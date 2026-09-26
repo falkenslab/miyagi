@@ -73,8 +73,9 @@ answering: check it's still running before anything else.
 (cd "$SANDBOX" && npm run --silent info -- --json) | node .claude/skills/simulate-course/capture-course.mjs <scratchpad>/shots <courseId>
 ```
 
-It captures the course front page, every activity and resource in course order, each quiz's
-questions, and the front page as the student "Alumno Demo". Look at every image, keep what
+It captures the course front page, every activity and resource in course order, each
+assignment's "Advanced grading" page (its rubric), each quiz's questions, and the front page
+as the student "Alumno Demo". Look at every image, keep what
 the report needs, and write it with the `test-report` skill: folder
 `tests/<YYYY-MM-DDTHH-MM>-course-<shortname>/`, with the course's structure as built (one row
 per section), the plan vs. what exists, the approvals from `approvals.jsonl` (as a list, since

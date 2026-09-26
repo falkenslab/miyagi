@@ -68,6 +68,11 @@ const modules = await page.locator('#region-main a[href*="/mod/"][href*="view.ph
 });
 for (const m of modules) {
   await shot(`${m.type}-${slugify(m.name)}`, m.href, `${m.type}: ${m.name}`);
+  if (m.type === "assign") {
+    // The rubric (or any advanced grading form) lives behind the activity's "Advanced grading" tab.
+    const grading = await page.locator('a[href*="/grade/grading/manage.php"]').first().getAttribute("href").catch(() => null);
+    if (grading) await shot(`assign-rubrica-${slugify(m.name)}`, grading, `Calificación avanzada (rúbrica) de "${m.name}"`);
+  }
   if (m.type === "quiz") {
     const cmid = new URL(m.href).searchParams.get("id");
     await shot(`quiz-preguntas-${slugify(m.name)}`, `/mod/quiz/edit.php?cmid=${cmid}`, `Preguntas del cuestionario "${m.name}"`);
