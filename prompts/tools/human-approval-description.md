@@ -1,0 +1,1 @@
+Ask for human confirmation right before an action that publishes something visible to others and hard to naturally undo: saving a grade/feedback, posting a reply in the forum, or publishing new course content. Don't use it for anything else: not for browsing, not for reading resources, not before every intermediate step.

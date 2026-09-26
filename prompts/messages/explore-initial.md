@@ -1,0 +1,1 @@
+Log into Moodle, enter the given course, and follow the system prompt's instructions to explore what activity and question types this particular Moodle installation supports, without creating or modifying anything real.
