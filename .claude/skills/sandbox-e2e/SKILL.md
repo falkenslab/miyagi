@@ -1,6 +1,6 @@
 ---
 name: sandbox-e2e
-description: Exercise teacher-agent end to end against a local Moodle from the moodle-sandbox repo - locate the sandbox, check it's up, seed the teacher's workload (students, submissions, forum doubts), build a scratch workspace from the sandbox's info contract, run explore/run/chat, and check what the students would see (grades, feedback, forum replies). Use to validate changes that act in Moodle (grading, forum, content, explore) before trying them on a real course.
+description: Exercise teacher-agent end to end against a local Moodle from the moodle-sandbox repo - locate the sandbox, check it's up, seed the teacher's workload (students, submissions, forum doubts), build a scratch workspace from the sandbox's info contract, run explore/run/chat, check what the students would see (grades, feedback, forum replies), and deliver a report with screenshots whose lessons go back into the agent's skills. Use to validate changes that act in Moodle (grading, forum, content, explore) before trying them on a real course.
 ---
 
 # End-to-end test against the Moodle sandbox
@@ -108,4 +108,33 @@ ends up empty, and the run stops at agent-kit's interactive token prompt.
 - The knowledge base: `node .claude/skills/smoke-ingest/check-knowledge.mjs <ws> --names "Lucía,Marcos,Sara,Martín,López,Gil"`
   — no broken links, and no student names in any page (class-level notes only).
 
-Report what was exercised, what the students would see, and anything that looked wrong.
+## 8. Report, and feed the lessons back
+
+A test isn't finished with a chat summary. Deliver an elaborate report with screenshots, and
+turn every lesson into a change in the agent itself.
+
+1. **Screenshots of the final state**, as admin, plus one student's view:
+
+   ```
+   (cd "$SANDBOX" && npm run --silent info -- --json) | node .claude/skills/sandbox-e2e/capture-moodle.mjs <scratchpad>/shots ["Sara Gil"]
+   ```
+
+   It captures the course, the submissions table, the grader per seeded student, the
+   gradebook, each forum thread (deduplicated), the quiz's questions and front page, and the
+   assignment and a thread as the chosen student ("Log in as"). It hides the fixed course
+   index and sticky footer, which otherwise cover the start of full-page captures. Look at
+   the images before using them.
+2. **Numbers from the transcripts**, not estimates: duration, tool calls per kind, and the
+   ordered list of `request_human_approval` summaries (`"pre_tool_use"` lines in each
+   session's `transcript.jsonl`). Check what was published against the database too:
+   grades and feedback lengths (`mdl_assign_grades` + `mdl_assignfeedback_comments`), one
+   post per intended reply (`mdl_forum_posts`), and any claim the agent made about settings.
+3. **The report as an artifact**: verdict first; what ran; each expected answer vs. what the
+   agent did; screenshots with captions saying what to look at; the approvals in order,
+   including anything published *without* one; findings with where each was fixed; and the
+   skill-by-skill list of what was learned.
+4. **Lessons into the agent**: every finding becomes a change in `plugin/skills/` (how Moodle
+   actually behaves, a rule the model followed only by luck) or in the prompts (a guardrail
+   gap), checked with `student-impact-review`. Verify every Moodle button or message you
+   quote against the language pack of the sandbox's own checkout
+   (`src/public/lang/en/*.php`, `mod/*/lang/en/*.php`), never from memory.
