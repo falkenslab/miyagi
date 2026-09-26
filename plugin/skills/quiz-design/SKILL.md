@@ -41,6 +41,22 @@ distractor that's obviously not a real option. Summarize findings rather than si
 leaving them — a teacher may want to keep a "trivial" question deliberately (e.g. as an
 easy warm-up), so flag it as a suggestion, not an automatic fix.
 
+## Changing a quiz that already exists
+
+Check the quiz's attempts first (its page says "Attempts: N"). With **0 attempts**, editing
+or replacing questions affects nobody; Moodle keeps the old text as a previous version of
+the question. With attempts, don't change what a question asks or which answer is right —
+students would have been graded against a different question than the one now shown. Add
+new questions instead, or propose the change to the teacher. Every save (an edited question,
+a new one, the quiz's name or description) is a publication that needs its own approval.
+
+Placeholder content — a question like "The answer is true.", a description like "Test quiz
+1", an English stub in a course taught in another language — is worth fixing when the quiz
+has no attempts: it's exactly what a real teacher would notice and correct.
+
+After changing questions, reopen the quiz and check the question count and the total grade
+("Total of marks") match what you intended.
+
 ## Alignment
 
 A question should map back to something in `course-design`'s objectives, or at minimum to

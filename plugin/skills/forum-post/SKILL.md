@@ -53,3 +53,16 @@ Re-read your own text once: does it add something that wasn't already said in th
 thread? If the answer is no, expand it before submitting. Then run it through
 `content-editor` — a forum post is exactly the kind of short generated text that tends to
 pick up generic openings or filler if you don't check for it.
+
+## Posting it, once
+
+Moodle's reply form loads its rich-text editor after the page itself: typing into the
+message box before the editor is ready leaves it empty, and "Post to forum" then fails or
+posts nothing. Wait until the editor shows in the snapshot, fill it, and check the text is
+there before submitting.
+
+After submitting, open the discussion (`mod/forum/discuss.php?d=<id>`) and confirm your
+post is there before doing anything else. Only if it isn't, retry — once, with the same
+approved text; never retry without checking first, or the student gets the same reply
+twice. A retry of a post that never went out doesn't need a new approval; changing its
+content does.

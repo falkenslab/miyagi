@@ -9,6 +9,23 @@ This underlies almost everything else: before deciding what to do next (grade a
 submission, audit a section), read what the course's structure actually says, not
 what a resource's title suggests it might contain.
 
+## Before reading: clear what's in the way
+
+- **User tours**: the first visit to a page (the course, edit mode, the quiz editor) often
+  opens a guided tour in a dialog that covers the page and swallows clicks. Close it with
+  "End tour", "Got it" or "Skip tour" before anything else; it's per user, so it won't come
+  back once dismissed.
+- **Edit mode (Moodle 4.x/5.x)**: the "Edit mode" switch in the header replaces the old
+  "Turn editing on" button, and after switching it the page reloads — wait for that before
+  looking for editing controls. The button to add content in a section is "Add content" →
+  "Activity or resource", not "Add an activity or resource".
+- **Moodle 5 question banks**: questions no longer live in a course-wide bank. Each quiz has
+  its own, reached from the quiz itself ("Questions" in its menu, `mod/quiz/edit.php?cmid=<id>`);
+  shared banks are separate "Question bank" activities. If the course's own bank page offers
+  "Create default question bank", don't click it just to look around — it creates a real
+  activity. If question management says some question-bank transfer task hasn't finished,
+  the site's scheduled tasks haven't run: say so to the teacher instead of retrying.
+
 ## Sections and activities
 
 A course page snapshot lists sections (sometimes called "topics" or "weeks") each

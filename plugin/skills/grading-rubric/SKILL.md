@@ -21,6 +21,25 @@ description: Grade Moodle submissions (assignments, open-response quiz questions
 4. If you've already graded a submission for this same activity in this session (or an
    earlier one — check the activity's page, `knowledge/activities/<slug>.md`), review what criteria you applied, so you're not
    stricter or more lenient with one student than another for the same answer.
+5. Check that the grading form can actually hold what you're going to write. An assignment
+   only shows a feedback box if "Feedback comments" is enabled in its settings ("Feedback
+   types"), and plenty of courses leave it off. If the criteria in use
+   require written feedback and it's off, enabling it is a settings change: ask for approval
+   first like any other publication, then do it in the activity's settings
+   (`course/modedit.php?update=<cmid>`), and only then start grading.
+
+In Moodle 4.x/5.x an assignment's submissions are listed at
+`mod/assign/view.php?id=<cmid>&action=grading`, and each one opens in the grader at
+`mod/assign/view.php?id=<cmid>&action=grader&userid=<id>` — save each grade there before
+moving to the next student.
+
+## When a rubric level is a range
+
+Rubrics often give a range for a partial level ("1-2 points if some example is missing or
+wrong"). Decide the rule the first time the range applies — e.g. "3 of 4 examples correct →
+2, 2 or fewer → 1" — and write it down in the activity's page before grading the next
+submission, so the same situation always lands on the same number. Mention the rule in the
+feedback when it decides the grade.
 
 ## When giving the grade
 

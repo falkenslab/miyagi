@@ -53,8 +53,10 @@ true/false) before moving on to the next.
 
 ## Importing into Moodle
 
-1. Go into the course's (or the quiz's, if the course doesn't have a shared one)
-   question bank and use the "Import" option.
+1. Open the question bank you'll import into and use its "Import" option. In Moodle 5
+   that's the quiz's own bank (`question/bank/importquestions/import.php?cmid=<quiz cmid>`)
+   or a shared "Question bank" activity if the course uses one; in Moodle 4.x and earlier,
+   the course's question bank ("More" → "Question bank" → "Import").
 2. Before uploading the file, check which category the questions will be imported
    into. If there isn't one named after the topic, create a new category with that name
    instead of leaving them all in the default category — that way the question bank
