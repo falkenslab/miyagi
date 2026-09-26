@@ -22,10 +22,10 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "prepare": "npm run build"
+    "prepack": "npm run build"
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "git+https://github.com/falkenslab/agent-kit.git#v0.6.0",
+    "@falkenslab/agent-kit": "https://github.com/falkenslab/teacher-agent/releases/download/v0.1.0/falkenslab-agent-kit-0.6.0.tgz",
     "@inquirer/prompts": "^8.5.2",
     "@playwright/mcp": "^0.0.79"
   },
@@ -40,9 +40,6 @@
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
-    "github:falkenslab/agent-kit#226acf77d2d208f785a1c712132569733f723e55": true
-  },
-  "bundleDependencies": [
-    "@falkenslab/agent-kit"
-  ]
+    "@falkenslab/agent-kit": false
+  }
 }

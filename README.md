@@ -176,8 +176,9 @@ para la arquitectura.
 ```
 git clone https://github.com/falkenslab/teacher-agent.git
 cd teacher-agent
-npm install                   # instala y compila
+npm install
 npm start -- chat --dir <carpeta-del-curso>
 npm run typecheck && npm run lint
+npm run build && npm link     # comando global teacher-agent desde este clon
 npm pack                      # genera el .tgz que se publica en cada release
 ```

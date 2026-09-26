@@ -14,15 +14,21 @@ Its whole domain layer (skills, slash commands, prompts) comes from the teacher 
 npm start -- [init|run|chat|explore|ingest|skills|commands] --dir <workspace> [...]   # tsx src/cli.ts
 npm run typecheck   # tsc --noEmit
 npm run lint        # eslint .
-npm run build       # tsc -> dist/ (also run by "prepare" on npm install)
-npm link            # global "teacher-agent" command -> dist/cli.js
+npm run build       # tsc -> dist/ (also run by "prepack" before npm pack)
+npm link            # global "teacher-agent" command -> dist/cli.js (build first)
 ```
 
-There are no tests yet. Users install from a release asset, not from git: `npm pack` builds a `teacher-agent-<version>.tgz` with `dist/` and agent-kit bundled (`bundleDependencies`), uploaded to the GitHub release as `teacher-agent.tgz` so `releases/latest/download/teacher-agent.tgz` always works (`npm install -g github:...` fails: npm can't find `tsc` when preparing git dependencies). Keep that asset name on every release. Always pass `--dir` pointing at a workspace outside this repo (the default is cwd, which would create `config.json`/`sessions/` here).
+There are no tests yet. Always pass `--dir` pointing at a workspace outside this repo (the default is cwd, which would create `config.json`/`sessions/` here).
 
 ## Depending on agent-kit
 
-`package.json` pins `"@falkenslab/agent-kit": "git+https://github.com/falkenslab/agent-kit.git#v0.6.0"` (not on npm yet); npm clones that tag and runs its `prepare` script to build `dist/`. That `prepare` is approved in `allowScripts` by resolved commit, so **bumping the tag means re-running `npm approve-scripts @falkenslab/agent-kit`**. To try unreleased agent-kit changes locally, `npm link ../agent-kit` (after `npm run build` there) and undo it with `npm install` before committing. Only import from the package root (`@falkenslab/agent-kit`), never deep paths. agent-kit's own `CLAUDE.md` documents its architecture — read it before changing how this agent wires into it.
+agent-kit is not on npm yet, and a git dependency doesn't work for end users (`npm install -g` of a package with git dependencies fails: npm can't find `tsc` while preparing them; bundling agent-kit instead drags in the Claude SDK's platform-specific binary, 245 MB of Windows-only `claude.exe`). So `package.json` points at a **built agent-kit tarball attached to a teacher-agent release** (`.../releases/download/v0.1.0/falkenslab-agent-kit-0.6.0.tgz`, made with `npm pack` of agent-kit at its tag). Its `prepare` is denied in `allowScripts` (the tarball already has `dist/`). To bump agent-kit: `npm pack` it at the new tag, attach the tarball to the next teacher-agent release, point the dependency at that URL and `npm install`.
+
+## Releasing
+
+Users install with `npm install -g https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz`, so every release must carry the `npm pack` output (built by `prepack`, ~50 kB, no `node_modules`) renamed to exactly `teacher-agent.tgz`. Bump `version`, commit, tag `vX.Y.Z`, `npm pack`, and `gh release create vX.Y.Z teacher-agent.tgz`.
+
+To try unreleased agent-kit changes locally, `npm link ../agent-kit` (after `npm run build` there) and undo it with `npm install` before committing. Only import from the package root (`@falkenslab/agent-kit`), never deep paths. agent-kit's own `CLAUDE.md` documents its architecture — read it before changing how this agent wires into it.
 
 ## Layout
 
