@@ -1,0 +1,48 @@
+{
+  "name": "teacher-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent that manages a Moodle course as a teacher, built on @falkenslab/agent-kit",
+  "author": "Francisco Vargas Ruiz",
+  "type": "module",
+  "bin": {
+    "teacher-agent": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "plugin",
+    "prompts",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "tsx src/cli.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@falkenslab/agent-kit": "git+https://github.com/falkenslab/agent-kit.git#v0.6.0",
+    "@inquirer/prompts": "^8.5.2",
+    "@playwright/mcp": "^0.0.79"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.68.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "github:falkenslab/agent-kit#226acf77d2d208f785a1c712132569733f723e55": true
+  },
+  "bundleDependencies": [
+    "@falkenslab/agent-kit"
+  ]
+}

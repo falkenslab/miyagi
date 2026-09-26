@@ -1,0 +1,9 @@
+node_modules/
+dist/
+
+# A workspace created by running the agent from inside this repo (always prefer --dir)
+/config.json
+/sessions/
+
+# Paquete generado con "npm pack" para las releases
+*.tgz
