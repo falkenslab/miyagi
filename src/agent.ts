@@ -83,7 +83,7 @@ function parseMode(args: string[]): Mode | undefined {
 
 /** Arguments that aren't flags nor a flag's value, e.g. the files given to "ingest". */
 function positionalArgs(args: string[]): string[] {
-  const valueFlags = new Set(["--dir", "--mode"]);
+  const valueFlags = new Set(["--dir", "--mode", "--task"]);
   return args.filter((arg, i) => !arg.startsWith("--") && !valueFlags.has(args[i - 1] ?? ""));
 }
 
@@ -348,7 +348,13 @@ function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string
 function initialPrompt(kind: SessionKind, workspaceDir: string, args: string[]): string {
   if (kind === "ingest") return ingestPrompt(workspaceDir, args);
   if (kind === "explore") return loadPrompt("messages/explore-initial.md");
-  return loadPrompt("messages/run-initial.md", { mission: loadPrompt("messages/run-mission-teacher.md") });
+  // --task "<text>" gives the run one concrete job (e.g. "/teacher-agent:build-course ..." or
+  // "corrige la Tarea 2") instead of managing the whole course.
+  const task = parseFlag(args, "--task")?.trim();
+  const mission = task
+    ? loadPrompt("messages/run-mission-task.md", { task })
+    : loadPrompt("messages/run-mission-teacher.md");
+  return loadPrompt("messages/run-initial.md", { mission });
 }
 
 /** "ingest" with files → just those (relative to the current directory); without → everything pending in sources/. */

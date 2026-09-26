@@ -14,6 +14,7 @@ knowledge/
   moodle-capabilities.md  activity/question types this Moodle supports ("explore")
   progress.md             history of class progress reviews (progress-monitoring)
   course-audit.md         history of course audits (course-auditor)
+  course-plan.md          the plan of a course you build, and what got created (course-building)
   topics/<slug>.md        one hub page per topic/section/block of the course: content you
                           authored there, recurring doubts from the forum
   activities/<slug>.md    one page per evaluable activity: grading criteria applied, its

@@ -18,10 +18,11 @@ Comandos:
   init [--dir <ruta>]
       Crea un workspace nuevo en el directorio indicado (o en el actual) y ofrece
       explorar a continuación qué admite ese Moodle.
-  run [--dir <ruta>] [--mode interactive|guided|autonomous] [--headless]
+  run [--dir <ruta>] [--mode interactive|guided|autonomous] [--headless] [--task "<texto>"]
       Gestiona el curso de una sentada: corrige entregas pendientes, atiende el foro,
       revisa o añade contenido y resume el progreso de la clase. Sin --mode, pregunta
-      el modo.
+      el modo. Con --task hace solo esa tarea (p. ej. --task "construye un curso de
+      introducción a Docker de 3 temas" o --task "corrige la Tarea 2").
   chat [--dir <ruta>] [--headless]
       Sesión conversacional (siempre en modo guided).
   explore [--dir <ruta>] [--headless]

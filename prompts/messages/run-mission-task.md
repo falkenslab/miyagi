@@ -1,0 +1,1 @@
+log into Moodle, enter the given course and carry out this specific task, which replaces the general course management described in the Mission section of your instructions (every other rule there still applies, approvals included): {{task}}
