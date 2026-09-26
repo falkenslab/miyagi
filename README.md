@@ -106,7 +106,8 @@ por ejemplo:
 
 Antes de guardar una nota, responder en el foro o publicar algo, te mostrará lo que va a
 hacer y esperará tu respuesta: pulsa **Intro** (o escribe `y`) para aprobarlo, o escribe
-`n` para rechazarlo. Para salir, escribe `/exit`.
+`n` para rechazarlo. Para salir, escribe `/exit`. Si quieres cortar lo que está haciendo
+sin salir, pulsa `Esc`. Al terminar no hay nada que guardar: todo se va guardando solo.
 
 ### Dejar que gestione el curso entero
 

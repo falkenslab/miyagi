@@ -254,7 +254,8 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
 
   if (kind === "chat") {
     await runChatTui(options, {
-      welcomeMessage: "teacher-agent conectando con Moodle. Escribe /exit para salir.",
+      welcomeMessage:
+        "teacher-agent conectando con Moodle. Esc interrumpe la respuesta en curso; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión.",
       promptLabel: `\n${ui.user("tú>")} `,
       agentLabel: ui.agent("teacher-agent>"),
       formatAction: friendlyToolLabel,
@@ -262,6 +263,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
       sessionLogPath: path.join(runDir, "session.log"),
       historyPath: path.join(sessionsDirFor(workspaceDir), "history.jsonl"),
     });
+    printSessionEnd(kind, workspaceDir, runDir, false);
     return;
   }
 
@@ -271,15 +273,54 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   // between consecutive actions.
   const renderer = createConsoleRenderer({ formatAction: friendlyToolLabel });
   const run = runQuery(initialPrompt(kind, workspaceDir, args), options);
+
+  // Without a handler, Ctrl+C killed the process on the spot, with no word about what was
+  // kept. The first one interrupts the run and lets it close normally (so the end message
+  // below still prints); a second one exits without waiting.
+  let interrupted = false;
+  const onSigint = () => {
+    if (interrupted) {
+      renderer.writeLine(ui.warn("Saliendo sin esperar. Lo registrado hasta ahora ya está guardado en disco."));
+      process.exit(130);
+    }
+    interrupted = true;
+    renderer.writeLine(ui.warn("Interrumpiendo y cerrando la sesión… (Ctrl+C otra vez para salir sin esperar)"));
+    void run.interrupt().finally(() => run.close());
+  };
+  process.on("SIGINT", onSigint);
+
   let failed = false;
-  for await (const event of run.events as AsyncIterable<AgentEvent>) {
-    renderer.render(event);
-    if (event.type === "turn-end") failed = event.failed;
+  try {
+    for await (const event of run.events as AsyncIterable<AgentEvent>) {
+      renderer.render(event);
+      if (event.type === "turn-end") failed = event.failed;
+    }
+  } finally {
+    process.off("SIGINT", onSigint);
+    run.close();
+    renderer.endLine();
   }
-  run.close();
-  renderer.endLine();
-  console.log(`\nSesión terminada. Transcript: ${path.join(runDir, "transcript.jsonl")}`);
-  process.exitCode = failed ? 1 : 0;
+  printSessionEnd(kind, workspaceDir, runDir, interrupted);
+  process.exitCode = interrupted ? 130 : failed ? 1 : 0;
+}
+
+/**
+ * What the human sees when a session ends, however it ended: that nothing needs saving —
+ * everything is written as it happens — and where each part of it is.
+ */
+function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string, interrupted: boolean): void {
+  const lines = [
+    "",
+    ui.heading(interrupted ? "Sesión interrumpida." : "Sesión cerrada."),
+    ui.dim("No hay nada pendiente de guardar: todo se escribe en disco sobre la marcha."),
+    ui.dim(`  - Acciones del agente y sus resultados: ${path.join(runDir, "transcript.jsonl")}`),
+    ...(kind === "chat" ? [ui.dim(`  - La conversación tal como la has visto: ${path.join(runDir, "session.log")}`)] : []),
+    ui.dim(`  - Lo que el agente ha aprendido: ${path.join(workspaceDir, "knowledge")}`),
+    ...(interrupted
+      ? [ui.dim("Lo que estaba haciendo al interrumpir puede haber quedado a medias (una nota sin guardar, una respuesta sin publicar); en la próxima sesión puedes pedirle que lo retome.")]
+      : []),
+  ];
+  console.log(lines.join("\n"));
 }
 
 function initialPrompt(kind: SessionKind, workspaceDir: string, args: string[]): string {
