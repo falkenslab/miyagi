@@ -46,6 +46,10 @@ The base seed has activities but no student work. `npm run activity` in the sand
 
 That's what makes a run checkable: there's a right answer for each grade and each reply.
 
+`seed` and `activity` end by running Moodle's pending ad-hoc tasks (the sandbox has no cron).
+If `explore` reports the question bank as blocked by `transfer_question_categories`, the
+sandbox predates that fix: `npm run tasks` there.
+
 ## 4. Connection info
 
 Depend only on the sandbox's contract, never on its internals:
@@ -76,7 +80,10 @@ weighs concepts 6, examples 3, clarity 1, and says a missing submission gets 0 w
 
 A Claude token must be available: `CLAUDE_CODE_OAUTH_TOKEN` in the environment, or the one
 saved in `~/.teacher-agent/config.json` (or `~/.student-agent/config.json`, passed through the
-environment for the run — never copied into a workspace file).
+environment for the run — never copied into a workspace file). In Git Bash, build that path
+with `path.join(os.homedir(), ".student-agent", "config.json")` inside `node -e`: a literal
+`"/.student-agent/..."` argument gets rewritten to `C:/Program Files/Git/...`, the variable
+ends up empty, and the run stops at agent-kit's interactive token prompt.
 
 - `explore` first (short, look-and-cancel, nothing created):
   `node dist/cli.js explore --dir <ws> --headless </dev/null > <scratchpad>/explore.log 2>&1`
