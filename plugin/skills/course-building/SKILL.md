@@ -48,6 +48,13 @@ In order, one section at a time, finishing each before starting the next:
 3. **Activities** (`activity-design`, and `rubric-design` for anything graded by hand; for
    quizzes `quiz-design`, and `quiz-bulk-import` when there are several questions): complete
    instructions, what to hand in, how it's graded, a due date that fits the course's pace.
+   **Every activity graded by hand gets a rubric in Moodle** — "Advanced grading" → Rubric,
+   built with `rubric-design` from the criteria in its statement, levels with a description
+   each (not just points), saved and made ready. A criteria table in the statement doesn't
+   replace it: the rubric is what shows up in the grader, gets marked criterion by criterion
+   and keeps the same answer on the same grade. A request that mentions a rubric for one
+   activity ("a final task with a rubric") is not a request to leave the others without one;
+   skip rubrics only if the teacher says so, and say in the report which activities have none.
    A hands-on activity (commands to run, code to write, a container to build) is checked with
    `practice-testing` before it's published, when the workspace allows it; if it doesn't, say in
    the report which practices weren't run.
@@ -55,7 +62,10 @@ In order, one section at a time, finishing each before starting the next:
    restrictions only if the plan calls for them.
 
 Every save in Moodle is a publication: in `guided` or `chat` it needs its own approval, with a
-summary of what that section or activity contains. Run each text through `content-editor` and
+summary of what that section or activity contains. One item per approval: three sections are
+three approvals, and creating a quiz and importing its questions are two (the second listing
+every question, see `quiz-bulk-import`). A summary that announces "and then I'll add X" hides X
+from whoever approves it. Run each text through `content-editor` and
 `accessibility` before saving it.
 
 Record in the plan page, as you go, what was actually created (with its Moodle URL) — the
@@ -68,6 +78,18 @@ role to..." → Student from your user menu, then back with "Return to my normal
 least with each activity's "Preview". Look for empty sections, activities without
 instructions, quizzes with no questions or a total grade of 0, broken links and dates out of
 order. Fix what you find (each fix is a publication too).
+
+Then check that the settings say what the texts promise — the gap students would find first:
+
+- **The gradebook** (Grades → the grader report and "Gradebook setup"): the weights are the
+  ones in the plan, and the course total uses the scale the course guide announces. With
+  "Natural" aggregation the total is the sum of every item's maximum (seven items out of 10
+  show as "out of 70"); if the guide says "out of 10", use an aggregation whose total you can
+  set (e.g. "Weighted mean of grades" with the course total's maximum at 10), or make the
+  items' maximums add up to it — then look at the grader report again.
+- **Submission settings**: accepted file types, sizes, group submission, attempts and dates as
+  the statement says. If Moodle doesn't know a file type the statement accepts (`.md` isn't in
+  its list), say so in the statement instead of promising a restriction that doesn't exist.
 
 ## 5. Report
 

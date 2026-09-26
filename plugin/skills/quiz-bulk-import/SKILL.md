@@ -53,6 +53,11 @@ true/false) before moving on to the next.
 
 ## Importing into Moodle
 
+The import is a publication of its own, however many questions it holds: ask for approval
+right before it, separately from creating the quiz, with every question in the summary — its
+stem, its type and its correct answer (and the distractors, briefly, for multiple choice).
+"The 6 GIFT questions about X" is not reviewable; the list is.
+
 1. Open the question bank you'll import into and use its "Import" option. In Moodle 5
    that's the quiz's own bank (`question/bank/importquestions/import.php?cmid=<quiz cmid>`)
    or a shared "Question bank" activity if the course uses one; in Moodle 4.x and earlier,
@@ -66,12 +71,18 @@ true/false) before moving on to the next.
    whether any had a syntax error — fix the file and re-import only if something's
    missing.
 5. Add the imported questions to the quiz from the question bank ("Add" → "from question
-   bank"), no need to recreate them.
+   bank"), no need to recreate them. Give each question a name that carries its position
+   (`T1-01 Contenedor vs MV`, `T1-02 ...`) in the GIFT file, so the order is visible anywhere.
+6. **Check the order.** Adding several questions at once doesn't keep the file's order (in a
+   real course they landed as 06, 01, 02, 03, 05, 04). Open the quiz's "Questions" page and,
+   if the order isn't the intended one, fix it with each question's move handle before
+   considering the quiz done — unless "Shuffle" is meant to be on, the order students see is
+   this one.
 
 ## After importing
 
-Open the quiz and check that the number of questions and the total grade are what you
-expected before considering it done.
+Open the quiz and check that the number of questions, their order and the total grade are
+what you expected before considering it done.
 
 Note in the quiz's page, `knowledge/activities/<quiz-slug>.md`, what questions you imported (types used, how many, general
 criteria you followed when writing them) — no need to copy the full content of the

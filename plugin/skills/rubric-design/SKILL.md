@@ -32,11 +32,18 @@ subjective judgment, defeating the point of having a rubric.
 
 ## Where it goes
 
-If the activity has Moodle's native rubric/grading-guide feature available, prefer setting
-it up there (via "Turn editing on" → the activity's grading method settings) so it's
-visible on the grading form itself — check `knowledge/moodle-capabilities.md` if it exists
-for what this installation supports. Otherwise, save the rubric in the activity's page, `knowledge/activities/<slug>.md`,
-so `grading-rubric` (and future gradings of the same activity) can reuse it consistently.
+Set it up in Moodle itself whenever the activity supports it (assignments do), so it's on
+the grading form: the activity's "Advanced grading" tab → "Change active grading method to"
+Rubric → "Define new grading form from scratch" → criteria and levels → "Save rubric and make
+it ready". Each level needs its own description and points; the points of each criterion's top
+level add up to the activity's maximum grade. Saving it is a publication (students see the
+rubric on the activity): ask for approval with the criteria and levels in the summary. Also
+keep a copy in the activity's page, `knowledge/activities/<slug>.md`, so `grading-rubric`
+and later sessions can read it without opening Moodle.
+
+A rubric on the grading form is the norm for anything graded by hand; a criteria table in
+the statement is useful for students but doesn't replace it. Only where no rubric can be
+attached (e.g. a quiz's essay question) does the knowledge-base copy stand alone.
 
 ## Detecting problems in an existing rubric
 
