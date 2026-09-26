@@ -6,6 +6,7 @@ carpeta `AAAA-MM-DDTHH-MM-<nombre>/`, con el informe completo (`README.md`) y su
 
 | Fecha | Prueba | Entorno | Resultado | Hallazgos |
 | --- | --- | --- | --- | --- |
+| 26 sep 2026 | [Curso "Introducción a Docker" construido por el agente](2026-09-26T13-52-course-docker-intro/README.md): un curso completo desde una descripción (`--task`), prácticas comprobadas en Docker con `practice-runner` y rúbricas añadidas después | moodle-sandbox · Moodle 5.2 · Docker 29 | Superada con hallazgos | 7 (6 corregidos o convertidos en regla, 1 aceptado) |
 | 26 sep 2026 | [Aula experimental del profesor](2026-09-26T12-53-guided-run/README.md): `explore`, `ingest` y `run --mode guided` sobre una tarea, un foro y un cuestionario sembrados | moodle-sandbox · Moodle 5.2 | Superada | 5 (todos corregidos o convertidos en regla) |
 
 Cómo se hacen y se guardan estos informes: [CLAUDE.md](CLAUDE.md).
