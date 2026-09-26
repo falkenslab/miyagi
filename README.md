@@ -109,6 +109,9 @@ por ejemplo:
 - *"¿Qué alumnos se están quedando atrás?"*
 - *"Revisa el curso y dime qué mejorarías."*
 - *"Monta un curso completo de introducción a Docker de tres temas."*
+- *"Añade un tema 4 sobre seguridad, planteado como un reto por equipos."*
+- *"Ayúdame a escribir mi programación didáctica y dime si el aula está acorde con ella."*
+- *"Investiga qué ha cambiado en Docker Compose este año."*
 
 Antes de guardar una nota, responder en el foro, publicar algo o cambiar la configuración
 de una actividad, te mostrará lo que va a hacer y esperará tu respuesta: pulsa **Intro**
@@ -172,6 +175,10 @@ Escríbelos en el chat, con lo que necesites detrás.
 | `/teacher-agent:forum` | Revisa el foro y decide si hace falta que intervenga el profesor. |
 | `/teacher-agent:quiz <tema>` | Escribe un lote de preguntas sobre ese tema y las importa al cuestionario. |
 | `/teacher-agent:build-course <descripción>` | Construye un curso completo: planifica, crea cada sección con apuntes, prácticas y cuestionarios, y lo revisa como lo vería un alumno. |
+| `/teacher-agent:build-unit <descripción>` | Construye un solo tema dentro del curso, encajado en su programación, su calendario y su estilo. |
+| `/teacher-agent:teaching-plan` | Escribe o revisa tu programación didáctica a partir de tu material y tus decisiones. |
+| `/teacher-agent:align` | Comprueba si el aula está acorde con tu programación y corrige lo que no. |
+| `/teacher-agent:research <tema>` | Investiga un tema en internet y guarda lo que encuentra con sus fuentes. |
 | `/teacher-agent:pending` | Revisa cómo va la clase y quién se está quedando atrás. |
 | `/teacher-agent:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
 | `/teacher-agent:orient` | Se orienta en el curso: evaluación, plazos, canales de comunicación. |
@@ -194,6 +201,13 @@ hace falta invocarlas: basta con pedirle el trabajo.
 | `forum-post` | Escribir una respuesta útil o un aviso a la clase. |
 | `forum-facilitation` | Decidir cuándo intervenir en el foro y cuándo dejar que respondan los compañeros. |
 | `course-building` | Construir un curso completo desde una descripción: plan, secciones, contenido, actividades y revisión final. |
+| `unit-building` | Construir un tema dentro de un curso que ya existe. |
+| `teaching-plan` | Redactar la programación didáctica: objetivos, temas, metodología, evaluación, calificación, atención a la diversidad. |
+| `course-alignment` | Comparar el aula con la programación y cerrar los huecos. |
+| `teaching-methodologies` | Elegir y aplicar metodologías: proyectos, retos, clase invertida, gamificación, cooperativo, casos, aprendizaje-servicio, design thinking, DUA… |
+| `assignment-building` | Crear tareas de cualquier tipo (escritas, archivos, en grupo, por borradores, portafolio, exposición…) con sus ajustes y su rúbrica. |
+| `activity-building` | Crear talleres de coevaluación, lecciones con itinerarios, glosarios, wikis, bases de datos, consultas, encuestas, H5P, libros, y configurar finalización, restricciones, insignias y grupos. |
+| `topic-research` | Investigar un tema en internet con fuentes contrastadas y citadas. |
 | `course-design` | Planificar un curso o un tema: objetivos, secuencia, tipos de actividad y evaluación. |
 | `activity-design` | Diseñar la mecánica de una actividad concreta (tarea, taller, lección, wiki…). |
 | `content-authoring` | Crear o editar recursos y actividades con instrucciones claras y coherentes con el curso. |
@@ -205,6 +219,40 @@ hace falta invocarlas: basta con pedirle el trabajo.
 | `content-editor` | Repasar la redacción de cualquier texto antes de publicarlo. |
 | `accessibility` | Aplicar y revisar prácticas básicas de accesibilidad. |
 | `knowledge-ingest`, `knowledge-query`, `knowledge-lint`, `knowledge-pages` | Mantener sus apuntes del curso (la carpeta `knowledge`). |
+
+### Ayudantes
+
+Para algunas tareas, el asistente se apoya en ayudantes especializados que trabajan por su
+cuenta y le devuelven un informe. Ninguno puede publicar nada en Moodle.
+
+| Ayudante | Qué hace | Cuándo está disponible |
+| --- | --- | --- |
+| Investigador | Busca en internet, lee las fuentes (primero las oficiales) y devuelve lo encontrado con enlaces y fechas. | Siempre (en `chat` y `run`) |
+| Revisor pedagógico | Experto en diseño didáctico y metodologías: revisa un plan o una actividad y señala qué mejorar (coherencia entre objetivos, actividades y evaluación, metodología, carga de trabajo, diversidad). | Siempre (en `chat` y `run`) |
+| Probador de prácticas | Ejecuta las prácticas en Docker. | Solo si lo activas (ver abajo) |
+
+---
+
+## Programación didáctica y metodologías
+
+El asistente puede ayudarte a escribir tu **programación didáctica** y a que tu aula de Moodle
+esté de acuerdo con ella:
+
+1. Deja en `sources` lo que tengas: un borrador, la programación del año pasado, los criterios
+   del departamento. Si quieres que siga una normativa concreta, déjala también o díselo.
+2. En el chat, `/teacher-agent:teaching-plan`. La escribe a partir de tu material, te pregunta
+   lo que solo tú puedes decidir (horas, calendario, pesos) y la hace revisar por el revisor
+   pedagógico. Queda en sus apuntes (`knowledge/teaching-plan.md`, enlazada con cada tema), no
+   se publica en Moodle salvo que se lo pidas.
+3. `/teacher-agent:align` compara el aula con la programación: criterios que ninguna actividad
+   evalúa, rúbricas que faltan, pesos o fechas distintos, temas sin construir. Te propone los
+   cambios y los hace con tu aprobación.
+4. `/teacher-agent:build-unit` construye los temas que falten.
+
+Al diseñar un tema o una actividad elige una metodología que encaje con lo que se quiere
+aprender (aprendizaje basado en proyectos o en retos, clase invertida, gamificación con
+insignias y niveles, trabajo cooperativo, estudio de casos…) y la monta con las piezas de Moodle
+que la hacen posible. Si tienes una en mente, pídesela.
 
 ---
 
