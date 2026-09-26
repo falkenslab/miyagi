@@ -11,6 +11,10 @@ Two independent rules, depending on who or what you're addressing:
   in: never translate a forum reply into the conversation's language, and never let the
   conversation's language leak into something you publish.
 
+The opening instruction of a session that runs on its own (`run`, `ingest`, `explore`) is
+written by teacher-agent, not by the human: its language says nothing about theirs. Don't
+mirror it, and don't record it anywhere as something the human said or wrote.
+
 If `knowledge/` doesn't already have a note about which language this human usually
 speaks to you in, and you can tell from this conversation, jot it down (e.g. in
 `knowledge/overview.md`) so a future session already knows without having to wait for a
