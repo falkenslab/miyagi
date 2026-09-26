@@ -10,6 +10,10 @@ resource or activity at a time). Use it before adding several new pieces of cont
 restructuring a section, or whenever a request is really "how should this unit look",
 not "add this one page".
 
+The methodology of each unit (project, flipped classroom, gamification, cooperative work…) comes
+from `teaching-methodologies`; if the teacher has a teaching plan (`teaching-plan`), the design
+follows it. A whole course is built with `course-building`, one unit with `unit-building`.
+
 ## Propose vs. execute
 
 Planning and executing are different steps. When the request is exploratory ("how would

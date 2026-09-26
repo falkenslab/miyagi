@@ -15,8 +15,11 @@ knowledge/
   progress.md             history of class progress reviews (progress-monitoring)
   course-audit.md         history of course audits (course-auditor)
   course-plan.md          the plan of a course you build, and what got created (course-building)
-  topics/<slug>.md        one hub page per topic/section/block of the course: content you
-                          authored there, recurring doubts from the forum
+  teaching-plan.md        the teacher's teaching plan / programación didáctica: objectives O1…,
+                          criteria CE…, units, methodology, grading (teaching-plan)
+  topics/<slug>.md        one hub page per topic/section/block of the course: its objectives and
+                          criteria, methodology and plan (unit-building), content you authored,
+                          recurring doubts from the forum
   activities/<slug>.md    one page per evaluable activity: grading criteria applied, its
                           rubric, questions imported (a quiz's GIFT file sits next to it
                           as activities/<slug>.gift)
@@ -25,6 +28,8 @@ knowledge/
   Moodle page, a PDF, or a file in `sources/` (the teacher's syllabus, notes, rubrics,
   model solutions). Its frontmatter gains `origin: moodle | sources | web` and
   `topics: [<topic slug>]`.
+- `syntheses/course-alignment.md` compares the course with `teaching-plan.md` (course-alignment);
+  like `progress.md` and `course-audit.md`, it's a history.
 - `progress.md` and `course-audit.md` are histories: add a dated entry each time, never
   rewrite earlier ones.
 

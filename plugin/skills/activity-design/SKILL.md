@@ -12,6 +12,10 @@ name and instructions (`content-authoring` covers the generic writing/creation
 mechanics that apply regardless of type). `quiz-design` already covers this same job for
 quizzes specifically; use it for those instead of this skill.
 
+Setting the designed activity up in Moodle is `assignment-building` (any assignment) or
+`activity-building` (workshop, lesson, glossary, wiki, database, choice, feedback, forum
+variants, H5P, book, plus completion, restrictions, badges and groups).
+
 ## Assignment
 
 A good assignment prompt requires genuine reasoning, application, or production — not

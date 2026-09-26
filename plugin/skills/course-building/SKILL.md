@@ -23,30 +23,39 @@ build only in empty sections and report what you left alone). Never delete anyth
 
 ## 2. Plan before creating anything
 
-Use `course-design` to write the plan into the knowledge base as `knowledge/course-plan.md`
-(a synthesis page, listed in `index.md`) before touching Moodle:
+If the teacher has a teaching plan (`knowledge/teaching-plan.md`, see `teaching-plan`), the
+course follows it: its units, objectives, criteria, methodology, calendar and weights. If not,
+use `course-design` and `teaching-methodologies` to write the plan into the knowledge base as
+`knowledge/course-plan.md` (a synthesis page, listed in `index.md`) before touching Moodle:
 
 - the course's objectives, observable ("configure...", "explain why...");
 - one row per section: title, objectives it covers, its resources, its activities (type,
   graded or not, how it's assessed), and how it connects to the next;
 - the evaluation: weights, and which activities are formative vs. summative;
+- the methodology of each section (`teaching-methodologies`), and why it fits;
 - a welcome section: what the course is about, how it's organized, how it's graded, where to
   ask (the forum).
+
+Ask `pedagogy-reviewer` to review the plan before building (point it at the plan page) and revise
+it with its critique. Research with `topic-research` anything in the course's subject that may
+have changed (versions, commands, current practice) before writing about it.
 
 Check `knowledge/moodle-capabilities.md` for what this Moodle can create; if it doesn't exist,
 look at the "Activity or resource" chooser once before planning activity types.
 
 ## 3. Create it, section by section
 
-In order, one section at a time, finishing each before starting the next:
+In order, one section at a time, finishing each before starting the next. Each section is a unit:
+build it with `unit-building` (which uses `assignment-building`, `activity-building`, `quiz-design`
+and `quiz-bulk-import` for its activities). What follows is what matters most across the course:
 
 1. **The section**: in edit mode, name it ("Edit section name" on its "New section" title, or
    "Add section" at the end of the course when more are needed) and write its summary: what
    the student will learn and do there.
 2. **Resources** (`content-authoring`): a page with the section's actual content — explained,
    with examples, at the course's level — not an outline of what "will be covered".
-3. **Activities** (`activity-design`, and `rubric-design` for anything graded by hand; for
-   quizzes `quiz-design`, and `quiz-bulk-import` when there are several questions): complete
+3. **Activities** (`activity-design` for what they ask; `assignment-building`,
+   `activity-building`, `quiz-design` and `quiz-bulk-import` to build them): complete
    instructions, what to hand in, how it's graded, a due date that fits the course's pace.
    **Every activity graded by hand gets a rubric in Moodle** — "Advanced grading" → Rubric,
    built with `rubric-design` from the criteria in its statement, levels with a description
