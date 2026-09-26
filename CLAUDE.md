@@ -53,6 +53,18 @@ File access is enforced by agent-kit's file-scope hook, configured in `toSession
 
 A moodle-agent teacher aula opens as-is: `moveLegacyContext()` moves `context/` into `sources/`, `moveLegacyKnowledge()` moves an old `knowledge/` (with `README.md`, no `index.md`) to `knowledge-legacy/` (non-markdown, non-GIFT files to `sources/`), and `migrationPending` adds `prompts/system/knowledge-migration.md` so the agent rebuilds the knowledge base from it.
 
+## Project skills (`.claude/skills/`)
+
+For whoever develops this repo (not the runtime agent's skills, which are in `plugin/`):
+
+- `verify` — quality gate: typecheck, lint, build and `check-prompts.mjs`, which renders the system prompt for every session kind and mode and asserts which sections are in it (and that no student-agent/moodle-agent leftover is). There are no unit tests, so this is the gate.
+- `commit` / `release` — commit conventions (Spanish, one logical change each; the repo is public) and cutting a version, including building and testing the `teacher-agent.tgz` users install from.
+- `upgrade-agent-kit` — moving the kit to a new release: pack it at its tag, attach the tarball to a teacher-agent release, point the dependency at it.
+- `try-agent-kit-local` — testing unreleased kit changes without the global npm (ask before touching `../agent-kit`).
+- `smoke-ingest` — a real `ingest` on a fixed fixture (syllabus + rubric) plus `check-knowledge.mjs` (which also fails on a student's name in any page with `--names`): the proof that prompt changes to the knowledge base still work.
+- `student-impact-review` — checking changes that publish to Moodle (grades, feedback, forum, content) against what students see: the per-action approval, fair and consistent grading, staying inside the course, no student data in the knowledge base.
+- `sandbox-e2e` — end-to-end runs against the moodle-sandbox repo (`$MOODLE_SANDBOX_DIR`, default `../moodle-sandbox`; a separate repo on purpose, not a submodule), using its `info` contract and its `activity` seed (students, submissions of known quality, forum doubts) so every grade and reply has a right answer.
+
 ## Things not to undo
 
 - `browser_run_code_unsafe` is in `disallowedTools` (RCE-equivalent, per Playwright's own description).
