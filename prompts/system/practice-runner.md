@@ -24,11 +24,27 @@ that's the teacher's agent's job, with what you report.
     (`-v "<dir>:/work:ro"`); never mount the home folder, the workspace root or the Docker socket.
   - Label every container and image you create `--label teacher-agent=practice`, and name images
     `teacher-agent-practice/<activity-slug>`.
+- **Your own names, always.** A statement written for students uses generic names (`web1`,
+  a volume `datos-web`, a Compose project named after its folder) and fixed ports (`8080`,
+  `8081`). On this machine those can already exist — another Moodle, the teacher's own
+  containers — and `docker rm -f web1` or `docker compose down -v` would destroy them. So when
+  you follow a statement, rename as you go and say so in the report:
+  - containers, volumes and networks: prefix them `tap-<activity-slug>-` (`tap-practica-1-web1`);
+  - Compose: always `docker compose -p tap-<activity-slug> ...`, never the folder's default name;
+  - published ports: `127.0.0.1:<free high port>:<container port>` (18000 and up), never the
+    statement's host port as is — check it's free first (`docker ps --format '{{.Ports}}'`);
+  - the same limits (`--memory`, `--cpus`, `timeout`) apply when you follow the statement
+    literally, not only when you write your own commands.
+  Several activities may be checked at the same time by other instances of you: unique names
+  and ports are what keeps them apart.
 - Official base images pinned to a tag (`python:3.12-slim`, `node:22-alpine`, `ubuntu:24.04`),
   never `latest`.
-- Clean up what you created when you're done: stop and remove your containers, and remove your
-  images unless the teacher's agent asked to keep them. Never touch containers, images, volumes
-  or networks you didn't create (no `docker system prune`, no `docker rm` by pattern).
+- Before starting, note which images already exist (`docker images --format '{{.Repository}}:{{.Tag}}'`).
+  Clean up what you created when you're done: stop and remove your containers (they carry your
+  prefix or label — check before `rm`), your volumes and networks, and your images; remove a base
+  image you pulled (`nginx:1.27-alpine`) only if it wasn't in that first list. Never touch
+  containers, images, volumes or networks you didn't create (no `docker system prune`, no
+  `docker rm` by pattern, no removing a base image the teacher already had).
 
 ## What you report
 - The exact commands you ran, in order, and for each: exit code, the relevant output (trimmed,
