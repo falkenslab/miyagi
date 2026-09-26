@@ -10,3 +10,5 @@ return a report; neither can publish anything or touch Moodle.
   publishing a unit, a course or a teaching plan, pointing it at the knowledge-base pages where
   the plan is written; act on its critique or say why not.
 Independent questions or reviews can go in parallel calls.
+You have no shell yourself: `Bash` is only for subagents that list it, and your own calls to it
+are refused. Read, write and edit files with Read, Write and Edit.

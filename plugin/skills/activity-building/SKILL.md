@@ -22,7 +22,17 @@ For work that students assess among themselves with a rubric (project drafts, es
   student's assessments.
 - Assessment form: a rubric or accumulative grading with the criteria from `rubric-design`;
   "Use self-assessment" if students also assess their own.
-- "Allocate submissions": random allocation, 3–4 assessments per student is usually enough.
+- "Allocate submissions": random allocation, 3–4 assessments per student is usually enough;
+  "Scheduled allocation" runs it by itself when the submission phase ends (it needs the site's
+  cron, which every real Moodle has).
+- **Teams reviewing teams**: with group mode "Separate groups", Moodle can only allocate
+  reviewers from the same group — the opposite of peer review between teams. Use "Visible
+  groups" and tick "Prevent reviews by peers from the same group" in the allocation.
+- The dates ("Open for submissions from", "Open for assessment from" and their deadlines) are
+  what really open and close each phase for students; switching the phase early is harmless if
+  those dates are set, and useless if they aren't.
+- The workshop's rubric only takes whole points per level: if the criteria use halves, scale
+  the rubric (×2, ×4) — the workshop normalizes it to the activity's grade.
 - Give examples of assessed work if students haven't done peer review before.
 
 ## Lesson — branching paths
@@ -91,8 +101,10 @@ by counting posts. Use group mode for team forums.
 - **Restrict access** ("Add restriction..."): by date, by completion of another activity, by
   grade, by group. Use it for itineraries and gamified levels; say in the section summary what
   unlocks what, or students will think content is missing.
-- **Badges**: "Manage badges" → "Add a new badge", awarded on activity completion or course
-  completion. Name what the badge certifies ("Contenedores: nivel 1"), not just a reward.
+- **Badges**: "Manage badges" → "Add a new badge", awarded on "Activity completion", course
+  completion, or "Manual issue by role" when the condition can't be expressed as completion or a
+  grade (e.g. "the team fixed the four critical flaws"). Name what the badge certifies
+  ("Contenedores: nivel 1"), not just a reward, and enable access once its criteria are set.
 - **Groups and groupings**: create them before activities that use them; separate groups hide
   other teams' work, visible groups show it.
 
