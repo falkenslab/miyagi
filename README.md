@@ -72,6 +72,10 @@ apuntes.
      cada vez que empiece, el asistente te pedirá que inicies sesión tú en la ventana
      de Chrome.
    - **Tono** (formal, cercano...) e **idioma** en el que quieres hablar con él.
+   - Si quieres que **pruebe las actividades prácticas con Docker** (solo tiene sentido en
+     cursos de informática, y necesitas Docker instalado): ver
+     [Probar prácticas con Docker](#probar-prácticas-con-docker). Si no lo sabes, di que no;
+     puedes activarlo más adelante.
 
    Al final te propone **explorar** tu Moodle: entra, mira qué tipos de actividades y de
    preguntas permite tu centro y lo apunta. No crea ni cambia nada. Te recomendamos
@@ -83,6 +87,7 @@ apuntes.
 > 💡 Si tienes el programa de la asignatura, rúbricas, soluciones de los ejercicios o tus
 > criterios de corrección, cópialos en la carpeta `sources` que se ha creado dentro de la
 > del curso. El asistente los tendrá en cuenta y, al corregir, **tus criterios mandan**.
+
 
 ## 4. Úsalo
 
@@ -103,11 +108,13 @@ por ejemplo:
 - *"Crea un cuestionario de 10 preguntas sobre el tema 3."*
 - *"¿Qué alumnos se están quedando atrás?"*
 - *"Revisa el curso y dime qué mejorarías."*
+- *"Monta un curso completo de introducción a Docker de tres temas."*
 
-Antes de guardar una nota, responder en el foro o publicar algo, te mostrará lo que va a
-hacer y esperará tu respuesta: pulsa **Intro** (o escribe `y`) para aprobarlo, o escribe
-`n` para rechazarlo. Para salir, escribe `/exit`. Si quieres cortar lo que está haciendo
-sin salir, pulsa `Esc`. Al terminar no hay nada que guardar: todo se va guardando solo.
+Antes de guardar una nota, responder en el foro, publicar algo o cambiar la configuración
+de una actividad, te mostrará lo que va a hacer y esperará tu respuesta: pulsa **Intro**
+(o escribe `y`) para aprobarlo, o escribe `n` para rechazarlo. Para salir, escribe `/exit`.
+Si quieres cortar lo que está haciendo sin salir, pulsa `Esc`. Al terminar no hay nada que
+guardar: todo se va guardando solo.
 
 ### Dejar que gestione el curso entero
 
@@ -125,18 +132,106 @@ supervisarlo:
 | **interactive** | Te pide confirmación antes de cada paso. Útil para ver cómo trabaja. |
 | **autonomous** | No pregunta nada. Solo si confías plenamente y has guardado usuario y contraseña. |
 
-### Otras órdenes
+### Encargarle una sola tarea
 
-| Orden | Para qué |
+```
+teacher-agent run --task "corrige las entregas de la Tarea 2"
+teacher-agent run --task "construye un curso de introducción a Docker de tres temas para FP"
+```
+
+Hace solo eso, con las mismas reglas (y las mismas aprobaciones) que el resto.
+
+---
+
+## Referencia
+
+### Órdenes
+
+Todas aceptan `--dir <carpeta>` para trabajar con un curso sin entrar en su carpeta.
+
+| Orden | Qué hace | Opciones |
+| --- | --- | --- |
+| `teacher-agent init` | Prepara una carpeta nueva para un curso (las preguntas del paso 3) y ofrece explorar tu Moodle. | |
+| `teacher-agent chat` | Conversación con el asistente, siempre pidiendo permiso antes de publicar. | `--headless` |
+| `teacher-agent run` | Gestiona el curso entero de una sentada: corregir, foro, contenido y resumen del progreso. | `--mode guided\|interactive\|autonomous`, `--task "…"`, `--headless` |
+| `teacher-agent explore` | Mira (sin crear nada) qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. | `--headless` |
+| `teacher-agent ingest` | Lee los documentos de `sources` (o los que indiques) y toma apuntes, sin abrir Moodle. | `[archivos…]` |
+| `teacher-agent skills` | Lista las habilidades del asistente, incluidas las tuyas. | |
+| `teacher-agent commands` | Lista los atajos que puedes usar dentro del chat. | |
+| `teacher-agent --help` / `--version` | Ayuda y versión instalada. | |
+
+Sin ninguna orden (`teacher-agent` a secas) te pregunta si quieres `run` o `chat`.
+
+### Atajos dentro del chat
+
+Escríbelos en el chat, con lo que necesites detrás.
+
+| Atajo | Qué hace |
 | --- | --- |
-| `teacher-agent explore` | Vuelve a comprobar qué actividades y tipos de pregunta permite tu Moodle. |
-| `teacher-agent ingest` | Lee los documentos que hayas puesto en `sources` y toma apuntes, sin abrir Moodle. |
-| `teacher-agent --help` | Muestra todas las opciones. |
+| `/teacher-agent:grade` | Corrige las entregas pendientes con un criterio justo y coherente. |
+| `/teacher-agent:forum` | Revisa el foro y decide si hace falta que intervenga el profesor. |
+| `/teacher-agent:quiz <tema>` | Escribe un lote de preguntas sobre ese tema y las importa al cuestionario. |
+| `/teacher-agent:build-course <descripción>` | Construye un curso completo: planifica, crea cada sección con apuntes, prácticas y cuestionarios, y lo revisa como lo vería un alumno. |
+| `/teacher-agent:pending` | Revisa cómo va la clase y quién se está quedando atrás. |
+| `/teacher-agent:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
+| `/teacher-agent:orient` | Se orienta en el curso: evaluación, plazos, canales de comunicación. |
+| `/teacher-agent:map` | Muestra las direcciones del curso que tiene apuntadas. |
+| `/knowledge:ingest` | Incorpora a sus apuntes lo que haya en `sources` sin procesar. |
+| `/knowledge:query <pregunta>` | Responde a partir de sus apuntes del curso. |
+| `/knowledge:lint` | Revisa que sus apuntes estén completos y bien enlazados. |
 
-Dentro del chat también puedes usar atajos: `/teacher-agent:grade` (corregir),
-`/teacher-agent:forum` (revisar el foro), `/teacher-agent:quiz` (crear preguntas),
-`/teacher-agent:pending` (quién va retrasado), `/teacher-agent:audit` (revisar el curso).
-`teacher-agent commands` los lista todos.
+### Habilidades
+
+Son los conocimientos que el asistente aplica por su cuenta cuando la tarea lo pide. No
+hace falta invocarlas: basta con pedirle el trabajo.
+
+| Habilidad | Para qué la usa |
+| --- | --- |
+| `course-orientation` | Orientarse en un curso antes de hacer nada complejo: estructura, evaluación, plazos y lo que su cuenta puede hacer de verdad. |
+| `moodle-navigation` | Leer la estructura real del curso (secciones, restricciones, finalización) y moverse por Moodle 4/5. |
+| `grading-rubric` | Corregir con un criterio justo y el mismo para todos, con retroalimentación útil. |
+| `rubric-design` | Construir una rúbrica cuando una actividad no la tiene. |
+| `forum-post` | Escribir una respuesta útil o un aviso a la clase. |
+| `forum-facilitation` | Decidir cuándo intervenir en el foro y cuándo dejar que respondan los compañeros. |
+| `course-building` | Construir un curso completo desde una descripción: plan, secciones, contenido, actividades y revisión final. |
+| `course-design` | Planificar un curso o un tema: objetivos, secuencia, tipos de actividad y evaluación. |
+| `activity-design` | Diseñar la mecánica de una actividad concreta (tarea, taller, lección, wiki…). |
+| `content-authoring` | Crear o editar recursos y actividades con instrucciones claras y coherentes con el curso. |
+| `quiz-design` | Escribir buenas preguntas (distractores plausibles, niveles variados) y revisar cuestionarios. |
+| `quiz-bulk-import` | Importar muchas preguntas de golpe en formato GIFT. |
+| `practice-testing` | Probar las actividades prácticas en Docker antes de publicarlas, o ejecutar una entrega al corregirla (ver abajo). |
+| `progress-monitoring` | Revisar el progreso de la clase priorizando a quien se queda atrás. |
+| `course-auditor` | Auditar el curso (organización, accesibilidad, pedagogía, evaluación) con recomendaciones. |
+| `content-editor` | Repasar la redacción de cualquier texto antes de publicarlo. |
+| `accessibility` | Aplicar y revisar prácticas básicas de accesibilidad. |
+| `knowledge-ingest`, `knowledge-query`, `knowledge-lint`, `knowledge-pages` | Mantener sus apuntes del curso (la carpeta `knowledge`). |
+
+---
+
+## Probar prácticas con Docker
+
+En un curso de informática (Docker, Linux, programación, bases de datos), una práctica que no
+funciona tal como está escrita le cuesta la tarde a toda la clase. Con esta opción, el
+asistente puede **ejecutar** las prácticas en contenedores Docker:
+
+- **Antes de publicar una práctica**, la sigue paso a paso como lo haría un alumno y
+  comprueba que la solución da lo que promete el enunciado. Si algo falla, lo corrige antes
+  de publicarla.
+- **Al corregir**, ejecuta la entrega del alumno y usa lo que sale como prueba en la nota y
+  en la retroalimentación.
+
+Está **desactivada por defecto**, porque es lo único que le da acceso a ejecutar programas en
+tu ordenador. Cuando la activas, lo hace una parte separada del asistente que solo puede usar
+Docker: siempre dentro de contenedores, sin red salvo que la práctica la necesite, con límites
+de memoria, CPU y tiempo, y trabajando solo en la carpeta `practice` del curso. Nunca instala
+nada: si falta Docker, te lo dice.
+
+Para activarla:
+
+1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/) (en Linux, Docker
+   Engine) y comprueba que funciona con `docker version`.
+2. Responde que sí a la pregunta de `teacher-agent init`, o en un curso ya creado edita su
+   `config.json` y añade `"allowPracticeRunner": true` dentro de `"agent"`.
 
 ---
 
@@ -167,6 +262,76 @@ nuevo la primera vez.
 
 ---
 
+## Avanzado: enséñale habilidades nuevas
+
+Si en tu asignatura hay algo que el asistente debería hacer siempre de una manera concreta,
+puedes escribírselo como una **habilidad propia**: un archivo de texto con instrucciones que
+el asistente carga cuando la tarea lo pide, igual que las suyas. No hace falta programar.
+
+### Dónde va y qué forma tiene
+
+Dentro de la carpeta del curso, crea una carpeta por habilidad con un archivo `SKILL.md`:
+
+```
+mi-curso/
+  .claude/
+    skills/
+      corregir-practicas-docker/
+        SKILL.md
+```
+
+El archivo empieza con un pequeño encabezado y sigue con las instrucciones:
+
+```markdown
+---
+name: corregir-practicas-docker
+description: Corregir las prácticas de Docker Compose de este curso ejecutándolas - úsala al corregir cualquier tarea cuyo nombre empiece por "Práctica".
+---
+
+# Corregir una práctica de Docker Compose
+
+1. Descarga los archivos de la entrega y guárdalos en sources/<práctica>/<id-del-alumno>/.
+2. Con la habilidad practice-testing, pide que se ejecute `docker compose up -d` con esos
+   archivos y que se compruebe que el servicio web responde en el puerto 8080 con la página
+   del enunciado.
+3. Aplica la rúbrica de la práctica (sources/rubricas/):
+   - Arranca sin errores: 4 puntos.
+   - Responde en el 8080 con lo pedido: 4 puntos.
+   - Usa volúmenes para los datos, como pide el enunciado: 2 puntos.
+4. En la retroalimentación, copia la línea exacta del error si algo no arranca.
+```
+
+- **`name`**: el nombre de la carpeta, en minúsculas y con guiones.
+- **`description`**: la parte más importante. Es lo que el asistente lee para decidir
+  **cuándo** usarla, así que di qué hace y en qué situaciones ("úsala al corregir...",
+  "cuando se pida crear...").
+- **El cuerpo**: los pasos, como se los explicarías a un profesor en prácticas. Sé concreto:
+  rutas de archivos, criterios, lo que no debe hacer.
+
+Comprueba que la ve con `teacher-agent skills` (aparece como `[propia]`) y pruébala en el
+chat pidiéndole justo esa tarea.
+
+### Lo que una habilidad puede y no puede hacer
+
+Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: el navegador
+con tu Moodle, sus apuntes y los documentos de `sources`. **No le da herramientas nuevas.**
+Por eso el ejemplo de arriba se apoya en `practice-testing`: ejecutar Docker solo es posible
+si has activado [Probar prácticas con Docker](#probar-prácticas-con-docker). Una habilidad que
+diga "ejecuta este programa" sin esa opción no funcionará, y el asistente te lo dirá.
+
+### Otras formas de adaptarlo
+
+- **Atajos propios para el chat**: un archivo `.claude/commands/<nombre>.md` con la
+  instrucción (puedes usar `$ARGUMENTS` para lo que escribas detrás). Por ejemplo,
+  `.claude/commands/semana.md` con *"Revisa lo que se ha entregado esta semana en las
+  prácticas de $ARGUMENTS y resume qué falla más"* se usa como `/semana Docker Compose`.
+- **Instrucciones generales**: `instructions.md` en la carpeta del curso, para lo que debe
+  tener en cuenta siempre, no solo en una tarea.
+- **Material de referencia**: tus rúbricas, soluciones y apuntes en `sources`; ejecuta
+  `teacher-agent ingest` para que los incorpore.
+
+---
+
 ## Para desarrolladores
 
 teacher-agent está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit),
@@ -179,7 +344,29 @@ git clone https://github.com/falkenslab/teacher-agent.git
 cd teacher-agent
 npm install
 npm start -- chat --dir <carpeta-del-curso>
+npm run build                 # compila dist/ (necesario para npm link y las skills de prueba)
 npm run typecheck && npm run lint
-npm run build && npm link     # comando global teacher-agent desde este clon
+npm link                      # comando global teacher-agent desde este clon
 npm pack                      # genera el .tgz que se publica en cada release
 ```
+
+### Skills de desarrollo
+
+En `.claude/skills/`, para trabajar en este repositorio con Claude Code (no las usa el
+asistente):
+
+| Skill | Para qué |
+| --- | --- |
+| `verify` | Comprobación completa: tipos, lint, compilación, los prompts de cada tipo de sesión y el catálogo. |
+| `commit` / `release` | Commits con las convenciones del repo y publicación de una versión con su paquete. |
+| `sandbox-e2e` | Probar el asistente de principio a fin contra [moodle-sandbox](https://github.com/falkenslab/moodle-sandbox). |
+| `simulate-course <descripción>` | Simular que el asistente construye un curso completo en el sandbox y dejar el informe. |
+| `test-report` | Escribir el informe de una prueba en `tests/` con sus capturas. |
+| `smoke-ingest` | Probar `ingest` con un temario y una rúbrica de ejemplo. |
+| `student-impact-review` | Revisar cambios que afectan a lo que ven los estudiantes. |
+| `upgrade-agent-kit` / `try-agent-kit-local` | Actualizar agent-kit o probar cambios suyos sin publicar. |
+
+### Informes de pruebas
+
+Cada prueba de principio a fin queda en [`tests/`](tests/README.md): una carpeta por prueba
+con el informe completo y sus capturas, y un índice.

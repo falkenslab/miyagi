@@ -33,15 +33,15 @@ To try unreleased agent-kit changes locally, `npm link ../agent-kit` (after `npm
 ## Layout
 
 - `src/cli.ts` — the `bin` entry: subcommand dispatch (`init`, `run`, `chat`, `explore`, `ingest`, `skills`, `commands`, `--help`, `--version`; bare `teacher-agent` asks run/chat). `init` offers to run `explore` right after creating the workspace; a failure there only warns.
-- `src/agent.ts` — `runSession()` (`run`/`ingest`/`explore` one-shot via `runQuery()`, `chat` via `runChatTui()`) and the `AgentSpec` (Playwright MCP, disallowed tools, approval/manual-login texts). No subagents: the teacher role never had any, so the session has no `Agent`/`Bash`. An `ingest` session has no browser; `explore` is `guided` (manual login possible), capped at 40 turns and skips the legacy migration.
-- `src/menu.ts` — the `init` wizard, the explore offer, and the run-kind/mode prompts.
+- `src/agent.ts` — `runSession()` (`run`/`ingest`/`explore` one-shot via `runQuery()`, `chat` via `runChatTui()`) and the `AgentSpec` (Playwright MCP, disallowed tools, approval/manual-login texts). The only subagent is the opt-in `practice-runner` (`agent.allowPracticeRunner`, off by default, `run`/`chat` only): Bash for Docker inside `practice/`, with agent-kit's three subagent gates keeping Bash away from the main agent; its prompt is `prompts/system/practice-runner.md`, and `practice-access.md` tells the main agent it exists. Without it the session has no `Agent`/`Bash` at all. `run --task "<text>"` replaces the default mission with one concrete job (`prompts/messages/run-mission-task.md`). An `ingest` session has no browser; `explore` is `guided` (manual login possible), capped at 40 turns and skips the legacy migration.
+- `src/menu.ts` — the `init` wizard (including the practice-runner opt-in, always saved as explicit true/false), `offerPracticeRunner()` for workspaces that never answered, the explore offer, and the run-kind/mode prompts.
 - `src/workspace.ts` — `<workspace>/config.json` schema (same shape as a moodle-agent teacher aula; `agent.role: "student"` is rejected, a missing role is written as `"teacher"`), workspace paths, `toSessionConfig()`, and the moodle-agent aula migration (`moveLegacyContext()`, `moveLegacyKnowledge()`, see below).
 - `src/globalConfig.ts` — `~/.teacher-agent/config.json` (Claude token, `defaultHeadless`, `defaultLanguage`, `autoCompactEnabled`) and the workspace `.env` loading.
 - `src/catalog.ts` — built-in (`plugin/` + agent-kit's knowledge plugin) and workspace skills/commands for the `skills`/`commands` subcommands.
 - `src/systemPrompt.ts` — assembles the system prompt from `prompts/system/*.md` (teacher-run / teacher-chat / teacher-ingest / explore plus conditional sections).
 - `src/playwrightConfig.ts` — the `@playwright/mcp` `--config` file; its `secrets` map is why the real Moodle password never reaches the model.
 - `src/toolLabels.ts` — `browser_*` labels layered on agent-kit's `createFriendlyToolLabel()`.
-- `plugin/` — the SDK local plugin (`name: "teacher-agent"`): 15 skills + 7 slash commands (`/teacher-agent:grade`...), moodle-agent's `shared` and `teacher` plugins merged; agent-kit's `knowledge` plugin adds 4 skills and 3 commands on its own.
+- `plugin/` — the SDK local plugin (`name: "teacher-agent"`): 17 skills + 8 slash commands (`/teacher-agent:grade`, `/teacher-agent:build-course <description>`...): moodle-agent's `shared` and `teacher` plugins merged, plus `course-building` and `practice-testing`; agent-kit's `knowledge` plugin adds 4 skills and 3 commands on its own.
 
 Code resolves `plugin/` and `prompts/` relative to `src/` (`path.join(__dirname, "..", ...)`), which also holds for the compiled `dist/`.
 
@@ -63,6 +63,8 @@ For whoever develops this repo (not the runtime agent's skills, which are in `pl
 - `try-agent-kit-local` — testing unreleased kit changes without the global npm (ask before touching `../agent-kit`).
 - `smoke-ingest` — a real `ingest` on a fixed fixture (syllabus + rubric) plus `check-knowledge.mjs` (which also fails on a student's name in any page with `--names`): the proof that prompt changes to the knowledge base still work.
 - `student-impact-review` — checking changes that publish to Moodle (grades, feedback, forum, content) against what students see: the per-action approval, fair and consistent grading, staying inside the course, no student data in the knowledge base.
+- `simulate-course <description>` — creates an empty course in the sandbox (`npm run course`), has teacher-agent build it with `course-building` while `auto-approve.mjs` answers and logs every approval (sandbox only), captures the whole course (`capture-course.mjs`) and writes the report.
+- `test-report` — writes a test's report into `tests/<YYYY-MM-DDTHH-MM>-<slug>/` (README.md + `assets/`), indexes it in `tests/README.md` and turns its findings into changes; see `tests/CLAUDE.md`.
 - `sandbox-e2e` — end-to-end runs against the moodle-sandbox repo (`$MOODLE_SANDBOX_DIR`, default `../moodle-sandbox`; a separate repo on purpose, not a submodule), using its `info` contract and its `activity` seed (students, submissions of known quality, forum doubts) so every grade and reply has a right answer.
 
 ## Things not to undo
@@ -71,3 +73,5 @@ For whoever develops this repo (not the runtime agent's skills, which are in `pl
 - There is no student role on purpose: this agent only ever acts as a teacher (`student-agent` is the student).
 - No pages about individual students in the knowledge base: progress and forum notes are class-level patterns.
 - `config.json` (plaintext password) and `.env` (token) stay in `deniedPaths`.
+- The practice runner stays opt-in and Docker-only: its prompt forbids installing anything, sudo, mounting beyond the practice folder or the Docker socket, and touching containers it didn't create. Don't give the main agent Bash to "simplify" it.
+- Every end-to-end test leaves its report in `tests/`, and its lessons in `plugin/skills/` or `prompts/`.
