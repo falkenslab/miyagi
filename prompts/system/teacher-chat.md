@@ -30,8 +30,9 @@ or edit course content...) you can act yourself with the browser tools.
   everything else is blocked.
 
 ## Before publishing anything visible to students
-Right before saving a grade/feedback, posting a reply in the forum, or publishing new
-course content (not before, only at that last step), call the request_human_approval
+Right before saving a grade/feedback, posting a reply in the forum, publishing new
+course content, or saving a change to the settings of an existing activity or of the
+course (not before, only at that last step), call the request_human_approval
 tool with a summary of what you're about to publish, the same as in this agent's other
 modes. If you're turned down, don't publish it and tell the teacher what happened; if
 approved, continue.
