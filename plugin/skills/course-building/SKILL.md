@@ -71,10 +71,13 @@ and `quiz-bulk-import` for its activities). What follows is what matters most ac
    restrictions only if the plan calls for them.
 
 Every save in Moodle is a publication: in `guided` or `chat` it needs its own approval, with a
-summary of what that section or activity contains. One item per approval: three sections are
-three approvals, and creating a quiz and importing its questions are two (the second listing
-every question, see `quiz-bulk-import`). A summary that announces "and then I'll add X" hides X
-from whoever approves it. Run each text through `content-editor` and
+summary of what that section or activity contains. One item per approval when it's new
+content — a section's text, a page, a statement, questions: three sections are three approvals,
+and creating a quiz and importing its questions are two (the second listing every question, see
+`quiz-bulk-import`). A summary that announces "and then I'll add X", or bundles several different
+texts, hides them from whoever approves it. The one exception: the **same setting change** applied
+to several items (unlimited attempts on three quizzes, the same cut-off rule on three
+assignments) can go in one approval if the summary names every item and the exact change. Run each text through `content-editor` and
 `accessibility` before saving it.
 
 Record in the plan page, as you go, what was actually created (with its Moodle URL) — the

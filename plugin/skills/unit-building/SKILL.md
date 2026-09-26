@@ -52,7 +52,8 @@ In edit mode, in the unit's section (or a new one, placed where the calendar say
 4. Every activity graded by hand gets its rubric in Moodle (`rubric-design`).
 5. Grade items in the right category and weight; dates in the calendar's order.
 
-One item per approval, with a summary of what it contains (see `course-building`).
+One item per approval, with a summary of what it contains; only an identical setting change on
+several items may share one, naming each (see `course-building`).
 
 ## 4. Check it
 

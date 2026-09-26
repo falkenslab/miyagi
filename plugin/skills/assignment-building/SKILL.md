@@ -51,6 +51,11 @@ Write it with `content-authoring`, and run it through `content-editor` and `acce
 - **Submission types**: only the ones the statement asks for; for files, the number, size and
   "Accepted file types". If a format isn't in Moodle's list (e.g. `.md`), don't restrict to it —
   say it in the statement.
+- **Late work**: Moodle 5 can apply late penalties automatically ("Grade penalties" on the
+  assignment, with the course's "Penalty rules": e.g. -20 % up to 3 days late), but only if the
+  site administrator has enabled grade penalties for assignments. If the setting isn't there,
+  say so to the teacher — "ask the site admin to enable grade penalties, or apply it by hand" —
+  never that Moodle can't do it. The cut-off date is what closes submissions.
 - **Feedback types**: "Feedback comments" on (written feedback), feedback files if you'll return
   annotated documents.
 - **Grade**: the maximum the rubric adds up to; the grade category if the gradebook uses them.

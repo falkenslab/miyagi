@@ -45,7 +45,8 @@ For each gap, decide with the teacher (in `chat`) or propose (in `run`):
 
 - the course is wrong → fix it: settings and rubrics with the usual skills, a missing unit with
   `unit-building`, a missing activity with `assignment-building` or `activity-building` — each
-  change a publication with its own approval;
+  change a publication with its own approval (an identical setting change on several items may
+  share one, naming each; new or rewritten texts never do);
 - the plan is wrong or outdated → don't touch the course; tell the teacher what to change in the
   plan, and update `teaching-plan.md` only if they confirm.
 

@@ -26,6 +26,11 @@ what a resource's title suggests it might contain.
   activity. If question management says some question-bank transfer task hasn't finished,
   the site's scheduled tasks haven't run: say so to the teacher instead of retrying.
 
+- **Forms that react to typing** (the gradebook's weights in "Gradebook setup", the rubric
+  editor, some dates): fill them by typing into the field, not by setting the value with
+  JavaScript — Moodle only saves what its own listeners saw change. After saving, reload the
+  page and check the values stuck before moving on.
+
 ## Sections and activities
 
 A course page snapshot lists sections (sometimes called "topics" or "weeks") each
