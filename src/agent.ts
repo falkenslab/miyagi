@@ -9,6 +9,7 @@ import {
   runQuery,
   createPromptLoader,
   ui,
+  type AgentDefinition,
   type AgentEvent,
   type AgentSpec,
   type McpServerConfig,
@@ -97,9 +98,8 @@ export function resolveWorkspaceDir(args: string[]): string {
  * MCP server, the plugin root, the RCE-equivalent disallowed tool, human-approval/manual-login
  * wording). Everything else (tool/hook wiring per mode, file-tool scoping, the
  * approval/manual-login/save-to-sources MCP tools themselves) is agent-kit's own
- * `buildSessionOptions()`, not repeated here. The teacher role has no subagents (as in
- * moodle-agent), so nothing here grants Bash. An "ingest" session has no browser: no
- * Playwright server, no manual login.
+ * `buildSessionOptions()`, not repeated here. Subagents: see buildSubagents() below. An
+ * "ingest" session has no browser: no Playwright server, no manual login.
  */
 function buildSpec(runDir: string, kind: SessionKind): AgentSpec<WorkspaceSessionConfig> {
   const hasBrowser = kind !== "ingest";
@@ -123,27 +123,42 @@ function buildSpec(runDir: string, kind: SessionKind): AgentSpec<WorkspaceSessio
       },
     }),
     pluginRoots: () => [path.join(__dirname, "..", "plugin")],
-    // Opt-in (workspace.agent.allowPracticeRunner, off by default — the only capability that
-    // grants a shell at all). agent-kit's three subagent gates keep Bash away from the main
-    // agent and restrict the Agent tool to this one registered type.
+    // In run/chat: two helpers without a shell (researcher: public web; pedagogy-reviewer:
+    // read-only critique), always on; and the opt-in practice-runner
+    // (workspace.agent.allowPracticeRunner, off by default — the only thing that grants a shell).
+    // Registering any subagent puts Agent and Bash in the session's tools, but agent-kit's three
+    // subagent gates keep Bash away from the main agent, restrict the Agent tool to these
+    // registered types, and each subagent only gets the tools it lists.
     buildSubagents: (config) => {
-      if ((kind !== "run" && kind !== "chat") || !config.allowPracticeRunner) return undefined;
-      return {
-        agents: {
-          "practice-runner": {
-            description: "Runs a practical activity in Docker containers inside practice/<activity>/ - the teacher's own statement or solution before publishing it, or a student's submission while grading - and reports exactly what ran and what came out. Invoke with the activity's slug, what to check and where its files are (sources/ or practice/).",
-            tools: ["Bash", "Read", "Write", "Glob"],
-            // Forward slashes even on Windows: interpolated into shell commands run through
-            // Bash (Git Bash on Windows), which doesn't want backslashes.
-            prompt: loadPrompt("system/practice-runner.md", {
-              practiceDir: config.practiceDir.split(path.sep).join("/"),
-              sourcesDir: (config.sourcesDir ?? "").split(path.sep).join("/"),
-            }),
-            maxTurns: 60,
-          },
+      if (kind !== "run" && kind !== "chat") return undefined;
+      const agents: Record<string, AgentDefinition> = {
+        researcher: {
+          description: "Researches concrete questions on the public web (official documentation first) and returns sourced findings with dates and confidence. Invoke with the questions and what you need back.",
+          tools: ["WebSearch", "WebFetch", "Read", "Glob", "Grep"],
+          prompt: loadPrompt("system/researcher.md"),
+          maxTurns: 40,
         },
-        allowedSubagentTypes: ["practice-runner"],
+        "pedagogy-reviewer": {
+          description: "Instructional-design expert that reviews a plan or an activity (alignment of objectives, activities and assessment; methodology fit; workload; diversity) and returns a prioritized critique. Invoke with what to review and the knowledge-base pages where it's written.",
+          tools: ["Read", "Glob", "Grep"],
+          prompt: loadPrompt("system/pedagogy-reviewer.md"),
+          maxTurns: 20,
+        },
       };
+      if (config.allowPracticeRunner) {
+        agents["practice-runner"] = {
+          description: "Runs a practical activity in Docker containers inside practice/<activity>/ - the teacher's own statement or solution before publishing it, or a student's submission while grading - and reports exactly what ran and what came out. Invoke with the activity's slug, what to check and where its files are (sources/ or practice/).",
+          tools: ["Bash", "Read", "Write", "Glob"],
+          // Forward slashes even on Windows: interpolated into shell commands run through
+          // Bash (Git Bash on Windows), which doesn't want backslashes.
+          prompt: loadPrompt("system/practice-runner.md", {
+            practiceDir: config.practiceDir.split(path.sep).join("/"),
+            sourcesDir: (config.sourcesDir ?? "").split(path.sep).join("/"),
+          }),
+          maxTurns: 60,
+        };
+      }
+      return { agents, allowedSubagentTypes: Object.keys(agents) };
     },
     // browser_run_code_unsafe runs arbitrary JS in the Playwright server process (not the
     // page) — Microsoft's own description calls it "RCE-equivalent". disallowedTools takes

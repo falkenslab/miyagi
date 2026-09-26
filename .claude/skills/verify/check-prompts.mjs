@@ -26,6 +26,7 @@ const SECTIONS = {
   "custom instructions": { text: "Additional instructions from the teacher", when: course },
   "approval before publishing": { text: "request_human_approval", when: (c) => c.kind === "chat" || (c.kind === "run" && c.mode === "guided") },
   "credentials": { text: "MOODLE_PASSWORD", when: browser },
+  "subagents": { text: "## Helpers you can delegate to", when: (c) => c.kind === "run" || c.kind === "chat" },
   "practice runner": { text: "## Checking practical activities in Docker", when: (c) => c.allowPracticeRunner && (c.kind === "run" || c.kind === "chat") },
 };
 
