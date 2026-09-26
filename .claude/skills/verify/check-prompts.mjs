@@ -26,24 +26,25 @@ const SECTIONS = {
   "custom instructions": { text: "Additional instructions from the teacher", when: course },
   "approval before publishing": { text: "request_human_approval", when: (c) => c.kind === "chat" || (c.kind === "run" && c.mode === "guided") },
   "credentials": { text: "MOODLE_PASSWORD", when: browser },
+  "practice runner": { text: "## Checking practical activities in Docker", when: (c) => c.allowPracticeRunner && (c.kind === "run" || c.kind === "chat") },
 };
 
-const workspace = {
+const workspace = (practice) => ({
   classroom: { label: "check", url: "https://moodle.example.com", courseId: "1", username: "u", password: "p" },
-  agent: { role: "teacher", language: "español", persona: "warm" },
-};
+  agent: { role: "teacher", language: "español", persona: "warm", allowPracticeRunner: practice },
+});
 
 const MODES = { run: ["guided", "interactive", "autonomous"], chat: ["guided"], ingest: ["autonomous"], explore: ["guided"] };
 
 let failures = 0;
 for (const [kind, modes] of Object.entries(MODES)) {
   for (const mode of modes) {
-    for (const migrationPending of [false, true]) {
-      const config = toSessionConfig("C:/ws", workspace, {
+    for (const [migrationPending, practice] of [[false, false], [true, false], [false, true]]) {
+      const config = toSessionConfig("C:/ws", workspace(practice), {
         mode, kind, headless: false, migrationPending, language: "español", instructions: "Puntúa sobre 10.",
       });
       const prompt = buildSystemPrompt(config);
-      const label = `${kind} ${mode} migration=${migrationPending}`;
+      const label = `${kind} ${mode} migration=${migrationPending} practice=${practice}`;
       const problems = [];
       const left = prompt.match(/\{\{[^}]+\}\}/g);
       if (left) problems.push(`unsubstituted: ${[...new Set(left)].join(", ")}`);

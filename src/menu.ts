@@ -4,6 +4,7 @@ import {
   createWorkspace,
   defaultWorkspaceLabel,
   writeInstructionsTemplate,
+  writeWorkspaceConfig,
   type AgentPersona,
   type WorkspaceConfig,
 } from "./workspace.js";
@@ -31,6 +32,16 @@ export function parseCourseUrl(raw: string): { url: string; courseId?: string } 
 
   return { url: `${parsed.origin}${parsed.pathname.slice(0, -suffix.length)}`, courseId };
 }
+
+/** The only opt-in capability: it's the one thing that grants a shell (Docker only). */
+const PRACTICE_RUNNER = {
+  summary: "probar las actividades prácticas (un Dockerfile, un script, el código de una entrega) " +
+    "en contenedores Docker, antes de publicarlas o al corregirlas",
+  message: "¿Permitir que el agente pruebe actividades prácticas en contenedores Docker (por " +
+    "ejemplo, comprobar que un enunciado funciona antes de publicarlo, o ejecutar una entrega " +
+    "al corregirla)? Trabaja solo en la carpeta practice/ del workspace y solo con Docker; nunca " +
+    "instala nada: si Docker no está instalado, te lo dice.",
+};
 
 /** Runs `fn`, exiting cleanly instead of throwing when the user hits Ctrl+C on a prompt. */
 async function exitOnCancel<T>(fn: () => Promise<T>): Promise<T> {
@@ -84,6 +95,10 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
         "te responderá en el idioma que uses):",
     });
 
+    // Saved as explicit true/false (never omitted): offerPracticeRunner() reads an absent key
+    // as "never asked", and would otherwise keep asking after a deliberate "no".
+    const allowPracticeRunner = await confirm({ message: PRACTICE_RUNNER.message, default: false });
+
     const config: WorkspaceConfig = {
       classroom: {
         label,
@@ -96,6 +111,7 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
         role: "teacher",
         ...(persona ? { persona } : {}),
         ...(language ? { language } : {}),
+        allowPracticeRunner,
       },
     };
     await createWorkspace(workspaceDir, config);
@@ -110,6 +126,39 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
     console.log(ui.success(`Workspace creado en ${workspaceDir}\n`));
     return config;
   });
+}
+
+/**
+ * A workspace created before the practice runner existed (or by moodle-agent) has no
+ * `agent.allowPracticeRunner`: offer it once — the answer, yes or no, is persisted — instead of
+ * it silently staying off forever. Ctrl+C skips without persisting, so it's offered again.
+ */
+export async function offerPracticeRunner(
+  workspaceDir: string,
+  config: WorkspaceConfig,
+  canPrompt: boolean,
+): Promise<WorkspaceConfig> {
+  if (config.agent.allowPracticeRunner !== undefined) return config;
+  console.log(ui.warn(
+    `Nota: este workspace todavía no ha configurado una capacidad opcional — ${PRACTICE_RUNNER.summary}. ` +
+      'Desactivada por defecto; cámbiala a mano en config.json ("agent.allowPracticeRunner": true/false) ' +
+      "o responde a la pregunta de abajo.",
+  ));
+  if (!canPrompt) {
+    console.log();
+    return config;
+  }
+  try {
+    const wants = await confirm({ message: PRACTICE_RUNNER.message, default: false });
+    const updated = { ...config, agent: { ...config.agent, allowPracticeRunner: wants } };
+    await writeWorkspaceConfig(workspaceDir, updated);
+    console.log();
+    return updated;
+  } catch (error) {
+    if (!isExitPromptError(error)) throw error;
+    console.log();
+    return config;
+  }
 }
 
 /** Asked right after "init": probing the Moodle's activity/question types is what the

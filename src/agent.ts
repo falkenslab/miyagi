@@ -38,7 +38,7 @@ import {
   resolveHeadless,
   resolveLanguage,
 } from "./globalConfig.js";
-import { promptInitWorkspace, promptMode } from "./menu.js";
+import { offerPracticeRunner, promptInitWorkspace, promptMode } from "./menu.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
 import { friendlyToolLabel } from "./toolLabels.js";
@@ -123,8 +123,28 @@ function buildSpec(runDir: string, kind: SessionKind): AgentSpec<WorkspaceSessio
       },
     }),
     pluginRoots: () => [path.join(__dirname, "..", "plugin")],
-    // No subagents for the teacher role (none existed in moodle-agent): no Agent/Bash at all.
-    buildSubagents: () => undefined,
+    // Opt-in (workspace.agent.allowPracticeRunner, off by default — the only capability that
+    // grants a shell at all). agent-kit's three subagent gates keep Bash away from the main
+    // agent and restrict the Agent tool to this one registered type.
+    buildSubagents: (config) => {
+      if ((kind !== "run" && kind !== "chat") || !config.allowPracticeRunner) return undefined;
+      return {
+        agents: {
+          "practice-runner": {
+            description: "Runs a practical activity in Docker containers inside practice/<activity>/ - the teacher's own statement or solution before publishing it, or a student's submission while grading - and reports exactly what ran and what came out. Invoke with the activity's slug, what to check and where its files are (sources/ or practice/).",
+            tools: ["Bash", "Read", "Write", "Glob"],
+            // Forward slashes even on Windows: interpolated into shell commands run through
+            // Bash (Git Bash on Windows), which doesn't want backslashes.
+            prompt: loadPrompt("system/practice-runner.md", {
+              practiceDir: config.practiceDir.split(path.sep).join("/"),
+              sourcesDir: (config.sourcesDir ?? "").split(path.sep).join("/"),
+            }),
+            maxTurns: 60,
+          },
+        },
+        allowedSubagentTypes: ["practice-runner"],
+      };
+    },
     // browser_run_code_unsafe runs arbitrary JS in the Playwright server process (not the
     // page) — Microsoft's own description calls it "RCE-equivalent". disallowedTools takes
     // full precedence over canUseTool/allowAnyMcpTool (confirmed empirically, see
@@ -153,9 +173,10 @@ function buildSpec(runDir: string, kind: SessionKind): AgentSpec<WorkspaceSessio
  * Reads the workspace's config.json, or — with a terminal in front — offers to create it
  * right there.
  */
-async function resolveWorkspace(workspaceDir: string): Promise<WorkspaceConfig> {
+async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promise<WorkspaceConfig> {
   if (await workspaceExists(workspaceDir)) {
-    return ensureTeacherRole(workspaceDir, await readWorkspaceConfig(workspaceDir));
+    const config = await ensureTeacherRole(workspaceDir, await readWorkspaceConfig(workspaceDir));
+    return offerPracticeRunner(workspaceDir, config, canPrompt);
   }
   if (!process.stdin.isTTY) {
     throw new Error(
@@ -208,7 +229,8 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   await loadWorkspaceEnv(workspaceDir);
   await ensureClaudeAuthPersisted();
 
-  const workspace = await resolveWorkspace(workspaceDir);
+  const canPrompt = Boolean(process.stdin.isTTY) && (kind === "run" || kind === "chat") && modeFlag !== "autonomous";
+  const workspace = await resolveWorkspace(workspaceDir, canPrompt);
   const mode = await resolveMode(kind, modeFlag);
   const headless = await resolveHeadless(parseBooleanFlag(args, "--headless"), workspace.agent.headless);
   const hasCredentials = Boolean(workspace.classroom.username && workspace.classroom.password);

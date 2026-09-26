@@ -34,6 +34,9 @@ export interface WorkspaceConfig {
     language?: string;
     /** Falls back to the global config's defaultHeadless, then false. --headless wins over both. */
     headless?: boolean;
+    /** Opt-in, off by default: registers the practice-runner subagent, the only thing that gets
+     * a shell (Docker only, inside practice/) — see agent.ts's buildSubagents(). */
+    allowPracticeRunner?: boolean;
   };
 }
 
@@ -49,6 +52,9 @@ export interface WorkspaceSessionConfig extends BaseSessionConfig {
   knownLanguage?: string;
   customInstructions?: string;
   headless: boolean;
+  allowPracticeRunner?: boolean;
+  /** Where the practice-runner subagent works: one folder per activity. */
+  practiceDir: string;
   /** Orthogonal to `mode` (see agent-kit's own agentSpec.ts doc comment on `Mode`) — set
    * by `agent.ts` from the CLI subcommand, decides which base prompt buildSystemPrompt()
    * loads and whether the session has a browser at all. */
@@ -68,6 +74,12 @@ export function knowledgeDirFor(workspaceDir: string): string {
 /** Original files, read-only for the agent: the material the human drops in (syllabus, rubrics, model solutions), plus what it saves with `save_to_sources` (downloaded course documents). */
 export function sourcesDirFor(workspaceDir: string): string {
   return path.join(workspaceDir, "sources");
+}
+
+/** Practical activities checked in containers by the practice-runner subagent (Dockerfiles,
+ * scripts, student submissions copied in): working files, not notes, so outside the knowledge base. */
+export function practiceDirFor(workspaceDir: string): string {
+  return path.join(workspaceDir, "practice");
 }
 
 /** Where a pre-knowledge base knowledge/ is moved so the agent can rebuild the knowledge base from it. */
@@ -122,6 +134,7 @@ const GITIGNORE_TEMPLATE = `# Generado por "teacher-agent init" — config.json 
 config.json
 .env
 sessions/
+practice/
 `;
 
 /** Writes `config` (chmod 600 best-effort, no-op on Windows) — used both to create a
@@ -195,6 +208,7 @@ export function toSessionConfig(
     projectDir: workspaceDir,
     knowledgeDir: knowledgeDirFor(workspaceDir),
     sourcesDir: sourcesDirFor(workspaceDir),
+    extraWritableDirs: workspace.agent.allowPracticeRunner ? [practiceDirFor(workspaceDir)] : [],
     // The password lives in config.json and the Claude token may live in .env.
     deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env")],
     secrets: workspace.classroom.password ? [workspace.classroom.password] : [],
@@ -203,6 +217,8 @@ export function toSessionConfig(
     moodleUsername: workspace.classroom.username,
     moodlePassword: workspace.classroom.password,
     agentPersona: workspace.agent.persona,
+    allowPracticeRunner: workspace.agent.allowPracticeRunner,
+    practiceDir: practiceDirFor(workspaceDir),
     knownLanguage: options.language,
     customInstructions: options.instructions,
     headless: options.headless,

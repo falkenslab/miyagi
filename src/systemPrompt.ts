@@ -22,13 +22,26 @@ export function buildSystemPrompt(config: WorkspaceSessionConfig): string {
   const base =
     config.kind === "chat" ? buildChatSystemPrompt(config) : config.kind === "ingest" ? buildIngestSystemPrompt(config) : buildRunSystemPrompt(config);
   const browserOnly = config.kind === "ingest" ? "" : playwrightFileSafetySection();
-  return `${base}${migrationSection(config)}${languageSection(config)}${personaSection(config)}${customInstructionsSection(config)}${webResearchSection(config)}${browserOnly}`;
+  return `${base}${migrationSection(config)}${practiceSection(config)}${languageSection(config)}${personaSection(config)}${customInstructionsSection(config)}${webResearchSection(config)}${browserOnly}`;
 }
 
 /** A legacy knowledge/ was moved to knowledge-legacy/: rebuilding the knowledge base comes before anything else. */
 function migrationSection(config: WorkspaceSessionConfig): string {
   if (!config.migrationPending) return "";
   return `\n\n${loadPrompt("system/knowledge-migration.md")}`;
+}
+
+/**
+ * The practice-runner subagent (registered in agent.ts's buildSubagents()) only exists in run/chat
+ * when the workspace opted into `allowPracticeRunner` — off by default, since it's the only thing
+ * that grants a shell. Without it, mentioning the subagent would send the model toward Agent
+ * calls that are denied.
+ */
+function practiceSection(config: WorkspaceSessionConfig): string {
+  if (!config.allowPracticeRunner || (config.kind !== "run" && config.kind !== "chat")) return "";
+  return `
+
+${loadPrompt("system/practice-access.md")}`;
 }
 
 function playwrightFileSafetySection(): string {
