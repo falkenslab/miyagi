@@ -79,6 +79,12 @@ for (const m of modules) {
   }
 }
 
+// The course's badges, if it has any (gamification).
+await page.goto(`${base}/badges/index.php?type=2&id=${courseId}`, { waitUntil: "networkidle" });
+if (await page.locator('a[href*="/badges/overview.php"]').count() > 0) {
+  await shot("insignias", `/badges/index.php?type=2&id=${courseId}`, "Insignias del curso");
+}
+
 // The course as a student sees it (admin "Log in as").
 const sesskey = await page.evaluate(() => globalThis.M?.cfg?.sesskey);
 await page.goto(`${base}/user/index.php?id=${courseId}&perpage=100`, { waitUntil: "networkidle" });
