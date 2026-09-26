@@ -124,17 +124,7 @@ turn every lesson into a change in the agent itself.
    assignment and a thread as the chosen student ("Log in as"). It hides the fixed course
    index and sticky footer, which otherwise cover the start of full-page captures. Look at
    the images before using them.
-2. **Numbers from the transcripts**, not estimates: duration, tool calls per kind, and the
-   ordered list of `request_human_approval` summaries (`"pre_tool_use"` lines in each
-   session's `transcript.jsonl`). Check what was published against the database too:
-   grades and feedback lengths (`mdl_assign_grades` + `mdl_assignfeedback_comments`), one
-   post per intended reply (`mdl_forum_posts`), and any claim the agent made about settings.
-3. **The report as an artifact**: verdict first; what ran; each expected answer vs. what the
-   agent did; screenshots with captions saying what to look at; the approvals in order,
-   including anything published *without* one; findings with where each was fixed; and the
-   skill-by-skill list of what was learned.
-4. **Lessons into the agent**: every finding becomes a change in `plugin/skills/` (how Moodle
-   actually behaves, a rule the model followed only by luck) or in the prompts (a guardrail
-   gap), checked with `student-impact-review`. Verify every Moodle button or message you
-   quote against the language pack of the sandbox's own checkout
-   (`src/public/lang/en/*.php`, `mod/*/lang/en/*.php`), never from memory.
+2. **The report**, with the `test-report` skill: the evidence from the transcripts and the
+   database, the report in `tests/<YYYY-MM-DDTHH-MM>-<slug>/README.md` with the screenshots
+   in `assets/`, its row in `tests/README.md`, and every finding turned into a change in
+   `plugin/skills/` or `prompts/` before committing.

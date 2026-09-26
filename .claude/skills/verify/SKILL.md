@@ -35,11 +35,12 @@ add it to the `SECTIONS` table in `check-prompts.mjs` in the same change.
 Also check the plugin, which the renders don't cover:
 
 ```
-grep -rn -E "context/|knowledge/README|save_to_knowledge|<topic>/|moodle-agent|as a student" plugin/
+grep -rn -E "context/|knowledge/README|save_to_knowledge|<topic>/|moodle-agent|\(as a student\)|\(student\)|student side" plugin/
 ```
 
 must print nothing (the teacher's skills were ported from moodle-agent's shared/teacher
-plugins; those are the patterns that used to be there).
+plugins, where skills spoke to both roles — "a post (as a student)"; those are the patterns
+that used to be there. "as a student would see it" is fine).
 
 Notes:
 - `dist/` is what `check-prompts.mjs` and the CLI read: always `npm run build` first.
