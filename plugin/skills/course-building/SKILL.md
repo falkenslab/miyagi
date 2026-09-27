@@ -52,7 +52,8 @@ When every unit is built, the things no single unit can see:
 
 - **As a student**, the whole course from the top ("Switch role to..." → "Student"): sections in
   order, nothing empty or locked without explanation, dates that follow the calendar.
-- **The gradebook** (the grader report and "Gradebook setup"): the plan's weights, and a course
+- **The gradebook**, decided before the first graded activity, not repaired after the last one: read in `moodle-capabilities.md` (or in "Gradebook setup") which aggregations the site offers, and create each graded item with the maximum grade the plan's weights need from the start (with only "Natural", a 10 % quiz and a 40 % project out of 100 are 10 and 40 points). The same for late penalties: promise one in a statement only if the site has them, or say it's applied by hand.
+- **The gradebook, checked** (the grader report and "Gradebook setup"): the plan's weights, and a course
   total on the scale the course guide announces. With "Natural" aggregation the total is the sum
   of every item's maximum (seven items out of 10 show as "out of 70"); if the guide says "out of
   10", use an aggregation whose total you can set (e.g. "Weighted mean of grades" with the course

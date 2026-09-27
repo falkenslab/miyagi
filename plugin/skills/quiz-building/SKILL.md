@@ -75,8 +75,9 @@ GIFT covers multiple choice, true/false, short answer, numerical, matching and e
 ### Order and total
 
 Adding several questions at once doesn't keep the file's order (in a real course they landed as
-06, 01, 02, 03, 05, 04). On the quiz's "Questions" page, fix the order with each question's
-move handle unless shuffling is intended, and check "Total of marks" and the maximum grade.
+06, 01, 02, 03, 05, 04). On the quiz's "Questions" page, fix the order with each question's move handle unless shuffling is intended, and check "Total of marks" and the maximum grade. Set the maximum grade the plan's weights need (`course-building`, the gradebook) when you create the quiz, not afterwards.
+
+Keep each browser script short and synchronous (read the order, click one handle): a long script of background requests can leave the page hanging with no timeout, and a hung call stops the whole session until someone notices.
 
 ## 3. Changing an existing quiz
 
@@ -95,6 +96,5 @@ each.
 ## 4. After
 
 Run `publish-check` on the quiz (preview it as a student: questions in order, feedback where
-expected, review options as intended). Record in `knowledge/activities/<quiz-slug>.md` the
-settings, the questions (types, how many, the criteria followed) and the quiz's URL — the GIFT
+expected, review options as intended). Record in `knowledge/activities/<quiz-slug>.md` — one page per quiz, even when it repeats another quiz's settings — the settings, the questions (types, how many, the criteria followed) and the quiz's URL — the GIFT
 file sits next to it.

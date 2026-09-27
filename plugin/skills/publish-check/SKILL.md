@@ -26,8 +26,7 @@ Three passes, in order.
 
 ## 2. Accessibility
 
-- **Headings**: real headings from the editor's styles, in order, no skipped levels — not bold or
-  bigger text.
+- **Headings**: real headings from the editor's styles, in order, no skipped levels — not bold or bigger text. Moodle already shows the page's or activity's name as the `h1`, so the content's own headings start at `h2`, in pages, descriptions and section summaries alike.
 - **Images**: alt text that conveys what the image shows (a process, a result), not the file name;
   empty alt text only for purely decorative images.
 - **Links**: text that says where it goes ("descarga el programa en PDF"), never "click here".
@@ -61,6 +60,7 @@ saving, with a summary of what's being published.
 - **One item per approval when it's new content** — a section's text, a page, a statement, a set
   of questions (listing each question, see `quiz-building`), a rubric. Three sections are three
   approvals; creating a quiz and importing its questions are two.
+- **Commitments in the teacher's name** — a reply time in the forum, feedback by a date, extra material on request — are the teacher's decision: if the teacher didn't make them, leave them out of what students read (keep them as a proposal in `teaching-plan.md`), or, in `guided`/`chat`, name each one in the approval summary so it's approved knowingly.
 - A summary that announces "and then I'll add X", or bundles several different texts, hides them
   from whoever approves it.
 - The one exception: the **same setting change** on several items (unlimited attempts on three

@@ -8,8 +8,7 @@ description: Help the teacher write the teaching plan (programación didáctica)
 The teaching plan is the teacher's document: what the course is for, how it's organised, how
 students learn and how they're assessed. You help write it, well structured and coherent; the
 decisions are the teacher's. It's generic — not tied to any particular law or regulation — unless
-the teacher gives you one (in `sources/`) or asks you to follow it, in which case use
-`topic-research` to find and cite it.
+the teacher gives you one (in `sources/`) or asks you to follow it, in which case use `topic-research` to find and cite it. Don't go looking for one otherwise: a course description that names a qualification or a level (a vocational title, a school year) says who the students are, not that the plan must quote its official curriculum. Write your own objectives and criteria, and at most note in the plan's context, as a proposal, that it can be aligned with the official curriculum if the teacher wants.
 
 There is only one plan per course: when `course-building` or `unit-building` need a plan and there
 isn't one, they draft this one (every decision the teacher didn't take marked as a proposal)
