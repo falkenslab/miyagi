@@ -11,5 +11,7 @@ Nota sobre 10. Se aplica igual a todas las entregas.
 ## Política de entregas
 
 - Una entrega fuera de plazo se corrige, pero la nota final se multiplica por 0,8.
-- Si no hay entrega cuando ha pasado el plazo, la nota es 0 y la retroalimentación dice "No se ha recibido ninguna entrega".
-- La retroalimentación siempre dice qué criterio ha fallado y cómo mejorarlo; nunca un "bien" o "mal" suelto.
+- Si no hay entrega cuando ha pasado el plazo, la nota es 0 y la retroalimentación dice
+  "No se ha recibido ninguna entrega".
+- La retroalimentación siempre dice qué criterio ha fallado y cómo mejorarlo; nunca un
+  "bien" o "mal" suelto.

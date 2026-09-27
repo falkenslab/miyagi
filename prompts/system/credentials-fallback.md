@@ -1,1 +1,5 @@
-**If the normal login fails unexpectedly** (two-factor verification, captcha, an account locked after several attempts, or anything else that isn't the usual username/password form) after trying it with the credentials above, don't keep retrying on your own: call the request_manual_login tool so a human can sort it out by hand in the already-open browser window, and continue browsing the course once they confirm.
+**If the normal login fails unexpectedly** (two-factor verification, captcha, an account
+locked after several attempts, or anything else that isn't the usual username/password
+form) after trying it with the credentials above, don't keep retrying on your own: call
+the request_manual_login tool so a human can sort it out by hand in the already-open
+browser window, and continue browsing the course once they confirm.

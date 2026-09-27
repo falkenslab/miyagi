@@ -5,9 +5,13 @@ description: Design and build a Moodle assignment of any kind - written answer, 
 
 # Designing and building an assignment
 
-An assignment in Moodle is three things that have to agree: the **statement** (what to do, what to hand in, how it's graded), the **submission settings** (what Moodle actually lets students upload, and when) and the **grading** (rubric, marking). A statement that says "upload a PDF" on an assignment that only accepts online text is the most common way to break one.
+An assignment in Moodle is three things that have to agree: the **statement** (what to do, what
+to hand in, how it's graded), the **submission settings** (what Moodle actually lets students
+upload, and when) and the **grading** (rubric, marking). A statement that says "upload a PDF"
+on an assignment that only accepts online text is the most common way to break one.
 
-Its rubric comes from `rubric-design`; hands-on work is checked with `practice-testing` when the workspace allows it. Check `knowledge/moodle-capabilities.md` for what this Moodle has.
+Its rubric comes from `rubric-design`; hands-on work is checked with `practice-testing` when the
+workspace allows it. Check `knowledge/moodle-capabilities.md` for what this Moodle has.
 
 ## 1. Pick the kind
 
@@ -22,36 +26,56 @@ Its rubric comes from `rubric-design`; hands-on work is checked with `practice-t
 | Oral presentation / video | Online text with the video link, or a file with a size limit that fits a video | Say the maximum length; grade with a rubric for content and delivery |
 | Offline task graded in Moodle | No submission types (only grading) | For presentations or exams done in class |
 
-Integrity options, when the task calls for them: "Require that students accept the submission statement", "Anonymous submissions" (graders don't see names), "Use marking workflow" (grades released together).
+Integrity options, when the task calls for them: "Require that students accept the submission
+statement", "Anonymous submissions" (graders don't see names), "Use marking workflow" (grades
+released together).
 
 ## 2. The statement
 
-A good assignment asks for genuine reasoning, application or production — something that can't be answered by restating the notes — and says what evidence of learning the submission must show, not just a topic to write about. Complete enough that a student needs nothing else:
+A good assignment asks for genuine reasoning, application or production — something that can't
+be answered by restating the notes — and says what evidence of learning the submission must show,
+not just a topic to write about. Complete enough that a student needs nothing else:
 
 1. **Context and goal**: what they'll do and why it matters (one short paragraph).
-2. **Steps or requirements**: numbered, concrete; for practical work, the commands or the starting files.
+2. **Steps or requirements**: numbered, concrete; for practical work, the commands or the
+   starting files.
 3. **What to hand in**: format, file names, length, where (online text or file).
-4. **How it's graded**: the criteria and their weights, the same as the rubric; late and missing policy if there is one.
+4. **How it's graded**: the criteria and their weights, the same as the rubric; late and missing
+   policy if there is one.
 5. **Dates**: due date and, if different, the cut-off date after which nothing is accepted.
 
 Write it in the course's style (look at two or three existing assignments first).
 
 ## 3. Settings
 
-- **Dates**: "Allow submissions from", "Due date", "Cut-off date" (late submissions accepted until then, marked late), "Remind me to grade by". Keep them in the course's calendar order.
-- **Submission types**: only the ones the statement asks for; for files, the number, size and "Accepted file types". If a format isn't in Moodle's list (e.g. `.md`), don't restrict to it — say it in the statement.
-- **Late work**: Moodle 5 can apply late penalties automatically ("Grade penalties" on the assignment, with the course's "Penalty rules": e.g. -20 % up to 3 days late), but only if the site administrator has enabled grade penalties for assignments. If the setting isn't there, say so to the teacher — "ask the site admin to enable grade penalties, or apply it by hand" — never that Moodle can't do it. The cut-off date is what closes submissions.
-- **Feedback types**: "Feedback comments" on (written feedback), feedback files if you'll return annotated documents.
+- **Dates**: "Allow submissions from", "Due date", "Cut-off date" (late submissions accepted
+  until then, marked late), "Remind me to grade by". Keep them in the course's calendar order.
+- **Submission types**: only the ones the statement asks for; for files, the number, size and
+  "Accepted file types". If a format isn't in Moodle's list (e.g. `.md`), don't restrict to it —
+  say it in the statement.
+- **Late work**: Moodle 5 can apply late penalties automatically ("Grade penalties" on the
+  assignment, with the course's "Penalty rules": e.g. -20 % up to 3 days late), but only if the
+  site administrator has enabled grade penalties for assignments. If the setting isn't there,
+  say so to the teacher — "ask the site admin to enable grade penalties, or apply it by hand" —
+  never that Moodle can't do it. The cut-off date is what closes submissions.
+- **Feedback types**: "Feedback comments" on (written feedback), feedback files if you'll return
+  annotated documents.
 - **Grade**: the maximum the rubric adds up to; the grade category if the gradebook uses them.
 - **Group mode and groups** when it's group work.
-- **Completion conditions** if the unit uses them (e.g. "receive a grade" to unlock the next part).
+- **Completion conditions** if the unit uses them (e.g. "receive a grade" to unlock the next
+  part).
 
 ## 4. Rubric
 
-Every assignment graded by hand gets its rubric in Moodle (`rubric-design`: "Advanced grading" → Rubric → "Save rubric and make it ready"), with the same criteria and weights as the statement.
+Every assignment graded by hand gets its rubric in Moodle (`rubric-design`: "Advanced grading" →
+Rubric → "Save rubric and make it ready"), with the same criteria and weights as the statement.
 
 ## 5. Publish and check
 
-Saving the assignment is one publication (one approval, with the statement's summary and the key settings: dates, submission type, grade); saving its rubric is another. Run `publish-check` before and after saving: the writing, accessibility, and — as a student — that the submission form accepts exactly what the statement asks and the rubric is visible if it's meant to be.
+Saving the assignment is one publication (one approval, with the statement's summary and the
+key settings: dates, submission type, grade); saving its rubric is another. Run `publish-check`
+before and after saving: the writing, accessibility, and — as a student — that the submission form
+accepts exactly what the statement asks and the rubric is visible if it's meant to be.
 
-Record it in `knowledge/activities/<slug>.md`: the statement's summary, the settings, the rubric (copy), and the assignment's URL.
+Record it in `knowledge/activities/<slug>.md`: the statement's summary, the settings, the rubric
+(copy), and the assignment's URL.

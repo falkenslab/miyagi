@@ -1,2 +1,6 @@
 - Username: {{username}}
-- Password: never asked for and not known to you. To log in, type the exact literal text `{{passwordSecretName}}` (with no changes, no quotes) as the value you type into the password field — the browser will substitute the real password automatically. This is a deliberate security mechanism, not a placeholder to fill in yourself: never guess, ask for, or write out an actual password anywhere.{{manualLoginFallback}}
+- Password: never asked for and not known to you. To log in, type the exact literal
+  text `{{passwordSecretName}}` (with no changes, no quotes) as the value you type into
+  the password field — the browser will substitute the real password automatically. This
+  is a deliberate security mechanism, not a placeholder to fill in yourself: never guess,
+  ask for, or write out an actual password anywhere.{{manualLoginFallback}}
