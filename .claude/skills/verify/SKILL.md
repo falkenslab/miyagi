@@ -23,7 +23,7 @@ node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir .
 - a section that must be there is missing, or one that must not be there is present (browser-only sections in `ingest`, the course layer in `explore`, the approval step outside `guided`/`chat`...);
 - a prompt mentions a leftover of the agents this one came from (`student-agent`, `moodle-agent`, `context/`, `knowledge/README.md`, `save_to_knowledge`).
 
-`check-references.mjs` fails if a skill, a command or a prompt names a skill or subagent that doesn't exist — what a merge or a rename leaves behind. After renaming or merging skills, also update `README.md` (skills table) and `CLAUDE.md`, which it doesn't read.
+`check-references.mjs` fails if a skill, a command or a prompt names a skill or subagent that doesn't exist — what a merge or a rename leaves behind. After renaming or merging skills, also update `README.md` (skills table) and `.minispec/core/architecture.md`, which it doesn't read.
 
 When you add a prompt section that depends on the session kind, the mode or a config flag, add it to the `SECTIONS` table in `check-prompts.mjs` in the same change.
 

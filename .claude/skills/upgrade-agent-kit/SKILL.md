@@ -1,6 +1,6 @@
 ---
 name: upgrade-agent-kit
-description: Move teacher-agent's @falkenslab/agent-kit dependency to a new agent-kit release - pack the kit at its tag, attach the tarball to a teacher-agent release, point package.json at that URL, reinstall, update CLAUDE.md, verify. Use when a new agent-kit release is out, or when the user asks to update the kit.
+description: Move teacher-agent's @falkenslab/agent-kit dependency to a new agent-kit release - pack the kit at its tag, attach the tarball to a teacher-agent release, point package.json at that URL, reinstall, update .minispec/core/stack.md, verify. Use when a new agent-kit release is out, or when the user asks to update the kit.
 ---
 
 # Upgrade the agent-kit dependency
@@ -47,7 +47,7 @@ A plain `npm install` after editing `package.json` isn't enough: the lockfile ke
 
 ## 4. Update the docs
 
-`CLAUDE.md` names the kit version and the tarball URL ("Depending on agent-kit"): update both.
+`.minispec/core/stack.md` names the kit version and the tarball URL: update both.
 
 ## 5. Check
 
@@ -57,4 +57,4 @@ A plain `npm install` after editing `package.json` isn't enough: the lockfile ke
 
 ## 6. Commit
 
-One commit, `build(deps): agent-kit vNEW`, whose body says in a line what the release brings to teacher-agent. Files: `package.json`, `package-lock.json`, `CLAUDE.md` (plus any code the upgrade required). Push only if the user asks. Users get the new kit with the next release.
+One commit, `build(deps): agent-kit vNEW`, whose body says in a line what the release brings to teacher-agent. Files: `package.json`, `package-lock.json`, `.minispec/core/stack.md` (plus any code the upgrade required). Push only if the user asks. Users get the new kit with the next release.
