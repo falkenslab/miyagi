@@ -21,12 +21,12 @@ later can't be saved.
    "Question bank") → "Create a new question". Note the full list of question types offered,
    without creating any — cancel without saving. If question management is blocked by
    unfinished transfer tasks, say so: the site's scheduled tasks haven't run.
-4. Don't create, edit, or delete anything real in the course at any step of this task:
-   the two steps above are look-and-cancel only.
+4. Look at how grades can work here: the course's "Grades" → "Gradebook setup" → the course total's "Edit category" (note which aggregations the "Aggregation" list offers — some sites only allow "Natural"), and an assignment's settings form ("Add content" → "Activity or resource" → "Assignment", then Cancel): note whether a "Grade penalties" section appears (late penalties must be enabled by the site). Cancel both forms without saving.
+5. Don't create, edit, or delete anything real in the course at any step of this task:
+   the steps above are look-and-cancel only.
 
 ## What to write
-Save the result in `knowledge/moodle-capabilities.md`, with two lists (activity/resource
-types and question types) exactly as you saw them on screen. List it in `knowledge/index.md` (creating `index.md` and `log.md` if the knowledge base
+Save the result in `knowledge/moodle-capabilities.md`, with two lists (activity/resource types and question types) exactly as you saw them on screen, and a short "Grades" note: the aggregations offered and whether late penalties are available. List it in `knowledge/index.md` (creating `index.md` and `log.md` if the knowledge base
 doesn't exist yet) and append the operation to `knowledge/log.md`, so it's indexed from
 the start.
 

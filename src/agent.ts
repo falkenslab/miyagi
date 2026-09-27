@@ -55,9 +55,9 @@ const PLAYWRIGHT_MCP_CLI = path.join(
   "cli.js",
 );
 
-/** "explore" is a bounded task (login, two look-and-cancel screens, one page written): it
+/** "explore" is a bounded task (login, a few look-and-cancel screens, one page written): it
  * doesn't need the headroom of a full run. */
-const EXPLORE_MAX_TURNS = 40;
+const EXPLORE_MAX_TURNS = 60;
 
 const VALID_MODES: readonly Mode[] = ["interactive", "guided", "autonomous"];
 
