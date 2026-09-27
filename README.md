@@ -173,13 +173,13 @@ Escríbelos en el chat, con lo que necesites detrás.
 | --- | --- |
 | `/teacher-agent:grade` | Corrige las entregas pendientes con un criterio justo y coherente. |
 | `/teacher-agent:forum` | Revisa el foro y decide si hace falta que intervenga el profesor. |
-| `/teacher-agent:quiz <tema>` | Escribe un lote de preguntas sobre ese tema y las importa al cuestionario. |
+| `/teacher-agent:quiz <tema>` | Crea un cuestionario sobre ese tema (o le añade preguntas), con preguntas bien escritas importadas de golpe. |
 | `/teacher-agent:build-course <descripción>` | Construye un curso completo: planifica, crea cada sección con apuntes, prácticas y cuestionarios, y lo revisa como lo vería un alumno. |
 | `/teacher-agent:build-unit <descripción>` | Construye un solo tema dentro del curso, encajado en su programación, su calendario y su estilo. |
 | `/teacher-agent:teaching-plan` | Escribe o revisa tu programación didáctica a partir de tu material y tus decisiones. |
 | `/teacher-agent:align` | Comprueba si el aula está acorde con tu programación y corrige lo que no. |
 | `/teacher-agent:research <tema>` | Investiga un tema en internet y guarda lo que encuentra con sus fuentes. |
-| `/teacher-agent:pending` | Revisa cómo va la clase y quién se está quedando atrás. |
+| `/teacher-agent:progress` | Revisa cómo va la clase y quién se está quedando atrás. |
 | `/teacher-agent:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
 | `/teacher-agent:orient` | Se orienta en el curso: evaluación, plazos, canales de comunicación. |
 | `/teacher-agent:map` | Muestra las direcciones del curso que tiene apuntadas. |
@@ -194,30 +194,30 @@ hace falta invocarlas: basta con pedirle el trabajo.
 
 | Habilidad | Para qué la usa |
 | --- | --- |
-| `course-orientation` | Orientarse en un curso antes de hacer nada complejo: estructura, evaluación, plazos y lo que su cuenta puede hacer de verdad. |
-| `moodle-navigation` | Leer la estructura real del curso (secciones, restricciones, finalización) y moverse por Moodle 4/5. |
-| `grading-rubric` | Corregir con un criterio justo y el mismo para todos, con retroalimentación útil. |
-| `rubric-design` | Construir una rúbrica cuando una actividad no la tiene. |
-| `forum-post` | Escribir una respuesta útil o un aviso a la clase. |
-| `forum-facilitation` | Decidir cuándo intervenir en el foro y cuándo dejar que respondan los compañeros. |
-| `course-building` | Construir un curso completo desde una descripción: plan, secciones, contenido, actividades y revisión final. |
-| `unit-building` | Construir un tema dentro de un curso que ya existe. |
+| **Construir** | |
+| `course-building` | Un curso completo desde una descripción: la programación, la bienvenida, cada tema y las comprobaciones finales. |
+| `unit-building` | Un tema dentro de un curso que ya existe, encajado en su programación, calendario y estilo. |
+| `resource-authoring` | Los apuntes y recursos del curso (páginas, libros, archivos, enlaces) con explicaciones y ejemplos de verdad. |
+| `assignment-building` | Tareas de cualquier tipo (escritas, archivos, en grupo, por borradores, portafolio, exposición…): enunciado, ajustes y rúbrica. |
+| `activity-building` | Talleres de coevaluación, lecciones con itinerarios, glosarios, wikis, bases de datos, consultas, encuestas, H5P, y finalización, restricciones, insignias y grupos. |
+| `quiz-design` | Escribir buenas preguntas (distractores plausibles, niveles variados) y revisar cuestionarios. |
+| `quiz-building` | Configurar el cuestionario, añadir o importar sus preguntas (GIFT) y dejarlas en orden. |
+| `rubric-design` | Construir la rúbrica de una actividad y dejarla en Moodle. |
+| `practice-testing` | Probar las prácticas en Docker antes de publicarlas, o ejecutar una entrega al corregirla (ver abajo). |
+| `publish-check` | La comprobación antes de publicar cualquier cosa: redacción, accesibilidad y cómo lo ve un alumno. |
+| **Diseñar** | |
+| `course-design` | Principios de diseño: objetivos, secuencia, tipos de actividad y equilibrio de la evaluación. |
+| `teaching-methodologies` | Elegir y aplicar metodologías: proyectos, retos, clase invertida, gamificación, cooperativo, casos, aprendizaje-servicio, design thinking, DUA… |
 | `teaching-plan` | Redactar la programación didáctica: objetivos, temas, metodología, evaluación, calificación, atención a la diversidad. |
 | `course-alignment` | Comparar el aula con la programación y cerrar los huecos. |
-| `teaching-methodologies` | Elegir y aplicar metodologías: proyectos, retos, clase invertida, gamificación, cooperativo, casos, aprendizaje-servicio, design thinking, DUA… |
-| `assignment-building` | Crear tareas de cualquier tipo (escritas, archivos, en grupo, por borradores, portafolio, exposición…) con sus ajustes y su rúbrica. |
-| `activity-building` | Crear talleres de coevaluación, lecciones con itinerarios, glosarios, wikis, bases de datos, consultas, encuestas, H5P, libros, y configurar finalización, restricciones, insignias y grupos. |
 | `topic-research` | Investigar un tema en internet con fuentes contrastadas y citadas. |
-| `course-design` | Planificar un curso o un tema: objetivos, secuencia, tipos de actividad y evaluación. |
-| `activity-design` | Diseñar la mecánica de una actividad concreta (tarea, taller, lección, wiki…). |
-| `content-authoring` | Crear o editar recursos y actividades con instrucciones claras y coherentes con el curso. |
-| `quiz-design` | Escribir buenas preguntas (distractores plausibles, niveles variados) y revisar cuestionarios. |
-| `quiz-bulk-import` | Importar muchas preguntas de golpe en formato GIFT. |
-| `practice-testing` | Probar las actividades prácticas en Docker antes de publicarlas, o ejecutar una entrega al corregirla (ver abajo). |
+| **Llevar el curso** | |
+| `course-orientation` | Orientarse en un curso antes de hacer nada complejo: estructura, evaluación, plazos y lo que su cuenta puede hacer. |
+| `moodle-navigation` | Leer la estructura real del curso y moverse por Moodle 4/5. |
+| `grading-rubric` | Corregir con un criterio justo y el mismo para todos, con retroalimentación útil. |
+| `forum` | Llevar el foro: cuándo intervenir, cómo responder y corregir, avisos a la clase. |
 | `progress-monitoring` | Revisar el progreso de la clase priorizando a quien se queda atrás. |
 | `course-auditor` | Auditar el curso (organización, accesibilidad, pedagogía, evaluación) con recomendaciones. |
-| `content-editor` | Repasar la redacción de cualquier texto antes de publicarlo. |
-| `accessibility` | Aplicar y revisar prácticas básicas de accesibilidad. |
 | `knowledge-ingest`, `knowledge-query`, `knowledge-lint`, `knowledge-pages` | Mantener sus apuntes del curso (la carpeta `knowledge`). |
 
 ### Ayudantes
