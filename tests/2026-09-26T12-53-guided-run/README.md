@@ -1,27 +1,18 @@
 # Aula experimental del profesor
 
-Primera prueba de principio a fin de teacher-agent en un Moodle real: explorar la instalación,
-incorporar la rúbrica del profesor y gestionar el curso en modo `guided`, revisando y aprobando
-cada publicación una a una.
+Primera prueba de principio a fin de teacher-agent en un Moodle real: explorar la instalación, incorporar la rúbrica del profesor y gestionar el curso en modo `guided`, revisando y aprobando cada publicación una a una.
 
-| | |
-| --- | --- |
-| **Fecha** | 26 sep 2026, 13:34–14:07 (hora local) |
-| **Entorno** | moodle-sandbox · Moodle 5.2 en Docker · `http://localhost:8081` |
-| **Curso** | `sandbox-course` (id 2), con la siembra `npm run activity` |
-| **Agente** | teacher-agent 0.1.0 (commit anterior a 0.2.0) · agent-kit 0.6.0 |
-| **Cuenta** | `profesor` (editingteacher) |
-| **Workspace** | `~/aulas/sandbox-profesor`, con `sources/rubrica-tarea-1.md` |
-| **Informe publicado** | https://claude.ai/artifact/7FepvWPN3AsFvyvQEpeHiX (privado) |
+- **Fecha:** 26 sep 2026, 13:34–14:07 (hora local)
+- **Entorno:** moodle-sandbox · Moodle 5.2 en Docker · `http://localhost:8081`
+- **Curso:** `sandbox-course` (id 2), con la siembra `npm run activity`
+- **Agente:** teacher-agent 0.1.0 (commit anterior a 0.2.0) · agent-kit 0.6.0
+- **Cuenta:** `profesor` (editingteacher)
+- **Workspace:** `~/aulas/sandbox-profesor`, con `sources/rubrica-tarea-1.md`
+- **Informe publicado:** https://claude.ai/artifact/7FepvWPN3AsFvyvQEpeHiX (privado)
 
 ## Veredicto
 
-**Superada, con un hueco en las reglas ya corregido.** Las tres notas aplican bien la rúbrica
-del profesor, las dos respuestas del foro son correctas y oportunas, y el cuestionario de
-relleno quedó convertido en uno de repaso. Hubo 11 aprobaciones, una por publicación. La
-excepción: el agente activó los comentarios de retroalimentación de la tarea sin pedir
-aprobación, porque las reglas no mencionaban los cambios de configuración. Desde la versión
-0.2.0 también los cubren.
+**Superada, con un hueco en las reglas ya corregido.** Las tres notas aplican bien la rúbrica del profesor, las dos respuestas del foro son correctas y oportunas, y el cuestionario de relleno quedó convertido en uno de repaso. Hubo 11 aprobaciones, una por publicación. La excepción: el agente activó los comentarios de retroalimentación de la tarea sin pedir aprobación, porque las reglas no mencionaban los cambios de configuración. Desde la versión 0.2.0 también los cubren.
 
 ## Qué se ejecutó
 
@@ -33,8 +24,7 @@ aprobación, porque las reglas no mencionaban los cambios de configuración. Des
 
 ## Corrección de la Tarea 1
 
-La actividad sembrada tiene una respuesta correcta para cada entrega. La rúbrica del profesor
-pondera conceptos (6), ejemplos (3) y claridad (1). El plazo acaba el 3 de octubre.
+La actividad sembrada tiene una respuesta correcta para cada entrega. La rúbrica del profesor pondera conceptos (6), ejemplos (3) y claridad (1). El plazo acaba el 3 de octubre.
 
 | Estudiante | Entrega sembrada | Conceptos | Ejemplos | Claridad | Nota | Valoración |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -43,23 +33,17 @@ pondera conceptos (6), ejemplos (3) y claridad (1). El plazo acaba el 3 de octub
 | Sara Gil | Tres errores conceptuales, 57 palabras | 1 / 6 | 1 / 3 | 0,5 / 1 | **2,5** | en rango, discutible |
 | Alumno Demo | Sin entrega | — | — | — | — | correcta: plazo abierto |
 
-Los tres errores de Sara (una variable "no puede cambiar", el float como "texto con
-decimales" y quitar las comillas para arreglar `"3" + 3`) son los que el temario del profesor
-listaba como frecuentes, y el agente los señaló todos. En Ejemplos le dio 1 de 3. Con tres de
-cuatro tipos bien, la rúbrica también admitía un 2. Por eso `grading-rubric` pide ahora fijar
-por escrito cómo se aplica un nivel con rango la primera vez que aparece.
+Los tres errores de Sara (una variable "no puede cambiar", el float como "texto con decimales" y quitar las comillas para arreglar `"3" + 3`) son los que el temario del profesor listaba como frecuentes, y el agente los señaló todos. En Ejemplos le dio 1 de 3. Con tres de cuatro tipos bien, la rúbrica también admitía un 2. Por eso `grading-rubric` pide ahora fijar por escrito cómo se aplica un nivel con rango la primera vez que aparece.
 
 ### Lo que ve el profesor
 
 ![Tabla de entregas de la Tarea 1 con las notas y los comentarios de cada estudiante](assets/02-entregas.png)
 
-*Tabla de entregas: tres entregas "Submitted for grading · Graded" con su nota y
-retroalimentación; Alumno Demo sin entrega ni nota.*
+*Tabla de entregas: tres entregas "Submitted for grading · Graded" con su nota y retroalimentación; Alumno Demo sin entrega ni nota.*
 
 ![Calificador con la entrega de Sara Gil y la nota 2,50](assets/05-calificador-sara.png)
 
-*Calificador, Sara Gil: la retroalimentación abre con el desglose por criterio. "Notify
-student" está marcado por defecto, así que cada nota avisa a la alumna.*
+*Calificador, Sara Gil: la retroalimentación abre con el desglose por criterio. "Notify student" está marcado por defecto, así que cada nota avisa a la alumna.*
 
 ![Libro de calificaciones del curso](assets/06-libro-calificaciones.png)
 
@@ -75,45 +59,35 @@ Capturas con "Iniciar sesión como" Sara Gil, que es quien recibió la correcci�
 
 ![Hilo del foro visto por Sara con la corrección del profesor](assets/14-alumna-sara-foro.png)
 
-*Foro, vista de Sara: la corrección le agradece la respuesta y explica el error con un ejemplo
-que puede ejecutar.*
+*Foro, vista de Sara: la corrección le agradece la respuesta y explica el error con un ejemplo que puede ejecutar.*
 
 ## Foro de dudas
 
 ![Hilo "Duda sobre el tipo bool" con la respuesta del profesor](assets/09-foro-hilo-1.png)
 
-*Duda sobre bool, sin responder: respuesta con un ejemplo (`es_mayor = edad >= 18`), que las
-comparaciones devuelven bool y cómo comprobarlo. El `if` todavía no está en el temario del
-tema 1.*
+*Duda sobre bool, sin responder: respuesta con un ejemplo (`es_mayor = edad >= 18`), que las comparaciones devuelven bool y cómo comprobarlo. El `if` todavía no está en el temario del tema 1.*
 
 ![Hilo "¿Se puede cambiar el valor de una variable?" con la corrección del profesor](assets/07-foro-hilo-2.png)
 
-*Respuesta errónea de una compañera: Sara decía que el valor "se queda fijo". El profesor lo
-corrige con tacto, se dirige a Marcos y a Sara y explica la reasignación paso a paso.*
+*Respuesta errónea de una compañera: Sara decía que el valor "se queda fijo". El profesor lo corrige con tacto, se dirige a Marcos y a Sara y explica la reasignación paso a paso.*
 
-La segunda respuesta falló en el primer intento: el editor de texto aún no había cargado y el
-mensaje salió vacío. El agente comprobó el hilo, vio que no estaba publicado y reintentó una
-vez. En la base de datos hay exactamente una respuesta suya por hilo, sin duplicados.
+La segunda respuesta falló en el primer intento: el editor de texto aún no había cargado y el mensaje salió vacío. El agente comprobó el hilo, vio que no estaba publicado y reintentó una vez. En la base de datos hay exactamente una respuesta suya por hilo, sin duplicados.
 
 ## Del "Quiz de prueba" a un cuestionario de repaso
 
 ![Editor del cuestionario con cinco preguntas y "Total of marks: 5.00"](assets/11-cuestionario-preguntas.png)
 
-*Cinco preguntas, cada una sobre un error visto en las entregas o en el foro. La primera
-reescribe la pregunta de relleno ("The answer is true.").*
+*Cinco preguntas, cada una sobre un error visto en las entregas o en el foro. La primera reescribe la pregunta de relleno ("The answer is true.").*
 
 ![Portada del cuestionario de repaso con su descripción en español](assets/12-cuestionario-portada.png)
 
-*Nombre y descripción nuevos. Lo que dice la descripción se comprobó en la base de datos:
-intentos ilimitados (`attempts = 0`) y se queda la mejor nota (`grademethod = 1`).*
+*Nombre y descripción nuevos. Lo que dice la descripción se comprobó en la base de datos: intentos ilimitados (`attempts = 0`) y se queda la mejor nota (`grademethod = 1`).*
 
-Editar era seguro porque nadie había intentado el cuestionario; `quiz-design` convierte esa
-condición en regla.
+Editar era seguro porque nadie había intentado el cuestionario; `quiz-design` convierte esa condición en regla.
 
 ## Las 11 aprobaciones, en orden
 
-Hora local de cada petición de `request_human_approval`, con lo que pedía. Todas se aprobaron
-tras revisarlas.
+Hora local de cada petición de `request_human_approval`, con lo que pedía. Todas se aprobaron tras revisarlas.
 
 | # | Hora | Publicación |
 | --- | --- | --- |
@@ -150,15 +124,13 @@ tras revisarlas.
 | `quiz-design` | Editar preguntas solo con 0 intentos; cada guardado con su aprobación; comprobar "Total of marks" |
 | `quiz-bulk-import` | En Moodle 5 se importa en el banco del cuestionario (`question/bank/importquestions/import.php?cmid=…`) |
 
-Todos los textos de Moodle citados en las skills se comprobaron en los paquetes de idioma de
-Moodle 5.2 del sandbox.
+Todos los textos de Moodle citados en las skills se comprobaron en los paquetes de idioma de Moodle 5.2 del sandbox.
 
 ## Base de conocimiento del aula
 
 - 12 páginas y 57 enlaces, ninguno roto; todas en `index.md`.
 - La rúbrica de `sources/` tiene su página de resumen, enlazada desde la de la Tarea 1.
-- `progress.md` resume la clase sin nombres ("una persona no ha entregado todavía"), comprobado
-  con `check-knowledge.mjs --names` para los seis nombres y apellidos sembrados.
+- `progress.md` resume la clase sin nombres ("una persona no ha entregado todavía"), comprobado con `check-knowledge.mjs --names` para los seis nombres y apellidos sembrados.
 
 ## No cubierto
 
@@ -166,8 +138,4 @@ Moodle 5.2 del sandbox.
 - El modo `chat`, que necesita un terminal real.
 - Corregir con una rúbrica nativa de Moodle ("Advanced grading") y la importación GIFT en bloque.
 
----
-
-*Capturas tomadas al terminar la prueba, como admin y con "Iniciar sesión como" para la vista de
-la alumna, ocultando el índice lateral y el pie fijos de Moodle. Los nombres de estudiantes son
-datos ficticios sembrados por moodle-sandbox; ninguna contraseña aparece en el informe.*
+*Capturas tomadas al terminar la prueba, como admin y con "Iniciar sesión como" para la vista de la alumna, ocultando el índice lateral y el pie fijos de Moodle. Los nombres de estudiantes son datos ficticios sembrados por moodle-sandbox; ninguna contraseña aparece en el informe.*

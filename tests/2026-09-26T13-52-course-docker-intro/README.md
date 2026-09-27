@@ -1,40 +1,25 @@
 # Curso "Introducción a Docker" construido por el agente
 
-Primera simulación de un curso completo: a partir de una descripción de tres líneas,
-teacher-agent planificó y creó en Moodle un curso de 8 semanas (bienvenida, tres temas con
-apuntes, práctica guiada y cuestionario, y una tarea final con rúbrica), comprobó en Docker las
-cuatro prácticas antes de publicarlas y lo revisó como alumno. En una segunda sesión añadió las
-rúbricas que faltaban en las prácticas.
+Primera simulación de un curso completo: a partir de una descripción de tres líneas, teacher-agent planificó y creó en Moodle un curso de 8 semanas (bienvenida, tres temas con apuntes, práctica guiada y cuestionario, y una tarea final con rúbrica), comprobó en Docker las cuatro prácticas antes de publicarlas y lo revisó como alumno. En una segunda sesión añadió las rúbricas que faltaban en las prácticas.
 
-| | |
-| --- | --- |
-| **Fecha** | 26 sep 2026, 14:52–15:41 (hora local) |
-| **Entorno** | moodle-sandbox · Moodle 5.2 en Docker · `http://localhost:8081` · Docker Desktop 29.6 en el anfitrión |
-| **Curso** | `docker-intro` (id 3), creado vacío con `npm run course` |
-| **Agente** | teacher-agent en el commit `f8aaf88` (posterior a 0.2.0) · agent-kit 0.6.0 |
-| **Cuenta** | `profesor` (editingteacher) |
-| **Workspace** | temporal, con `allowPracticeRunner: true` y sin material en `sources/` |
-| **Modo** | `run --mode guided --headless --task "…"`, con las aprobaciones respondidas por `auto-approve.mjs` (solo sandbox) y revisadas después |
+- **Fecha:** 26 sep 2026, 14:52–15:41 (hora local)
+- **Entorno:** moodle-sandbox · Moodle 5.2 en Docker · `http://localhost:8081` · Docker Desktop 29.6 en el anfitrión
+- **Curso:** `docker-intro` (id 3), creado vacío con `npm run course`
+- **Agente:** teacher-agent en el commit `f8aaf88` (posterior a 0.2.0) · agent-kit 0.6.0
+- **Cuenta:** `profesor` (editingteacher)
+- **Workspace:** temporal, con `allowPracticeRunner: true` y sin material en `sources/`
+- **Modo:** `run --mode guided --headless --task "…"`, con las aprobaciones respondidas por `auto-approve.mjs` (solo sandbox) y revisadas después
 
-**Encargo:** *"Introducción a Docker para FP de grado superior (ASIR/DAW), en español. Tres
-temas: 1) contenedores e imágenes, 2) Dockerfile y construcción de imágenes, 3) Docker
-Compose. Cada tema con apuntes propios, una práctica guiada y un cuestionario corto. Una sección
-de bienvenida con la guía del curso y un foro de dudas, y una tarea práctica final evaluable con
-rúbrica."*
+**Encargo:** *"Introducción a Docker para FP de grado superior (ASIR/DAW), en español. Tres temas: 1) contenedores e imágenes, 2) Dockerfile y construcción de imágenes, 3) Docker Compose. Cada tema con apuntes propios, una práctica guiada y un cuestionario corto. Una sección de bienvenida con la guía del curso y un foro de dudas, y una tarea práctica final evaluable con rúbrica."*
 
 ## Veredicto
 
-**Superada con hallazgos.** El curso está completo y es de calidad: todo lo planificado existe,
-en orden, con contenido real, fechas coherentes y pesos configurados. Las prácticas se
-comprobaron ejecutándolas antes de publicarlas, y eso detectó y corrigió un comando que ya no
-funciona en Docker 29. Pero hubo cuatro fallos que se han corregido en las skills y en los
-prompts:
+**Superada con hallazgos.** El curso está completo y es de calidad: todo lo planificado existe, en orden, con contenido real, fechas coherentes y pesos configurados. Las prácticas se comprobaron ejecutándolas antes de publicarlas, y eso detectó y corrigió un comando que ya no funciona en Docker 29. Pero hubo cuatro fallos que se han corregido en las skills y en los prompts:
 
 - las prácticas se crearon sin rúbrica;
 - las 18 preguntas de los cuestionarios se publicaron sin que ninguna aprobación las mostrara;
 - las preguntas quedaron desordenadas;
-- el subagente de prácticas usó nombres y puertos que podían chocar con contenedores del
-  profesor.
+- el subagente de prácticas usó nombres y puertos que podían chocar con contenedores del profesor.
 
 ## Qué se ejecutó
 
@@ -56,12 +41,9 @@ Comprobado en la base de datos de Moodle, no en lo que dijo el agente:
 | Tema 3. Docker Compose | Apuntes, Práctica guiada 3 (contador de visitas con Redis), cuestionario de 6 | 26/10 – 08/11 | 10 % + 5 % |
 | Tarea final | Despliegue de tres servicios (proxy Nginx, app propia, Redis con contraseña, healthcheck, `.env`) con rúbrica de 5 criterios | 09/11 – 22/11 | 55 % |
 
-- 5 secciones con resumen, 12 módulos visibles, 4 tareas sobre 10 con fechas en orden, 3
-  cuestionarios (6 preguntas, 2 intentos con la nota más alta, 20 minutos).
-- Rúbricas nativas "Ready for use" en las 4 tareas: la final desde la primera sesión, y las tres
-  prácticas desde la segunda, con 7-8 criterios de niveles descritos y un total de 10 cada una.
-- Plan en `knowledge/course-plan.md` y 18 páginas en la base de conocimiento: 73 enlaces sin
-  romper, ningún nombre de alumno.
+- 5 secciones con resumen, 12 módulos visibles, 4 tareas sobre 10 con fechas en orden, 3 cuestionarios (6 preguntas, 2 intentos con la nota más alta, 20 minutos).
+- Rúbricas nativas "Ready for use" en las 4 tareas: la final desde la primera sesión, y las tres prácticas desde la segunda, con 7-8 criterios de niveles descritos y un total de 10 cada una.
+- Plan en `knowledge/course-plan.md` y 18 páginas en la base de conocimiento: 73 enlaces sin romper, ningún nombre de alumno.
 
 ![Portada del curso con las cinco secciones y sus fechas](assets/01-curso.png)
 
@@ -77,10 +59,7 @@ Comprobado en la base de datos de Moodle, no en lo que dijo el agente:
 
 ## Las prácticas, comprobadas en Docker
 
-Con `allowPracticeRunner`, el agente escribió cada enunciado y su solución en `practice/<slug>/`
-y delegó en el subagente `practice-runner` seguirlo paso a paso. Las cuatro comprobaciones
-corrieron en paralelo (varias llamadas al subagente en un mismo turno) y encontraron problemas
-reales antes de publicar:
+Con `allowPracticeRunner`, el agente escribió cada enunciado y su solución en `practice/<slug>/` y delegó en el subagente `practice-runner` seguirlo paso a paso. Las cuatro comprobaciones corrieron en paralelo (varias llamadas al subagente en un mismo turno) y encontraron problemas reales antes de publicar:
 
 | Práctica | Corrección aplicada antes de publicar |
 | --- | --- |
@@ -95,41 +74,29 @@ reales antes de publicar:
 
 ![Rúbrica nativa de la práctica 1](assets/05-rubrica-practica-1.png)
 
-*La rúbrica que se añadió en la segunda sesión: cada nivel describe lo que se ve en la entrega,
-con las salidas concretas que promete el enunciado.*
+*La rúbrica que se añadió en la segunda sesión: cada nivel describe lo que se ve en la entrega, con las salidas concretas que promete el enunciado.*
 
 ### Lo que hizo el subagente en el anfitrión
 
-Se auditaron en directo sus 42 comandos. Etiquetó sus imágenes y contenedores
-(`teacher-agent=practice`), limitó memoria y CPU, publicó puertos solo en `127.0.0.1` en sus
-propias pruebas, limpió con `docker compose down -v --rmi local`, **detectó que el 8081 del
-enunciado estaba ocupado por el propio Moodle y pasó al 18081**, y respetó la imagen
-`python:3.12-slim` que el profesor ya tenía. Pero al seguir los enunciados al pie de la letra:
+Se auditaron en directo sus 42 comandos. Etiquetó sus imágenes y contenedores (`teacher-agent=practice`), limitó memoria y CPU, publicó puertos solo en `127.0.0.1` en sus propias pruebas, limpió con `docker compose down -v --rmi local`, **detectó que el 8081 del enunciado estaba ocupado por el propio Moodle y pasó al 18081**, y respetó la imagen `python:3.12-slim` que el profesor ya tenía. Pero al seguir los enunciados al pie de la letra:
 
-- usó los nombres genéricos del enunciado (`web1`, el volumen `datos-web`) y ejecutó
-  `docker rm -f web1`, que habría borrado un contenedor del profesor con ese nombre;
-- lanzó la práctica 3 como proyecto de Compose `run` (el nombre de la carpeta), cuyo
-  `down -v` borraría los volúmenes de cualquier otro proyecto `run`;
-- no aplicó los límites de recursos en esos comandos, y dejó descargadas `nginx:1.27-alpine` y
-  `redis:7-alpine`.
+- usó los nombres genéricos del enunciado (`web1`, el volumen `datos-web`) y ejecutó `docker rm -f web1`, que habría borrado un contenedor del profesor con ese nombre;
+- lanzó la práctica 3 como proyecto de Compose `run` (el nombre de la carpeta), cuyo `down -v` borraría los volúmenes de cualquier otro proyecto `run`;
+- no aplicó los límites de recursos en esos comandos, y dejó descargadas `nginx:1.27-alpine` y `redis:7-alpine`.
 
-No hubo daños (no existían contenedores con esos nombres), pero son huecos reales: se han
-cerrado en su prompt.
+No hubo daños (no existían contenedores con esos nombres), pero son huecos reales: se han cerrado en su prompt.
 
 ## Cuestionarios y tarea final
 
 ![Preguntas del cuestionario 1, desordenadas](assets/06-preguntas-cuestionario-1.png)
 
-*Cuestionario 1: seis preguntas bien planteadas, pero en orden 06, 01, 02, 03, 05, 04 (en los
-tres cuestionarios igual): añadir varias desde el banco no respeta el orden del GIFT, y
-"Shuffle" está desactivado.*
+*Cuestionario 1: seis preguntas bien planteadas, pero en orden 06, 01, 02, 03, 05, 04 (en los tres cuestionarios igual): añadir varias desde el banco no respeta el orden del GIFT, y "Shuffle" está desactivado.*
 
 ![Tarea final](assets/07-tarea-final.png)
 
 ![Rúbrica de la tarea final](assets/08-rubrica-tarea-final.png)
 
-*Tarea final y su rúbrica de 5 criterios × 3 niveles, creada con "Advanced grading" en la
-primera sesión.*
+*Tarea final y su rúbrica de 5 criterios × 3 niveles, creada con "Advanced grading" en la primera sesión.*
 
 ![El curso visto por un alumno](assets/09-curso-vista-alumno.png)
 
@@ -185,13 +152,8 @@ Nadie las revisó en directo: `auto-approve.mjs` las aprobó y las registró, y 
 
 ## No cubierto
 
-- Que una entrega real de un alumno se ejecute y se corrija con `practice-testing` (el curso aún
-  no tiene entregas).
+- Que una entrega real de un alumno se ejecute y se corrija con `practice-testing` (el curso aún no tiene entregas).
 - Revisar las aprobaciones en directo (aquí se aprobaron todas automáticamente).
 - Reordenar las preguntas de los tres cuestionarios del curso.
 
----
-
-*Capturas tomadas al terminar las dos sesiones, como admin y como Alumno Demo ("Log in as"),
-ocultando el índice lateral y el pie fijos de Moodle. Todo el contenido del curso es del agente:
-el workspace no tenía material del profesor.*
+*Capturas tomadas al terminar las dos sesiones, como admin y como Alumno Demo ("Log in as"), ocultando el índice lateral y el pie fijos de Moodle. Todo el contenido del curso es del agente: el workspace no tenía material del profesor.*

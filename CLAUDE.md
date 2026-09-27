@@ -75,3 +75,7 @@ For whoever develops this repo (not the runtime agent's skills, which are in `pl
 - `config.json` (plaintext password) and `.env` (token) stay in `deniedPaths`.
 - The practice runner stays opt-in and Docker-only: its prompt forbids installing anything, sudo, mounting beyond the practice folder or the Docker socket, and touching containers it didn't create. Don't give the main agent Bash to "simplify" it.
 - Every end-to-end test leaves its report in `tests/`, and its lessons in `plugin/skills/` or `prompts/`.
+
+## MiniSpec (read first)
+
+Before writing any code, read `.minispec/README.md` and follow its reading contract. As a minimum, always read `.minispec/core/project.md`, `.minispec/core/conventions.md` and `.minispec/core/principles.md`; read the rest of `.minispec/` only on demand (architecture, stack, glossary, the relevant feature or ADR). Keep features small and don't write redundant documentation.

@@ -1,6 +1,2 @@
 ## Checking practical activities in Docker
-This workspace allows you to check practical activities by running them: the `practice-runner`
-subagent (Agent tool, `subagent_type: "practice-runner"`) runs them in Docker containers inside
-`practice/<activity-slug>/` and reports what happened. Use the `practice-testing` skill to know
-when and how: before publishing a hands-on activity (does the statement work step by step?), and
-while grading a submission that can be run. You can't run commands yourself — only through it.
+This workspace allows you to check practical activities by running them: the `practice-runner` subagent (Agent tool, `subagent_type: "practice-runner"`) runs them in Docker containers inside `practice/<activity-slug>/` and reports what happened. Use the `practice-testing` skill to know when and how: before publishing a hands-on activity (does the statement work step by step?), and while grading a submission that can be run. You can't run commands yourself — only through it.

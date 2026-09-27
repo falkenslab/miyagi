@@ -1,27 +1,18 @@
 # teacher-agent
 
-Un asistente que te ayuda a gestionar tu curso de Moodle. Entra con tu cuenta de profesor
-en una ventana de Chrome y trabaja como lo harías tú: **corrige entregas**, **responde
-en el foro**, **crea o revisa contenido** y te **resume cómo va la clase**. Antes de
-publicar nada que vean tus estudiantes (una nota, una respuesta, un recurso nuevo), te
-pide permiso.
+Un asistente que te ayuda a gestionar tu curso de Moodle. Entra con tu cuenta de profesor en una ventana de Chrome y trabaja como lo harías tú: **corrige entregas**, **responde en el foro**, **crea o revisa contenido** y te **resume cómo va la clase**. Antes de publicar nada que vean tus estudiantes (una nota, una respuesta, un recurso nuevo), te pide permiso.
 
-Además, va tomando apuntes del curso (criterios de corrección, rúbricas, dudas que se
-repiten, cómo evoluciona la clase) para acordarse de todo en la siguiente sesión.
+Además, va tomando apuntes del curso (criterios de corrección, rúbricas, dudas que se repiten, cómo evoluciona la clase) para acordarse de todo en la siguiente sesión.
 
 > 📋 **¿Quieres empezar rápido?** La [CheatSheet](docs/CHEATSHEET.md) explica paso a paso cómo instalarlo y conectarlo a un curso, y recorre casos de uso en el chat de menos a más.
-
----
 
 ## 1. Qué necesitas
 
 Antes de instalarlo, comprueba que tienes estas tres cosas:
 
 1. **Google Chrome**. Si no lo tienes: [google.com/chrome](https://www.google.com/chrome/).
-2. **Node.js** (versión 20 o posterior). Descárgalo de [nodejs.org](https://nodejs.org/),
-   elige la versión **LTS** e instálalo con las opciones por defecto.
-3. **Una suscripción de Claude Pro o Max** ([claude.ai](https://claude.ai)). Es lo que
-   hace funcionar al asistente.
+2. **Node.js** (versión 20 o posterior). Descárgalo de [nodejs.org](https://nodejs.org/), elige la versión **LTS** e instálalo con las opciones por defecto.
+3. **Una suscripción de Claude Pro o Max** ([claude.ai](https://claude.ai)). Es lo que hace funcionar al asistente.
 
 Y, por supuesto, un curso de Moodle en el que tengas rol de **profesor**.
 
@@ -36,8 +27,7 @@ Y, por supuesto, un curso de Moodle en el que tengas rol de **profesor**.
    npm install -g https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz
    ```
 
-   Tarda uno o dos minutos. Es normal que aparezca algún aviso en amarillo (`warn`).
-   En Mac, si da un error de permisos, ponle `sudo ` delante y escribe tu contraseña.
+   Tarda uno o dos minutos. Es normal que aparezca algún aviso en amarillo (`warn`). En Mac, si da un error de permisos, ponle `sudo ` delante y escribe tu contraseña.
 3. Comprueba que ha funcionado:
 
    ```
@@ -46,13 +36,11 @@ Y, por supuesto, un curso de Moodle en el que tengas rol de **profesor**.
 
    Si ves un número de versión (por ejemplo `0.1.0`), ya está instalado.
 
-Para **actualizarlo** más adelante, repite el paso 2. Para **desinstalarlo**:
-`npm uninstall -g teacher-agent`.
+Para **actualizarlo** más adelante, repite el paso 2. Para **desinstalarlo**: `npm uninstall -g teacher-agent`.
 
 ## 3. Prepara tu curso (solo la primera vez)
 
-Cada curso tiene su propia carpeta. En ella el asistente guarda los datos del curso y sus
-apuntes.
+Cada curso tiene su propia carpeta. En ella el asistente guarda los datos del curso y sus apuntes.
 
 1. Crea una carpeta para el curso y entra en ella. En la terminal:
 
@@ -68,28 +56,16 @@ apuntes.
    ```
 
    Te hará unas preguntas:
-   - **URL de Moodle**: lo más fácil es abrir tu curso en el navegador y copiar la
-     dirección completa (algo como `https://moodle.micentro.es/course/view.php?id=4`).
-   - **Usuario y contraseña** de profesor. Si prefieres no guardarlos, déjalos en blanco:
-     cada vez que empiece, el asistente te pedirá que inicies sesión tú en la ventana
-     de Chrome.
+   - **URL de Moodle**: lo más fácil es abrir tu curso en el navegador y copiar la dirección completa (algo como `https://moodle.micentro.es/course/view.php?id=4`).
+   - **Usuario y contraseña** de profesor. Si prefieres no guardarlos, déjalos en blanco: cada vez que empiece, el asistente te pedirá que inicies sesión tú en la ventana de Chrome.
    - **Tono** (formal, cercano...) e **idioma** en el que quieres hablar con él.
-   - Si quieres que **pruebe las actividades prácticas con Docker** (solo tiene sentido en
-     cursos de informática, y necesitas Docker instalado): ver
-     [Probar prácticas con Docker](#probar-prácticas-con-docker). Si no lo sabes, di que no;
-     puedes activarlo más adelante.
+   - Si quieres que **pruebe las actividades prácticas con Docker** (solo tiene sentido en cursos de informática, y necesitas Docker instalado): ver [Probar prácticas con Docker](#probar-prácticas-con-docker). Si no lo sabes, di que no; puedes activarlo más adelante.
 
-   Al final te propone **explorar** tu Moodle: entra, mira qué tipos de actividades y de
-   preguntas permite tu centro y lo apunta. No crea ni cambia nada. Te recomendamos
-   decir que sí.
+   Al final te propone **explorar** tu Moodle: entra, mira qué tipos de actividades y de preguntas permite tu centro y lo apunta. No crea ni cambia nada. Te recomendamos decir que sí.
 
-3. **La primera vez**, te pedirá conectar tu cuenta de Claude: acepta, se abrirá el
-   navegador, inicia sesión en Claude y vuelve a la terminal. Solo se hace una vez.
+3. **La primera vez**, te pedirá conectar tu cuenta de Claude: acepta, se abrirá el navegador, inicia sesión en Claude y vuelve a la terminal. Solo se hace una vez.
 
-> 💡 Si tienes el programa de la asignatura, rúbricas, soluciones de los ejercicios o tus
-> criterios de corrección, cópialos en la carpeta `sources` que se ha creado dentro de la
-> del curso. El asistente los tendrá en cuenta y, al corregir, **tus criterios mandan**.
-
+> 💡 Si tienes el programa de la asignatura, rúbricas, soluciones de los ejercicios o tus criterios de corrección, cópialos en la carpeta `sources` que se ha creado dentro de la del curso. El asistente los tendrá en cuenta y, al corregir, **tus criterios mandan**.
 
 ## 4. Úsalo
 
@@ -101,8 +77,7 @@ Siempre desde la carpeta del curso (`cd mi-curso`).
 teacher-agent chat
 ```
 
-Se abre Chrome, entra en tu curso y te pregunta qué necesitas. Pídeselo con tus palabras,
-por ejemplo:
+Se abre Chrome, entra en tu curso y te pregunta qué necesitas. Pídeselo con tus palabras, por ejemplo:
 
 - *"¿Qué entregas tengo pendientes de corregir?"*
 - *"Corrige las entregas de la Tarea 2 con la rúbrica que te he dejado."*
@@ -115,11 +90,7 @@ por ejemplo:
 - *"Ayúdame a escribir mi programación didáctica y dime si el aula está acorde con ella."*
 - *"Investiga qué ha cambiado en Docker Compose este año."*
 
-Antes de guardar una nota, responder en el foro, publicar algo o cambiar la configuración
-de una actividad, te mostrará lo que va a hacer y esperará tu respuesta: pulsa **Intro**
-(o escribe `y`) para aprobarlo, o escribe `n` para rechazarlo. Para salir, escribe `/exit`.
-Si quieres cortar lo que está haciendo sin salir, pulsa `Esc`. Al terminar no hay nada que
-guardar: todo se va guardando solo.
+Antes de guardar una nota, responder en el foro, publicar algo o cambiar la configuración de una actividad, te mostrará lo que va a hacer y esperará tu respuesta: pulsa **Intro** (o escribe `y`) para aprobarlo, o escribe `n` para rechazarlo. Para salir, escribe `/exit`. Si quieres cortar lo que está haciendo sin salir, pulsa `Esc`. Al terminar no hay nada que guardar: todo se va guardando solo.
 
 ### Dejar que gestione el curso entero
 
@@ -127,9 +98,7 @@ guardar: todo se va guardando solo.
 teacher-agent run
 ```
 
-Recorre el curso de principio a fin: corrige lo pendiente, atiende el foro, revisa el
-contenido y termina con un resumen de cómo va la clase. Te preguntará cuánto quieres
-supervisarlo:
+Recorre el curso de principio a fin: corrige lo pendiente, atiende el foro, revisa el contenido y termina con un resumen de cómo va la clase. Te preguntará cuánto quieres supervisarlo:
 
 | Opción | Qué significa |
 | --- | --- |
@@ -145,8 +114,6 @@ teacher-agent run --task "construye un curso de introducción a Docker de tres t
 ```
 
 Hace solo eso, con las mismas reglas (y las mismas aprobaciones) que el resto.
-
----
 
 ## Referencia
 
@@ -191,8 +158,7 @@ Escríbelos en el chat, con lo que necesites detrás.
 
 ### Habilidades
 
-Son los conocimientos que el asistente aplica por su cuenta cuando la tarea lo pide. No
-hace falta invocarlas: basta con pedirle el trabajo.
+Son los conocimientos que el asistente aplica por su cuenta cuando la tarea lo pide. No hace falta invocarlas: basta con pedirle el trabajo.
 
 | Habilidad | Para qué la usa |
 | --- | --- |
@@ -224,8 +190,7 @@ hace falta invocarlas: basta con pedirle el trabajo.
 
 ### Ayudantes
 
-Para algunas tareas, el asistente se apoya en ayudantes especializados que trabajan por su
-cuenta y le devuelven un informe. Ninguno puede publicar nada en Moodle.
+Para algunas tareas, el asistente se apoya en ayudantes especializados que trabajan por su cuenta y le devuelven un informe. Ninguno puede publicar nada en Moodle.
 
 | Ayudante | Qué hace | Cuándo está disponible |
 | --- | --- | --- |
@@ -233,90 +198,48 @@ cuenta y le devuelven un informe. Ninguno puede publicar nada en Moodle.
 | Revisor pedagógico | Experto en diseño didáctico y metodologías: revisa un plan o una actividad y señala qué mejorar (coherencia entre objetivos, actividades y evaluación, metodología, carga de trabajo, diversidad). | Siempre (en `chat` y `run`) |
 | Probador de prácticas | Ejecuta las prácticas en Docker. | Solo si lo activas (ver abajo) |
 
----
-
 ## Programación didáctica y metodologías
 
-El asistente puede ayudarte a escribir tu **programación didáctica** y a que tu aula de Moodle
-esté de acuerdo con ella:
+El asistente puede ayudarte a escribir tu **programación didáctica** y a que tu aula de Moodle esté de acuerdo con ella:
 
-1. Deja en `sources` lo que tengas: un borrador, la programación del año pasado, los criterios
-   del departamento. Si quieres que siga una normativa concreta, déjala también o díselo.
-2. En el chat, `/teacher-agent:teaching-plan`. La escribe a partir de tu material, te pregunta
-   lo que solo tú puedes decidir (horas, calendario, pesos) y la hace revisar por el revisor
-   pedagógico. Queda en sus apuntes (`knowledge/teaching-plan.md`, enlazada con cada tema), no
-   se publica en Moodle salvo que se lo pidas.
-3. `/teacher-agent:align` compara el aula con la programación: criterios que ninguna actividad
-   evalúa, rúbricas que faltan, pesos o fechas distintos, temas sin construir. Te propone los
-   cambios y los hace con tu aprobación.
+1. Deja en `sources` lo que tengas: un borrador, la programación del año pasado, los criterios del departamento. Si quieres que siga una normativa concreta, déjala también o díselo.
+2. En el chat, `/teacher-agent:teaching-plan`. La escribe a partir de tu material, te pregunta lo que solo tú puedes decidir (horas, calendario, pesos) y la hace revisar por el revisor pedagógico. Queda en sus apuntes (`knowledge/teaching-plan.md`, enlazada con cada tema), no se publica en Moodle salvo que se lo pidas.
+3. `/teacher-agent:align` compara el aula con la programación: criterios que ninguna actividad evalúa, rúbricas que faltan, pesos o fechas distintos, temas sin construir. Te propone los cambios y los hace con tu aprobación.
 4. `/teacher-agent:build-unit` construye los temas que falten.
 
-Al diseñar un tema o una actividad elige una metodología que encaje con lo que se quiere
-aprender (aprendizaje basado en proyectos o en retos, clase invertida, gamificación con
-insignias y niveles, trabajo cooperativo, estudio de casos…) y la monta con las piezas de Moodle
-que la hacen posible. Si tienes una en mente, pídesela.
-
----
+Al diseñar un tema o una actividad elige una metodología que encaje con lo que se quiere aprender (aprendizaje basado en proyectos o en retos, clase invertida, gamificación con insignias y niveles, trabajo cooperativo, estudio de casos…) y la monta con las piezas de Moodle que la hacen posible. Si tienes una en mente, pídesela.
 
 ## Probar prácticas con Docker
 
-En un curso de informática (Docker, Linux, programación, bases de datos), una práctica que no
-funciona tal como está escrita le cuesta la tarde a toda la clase. Con esta opción, el
-asistente puede **ejecutar** las prácticas en contenedores Docker:
+En un curso de informática (Docker, Linux, programación, bases de datos), una práctica que no funciona tal como está escrita le cuesta la tarde a toda la clase. Con esta opción, el asistente puede **ejecutar** las prácticas en contenedores Docker:
 
-- **Antes de publicar una práctica**, la sigue paso a paso como lo haría un alumno y
-  comprueba que la solución da lo que promete el enunciado. Si algo falla, lo corrige antes
-  de publicarla.
-- **Al corregir**, ejecuta la entrega del alumno y usa lo que sale como prueba en la nota y
-  en la retroalimentación.
+- **Antes de publicar una práctica**, la sigue paso a paso como lo haría un alumno y comprueba que la solución da lo que promete el enunciado. Si algo falla, lo corrige antes de publicarla.
+- **Al corregir**, ejecuta la entrega del alumno y usa lo que sale como prueba en la nota y en la retroalimentación.
 
-Está **desactivada por defecto**, porque es lo único que le da acceso a ejecutar programas en
-tu ordenador. Cuando la activas, lo hace una parte separada del asistente que solo puede usar
-Docker: siempre dentro de contenedores, sin red salvo que la práctica la necesite, con límites
-de memoria, CPU y tiempo, y trabajando solo en la carpeta `practice` del curso. Nunca instala
-nada: si falta Docker, te lo dice.
+Está **desactivada por defecto**, porque es lo único que le da acceso a ejecutar programas en tu ordenador. Cuando la activas, lo hace una parte separada del asistente que solo puede usar Docker: siempre dentro de contenedores, sin red salvo que la práctica la necesite, con límites de memoria, CPU y tiempo, y trabajando solo en la carpeta `practice` del curso. Nunca instala nada: si falta Docker, te lo dice.
 
 Para activarla:
 
-1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/) (en Linux, Docker
-   Engine) y comprueba que funciona con `docker version`.
-2. Responde que sí a la pregunta de `teacher-agent init`, o en un curso ya creado edita su
-   `config.json` y añade `"allowPracticeRunner": true` dentro de `"agent"`.
-
----
+1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/) (en Linux, Docker Engine) y comprueba que funciona con `docker version`.
+2. Responde que sí a la pregunta de `teacher-agent init`, o en un curso ya creado edita su `config.json` y añade `"allowPracticeRunner": true` dentro de `"agent"`.
 
 ## Preguntas frecuentes
 
-**¿Mi contraseña está segura?** Se guarda en el archivo `config.json` de la carpeta del
-curso, en tu ordenador. El asistente nunca la ve: escribe un marcador en el campo de
-contraseña y es el propio Chrome quien pone la real. Tampoco puede abrir ese archivo.
+**¿Mi contraseña está segura?** Se guarda en el archivo `config.json` de la carpeta del curso, en tu ordenador. El asistente nunca la ve: escribe un marcador en el campo de contraseña y es el propio Chrome quien pone la real. Tampoco puede abrir ese archivo.
 
-**¿Puede borrar cosas o salirse de mi curso?** Tiene instrucciones de no borrar nada, no
-cambiar matrículas, no tocar la configuración de Moodle ni entrar en otros cursos. Aun
-así, usa el modo **guided** (o el chat) para revisar todo lo que publica.
+**¿Puede borrar cosas o salirse de mi curso?** Tiene instrucciones de no borrar nada, no cambiar matrículas, no tocar la configuración de Moodle ni entrar en otros cursos. Aun así, usa el modo **guided** (o el chat) para revisar todo lo que publica.
 
-**¿Dónde están sus apuntes?** En la carpeta `knowledge` del curso: archivos de texto que
-puedes abrir con cualquier editor (o con [Obsidian](https://obsidian.md), que muestra
-cómo se enlazan). No guarda fichas de estudiantes concretos, solo tendencias de la clase.
+**¿Dónde están sus apuntes?** En la carpeta `knowledge` del curso: archivos de texto que puedes abrir con cualquier editor (o con [Obsidian](https://obsidian.md), que muestra cómo se enlazan). No guarda fichas de estudiantes concretos, solo tendencias de la clase.
 
-**¿Puedo darle instrucciones propias?** Sí. Crea un archivo `instructions.md` en la
-carpeta del curso y escribe ahí lo que quieras que tenga siempre en cuenta ("puntúa
-sobre 10", "sé breve en el foro", "la ortografía cuenta un 10 %"...).
+**¿Puedo darle instrucciones propias?** Sí. Crea un archivo `instructions.md` en la carpeta del curso y escribe ahí lo que quieras que tenga siempre en cuenta ("puntúa sobre 10", "sé breve en el foro", "la ortografía cuenta un 10 %"...).
 
-**No quiero ver la ventana de Chrome.** Añade `--headless` (por ejemplo
-`teacher-agent run --headless`). Necesita el usuario y la contraseña guardados.
+**No quiero ver la ventana de Chrome.** Añade `--headless` (por ejemplo `teacher-agent run --headless`). Necesita el usuario y la contraseña guardados.
 
-**Venía usando moodle-agent.** Tu carpeta de aula de profesor sirve tal cual: ejecuta
-`teacher-agent chat` dentro de ella y el asistente reorganizará sus apuntes al formato
-nuevo la primera vez.
-
----
+**Venía usando moodle-agent.** Tu carpeta de aula de profesor sirve tal cual: ejecuta `teacher-agent chat` dentro de ella y el asistente reorganizará sus apuntes al formato nuevo la primera vez.
 
 ## Avanzado: enséñale habilidades nuevas
 
-Si en tu asignatura hay algo que el asistente debería hacer siempre de una manera concreta,
-puedes escribírselo como una **habilidad propia**: un archivo de texto con instrucciones que
-el asistente carga cuando la tarea lo pide, igual que las suyas. No hace falta programar.
+Si en tu asignatura hay algo que el asistente debería hacer siempre de una manera concreta, puedes escribírselo como una **habilidad propia**: un archivo de texto con instrucciones que el asistente carga cuando la tarea lo pide, igual que las suyas. No hace falta programar.
 
 ### Dónde va y qué forma tiene
 
@@ -352,42 +275,24 @@ description: Corregir las prácticas de Docker Compose de este curso ejecutándo
 ```
 
 - **`name`**: el nombre de la carpeta, en minúsculas y con guiones.
-- **`description`**: la parte más importante. Es lo que el asistente lee para decidir
-  **cuándo** usarla, así que di qué hace y en qué situaciones ("úsala al corregir...",
-  "cuando se pida crear...").
-- **El cuerpo**: los pasos, como se los explicarías a un profesor en prácticas. Sé concreto:
-  rutas de archivos, criterios, lo que no debe hacer.
+- **`description`**: la parte más importante. Es lo que el asistente lee para decidir **cuándo** usarla, así que di qué hace y en qué situaciones ("úsala al corregir...", "cuando se pida crear...").
+- **El cuerpo**: los pasos, como se los explicarías a un profesor en prácticas. Sé concreto: rutas de archivos, criterios, lo que no debe hacer.
 
-Comprueba que la ve con `teacher-agent skills` (aparece como `[propia]`) y pruébala en el
-chat pidiéndole justo esa tarea.
+Comprueba que la ve con `teacher-agent skills` (aparece como `[propia]`) y pruébala en el chat pidiéndole justo esa tarea.
 
 ### Lo que una habilidad puede y no puede hacer
 
-Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: el navegador
-con tu Moodle, sus apuntes y los documentos de `sources`. **No le da herramientas nuevas.**
-Por eso el ejemplo de arriba se apoya en `practice-testing`: ejecutar Docker solo es posible
-si has activado [Probar prácticas con Docker](#probar-prácticas-con-docker). Una habilidad que
-diga "ejecuta este programa" sin esa opción no funcionará, y el asistente te lo dirá.
+Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: el navegador con tu Moodle, sus apuntes y los documentos de `sources`. **No le da herramientas nuevas.** Por eso el ejemplo de arriba se apoya en `practice-testing`: ejecutar Docker solo es posible si has activado [Probar prácticas con Docker](#probar-prácticas-con-docker). Una habilidad que diga "ejecuta este programa" sin esa opción no funcionará, y el asistente te lo dirá.
 
 ### Otras formas de adaptarlo
 
-- **Atajos propios para el chat**: un archivo `.claude/commands/<nombre>.md` con la
-  instrucción (puedes usar `$ARGUMENTS` para lo que escribas detrás). Por ejemplo,
-  `.claude/commands/semana.md` con *"Revisa lo que se ha entregado esta semana en las
-  prácticas de $ARGUMENTS y resume qué falla más"* se usa como `/semana Docker Compose`.
-- **Instrucciones generales**: `instructions.md` en la carpeta del curso, para lo que debe
-  tener en cuenta siempre, no solo en una tarea.
-- **Material de referencia**: tus rúbricas, soluciones y apuntes en `sources`; ejecuta
-  `teacher-agent ingest` para que los incorpore.
-
----
+- **Atajos propios para el chat**: un archivo `.claude/commands/<nombre>.md` con la instrucción (puedes usar `$ARGUMENTS` para lo que escribas detrás). Por ejemplo, `.claude/commands/semana.md` con *"Revisa lo que se ha entregado esta semana en las prácticas de $ARGUMENTS y resume qué falla más"* se usa como `/semana Docker Compose`.
+- **Instrucciones generales**: `instructions.md` en la carpeta del curso, para lo que debe tener en cuenta siempre, no solo en una tarea.
+- **Material de referencia**: tus rúbricas, soluciones y apuntes en `sources`; ejecuta `teacher-agent ingest` para que los incorpore.
 
 ## Para desarrolladores
 
-teacher-agent está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit),
-igual que [student-agent](https://github.com/falkenslab/student-agent). Sus habilidades,
-comandos y prompts proceden del rol de profesor de moodle-agent. Ver [CLAUDE.md](CLAUDE.md)
-para la arquitectura.
+teacher-agent está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit), igual que [student-agent](https://github.com/falkenslab/student-agent). Sus habilidades, comandos y prompts proceden del rol de profesor de moodle-agent. Ver [CLAUDE.md](CLAUDE.md) para la arquitectura.
 
 ```
 git clone https://github.com/falkenslab/teacher-agent.git
@@ -402,8 +307,7 @@ npm pack                      # genera el .tgz que se publica en cada release
 
 ### Skills de desarrollo
 
-En `.claude/skills/`, para trabajar en este repositorio con Claude Code (no las usa el
-asistente):
+En `.claude/skills/`, para trabajar en este repositorio con Claude Code (no las usa el asistente):
 
 | Skill | Para qué |
 | --- | --- |
@@ -418,5 +322,4 @@ asistente):
 
 ### Informes de pruebas
 
-Cada prueba de principio a fin queda en [`tests/`](tests/README.md): una carpeta por prueba
-con el informe completo y sus capturas, y un índice.
+Cada prueba de principio a fin queda en [`tests/`](tests/README.md): una carpeta por prueba con el informe completo y sus capturas, y un índice.

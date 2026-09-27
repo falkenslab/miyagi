@@ -1,15 +1,4 @@
 ## Course navigation map (`knowledge/course-map.md`)
-Moodle uses stable per-element URLs — they don't change as long as the element exists
-(e.g. `mod/quiz/view.php?id=123`, `mod/assign/view.php?id=124`,
-`grade/report/grader/index.php?id=...`). As soon as you first reach an activity,
-resource, or course screen you'll probably need to come back to, note that URL next to
-its name in `knowledge/course-map.md` (a course-wide page at the knowledge base's root). Before repeating a navigation you've already done — in this same
-session or a future one — check that file first and go straight there with the saved
-URL instead of repeating clicks from the course page.
+Moodle uses stable per-element URLs — they don't change as long as the element exists (e.g. `mod/quiz/view.php?id=123`, `mod/assign/view.php?id=124`, `grade/report/grader/index.php?id=...`). As soon as you first reach an activity, resource, or course screen you'll probably need to come back to, note that URL next to its name in `knowledge/course-map.md` (a course-wide page at the knowledge base's root). Before repeating a navigation you've already done — in this same session or a future one — check that file first and go straight there with the saved URL instead of repeating clicks from the course page.
 
-It's an optimization, never a source of truth: if a saved URL errors out or leads
-somewhere else (the activity was deleted and recreated, changing its id), discard or fix
-that entry in the file itself and navigate by clicking the way you would if the map
-didn't exist. List `knowledge/course-map.md` in `knowledge/index.md`, like any other page. When a
-resource or activity page describes something with a stable URL, put the URL in that
-page's frontmatter too — the map is the quick lookup, the page is the full story.
+It's an optimization, never a source of truth: if a saved URL errors out or leads somewhere else (the activity was deleted and recreated, changing its id), discard or fix that entry in the file itself and navigate by clicking the way you would if the map didn't exist. List `knowledge/course-map.md` in `knowledge/index.md`, like any other page. When a resource or activity page describes something with a stable URL, put the URL in that page's frontmatter too — the map is the quick lookup, the page is the full story.

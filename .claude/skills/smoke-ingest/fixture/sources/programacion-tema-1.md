@@ -23,8 +23,6 @@ Al terminar el tema, el alumnado debe ser capaz de:
 
 ## Errores frecuentes de otros años
 
-- Pensar que una variable "no puede cambiar" una vez asignada (confunden variable con
-  constante).
-- Creer que `float` es "texto con decimales" porque lo ven escrito entre comillas en algún
-  ejemplo de internet.
+- Pensar que una variable "no puede cambiar" una vez asignada (confunden variable con constante).
+- Creer que `float` es "texto con decimales" porque lo ven escrito entre comillas en algún ejemplo de internet.
 - Arreglar `"3" + 3` "quitando las comillas" en vez de convertir el dato que llega como texto.

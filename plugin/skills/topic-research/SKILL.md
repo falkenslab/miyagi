@@ -5,37 +5,23 @@ description: Research a subject on the web when the course's material isn't enou
 
 # Researching a topic
 
-Ingesting (`knowledge-ingest`) works on what the teacher gave you in `sources/`. Researching goes
-out to find what isn't there — and everything found that way is outside the course: it's
-labelled as such, cited, and never treated as the teacher's word.
+Ingesting (`knowledge-ingest`) works on what the teacher gave you in `sources/`. Researching goes out to find what isn't there — and everything found that way is outside the course: it's labelled as such, cited, and never treated as the teacher's word.
 
 ## When
 
-- Before writing notes, practices or questions on something that changes (a tool's current
-  version, a command's syntax, an API): check what's current, not what you remember.
+- Before writing notes, practices or questions on something that changes (a tool's current version, a command's syntax, an API): check what's current, not what you remember.
 - When the teacher asks ("investiga cómo se enseña X", "busca ejemplos de proyectos de Y").
-- To back a methodology or a plan with references, or to find open resources (videos, datasets,
-  exercises) that can be linked from the course.
+- To back a methodology or a plan with references, or to find open resources (videos, datasets, exercises) that can be linked from the course.
 
 Always look first at what you have: `sources/`, the knowledge base, the course itself.
 
 ## How
 
-1. **Frame the questions**: two to five concrete questions, not a topic ("which Compose file
-   version does Docker 29 expect, and is `version:` still accepted?", not "Docker Compose").
-2. **Delegate to the `researcher` subagent** (Agent tool, `subagent_type: "researcher"`), one call
-   per independent question or batch, with what you need back: the answer, the sources, and how
-   sure it is. Several independent questions can go in parallel calls.
-3. **Contrast**: prefer primary sources (official documentation, the project's release notes,
-   standards, the publisher of a dataset) over blogs; note the date of each source; when two
-   disagree, keep both and say which is more authoritative and why.
-4. **Keep it**: write what's worth keeping into the knowledge base — a summary page per important
-   source (`summaries/<slug>.md` with `origin: web`, its URL and the date consulted) and the
-   facts into the concept or topic pages that use them, each linking its source. A synthesis page
-   (`syntheses/<slug>.md`) for a question answered from several sources. Follow
-   `knowledge-pages` and update `index.md` and `log.md`.
-5. **Use it with care**: in anything published to students, what comes from outside the course
-   says so where it matters (a link to the documentation, "según la documentación oficial de…").
+1. **Frame the questions**: two to five concrete questions, not a topic ("which Compose file version does Docker 29 expect, and is `version:` still accepted?", not "Docker Compose").
+2. **Delegate to the `researcher` subagent** (Agent tool, `subagent_type: "researcher"`), one call per independent question or batch, with what you need back: the answer, the sources, and how sure it is. Several independent questions can go in parallel calls.
+3. **Contrast**: prefer primary sources (official documentation, the project's release notes, standards, the publisher of a dataset) over blogs; note the date of each source; when two disagree, keep both and say which is more authoritative and why.
+4. **Keep it**: write what's worth keeping into the knowledge base — a summary page per important source (`summaries/<slug>.md` with `origin: web`, its URL and the date consulted) and the facts into the concept or topic pages that use them, each linking its source. A synthesis page (`syntheses/<slug>.md`) for a question answered from several sources. Follow `knowledge-pages` and update `index.md` and `log.md`.
+5. **Use it with care**: in anything published to students, what comes from outside the course says so where it matters (a link to the documentation, "según la documentación oficial de…").
 
 ## Rules
 

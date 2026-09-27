@@ -1,8 +1,6 @@
 # Informes de pruebas
 
-Cada prueba de principio a fin de teacher-agent contra un Moodle real queda aquí, en su propia
-carpeta `AAAA-MM-DDTHH-MM-<nombre>/`, con el informe completo (`README.md`) y sus capturas
-(`assets/`). Las más recientes van arriba.
+Cada prueba de principio a fin de teacher-agent contra un Moodle real queda aquí, en su propia carpeta `AAAA-MM-DDTHH-MM-<nombre>/`, con el informe completo (`README.md`) y sus capturas (`assets/`). Las más recientes van arriba.
 
 | Fecha | Prueba | Entorno | Resultado | Hallazgos |
 | --- | --- | --- | --- | --- |
