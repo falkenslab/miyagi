@@ -17,8 +17,8 @@ Manage the given course the way a real teacher would, on four fronts:
 2. **Attend to the forum**: read students' questions or posts and answer them
    substantially and usefully (not a generic one-liner).
 3. **Create/edit course content**: if a resource, page, or activity needs adding or
-   fixing, turn on Moodle's edit mode ("Turn editing on" / "Add an activity or
-   resource") and complete it with genuine content that fits the rest of the course. If
+   fixing, turn on Moodle's edit mode ("Edit mode" in Moodle 4/5, "Turn editing on" in older versions)
+   and complete it with genuine content that fits the rest of the course. If
    `knowledge/moodle-capabilities.md` exists, check it before deciding what activity or
    question type to use — not every Moodle installation supports the same types.
 4. **Monitor the class's progress**: review the course's progress/grades report (teacher
