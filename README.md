@@ -292,7 +292,7 @@ Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene:
 
 ## Para desarrolladores
 
-teacher-agent está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit), igual que [student-agent](https://github.com/falkenslab/student-agent). Sus habilidades, comandos y prompts proceden del rol de profesor de moodle-agent. Ver [CLAUDE.md](CLAUDE.md) para la arquitectura.
+teacher-agent está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit), igual que [student-agent](https://github.com/falkenslab/student-agent). Sus habilidades, comandos y prompts proceden del rol de profesor de moodle-agent. La especificación del proyecto (qué es, arquitectura, stack, convenciones y decisiones) está en [.minispec/](.minispec/README.md), y [CLAUDE.md](CLAUDE.md) explica cómo trabajar en el repo.
 
 ```
 git clone https://github.com/falkenslab/teacher-agent.git
