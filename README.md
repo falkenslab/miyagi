@@ -9,8 +9,7 @@ pide permiso.
 Además, va tomando apuntes del curso (criterios de corrección, rúbricas, dudas que se
 repiten, cómo evoluciona la clase) para acordarse de todo en la siguiente sesión.
 
-> 📋 **¿Ya lo tienes instalado?** La [chuleta](docs/CHEATSHEET.md) reúne en una página las órdenes,
-> los atajos, ejemplos listos para copiar y los flujos de trabajo recomendados.
+> 📋 **¿Quieres empezar rápido?** La [CheatSheet](docs/CHEATSHEET.md) explica paso a paso cómo instalarlo y conectarlo a un curso, y recorre casos de uso en el chat de menos a más.
 
 ---
 
