@@ -63,7 +63,7 @@ answering: check it's still running before anything else.
 - Structure, from the database: sections with their names and summaries, and the modules in
   each (`mdl_course_sections`, `mdl_course_modules` joined with `mdl_modules`), quizzes with
   their question count and `sumgrades`, assignments with due dates and grading.
-- Against the plan the agent wrote (`knowledge/course-plan.md`): everything planned exists, in
+- Against the plan the agent wrote (`knowledge/teaching-plan.md`): everything planned exists, in
   order, and nothing is empty or placeholder.
 - As a student: the screenshots below include the course seen by a student.
 
@@ -80,5 +80,6 @@ the report needs, and write it with the `test-report` skill: folder
 `tests/<YYYY-MM-DDTHH-MM>-course-<shortname>/`, with the course's structure as built (one row
 per section), the plan vs. what exists, the approvals from `approvals.jsonl` (as a list, since
 nobody reviewed them live: flag any you wouldn't have approved), the findings, and the lessons
-fed back into `plugin/skills/` (most often `course-building`, `content-authoring`,
-`activity-design`, `quiz-design`, `moodle-navigation`).
+fed back into `plugin/skills/` (most often `course-building`, `unit-building`,
+`resource-authoring`, `assignment-building`, `activity-building`, `quiz-building`,
+`publish-check`, `moodle-navigation`).

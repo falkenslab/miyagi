@@ -99,7 +99,7 @@ ends up empty, and the run stops at agent-kit's interactive token prompt.
 ## 7. Inspect
 
 - The console log and `sessions/<latest>/transcript.jsonl`: which skills were loaded
-  (`grading-rubric`, `forum-facilitation`...), which pages it read, what it published.
+  (`grading-rubric`, `forum`...), which pages it read, what it published.
 - In Moodle, as admin (from `info`): the grader report — Lucía high, Marcos low with feedback
   on what's missing, Sara penalised on the concepts with a correction, and `alumno` left
   ungraded (the due date is a week after seeding: `grading-rubric` only gives 0 for a missing
