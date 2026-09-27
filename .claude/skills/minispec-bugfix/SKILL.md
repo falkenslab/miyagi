@@ -5,7 +5,8 @@ description: Document a bug and its fix as a MiniSpec bugfix note under .minispe
 
 # MiniSpec: new bugfix
 
-Document a bug and its fix using the bugfix format. It is temporal knowledge, so it lives under `.minispec/features/`.
+Document a bug and its fix using the bugfix format. It is temporal knowledge, so
+it lives under `.minispec/features/`.
 
 ## Steps
 
@@ -21,4 +22,6 @@ Document a bug and its fix using the bugfix format. It is temporal knowledge, so
 ## Rules
 
 - Max 100 lines. Short and factual. Base it on the real diff.
-- Temporal: once the fix is merged and verified, delete this file. If the fix revealed a permanent lesson (a rule, a decision), promote it to `core/` or an ADR first. Mention this; do not delete now.
+- Temporal: once the fix is merged and verified, delete this file. If the fix
+  revealed a permanent lesson (a rule, a decision), promote it to `core/` or an
+  ADR first. Mention this; do not delete now.
