@@ -1,17 +1,17 @@
 ---
 name: assignment-building
-description: Create a Moodle assignment of any kind - written answer, file submission, group work, project milestone, lab report, case analysis, portfolio, oral presentation or video, drafts with resubmission - with the statement, the submission settings that match it, due and cut-off dates, and its rubric. Use whenever an assignment has to be created or reconfigured; activity-design decides what it asks, this skill builds it.
+description: Design and build a Moodle assignment of any kind - written answer, file submission, group work, project milestone, lab report, case analysis, portfolio, oral presentation or video, drafts with resubmission - with a statement that asks for real reasoning or production, the submission settings that match it, due and cut-off dates, and its rubric. Use whenever an assignment has to be created or reconfigured.
 ---
 
-# Building an assignment
+# Designing and building an assignment
 
 An assignment in Moodle is three things that have to agree: the **statement** (what to do, what
 to hand in, how it's graded), the **submission settings** (what Moodle actually lets students
 upload, and when) and the **grading** (rubric, marking). A statement that says "upload a PDF"
 on an assignment that only accepts online text is the most common way to break one.
 
-Use `activity-design` for what the assignment asks and `rubric-design` for its rubric; this skill
-is how to set it up. Check `knowledge/moodle-capabilities.md` for what this Moodle has.
+Its rubric comes from `rubric-design`; hands-on work is checked with `practice-testing` when the
+workspace allows it. Check `knowledge/moodle-capabilities.md` for what this Moodle has.
 
 ## 1. Pick the kind
 
@@ -32,7 +32,9 @@ released together).
 
 ## 2. The statement
 
-Complete enough that a student needs nothing else:
+A good assignment asks for genuine reasoning, application or production — something that can't
+be answered by restating the notes — and says what evidence of learning the submission must show,
+not just a topic to write about. Complete enough that a student needs nothing else:
 
 1. **Context and goal**: what they'll do and why it matters (one short paragraph).
 2. **Steps or requirements**: numbered, concrete; for practical work, the commands or the
@@ -42,7 +44,7 @@ Complete enough that a student needs nothing else:
    policy if there is one.
 5. **Dates**: due date and, if different, the cut-off date after which nothing is accepted.
 
-Write it with `content-authoring`, and run it through `content-editor` and `accessibility`.
+Write it in the course's style (look at two or three existing assignments first).
 
 ## 3. Settings
 
@@ -71,10 +73,9 @@ Rubric → "Save rubric and make it ready"), with the same criteria and weights 
 ## 5. Publish and check
 
 Saving the assignment is one publication (one approval, with the statement's summary and the
-key settings: dates, submission type, grade); saving its rubric is another. Afterwards open the
-assignment as a student would ("Switch role to..." or preview) and check the statement, the
-dates, that the submission form accepts exactly what the statement asks, and that the rubric
-is visible if it's meant to be.
+key settings: dates, submission type, grade); saving its rubric is another. Run `publish-check`
+before and after saving: the writing, accessibility, and — as a student — that the submission form
+accepts exactly what the statement asks and the rubric is visible if it's meant to be.
 
 Record it in `knowledge/activities/<slug>.md`: the statement's summary, the settings, the rubric
 (copy), and the assignment's URL.

@@ -11,6 +11,10 @@ decisions are the teacher's. It's generic — not tied to any particular law or 
 the teacher gives you one (in `sources/`) or asks you to follow it, in which case use
 `topic-research` to find and cite it.
 
+There is only one plan per course: when `course-building` or `unit-building` need a plan and there
+isn't one, they draft this one (every decision the teacher didn't take marked as a proposal)
+rather than keeping a plan of their own.
+
 It lives in the knowledge base, as linked pages, not as a separate document: `teaching-plan.md`
 is the hub, and each unit's topic page holds that unit's part. That's what lets
 `course-alignment` compare it with the course in Moodle.

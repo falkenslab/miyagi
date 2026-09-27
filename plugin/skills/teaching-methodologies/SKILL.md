@@ -137,7 +137,7 @@ A methodology that doesn't fit the time available is worse than a well-run lectu
   several ways to engage (choice, relevance, self-regulation).
 - **Moodle**: the same content as a page and a video or H5P; an assignment that accepts
   different formats; optional extension activities; clear structure and deadlines. Combine with
-  `accessibility`.
+  `publish-check`'s accessibility pass.
 
 ## Writing it down
 

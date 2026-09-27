@@ -14,9 +14,9 @@ knowledge/
   moodle-capabilities.md  activity/question types this Moodle supports ("explore")
   progress.md             history of class progress reviews (progress-monitoring)
   course-audit.md         history of course audits (course-auditor)
-  course-plan.md          the plan of a course you build, and what got created (course-building)
-  teaching-plan.md        the teacher's teaching plan / programación didáctica: objectives O1…,
-                          criteria CE…, units, methodology, grading (teaching-plan)
+  teaching-plan.md        the course's only plan: the teacher's programación didáctica, or your
+                          draft of it with proposals marked (teaching-plan): objectives O1…,
+                          criteria CE…, units, methodology, grading
   topics/<slug>.md        one hub page per topic/section/block of the course: its objectives and
                           criteria, methodology and plan (unit-building), content you authored,
                           recurring doubts from the forum

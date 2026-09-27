@@ -8,8 +8,9 @@ description: Review the class's progress and grades, prioritizing who's falling 
 ## Before looking at Moodle
 
 If `knowledge/progress.md` exists, read it first: it's your own history of earlier
-reviews. It tells you who was already falling behind last time, so you can focus on
-what's changed instead of re-analyzing the whole class from scratch.
+reviews — class-level, without names — so you can compare ("3 students without the first
+practice last week, 2 now") and focus on what's changed. Who exactly is behind you read live
+from Moodle each time; it goes in your reply to the teacher, never in the knowledge base.
 
 ## What to check
 
@@ -48,13 +49,12 @@ If several students are falling behind for the same reason (a deadline, a confus
 activity) and you're in a context where you can publish (`run` in `guided` mode, or
 `chat`), consider posting an announcement reminding them of the deadline or clarifying
 the activity, instead of just noting it — see the announcements section of the
-`forum-post` skill. A single student falling behind on their own doesn't justify it; a
+`forum` skill. A single student falling behind on their own doesn't justify it; a
 pattern affecting several does.
 
 ## Update knowledge/progress.md
 
-Add an entry with this review's date and the summary above — don't rewrite earlier
-entries, it's a history. The knowledge base is the agent's memory across sessions: without
+Add an entry with this review's date and the summary above, as counts and patterns
+without any student's name — don't rewrite earlier entries, it's a history. The knowledge base is the agent's memory across sessions: without
 this, every progress review would start from zero and you wouldn't be able to tell
-whether a student has been falling behind for several sessions or just fell behind
-right now.
+whether the class is catching up or falling further behind.

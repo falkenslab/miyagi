@@ -5,8 +5,7 @@ description: Plan a course or unit's pedagogical structure - progressive organiz
 
 # Designing a course or unit, not just its individual pieces
 
-This is about **planning**, one level above `content-authoring` (which creates one
-resource or activity at a time). Use it before adding several new pieces of content, when
+This is about **planning**, one level above the skills that build each resource or activity. Use it before adding several new pieces of content, when
 restructuring a section, or whenever a request is really "how should this unit look",
 not "add this one page".
 
@@ -20,7 +19,7 @@ Planning and executing are different steps. When the request is exploratory ("ho
 you organize unit 3?", "what's missing pedagogically?"), propose a structure and explain
 the reasoning — don't start creating activities in Moodle until the plan itself is
 confirmed. When the request is explicit ("create this"), you can go straight to execution
-using this skill's principles, plus `content-authoring` for each individual piece.
+using this skill's principles, and the building skill of each piece.
 
 ## Progressive organization
 
@@ -53,8 +52,8 @@ familiar. Match the type to what's actually being practiced: a forum or workshop
 discussion/peer-review skills, an assignment for extended reasoning or production, a quiz
 for quick recall or applied problems, a lesson for guided, branching content. Reviewing a
 section that's five quizzes in a row is itself a signal to reconsider. This is only about
-*which* type fits — once it's chosen, `activity-design` designs that specific activity's
-mechanics (a quiz's questions are `quiz-design`'s job instead).
+*which* type fits — once it's chosen, its building skill designs and sets it up
+(`assignment-building`, `activity-building`, `quiz-design` + `quiz-building`).
 
 ## Evaluation balance
 
@@ -71,9 +70,9 @@ worth naming explicitly in a proposal.
 
 ## Using this alongside other skills
 
-`course-design` decides *what* the course should contain and why, and which activity type
-fits where; `activity-design`/`quiz-design` design that specific activity's mechanics once
-the type is chosen; `rubric-design` designs its grading criteria; `content-authoring`
-builds and writes the actual piece in Moodle; `accessibility` applies to however the
-result ends up being written. `course-auditor` uses this skill's criteria when reviewing
-an existing course rather than designing a new one.
+`course-design` decides *what* the course or unit contains and why, in what order, and which
+activity type fits where; it's the source of the principles the teaching plan (`teaching-plan`)
+and each unit's plan (`unit-building`) follow, and that `pedagogy-reviewer` and `course-auditor`
+check against. The methodology comes from `teaching-methodologies`; each piece is then designed
+and built with `resource-authoring`, `assignment-building`, `activity-building` or `quiz-design` +
+`quiz-building`, its grading with `rubric-design`, and everything goes through `publish-check`.

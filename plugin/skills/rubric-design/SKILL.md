@@ -8,7 +8,7 @@ description: Build a rubric or grading guide from scratch - observable criteria 
 `grading-rubric` covers grading with criteria that already exist (Moodle's own rubric,
 something left in `sources/`, or one already noted in the activity's knowledge base page). This skill is for
 when none of those exist yet and criteria need to be constructed — typically while setting
-up a new evaluable activity (alongside `content-authoring`), or the first time an existing
+up a new evaluable activity (alongside `assignment-building` or `activity-building`), or the first time an existing
 activity is about to be graded with nothing to go on but its prompt.
 
 ## What makes a good criterion

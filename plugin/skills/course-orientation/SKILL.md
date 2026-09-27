@@ -28,7 +28,7 @@ all of them):
 
 Additionally, check what your account can actually do in this course (editing
 enabled, question bank access, grading permissions) instead of assuming full capabilities
-— what "Turn editing on" and the course's admin menu actually expose is the real answer,
+— what "Edit mode" and the course's menus actually expose is the real answer,
 not what a teacher role usually has elsewhere.
 
 If none of this exists, don't make it up: note in `knowledge/orientation.md` that the course has no

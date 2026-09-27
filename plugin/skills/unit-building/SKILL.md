@@ -12,15 +12,16 @@ around it is a bad unit.
 
 ## 1. Read the course first
 
-- The knowledge base: `teaching-plan.md` if it exists (the objectives and criteria this unit
-  must cover, its dates and weight), `course-plan.md`, `overview.md`, the other topics' pages.
+- The knowledge base: `teaching-plan.md` if there is one (the objectives and criteria this unit
+  must cover, its dates and weight), `overview.md`, the other topics' pages.
 - The course in Moodle (`moodle-navigation`): the sections before and after, two or three
   existing activities (names, tone, level of detail, how statements are written), the gradebook
   (categories, weights), what the students already did.
 - `sources/`: the teacher's notes or syllabus for this unit win over your own idea of it.
 
 If something the unit needs is undecided (its weight, its dates, whether it's graded), take it
-from the teaching plan; if there's none, ask in `chat`, or decide in `run` and say so.
+from the teaching plan; if the plan doesn't say, ask in `chat`, or propose it in `run` — adding it
+to `teaching-plan.md` marked as a proposal — and say so.
 
 ## 2. Plan it
 
@@ -43,23 +44,23 @@ revise it with its critique before building.
 In edit mode, in the unit's section (or a new one, placed where the calendar says):
 
 1. Section name and summary: what the student will learn and do, the dates, the order to follow.
-2. Resources (`content-authoring`): the unit's actual content, at the course's level.
+2. Resources (`resource-authoring`): the unit's actual content, at the course's level.
 3. Activities, each with the skill for its kind: `assignment-building` (any assignment),
-   `quiz-design` and `quiz-bulk-import` (quizzes), `activity-building` (workshop, lesson,
-   glossary, wiki, database, choice, feedback, forum variants, H5P, book, completion,
-   restrictions, badges, groups). Hands-on work is checked with `practice-testing` when the
+   `quiz-design` + `quiz-building` (quizzes), `activity-building` (workshop, lesson, glossary,
+   wiki, database, choice, feedback, forum activities, H5P, completion, restrictions, badges,
+   groups). Hands-on work is checked with `practice-testing` when the
    workspace allows it.
 4. Every activity graded by hand gets its rubric in Moodle (`rubric-design`).
 5. Grade items in the right category and weight; dates in the calendar's order.
 
-One item per approval, with a summary of what it contains; only an identical setting change on
-several items may share one, naming each (see `course-building`).
+Every item goes through `publish-check` (writing and accessibility) and gets its approval, one
+item per approval when it's new content.
 
 ## 4. Check it
 
-As a student ("Switch role to..." → Student): the section reads in order, nothing is empty or
-locked without explanation, every statement is complete, quizzes have their questions in order
-and a non-zero total, rubrics are visible where intended. Then the gradebook: the unit's items
+The unit as a student, with the third pass of `publish-check` over the whole section: it reads in
+order, nothing is empty or locked without explanation, every statement is complete, quizzes in
+order with a non-zero total, rubrics visible where intended. Then the gradebook: the unit's items
 with the planned weights.
 
 Update the topic page with what was actually created (URLs), the activity pages, `course-map.md`,

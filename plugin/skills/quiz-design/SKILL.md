@@ -5,10 +5,9 @@ description: Write pedagogically sound quiz questions - plausible distractors, v
 
 # Designing quiz questions, not just formatting them
 
-This is the pedagogical layer behind writing a question. `quiz-bulk-import` covers the
-GIFT-format mechanics of importing many questions at once — apply this skill's principles
-first, while actually writing them, whichever way they'll end up in Moodle (the normal
-form for one or two, or `quiz-bulk-import` for a batch).
+This is the pedagogical layer behind writing a question. `quiz-building` covers the quiz itself
+— its settings, adding the questions by form or GIFT import, their order, and changing a quiz
+that already has attempts — apply this skill's principles while actually writing the questions.
 
 ## Writing a question
 
@@ -22,8 +21,8 @@ form for one or two, or `quiz-bulk-import` for a batch).
   misconception — not be obviously wrong just from its wording or length. A wrong answer
   that's clearly the odd one out (much shorter, oddly specific, unrelated to the others)
   gives away the answer without testing anything.
-- **Feedback per option**, when the format supports it (see `quiz-bulk-import`'s GIFT
-  `#` syntax): explain briefly *why* a wrong option is wrong, not just that it is —
+- **Feedback per option**, when the format supports it (see the GIFT `#` syntax in
+  `quiz-building`): explain briefly *why* a wrong option is wrong, not just that it is —
   that's what makes a quiz useful for learning, not only for scoring.
 
 ## Varying cognitive level
@@ -41,24 +40,9 @@ distractor that's obviously not a real option. Summarize findings rather than si
 leaving them — a teacher may want to keep a "trivial" question deliberately (e.g. as an
 easy warm-up), so flag it as a suggestion, not an automatic fix.
 
-## Changing a quiz that already exists
-
-Check the quiz's attempts first (its page says "Attempts: N"). With **0 attempts**, editing
-or replacing questions affects nobody; Moodle keeps the old text as a previous version of
-the question. With attempts, don't change what a question asks or which answer is right —
-students would have been graded against a different question than the one now shown. Add
-new questions instead, or propose the change to the teacher. Every save (an edited question,
-a new one, the quiz's name or description) is a publication that needs its own approval.
-
-Placeholder content — a question like "The answer is true.", a description like "Test quiz
-1", an English stub in a course taught in another language — is worth fixing when the quiz
-has no attempts: it's exactly what a real teacher would notice and correct.
-
-After changing questions, reopen the quiz and check the question count and the total grade
-("Total of marks") match what you intended.
-
 ## Alignment
 
-A question should map back to something in `course-design`'s objectives, or at minimum to
+A question should map back to an objective of the unit (the teaching plan's criteria, or
+`course-design`'s objectives), or at minimum to
 material the students actually had access to (`sources/`, the course's own resources) —
 don't test on a detail that was never actually covered.

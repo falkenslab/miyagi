@@ -1,110 +1,67 @@
 ---
 name: course-building
-description: Build a complete Moodle course from a description (subject, level, length) - plan it with course-design, then create every section, resource and activity with real content, check it as a student would see it, and leave the plan in the knowledge base. Use when asked to create or set up a whole course, or a whole unit, rather than a single activity.
+description: Build a complete Moodle course from a description (subject, level, length) - its teaching plan first, then the welcome section and every unit with real content, activities and rubrics, then the course-wide checks (gradebook, calendar, as a student). Use when asked to create or set up a whole course; one unit is unit-building.
 ---
 
 # Building a complete course
 
 A course built this way has to hold up as a real one: a student should be able to take it from
 the first section to the last without meeting an empty page, a placeholder or an activity whose
-instructions don't say what to do. This skill orchestrates the others; it doesn't replace them.
+instructions don't say what to do. This skill orchestrates the others; each unit is built with
+`unit-building`.
 
 ## 1. Understand the request
 
 From the description, pin down: subject, level (and so the register of the texts), length
-(number of units or weeks), the language of the course, and anything the teacher asked for
-explicitly (a practice per unit, a final project, a weekly quiz...). Check `sources/` for a
-syllabus or notes: they win over your own idea of the subject. What's still ambiguous and would
-change the structure (e.g. "a course on Docker" — for beginners or for sysadmins?), ask about in
-`chat`; in `run`, make the most reasonable call and state it in the plan.
+(units or weeks), the course's language, and anything the teacher asked for explicitly (a
+practice per unit, a final project, a methodology). `sources/` wins over your own idea of the
+subject. What's ambiguous and would change the structure ("a course on Docker" — for beginners
+or for sysadmins?), ask about in `chat`; in `run`, make the most reasonable call and say so.
 
 If the course already has content, don't build over it: say what's there and ask (in `run`,
 build only in empty sections and report what you left alone). Never delete anything.
 
-## 2. Plan before creating anything
+## 2. The plan is the teaching plan
 
-If the teacher has a teaching plan (`knowledge/teaching-plan.md`, see `teaching-plan`), the
-course follows it: its units, objectives, criteria, methodology, calendar and weights. If not,
-use `course-design` and `teaching-methodologies` to write the plan into the knowledge base as
-`knowledge/course-plan.md` (a synthesis page, listed in `index.md`) before touching Moodle:
+There is one plan: `knowledge/teaching-plan.md` (`teaching-plan`). If the teacher has one, the
+course follows it — units, objectives, criteria, methodology, calendar, weights. If not, draft it
+with `teaching-plan` before touching Moodle, marking as a proposal everything the teacher didn't
+decide, with `course-design` for the structure and `teaching-methodologies` for each unit's
+methodology. It must include a welcome section: what the course is about, how it's organized, how
+it's graded, where to ask.
 
-- the course's objectives, observable ("configure...", "explain why...");
-- one row per section: title, objectives it covers, its resources, its activities (type,
-  graded or not, how it's assessed), and how it connects to the next;
-- the evaluation: weights, and which activities are formative vs. summative;
-- the methodology of each section (`teaching-methodologies`), and why it fits;
-- a welcome section: what the course is about, how it's organized, how it's graded, where to
-  ask (the forum).
+Research with `topic-research` anything in the subject that may have changed (versions,
+commands, current practice), ask `pedagogy-reviewer` to review the plan and revise it, and check
+`knowledge/moodle-capabilities.md` for what this Moodle can create (if it doesn't exist, look at
+the "Activity or resource" chooser once before planning activity types).
 
-Ask `pedagogy-reviewer` to review the plan before building (point it at the plan page) and revise
-it with its critique. Research with `topic-research` anything in the course's subject that may
-have changed (versions, commands, current practice) before writing about it.
+## 3. Build it, unit by unit
 
-Check `knowledge/moodle-capabilities.md` for what this Moodle can create; if it doesn't exist,
-look at the "Activity or resource" chooser once before planning activity types.
+1. **Welcome section**: its summary, a course guide (`resource-authoring`: objectives, calendar,
+   evaluation, what to install, where to ask) and a forum for doubts (`activity-building`).
+2. **Each unit, in order**, with `unit-building` — which writes the unit's part of the plan in its
+   topic page, builds its resources and activities with their skills, gives every activity graded
+   by hand its rubric (`rubric-design`), checks hands-on work with `practice-testing` when the
+   workspace allows it, and checks the unit as a student. Finish a unit before starting the next.
 
-## 3. Create it, section by section
+Approvals follow `publish-check`: one item per approval when it's new content.
 
-In order, one section at a time, finishing each before starting the next. Each section is a unit:
-build it with `unit-building` (which uses `assignment-building`, `activity-building`, `quiz-design`
-and `quiz-bulk-import` for its activities). What follows is what matters most across the course:
+## 4. Course-wide checks
 
-1. **The section**: in edit mode, name it ("Edit section name" on its "New section" title, or
-   "Add section" at the end of the course when more are needed) and write its summary: what
-   the student will learn and do there.
-2. **Resources** (`content-authoring`): a page with the section's actual content — explained,
-   with examples, at the course's level — not an outline of what "will be covered".
-3. **Activities** (`activity-design` for what they ask; `assignment-building`,
-   `activity-building`, `quiz-design` and `quiz-bulk-import` to build them): complete
-   instructions, what to hand in, how it's graded, a due date that fits the course's pace.
-   **Every activity graded by hand gets a rubric in Moodle** — "Advanced grading" → Rubric,
-   built with `rubric-design` from the criteria in its statement, levels with a description
-   each (not just points), saved and made ready. A criteria table in the statement doesn't
-   replace it: the rubric is what shows up in the grader, gets marked criterion by criterion
-   and keeps the same answer on the same grade. A request that mentions a rubric for one
-   activity ("a final task with a rubric") is not a request to leave the others without one;
-   skip rubrics only if the teacher says so, and say in the report which activities have none.
-   A hands-on activity (commands to run, code to write, a container to build) is checked with
-   `practice-testing` before it's published, when the workspace allows it; if it doesn't, say in
-   the report which practices weren't run.
-4. **Order and visibility**: activities after the resources they depend on; access
-   restrictions only if the plan calls for them.
+When every unit is built, the things no single unit can see:
 
-Every save in Moodle is a publication: in `guided` or `chat` it needs its own approval, with a
-summary of what that section or activity contains. One item per approval when it's new
-content — a section's text, a page, a statement, questions: three sections are three approvals,
-and creating a quiz and importing its questions are two (the second listing every question, see
-`quiz-bulk-import`). A summary that announces "and then I'll add X", or bundles several different
-texts, hides them from whoever approves it. The one exception: the **same setting change** applied
-to several items (unlimited attempts on three quizzes, the same cut-off rule on three
-assignments) can go in one approval if the summary names every item and the exact change. Run each text through `content-editor` and
-`accessibility` before saving it.
-
-Record in the plan page, as you go, what was actually created (with its Moodle URL) — the
-course map and the activity pages follow the usual knowledge-base rules.
-
-## 4. Check it as a student
-
-When everything is created: go through the course from the top as a student would ("Switch
-role to..." → Student from your user menu, then back with "Return to my normal role"), or at
-least with each activity's "Preview". Look for empty sections, activities without
-instructions, quizzes with no questions or a total grade of 0, broken links and dates out of
-order. Fix what you find (each fix is a publication too).
-
-Then check that the settings say what the texts promise — the gap students would find first:
-
-- **The gradebook** (Grades → the grader report and "Gradebook setup"): the weights are the
-  ones in the plan, and the course total uses the scale the course guide announces. With
-  "Natural" aggregation the total is the sum of every item's maximum (seven items out of 10
-  show as "out of 70"); if the guide says "out of 10", use an aggregation whose total you can
-  set (e.g. "Weighted mean of grades" with the course total's maximum at 10), or make the
-  items' maximums add up to it — then look at the grader report again.
-- **Submission settings**: accepted file types, sizes, group submission, attempts and dates as
-  the statement says. If Moodle doesn't know a file type the statement accepts (`.md` isn't in
-  its list), say so in the statement instead of promising a restriction that doesn't exist.
+- **As a student**, the whole course from the top ("Switch role to..." → "Student"): sections in
+  order, nothing empty or locked without explanation, dates that follow the calendar.
+- **The gradebook** (the grader report and "Gradebook setup"): the plan's weights, and a course
+  total on the scale the course guide announces. With "Natural" aggregation the total is the sum
+  of every item's maximum (seven items out of 10 show as "out of 70"); if the guide says "out of
+  10", use an aggregation whose total you can set (e.g. "Weighted mean of grades" with the course
+  total's maximum at 10) or make the items' maximums add up to it — then look again.
+- **The plan vs. the course**: every unit built, every criterion assessed somewhere
+  (`course-alignment` does this check in full).
 
 ## 5. Report
 
-Summarize what was built: sections with their resources and activities, the evaluation, the
-decisions you took on your own (and why), and what's left for the teacher to review — the
-items worth a human look before students arrive.
+What was built (sections with their resources and activities), the evaluation, the decisions you
+took on your own and why, what `pedagogy-reviewer` pointed out, and what the teacher should review
+before students arrive — starting with every proposal in the teaching plan they haven't confirmed.

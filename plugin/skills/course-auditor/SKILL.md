@@ -16,12 +16,15 @@ Two related but different uses of this skill:
 
 Both compose the other skills' criteria rather than redefining them:
 
-- Structure and pedagogical coherence: `course-design`.
-- Accessibility: `accessibility`.
-- Non-quiz activity design (does a workshop/lesson/collaborative activity actually work
-  as designed): `activity-design`.
-- Quiz quality: `quiz-design`.
+- Structure and pedagogical coherence: `course-design` — and a second opinion from the
+  `pedagogy-reviewer` subagent on the units that look weakest.
+- Against the teacher's teaching plan, if there is one: `course-alignment` (don't repeat its
+  comparison here; run it, or cite its latest entry).
+- Writing, accessibility and how it works for a student: `publish-check` (its "When auditing").
+- Each activity's design: `assignment-building`, `activity-building`, `quiz-design` +
+  `quiz-building`; notes and resources: `resource-authoring`.
 - Grading criteria quality: `rubric-design`.
+- Outdated content (a tool version, a command, a statistic): `topic-research`.
 - Reading the course's real current state: `moodle-navigation`.
 
 ## What to check
@@ -31,17 +34,18 @@ Both compose the other skills' criteria rather than redefining them:
   unrelated files?
 - **Coherence**: do objectives, content, activities, and evaluation actually line up
   (`course-design`)?
-- **Accessibility**: apply `accessibility`'s checklist to a sample of pages/activities,
-  not necessarily every single one for a large course.
+- **Writing and accessibility**: `publish-check` on a sample of pages and activities, not
+  necessarily every single one for a large course.
 - **Activities and evaluation**: activity-type variety, evaluation balance
   (`course-design`), whether each activity is actually well-designed for its type
-  (`activity-design`), question quality in quizzes (`quiz-design`), grading-criteria
+  (its building skill), question quality in quizzes (`quiz-design`), grading-criteria
   quality (`rubric-design`).
 - **Instructions**: does each activity clearly say what's expected, in what format, and
-  what's graded (same standard as `content-authoring`)?
+  what's graded (the standard of `assignment-building`)?
 - **Resources**: broken external links (checkable via `WebFetch` where the link is
   reachable at all — note as "couldn't verify" rather than "broken" if it's blocked or
-  requires auth), outdated material (a date, a tool version, a reference clearly stale),
+  requires auth), outdated material (a date, a tool version, a reference clearly stale — check what's
+  current with `topic-research`),
   content overload (a section with far more material than a student could reasonably get
   through).
 - **Dates**: inconsistent or contradictory deadlines (a quiz open before its own
