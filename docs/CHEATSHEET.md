@@ -449,7 +449,7 @@ teacher-agent run --mode guided
 
 Todas aceptan `--dir <carpeta>`; `chat`, `run` y `explore`, también `--headless`.
 
-**Habilidades** que aplica solo cuando la tarea lo pide (`teacher-agent skills` para verlas):
+**Habilidades** que aplica solo cuando la tarea lo pide (`teacher-agent skills` para verlas; cada una explicada con ejemplos en [skills.md](skills.md)):
 
 - **Construir**: `course-building`, `unit-building`, `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`, `quiz-building`, `rubric-design`, `practice-testing`, `publish-check`.
 - **Diseñar**: `course-design`, `teaching-methodologies`, `teaching-plan`, `course-alignment`, `topic-research`.
