@@ -23,8 +23,10 @@ Comandos:
       revisa o añade contenido y resume el progreso de la clase. Sin --mode, pregunta
       el modo. Con --task hace solo esa tarea (p. ej. --task "construye un curso de
       introducción a Docker de 3 temas" o --task "corrige la Tarea 2").
-  chat [--dir <ruta>] [--headless]
-      Sesión conversacional (siempre en modo guided).
+  chat [--dir <ruta>] [--headless] [--inline] [--plain]
+      Sesión conversacional a pantalla completa. Empieza en modo guided y Shift+Tab lo
+      alterna con interactive. --inline deja la conversación en el historial de la
+      terminal y --plain usa el chat de texto simple.
   explore [--dir <ruta>] [--headless]
       Mira (sin crear nada) qué tipos de actividad y de pregunta admite este Moodle y lo
       apunta en knowledge/moodle-capabilities.md.

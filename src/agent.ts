@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import {
   buildSessionOptions,
   createConsoleRenderer,
-  runChatTui,
+  runChatInk,
   runQuery,
   createPromptLoader,
   ui,
@@ -188,7 +188,8 @@ function buildSpec(runDir: string, kind: SessionKind): AgentSpec<WorkspaceSessio
  * Reads the workspace's config.json, or — with a terminal in front — offers to create it
  * right there.
  */
-async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promise<WorkspaceConfig> {
+/** The workspace's config, or null when it was just created here: then the session doesn't start. */
+async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promise<WorkspaceConfig | null> {
   if (await workspaceExists(workspaceDir)) {
     const config = await ensureTeacherRole(workspaceDir, await readWorkspaceConfig(workspaceDir));
     return offerPracticeRunner(workspaceDir, config, canPrompt);
@@ -279,20 +280,42 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   await mkdir(runDir, { recursive: true });
   if (kind !== "ingest") await writePlaywrightConfig(runDir, config.moodlePassword);
 
-  console.log(ui.heading(sessionHeading(kind, mode)));
-  console.log(ui.dim(`Workspace: ${workspace.classroom.label} (${workspaceDir})`));
-  console.log(ui.dim(`Sesión: ${runDir}`));
-  console.log(ui.dim(`Curso: ${config.moodleUrl} (id ${config.moodleCourseId})\n`));
+  // The Ink chat shows these in its own header (full screen would wipe anything printed
+  // before it); the readline chat, like the one-shot kinds, gets them printed.
+  const plainChat = parseBooleanFlag(args, "--plain") === true || !process.stdin.isTTY || !process.stdout.isTTY;
+  if (kind !== "chat" || plainChat) {
+    console.log(ui.heading(sessionHeading(kind, mode)));
+    console.log(ui.dim(`Workspace: ${workspace.classroom.label} (${workspaceDir})`));
+    console.log(ui.dim(`Sesión: ${runDir}`));
+    console.log(ui.dim(`Curso: ${config.moodleUrl} (id ${config.moodleCourseId})\n`));
+  }
 
-  const { options } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind), {
+  const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind), {
     autoCompactEnabled: await isAutoCompactEnabled(),
   });
   if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
 
   if (kind === "chat") {
-    await runChatTui(options, {
-      welcomeMessage:
-        "teacher-agent conectando con Moodle. Esc interrumpe la respuesta en curso; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión.",
+    // Full screen by default; --inline keeps the history in the terminal's scrollback, and
+    // --plain (or no TTY) falls back to the readline chat.
+    await runChatInk(options, {
+      header: {
+        title: "teacher-agent",
+        // One line, cut to the terminal's width: short values only (the full paths are
+        // printed again when the session ends).
+        fields: {
+          workspace: workspace.classroom.label,
+          curso: `${new URL(config.moodleUrl).host} · id ${config.moodleCourseId}`,
+          sesión: path.basename(runDir),
+        },
+      },
+      mode,
+      modeControl,
+      plain: plainChat,
+      fullscreen: parseBooleanFlag(args, "--inline") !== true,
+      welcomeMessage: plainChat
+        ? "teacher-agent conectando con Moodle. Esc interrumpe la respuesta en curso; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión."
+        : ui.dim("teacher-agent conectando con Moodle. Shift+Tab alterna entre guided e interactive, ? muestra los atajos y /exit cierra la sesión."),
       promptLabel: `\n${ui.user("tú>")} `,
       agentLabel: ui.agent("teacher-agent>"),
       formatAction: friendlyToolLabel,
@@ -351,7 +374,7 @@ function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string
     ui.heading(interrupted ? "Sesión interrumpida." : "Sesión cerrada."),
     ui.dim("No hay nada pendiente de guardar: todo se escribe en disco sobre la marcha."),
     ui.dim(`  - Acciones del agente y sus resultados: ${path.join(runDir, "transcript.jsonl")}`),
-    ...(kind === "chat" ? [ui.dim(`  - La conversación tal como la has visto: ${path.join(runDir, "session.log")}`)] : []),
+    ...(kind === "chat" ? [ui.dim(`  - La conversación, en texto plano: ${path.join(runDir, "session.log")}`)] : []),
     ui.dim(`  - Lo que el agente ha aprendido: ${path.join(workspaceDir, "knowledge")}`),
     ...(interrupted
       ? [ui.dim("Lo que estaba haciendo al interrumpir puede haber quedado a medias (una nota sin guardar, una respuesta sin publicar); en la próxima sesión puedes pedirle que lo retome.")]

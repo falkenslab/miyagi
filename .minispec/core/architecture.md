@@ -3,14 +3,14 @@
 ## Flow
 
 ```
-cli.ts → workspace config → toSessionConfig() → AgentSpec (agent.ts) → agent-kit runQuery()/runChatTui()
+cli.ts → workspace config → toSessionConfig() → AgentSpec (agent.ts) → agent-kit runQuery()/runChatInk()
                                                     ├─ system prompt (prompts/system/*.md)
                                                     ├─ plugin/ skills + commands, agent-kit knowledge plugin
                                                     ├─ Playwright MCP → Moodle
                                                     └─ subagents: researcher, pedagogy-reviewer, practice-runner (opt-in)
 ```
 
-Session kinds: `run` (one-shot mission, or `--task`), `chat` (TUI), `ingest` (no browser, builds the knowledge base), `explore` (guided probe of the Moodle site, capped at 60 turns, no legacy migration).
+Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink chat, full screen by default; `--inline`, `--plain` for readline; starts guided, Shift+Tab switches to interactive), `ingest` (no browser, builds the knowledge base), `explore` (guided probe of the Moodle site, capped at 60 turns, no legacy migration).
 
 ## Key pieces
 

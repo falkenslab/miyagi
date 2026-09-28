@@ -137,9 +137,13 @@ Siempre desde la carpeta del curso: `teacher-agent chat` (o `teacher-agent chat 
 | Qué quieres | Qué haces |
 | --- | --- |
 | Pedirle algo | Escríbelo con tus palabras y pulsa Intro |
-| Aprobar lo que va a publicar | **Intro** o `y` |
-| Rechazarlo | `n` (y dile qué cambiar) |
+| Aprobar lo que va a publicar | **Intro**, `1` o `y` |
+| Rechazarlo | `2` o `n` (y dile qué cambiar) |
 | Cortar lo que está haciendo sin salir | `Esc` |
+| Que te consulte cada paso, no solo lo que publica | `Shift+Tab` (pasa de guided a interactive y vuelta) |
+| Ver lo que ya ha salido de pantalla | Rueda del ratón o `RePág`/`AvPág` |
+| Copiar texto | Arrástralo con el ratón y haz clic derecho |
+| Ver los atajos de teclado | `?` con el prompt vacío |
 | Salir | `/exit` (todo se guarda solo) |
 | Ver los atajos disponibles | `teacher-agent commands` (fuera del chat) |
 

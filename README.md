@@ -77,7 +77,7 @@ Siempre desde la carpeta del curso (`cd mi-curso`).
 teacher-agent chat
 ```
 
-Se abre Chrome, entra en tu curso y te pregunta qué necesitas. Pídeselo con tus palabras, por ejemplo:
+El chat ocupa toda la terminal y se abre Chrome, que entra en tu curso; el asistente te pregunta qué necesitas. Pídeselo con tus palabras, por ejemplo:
 
 - *"¿Qué entregas tengo pendientes de corregir?"*
 - *"Corrige las entregas de la Tarea 2 con la rúbrica que te he dejado."*
@@ -124,7 +124,7 @@ Todas aceptan `--dir <carpeta>` para trabajar con un curso sin entrar en su carp
 | Orden | Qué hace | Opciones |
 | --- | --- | --- |
 | `teacher-agent init` | Prepara una carpeta nueva para un curso (las preguntas del paso 3) y ofrece explorar tu Moodle. | |
-| `teacher-agent chat` | Conversación con el asistente, siempre pidiendo permiso antes de publicar. | `--headless` |
+| `teacher-agent chat` | Conversación con el asistente a pantalla completa, siempre pidiendo permiso antes de publicar. | `--headless`, `--inline` (sin pantalla completa), `--plain` (chat de texto simple) |
 | `teacher-agent run` | Gestiona el curso entero de una sentada: corregir, foro, contenido y resumen del progreso. | `--mode guided\|interactive\|autonomous`, `--task "…"`, `--headless` |
 | `teacher-agent explore` | Mira (sin crear nada) qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. | `--headless` |
 | `teacher-agent ingest` | Lee los documentos de `sources` (o los que indiques) y toma apuntes, sin abrir Moodle. | `[archivos…]` |
