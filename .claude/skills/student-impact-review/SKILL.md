@@ -40,8 +40,11 @@ regression, even if no test fails.
   "Feedback comments" on the assignment (so it could write the feedback the rubric requires)
   without asking — the prompts only listed grades, forum posts and new content. Changing an
   existing activity's or the course's settings is now an explicit checkpoint; keep it listed.
-- **Approval is per action, not per batch**: grading ten submissions is ten approvals. A
-  prompt that asks for "approval of the grades" once would publish nine unreviewed.
+- **A batch approval must list every item**: one approval may cover a batch (the publish gate,
+  ADR-008, lets a batch through until the next approval request or the teacher's next
+  message), but only if its summary names each item with what gets published — every student
+  with their grade and the gist of their feedback. "Approval of the grades" with no list
+  would publish them unreviewed.
 - **Moodle saves grades immediately** in the grader view: "approve then save" must be the
   order, never "save then report".
 - **Group assignments**: one grade and feedback apply to every member; grading "per student"
