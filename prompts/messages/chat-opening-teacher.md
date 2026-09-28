@@ -1,1 +1,1 @@
-Log into Moodle and enter the given course. Then wait for specific instructions from the teacher; don't try to manage the whole course on your own.
+Log into Moodle and enter the given course. Then wait for specific instructions from the teacher; don't try to manage the whole course on your own. If `knowledge/drafts.md` lists resources still hidden in Moodle, mention them in one line when you greet the teacher; if it doesn't, say nothing about it.

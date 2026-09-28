@@ -76,6 +76,13 @@ export function sourcesDirFor(workspaceDir: string): string {
   return path.join(workspaceDir, "sources");
 }
 
+/** The editable source of every resource the agent builds for Moodle (HTML, GIFT, text,
+ * images), one folder per resource: the teacher's material, not notes, so outside the
+ * knowledge base. Uploaded hidden to be tested in Moodle before students see it. */
+export function draftsDirFor(workspaceDir: string): string {
+  return path.join(workspaceDir, "drafts");
+}
+
 /** Practical activities checked in containers by the practice-runner subagent (Dockerfiles,
  * scripts, student submissions copied in): working files, not notes, so outside the knowledge base. */
 export function practiceDirFor(workspaceDir: string): string {
@@ -146,11 +153,12 @@ export async function writeWorkspaceConfig(workspaceDir: string, config: Workspa
   await chmod(file, 0o600).catch(() => {});
 }
 
-/** Creates a new workspace: config.json, sources/, knowledge/, and a starter .gitignore
- * (without overwriting one that already exists). */
+/** Creates a new workspace: config.json, sources/, knowledge/, drafts/, and a starter
+ * .gitignore (without overwriting one that already exists). */
 export async function createWorkspace(workspaceDir: string, config: WorkspaceConfig): Promise<void> {
   await mkdir(knowledgeDirFor(workspaceDir), { recursive: true });
   await mkdir(sourcesDirFor(workspaceDir), { recursive: true });
+  await mkdir(draftsDirFor(workspaceDir), { recursive: true });
   await writeWorkspaceConfig(workspaceDir, config);
 
   const gitignorePath = path.join(workspaceDir, ".gitignore");
@@ -208,7 +216,7 @@ export function toSessionConfig(
     projectDir: workspaceDir,
     knowledgeDir: knowledgeDirFor(workspaceDir),
     sourcesDir: sourcesDirFor(workspaceDir),
-    extraWritableDirs: workspace.agent.allowPracticeRunner ? [practiceDirFor(workspaceDir)] : [],
+    extraWritableDirs: [draftsDirFor(workspaceDir), ...(workspace.agent.allowPracticeRunner ? [practiceDirFor(workspaceDir)] : [])],
     // The password lives in config.json and the Claude token may live in .env.
     deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env")],
     secrets: workspace.classroom.password ? [workspace.classroom.password] : [],

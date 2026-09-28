@@ -8,6 +8,7 @@ Consult **before** writing code.
 - Document decisions, not implementation.
 - The teacher approves every change students would see; never delete or change enrolments.
 - In guided, that approval is enforced by a hook, not only asked for in the prompt (ADR-008).
+- New resources are built in `drafts/`, uploaded hidden and tested in Moodle before being shown (ADR-009).
 - Only the teacher role exists (ADR-002).
 - Secrets never reach the model; no RCE-equivalent browser tools (ADR-004).
 - Bash only for the opt-in, Docker-only practice-runner, never for the main agent (ADR-003).

@@ -231,6 +231,8 @@ Para activarla:
 
 **¿Dónde están sus apuntes?** En la carpeta `knowledge` del curso: archivos de texto que puedes abrir con cualquier editor (o con [Obsidian](https://obsidian.md), que muestra cómo se enlazan). No guarda fichas de estudiantes concretos, solo tendencias de la clase.
 
+**¿Cómo prueba lo que crea antes de que lo vean los alumnos?** Lo construye en la carpeta `drafts` del curso, lo sube a Moodle **oculto** (con tu permiso), lo prueba ahí como profesor y te pide permiso otra vez para mostrarlo. Lo que dejes oculto queda apuntado en `knowledge/drafts.md` y te lo recuerda al cerrar la sesión.
+
 **¿Puedo darle instrucciones propias?** Sí. Crea un archivo `instructions.md` en la carpeta del curso y escribe ahí lo que quieras que tenga siempre en cuenta ("puntúa sobre 10", "sé breve en el foro", "la ortografía cuenta un 10 %"...).
 
 **No quiero ver la ventana de Chrome.** Añade `--headless` (por ejemplo `teacher-agent run --headless`). Necesita el usuario y la contraseña guardados.

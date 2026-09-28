@@ -52,7 +52,7 @@ agent-kit's generic knowledge base plus the course layer in `prompts/system/cour
 - `syntheses/course-alignment.md` — dated comparisons of the course with the plan.
 - `topics/<slug>.md`, `activities/<slug>.md` — criteria, rubric, questions; a quiz's GIFT file sits next to it as `activities/<slug>.gift`.
 
-File scope (agent-kit's hook, set in `toSessionConfig()`): writes only in `knowledge/` (and `practice/` with the practice-runner), `sources/` read-only, `config.json` and `.env` denied.
+File scope (agent-kit's hook, set in `toSessionConfig()`): writes only in `knowledge/` and `drafts/` (and `practice/` with the practice-runner), `sources/` read-only, `config.json` and `.env` denied.
 
 ## Legacy migration
 

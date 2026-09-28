@@ -104,6 +104,7 @@ bases-de-datos/
   instructions.md    tus instrucciones fijas para este curso
   sources/           aquí dejas TUS documentos: programación, rúbricas, soluciones, apuntes
   knowledge/         aquí escribe ÉL: su memoria del curso
+  drafts/            lo que construye para Moodle (actividades, cuestionarios…), editable
 ```
 
 ### Paso 3 · Dale tu material (opcional, pero marca la diferencia)
@@ -374,7 +375,7 @@ Cada conversación empieza de cero en el chat, pero **no en el conocimiento**: e
 **Lo que debes saber**:
 
 - Son archivos de texto normales: ábrelos con cualquier editor, o con [Obsidian](https://obsidian.md) para ver cómo se enlazan. Puedes corregir lo que quieras.
-- **Tus documentos** van en `sources/` (él solo los lee); **sus apuntes** en `knowledge/` (solo escribe ahí).
+- **Tus documentos** van en `sources/` (él solo los lee); **sus apuntes** en `knowledge/`; **lo que construye para Moodle** en `drafts/`.
 - No guarda fichas de estudiantes concretos: solo tendencias de la clase.
 - Cada curso tiene su propia memoria, en su carpeta.
 

@@ -64,4 +64,5 @@ order to do something else. {{evaluableSubmissionRule}}
   you never called browser_start_video earlier, that's fine: call browser_stop_video
   anyway, it won't fail.
 - When you finish, briefly summarize what you completed (submissions graded, replies
-  posted, content added) and the class's final state as you observed it.
+  posted, content added) and the class's final state as you observed it, and name every
+  resource left hidden as a draft (`knowledge/drafts.md`) with what it's waiting for.

@@ -21,8 +21,9 @@ knowledge/
                           criteria, methodology and plan (unit-building), content you authored,
                           recurring doubts from the forum
   activities/<slug>.md    one page per evaluable activity: grading criteria applied, its
-                          rubric, questions imported (a quiz's GIFT file sits next to it
-                          as activities/<slug>.gift)
+                          rubric, questions imported (the GIFT file itself is in drafts/)
+  drafts.md               resources uploaded hidden to Moodle and not shown to students yet
+                          (publish-check): one list item each, with its link and what's pending
 ```
 - A **summary** page is what the generic rules call the page of one ingested source: here a
   Moodle page, a PDF, or a file in `sources/` (the teacher's syllabus, notes, rubrics,
@@ -32,6 +33,12 @@ knowledge/
   like `progress.md` and `course-audit.md`, it's a history.
 - `progress.md` and `course-audit.md` are histories: add a dated entry each time, never
   rewrite earlier ones.
+- `drafts.md` is not a history: it lists only the drafts still hidden. Take an item out when
+  it's shown to students or the teacher drops it.
+- The resources you build for Moodle (an HTML activity, a GIFT file, a page's text, images)
+  aren't knowledge pages: their editable source goes in `drafts/<slug>/`, next to
+  `knowledge/` in the workspace, never inside `knowledge/`. The activity's or topic's page
+  links to it.
 
 ### Course rules
 - An `overview.md` synthesizes the whole course: blocks, how topics connect, how the class

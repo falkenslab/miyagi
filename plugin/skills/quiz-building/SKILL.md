@@ -58,8 +58,8 @@ GIFT covers multiple choice, true/false, short answer, numerical, matching and e
 ::T1-04 Root::What's the square root of 49? {#7:0}
 ```
 
-1. Write the file in the knowledge base, next to the quiz's page:
-   `knowledge/activities/<quiz-slug>.gift`; check each question has exactly one right answer
+1. Write the file in the quiz's drafts folder, outside the knowledge base:
+   `drafts/<quiz-slug>/<quiz-slug>.gift`; check each question has exactly one right answer
    (`=`, or `{TRUE}`/`{FALSE}`).
 2. **Ask for approval of the import on its own**, separately from creating the quiz, listing
    every question — stem, type, right answer, and the distractors briefly. "6 GIFT questions
@@ -96,5 +96,5 @@ each.
 ## 4. After
 
 Run `publish-check` on the quiz (preview it as a student: questions in order, feedback where
-expected, review options as intended). Record in `knowledge/activities/<quiz-slug>.md` — one page per quiz, even when it repeats another quiz's settings — the settings, the questions (types, how many, the criteria followed) and the quiz's URL — the GIFT
-file sits next to it.
+expected, review options as intended). Record in `knowledge/activities/<quiz-slug>.md` — one page per quiz, even when it repeats another quiz's settings — the settings, the questions (types, how many, the criteria followed) and the quiz's URL, with
+a link to its GIFT file in `drafts/`.

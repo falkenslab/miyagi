@@ -9,8 +9,8 @@ knowledge base:
    note.
 2. Topic folders become `topics/<slug>.md` pages; grading criteria, rubrics and imported
    questions of an activity become its `activities/<slug>.md` page (a `.gift` file is
-   rewritten next to it as `activities/<slug>.gift`); `orientation.md`, `course-map.md`,
-   `moodle-capabilities.md`, `progress.md` and `course-audit.md` become the same pages at
+   rewritten as `drafts/<slug>/<slug>.gift`, outside the knowledge base); `orientation.md`,
+   `course-map.md`, `moodle-capabilities.md`, `progress.md` and `course-audit.md` become the same pages at
    the knowledge base root (keep their content, histories included).
 3. Downloaded files are now in `sources/` under the same relative path they had in
    `knowledge/`: write a summary page for each and point it at them there.

@@ -1,4 +1,5 @@
 import { mkdir } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -16,6 +17,7 @@ import {
   type Mode,
 } from "@falkenslab/agent-kit";
 import {
+  draftsDirFor,
   ensureTeacherRole,
   isMigrationPending,
   legacyKnowledgeDirFor,
@@ -286,6 +288,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
 
   const runDir = sessionDirFor(workspaceDir, kind);
   await mkdir(runDir, { recursive: true });
+  await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
   if (kind !== "ingest") await writePlaywrightConfig(runDir, config.moodlePassword);
 
   // The Ink chat shows these in its own header (full screen would wipe anything printed
@@ -378,6 +381,15 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
  * What the human sees when a session ends, however it ended: that nothing needs saving —
  * everything is written as it happens — and where each part of it is.
  */
+/** knowledge/drafts.md lists only the drafts still hidden in Moodle, one list item each. */
+function hasPendingDrafts(workspaceDir: string): boolean {
+  try {
+    return /^\s*[-*] /m.test(readFileSync(path.join(workspaceDir, "knowledge", "drafts.md"), "utf-8"));
+  } catch {
+    return false;
+  }
+}
+
 function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string, interrupted: boolean): void {
   const lines = [
     "",
@@ -386,6 +398,9 @@ function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string
     ui.dim(`  - Acciones del agente y sus resultados: ${path.join(runDir, "transcript.jsonl")}`),
     ...(kind === "chat" ? [ui.dim(`  - La conversación, en texto plano: ${path.join(runDir, "session.log")}`)] : []),
     ui.dim(`  - Lo que el agente ha aprendido: ${path.join(workspaceDir, "knowledge")}`),
+    ...(hasPendingDrafts(workspaceDir)
+      ? [ui.warn(`Hay recursos subidos ocultos a Moodle, aún sin mostrar a los alumnos: ${path.join(workspaceDir, "knowledge", "drafts.md")}`)]
+      : []),
     ...(interrupted
       ? [ui.dim("Lo que estaba haciendo al interrumpir puede haber quedado a medias (una nota sin guardar, una respuesta sin publicar); en la próxima sesión puedes pedirle que lo retome.")]
       : []),

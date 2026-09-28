@@ -1,6 +1,6 @@
 ---
 name: publish-check
-description: The last check before anything goes out to students, and the checklist for reviewing what's already published - the writing (no filler, redundancy or unverified claims, the course's own terms), accessibility (headings, alt text, link text, tables, color), and how it actually looks and works for a student (preview or "Switch role to..."). Use on every page, activity, question, feedback or forum post before saving it, and on existing content when auditing.
+description: The last check before anything goes out to students, and the checklist for reviewing what's already published - new resources go up hidden and are tested in Moodle before being shown (drafts/, knowledge/drafts.md), the writing (no filler, redundancy or unverified claims, the course's own terms), accessibility (headings, alt text, link text, tables, color), and how it actually looks and works for a student (preview or "Switch role to..."). Use on every page, activity, question, feedback or forum post before saving it, and on existing content when auditing.
 ---
 
 # Checking before publishing
@@ -9,6 +9,34 @@ Whatever skill produced the content (`resource-authoring`, `assignment-building`
 `activity-building`, `quiz-building`, `forum`, `grading-rubric`'s feedback…), it goes through this
 before it's saved — and the same checklist is how `course-auditor` reviews what's already there.
 Three passes, in order.
+
+## New resources: a hidden draft first
+
+Anything new you build for the course — a page, a file (an HTML activity, a PDF), a quiz, an
+H5P, an assignment, a whole unit — is tested in Moodle before students can see it, whatever
+its type:
+
+1. **Build it in `drafts/<slug>/`**: the editable source (the HTML, the GIFT file, the page's
+   text, its images). Never in `knowledge/`; the activity's or topic's page links to it.
+2. **Upload it hidden.** In the activity's form, "Common module settings" → "Availability":
+   "Hide on course page" ("Ocultar en la página del curso"), set before the first save. For a
+   new section, hide the section. The approval summary says it goes up **hidden, to test it**.
+   Leave "Send content change notification" unticked.
+3. **Test it as the teacher, in Moodle**: open it and use it the way a student would — the
+   quiz's "Preview", the H5P, every link and interactive part, and the page at a narrow window
+   width. If something fails, fix it in `drafts/` and replace it (another approval).
+4. **Note it in `knowledge/drafts.md`**: one list item per hidden draft, with its link and
+   what's pending.
+5. **Report what you tested, and ask to show it**: showing it ("Show on course page") is a
+   publication with its own approval. The same change on several drafts (a whole unit) can
+   share one approval if the summary names each. Once shown, take it out of `drafts.md` and
+   do pass 3 below as a student.
+
+A draft the teacher doesn't want shown yet stays hidden and in `drafts.md`: say so when you
+finish, and offer it again when the teacher next asks what's pending.
+
+Changes to something students can already see (a typo, a date, a fixed link) don't go through
+a draft: they're saved in place, with their approval.
 
 ## 1. The writing
 
@@ -38,9 +66,10 @@ Three passes, in order.
 
 ## 3. As a student sees it
 
-Save (with its approval), then look at it from the student's side — "Switch role to..." →
-"Student" from the user menu (back with "Return to my normal role"), or the activity's
-"Preview" — and check:
+Once it's visible (a new resource, after its hidden draft is shown), look at it from the
+student's side — "Switch role to..." → "Student" from the user menu (back with "Return to my
+normal role"), or the activity's "Preview" — and check (a hidden draft is checked the same
+way, but as the teacher: the student role doesn't see it):
 
 - it reads in order and nothing is empty, placeholder, or broken (links, images, code blocks
   keeping their indentation);
