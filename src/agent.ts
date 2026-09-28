@@ -43,6 +43,7 @@ import { offerPracticeRunner, promptInitWorkspace, promptMode } from "./menu.js"
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
 import { friendlyToolLabel } from "./toolLabels.js";
+import { installPublishGate } from "./publishGate.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const loadPrompt = createPromptLoader(path.join(__dirname, "..", "prompts"));
@@ -301,6 +302,8 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     autoCompactEnabled: await isAutoCompactEnabled(),
   });
   if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
+  // The approval before publishing, enforced (it only acts in guided; ingest has no browser).
+  if (kind !== "ingest") installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
 
   if (kind === "chat") {
     // Full screen by default; --inline keeps the history in the terminal's scrollback, and

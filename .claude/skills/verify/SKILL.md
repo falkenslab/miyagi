@@ -17,6 +17,7 @@ npm run lint
 npm run build
 node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
+node .claude/skills/verify/check-publish-gate.mjs
 node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
 ```
 
@@ -33,6 +34,11 @@ if:
 `check-references.mjs` fails if a skill, a command or a prompt names a skill or subagent that
 doesn't exist — what a merge or a rename leaves behind. After renaming or merging skills, also
 update `README.md` (skills table) and `.minispec/core/architecture.md`, which it doesn't read.
+
+`check-publish-gate.mjs` classifies real tool calls (clicks, scripts, navigations taken from
+test transcripts) with the publish gate's `isPublishAction()` and fails on any that would
+publish without being caught, or be stopped without publishing. When a test finds a
+publishing action the gate missed, add it there with the fix.
 
 When you add a prompt section that depends on the session kind, the mode or a config flag,
 add it to the `SECTIONS` table in `check-prompts.mjs` in the same change.
