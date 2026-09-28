@@ -46,11 +46,12 @@ Opciones:
 
 Cada workspace es un directorio (el actual, o el indicado con --dir) con su propio
 config.json, como un repositorio git. Sin argumentos, teacher-agent pregunta si quieres
-"run" o "chat" y usa el directorio actual, ofreciendo inicializarlo si todavía no es un
-workspace. --headless (necesita credenciales guardadas) y el idioma preferido también se
-pueden fijar de forma persistente: en el config.json del workspace ("agent.headless",
-"agent.language") o, para todos, en ${globalConfigPath()} ("defaultHeadless",
-"defaultLanguage"). Ver README.md para más detalle.`);
+"run" o "chat" y usa el directorio actual; si todavía no es un workspace, lo configura
+y termina (vuelve a lanzarlo para empezar). --headless (necesita credenciales guardadas)
+y el idioma preferido también se pueden fijar de forma persistente: en el config.json
+del workspace ("agent.headless", "agent.language") o, para todos, en
+${globalConfigPath()} ("defaultHeadless", "defaultLanguage"). Ver README.md para más
+detalle.`);
 }
 
 async function installedVersion(): Promise<string> {

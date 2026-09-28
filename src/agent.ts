@@ -200,7 +200,8 @@ async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promi
         '"teacher-agent init" ahí, o pasa --dir con un workspace existente.',
     );
   }
-  return promptInitWorkspace(workspaceDir);
+  await promptInitWorkspace(workspaceDir);
+  return null;
 }
 
 /**
@@ -247,6 +248,12 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
 
   const canPrompt = Boolean(process.stdin.isTTY) && (kind === "run" || kind === "chat") && modeFlag !== "autonomous";
   const workspace = await resolveWorkspace(workspaceDir, canPrompt);
+  // Just configured: stop here, so the session starts clean (the full-screen chat) from its
+  // own command instead of right after the setup wizard's prompts.
+  if (!workspace) {
+    console.log(ui.dim(`Configuración guardada. Cuando quieras empezar: teacher-agent ${kind} --dir "${workspaceDir}"`));
+    return;
+  }
   const mode = await resolveMode(kind, modeFlag);
   const headless = await resolveHeadless(parseBooleanFlag(args, "--headless"), workspace.agent.headless);
   const hasCredentials = Boolean(workspace.classroom.username && workspace.classroom.password);

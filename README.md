@@ -132,7 +132,7 @@ Todas aceptan `--dir <carpeta>` para trabajar con un curso sin entrar en su carp
 | `teacher-agent commands` | Lista los atajos que puedes usar dentro del chat. | |
 | `teacher-agent --help` / `--version` | Ayuda y versión instalada. | |
 
-Sin ninguna orden (`teacher-agent` a secas) te pregunta si quieres `run` o `chat`.
+Sin ninguna orden (`teacher-agent` a secas) te pregunta si quieres `run` o `chat`. Si la carpeta aún no es un curso, primero te hace las preguntas del paso 3, guarda la configuración y termina: vuelve a lanzarlo para empezar.
 
 ### Atajos dentro del chat
 
