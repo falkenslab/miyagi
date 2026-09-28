@@ -61,6 +61,10 @@ const CASES = [
   [pw("navigate"), { url: "http://localhost:8081/mod/assign/view.php?id=47&action=grader&userid=5" }, false],
   [pw("type"), { element: "Name textbox", target: "f16e119", text: "Reto de repaso" }, false],
   [pw("type"), { element: "Search box", target: "e9", text: "variables", submit: true }, false],
+  // The login, typed with Enter into an unnamed field (a false positive in the draft-testing run).
+  [pw("type"), { target: "f1e36", text: "MOODLE_PASSWORD", submit: true }, false],
+  [pw("type"), { element: "Password textbox", target: "e36", text: "x", submit: true }, false],
+  [pw("type"), { element: "Username or email textbox", target: "e32", text: "profesor", submit: true }, false],
   [pw("fill_form"), { fields: [{ name: "Username", type: "textbox", value: "profesor" }] }, false],
   ["mcp__approvals__request_human_approval", { summary: "Save changes" }, false],
   ["Write", { file_path: "knowledge/log.md", content: "Save and display" }, false],

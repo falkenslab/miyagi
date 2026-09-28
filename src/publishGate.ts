@@ -1,4 +1,5 @@
 import { askForDecision, type ModeControl, type Options } from "@falkenslab/agent-kit";
+import { MOODLE_PASSWORD_SECRET_NAME } from "./playwrightConfig.js";
 
 /**
  * The publish gate: in "guided" mode, a browser action that publishes something in Moodle only
@@ -62,6 +63,13 @@ function namesPublishing(text: string): boolean {
   return PUBLISH_PATTERNS.some((re) => re.test(t)) || SHOW_ITEM.test(t);
 }
 
+/** The login form (the password is typed as its secret name, often into an unnamed field) or a search box. */
+function isLoginOrSearch(element: string, target: string, typed: string): boolean {
+  if (typed === MOODLE_PASSWORD_SECRET_NAME) return true;
+  const t = norm(`${element} ${target}`);
+  return NEVER_PUBLISH.some((re) => re.test(t)) || /\b(password|username|user ?name|log ?in|email|contrasena|usuario|acceder)\b/.test(t);
+}
+
 /** Scripts that submit a form, click a submit button or POST to Moodle. */
 function scriptPublishes(code: string): boolean {
   const c = norm(code);
@@ -87,7 +95,8 @@ export function isPublishAction(toolName: string, toolInput: unknown): boolean {
       return namesPublishing(`${text("element")} ${text("target")}`);
     case "type":
     case "press_sequentially":
-      return input.submit === true && !NEVER_PUBLISH.some((re) => re.test(norm(`${text("element")} ${text("target")}`)));
+      // Typing then Enter submits the form around the field, except a login or a search.
+      return input.submit === true && !isLoginOrSearch(text("element"), text("target"), text("text"));
     case "evaluate":
       return scriptPublishes(text("function"));
     case "navigate":
