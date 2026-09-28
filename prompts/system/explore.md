@@ -20,7 +20,10 @@ later can't be saved.
    question bank" just to look); in older versions, the course's question bank ("More" →
    "Question bank") → "Create a new question". Note the full list of question types offered,
    without creating any — cancel without saving. If question management is blocked by
-   unfinished transfer tasks, say so: the site's scheduled tasks haven't run.
+   unfinished transfer tasks, say so: the site's scheduled tasks haven't run. Use a quiz of
+   this course only: if it has none, don't look for one in another course — write that the
+   question types couldn't be checked yet (a later "explore", once the course has a quiz,
+   fills them in).
 4. Look at how grades can work here: the course's "Grades" → "Gradebook setup" → the course total's "Edit category" (note which aggregations the "Aggregation" list offers — some sites only allow "Natural"), and an assignment's settings form ("Add content" → "Activity or resource" → "Assignment", then Cancel): note whether a "Grade penalties" section appears (late penalties must be enabled by the site). Cancel both forms without saving.
 5. Don't create, edit, or delete anything real in the course at any step of this task:
    the steps above are look-and-cancel only.
