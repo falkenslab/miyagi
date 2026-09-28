@@ -1,6 +1,6 @@
 ---
 name: try-agent-kit-local
-description: Try unreleased changes of the sibling ../agent-kit in teacher-agent before a kit release - link the local kit into node_modules without touching the global npm, test, then restore the pinned tarball. Use when a teacher-agent change needs something new in agent-kit, or to check a kit change against this agent before releasing it.
+description: Try unreleased changes of the sibling ../agent-kit in teacher-agent before a kit release - link the local kit into node_modules without touching the global npm, test, then restore the pinned version. Use when a teacher-agent change needs something new in agent-kit, or to check a kit change against this agent before releasing it.
 ---
 
 # Try a local agent-kit build
@@ -42,5 +42,5 @@ skill; confirm with the user), then run `upgrade-agent-kit` here. Check
 
 ## If the trial is abandoned
 
-`npm install` restores the pinned tarball from the lockfile. Leave `../agent-kit` as it was,
+`npm install` restores the pinned version from the lockfile. Leave `../agent-kit` as it was,
 or tell the user what's left there uncommitted.

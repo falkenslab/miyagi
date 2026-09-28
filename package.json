@@ -25,7 +25,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "https://github.com/falkenslab/teacher-agent/releases/download/v0.4.0/falkenslab-agent-kit-0.10.0.tgz",
+    "@falkenslab/agent-kit": "0.10.1",
     "@inquirer/prompts": "^8.5.2",
     "@playwright/mcp": "^0.0.79"
   },
@@ -39,7 +39,6 @@
     "typescript-eslint": "^8.68.0"
   },
   "allowScripts": {
-    "esbuild@0.28.2": true,
-    "@falkenslab/agent-kit": false
+    "esbuild@0.28.2": true
   }
 }

@@ -4,7 +4,7 @@
 
 - Node.js ≥ 20, ESM.
 - TypeScript (`tsc` to `dist/`), `tsx` in development.
-- `@falkenslab/agent-kit` 0.10.0, from the tarball `https://github.com/falkenslab/teacher-agent/releases/download/v0.4.0/falkenslab-agent-kit-0.10.0.tgz` (see ADR-001).
+- `@falkenslab/agent-kit` 0.10.1, from npm at that exact version (see ADR-010).
 - Claude Agent SDK (through agent-kit).
 - `@playwright/mcp` — browser control of Moodle.
 - `@inquirer/prompts` — CLI wizards.
@@ -16,6 +16,6 @@
 
 ## Infrastructure
 
-- GitHub releases: `teacher-agent.tgz` (what users install) and the agent-kit tarball.
+- GitHub releases: `teacher-agent.tgz` (what users install). Releases up to v0.4.0 also carry the agent-kit tarball their versions depend on.
 - `moodle-sandbox` (sibling repo) for end-to-end tests.
 - Docker, only for the opt-in practice-runner.

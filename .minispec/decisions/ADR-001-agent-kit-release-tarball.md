@@ -1,5 +1,7 @@
 # ADR-001: agent-kit from a release tarball
 
+> Superseded by ADR-010: agent-kit is now installed from npm.
+
 ## Decision
 
 `@falkenslab/agent-kit` is a dependency on a built `npm pack` tarball attached to a teacher-agent GitHub release, with its `prepare` script denied in `allowScripts`.

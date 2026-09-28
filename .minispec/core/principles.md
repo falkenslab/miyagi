@@ -13,5 +13,5 @@ Consult **before** writing code.
 - Secrets never reach the model; no RCE-equivalent browser tools (ADR-004).
 - Bash only for the opt-in, Docker-only practice-runner, never for the main agent (ADR-003).
 - No pages about individual students in the knowledge base (ADR-005).
-- agent-kit comes from a release tarball, not npm or git (ADR-001).
+- agent-kit comes from npm at an exact version, never a git dependency (ADR-010).
 - Prompt and skill changes are proven against a real Moodle, and the report stays in `tests/` (ADR-006).

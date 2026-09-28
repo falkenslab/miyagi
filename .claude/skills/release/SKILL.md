@@ -21,7 +21,7 @@ everyone the moment it becomes "latest".
 
 - On `main`, working tree clean, up to date with `origin/main` (`git fetch && git status -sb`).
   Uncommitted changes: stop and ask (or use `commit` first if the user wants them in).
-- `node_modules/@falkenslab/agent-kit` is a real folder installed from the tarball URL in
+- `node_modules/@falkenslab/agent-kit` is a real folder installed from npm at the version in
   `package.json`, not a symlink to `../agent-kit` (finish a local-kit trial first).
 - The `verify` skill passes. If prompts or plugin skills changed since the last tag,
   `smoke-ingest` too; if something that acts in Moodle changed, `sandbox-e2e`.
