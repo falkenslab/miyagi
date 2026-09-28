@@ -33,6 +33,17 @@ In Moodle 4.x/5.x an assignment's submissions are listed at
 `mod/assign/view.php?id=<cmid>&action=grader&userid=<id>` — save each grade there before
 moving to the next student.
 
+The grader's feedback box is a rich-text editor (TinyMCE) over a hidden textarea, and "Save
+changes" sends the textarea, not what the editor shows. Text put into the editor with
+JavaScript (`ed = tinymce.get('id_assignfeedbackcomments_editor'); ed.setContent(...)`) never
+reaches it unless you also call `ed.save()` before saving; typing into the editor does.
+Otherwise Moodle saves the grade with an empty comment, and says nothing. So after saving,
+reload the grader for that
+student (or look at the "Feedback comments" column of the submissions table) and check that
+**both** the grade and the comment are there — checking only the grade is how a whole batch
+ends up with no feedback. Never tell the teacher that students received a comment you
+haven't seen saved.
+
 ## When a rubric level is a range
 
 Rubrics often give a range for a partial level ("1-2 points if some example is missing or
