@@ -25,7 +25,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "https://github.com/falkenslab/teacher-agent/releases/download/v0.1.0/falkenslab-agent-kit-0.6.0.tgz",
+    "@falkenslab/agent-kit": "https://github.com/falkenslab/teacher-agent/releases/download/v0.4.0/falkenslab-agent-kit-0.10.0.tgz",
     "@inquirer/prompts": "^8.5.2",
     "@playwright/mcp": "^0.0.79"
   },

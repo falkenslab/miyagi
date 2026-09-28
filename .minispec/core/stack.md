@@ -4,7 +4,7 @@
 
 - Node.js ≥ 20, ESM.
 - TypeScript (`tsc` to `dist/`), `tsx` in development.
-- `@falkenslab/agent-kit` 0.6.0, from the tarball `https://github.com/falkenslab/teacher-agent/releases/download/v0.1.0/falkenslab-agent-kit-0.6.0.tgz` (see ADR-001).
+- `@falkenslab/agent-kit` 0.10.0, from the tarball `https://github.com/falkenslab/teacher-agent/releases/download/v0.4.0/falkenslab-agent-kit-0.10.0.tgz` (see ADR-001).
 - Claude Agent SDK (through agent-kit).
 - `@playwright/mcp` — browser control of Moodle.
 - `@inquirer/prompts` — CLI wizards.
