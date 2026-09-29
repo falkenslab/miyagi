@@ -23,7 +23,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 - `src/catalog.ts` — skill and command listing for the `skills`/`commands` subcommands, and the session's `AgentSpec.skills` (this plugin's and the workspace's; the SDK's own left out).
 - `src/systemPrompt.ts` — assembles the prompt: teacher-run / teacher-chat / teacher-ingest / explore plus conditional sections.
 - `src/playwrightConfig.ts` — the `@playwright/mcp` config; its `secrets` map keeps the Moodle password away from the model.
-- `src/toolLabels.ts` — `browser_*` labels on top of agent-kit's `createFriendlyToolLabel()`.
+- `src/toolLabels.ts` — `browser_*` labels on top of agent-kit's `createFriendlyToolLabel()`; the chat's (`chatToolLabel`) dimmed.
 - `src/messages/` — person-facing texts in en/es/fr/de, typed as `Messages` (en is the reference); `t()` follows agent-kit's `getLanguage()`, chosen once at the CLI's start (`--language`, `agent.language`, `defaultLanguage`, system). Model-facing text stays in English.
 
 ## Subagents
