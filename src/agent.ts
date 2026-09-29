@@ -64,6 +64,18 @@ const PLAYWRIGHT_MCP_CLI = path.join(
  * doesn't need the headroom of a full run. */
 const EXPLORE_MAX_TURNS = 60;
 
+/**
+ * The chat header's logo: an owl in a mortarboard. One-column characters only (ASCII):
+ * agent-kit measures the logo to place the title beside it, and an emoji would shift it.
+ */
+const LOGO = [
+  ui.dim("  ____"),
+  ui.dim(" /___/|"),
+  `${ui.accent(" {o,o}")}${ui.warn("'")}`,
+  ui.accent(" |)__)"),
+  ui.dim(" -\"-\"-"),
+];
+
 const VALID_MODES: readonly Mode[] = ["interactive", "guided", "autonomous"];
 
 export function parseFlag(args: string[], name: string): string | undefined {
@@ -335,6 +347,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         language: config.language,
         header: {
           title: "teacher-agent",
+          art: LOGO,
           // One line, cut to the terminal's width: short values only (the full paths are
           // printed again when the session ends).
           fields: {
