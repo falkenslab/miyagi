@@ -10,7 +10,7 @@ Check the files the agent uploads to Moodle (GIFT first, then HTML) with code, n
   - The agent only found it by previewing the hidden quiz, and fixed it question by question with two more approvals.
   - What worked, confirmed empirically: `[html]` with `<pre>` and `&nbsp;` for the indentation.
 - Getting the file right is left to the model today (`quiz-building`: "check each question has exactly one right answer"). A syntax or format mistake is only seen after the upload, if at all.
-- The agent uploads files with `browser_drop` or `browser_file_upload`, passing the file's path in `drafts/`. A PreToolUse hook can read and check it before the upload, like the publish gate (ADR-008). No new MCP tool is needed: the kit doesn't export a way to build one.
+- The agent uploads files with `browser_drop` or `browser_file_upload`, passing the file's path in `drafts/`. A PreToolUse hook can read and check it before the upload, like the publish gate (ADR-008): it works whatever tool the agent chose, so no new MCP tool is needed for this.
 
 ## Changes
 
