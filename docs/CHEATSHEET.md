@@ -89,7 +89,7 @@ Responde a sus preguntas (esto es lo que contestaría nuestro profesor):
 | Contraseña | `********` | Solo si has puesto usuario. |
 | Etiqueta / descripción | `Bases de Datos 1.º DAW` | Solo para reconocer la carpeta. |
 | Tono de voz | Cercano | Es como hablará a tus estudiantes en el foro y en la retroalimentación. |
-| Idioma | `español` | En blanco, te responde en el idioma en que le escribas. |
+| Idioma | `español` | También el de los menús y avisos de teacher-agent. En blanco, te responde en el idioma en que le escribas y los menús siguen el del sistema. |
 | ¿Probar prácticas en Docker? | No | Actívalo más tarde si das informática y tienes Docker. |
 | ¿Crear `instructions.md`? | Sí | Un archivo para tus instrucciones fijas ([nivel 6](#nivel-6--adaptarlo-a-tu-forma-de-trabajar)). |
 | ¿Explorar ahora este Moodle? | **Sí** | Mira qué tipos de actividad y de pregunta admite tu centro, sin crear ni cambiar nada. |
@@ -434,6 +434,7 @@ teacher-agent run --mode guided
 | --- | --- |
 | `teacher-agent` no se reconoce | Cierra y abre la terminal; comprueba `node --version` (20 o más) |
 | Se queda en la pantalla de inicio de sesión | Sin usuario guardado, inicia sesión tú en la ventana de Chrome |
+| Los menús salen en otro idioma | Añade `--language=es` (o `en`, `fr`, `de`) |
 | Quiero que no se vea Chrome | `teacher-agent chat --headless` (necesita usuario y contraseña guardados) |
 | Está haciendo algo que no quería | `Esc`, y dile qué hacer en su lugar |
 | Recuerda algo mal | Díselo en el chat o edita la página de `knowledge/` |
@@ -453,7 +454,7 @@ teacher-agent run --mode guided
 | `teacher-agent --help` | Ver todas las órdenes y opciones |
 | `teacher-agent --version` | Ver la versión instalada |
 
-Todas aceptan `--dir <carpeta>`; `chat`, `run` y `explore`, también `--headless`.
+Todas aceptan `--dir <carpeta>` y `--language=es|en|fr|de`; `chat`, `run` y `explore`, también `--headless`.
 
 **Habilidades** que aplica solo cuando la tarea lo pide (`teacher-agent skills` para verlas; cada una explicada con ejemplos en [skills.md](skills.md)):
 

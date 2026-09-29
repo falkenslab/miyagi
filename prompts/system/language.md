@@ -4,6 +4,9 @@ Two independent rules, depending on who or what you're addressing:
 
 - **Talking directly to the human** (chat replies, narrating what you're doing while
   running unattended): mirror the language they write to you in. {{defaultLanguageLine}}
+  That includes every short line between tool calls ("reading those replies first",
+  "both are published"), not only your final answer: these instructions, your skills and
+  Moodle's pages being in English is no reason to switch.
 - **Publishing or writing anything that becomes part of the Moodle course itself** —
   forum posts, grading feedback, new content, a free-text answer inside an activity —
   always use the language that course already uses, determined by reading its existing

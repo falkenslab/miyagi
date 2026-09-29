@@ -5,57 +5,15 @@ import { fileURLToPath } from "node:url";
 import { isExitPromptError, ui } from "@falkenslab/agent-kit";
 import { resolveWorkspaceDir, runSession } from "./agent.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
-import { globalConfigPath } from "./globalConfig.js";
+import { globalConfigPath, resolveLanguage } from "./globalConfig.js";
 import { promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
-import { workspaceExists } from "./workspace.js";
+import { chooseInterfaceLanguage, t } from "./messages/index.js";
+import { interfaceLanguage, readWorkspaceConfig, workspaceExists } from "./workspace.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function printHelp(): void {
-  console.log(`teacher-agent [<comando>] [opciones]
-
-Comandos:
-  init [--dir <ruta>]
-      Crea un workspace nuevo en el directorio indicado (o en el actual) y ofrece
-      explorar a continuación qué admite ese Moodle.
-  run [--dir <ruta>] [--mode interactive|guided|autonomous] [--headless] [--task "<texto>"]
-      Gestiona el curso de una sentada: corrige entregas pendientes, atiende el foro,
-      revisa o añade contenido y resume el progreso de la clase. Sin --mode, pregunta
-      el modo. Con --task hace solo esa tarea (p. ej. --task "construye un curso de
-      introducción a Docker de 3 temas" o --task "corrige la Tarea 2").
-  chat [--dir <ruta>] [--headless] [--inline] [--plain] [--continue]
-      Sesión conversacional a pantalla completa. Empieza en modo guided y Shift+Tab lo
-      alterna con interactive. --inline deja la conversación en el historial de la
-      terminal y --plain usa el chat de texto simple. --continue retoma la última
-      conversación de este curso, y /resume, dentro del chat, deja elegir otra.
-  explore [--dir <ruta>] [--headless]
-      Mira (sin crear nada) qué tipos de actividad y de pregunta admite este Moodle y lo
-      apunta en knowledge/moodle-capabilities.md.
-  ingest [--dir <ruta>] [ficheros...]
-      Incorpora a la base de conocimiento (knowledge/) los ficheros indicados o, sin
-      ninguno, todo lo de sources/ que aún no esté en ella. Sin navegador ni
-      Moodle.
-  skills [--dir <ruta>]
-      Lista las habilidades disponibles: las incorporadas y las propias del workspace
-      (<workspace>/.claude/skills/).
-  commands [--dir <ruta>]
-      Lista los comandos de barra que se pueden usar dentro de "chat".
-
-Opciones:
-  -h, --help           Muestra esta ayuda.
-  -v, --version        Muestra la versión instalada.
-  --language=<código>  Idioma de la barra de estado, los paneles y los atajos del chat:
-                       es, en, fr o de (por defecto, el de "agent.language" del
-                       workspace, o español).
-
-Cada workspace es un directorio (el actual, o el indicado con --dir) con su propio
-config.json, como un repositorio git. Sin argumentos, teacher-agent pregunta si quieres
-"run" o "chat" y usa el directorio actual; si todavía no es un workspace, lo configura
-y termina (vuelve a lanzarlo para empezar). --headless (necesita credenciales guardadas)
-y el idioma preferido también se pueden fijar de forma persistente: en el config.json
-del workspace ("agent.headless", "agent.language") o, para todos, en
-${globalConfigPath()} ("defaultHeadless", "defaultLanguage"). Ver README.md para más
-detalle.`);
+  console.log(t().help(globalConfigPath()));
 }
 
 async function installedVersion(): Promise<string> {
@@ -66,7 +24,7 @@ async function installedVersion(): Promise<string> {
 async function initCommand(args: string[]): Promise<void> {
   const workspaceDir = resolveWorkspaceDir(args);
   if (await workspaceExists(workspaceDir)) {
-    throw new Error(`${workspaceDir} ya es un workspace de teacher-agent (config.json existe). Elige otro directorio.`);
+    throw new Error(t().alreadyWorkspace(workspaceDir));
   }
   await promptInitWorkspace(workspaceDir);
   if (!(await promptExploreNow())) return;
@@ -77,17 +35,14 @@ async function initCommand(args: string[]): Promise<void> {
     await runSession("explore", ["--dir", workspaceDir]);
   } catch (error) {
     if (isExitPromptError(error)) throw error;
-    console.log(ui.warn(
-      `No se pudo explorar el Moodle (${error instanceof Error ? error.message : String(error)}). ` +
-        'El workspace está creado; puedes reintentarlo con "teacher-agent explore".',
-    ));
+    console.log(ui.warn(t().exploreFailed(error instanceof Error ? error.message : String(error))));
   }
 }
 
 function printCatalog(title: string, entries: CatalogEntry[]): void {
   console.log(ui.heading(title));
   for (const entry of entries) {
-    const origin = ui.dim(entry.origin === "builtin" ? "[incorporada]" : "[propia]");
+    const origin = ui.dim(entry.origin === "builtin" ? t().catalogBuiltin : t().catalogCustom);
     const description = entry.description ? ` — ${entry.description}` : "";
     console.log(`- ${entry.name} ${origin}${description}`);
   }
@@ -95,16 +50,34 @@ function printCatalog(title: string, entries: CatalogEntry[]): void {
 
 async function skillsCommand(args: string[]): Promise<void> {
   const workspaceDir = resolveWorkspaceDir(args);
-  printCatalog(`Habilidades disponibles en ${workspaceDir}`, await listSkills(workspaceDir));
+  printCatalog(t().skillsTitle(workspaceDir), await listSkills(workspaceDir));
 }
 
 async function commandsCommand(args: string[]): Promise<void> {
   const workspaceDir = resolveWorkspaceDir(args);
-  printCatalog(`Comandos disponibles en ${workspaceDir} (dentro de "chat")`, await listCommands(workspaceDir));
+  printCatalog(t().commandsTitle(workspaceDir), await listCommands(workspaceDir));
+}
+
+/**
+ * The process's language, before anything is printed: `--language`, then the workspace's
+ * `agent.language`, then the global `defaultLanguage`, then the system's. agent-kit takes the
+ * same one, so its texts and teacher-agent's always agree.
+ */
+async function chooseLanguage(args: string[]): Promise<void> {
+  const workspaceDir = resolveWorkspaceDir(args);
+  let workspaceLanguage: string | undefined;
+  try {
+    if (await workspaceExists(workspaceDir)) workspaceLanguage = (await readWorkspaceConfig(workspaceDir)).agent.language;
+  } catch {
+    // A broken or student config.json is reported by the command itself, in the chosen language.
+  }
+  const warnings = chooseInterfaceLanguage(interfaceLanguage(await resolveLanguage(workspaceLanguage)));
+  for (const warning of warnings) console.error(ui.warn(warning));
 }
 
 async function main(): Promise<void> {
   const [first, ...rest] = process.argv.slice(2);
+  await chooseLanguage(process.argv.slice(2));
 
   switch (first) {
     case "-h":
@@ -129,7 +102,7 @@ async function main(): Promise<void> {
     default:
       // Flags without a subcommand ("teacher-agent --mode guided") are taken as "run" flags.
       if (first.startsWith("-")) return runSession("run", process.argv.slice(2));
-      console.error(ui.error(`Comando desconocido "${first}". Usa teacher-agent --help.`));
+      console.error(ui.error(t().unknownCommand(first)));
       process.exitCode = 1;
   }
 }

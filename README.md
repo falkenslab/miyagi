@@ -245,6 +245,8 @@ Para activarla:
 
 **¿Puedo darle instrucciones propias?** Sí. Crea un archivo `instructions.md` en la carpeta del curso y escribe ahí lo que quieras que tenga siempre en cuenta ("puntúa sobre 10", "sé breve en el foro", "la ortografía cuenta un 10 %"...).
 
+**¿En qué idioma habla?** En el que elegiste al crear el curso, que es también el de sus menús y avisos (español, inglés, francés o alemán). Para cambiarlo solo una vez, añade `--language=en` (o `es`, `fr`, `de`); si le escribes en otro idioma, te sigue.
+
 **No quiero ver la ventana de Chrome.** Añade `--headless` (por ejemplo `teacher-agent run --headless`). Necesita el usuario y la contraseña guardados.
 
 **Venía usando moodle-agent.** Tu carpeta de aula de profesor sirve tal cual: ejecuta `teacher-agent chat` dentro de ella y el asistente reorganizará sus apuntes al formato nuevo la primera vez.

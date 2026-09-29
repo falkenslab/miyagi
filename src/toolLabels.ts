@@ -1,4 +1,5 @@
 import { createFriendlyToolLabel, truncate } from "@falkenslab/agent-kit";
+import { t } from "./messages/index.js";
 
 /**
  * `describe()` for `createFriendlyToolLabel()`'s override callback — agent-kit's own
@@ -7,83 +8,68 @@ import { createFriendlyToolLabel, truncate } from "@falkenslab/agent-kit";
  * `browser_*` cases for `@playwright/mcp`.
  */
 function describePlaywright(shortName: string, input: Record<string, unknown>): string | undefined {
+  const m = t().tool;
+  const text = (value: unknown, fallback: string): string => truncate(typeof value === "string" ? value : fallback);
   switch (shortName) {
     case "browser_navigate":
-      return `Navigating to ${input.url ?? "a page"}`;
+      return m.navigate(typeof input.url === "string" ? input.url : m.aPage);
     case "browser_navigate_back":
-      return "Going back to the previous page";
+      return m.back;
     case "browser_navigate_forward":
-      return "Going forward to the next page";
+      return m.forward;
     case "browser_snapshot":
-      return "Reading the page structure";
-    case "browser_click": {
-      const element = typeof input.element === "string" ? input.element : "an element";
-      return `Clicking "${truncate(element)}"`;
-    }
-    case "browser_hover": {
-      const element = typeof input.element === "string" ? input.element : "an element";
-      return `Hovering over "${truncate(element)}"`;
-    }
-    case "browser_drag": {
-      const from = typeof input.startElement === "string" ? input.startElement : "an element";
-      const to = typeof input.endElement === "string" ? input.endElement : "another element";
-      return `Dragging "${truncate(from)}" to "${truncate(to)}"`;
-    }
-    case "browser_select_option": {
-      const element = typeof input.element === "string" ? input.element : "a dropdown";
-      const values = Array.isArray(input.values) ? input.values.join(", ") : "";
-      return `Selecting "${truncate(values)}" in "${truncate(element)}"`;
-    }
-    case "browser_type": {
-      const element = typeof input.element === "string" ? input.element : "a field";
-      const text = typeof input.text === "string" ? input.text : "";
-      return `Typing "${truncate(text)}" into "${truncate(element)}"`;
-    }
+      return m.snapshot;
+    case "browser_click":
+      return m.click(text(input.element, m.anElement));
+    case "browser_hover":
+      return m.hover(text(input.element, m.anElement));
+    case "browser_drag":
+      return m.drag(text(input.startElement, m.anElement), text(input.endElement, m.anotherElement));
+    case "browser_select_option":
+      return m.select(truncate(Array.isArray(input.values) ? input.values.join(", ") : ""), text(input.element, m.aDropdown));
+    case "browser_type":
+      return m.type(text(input.text, ""), text(input.element, m.aField));
     case "browser_press_key":
-      return `Pressing the "${input.key ?? "?"}" key`;
+      return m.pressKey(typeof input.key === "string" ? input.key : "?");
     case "browser_wait_for":
-      if (typeof input.text === "string") return `Waiting for "${truncate(input.text)}" to appear`;
-      if (typeof input.textGone === "string") return `Waiting for "${truncate(input.textGone)}" to disappear`;
-      if (typeof input.time === "number") return `Waiting ${input.time}s`;
-      return "Waiting";
+      if (typeof input.text === "string") return m.waitFor(truncate(input.text));
+      if (typeof input.textGone === "string") return m.waitGone(truncate(input.textGone));
+      if (typeof input.time === "number") return m.waitSeconds(input.time);
+      return m.wait;
     case "browser_find":
-      if (typeof input.text === "string") return `Looking for "${truncate(input.text)}" on the page`;
-      if (typeof input.regex === "string") return `Looking for the pattern "${truncate(input.regex)}" on the page`;
-      return "Searching the page";
-    case "browser_fill_form": {
-      const n = Array.isArray(input.fields) ? input.fields.length : 0;
-      return `Filling in a form (${n} field${n === 1 ? "" : "s"})`;
-    }
+      if (typeof input.text === "string") return m.findText(truncate(input.text));
+      if (typeof input.regex === "string") return m.findPattern(truncate(input.regex));
+      return m.find;
+    case "browser_fill_form":
+      return m.fillForm(Array.isArray(input.fields) ? input.fields.length : 0);
     case "browser_file_upload":
-      return "Uploading file(s)";
+      return m.upload;
     case "browser_evaluate": {
       const code = typeof input.function === "string" ? input.function.replace(/\s+/g, " ").trim() : "";
-      return code ? `Running JavaScript: ${truncate(code, 80)}` : "Inspecting the page with JavaScript";
+      return code ? m.evaluate(truncate(code, 80)) : m.inspect;
     }
     case "browser_take_screenshot":
-      return "Taking a screenshot";
+      return m.screenshot;
     case "browser_tabs":
-      return "Managing browser tabs";
+      return m.tabs;
     case "browser_resize":
-      return "Resizing the window";
+      return m.resize;
     case "browser_close":
-      return "Closing the browser";
+      return m.close;
     case "browser_console_messages":
-      return "Checking the browser console";
+      return m.console;
     case "browser_network_requests":
-      return "Checking network requests";
-    case "browser_network_request": {
-      const part = typeof input.part === "string" ? input.part : undefined;
-      return part === "response-body" ? "Saving a network response's body to disk" : "Reading network request details";
-    }
+      return m.networkRequests;
+    case "browser_network_request":
+      return input.part === "response-body" ? m.saveResponse : m.requestDetails;
     case "browser_start_video":
-      return "Starting video recording";
+      return m.startVideo;
     case "browser_stop_video":
-      return "Stopping video recording";
+      return m.stopVideo;
     case "browser_run_code_unsafe":
-      return "⚠️ Trying to run unrestricted code (blocked)";
+      return m.runCodeUnsafe;
     case "browser_handle_dialog":
-      return input.accept === false ? "Dismissing a browser dialog" : "Accepting a browser dialog";
+      return input.accept === false ? m.dismissDialog : m.acceptDialog;
     default:
       // The kit's generic fallback no longer strips Playwright's "browser_" prefix.
       return shortName.startsWith("browser_") ? shortName.replace(/^browser_/, "").replace(/_/g, " ") : undefined;
@@ -96,3 +82,4 @@ export const friendlyToolLabel = createFriendlyToolLabel({
   describe: describePlaywright,
   extraLocalServers: ["playwright"],
 });
+

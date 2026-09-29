@@ -1,6 +1,7 @@
 import { chmod, mkdir, readdir, readFile, rename, rmdir, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { BaseSessionConfig, Mode } from "@falkenslab/agent-kit";
+import { t } from "./messages/index.js";
 
 export type AgentPersona = "formal" | "warm" | "motivating";
 
@@ -121,7 +122,7 @@ export async function readWorkspaceConfig(workspaceDir: string): Promise<Workspa
   const raw = await readFile(workspaceConfigPath(workspaceDir), "utf-8");
   const config = JSON.parse(raw) as WorkspaceConfig;
   if (config.agent?.role === "student") {
-    throw new Error(`${workspaceDir} es un aula con rol "student": teacher-agent solo actúa como profesor.`);
+    throw new Error(t().studentRole(workspaceDir));
   }
   return config;
 }
@@ -200,21 +201,21 @@ export function defaultWorkspaceLabel(url: string, courseId: string): string {
   } catch {
     host = url;
   }
-  return `${host} · curso ${courseId}`;
+  return t().defaultLabel(host, courseId);
 }
 
 /**
- * agent-kit's interface language ("en", "es", "fr", "de": status bar, panels, labels) for the
- * workspace's `agent.language`, which is free text ("español", "English"). Spanish, the
- * language of teacher-agent's own texts, when it's none of the others. `--language=<code>` on
- * the command line still wins (the kit reads it).
+ * The interface language ("en", "es", "fr", "de": teacher-agent's and agent-kit's texts) for
+ * `agent.language`, which is free text ("español", "English"). Undefined when it's none of
+ * them, so the system's language decides. `--language=<code>` on the command line still wins.
  */
-export function interfaceLanguage(language: string | undefined): string {
+export function interfaceLanguage(language: string | undefined): string | undefined {
   const name = (language ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
+  if (/^(es\b|espanol|castellano|spanish)/.test(name)) return "es";
   if (/^(en\b|english|ingles)/.test(name)) return "en";
   if (/^(fr\b|french|frances|francais)/.test(name)) return "fr";
   if (/^(de\b|german|aleman|deutsch)/.test(name)) return "de";
-  return "es";
+  return undefined;
 }
 
 /** Merges `WorkspaceConfig` (the file) with the CLI's own choices into the config `AgentSpec` sees. */

@@ -1,4 +1,5 @@
 import { askForDecision, type ModeControl, type Options } from "@falkenslab/agent-kit";
+import { t } from "./messages/index.js";
 import { MOODLE_PASSWORD_SECRET_NAME } from "./playwrightConfig.js";
 
 /**
@@ -136,9 +137,9 @@ export function installPublishGate(options: Options, runDir: string, modeControl
     if (modeControl.mode !== "guided" || input.agent_id || approved || !isPublishAction(tool, input.tool_input)) return {};
 
     const answer = await askForDecision(runDir, {
-      title: "Publicación sin aprobación previa",
+      title: t().gateTitle,
       lines: [
-        "El agente va a publicar o cambiar algo en Moodle que pueden ver los alumnos, sin haberte pedido aprobación antes.",
+        t().gateLine,
         describe(tool, input.tool_input),
       ],
     });

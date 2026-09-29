@@ -15,15 +15,16 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 ## Key pieces
 
 - `src/cli.ts` — `bin` entry and subcommand dispatch; bare `teacher-agent` asks run/chat; `run`/`chat` in a folder that isn't a workspace yet run the setup wizard, save and exit (the session starts from its own command, so the full-screen chat never follows the wizard's prompts); `init` offers `explore` afterwards (a failure only warns).
-- `src/agent.ts` — `runSession()` and the `AgentSpec`: Playwright MCP, disallowed tools, approval and manual-login texts, `buildSubagents()`, `replyInLanguage: false` (the prompt's own language section rules). A chat's session is opened per run folder.
+- `src/agent.ts` — `runSession()` and the `AgentSpec`: Playwright MCP, disallowed tools, approval and manual-login texts, `buildSubagents()`. A chat's session is opened per run folder.
 - `src/publishGate.ts` — the publish gate (ADR-008): in guided, a publishing browser action without a prior approval asks the teacher; `isPublishAction()` knows Moodle's publishing buttons.
 - `src/menu.ts` — the `init` wizard (practice-runner opt-in saved as explicit true/false), `offerPracticeRunner()`, run-kind and mode prompts.
-- `src/workspace.ts` — `config.json` schema (a moodle-agent teacher aula; `agent.role: "student"` rejected), paths, `toSessionConfig()`, legacy migration, `interfaceLanguage()` (agent-kit's interface language from `agent.language`, Spanish by default).
+- `src/workspace.ts` — `config.json` schema (a moodle-agent teacher aula; `agent.role: "student"` rejected), paths, `toSessionConfig()`, legacy migration, `interfaceLanguage()` (agent-kit's interface language from `agent.language`; unknown → the system's).
 - `src/globalConfig.ts` — `~/.teacher-agent/config.json` (token, `defaultHeadless`, `defaultLanguage`, `autoCompactEnabled`) and the workspace `.env`.
 - `src/catalog.ts` — skill and command listing for the `skills`/`commands` subcommands, and the session's `AgentSpec.skills` (this plugin's and the workspace's; the SDK's own left out).
 - `src/systemPrompt.ts` — assembles the prompt: teacher-run / teacher-chat / teacher-ingest / explore plus conditional sections.
 - `src/playwrightConfig.ts` — the `@playwright/mcp` config; its `secrets` map keeps the Moodle password away from the model.
 - `src/toolLabels.ts` — `browser_*` labels on top of agent-kit's `createFriendlyToolLabel()`.
+- `src/messages/` — person-facing texts in en/es/fr/de, typed as `Messages` (en is the reference); `t()` follows agent-kit's `getLanguage()`, chosen once at the CLI's start (`--language`, `agent.language`, `defaultLanguage`, system). Model-facing text stays in English.
 
 ## Subagents
 

@@ -48,6 +48,7 @@ import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConf
 import { friendlyToolLabel } from "./toolLabels.js";
 import { installPublishGate } from "./publishGate.js";
 import { sessionSkills } from "./catalog.js";
+import { t } from "./messages/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const loadPrompt = createPromptLoader(path.join(__dirname, "..", "prompts"));
@@ -96,7 +97,7 @@ function parseMode(args: string[]): Mode | undefined {
   const value = parseFlag(args, "--mode");
   if (!value) return undefined;
   if ((VALID_MODES as readonly string[]).includes(value)) return value as Mode;
-  throw new Error(`Modo desconocido "${value}". Usa uno de: ${VALID_MODES.join(", ")}.`);
+  throw new Error(t().unknownMode(value, VALID_MODES.join(", ")));
 }
 
 /** Arguments that aren't flags nor a flag's value, e.g. the files given to "ingest". */
@@ -183,10 +184,6 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSp
     // full precedence over canUseTool/allowAnyMcpTool (confirmed empirically, see
     // agent-kit's own session.ts doc comment).
     disallowedTools: ["mcp__playwright__browser_run_code_unsafe"],
-    // The prompt's own language section (language.md) already says which language to use,
-    // and tells the conversation's language (the human's) apart from the course's (what gets
-    // published): the kit's single "reply in <language>" line would blur that.
-    replyInLanguage: false,
     humanApprovalTexts: {
       description: loadPrompt("tools/human-approval-description.md"),
       approved: loadPrompt("tools/human-approval-approved.md"),
@@ -197,9 +194,9 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSp
           manualInterventionTexts: {
             toolDescription: loadPrompt("tools/manual-login-description.md"),
             confirmedMessage: loadPrompt("tools/manual-login-confirmed.md"),
-            checkpointTitle: "Manual login required",
-            checkpointLines: ["No saved credentials for this workspace.", "Log in manually in the already-open browser window."],
-            checkpointQuestion: "Press Enter once you've finished logging in (or 'q' to cancel): ",
+            checkpointTitle: t().manualLoginTitle,
+            checkpointLines: t().manualLoginLines,
+            checkpointQuestion: t().manualLoginQuestion,
           },
         }
       : {}),
@@ -217,10 +214,7 @@ async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promi
     return offerPracticeRunner(workspaceDir, config, canPrompt);
   }
   if (!process.stdin.isTTY) {
-    throw new Error(
-      `${workspaceDir} no es un workspace de teacher-agent (falta config.json). Ejecuta ` +
-        '"teacher-agent init" ahí, o pasa --dir con un workspace existente.',
-    );
+    throw new Error(t().notAWorkspace(workspaceDir));
   }
   await promptInitWorkspace(workspaceDir);
   return null;
@@ -235,13 +229,10 @@ async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promi
 async function prepareKnowledgeBase(workspaceDir: string): Promise<boolean> {
   const movedContext = await moveLegacyContext(workspaceDir);
   if (movedContext > 0) {
-    console.log(ui.warn(`context/ ya no se usa: sus ${movedContext} ficheros se han movido a ${sourcesDirFor(workspaceDir)}.\n`));
+    console.log(ui.warn(t().contextMoved(movedContext, sourcesDirFor(workspaceDir))));
   }
   if (await moveLegacyKnowledge(workspaceDir)) {
-    console.log(ui.warn(
-      `knowledge/ tenía la estructura antigua: se ha movido a ${legacyKnowledgeDirFor(workspaceDir)} ` +
-        `(sus ficheros descargados, a ${sourcesDirFor(workspaceDir)}) y el agente reconstruirá la base de conocimiento a partir de ahí.\n`,
-    ));
+    console.log(ui.warn(t().knowledgeMoved(legacyKnowledgeDirFor(workspaceDir), sourcesDirFor(workspaceDir))));
   }
   return isMigrationPending(workspaceDir);
 }
@@ -255,9 +246,9 @@ async function resolveMode(kind: SessionKind, modeFlag: Mode | undefined): Promi
 }
 
 function sessionHeading(kind: SessionKind, mode: Mode): string {
-  if (kind === "ingest") return "Ingesta en la base de conocimiento (sin navegador)";
-  if (kind === "explore") return "Explorando las capacidades de este Moodle";
-  return `Modo: ${mode}${kind === "chat" ? " (chat)" : ""}`;
+  if (kind === "ingest") return t().headingIngest;
+  if (kind === "explore") return t().headingExplore;
+  return t().headingMode(mode, kind === "chat");
 }
 
 /** Entry point for the "run", "chat", "ingest" and "explore" subcommands — `args` excludes the subcommand itself. */
@@ -273,7 +264,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   // Just configured: stop here, so the session starts clean (the full-screen chat) from its
   // own command instead of right after the setup wizard's prompts.
   if (!workspace) {
-    console.log(ui.dim(`Configuración guardada. Cuando quieras empezar: teacher-agent ${kind} --dir "${workspaceDir}"`));
+    console.log(ui.dim(t().setupSaved(kind, workspaceDir)));
     return;
   }
   const mode = await resolveMode(kind, modeFlag);
@@ -283,16 +274,10 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   // Manual login needs a visible browser window — no channel for it in autonomous or
   // headless (mirrors agent-kit's own includeManualLoginTool condition in session.ts).
   if (kind !== "ingest" && mode === "autonomous" && !hasCredentials) {
-    throw new Error(
-      "El modo autonomous no admite login manual (no hay forma de pedir ayuda a un humano): " +
-        "guarda usuario y contraseña en config.json, o usa --mode guided/interactive.",
-    );
+    throw new Error(t().autonomousNeedsCredentials);
   }
   if (kind !== "ingest" && headless && !hasCredentials) {
-    throw new Error(
-      "--headless necesita credenciales guardadas (no hay ventana visible para iniciar sesión " +
-        "a mano): guarda usuario y contraseña en config.json, o quita --headless.",
-    );
+    throw new Error(t().headlessNeedsCredentials);
   }
 
   const config = toSessionConfig(workspaceDir, workspace, {
@@ -324,9 +309,9 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   const plainChat = parseBooleanFlag(args, "--plain") === true || !process.stdin.isTTY || !process.stdout.isTTY;
   const printHeading = (runDir?: string): void => {
     console.log(ui.heading(sessionHeading(kind, mode)));
-    console.log(ui.dim(`Workspace: ${workspace.classroom.label} (${workspaceDir})`));
-    if (runDir) console.log(ui.dim(`Sesión: ${runDir}`));
-    console.log(ui.dim(`Curso: ${config.moodleUrl} (id ${config.moodleCourseId})\n`));
+    console.log(ui.dim(t().headingWorkspace(workspace.classroom.label, workspaceDir)));
+    if (runDir) console.log(ui.dim(t().headingSession(runDir)));
+    console.log(ui.dim(t().headingCourse(config.moodleUrl, config.moodleCourseId)));
   };
 
   if (kind === "chat") {
@@ -351,17 +336,15 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
           // One line, cut to the terminal's width: short values only (the full paths are
           // printed again when the session ends).
           fields: {
-            workspace: workspace.classroom.label,
-            curso: `${new URL(config.moodleUrl).host} · id ${config.moodleCourseId}`,
+            [t().headerWorkspace]: workspace.classroom.label,
+            [t().headerCourse]: `${new URL(config.moodleUrl).host} · id ${config.moodleCourseId}`,
           },
         },
         mode,
         plain: plainChat,
         fullscreen: parseBooleanFlag(args, "--inline") !== true,
-        welcomeMessage: plainChat
-          ? "teacher-agent conectando con Moodle. Esc interrumpe la respuesta en curso; /resume retoma una conversación anterior; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión."
-          : ui.dim("teacher-agent conectando con Moodle. Shift+Tab alterna entre guided e interactive, /resume retoma una conversación anterior, ? muestra los atajos y /exit cierra la sesión."),
-        promptLabel: `\n${ui.user("tú>")} `,
+        welcomeMessage: plainChat ? t().welcomePlain : ui.dim(t().welcomeInk),
+        promptLabel: `\n${ui.user(t().promptLabel)} `,
         agentLabel: ui.agent("teacher-agent>"),
         formatAction: friendlyToolLabel,
         initialPrompt: loadPrompt("messages/chat-opening-teacher.md"),
@@ -390,11 +373,11 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   let interrupted = false;
   const onSigint = () => {
     if (interrupted) {
-      renderer.writeLine(ui.warn("Saliendo sin esperar. Lo registrado hasta ahora ya está guardado en disco."));
+      renderer.writeLine(ui.warn(t().exitingNow));
       process.exit(130);
     }
     interrupted = true;
-    renderer.writeLine(ui.warn("Interrumpiendo y cerrando la sesión… (Ctrl+C otra vez para salir sin esperar)"));
+    renderer.writeLine(ui.warn(t().interrupting));
     void run.interrupt().finally(() => run.close());
   };
   process.on("SIGINT", onSigint);
@@ -430,16 +413,16 @@ function hasPendingDrafts(workspaceDir: string): boolean {
 function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string, interrupted: boolean): void {
   const lines = [
     "",
-    ui.heading(interrupted ? "Sesión interrumpida." : "Sesión cerrada."),
-    ui.dim("No hay nada pendiente de guardar: todo se escribe en disco sobre la marcha."),
-    ui.dim(`  - Acciones del agente y sus resultados: ${path.join(runDir, "transcript.jsonl")}`),
-    ...(kind === "chat" ? [ui.dim(`  - La conversación, en texto plano: ${path.join(runDir, "session.log")}`)] : []),
-    ui.dim(`  - Lo que el agente ha aprendido: ${path.join(workspaceDir, "knowledge")}`),
+    ui.heading(interrupted ? t().sessionInterrupted : t().sessionClosed),
+    ui.dim(t().nothingPending),
+    ui.dim(t().endTranscript(path.join(runDir, "transcript.jsonl"))),
+    ...(kind === "chat" ? [ui.dim(t().endConversation(path.join(runDir, "session.log")))] : []),
+    ui.dim(t().endKnowledge(path.join(workspaceDir, "knowledge"))),
     ...(hasPendingDrafts(workspaceDir)
-      ? [ui.warn(`Hay recursos subidos ocultos a Moodle, aún sin mostrar a los alumnos: ${path.join(workspaceDir, "knowledge", "drafts.md")}`)]
+      ? [ui.warn(t().endDrafts(path.join(workspaceDir, "knowledge", "drafts.md")))]
       : []),
     ...(interrupted
-      ? [ui.dim("Lo que estaba haciendo al interrumpir puede haber quedado a medias (una nota sin guardar, una respuesta sin publicar); en la próxima sesión puedes pedirle que lo retome.")]
+      ? [ui.dim(t().endInterruptedNote)]
       : []),
   ];
   console.log(lines.join("\n"));
