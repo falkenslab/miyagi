@@ -85,6 +85,19 @@ export async function listSkills(workspaceDir: string): Promise<CatalogEntry[]> 
   ];
 }
 
+/**
+ * The skills a session offers (agent-kit's `AgentSpec.skills`): this plugin's, as
+ * `teacher-agent:<name>`, and the workspace's own. The kit adds the knowledge base's. Leaves
+ * out the SDK's own (pdf, docx…), which run scripts through a shell the main agent doesn't
+ * have, and which cost context on every turn.
+ */
+export async function sessionSkills(workspaceDir: string): Promise<string[]> {
+  return [
+    ...(await readSkills(path.join(pluginDir, "skills"), "builtin")).map((s) => `${PLUGIN_NAMESPACE}:${s.name}`),
+    ...(await readSkills(path.join(workspaceDir, ".claude", "skills"), "custom")).map((s) => s.name),
+  ];
+}
+
 /** Built-in slash commands plus the workspace's own under `<workspace>/.claude/commands/`. */
 export async function listCommands(workspaceDir: string): Promise<CatalogEntry[]> {
   return [

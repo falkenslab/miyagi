@@ -47,6 +47,7 @@ import { buildSystemPrompt } from "./systemPrompt.js";
 import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
 import { friendlyToolLabel } from "./toolLabels.js";
 import { installPublishGate } from "./publishGate.js";
+import { sessionSkills } from "./catalog.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const loadPrompt = createPromptLoader(path.join(__dirname, "..", "prompts"));
@@ -105,9 +106,10 @@ export function resolveWorkspaceDir(args: string[]): string {
  * `buildSessionOptions()`, not repeated here. Subagents: see buildSubagents() below. An
  * "ingest" session has no browser: no Playwright server, no manual login.
  */
-function buildSpec(runDir: string, kind: SessionKind): AgentSpec<WorkspaceSessionConfig> {
+function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSessionConfig> {
   const hasBrowser = kind !== "ingest";
   return {
+    skills,
     buildSystemPrompt,
     buildMcpServers: (config): Record<string, McpServerConfig> => (!hasBrowser ? {} : {
       playwright: {
@@ -293,11 +295,12 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
 
   await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
   const autoCompactEnabled = await isAutoCompactEnabled();
+  const skills = await sessionSkills(workspaceDir);
 
   /** The session's options for a run folder: its browser, its tools and hooks, the publish gate. */
   async function openSession(runDir: string, run?: RunFolder) {
     if (kind !== "ingest") await writePlaywrightConfig(runDir, config.moodlePassword);
-    const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind), { autoCompactEnabled, run });
+    const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills), { autoCompactEnabled, run });
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
     // The approval before publishing, enforced (it only acts in guided; ingest has no browser).
     if (kind !== "ingest") installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
