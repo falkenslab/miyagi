@@ -46,7 +46,8 @@ function norm(text: string): string {
  */
 const PUBLISH_PATTERNS = [
   /\bsave\b/, /\bguardar\b/, /savechanges|submitbutton|saveandshownext/,
-  /\bpost\b/, /\bsubmit\b/, /\bsend\b/, /\benviar\b/, /\bpublish\b/, /\bpublicar\b/,
+  // "Post to forum", not "post" alone: "Reply link on Sara Gil's post" only opens the form.
+  /\bpost to forum\b/, /\bsubmit\b/, /\bsend\b/, /\benviar\b/, /\bpublish\b/, /\bpublicar\b/,
   /\bimport\b/, /\bimportar\b/, /\bduplicate\b/, /\bduplicar\b/,
   /\bgrant extension\b/, /\bampliar (el )?plazo\b/,
   /\bmake available\b/, /\bhacer disponible\b/,

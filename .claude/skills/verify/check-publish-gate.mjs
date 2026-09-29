@@ -54,6 +54,9 @@ const CASES = [
   [...click("Cancel"), false],
   [...click("Show more"), false],
   [...click("Show parent"), false],
+  // Opens the reply form (a false positive in a 2026-09-29 chat, whose panel then timed out).
+  [...click("Reply link on Sara Gil's post", "f8e117"), false],
+  [...click("Reply to this post"), false],
   [...click("Search forums button"), false],
   [pw("evaluate"), { function: "() => { const ed = tinymce.get('id_assignfeedbackcomments_editor'); ed.setContent('<p>Nota</p>'); ed.save(); return 'ok' }" }, false],
   [pw("evaluate"), { function: "async () => { const r = await fetch('/mod/forum/discuss.php?d=7'); return (await r.text()).length }" }, false],
