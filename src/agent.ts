@@ -51,6 +51,9 @@ import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/** The installed version, for the chat header (package.json sits next to src/ and dist/). */
+const VERSION = (JSON.parse(readFileSync(path.join(__dirname, "..", "package.json"), "utf-8")) as { version: string }).version;
 const loadPrompt = createPromptLoader(path.join(__dirname, "..", "prompts"));
 
 /** The installed @playwright/mcp's CLI, launched with this same Node — its version is pinned
@@ -331,7 +334,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         runsDir: sessionsDirFor(workspaceDir),
         language: config.language,
         header: {
-          title: "teacher-agent",
+          title: `teacher-agent v${VERSION}`,
           art: LOGO,
           // One line, cut to the terminal's width: short values only (the full paths are
           // printed again when the session ends).
