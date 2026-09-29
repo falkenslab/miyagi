@@ -1,5 +1,7 @@
 # teacher-agent
 
+[![Versión](https://img.shields.io/github/v/release/falkenslab/teacher-agent?label=versi%C3%B3n)](https://github.com/falkenslab/teacher-agent/releases/latest) [![Descargas](https://img.shields.io/github/downloads/falkenslab/teacher-agent/total?label=descargas)](https://github.com/falkenslab/teacher-agent/releases) [![verify](https://github.com/falkenslab/teacher-agent/actions/workflows/verify.yml/badge.svg)](https://github.com/falkenslab/teacher-agent/actions/workflows/verify.yml) [![Moodle](https://img.shields.io/badge/Moodle-5.2-f98012?logo=moodle&logoColor=white)](https://github.com/falkenslab/moodle-sandbox) [![Licencia](https://img.shields.io/github/license/falkenslab/teacher-agent?label=licencia)](LICENSE) [![agent-kit](https://img.shields.io/github/package-json/dependency-version/falkenslab/teacher-agent/@falkenslab/agent-kit?label=agent-kit)](https://www.npmjs.com/package/@falkenslab/agent-kit) [![Node](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffalkenslab%2Fteacher-agent%2Fmain%2Fpackage.json&query=%24.engines.node&label=node&logo=node.js&logoColor=white&color=339933)](https://nodejs.org) [![Issues](https://img.shields.io/github/issues/falkenslab/teacher-agent?label=issues)](https://github.com/falkenslab/teacher-agent/issues) [![Último commit](https://img.shields.io/github/last-commit/falkenslab/teacher-agent?label=%C3%BAltimo%20commit)](https://github.com/falkenslab/teacher-agent/commits/main)
+
 Un asistente que te ayuda a gestionar tu curso de Moodle. Entra con tu cuenta de profesor en una ventana de Chrome y trabaja como lo harías tú: **corrige entregas**, **responde en el foro**, **crea o revisa contenido** y te **resume cómo va la clase**. Antes de publicar nada que vean tus estudiantes (una nota, una respuesta, un recurso nuevo), te pide permiso.
 
 Además, va tomando apuntes del curso (criterios de corrección, rúbricas, dudas que se repiten, cómo evoluciona la clase) para acordarse de todo en la siguiente sesión.
@@ -325,3 +327,7 @@ En `.claude/skills/`, para trabajar en este repositorio con Claude Code (no las 
 ### Informes de pruebas
 
 Cada prueba de principio a fin queda en [`tests/`](tests/README.md): una carpeta por prueba con el informe completo y sus capturas, y un índice.
+
+## Licencia
+
+[MIT](LICENSE).
