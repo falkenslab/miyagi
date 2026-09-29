@@ -1,0 +1,32 @@
+# The quality gate of the `verify` skill, on every push and pull request: typecheck, lint,
+# build, the rendered system prompts, skill references, the publish gate and the catalog.
+# It needs neither Claude nor Moodle.
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - run: node .claude/skills/verify/check-prompts.mjs
+      - run: node .claude/skills/verify/check-references.mjs
+      - run: node .claude/skills/verify/check-publish-gate.mjs
+      - run: node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
+      - name: No leftovers of the agents this one came from in the plugin
+        run: "! grep -rn -E 'context/|knowledge/README|save_to_knowledge|<topic>/|moodle-agent|\\(as a student\\)|\\(student\\)|student side' plugin/"

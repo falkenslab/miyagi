@@ -12,7 +12,7 @@
 ## Tooling
 
 - ESLint with `typescript-eslint`.
-- No unit tests: the gate is the `verify` skill (typecheck, lint, build, rendered prompts, references).
+- No unit tests: the gate is the `verify` skill (typecheck, lint, build, rendered prompts, references, publish gate), also run by GitHub Actions on every push and pull request (`.github/workflows/verify.yml`, Node 20 and 22).
 
 ## Infrastructure
 
