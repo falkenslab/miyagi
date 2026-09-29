@@ -23,10 +23,11 @@ Comandos:
       revisa o añade contenido y resume el progreso de la clase. Sin --mode, pregunta
       el modo. Con --task hace solo esa tarea (p. ej. --task "construye un curso de
       introducción a Docker de 3 temas" o --task "corrige la Tarea 2").
-  chat [--dir <ruta>] [--headless] [--inline] [--plain]
+  chat [--dir <ruta>] [--headless] [--inline] [--plain] [--continue]
       Sesión conversacional a pantalla completa. Empieza en modo guided y Shift+Tab lo
       alterna con interactive. --inline deja la conversación en el historial de la
-      terminal y --plain usa el chat de texto simple.
+      terminal y --plain usa el chat de texto simple. --continue retoma la última
+      conversación de este curso, y /resume, dentro del chat, deja elegir otra.
   explore [--dir <ruta>] [--headless]
       Mira (sin crear nada) qué tipos de actividad y de pregunta admite este Moodle y lo
       apunta en knowledge/moodle-capabilities.md.
@@ -41,8 +42,11 @@ Comandos:
       Lista los comandos de barra que se pueden usar dentro de "chat".
 
 Opciones:
-  -h, --help       Muestra esta ayuda.
-  -v, --version    Muestra la versión instalada.
+  -h, --help           Muestra esta ayuda.
+  -v, --version        Muestra la versión instalada.
+  --language=<código>  Idioma de la barra de estado, los paneles y los atajos del chat:
+                       es, en, fr o de (por defecto, el de "agent.language" del
+                       workspace, o español).
 
 Cada workspace es un directorio (el actual, o el indicado con --dir) con su propio
 config.json, como un repositorio git. Sin argumentos, teacher-agent pregunta si quieres

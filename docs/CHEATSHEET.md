@@ -146,6 +146,7 @@ Siempre desde la carpeta del curso: `teacher-agent chat` (o `teacher-agent chat 
 | Copiar texto | Arrástralo con el ratón y haz clic derecho |
 | Ver los atajos de teclado | `?` con el prompt vacío |
 | Salir | `/exit` (todo se guarda solo) |
+| Seguir donde lo dejaste | `teacher-agent chat --continue`, o `/resume` dentro del chat para elegir una conversación anterior: recuerda lo que hablasteis |
 | Ver los atajos disponibles | `teacher-agent commands` (fuera del chat) |
 
 **Atajos** (escríbelos con lo que necesites detrás):

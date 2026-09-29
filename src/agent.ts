@@ -7,6 +7,7 @@ import {
   buildSessionOptions,
   createConsoleRenderer,
   runChatInk,
+  type RunFolder,
   runQuery,
   createPromptLoader,
   ui,
@@ -290,60 +291,75 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     instructions: await readInstructions(workspaceDir),
   });
 
-  const runDir = sessionDirFor(workspaceDir, kind);
-  await mkdir(runDir, { recursive: true });
   await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
-  if (kind !== "ingest") await writePlaywrightConfig(runDir, config.moodlePassword);
+  const autoCompactEnabled = await isAutoCompactEnabled();
+
+  /** The session's options for a run folder: its browser, its tools and hooks, the publish gate. */
+  async function openSession(runDir: string, run?: RunFolder) {
+    if (kind !== "ingest") await writePlaywrightConfig(runDir, config.moodlePassword);
+    const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind), { autoCompactEnabled, run });
+    if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
+    // The approval before publishing, enforced (it only acts in guided; ingest has no browser).
+    if (kind !== "ingest") installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
+    return { options, modeControl };
+  }
 
   // The Ink chat shows these in its own header (full screen would wipe anything printed
   // before it); the readline chat, like the one-shot kinds, gets them printed.
   const plainChat = parseBooleanFlag(args, "--plain") === true || !process.stdin.isTTY || !process.stdout.isTTY;
-  if (kind !== "chat" || plainChat) {
+  const printHeading = (runDir?: string): void => {
     console.log(ui.heading(sessionHeading(kind, mode)));
     console.log(ui.dim(`Workspace: ${workspace.classroom.label} (${workspaceDir})`));
-    console.log(ui.dim(`Sesión: ${runDir}`));
+    if (runDir) console.log(ui.dim(`Sesión: ${runDir}`));
     console.log(ui.dim(`Curso: ${config.moodleUrl} (id ${config.moodleCourseId})\n`));
-  }
-
-  const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind), {
-    autoCompactEnabled: await isAutoCompactEnabled(),
-  });
-  if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
-  // The approval before publishing, enforced (it only acts in guided; ingest has no browser).
-  if (kind !== "ingest") installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
+  };
 
   if (kind === "chat") {
+    if (plainChat) printHeading();
+    // Each chat is a run folder under sessions/ keeping its whole conversation (agent-kit's
+    // runs, ADR-011): --continue starts with the latest one, /resume switches to another, and
+    // either reopens the session in that same folder. The opener runs again on each switch.
+    let runDir = "";
     // Full screen by default; --inline keeps the history in the terminal's scrollback, and
     // --plain (or no TTY) falls back to the readline chat.
-    await runChatInk(options, {
-      language: config.language,
-      header: {
-        title: "teacher-agent",
-        // One line, cut to the terminal's width: short values only (the full paths are
-        // printed again when the session ends).
-        fields: {
-          workspace: workspace.classroom.label,
-          curso: `${new URL(config.moodleUrl).host} · id ${config.moodleCourseId}`,
-          sesión: path.basename(runDir),
-        },
+    await runChatInk(
+      async (run) => {
+        runDir = run.dir;
+        return await openSession(run.dir, run);
       },
-      mode,
-      modeControl,
-      plain: plainChat,
-      fullscreen: parseBooleanFlag(args, "--inline") !== true,
-      welcomeMessage: plainChat
-        ? "teacher-agent conectando con Moodle. Esc interrumpe la respuesta en curso; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión."
-        : ui.dim("teacher-agent conectando con Moodle. Shift+Tab alterna entre guided e interactive, ? muestra los atajos y /exit cierra la sesión."),
-      promptLabel: `\n${ui.user("tú>")} `,
-      agentLabel: ui.agent("teacher-agent>"),
-      formatAction: friendlyToolLabel,
-      initialPrompt: loadPrompt("messages/chat-opening-teacher.md"),
-      sessionLogPath: path.join(runDir, "session.log"),
-      historyPath: path.join(sessionsDirFor(workspaceDir), "history.jsonl"),
-    });
+      {
+        runsDir: sessionsDirFor(workspaceDir),
+        language: config.language,
+        header: {
+          title: "teacher-agent",
+          // One line, cut to the terminal's width: short values only (the full paths are
+          // printed again when the session ends).
+          fields: {
+            workspace: workspace.classroom.label,
+            curso: `${new URL(config.moodleUrl).host} · id ${config.moodleCourseId}`,
+          },
+        },
+        mode,
+        plain: plainChat,
+        fullscreen: parseBooleanFlag(args, "--inline") !== true,
+        welcomeMessage: plainChat
+          ? "teacher-agent conectando con Moodle. Esc interrumpe la respuesta en curso; /resume retoma una conversación anterior; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión."
+          : ui.dim("teacher-agent conectando con Moodle. Shift+Tab alterna entre guided e interactive, /resume retoma una conversación anterior, ? muestra los atajos y /exit cierra la sesión."),
+        promptLabel: `\n${ui.user("tú>")} `,
+        agentLabel: ui.agent("teacher-agent>"),
+        formatAction: friendlyToolLabel,
+        initialPrompt: loadPrompt("messages/chat-opening-teacher.md"),
+        historyPath: path.join(sessionsDirFor(workspaceDir), "history.jsonl"),
+      },
+    );
     printSessionEnd(kind, workspaceDir, runDir, false);
     return;
   }
+
+  const runDir = sessionDirFor(workspaceDir, kind);
+  await mkdir(runDir, { recursive: true });
+  printHeading(runDir);
+  const { options } = await openSession(runDir);
 
   // One-shot "run"/"ingest"/"explore": a single string prompt, printed straight to the
   // console via agent-kit's own normalized AgentEvent stream (runQuery()) — no interactive REPL.
