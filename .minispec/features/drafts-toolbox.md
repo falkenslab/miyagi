@@ -19,7 +19,7 @@ Let the agent do almost anything with files in `drafts/` — download a site, co
 
 ## Changes
 
-- An in-process MCP server `drafts` (the SDK's `createSdkMcpServer`, which agent-kit expects a consumer to import directly for its own tools), registered in `run` and `chat`. Tools:
+- An in-process MCP server `drafts`, built with `createSdkMcpServer()` and `tool()` as exported by agent-kit since 0.12.0 (no SDK dependency of our own), returned from `buildMcpServers()` in `run` and `chat`. Tools:
   - `drafts_list`: a folder's entries (name, size, date), optionally recursive.
   - `drafts_mkdir`, `drafts_copy`, `drafts_move`: folders, and files including binaries.
   - `drafts_delete`: permanent, for a file or a folder. Never `drafts/` itself.
