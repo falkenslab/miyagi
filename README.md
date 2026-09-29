@@ -14,6 +14,8 @@ Un asistente que te ayuda a gestionar tu curso de Moodle. Entra con tu cuenta de
 
 Además, va tomando apuntes del curso (criterios de corrección, rúbricas, dudas que se repiten, cómo evoluciona la clase) para acordarse de todo en la siguiente sesión.
 
+![teacher-agent en el chat: tras dejar listo y visible un escape room de bucles, atiende una duda del foro y pide permiso antes de publicar la respuesta](docs/assets/chat.png)
+
 > 📋 **¿Quieres empezar rápido?** La [CheatSheet](docs/CHEATSHEET.md) explica paso a paso cómo instalarlo y conectarlo a un curso, y recorre casos de uso en el chat de menos a más.
 
 ## 1. Qué necesitas
