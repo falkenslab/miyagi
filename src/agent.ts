@@ -168,6 +168,10 @@ function buildSpec(runDir: string, kind: SessionKind): AgentSpec<WorkspaceSessio
     // full precedence over canUseTool/allowAnyMcpTool (confirmed empirically, see
     // agent-kit's own session.ts doc comment).
     disallowedTools: ["mcp__playwright__browser_run_code_unsafe"],
+    // The prompt's own language section (language.md) already says which language to use,
+    // and tells the conversation's language (the human's) apart from the course's (what gets
+    // published): the kit's single "reply in <language>" line would blur that.
+    replyInLanguage: false,
     humanApprovalTexts: {
       description: loadPrompt("tools/human-approval-description.md"),
       approved: loadPrompt("tools/human-approval-approved.md"),
@@ -312,6 +316,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     // Full screen by default; --inline keeps the history in the terminal's scrollback, and
     // --plain (or no TTY) falls back to the readline chat.
     await runChatInk(options, {
+      language: config.language,
       header: {
         title: "teacher-agent",
         // One line, cut to the terminal's width: short values only (the full paths are

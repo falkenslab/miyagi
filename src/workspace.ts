@@ -203,6 +203,20 @@ export function defaultWorkspaceLabel(url: string, courseId: string): string {
   return `${host} · curso ${courseId}`;
 }
 
+/**
+ * agent-kit's interface language ("en", "es", "fr", "de": status bar, panels, labels) for the
+ * workspace's `agent.language`, which is free text ("español", "English"). Spanish, the
+ * language of teacher-agent's own texts, when it's none of the others. `--language=<code>` on
+ * the command line still wins (the kit reads it).
+ */
+export function interfaceLanguage(language: string | undefined): string {
+  const name = (language ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
+  if (/^(en\b|english|ingles)/.test(name)) return "en";
+  if (/^(fr\b|french|frances|francais)/.test(name)) return "fr";
+  if (/^(de\b|german|aleman|deutsch)/.test(name)) return "de";
+  return "es";
+}
+
 /** Merges `WorkspaceConfig` (the file) with the CLI's own choices into the config `AgentSpec` sees. */
 export function toSessionConfig(
   workspaceDir: string,
@@ -228,6 +242,7 @@ export function toSessionConfig(
     allowPracticeRunner: workspace.agent.allowPracticeRunner,
     practiceDir: practiceDirFor(workspaceDir),
     knownLanguage: options.language,
+    language: interfaceLanguage(options.language),
     customInstructions: options.instructions,
     headless: options.headless,
   };
