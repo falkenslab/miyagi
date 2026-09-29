@@ -1,12 +1,7 @@
-# teacher-agent
-
-```text
-  ____
- /___/|
- {o,o}'
- |)__)
- -"-"-
-```
+<h1 align="center">
+  <img src="docs/assets/owl.svg" width="120" alt="Búho con birrete, el logo de teacher-agent"><br>
+  teacher-agent
+</h1>
 
 [![Versión](https://img.shields.io/github/v/release/falkenslab/teacher-agent?label=versi%C3%B3n)](https://github.com/falkenslab/teacher-agent/releases/latest) [![Descargas](https://img.shields.io/github/downloads/falkenslab/teacher-agent/total?label=descargas)](https://github.com/falkenslab/teacher-agent/releases) [![verify](https://github.com/falkenslab/teacher-agent/actions/workflows/verify.yml/badge.svg)](https://github.com/falkenslab/teacher-agent/actions/workflows/verify.yml) [![Moodle](https://img.shields.io/badge/Moodle-5.2-f98012?logo=moodle&logoColor=white)](https://github.com/falkenslab/moodle-sandbox) [![Licencia](https://img.shields.io/github/license/falkenslab/teacher-agent?label=licencia)](LICENSE) [![agent-kit](https://img.shields.io/github/package-json/dependency-version/falkenslab/teacher-agent/@falkenslab/agent-kit?label=agent-kit)](https://www.npmjs.com/package/@falkenslab/agent-kit) [![Node](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffalkenslab%2Fteacher-agent%2Fmain%2Fpackage.json&query=%24.engines.node&label=node&logo=node.js&logoColor=white&color=339933)](https://nodejs.org) [![Issues](https://img.shields.io/github/issues/falkenslab/teacher-agent?label=issues)](https://github.com/falkenslab/teacher-agent/issues) [![Último commit](https://img.shields.io/github/last-commit/falkenslab/teacher-agent?label=%C3%BAltimo%20commit)](https://github.com/falkenslab/teacher-agent/commits/main)
 
