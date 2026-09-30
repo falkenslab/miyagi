@@ -1,6 +1,28 @@
 import { createFriendlyToolLabel, truncate, type ToolPhrase } from "@falkenslab/agent-kit";
 import { t } from "./messages/index.js";
-import type { ToolPhraseKey } from "./messages/en.js";
+import type { EvaluateKind, ToolPhraseKey } from "./messages/en.js";
+
+/**
+ * What a `browser_evaluate` call does, read from its code with a few ordered rules, so the
+ * chat says it in words instead of showing the code (asking the model for a description
+ * would cost tokens on every call). Writing and acting win over reading: a function that
+ * reads the form and then fills it is filling it. Pure: `check-tool-labels.mjs` runs it on
+ * real calls from sandbox sessions.
+ */
+export function classifyEvaluate(code: string): EvaluateKind {
+  const c = code.replace(/\s+/g, " ");
+  if (/setContent\(|insertContent\(|execCommand\(|\.innerHTML\s*=(?!=)/.test(c)) return "editor";
+  if (/\.(value|checked|selected)\s*=(?!=)|dispatchEvent\(/.test(c)) return "form";
+  if (/\.click\(\)|\.submit\(\)|requestSubmit\(/.test(c)) return "act";
+  if (/\bfetch\(/.test(c)) return "otherPages";
+  if (/\.modal|\[role=\\?"?dialog|modal-dialog/.test(c)) return "dialog";
+  if (/\b(table|thead|tbody)\b|\btr\b|li\.slot/.test(c)) return "table";
+  if (/\b(input|select|textarea|form|fieldset|options)\b|getElementById\(\s*['"]id_/.test(c)) return "formFields";
+  if (/^\(\)\s*=>\s*location\.href/.test(c.trim())) return "location";
+  if (/\.href\b|a\[href|querySelectorAll\(\s*['"]a['"]/.test(c)) return "links";
+  if (/innerText|textContent|querySelector|getElementById|body/.test(c)) return "content";
+  return "generic";
+}
 
 /**
  * `describe()` for `createFriendlyToolLabel()`'s override callback — agent-kit's own
@@ -45,10 +67,8 @@ function describePlaywright(shortName: string, input: Record<string, unknown>): 
       return m.fillForm(Array.isArray(input.fields) ? input.fields.length : 0);
     case "browser_file_upload":
       return m.upload;
-    case "browser_evaluate": {
-      const code = typeof input.function === "string" ? input.function.replace(/\s+/g, " ").trim() : "";
-      return code ? m.evaluate(truncate(code, 80)) : m.inspect;
-    }
+    case "browser_evaluate":
+      return m.evaluate[classifyEvaluate(typeof input.function === "string" ? input.function : "")];
     case "browser_take_screenshot":
       return m.screenshot;
     case "browser_tabs":

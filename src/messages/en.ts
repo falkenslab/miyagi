@@ -8,6 +8,11 @@ export type ToolPhraseKey =
   | "navigate" | "back" | "click" | "type" | "fillForm" | "select" | "pressKey" | "snapshot"
   | "evaluate" | "find" | "wait" | "upload" | "screenshot" | "approval";
 
+/** What a browser_evaluate call does, read from its code (no model involved). */
+export type EvaluateKind =
+  | "editor" | "form" | "act" | "otherPages" | "formFields" | "table" | "dialog" | "links"
+  | "location" | "content" | "generic";
+
 export interface Messages {
   // cli.ts
   help: (globalConfigPath: string) => string;
@@ -118,8 +123,8 @@ export interface Messages {
     find: string;
     fillForm: (fields: number) => string;
     upload: string;
-    evaluate: (code: string) => string;
-    inspect: string;
+    /** browser_evaluate, by what its code does (see classifyEvaluate() in toolLabels.ts). */
+    evaluate: Record<EvaluateKind, string>;
     screenshot: string;
     tabs: string;
     resize: string;
@@ -305,8 +310,19 @@ details.`,
     find: "Searching the page",
     fillForm: (fields) => `Filling in a form (${fields} field${fields === 1 ? "" : "s"})`,
     upload: "Uploading file(s)",
-    evaluate: (code) => `Running JavaScript: ${code}`,
-    inspect: "Inspecting the page with JavaScript",
+    evaluate: {
+      editor: "Writing in the text editor",
+      form: "Filling in the form",
+      act: "Clicking on the page",
+      otherPages: "Looking at other pages of the course",
+      formFields: "Checking the form's fields",
+      table: "Reading a table on the page",
+      dialog: "Reading a dialog on the page",
+      links: "Looking at the page's links",
+      location: "Checking which page it's on",
+      content: "Reading the page's content",
+      generic: "Inspecting the page",
+    },
     screenshot: "Taking a screenshot",
     tabs: "Managing browser tabs",
     resize: "Resizing the window",

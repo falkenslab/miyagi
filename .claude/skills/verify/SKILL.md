@@ -18,6 +18,7 @@ npm run build
 node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
 node .claude/skills/verify/check-publish-gate.mjs
+node .claude/skills/verify/check-tool-labels.mjs
 node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
 ```
 
@@ -39,6 +40,11 @@ update `README.md` (skills table) and `.minispec/core/architecture.md`, which it
 test transcripts) with the publish gate's `isPublishAction()` and fails on any that would
 publish without being caught, or be stopped without publishing. When a test finds a
 publishing action the gate missed, add it there with the fix.
+
+`check-tool-labels.mjs` runs `classifyEvaluate()` on real `browser_evaluate` calls and fails
+if one is labelled as the wrong kind (writing, acting, reading a table, the form...) or if
+its chat line shows code. When a session shows a JavaScript call with a misleading or
+generic label, add it there with the rule that fixes it.
 
 When you add a prompt section that depends on the session kind, the mode or a config flag,
 add it to the `SECTIONS` table in `check-prompts.mjs` in the same change.

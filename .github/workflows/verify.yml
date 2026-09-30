@@ -27,6 +27,7 @@ jobs:
       - run: node .claude/skills/verify/check-prompts.mjs
       - run: node .claude/skills/verify/check-references.mjs
       - run: node .claude/skills/verify/check-publish-gate.mjs
+      - run: node .claude/skills/verify/check-tool-labels.mjs
       - run: node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
       - name: No leftovers of the agents this one came from in the plugin
         run: "! grep -rn -E 'context/|knowledge/README|save_to_knowledge|<topic>/|moodle-agent|\\(as a student\\)|\\(student\\)|student side' plugin/"
