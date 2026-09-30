@@ -1,0 +1,18 @@
+// An unescaped "=" in an answer, a question with no right answer and a repeated name.
+::Q1 asignación::¿Qué hace esta línea en Python? {
+=Guarda un valor en una variable
+~Compara dos valores, como en x = 5
+~Imprime un valor
+}
+
+::Q2 sin correcta::¿Qué tipo de dato es 3.5? {
+~int
+~str
+~bool
+}
+
+::Q1 asignación::¿Cuántas veces se repite for i in range(3)? {
+=3 veces
+~2 veces
+~4 veces
+}

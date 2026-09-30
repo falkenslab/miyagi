@@ -50,17 +50,39 @@ GIFT covers multiple choice, true/false, short answer, numerical, matching and e
 ~London#London is the capital of the United Kingdom
 ~Berlin#Berlin is the capital of Germany
 }
+
 // True/false
 ::T1-02 For loop::A "for" loop in Python always needs to know the number of iterations in advance. {FALSE}
+
 // Short answer
 ::T1-03 Keyword::Which Python keyword defines a function? {=def}
+
 // Numerical, with tolerance
 ::T1-04 Root::What's the square root of 49? {#7:0}
+
+// Code: [html], <pre>, and &nbsp; for every level of indentation
+::T1-05 Trace::[html]<p>What does this print?</p><pre>for i in range(2)\:
+&nbsp;&nbsp;&nbsp;&nbsp;print(i)</pre> {
+=0 and 1
+~1 and 2
+}
 ```
+
+A blank line ends a question, so questions are separated by one and never contain one.
+Escape `~ = # { } :` with a backslash wherever they are meant literally, in the text and in
+the answers (`n \= 3`, `C\#`). Moodle's importer trims every line: code indented with spaces
+or tabs loses its indentation (and a Python program its meaning), so write code as `[html]`
+inside `<pre>`, with `&nbsp;` for every space of indentation, from the start.
+
+Every `.gift` and `.html` upload is checked with code before it leaves the browser: a file
+with errors (unbalanced braces, an unescaped `=` inside an answer, a multiple choice with no
+right answer or with several, a malformed numerical answer, a repeated name, indentation that
+will be lost; an HTML page without viewport or with a missing local file) is refused with the
+list of lines. Fix the file in `drafts/` and upload it again; don't work around the check.
 
 1. Write the file in the quiz's drafts folder, outside the knowledge base:
    `drafts/<quiz-slug>/<quiz-slug>.gift`; check each question has exactly one right answer
-   (`=`, or `{TRUE}`/`{FALSE}`).
+   (`=`, or `{TRUE}`/`{FALSE}`). The upload check catches format mistakes, not wrong content.
 2. **Ask for approval of the import on its own**, separately from creating the quiz, listing
    every question — stem, type, right answer, and the distractors briefly. "6 GIFT questions
    about X" isn't reviewable; the list is.

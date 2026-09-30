@@ -1,0 +1,28 @@
+// One of each type Moodle's GIFT supports, all valid.
+::TF::Python distingue mayúsculas de minúsculas. {T#Correcto.#Sí las distingue.}
+
+::SA::¿Qué palabra clave define una función en Python? {=def =DEF}
+
+::NUM::¿Cuánto vale 7 // 2? {#3}
+
+::NUM2::Un valor entre 3 y 4 {#3..4}
+
+::NUM3::π con dos decimales {#3.14:0.005}
+
+::MATCH::Empareja cada tipo con un ejemplo. {
+=int -> 3
+=float -> 3.5
+=str -> "tres"
+}
+
+::PARTIAL::Elige los tipos numéricos. {
+~%50%int
+~%50%float
+~%-100%str
+}
+
+::ESSAY::Explica con tus palabras qué es una variable. {}
+
+::DESC::Las preguntas siguientes tratan sobre bucles.
+
+::ESCAPED::¿Qué hace a \= b en Python? {=Asigna b a a#Es la asignación\: guarda el valor de b en a. ~Compara a y b}

@@ -16,6 +16,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 
 - `src/cli.ts` — `bin` entry and subcommand dispatch; bare `teacher-agent` asks run/chat; `run`/`chat` in a folder that isn't a workspace yet run the setup wizard, save and exit (the session starts from its own command, so the full-screen chat never follows the wizard's prompts); `init` offers `explore` afterwards (a failure only warns).
 - `src/agent.ts` — `runSession()` and the `AgentSpec`: Playwright MCP, disallowed tools, approval and manual-login texts, `buildSubagents()`. A chat's session is opened per run folder.
+- `src/uploadGate.ts` + `src/validators/` — the upload gate: before `browser_file_upload`/`browser_drop`, a `.gift` or `.html` file is checked with code (GIFT syntax, answers, numbers, names, lost indentation; HTML viewport, lang, missing local files); errors deny the upload with the lines, warnings reach the model. Every mode.
 - `src/publishGate.ts` — the publish gate (ADR-008): in guided, a publishing browser action without a prior approval asks the teacher; `isPublishAction()` knows Moodle's publishing buttons.
 - `src/menu.ts` — the `init` wizard (practice-runner opt-in saved as explicit true/false), `offerPracticeRunner()`, run-kind and mode prompts.
 - `src/workspace.ts` — `config.json` schema (a moodle-agent teacher aula; `agent.role: "student"` rejected), paths, `toSessionConfig()`, legacy migration, `interfaceLanguage()` (agent-kit's interface language from `agent.language`; unknown → the system's).

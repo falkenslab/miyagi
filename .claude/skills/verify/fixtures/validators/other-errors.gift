@@ -1,0 +1,15 @@
+// A numerical answer with a decimal comma, unbalanced braces and indented code without [html].
+::N1 decimal::¿Cuánto vale 7 / 2 en Python? {#3,5}
+
+::B1 llaves::¿Qué imprime print({1, 2})? {
+=Un conjunto con 1 y 2
+~Un diccionario
+}
+
+::C1 código::¿Qué muestra este programa?
+for i in range(2):
+    print(i)
+{
+=0 y 1
+~1 y 2
+}

@@ -47,6 +47,7 @@ import { buildSystemPrompt } from "./systemPrompt.js";
 import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
 import { installPublishGate } from "./publishGate.js";
+import { installUploadGate } from "./uploadGate.js";
 import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
 
@@ -301,7 +302,10 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills), { autoCompactEnabled, run });
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
     // The approval before publishing, enforced (it only acts in guided; ingest has no browser).
-    if (kind !== "ingest") installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
+    if (kind !== "ingest") {
+      installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
+      installUploadGate(options);
+    }
     return { options, modeControl };
   }
 

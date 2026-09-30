@@ -19,6 +19,7 @@ node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
 node .claude/skills/verify/check-publish-gate.mjs
 node .claude/skills/verify/check-tool-labels.mjs
+node .claude/skills/verify/check-validators.mjs
 node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
 ```
 
@@ -45,6 +46,12 @@ publishing action the gate missed, add it there with the fix.
 if one is labelled as the wrong kind (writing, acting, reading a table, the form...) or if
 its chat line shows code. When a session shows a JavaScript call with a misleading or
 generic label, add it there with the rule that fixes it.
+
+`check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
+sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT
+and HTML files broken on purpose, and the upload gate's hook itself. Each fixture has its
+expected errors by line. When a real upload gets through broken, or a good one is refused,
+add the file there with the rule that fixes it.
 
 When you add a prompt section that depends on the session kind, the mode or a config flag,
 add it to the `SECTIONS` table in `check-prompts.mjs` in the same change.

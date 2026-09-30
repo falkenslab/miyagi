@@ -1,0 +1,58 @@
+// Escape room del Tema 3: bucles. 5 candados de opción múltiple (una correcta), en orden.
+// La retroalimentación de la respuesta correcta abre el candado y da la pista del siguiente.
+// Sangría con &nbsp; porque la importación GIFT borra los espacios iniciales.
+
+// Candado 1 - Comprender: range(inicio, fin) no incluye fin
+::ER-01 Candado 1 - range::[html]<p><strong>Candado 1.</strong> La puerta del laboratorio se abre con el último número que muestra este programa. ¿Cuál es?</p><pre>for i in range(1, 10)\:
+&nbsp;&nbsp;&nbsp;&nbsp;print(i)</pre> {
+=9#<p><strong>Candado 1 abierto.</strong> range(1, 10) empieza en 1 y se detiene justo antes del 10, así que el último valor es 9.</p><p><em>Pista para el candado 2\:</em> ahí hay un while. Sigue el valor de la variable vuelta a vuelta y fíjate en cuándo deja de cumplirse la condición.</p>
+~10#range(inicio, fin) no incluye el valor final\: se detiene justo antes de llegar a 10. Para llegar al 10 haría falta range(1, 11).
+~1#El 1 es el primer número que se muestra, no el último. El for recorre todos los valores del range, uno en cada vuelta.
+~8#El range empieza en 1 y el valor final (10) es el único que se excluye. El 9 sí se muestra.
+}
+
+// Candado 2 - Aplicar: trazar un while
+::ER-02 Candado 2 - while::[html]<p><strong>Candado 2.</strong> El código del segundo candado es el número que muestra este programa. ¿Cuál es?</p><pre>x \= 1
+while x &lt; 20\:
+&nbsp;&nbsp;&nbsp;&nbsp;x \= x * 2
+print(x)</pre> {
+=32#<p><strong>Candado 2 abierto.</strong> x pasa por 1, 2, 4, 8, 16 y 32. Con 16 la condición x &lt; 20 todavía se cumple, así que el bucle da una vuelta más y x llega a 32. Entonces la condición es falsa, el bucle termina y print muestra 32.</p><p><em>Pista para el candado 3\:</em> este bucle se corta antes de tiempo. Busca la palabra break y fíjate en si va antes o después del print.</p>
+~16#Con x \= 16 la condición x &lt; 20 todavía es cierta, así que el bucle da otra vuelta y x pasa a valer 32. El while solo comprueba la condición al empezar cada vuelta.
+~20#x solo toma valores que se obtienen multiplicando por 2 desde 1 (2, 4, 8, 16, 32...). El 20 es el límite de la condición, pero x nunca llega a valer 20.
+~No muestra nada, porque es un bucle infinito#x se multiplica por 2 en cada vuelta, así que acaba superando 20 y la condición deja de cumplirse. Además, print está fuera del bucle\: se ejecuta una vez, al terminar.
+}
+
+// Candado 3 - Aplicar: break dentro de un for
+::ER-03 Candado 3 - break::[html]<p><strong>Candado 3.</strong> Para abrir el tercer candado hay que saber qué muestra este programa. ¿Qué muestra?</p><pre>for n in range(10)\:
+&nbsp;&nbsp;&nbsp;&nbsp;if n \=\= 4\:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break
+&nbsp;&nbsp;&nbsp;&nbsp;print(n)</pre> {
+=0, 1, 2 y 3 (cada número en una línea)#<p><strong>Candado 3 abierto.</strong> Cuando n vale 4, break corta el bucle en ese momento. Como el break va antes del print, el 4 no llega a mostrarse y el bucle no sigue con los valores del 5 al 9.</p><p><em>Pista para el candado 4\:</em> en un while no basta con que la variable cambie en cada vuelta; importa hacia dónde cambia. Compárala con la condición.</p>
+~0, 1, 2, 3 y 4 (cada número en una línea)#El if con el break va antes del print\: cuando n vale 4 el bucle se corta antes de llegar a print(n), así que el 4 no se muestra.
+~Del 0 al 9 menos el 4 (cada número en una línea)#break no se salta solo una vuelta\: termina el bucle entero. Después del 4 ya no se ejecuta ninguna vuelta más.
+~Del 0 al 9 (cada número en una línea)#Cuando n vale 4 se cumple la condición del if y se ejecuta break, que corta el bucle. Los valores del 4 al 9 no llegan a mostrarse.
+}
+
+// Candado 4 - Analizar: encontrar el error de un while infinito
+::ER-04 Candado 4 - while infinito::[html]<p><strong>Candado 4.</strong> Este programa debía mostrar una cuenta atrás del 10 al 1, pero tiene un fallo. ¿Qué ocurre al ejecutarlo?</p><pre>i \= 10
+while i &gt; 0\:
+&nbsp;&nbsp;&nbsp;&nbsp;print(i)
+&nbsp;&nbsp;&nbsp;&nbsp;i \= i + 1</pre> {
+=No termina nunca (bucle infinito)#<p><strong>Candado 4 abierto.</strong> La variable sí cambia, pero en la dirección equivocada\: con i \= i + 1 se aleja de 0 y la condición i &gt; 0 no deja de cumplirse. Para la cuenta atrás haría falta i \= i - 1.</p><p><em>Pista para el candado 5\:</em> el último candado tiene un while cuya condición es siempre verdadera. Entonces, ¿cómo puede terminar? Recuerda lo que hacía break en el candado 3.</p>
+~Muestra 10, 9, 8... hasta 1 y termina#Eso haría con i \= i - 1. Aquí se suma 1\: i vale 10, 11, 12... y nunca llega a 0.
+~Muestra solo el 10 y termina#Después de mostrar el 10, i pasa a valer 11. La condición 11 &gt; 0 se sigue cumpliendo, así que el bucle da otra vuelta, y otra...
+~No muestra nada, porque la condición es falsa desde el principio#Al empezar, i vale 10 y 10 &gt; 0 es cierto, así que el bucle sí entra y muestra el 10.
+}
+
+// Candado 5 - Analizar: while True con break
+::ER-05 Candado 5 - while True y break::[html]<p><strong>Candado 5, el último.</strong> La salida del laboratorio se abre con el número que muestra este programa. ¿Cuál es?</p><pre>intentos \= 0
+while True\:
+&nbsp;&nbsp;&nbsp;&nbsp;intentos \= intentos + 1
+&nbsp;&nbsp;&nbsp;&nbsp;if intentos \=\= 3\:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break
+print(intentos)</pre> {
+=3#<p><strong>Candado 5 abierto. ¡Has escapado del laboratorio!</strong> La condición True nunca es falsa, pero break corta el bucle en la vuelta en que intentos llega a 3. Es una forma habitual de repetir algo hasta que ocurra una situación concreta.</p>
+~No muestra nada, porque while True es un bucle infinito#Sería infinito sin el break. Cuando intentos llega a 3 se ejecuta break y el bucle termina, aunque la condición True siga siendo verdadera.
+~2#La suma va antes del if\: en la tercera vuelta intentos pasa a valer 3, se cumple intentos \=\= 3 y el bucle se corta con ese valor.
+~4#break corta el bucle en cuanto intentos vale 3, sin dar otra vuelta, así que no llega a sumarse 1 más.
+}

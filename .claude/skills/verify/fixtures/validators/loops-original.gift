@@ -1,0 +1,28 @@
+// Repaso Tema 3: bucles. 3 preguntas de opción múltiple (una correcta).
+// Aplicar: trazar un while
+::T3-01 Traza de while::[html]<p>¿Qué muestra por pantalla este programa?</p><pre>n \= 3
+while n &gt; 0\:
+    print(n)
+    n \= n - 1</pre> {
+=3, 2 y 1 (cada número en una línea)#Correcto\: n vale 3, 2 y 1 mientras la condición n &gt; 0 es cierta; cuando n llega a 0 la condición es falsa y el bucle termina sin imprimirlo.
+~3, 2, 1 y 0 (cada número en una línea)#Cuando n vale 0, la condición n &gt; 0 ya es falsa, así que el bucle termina antes de imprimir el 0.
+~2, 1 y 0 (cada número en una línea)#El print va antes de restar\: el primer valor que se imprime es 3, no 2.
+~Repite el 3 sin parar (bucle infinito)#No es infinito\: la línea n \= n - 1 está dentro del bucle y reduce n en cada vuelta hasta que la condición deja de cumplirse.
+}
+
+// Comprender: qué valores genera range
+::T3-02 for con range::[html]<p>¿Qué muestra por pantalla este programa?</p><pre>for i in range(5)\:
+    print(i)</pre> {
+=0, 1, 2, 3 y 4 (cada número en una línea)#Correcto\: range(5) empieza en 0 y se detiene antes de llegar a 5, así que da 5 valores\: del 0 al 4.
+~1, 2, 3, 4 y 5 (cada número en una línea)#range(5) empieza en 0, no en 1.
+~0, 1, 2, 3, 4 y 5 (cada número en una línea)#El 5 no se incluye\: range(5) se detiene justo antes de llegar a 5.
+~El número 5, una sola vez#range(5) no es el número 5, sino una secuencia de 5 valores que el for recorre uno a uno.
+}
+
+// Analizar: elegir el bucle adecuado
+::T3-03 Cuándo usar while o for::¿En cuál de estas situaciones encaja mejor un bucle <b>while</b> que un bucle <b>for</b>? {
+=Pedir una contraseña al usuario hasta que la escriba bien#Correcto\: no se sabe de antemano cuántas veces habrá que pedirla; se repite mientras la contraseña no sea correcta, que es justo lo que hace while.
+~Mostrar los números del 0 al 9#Se sabe cuántas vueltas hay que dar\: for i in range(10) lo resuelve directamente.
+~Repetir exactamente 5 veces un mismo mensaje#Con un número fijo de repeticiones, for con range(5) es lo más sencillo.
+~Recorrer una por una las letras de una palabra#for recorre cualquier secuencia, también un texto\: for letra in palabra.
+}
