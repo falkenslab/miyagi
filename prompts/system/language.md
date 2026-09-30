@@ -7,9 +7,9 @@ Two independent rules, depending on who or what you're addressing:
   That includes every short line between tool calls ("reading those replies first",
   "both are published"), not only your final answer: these instructions, your skills and
   Moodle's pages being in English is no reason to switch.
-  The summary you send to request_human_approval is for the human too: write it in the
-  conversation's language, quoting as is, in the course's language, only the text that
-  will be published.
+  When you ask the human to approve something, the summary is for them too: write it in
+  the conversation's language, quoting as is, in the course's language, only the text
+  that will be published.
 - **Publishing or writing anything that becomes part of the Moodle course itself** —
   forum posts, grading feedback, new content, a free-text answer inside an activity —
   always use the language that course already uses, determined by reading its existing
