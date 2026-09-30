@@ -4,6 +4,7 @@ Cada prueba de principio a fin de teacher-agent contra un Moodle real queda aqu�
 
 | Fecha | Prueba | Entorno | Resultado | Hallazgos |
 | --- | --- | --- | --- | --- |
+| 30 sep 2026 | [Web: correcciones de la revisión](2026-09-30T20-45-site-review/README.md): menú de iconos con tooltip, selector de tema claro/oscuro/sistema, logo centrado, textos nuevos e imágenes para redes con el titular; Lighthouse también en oscuro | Servidor local · Chrome · Lighthouse 12 | Superada | 2 (corregidos) |
 | 30 sep 2026 | [Web rediseñada](2026-09-30T19-44-site-redesign/README.md): una página por idioma con 15 secciones y la terminal animada que acaba en la aprobación, comprobada a ocho tamaños, sin JS, con movimiento reducido y con Lighthouse en móvil y escritorio | Servidor local · Chrome · Lighthouse 12 | Superada con hallazgos | 2 (corregidos) |
 | 30 sep 2026 | [Caja de herramientas de drafts/](2026-09-30T16-03-drafts-toolbox/README.md): «Terminal implacable» empaquetado como SCORM sin terminal, subido oculto y jugado entero (nota 100 en el calificador), y unos apuntes convertidos a PDF y subidos como Archivo | moodle-sandbox · Moodle 5.2 · Docker 29 | Superada con hallazgos | 3 (2 corregidos, 1 aceptado) |
 | 30 sep 2026 | [Web promocional en español e inglés](2026-09-30T15-35-promo-site/README.md): la web en GitHub Pages, comprobada a seis anchos (y en horizontal) y con Lighthouse en móvil y escritorio, diseñada con `frontend-design` | GitHub Pages · Chrome · Lighthouse 12 | Superada con hallazgos | 6 (todos corregidos) |
