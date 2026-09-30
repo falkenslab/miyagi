@@ -1,5 +1,6 @@
 // Renders the system prompt for every session kind from dist/ and checks it.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-prompts.mjs
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -14,6 +15,7 @@ const course = (c) => c.kind !== "explore";
 const SECTIONS = {
   "teacher run": { text: "Manage the given course the way a real teacher would", when: (c) => c.kind === "run" },
   "teacher chat": { text: "You are a conversational assistant for a teacher", when: (c) => c.kind === "chat" },
+  "browser on demand": { text: "Don't open the browser at the start", when: (c) => c.kind === "chat" },
   "teacher ingest": { text: "You maintain the knowledge base of a teacher", when: (c) => c.kind === "ingest" },
   "explore": { text: "exploring the capabilities of a specific Moodle installation", when: (c) => c.kind === "explore" },
   "file-name safety": { text: "Never pass a `filename` to a Playwright tool", when: browser },
@@ -66,6 +68,14 @@ for (const [kind, modes] of Object.entries(MODES)) {
       }
     }
   }
+}
+// The chat opens from the knowledge base: its opening message must not send it to Moodle.
+const opening = readFileSync(path.join(root, "prompts/messages/chat-opening-teacher.md"), "utf-8");
+if (/log into moodle|log in to moodle|enter the given course/i.test(opening)) {
+  failures++;
+  console.log("FAIL chat opening message still logs into Moodle");
+} else {
+  console.log("ok   chat opening message greets from the knowledge base, no login");
 }
 if (failures > 0) {
   console.log(`\n${failures} render(s) failed`);
