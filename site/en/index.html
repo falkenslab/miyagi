@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>teacher-agent: an assistant for your Moodle course that asks before it publishes</title>
+  <meta name="description" content="teacher-agent works in your Moodle course with your teacher account: it grades submissions, answers the forum, builds activities and sums up how the class is doing. Nothing reaches your students without your say-so.">
+  <link rel="canonical" href="https://falkenslab.github.io/teacher-agent/en/">
+  <link rel="alternate" hreflang="es" href="https://falkenslab.github.io/teacher-agent/">
+  <link rel="alternate" hreflang="en" href="https://falkenslab.github.io/teacher-agent/en/">
+  <link rel="alternate" hreflang="x-default" href="https://falkenslab.github.io/teacher-agent/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta property="og:title" content="teacher-agent: your Moodle course, with an assistant that asks before it publishes">
+  <meta property="og:description" content="It grades, answers the forum, builds activities and sums up the class. Nothing reaches your students without your say-so.">
+  <meta property="og:url" content="https://falkenslab.github.io/teacher-agent/en/">
+  <meta property="og:image" content="https://falkenslab.github.io/teacher-agent/assets/og-en.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="teacher-agent's owl in a mortarboard, and the page's tagline">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1f3129">
+  <link rel="icon" href="../assets/owl.svg" type="image/svg+xml">
+  <link rel="preload" href="../fonts/atkinson-next-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../site.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./"><img src="../assets/owl.svg" alt="" width="34" height="43">teacher-agent</a>
+      <nav class="nav" aria-label="Main">
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+        <ul class="nav-links" id="menu">
+          <li><a href="#week">What it does</a></li>
+          <li><a href="#control">You're in charge</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#questions">Questions</a></li>
+        </ul>
+        <a class="lang" href="../" hreflang="es" lang="es">Español</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="hero" aria-labelledby="title">
+      <div class="wrap">
+        <div>
+          <h1 id="title">Your Moodle course, with an assistant that asks before it publishes</h1>
+          <p class="lead">teacher-agent signs in with your teacher account, grades submissions, answers the forum, builds activities and tells you how the class is doing. Nothing reaches your students without your say-so.</p>
+          <div class="actions">
+            <a class="button primary" href="#install">Install teacher-agent</a>
+            <a class="button" href="https://github.com/falkenslab/teacher-agent">See the code on GitHub</a>
+          </div>
+          <p class="fine">Free software (MIT license). Runs on your Claude subscription.</p>
+        </div>
+
+        <div class="terminal" role="img" aria-label="Example conversation: you ask whether there's anything new in the forum, the assistant finds a question from Lucía, drafts an answer and asks your permission before posting it.">
+          <div class="bar" aria-hidden="true"><img src="../assets/owl.svg" alt="" width="26" height="33">teacher-agent</div>
+          <ol aria-hidden="true">
+            <li class="t-you"><b>you&gt;</b> Anything new in the forum?</li>
+            <li class="t-tool">Opening the Q&amp;A forum</li>
+            <li class="t-tool">Reading a table on the page</li>
+            <li class="t-agent">There's a new question from Lucía: "What's the difference between break and continue?" I'll draft an answer with an example of each.</li>
+            <li class="t-panel">
+              <strong>Your confirmation is needed before publishing</strong>
+              Reply to Lucía in the forum, in Spanish like the course: break leaves the loop; continue skips to the next round, with two code examples.
+              <ul class="opts"><li class="on">❯ 1. Yes</li><li>&nbsp; 2. No</li><li>&nbsp; 3. Stop</li></ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="week" aria-labelledby="week-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="week-t">A week with teacher&#8209;agent</h2>
+          <p>You ask for things the way you'd ask a colleague, in a conversation. It works in your Moodle the way you would.</p>
+        </div>
+        <ol class="week">
+          <li>
+            <span class="day">Monday</span>
+            <div>
+              <h3>Grades the assignment</h3>
+              <p>It applies your rubric and your criteria, writes feedback that says what went wrong and how to improve, and shows you each student's grade before saving it.</p>
+              <span class="says">"Grade Assignment 2 with the unit's rubric"</span>
+            </div>
+          </li>
+          <li>
+            <span class="day">Tuesday</span>
+            <div>
+              <h3>Answers the forum</h3>
+              <p>It finds the unanswered questions, replies in the tone you chose, and tells you when the same question keeps coming back because the notes fall short.</p>
+              <span class="says">"Anything new in the forum?"</span>
+            </div>
+          </li>
+          <li>
+            <span class="day">Wednesday</span>
+            <div>
+              <h3>Builds an activity</h3>
+              <p>A quiz, notes, a lab or something bolder, like an escape room. It tries it out hidden in Moodle and shows it to you before your students see it.</p>
+              <span class="says">"Make a loops review escape room in Unit 3"</span>
+            </div>
+          </li>
+          <li>
+            <span class="day">Thursday</span>
+            <div>
+              <h3>Sums up the class</h3>
+              <p>Submissions, grades, who's falling behind and which topics are hardest, from what's in your course.</p>
+              <span class="says">"How is the class doing overall?"</span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="control" class="board" aria-labelledby="control-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="control-t">You decide what gets published</h2>
+          <p>It works with your account in your real course, so it's built not to act on its own where your students would see it.</p>
+        </div>
+        <div class="points">
+          <div class="point">
+            <h3>It asks first</h3>
+            <p>Before saving a grade, replying in the forum or publishing a resource, it shows you exactly what it's about to publish and waits for your yes. If you say no, it doesn't publish it.</p>
+          </div>
+          <div class="point">
+            <h3>It tests before showing</h3>
+            <p>Whatever it builds goes up hidden first, gets tried out in Moodle as a teacher, and needs your yes again to be shown. Anything still hidden, it reminds you of when you close.</p>
+          </div>
+          <div class="point">
+            <h3>It stays in your course</h3>
+            <p>Its instructions are not to delete anything, not to touch enrolments or Moodle's settings, and not to enter other courses. Your password never goes through the model.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="memory-t">
+      <div class="wrap split">
+        <div>
+          <h2 id="memory-t">It remembers your course</h2>
+          <p>It keeps notes as it goes: your grading criteria, the rubrics, the questions that keep coming up, how the class is doing. The next session starts from there, without going through everything in Moodle again.</p>
+          <p>They're plain text files in your course's folder, which you can open and correct with any editor. It keeps no files on individual students, only trends across the class.</p>
+        </div>
+        <div>
+          <h2 id="languages-t">Talks your language, publishes in the course's</h2>
+          <p>Its menus and messages come in English, Spanish, French and German, and it replies in whatever language you write to it in.</p>
+          <p>What it publishes in Moodle always follows your course's language: you can talk to it in English about a course taught in Spanish, and its forum replies will be in Spanish.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="real-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="real-t">What it really looks like</h2>
+          <p>A real session on a test Moodle, in English, about a course taught in Spanish: the summary is for you, the reply it quotes is for the students.</p>
+        </div>
+        <figure class="shot">
+          <a href="../assets/chat-en-1100.jpg">
+            <img src="../assets/chat-en-720.jpg" srcset="../assets/chat-en-720.jpg 720w, ../assets/chat-en-1100.jpg 1100w" sizes="(max-width: 72rem) calc(100vw - 2rem), 72rem" width="1100" height="1027" loading="lazy" alt="teacher-agent's terminal: it has found a new forum question and asks for confirmation, with an English summary and the Spanish reply it will post.">
+          </a>
+          <figcaption>On a phone, tap the image to see it full size.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="install" aria-labelledby="install-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="install-t">Install it in three steps</h2>
+          <p>On Windows, Mac or Linux. No programming needed.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <div>
+              <h3>Install Google Chrome</h3>
+              <p>If you don't have it yet, from <a href="https://www.google.com/chrome/">google.com/chrome</a>. teacher-agent uses it to work in Moodle.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Install Node.js</h3>
+              <p>The LTS version from <a href="https://nodejs.org/">nodejs.org</a>, with the default options.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Install teacher-agent</h3>
+              <p>Open a terminal (PowerShell on Windows, Terminal on Mac), paste this line and press Enter:</p>
+              <div class="command">
+                <code>npm install -g https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz</code>
+                <button class="copy" type="button" data-label="Copy" data-done="Copied" data-fail="Select it and copy it">Copy</button>
+              </div>
+              <p>Then run <code>teacher-agent init</code> in the folder you want to use for your course and answer its questions.</p>
+            </div>
+          </li>
+        </ol>
+        <p class="needs">You need a Moodle course where you have the teacher role, and a Claude Pro or Max subscription. The step-by-step <a href="https://github.com/falkenslab/teacher-agent/blob/main/docs/CHEATSHEET.md">guide</a> (in Spanish) covers everything with examples.</p>
+      </div>
+    </section>
+
+    <section id="questions" class="faq" aria-labelledby="questions-t">
+      <div class="wrap">
+        <h2 id="questions-t">Questions</h2>
+        <details>
+          <summary>How much does it cost?</summary>
+          <p>teacher-agent is free and open source. What runs the assistant is your Claude subscription (Pro or Max).</p>
+        </details>
+        <details>
+          <summary>Does it work with my school's Moodle?</summary>
+          <p>It works with the Moodle you already use, through the browser and your teacher account: nothing to install on the server. While setting it up, it can look (without changing anything) at which activity and question types your Moodle supports.</p>
+        </details>
+        <details>
+          <summary>Could it publish something without me noticing?</summary>
+          <p>In the chat, before saving a grade, replying in the forum or publishing content, it asks your permission with a summary of what it will publish. If it tries to publish without having asked, that's stopped and you're asked.</p>
+        </details>
+        <details>
+          <summary>What about my students' data?</summary>
+          <p>It reads what you would see in Moodle to do its work, but its notes keep no files on individual students, only trends across the class. Your Moodle password is never sent to the model.</p>
+        </details>
+        <details>
+          <summary>Can I give it my own instructions?</summary>
+          <p>Yes. Write whatever it should always keep in mind in an <code>instructions.md</code> file in the course's folder: "grade out of 10", "keep forum replies short", "spelling counts for 10%".</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>teacher-agent, by <a href="https://github.com/falkenslab">falkenslab</a></span>
+      <ul>
+        <li><a href="https://github.com/falkenslab/teacher-agent">GitHub</a></li>
+        <li><a href="https://github.com/falkenslab/teacher-agent/releases/latest">Latest release</a></li>
+        <li><a href="https://github.com/falkenslab/teacher-agent/blob/main/LICENSE">MIT license</a></li>
+        <li><a href="../" hreflang="es" lang="es">Español</a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>

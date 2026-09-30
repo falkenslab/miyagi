@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="168" height="212" viewBox="76 62 168 212" role="img" aria-labelledby="title">
+  <title id="title">teacher-agent</title>
+  <g font-family="ui-monospace, 'Cascadia Mono', Consolas, Menlo, 'DejaVu Sans Mono', monospace" font-size="40" font-weight="600">
+    <text y="77.44"><tspan x="112" fill="#8a8a8a">_</tspan><tspan x="136" fill="#8a8a8a">_</tspan><tspan x="160" fill="#8a8a8a">_</tspan><tspan x="184" fill="#8a8a8a">_</tspan></text>
+    <text y="125.44"><tspan x="88" fill="#8a8a8a">/</tspan><tspan x="112" fill="#8a8a8a">_</tspan><tspan x="136" fill="#8a8a8a">_</tspan><tspan x="160" fill="#8a8a8a">_</tspan><tspan x="184" fill="#8a8a8a">/</tspan><tspan x="208" fill="#8a8a8a">|</tspan></text>
+    <text y="173.44"><tspan x="88" fill="#d77757">{</tspan><tspan x="112" fill="#d77757">o</tspan><tspan x="136" fill="#d77757">,</tspan><tspan x="160" fill="#d77757">o</tspan><tspan x="184" fill="#d77757">}</tspan><tspan x="208" fill="#dfa23a">'</tspan></text>
+    <text y="221.44"><tspan x="88" fill="#d77757">|</tspan><tspan x="112" fill="#d77757">)</tspan><tspan x="136" fill="#d77757">_</tspan><tspan x="160" fill="#d77757">_</tspan><tspan x="184" fill="#d77757">)</tspan></text>
+    <text y="269.44"><tspan x="88" fill="#8a8a8a">-</tspan><tspan x="112" fill="#8a8a8a">&quot;</tspan><tspan x="136" fill="#8a8a8a">-</tspan><tspan x="160" fill="#8a8a8a">&quot;</tspan><tspan x="184" fill="#8a8a8a">-</tspan></text>
+  </g>
+</svg>

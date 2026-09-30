@@ -40,6 +40,12 @@ For whoever develops this repo (not the runtime agent's skills, which are in `pl
 - `minispec-feature` / `minispec-adr` / `minispec-bugfix` / `minispec-implement` — write a feature, an ADR or a bugfix note in `.minispec/`, and implement a pending feature. Every feature and fix note has a GitHub issue in Spanish (label `feature` or `fix`), linked from an `Issue:` line under its title, and closed with a summary of the solution when the note is done.
 - `sync-issues` — repairs whatever drifted between the notes and the issues: opens and links a missing issue, closes the one whose note is done.
 
+## Promotional site (`site/`)
+
+A static page in Spanish (`site/index.html`) and English (`site/en/index.html`), with one stylesheet, one script and self-hosted fonts, published to https://falkenslab.github.io/teacher-agent/ by `.github/workflows/pages.yml` on every push to `main` that touches it. No build step and no framework; it isn't in the npm package. Texts are for teachers, the English one an adaptation of the Spanish one; say nothing the product doesn't back.
+
+`.claude/settings.json` enables Anthropic's `example-skills` plugin (`anthropics/skills`) for whoever works on the site: `frontend-design` for any design change (its plan-then-critique process, and its list of generic-page tells), `canvas-design` for the social preview images (`site/assets/og-*.png`) and `webapp-testing` to check it. Every change is checked at 360, 390, 768, 1024, 1440 and 1920 px (no horizontal scroll, touch targets of 44 px, the menu and the language switch working) and with Lighthouse's mobile and desktop runs, all four scores at 90 or more.
+
 ## MiniSpec (read first)
 
 Before writing any code, read `.minispec/README.md` and follow its reading contract. As a minimum, always read `.minispec/core/project.md`, `.minispec/core/conventions.md` and `.minispec/core/principles.md`; read the rest of `.minispec/` only on demand (architecture, stack, glossary, the relevant feature or ADR). Keep features small and don't write redundant documentation. The rules that must not be undone are in `.minispec/core/principles.md`, each backed by an ADR in `.minispec/decisions/`.
