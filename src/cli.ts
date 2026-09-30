@@ -8,6 +8,7 @@ import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
 import { globalConfigPath, resolveLanguage } from "./globalConfig.js";
 import { promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
 import { chooseInterfaceLanguage, t } from "./messages/index.js";
+import { applyTeacherTheme } from "./theme.js";
 import { interfaceLanguage, readWorkspaceConfig, workspaceExists } from "./workspace.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -78,6 +79,7 @@ async function chooseLanguage(args: string[]): Promise<void> {
 async function main(): Promise<void> {
   const [first, ...rest] = process.argv.slice(2);
   await chooseLanguage(process.argv.slice(2));
+  applyTeacherTheme();
 
   switch (first) {
     case "-h":
