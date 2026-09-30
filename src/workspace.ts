@@ -2,6 +2,7 @@ import { chmod, mkdir, readdir, readFile, rename, rmdir, stat, writeFile } from 
 import path from "node:path";
 import type { BaseSessionConfig, Mode } from "@falkenslab/agent-kit";
 import { t } from "./messages/index.js";
+import { DEFAULT_DRAFTS_LIMITS, type DraftsLimits } from "./drafts/files.js";
 
 export type AgentPersona = "formal" | "warm" | "motivating";
 
@@ -38,6 +39,8 @@ export interface WorkspaceConfig {
     /** Opt-in, off by default: registers the practice-runner subagent, the only thing that gets
      * a shell (Docker only, inside practice/) — see agent.ts's buildSubagents(). */
     allowPracticeRunner?: boolean;
+    /** Limits of the drafts toolbox (download and unzip sizes); each falls back to its default. */
+    draftsLimits?: Partial<DraftsLimits>;
   };
 }
 
@@ -56,6 +59,9 @@ export interface WorkspaceSessionConfig extends BaseSessionConfig {
   allowPracticeRunner?: boolean;
   /** Where the practice-runner subagent works: one folder per activity. */
   practiceDir: string;
+  /** The drafts toolbox's folder and limits. */
+  draftsDir: string;
+  draftsLimits: DraftsLimits;
   /** Orthogonal to `mode` (see agent-kit's own agentSpec.ts doc comment on `Mode`) — set
    * by `agent.ts` from the CLI subcommand, decides which base prompt buildSystemPrompt()
    * loads and whether the session has a browser at all. */
@@ -123,6 +129,11 @@ export async function readWorkspaceConfig(workspaceDir: string): Promise<Workspa
   const config = JSON.parse(raw) as WorkspaceConfig;
   if (config.agent?.role === "student") {
     throw new Error(t().studentRole(workspaceDir));
+  }
+  for (const [key, value] of Object.entries(config.agent?.draftsLimits ?? {})) {
+    if (!(key in DEFAULT_DRAFTS_LIMITS) || typeof value !== "number" || !(value > 0)) {
+      throw new Error(t().draftsLimitsInvalid(workspaceDir, key, Object.keys(DEFAULT_DRAFTS_LIMITS).join(", ")));
+    }
   }
   return config;
 }
@@ -242,6 +253,8 @@ export function toSessionConfig(
     agentPersona: workspace.agent.persona,
     allowPracticeRunner: workspace.agent.allowPracticeRunner,
     practiceDir: practiceDirFor(workspaceDir),
+    draftsDir: draftsDirFor(workspaceDir),
+    draftsLimits: { ...DEFAULT_DRAFTS_LIMITS, ...workspace.agent.draftsLimits },
     knownLanguage: options.language,
     language: interfaceLanguage(options.language),
     customInstructions: options.instructions,

@@ -87,6 +87,28 @@ function describePlaywright(shortName: string, input: Record<string, unknown>): 
       return m.runCodeUnsafe;
     case "browser_handle_dialog":
       return input.accept === false ? m.dismissDialog : m.acceptDialog;
+    case "drafts_list":
+      return m.drafts.list(text(input.path, "."));
+    case "drafts_mkdir":
+      return m.drafts.mkdir(text(input.path, ""));
+    case "drafts_copy":
+      return m.drafts.copy(text(input.from, ""), text(input.to, ""));
+    case "drafts_move":
+      return m.drafts.move(text(input.from, ""), text(input.to, ""));
+    case "drafts_delete":
+      return m.drafts.del(text(input.path, ""));
+    case "drafts_download":
+      return m.drafts.download(text(input.url, ""));
+    case "drafts_fetch_site":
+      return m.drafts.fetchSite(text(input.url, ""));
+    case "drafts_unzip":
+      return m.drafts.unzip(text(input.archive, ""));
+    case "drafts_zip":
+      return m.drafts.zip(text(input.to, ""));
+    case "drafts_pdf":
+      return m.drafts.pdf(text(input.to, ""));
+    case "drafts_info":
+      return m.drafts.info(text(input.path, ""));
     default:
       // The kit's generic fallback no longer strips Playwright's "browser_" prefix.
       return shortName.startsWith("browser_") ? shortName.replace(/^browser_/, "").replace(/_/g, " ") : undefined;
@@ -97,7 +119,7 @@ function describePlaywright(shortName: string, input: Record<string, unknown>): 
  * `describePlaywright("browser_click", ...)` without a `"[playwright] "` prefix. */
 export const friendlyToolLabel = createFriendlyToolLabel({
   describe: describePlaywright,
-  extraLocalServers: ["playwright"],
+  extraLocalServers: ["playwright", "drafts"],
 });
 
 
@@ -120,6 +142,17 @@ const PHRASE_KEYS: Record<string, ToolPhraseKey> = {
   browser_file_upload: "upload",
   browser_take_screenshot: "screenshot",
   request_human_approval: "approval",
+  drafts_download: "download",
+  drafts_fetch_site: "download",
+  drafts_pdf: "pdf",
+  drafts_list: "files",
+  drafts_mkdir: "files",
+  drafts_copy: "files",
+  drafts_move: "files",
+  drafts_delete: "files",
+  drafts_unzip: "files",
+  drafts_zip: "files",
+  drafts_info: "files",
 };
 
 /** `toolPhrase` for agent-kit's folded tool groups ("abrió 3 páginas, pulsó 5 veces"); other tools keep the kit's. */

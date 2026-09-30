@@ -9,7 +9,7 @@ Para verlas desde la terminal: `teacher-agent skills`. Para empezar a usar el as
 ## Índice
 
 - [Llevar el curso día a día](#llevar-el-curso-día-a-día): `course-orientation`, `moodle-navigation`, `grading-rubric`, `forum`, `progress-monitoring`, `course-auditor`
-- [Crear contenido y actividades](#crear-contenido-y-actividades): `resource-authoring`, `assignment-building`, `rubric-design`, `quiz-design`, `quiz-building`, `activity-building`, `practice-testing`, `publish-check`
+- [Crear contenido y actividades](#crear-contenido-y-actividades): `resource-authoring`, `assignment-building`, `rubric-design`, `quiz-design`, `quiz-building`, `activity-building`, `scorm-packaging`, `practice-testing`, `publish-check`
 - [Diseñar y planificar](#diseñar-y-planificar): `course-design`, `teaching-methodologies`, `teaching-plan`, `course-alignment`, `topic-research`
 - [Construir temas y cursos](#construir-temas-y-cursos): `unit-building`, `course-building`
 - [Su memoria del curso](#su-memoria-del-curso): `knowledge-ingest`, `knowledge-query`, `knowledge-lint`, `knowledge-pages`
@@ -97,6 +97,12 @@ Crea o modifica cuestionarios en Moodle: su configuración (fechas, tiempo, inte
 Diseña y monta el resto de actividades para que funcionen como deben: talleres de coevaluación, lecciones con itinerarios, glosarios, wikis, bases de datos, consultas, encuestas, foros evaluables y H5P. Y también las piezas que conectan las actividades: condiciones de finalización, restricciones de acceso, insignias y grupos.
 
 - **Pídeselo así:** *"Añade un taller de coevaluación para la práctica final, con la rúbrica de la tarea."*
+
+### 📦 `scorm-packaging` · Actividades web como SCORM
+
+Empaqueta una actividad web (un juego en HTML, una simulación, un ejercicio interactivo, tuyo o uno publicado en internet) como paquete SCORM para que Moodle registre si el alumno la completó y su nota en el calificador. Descarga la actividad con todos sus ficheros, le añade un pequeño puente que habla con Moodle sin cambiar cómo se juega, escribe el manifiesto, la comprime y la sube oculta para probarla antes de mostrarla. Todo con sus propias herramientas de ficheros, sin terminal.
+
+- **Pídeselo así:** *"Empaqueta como SCORM el juego https://… y súbelo al Tema 2 para que cuente para la nota."*
 
 ### 🐳 `practice-testing` · Probar las prácticas en Docker
 

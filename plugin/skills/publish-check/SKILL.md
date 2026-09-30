@@ -17,7 +17,10 @@ H5P, an assignment, a whole unit — is tested in Moodle before students can see
 its type:
 
 1. **Build it in `drafts/<slug>/`**: the editable source (the HTML, the GIFT file, the page's
-   text, its images). Never in `knowledge/`; the activity's or topic's page links to it.
+   text, its images). Never in `knowledge/`; the activity's or topic's page links to it. Beyond
+   writing text files, the drafts toolbox (`drafts_*` tools) downloads files and whole pages,
+   copies and moves binaries, zips and unzips (a SCORM package: `scorm-packaging`), prints
+   HTML or Markdown to PDF and tells a file's real type: use it, never a shell.
 2. **Upload it hidden.** In the activity's form, "Common module settings" → "Availability":
    "Hide on course page" ("Ocultar en la página del curso"), set before the first save. For a
    new section, hide the section. The approval summary says it goes up **hidden, to test it**.

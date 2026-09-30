@@ -179,6 +179,7 @@ Son los conocimientos que el asistente aplica por su cuenta cuando la tarea lo p
 | `activity-building` | Talleres de coevaluación, lecciones con itinerarios, glosarios, wikis, bases de datos, consultas, encuestas, H5P, y finalización, restricciones, insignias y grupos. |
 | `quiz-design` | Escribir buenas preguntas (distractores plausibles, niveles variados) y revisar cuestionarios. |
 | `quiz-building` | Configurar el cuestionario, añadir o importar sus preguntas (GIFT) y dejarlas en orden. |
+| `scorm-packaging` | Empaquetar una actividad web (un juego, una simulación) como SCORM para que Moodle guarde la nota y si se completó. |
 | `rubric-design` | Construir la rúbrica de una actividad y dejarla en Moodle. |
 | `practice-testing` | Probar las prácticas en Docker antes de publicarlas, o ejecutar una entrega al corregirla (ver abajo). |
 | `publish-check` | La comprobación antes de publicar cualquier cosa: redacción, accesibilidad y cómo lo ve un alumno. |
@@ -245,6 +246,8 @@ Para activarla:
 **¿Puedo darle instrucciones propias?** Sí. Crea un archivo `instructions.md` en la carpeta del curso y escribe ahí lo que quieras que tenga siempre en cuenta ("puntúa sobre 10", "sé breve en el foro", "la ortografía cuenta un 10 %"...).
 
 **¿En qué idioma habla?** En el que elegiste al crear el curso, que es también el de sus menús y avisos (español, inglés, francés o alemán). Para cambiarlo solo una vez, añade `--language=en` (o `es`, `fr`, `de`); si le escribes en otro idioma, te sigue.
+
+**¿Puede descargar, comprimir o hacer PDF?** Sí, dentro de la carpeta `drafts` del curso y con sus propias herramientas, sin terminal: descarga archivos y páginas web completas, copia, comprime y descomprime (por ejemplo, para un paquete SCORM) y convierte apuntes a PDF. Por seguridad, una descarga no pasa de 50 MB y un ZIP descomprimido de 200 MB y 2000 archivos; para cambiarlo, en el `config.json` del curso: `"agent": { "draftsLimits": { "downloadMB": 100, "unzipMB": 500, "unzipFiles": 5000 } }`.
 
 **No quiero ver la ventana de Chrome.** Añade `--headless` (por ejemplo `teacher-agent run --headless`). Necesita el usuario y la contraseña guardados.
 

@@ -16,6 +16,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 
 - `src/cli.ts` — `bin` entry and subcommand dispatch; bare `teacher-agent` asks run/chat; `run`/`chat` in a folder that isn't a workspace yet run the setup wizard, save and exit (the session starts from its own command, so the full-screen chat never follows the wizard's prompts); `init` offers `explore` afterwards (a failure only warns).
 - `src/agent.ts` — `runSession()` and the `AgentSpec`: Playwright MCP, disallowed tools, approval and manual-login texts, `buildSubagents()`. A chat's session is opened per run folder.
+- `src/drafts/` — the drafts toolbox, in-process MCP server `drafts` in run/chat: list, mkdir, copy, move, delete, download, fetch_site, unzip, zip, pdf, info. Every path resolved inside drafts/ (`paths.ts`: no "..", absolute paths or links out), http(s) URLs only, size limits from `agent.draftsLimits`, zip-slip and zip-bomb checks, nothing executed; the site fetch and the PDF use @playwright/mcp's playwright-core with the system Chrome, headless.
 - `src/uploadGate.ts` + `src/validators/` — the upload gate: before `browser_file_upload`/`browser_drop`, a `.gift` or `.html` file is checked with code (GIFT syntax, answers, numbers, names, lost indentation; HTML viewport, lang, missing local files); errors deny the upload with the lines, warnings reach the model. Every mode.
 - `src/publishGate.ts` — the publish gate (ADR-008): in guided, a publishing browser action without a prior approval asks the teacher; `isPublishAction()` knows Moodle's publishing buttons.
 - `src/menu.ts` — the `init` wizard (practice-runner opt-in saved as explicit true/false), `offerPracticeRunner()`, run-kind and mode prompts.
@@ -39,7 +40,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 
 One home per concern:
 
-- Building — `course-building` → `unit-building` → `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design` + `quiz-building`, `rubric-design`, `practice-testing`.
+- Building — `course-building` → `unit-building` → `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design` + `quiz-building`, `rubric-design`, `scorm-packaging`, `practice-testing`.
 - Pedagogy — `course-design`, `teaching-methodologies`, `teaching-plan`, `course-alignment`.
 - Running the course — `grading-rubric`, `forum`, `progress-monitoring`, `course-auditor`, `course-orientation`, `moodle-navigation`.
 - `topic-research`, and `publish-check`: the one pre-publication check and the approval rules the other skills point to.

@@ -458,7 +458,7 @@ Todas aceptan `--dir <carpeta>` y `--language=es|en|fr|de`; `chat`, `run` y `exp
 
 **Habilidades** que aplica solo cuando la tarea lo pide (`teacher-agent skills` para verlas; cada una explicada con ejemplos en [skills.md](skills.md)):
 
-- **Construir**: `course-building`, `unit-building`, `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`, `quiz-building`, `rubric-design`, `practice-testing`, `publish-check`.
+- **Construir**: `course-building`, `unit-building`, `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`, `quiz-building`, `rubric-design`, `scorm-packaging`, `practice-testing`, `publish-check`.
 - **Diseñar**: `course-design`, `teaching-methodologies`, `teaching-plan`, `course-alignment`, `topic-research`.
 - **Llevar el curso**: `course-orientation`, `moodle-navigation`, `grading-rubric`, `forum`, `progress-monitoring`, `course-auditor`.
 - **Memoria**: `knowledge-ingest`, `knowledge-query`, `knowledge-lint`, `knowledge-pages`.

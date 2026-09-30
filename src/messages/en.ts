@@ -6,7 +6,7 @@
 /** How each kind of browser action counts in a folded group's summary: [one, many], "{n}" the count. */
 export type ToolPhraseKey =
   | "navigate" | "back" | "click" | "type" | "fillForm" | "select" | "pressKey" | "snapshot"
-  | "evaluate" | "find" | "wait" | "upload" | "screenshot" | "approval";
+  | "evaluate" | "find" | "wait" | "upload" | "screenshot" | "approval" | "download" | "files" | "pdf";
 
 /** What a browser_evaluate call does, read from its code (no model involved). */
 export type EvaluateKind =
@@ -54,6 +54,7 @@ export interface Messages {
 
   // workspace.ts
   studentRole: (dir: string) => string;
+  draftsLimitsInvalid: (dir: string, key: string, valid: string) => string;
   defaultLabel: (host: string, courseId: string) => string;
 
   // agent.ts: the session
@@ -134,6 +135,20 @@ export interface Messages {
     saveResponse: string;
     requestDetails: string;
     runCodeUnsafe: string;
+    /** The drafts toolbox (src/drafts/). */
+    drafts: {
+      list: (path: string) => string;
+      mkdir: (path: string) => string;
+      copy: (from: string, to: string) => string;
+      move: (from: string, to: string) => string;
+      del: (path: string) => string;
+      download: (url: string) => string;
+      fetchSite: (url: string) => string;
+      unzip: (archive: string) => string;
+      zip: (to: string) => string;
+      pdf: (to: string) => string;
+      info: (path: string) => string;
+    };
     acceptDialog: string;
     dismissDialog: string;
   };
@@ -226,6 +241,7 @@ details.`,
   modeAutonomous: "autonomous — no pauses",
 
   studentRole: (dir) => `${dir} is a classroom with the "student" role: teacher-agent only acts as a teacher.`,
+  draftsLimitsInvalid: (dir, key, valid) => `${dir}/config.json: agent.draftsLimits.${key} must be a positive number, and one of: ${valid}.`,
   defaultLabel: (host, courseId) => `${host} · course ${courseId}`,
 
   unknownMode: (value, valid) => `Unknown mode "${value}". Use one of: ${valid}.`,
@@ -283,6 +299,9 @@ details.`,
     upload: ["uploaded files", "uploaded files {n} times"],
     screenshot: ["took {n} screenshot", "took {n} screenshots"],
     approval: ["asked for approval", "asked for approval {n} times"],
+    download: ["downloaded {n} file", "downloaded {n} files"],
+    files: ["worked on files", "worked on files {n} times"],
+    pdf: ["made {n} PDF", "made {n} PDFs"],
   },
 
   tool: {
@@ -332,6 +351,19 @@ details.`,
     saveResponse: "Saving a network response's body to disk",
     requestDetails: "Reading network request details",
     runCodeUnsafe: "Trying to run unrestricted code (blocked)",
+    drafts: {
+      list: (p) => `Listing ${p} in drafts/`,
+      mkdir: (p) => `Creating the folder ${p}`,
+      copy: (from, to) => `Copying ${from} to ${to}`,
+      move: (from, to) => `Moving ${from} to ${to}`,
+      del: (p) => `Deleting ${p}`,
+      download: (url) => `Downloading ${url}`,
+      fetchSite: (url) => `Saving the site ${url}`,
+      unzip: (archive) => `Unzipping ${archive}`,
+      zip: (to) => `Building the archive ${to}`,
+      pdf: (to) => `Printing ${to}`,
+      info: (p) => `Checking the file ${p}`,
+    },
     acceptDialog: "Accepting a browser dialog",
     dismissDialog: "Dismissing a browser dialog",
   },

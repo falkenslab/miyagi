@@ -25,7 +25,7 @@ it. Activities are `assignment-building`, `quiz-building` and `activity-building
 | --- | --- |
 | A unit's notes of reasonable length | Page |
 | Long notes, several sub-topics | Book, one chapter per sub-topic ("Add new chapter") |
-| A document the student downloads (the syllabus, a dataset, a template) | File, or folder for several |
+| A document the student downloads (the syllabus, a dataset, a template) | File, or folder for several; notes as PDF with `drafts_pdf` from their HTML or Markdown |
 | An external reference (official documentation, a video) | URL, with what to look at and why |
 | A short note between activities on the course page | Text and media area |
 | What a section is about and in what order to go | The section's summary |

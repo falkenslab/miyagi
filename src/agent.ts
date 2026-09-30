@@ -48,6 +48,7 @@ import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConf
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
 import { installPublishGate } from "./publishGate.js";
 import { installUploadGate } from "./uploadGate.js";
+import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
 import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
 
@@ -129,6 +130,8 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSp
     skills,
     buildSystemPrompt,
     buildMcpServers: (config): Record<string, McpServerConfig> => (!hasBrowser ? {} : {
+      // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a shell.
+      ...(kind === "run" || kind === "chat" ? { [DRAFTS_SERVER]: createDraftsServer(config.draftsDir, config.draftsLimits) } : {}),
       playwright: {
         command: process.execPath,
         args: [

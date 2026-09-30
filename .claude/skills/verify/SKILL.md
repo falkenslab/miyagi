@@ -20,6 +20,7 @@ node .claude/skills/verify/check-references.mjs
 node .claude/skills/verify/check-publish-gate.mjs
 node .claude/skills/verify/check-tool-labels.mjs
 node .claude/skills/verify/check-validators.mjs
+node .claude/skills/verify/check-drafts-toolbox.mjs
 node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
 ```
 
@@ -52,6 +53,12 @@ sandbox tests (the loops quiz whose indentation Moodle lost, before and after it
 and HTML files broken on purpose, and the upload gate's hook itself. Each fixture has its
 expected errors by line. When a real upload gets through broken, or a good one is refused,
 add the file there with the rule that fixes it.
+
+`check-drafts-toolbox.mjs` exercises the drafts toolbox in a throwaway folder: every refusal
+(paths out of drafts/ by "..", absolute path or link, file:// and data: URLs, a zip-slip
+archive, downloads and unzips over the limits, drafts/ itself as a target) and a round trip
+(copy, zip, unzip, info, and a PDF when Chrome is installed; skipped, and said, otherwise).
+A new tool or limit gets its refusal here in the same change.
 
 When you add a prompt section that depends on the session kind, the mode or a config flag,
 add it to the `SECTIONS` table in `check-prompts.mjs` in the same change.
