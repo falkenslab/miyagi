@@ -3,7 +3,7 @@
 ## Flow
 
 ```
-cli.ts → workspace config → toSessionConfig() → AgentSpec (agent.ts) → agent-kit runQuery()/runChatInk()
+cli.ts → workspace config → toSessionConfig() → AgentSpec (agent.ts) → agent-kit runQuery() + createProgressView() / runChatInk()
                                                     ├─ system prompt (prompts/system/*.md)
                                                     ├─ plugin/ skills + commands, agent-kit knowledge plugin
                                                     ├─ Playwright MCP → Moodle

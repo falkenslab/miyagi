@@ -132,7 +132,7 @@ Todas aceptan `--dir <carpeta>` para trabajar con un curso sin entrar en su carp
 | --- | --- | --- |
 | `teacher-agent init` | Prepara una carpeta nueva para un curso (las preguntas del paso 3) y ofrece explorar tu Moodle. | |
 | `teacher-agent chat` | Conversación con el asistente a pantalla completa, siempre pidiendo permiso antes de publicar. Dentro, `/resume` retoma una conversación anterior. | `--headless`, `--inline` (sin pantalla completa), `--plain` (chat de texto simple), `--continue` (retoma la última conversación) |
-| `teacher-agent run` | Gestiona el curso entero de una sentada: corregir, foro, contenido y resumen del progreso. | `--mode guided\|interactive\|autonomous`, `--task "…"`, `--headless` |
+| `teacher-agent run` | Gestiona el curso entero de una sentada: corregir, foro, contenido y resumen del progreso. | `--mode guided\|interactive\|autonomous`, `--task "…"`, `--headless`, `--plain` (texto simple, sin spinner ni paneles) |
 | `teacher-agent explore` | Mira (sin crear nada) qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. | `--headless` |
 | `teacher-agent ingest` | Lee los documentos de `sources` (o los que indiques) y toma apuntes, sin abrir Moodle. | `[archivos…]` |
 | `teacher-agent skills` | Lista las habilidades del asistente, incluidas las tuyas. | |

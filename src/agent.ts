@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import {
   buildSessionOptions,
-  createConsoleRenderer,
+  createProgressView,
   runChatInk,
   type RunFolder,
   runQuery,
@@ -309,7 +309,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
 
   // The Ink chat shows these in its own header (full screen would wipe anything printed
   // before it); the readline chat, like the one-shot kinds, gets them printed.
-  const plainChat = parseBooleanFlag(args, "--plain") === true || !process.stdin.isTTY || !process.stdout.isTTY;
+  const plain = parseBooleanFlag(args, "--plain") === true || !process.stdin.isTTY || !process.stdout.isTTY;
   const printHeading = (runDir?: string): void => {
     console.log(ui.heading(sessionHeading(kind, mode)));
     console.log(ui.dim(t().headingWorkspace(workspace.classroom.label, workspaceDir)));
@@ -318,7 +318,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   };
 
   if (kind === "chat") {
-    if (plainChat) printHeading();
+    if (plain) printHeading();
     // Each chat is a run folder under sessions/ keeping its whole conversation (agent-kit's
     // runs, ADR-011): --continue starts with the latest one, /resume switches to another, and
     // either reopens the session in that same folder. The opener runs again on each switch.
@@ -344,9 +344,9 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
           },
         },
         mode,
-        plain: plainChat,
+        plain,
         fullscreen: parseBooleanFlag(args, "--inline") !== true,
-        welcomeMessage: plainChat ? t().welcomePlain : ui.dim(t().welcomeInk),
+        welcomeMessage: plain ? t().welcomePlain : ui.dim(t().welcomeInk),
         promptLabel: `\n${ui.user(t().promptLabel)} `,
         agentLabel: ui.agent("teacher-agent>"),
         formatAction: friendlyToolLabel,
@@ -364,24 +364,27 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   printHeading(runDir);
   const { options } = await openSession(runDir);
 
-  // One-shot "run"/"ingest"/"explore": a single string prompt, printed straight to the
-  // console via agent-kit's own normalized AgentEvent stream (runQuery()) — no interactive REPL.
-  // Same console rendering as the chat (agent-kit's createConsoleRenderer): no blank line
-  // between consecutive actions.
-  const renderer = createConsoleRenderer({ formatAction: friendlyToolLabel });
+  // One-shot "run"/"ingest"/"explore": a single string prompt and agent-kit's normalized
+  // AgentEvent stream (runQuery()), shown with its Ink progress view: a spinner with the
+  // current action, the chat's approval panels and a status bar. --plain (or no TTY) keeps
+  // the plain console lines.
+  const renderer = createProgressView({ formatAction: friendlyToolLabel, toolPhrase, mode, plain });
   const run = runQuery(initialPrompt(kind, workspaceDir, args), options);
 
   // Without a handler, Ctrl+C killed the process on the spot, with no word about what was
   // kept. The first one interrupts the run and lets it close normally (so the end message
   // below still prints); a second one exits without waiting.
   let interrupted = false;
+  // As an "info" event, not writeLine(): agent-kit 0.13's progress view drops writeLine()'s
+  // text (it goes to its inner, silent console renderer); an event shows in both views.
+  const notice = (text: string) => renderer.render({ type: "info", level: "warning", text });
   const onSigint = () => {
     if (interrupted) {
-      renderer.writeLine(ui.warn(t().exitingNow));
+      notice(t().exitingNow);
       process.exit(130);
     }
     interrupted = true;
-    renderer.writeLine(ui.warn(t().interrupting));
+    notice(t().interrupting);
     void run.interrupt().finally(() => run.close());
   };
   process.on("SIGINT", onSigint);
@@ -396,6 +399,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     process.off("SIGINT", onSigint);
     run.close();
     renderer.endLine();
+    await renderer.close();
   }
   printSessionEnd(kind, workspaceDir, runDir, interrupted);
   process.exitCode = interrupted ? 130 : failed ? 1 : 0;

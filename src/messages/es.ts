@@ -7,7 +7,7 @@ Comandos:
   init [--dir <ruta>]
       Crea un workspace nuevo en el directorio indicado (o en el actual) y ofrece
       explorar a continuación qué admite ese Moodle.
-  run [--dir <ruta>] [--mode interactive|guided|autonomous] [--headless] [--task "<texto>"]
+  run [--dir <ruta>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<texto>"]
       Gestiona el curso de una sentada: corrige entregas pendientes, atiende el foro,
       revisa o añade contenido y resume el progreso de la clase. Sin --mode, pregunta
       el modo. Con --task hace solo esa tarea (p. ej. --task "construye un curso de
@@ -17,10 +17,10 @@ Comandos:
       alterna con interactive. --inline deja la conversación en el historial de la
       terminal y --plain usa el chat de texto simple. --continue retoma la última
       conversación de este curso, y /resume, dentro del chat, deja elegir otra.
-  explore [--dir <ruta>] [--headless]
+  explore [--dir <ruta>] [--headless] [--plain]
       Mira (sin crear nada) qué tipos de actividad y de pregunta admite este Moodle y lo
       apunta en knowledge/moodle-capabilities.md.
-  ingest [--dir <ruta>] [ficheros...]
+  ingest [--dir <ruta>] [--plain] [ficheros...]
       Incorpora a la base de conocimiento (knowledge/) los ficheros indicados o, sin
       ninguno, todo lo de sources/ que aún no esté en ella. Sin navegador ni
       Moodle.

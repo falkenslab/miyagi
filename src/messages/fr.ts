@@ -7,7 +7,7 @@ Commandes :
   init [--dir <chemin>]
       Crée un nouvel espace de travail dans le dossier indiqué (ou l'actuel) et propose
       ensuite d'explorer ce que permet ce Moodle.
-  run [--dir <chemin>] [--mode interactive|guided|autonomous] [--headless] [--task "<texte>"]
+  run [--dir <chemin>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<texte>"]
       Gère le cours d'une traite : corrige les devoirs en attente, répond sur le forum,
       revoit ou ajoute du contenu et résume la progression de la classe. Sans --mode,
       demande le mode. Avec --task, ne fait que cette tâche (p. ex. --task "construis un
@@ -17,10 +17,10 @@ Commandes :
       interactive. --inline garde la conversation dans l'historique du terminal et
       --plain utilise le chat en texte simple. --continue reprend la dernière
       conversation de ce cours, et /resume, dans le chat, permet d'en choisir une autre.
-  explore [--dir <chemin>] [--headless]
+  explore [--dir <chemin>] [--headless] [--plain]
       Regarde (sans rien créer) quels types d'activité et de question admet ce Moodle et
       les note dans knowledge/moodle-capabilities.md.
-  ingest [--dir <chemin>] [fichiers...]
+  ingest [--dir <chemin>] [--plain] [fichiers...]
       Ajoute à la base de connaissances (knowledge/) les fichiers indiqués ou, sans
       fichier, tout ce qui est dans sources/ et n'y est pas encore. Sans navigateur ni
       Moodle.

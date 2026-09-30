@@ -143,7 +143,7 @@ Commands:
   init [--dir <path>]
       Creates a new workspace in the given directory (or the current one) and offers
       to explore what that Moodle supports next.
-  run [--dir <path>] [--mode interactive|guided|autonomous] [--headless] [--task "<text>"]
+  run [--dir <path>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<text>"]
       Manages the course in one go: grades pending submissions, answers the forum,
       reviews or adds content and summarizes the class's progress. Without --mode, asks
       for the mode. With --task it does only that task (e.g. --task "build a 3-unit
@@ -153,10 +153,10 @@ Commands:
       it to interactive. --inline keeps the conversation in the terminal's scrollback
       and --plain uses the plain-text chat. --continue resumes this course's latest
       conversation, and /resume, inside the chat, lets you pick another.
-  explore [--dir <path>] [--headless]
+  explore [--dir <path>] [--headless] [--plain]
       Looks (without creating anything) at the activity and question types this Moodle
       supports and notes them in knowledge/moodle-capabilities.md.
-  ingest [--dir <path>] [files...]
+  ingest [--dir <path>] [--plain] [files...]
       Adds the given files to the knowledge base (knowledge/) or, with none, everything
       in sources/ not in it yet. No browser, no Moodle.
   skills [--dir <path>]

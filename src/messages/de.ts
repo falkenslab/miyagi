@@ -7,7 +7,7 @@ Befehle:
   init [--dir <Pfad>]
       Legt im angegebenen (oder aktuellen) Verzeichnis einen neuen Arbeitsbereich an
       und bietet danach an zu erkunden, was dieses Moodle unterstützt.
-  run [--dir <Pfad>] [--mode interactive|guided|autonomous] [--headless] [--task "<Text>"]
+  run [--dir <Pfad>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<Text>"]
       Betreut den Kurs in einem Durchgang: bewertet offene Abgaben, antwortet im Forum,
       prüft oder ergänzt Inhalte und fasst den Fortschritt der Klasse zusammen. Ohne
       --mode fragt es nach dem Modus. Mit --task erledigt es nur diese Aufgabe (z. B.
@@ -18,10 +18,10 @@ Befehle:
       interactive. --inline lässt das Gespräch im Verlauf des Terminals und --plain
       nutzt den reinen Text-Chat. --continue setzt das letzte Gespräch dieses Kurses
       fort, und /resume lässt im Chat ein anderes wählen.
-  explore [--dir <Pfad>] [--headless]
+  explore [--dir <Pfad>] [--headless] [--plain]
       Schaut (ohne etwas anzulegen), welche Aktivitäts- und Fragetypen dieses Moodle
       unterstützt, und notiert sie in knowledge/moodle-capabilities.md.
-  ingest [--dir <Pfad>] [Dateien...]
+  ingest [--dir <Pfad>] [--plain] [Dateien...]
       Nimmt die angegebenen Dateien in die Wissensbasis (knowledge/) auf oder, ohne
       Dateien, alles aus sources/, was noch nicht darin ist. Ohne Browser und ohne Moodle.
   skills [--dir <Pfad>]
