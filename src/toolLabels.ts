@@ -63,10 +63,6 @@ function describePlaywright(shortName: string, input: Record<string, unknown>): 
       return m.networkRequests;
     case "browser_network_request":
       return input.part === "response-body" ? m.saveResponse : m.requestDetails;
-    case "browser_start_video":
-      return m.startVideo;
-    case "browser_stop_video":
-      return m.stopVideo;
     case "browser_run_code_unsafe":
       return m.runCodeUnsafe;
     case "browser_handle_dialog":

@@ -128,8 +128,6 @@ export interface Messages {
     networkRequests: string;
     saveResponse: string;
     requestDetails: string;
-    startVideo: string;
-    stopVideo: string;
     runCodeUnsafe: string;
     acceptDialog: string;
     dismissDialog: string;
@@ -317,8 +315,6 @@ details.`,
     networkRequests: "Checking network requests",
     saveResponse: "Saving a network response's body to disk",
     requestDetails: "Reading network request details",
-    startVideo: "Starting video recording",
-    stopVideo: "Stopping video recording",
     runCodeUnsafe: "Trying to run unrestricted code (blocked)",
     acceptDialog: "Accepting a browser dialog",
     dismissDialog: "Dismissing a browser dialog",

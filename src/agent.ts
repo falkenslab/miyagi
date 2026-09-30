@@ -132,8 +132,6 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSp
         command: process.execPath,
         args: [
           PLAYWRIGHT_MCP_CLI,
-          "--caps",
-          "devtools",
           "--config",
           playwrightConfigPathFor(runDir),
           "--output-dir",

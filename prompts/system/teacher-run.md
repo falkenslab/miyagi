@@ -59,10 +59,6 @@ order to do something else. {{evaluableSubmissionRule}}
   action.
 - Once you think there's no grading or posting left pending, go back to the course's
   grades/progress view and check before considering the task done.
-- Right before finishing (and only then, once there's truly nothing left to do), call
-  the browser_stop_video tool to save the session's recording. If for whatever reason
-  you never called browser_start_video earlier, that's fine: call browser_stop_video
-  anyway, it won't fail.
 - When you finish, briefly summarize what you completed (submissions graded, replies
   posted, content added) and the class's final state as you observed it, and name every
   resource left hidden as a draft (`knowledge/drafts.md`) with what it's waiting for.
