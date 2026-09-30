@@ -1,4 +1,4 @@
-import { createFriendlyToolLabel, truncate, ui } from "@falkenslab/agent-kit";
+import { createFriendlyToolLabel, truncate } from "@falkenslab/agent-kit";
 import { t } from "./messages/index.js";
 
 /**
@@ -83,6 +83,3 @@ export const friendlyToolLabel = createFriendlyToolLabel({
   extraLocalServers: ["playwright"],
 });
 
-/** The chat's tool lines (and its spinner) in gray, so they don't read as the agent's replies.
- * The one-shot kinds keep `friendlyToolLabel`: the console renderer colors `[action]` lines itself. */
-export const chatToolLabel = (toolName: string, input: unknown): string => ui.dim(friendlyToolLabel(toolName, input));

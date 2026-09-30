@@ -45,7 +45,7 @@ import {
 import { offerPracticeRunner, promptInitWorkspace, promptMode } from "./menu.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
-import { chatToolLabel, friendlyToolLabel } from "./toolLabels.js";
+import { friendlyToolLabel } from "./toolLabels.js";
 import { installPublishGate } from "./publishGate.js";
 import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
@@ -349,7 +349,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         welcomeMessage: plainChat ? t().welcomePlain : ui.dim(t().welcomeInk),
         promptLabel: `\n${ui.user(t().promptLabel)} `,
         agentLabel: ui.agent("teacher-agent>"),
-        formatAction: chatToolLabel,
+        formatAction: friendlyToolLabel,
         initialPrompt: loadPrompt("messages/chat-opening-teacher.md"),
         historyPath: path.join(sessionsDirFor(workspaceDir), "history.jsonl"),
       },
