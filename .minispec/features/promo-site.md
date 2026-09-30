@@ -18,7 +18,13 @@ Publish a one-page promotional site for teacher-agent, in Spanish and English, o
 ## Changes
 
 - **Design skills for whoever builds the site** (not the runtime agent's `plugin/`): enable `example-skills@anthropic-agent-skills` in the project's `.claude/settings.json` (`extraKnownMarketplaces` + `enabledPlugins`), and use `frontend-design` for the look, `theme-factory` only if its themes fit the owl's palette, `canvas-design` for the social preview image and `webapp-testing` to check the result. Say in `CLAUDE.md` that they're there for the site.
-- **Site** in `site/`, static (HTML + CSS, no build step, no framework), light and fast, works at phone width, respects the dark/light preference:
+- **Site** in `site/`, static (HTML + CSS, no build step, no framework), light and fast, respects the dark/light preference.
+- **Responsive, mobile-first** (many teachers will open the link on their phone):
+  - one fluid layout from 320 px up, with breakpoints where the content needs them (phone, tablet, desktop, wide screens capped to a readable width);
+  - multi-column sections stack on narrow screens; the navigation folds into a menu; type scales with `clamp()`;
+  - touch targets of at least 44 px, no hover-only interactions, no horizontal scroll except inside the install command's code block;
+  - screenshots and the owl sized with `max-width: 100%` and `srcset`/`sizes` (a narrower crop or size for phones), so a phone never downloads the desktop image.
+- Pages:
   - `site/index.html` in Spanish and `site/en/index.html` in English, same structure, a language switch on each, `lang` and `hreflang` set;
   - sections: hero with the owl and one line of what it does; what it does in a teacher's week (grade, forum, build content, summarize the class); how it keeps you in control (approval before publishing, hidden drafts, stays inside the course); what it remembers (the knowledge base); languages and Moodle support; install in three steps (Chrome, Node, the one `npm install -g` line) with a link to the CheatSheet; FAQ highlights; footer with GitHub, license (MIT) and the latest release;
   - the chat screenshot, and an English one taken with `--language=en` against the sandbox;
@@ -30,7 +36,8 @@ Publish a one-page promotional site for teacher-agent, in Spanish and English, o
 ## Acceptance
 
 - `https://falkenslab.github.io/teacher-agent/` (es) and `/en/` (en) are live, linked to each other, and deployed by the workflow from `main`.
-- `webapp-testing` checks of both pages at 1280 and 390 px wide: nothing overflows, images load, links work, the language switch works; screenshots kept in a test report.
+- `webapp-testing` checks of both pages at 360, 390, 768, 1024, 1440 and 1920 px wide, portrait and landscape on the phone sizes: no horizontal scroll, nothing cut or overlapping, readable text without zooming, images load (the small ones on phones), links, the menu and the language switch work by touch and keyboard; screenshots of each width kept in a test report.
+- Lighthouse's mobile run (not only desktop) for the scores below.
 - Lighthouse (or equivalent) accessibility and performance ≥ 90 on both pages.
 - Sharing the URL shows the preview image and the right title/description.
 - The site doesn't reach the npm package (`npm pack` contents unchanged).
