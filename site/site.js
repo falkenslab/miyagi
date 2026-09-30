@@ -23,6 +23,34 @@ if (toggle && links) {
   sync();
 }
 
+// Theme: system → light → dark. The choice is remembered; the head's inline script applies it
+// before the first paint. Without JS the button stays hidden and the page follows the system.
+const themeButton = document.querySelector(".theme");
+if (themeButton) {
+  const order = ["system", "light", "dark"];
+  const show = (theme) => {
+    const label = themeButton.dataset[theme];
+    themeButton.setAttribute("aria-label", label);
+    themeButton.dataset.tip = label;
+    themeButton.querySelector("use").setAttribute("href", `#i-${theme}`);
+  };
+  let theme = document.documentElement.dataset.theme ?? "system";
+  show(theme);
+  themeButton.hidden = false;
+  themeButton.addEventListener("click", () => {
+    theme = order[(order.indexOf(theme) + 1) % order.length];
+    if (theme === "system") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = theme;
+    try {
+      if (theme === "system") localStorage.removeItem("miyagi-theme");
+      else localStorage.setItem("miyagi-theme", theme);
+    } catch {
+      // Storage blocked: the choice lasts until the page is left.
+    }
+    show(theme);
+  });
+}
+
 // Copy the install command; the button says so, in the page's language.
 for (const button of document.querySelectorAll(".copy")) {
   button.addEventListener("click", async () => {

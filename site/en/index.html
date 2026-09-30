@@ -12,36 +12,60 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="es_ES">
-  <meta property="og:title" content="miyagi: your Moodle course, with an assistant that asks before it publishes">
-  <meta property="og:description" content="It grades, answers the forum, builds units and quizzes, writes your course plan and sums up the class. Nothing reaches your students without your say-so.">
+  <meta property="og:title" content="miyagi runs your Moodle course. You give the go-ahead.">
+  <meta property="og:description" content="It grades with your rubric, answers the forum, builds units, quizzes and games, and tells you how the class is doing. You can teach it new skills. Nothing reaches your students without your say-so.">
   <meta property="og:url" content="https://falkenslab.github.io/miyagi/en/">
-  <meta property="og:image" content="https://falkenslab.github.io/miyagi/assets/og-en.png">
+  <meta property="og:image" content="https://falkenslab.github.io/miyagi/assets/og-en.png?v=2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="miyagi's sensei face, with his headband, and the page's tagline">
+  <meta property="og:image:alt" content="miyagi's logo and the page's headline: &quot;miyagi runs your Moodle course. You give the go-ahead.&quot;">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#18181b">
   <link rel="icon" href="../assets/miyagi.svg" type="image/svg+xml">
   <link rel="preload" href="../fonts/atkinson-next-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <script>try{var t=localStorage.getItem("miyagi-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="../styles.css">
   <script src="../site.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#content">Skip to content</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="logo" viewBox="0 0 228 244">
+        <g font-family="ui-monospace, 'Cascadia Mono', Consolas, Menlo, 'DejaVu Sans Mono', monospace" font-size="40" font-weight="600">
+        <text y="44.800000000000004"><tspan x="54" style="fill:var(--logo-hair)">.</tspan><tspan x="78" style="fill:var(--logo-hair)">-</tspan><tspan x="102" style="fill:var(--logo-hair)">-</tspan><tspan x="126" style="fill:var(--logo-hair)">-</tspan><tspan x="150" style="fill:var(--logo-hair)">-</tspan><tspan x="174" style="fill:var(--logo-hair)">-</tspan><tspan x="198" style="fill:var(--logo-hair)">.</tspan></text>
+        <text y="90.8"><tspan x="6" style="fill:var(--logo-band)">~</tspan><tspan x="30" style="fill:var(--logo-band)">=</tspan><tspan x="54" style="fill:var(--logo-band)">[</tspan><tspan x="78" style="fill:var(--logo-band)">=</tspan><tspan x="102" style="fill:var(--logo-band)">=</tspan><tspan x="126" style="fill:var(--logo-sun)">o</tspan><tspan x="150" style="fill:var(--logo-band)">=</tspan><tspan x="174" style="fill:var(--logo-band)">=</tspan><tspan x="198" style="fill:var(--logo-band)">]</tspan></text>
+        <text y="136.79999999999998"><tspan x="54" style="fill:var(--logo-skin)">|</tspan><tspan x="102" style="fill:var(--logo-skin)">=</tspan><tspan x="150" style="fill:var(--logo-skin)">=</tspan><tspan x="198" style="fill:var(--logo-skin)">|</tspan></text>
+        <text y="182.79999999999998"><tspan x="54" style="fill:var(--logo-beard)">|</tspan><tspan x="78" style="fill:var(--logo-beard)">/</tspan><tspan x="102" style="fill:var(--logo-beard)">~</tspan><tspan x="126" style="fill:var(--logo-beard)">~</tspan><tspan x="150" style="fill:var(--logo-beard)">~</tspan><tspan x="174" style="fill:var(--logo-beard)">\</tspan><tspan x="198" style="fill:var(--logo-beard)">|</tspan></text>
+        <text y="228.79999999999998"><tspan x="78" style="fill:var(--logo-beard)">\</tspan><tspan x="102" style="fill:var(--logo-beard)">_</tspan><tspan x="126" style="fill:var(--logo-beard)">Y</tspan><tspan x="150" style="fill:var(--logo-beard)">_</tspan><tspan x="174" style="fill:var(--logo-beard)">/</tspan></text>
+        </g>
+      </symbol>
+      <symbol id="i-what" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15v4M17 17h4"/></symbol>
+      <symbol id="i-how" viewBox="0 0 24 24"><path d="M3 6l1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17M11 6h10M11 12h10M11 18h10"/></symbol>
+      <symbol id="i-control" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+      <symbol id="i-install" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+      <symbol id="i-questions" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.9-.9 1.5v.5M12 17h.01"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.6 3.7 5.6 3.7 9s-1.3 6.4-3.7 9c-2.4-2.6-3.7-5.6-3.7-9S9.6 5.6 12 3z"/></symbol>
+      <symbol id="i-system" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+      <symbol id="i-light" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-dark" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+    </defs>
+  </svg>
 
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="./"><img src="../assets/miyagi.svg" alt="" width="34" height="36">miyagi</a>
+      <a class="brand" href="./"><svg class="logo" viewBox="0 0 228 244" width="34" height="36" aria-hidden="true"><use href="#logo"/></svg>miyagi</a>
       <nav class="nav" aria-label="Main">
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
         <ul class="nav-links" id="menu">
-          <li><a href="#what">What it does</a></li>
-          <li><a href="#how">How it works</a></li>
-          <li><a href="#control">You're in charge</a></li>
-          <li><a href="#install">Install</a></li>
-          <li><a href="#questions">Questions</a></li>
+          <li><a href="#what" data-tip="What it does"><svg class="icon" aria-hidden="true"><use href="#i-what"/></svg><span class="label">What it does</span></a></li>
+          <li><a href="#how" data-tip="How it works"><svg class="icon" aria-hidden="true"><use href="#i-how"/></svg><span class="label">How it works</span></a></li>
+          <li><a href="#control" data-tip="You're in charge"><svg class="icon" aria-hidden="true"><use href="#i-control"/></svg><span class="label">You're in charge</span></a></li>
+          <li><a href="#install" data-tip="Install"><svg class="icon" aria-hidden="true"><use href="#i-install"/></svg><span class="label">Install</span></a></li>
+          <li><a href="#questions" data-tip="Questions"><svg class="icon" aria-hidden="true"><use href="#i-questions"/></svg><span class="label">Questions</span></a></li>
         </ul>
-        <a class="lang" href="../" hreflang="es" lang="es">Español</a>
+        <a class="lang icon-btn" href="../" hreflang="es" lang="es" aria-label="Español" data-tip="Español"><svg class="icon" aria-hidden="true"><use href="#i-globe"/></svg></a>
+        <button class="theme icon-btn" type="button" hidden aria-label="Theme: system" data-tip="Theme: system" data-system="Theme: system" data-light="Theme: light" data-dark="Theme: dark"><svg class="icon" aria-hidden="true"><use href="#i-system"/></svg></button>
       </nav>
     </div>
   </header>
@@ -49,10 +73,11 @@
   <main id="content">
     <section class="hero" aria-labelledby="title">
       <div class="wrap">
+        <p class="hero-brand"><svg class="logo" viewBox="0 0 228 244" width="84" height="90" aria-hidden="true"><use href="#logo"/></svg>miyagi</p>
         <div>
-          <p class="kicker">An assistant for Moodle teachers</p>
-          <h1 id="title">miyagi runs your Moodle course. You give the go-ahead.</h1>
-          <p class="lead">It grades with your rubric, answers the forum, builds units, quizzes and games, and tells you how the class is doing. It works with your teacher account and publishes nothing without your say-so.</p>
+          <p class="kicker">AI assistant for teachers to manage Moodle courses</p>
+          <h1 id="title">miyagi runs your Moodle course. You give the go&#8209;ahead.</h1>
+          <p class="lead">It grades with your rubric, answers the forum, builds units, quizzes and games, and tells you how the class is doing. You can teach it new skills to fit your subject. It works with your teacher account and publishes nothing without your say-so.</p>
           <div class="actions">
             <a class="button primary" href="#install">Install miyagi</a>
             <a class="button" href="#what">See what it does</a>
@@ -62,7 +87,7 @@
 
         <div class="demo">
           <div class="terminal">
-            <div class="bar" aria-hidden="true"><img src="../assets/miyagi.svg" alt="" width="26" height="28">miyagi</div>
+            <div class="bar" aria-hidden="true"><svg class="logo" viewBox="0 0 228 244" width="26" height="28"><use href="#logo"/></svg>miyagi</div>
             <ol class="scene" data-scene="grade" aria-label="Example: grading an assignment">
               <li class="t-you"><b>you&gt;</b> <span class="typed">Grade Assignment 2 with the unit's rubric</span></li>
               <li class="t-tool">Reading your rubric and your criteria</li>

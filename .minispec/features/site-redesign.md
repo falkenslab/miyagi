@@ -48,6 +48,18 @@ Also:
 - Update `og-es.png` / `og-en.png` only if the headline changes.
 - Nothing claimed that the product doesn't back: every capability traceable to `plugin/skills/`, `prompts/` or a report in `tests/`; no testimonials, logos, multipliers or usage numbers until they are real.
 
+## Review corrections
+
+First version published 2026-09-30 (`888d1d1`). The teacher's corrections, by block number of the page (0 header … 16 footer), both languages:
+
+- **0.2 Menu links:** an icon each instead of the text, with a tooltip saying what it is. The link keeps its text as its accessible name (`aria-label`), since a tooltip doesn't show on touch or to screen readers.
+- **0.3 Language switch:** an icon instead of "English" / "Español", with a tooltip and the same accessible name.
+- **0.4 Theme switch (new):** light, dark or system, in the header next to the language switch, as an icon with a tooltip like 0.2 and 0.3. Default: system. The choice is remembered (`localStorage`, wrapped in try/catch) and applied before the first paint so the page doesn't flash. Today dark mode only follows `prefers-color-scheme`; the dark palette needs a contrast check too (not covered by the first report).
+- **Social preview (og):** `og-es.png` / `og-en.png` redone with the page's own headline (1.2, as it ends up after this review) instead of the old tagline, and a subtitle that matches the lead (1.3); `og:title` and `og:description` of both pages say the same. Same layout (logo on sumi, 1200×630), with `canvas-design`; check the preview WhatsApp actually shows (it caches: test with a fresh URL, e.g. `?v=2`).
+- **1.0 Brand at the top (new):** the miyagi logo, larger than in the header, with the word "miyagi" to its right, the pair centred on the page, opening the hero above the kicker.
+- **1.1 Kicker:** «Asistente de IA de gestión de aulas Moodle para profesores» (English: "AI assistant for teachers to manage Moodle courses").
+- **1.3 Lead:** add that you can teach it new skills to adapt it to your subject (own skills in text files, no programming; README "Habilidades propias").
+
 ## Acceptance
 
 - Both pages follow the order above, in the current palette and fonts, and link to each other.

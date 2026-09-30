@@ -48,6 +48,9 @@
   --sol: #bc002d;          /* the sun as a fill: primary buttons, step numbers */
   --linea: #dcdcd6;        /* hairlines on paper */
 
+  /* The logo's colours on paper (assets/miyagi.svg); redefined for dark and on sumi. */
+  --logo-hair: #7c8088; --logo-band: #18181b; --logo-sun: #bc002d; --logo-skin: #a86b3d; --logo-beard: #5c6068;
+
   --bg: var(--papel);
   --fg: var(--tinta);
   --fg-2: var(--tinta-suave);
@@ -68,15 +71,26 @@
   color-scheme: light;
 }
 
+/* Dark: follows the system unless the visitor picked a theme (the switch sets data-theme on <html>). */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg: #121214;
     --fg: var(--tiza);
     --fg-2: #b9c4bc;
     --accent-text: var(--borla);
     --rule: #2e2e33;
+    --logo-hair: #b9bcc2; --logo-band: #f3f3f0; --logo-sun: #e0303f; --logo-skin: #e2b48a; --logo-beard: #cfd1d6;
     color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --bg: #121214;
+  --fg: var(--tiza);
+  --fg-2: #b9c4bc;
+  --accent-text: var(--borla);
+  --rule: #2e2e33;
+  --logo-hair: #b9bcc2; --logo-band: #f3f3f0; --logo-sun: #e0303f; --logo-skin: #e2b48a; --logo-beard: #cfd1d6;
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -123,16 +137,35 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 }
 .site-header .wrap { display: flex; align-items: center; gap: 1rem; min-height: 4rem; }
 .brand { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; color: var(--fg); text-decoration: none; font-weight: 800; font-size: 1.15rem; }
-.brand img { width: 2.1rem; }
+.brand .logo { width: 2.1rem; }
+.logo { height: auto; }
 .nav { margin-left: auto; display: flex; align-items: center; gap: 0.25rem; }
 .nav-links { display: flex; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
-.nav a, .lang, .menu-toggle {
-  display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.75rem;
+.nav a, .icon-btn, .menu-toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; min-height: 44px; min-width: 44px; padding: 0 0.75rem;
   border-radius: 8px; color: var(--fg); text-decoration: none; font-size: var(--step--1);
 }
-.nav a:hover { background: color-mix(in srgb, var(--fg) 8%, transparent); }
-.lang { border: 1px solid var(--rule); margin-left: 0.5rem; }
+.nav a:hover, .icon-btn:hover { background: color-mix(in srgb, var(--fg) 8%, transparent); }
+.icon { width: 1.35rem; height: 1.35rem; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn { padding: 0; border: 1px solid var(--rule); background: none; cursor: pointer; font: inherit; }
+.lang { margin-left: 0.5rem; }
+.icon-btn[hidden] { display: none; }
 .menu-toggle { display: none; background: none; border: 1px solid var(--rule); font: inherit; font-size: var(--step--1); cursor: pointer; }
+
+/* On wide screens the menu is icons; the label stays for screen readers and a tooltip shows it. */
+@media (min-width: 48rem) {
+  .nav-links a { padding: 0; }
+  .nav-links .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+[data-tip] { position: relative; }
+[data-tip]::after {
+  content: attr(data-tip); display: none; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  white-space: nowrap; padding: 0.3rem 0.6rem; border-radius: 6px; border: 1px solid #3a3a40;
+  background: var(--pizarra); color: var(--tiza); font: 600 0.8rem/1.3 var(--font); pointer-events: none; z-index: 10;
+}
+.icon-btn[data-tip]::after { left: auto; right: 0; transform: none; }
+@media (hover: hover) { [data-tip]:hover::after { display: block; } }
+[data-tip]:focus-visible::after { display: block; }
 
 @media (max-width: 47.99rem) {
   .menu-toggle { display: inline-flex; }
@@ -142,7 +175,9 @@ p { margin: 0 0 1em; max-width: var(--measure); }
     background: var(--bg); border-bottom: 1px solid var(--rule);
   }
   .nav-links[hidden] { display: none; }
-  .nav-links a { width: 100%; font-size: var(--step-0); }
+  .nav-links a { width: 100%; justify-content: flex-start; font-size: var(--step-0); }
+  .nav-links a::after { display: none !important; }
+  .lang { margin-left: 0.25rem; }
 }
 
 /* ---------- Hero ---------- */
@@ -150,8 +185,13 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 .hero { padding-block: clamp(2.5rem, 7vw, 5.5rem) clamp(2.5rem, 6vw, 4.5rem); }
 .hero .wrap { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
 @media (min-width: 60rem) { .hero .wrap { grid-template-columns: 1fr 1.05fr; } }
+.hero-brand {
+  grid-column: 1 / -1; justify-self: center; display: flex; align-items: center; gap: clamp(0.8rem, 2vw, 1.25rem);
+  margin: 0 0 clamp(0.5rem, 2vw, 1.5rem); font-size: var(--step-3); font-weight: 800; letter-spacing: -0.02em; line-height: 1;
+}
+.hero-brand .logo { width: clamp(3.6rem, 3rem + 3vw, 5.5rem); }
 .hero h1 { max-width: 16ch; }
-.lead { font-size: var(--step-1); line-height: 1.45; color: var(--fg-2); max-width: 36ch; }
+.lead { font-size: var(--step-1); line-height: 1.45; color: var(--fg-2); max-width: 40ch; }
 .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
 .button {
   display: inline-flex; align-items: center; justify-content: center; min-height: 48px;
@@ -172,7 +212,8 @@ p { margin: 0 0 1em; max-width: var(--measure); }
   overflow-wrap: anywhere;
 }
 .terminal .bar { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; color: #b8c7bd; font-size: 0.85em; }
-.terminal .bar img { width: 1.6rem; }
+.terminal .bar .logo { width: 1.6rem; }
+.terminal { --logo-hair: #b9bcc2; --logo-band: #f3f3f0; --logo-sun: #e0303f; --logo-skin: #e2b48a; --logo-beard: #cfd1d6; }
 .terminal ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.55rem; }
 .terminal li { max-width: none; }
 .t-you { background: #ffffff12; border-radius: 6px; padding: 0.35rem 0.6rem; }
