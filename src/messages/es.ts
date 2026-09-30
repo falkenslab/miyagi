@@ -132,6 +132,23 @@ detalle.`,
   manualLoginLines: ["Este workspace no tiene credenciales guardadas.", "Inicia sesión a mano en la ventana del navegador que ya está abierta."],
   manualLoginQuestion: "Pulsa Intro cuando hayas iniciado sesión (o 'q' para cancelar): ",
 
+  toolPhrases: {
+    navigate: ["abrió {n} página", "abrió {n} páginas"],
+    back: ["volvió atrás", "volvió atrás {n} veces"],
+    click: ["pulsó {n} vez", "pulsó {n} veces"],
+    type: ["escribió en {n} campo", "escribió en {n} campos"],
+    fillForm: ["rellenó {n} formulario", "rellenó {n} formularios"],
+    select: ["eligió {n} opción", "eligió {n} opciones"],
+    pressKey: ["pulsó {n} tecla", "pulsó {n} teclas"],
+    snapshot: ["leyó la página", "leyó la página {n} veces"],
+    evaluate: ["consultó la página", "consultó la página {n} veces"],
+    find: ["buscó en la página", "buscó en la página {n} veces"],
+    wait: ["esperó", "esperó {n} veces"],
+    upload: ["subió ficheros", "subió ficheros {n} veces"],
+    screenshot: ["hizo {n} captura", "hizo {n} capturas"],
+    approval: ["pidió aprobación", "pidió aprobación {n} veces"],
+  },
+
   tool: {
     navigate: (url) => `Abriendo ${url}`,
     aPage: "una página",

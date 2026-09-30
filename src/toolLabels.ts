@@ -1,5 +1,6 @@
-import { createFriendlyToolLabel, truncate } from "@falkenslab/agent-kit";
+import { createFriendlyToolLabel, truncate, type ToolPhrase } from "@falkenslab/agent-kit";
 import { t } from "./messages/index.js";
+import type { ToolPhraseKey } from "./messages/en.js";
 
 /**
  * `describe()` for `createFriendlyToolLabel()`'s override callback — agent-kit's own
@@ -83,3 +84,30 @@ export const friendlyToolLabel = createFriendlyToolLabel({
   extraLocalServers: ["playwright"],
 });
 
+
+/** Which phrase each browser tool (and the approval tool) counts with in a folded group. */
+const PHRASE_KEYS: Record<string, ToolPhraseKey> = {
+  browser_navigate: "navigate",
+  browser_navigate_back: "back",
+  browser_navigate_forward: "navigate",
+  browser_click: "click",
+  browser_hover: "click",
+  browser_drag: "click",
+  browser_type: "type",
+  browser_fill_form: "fillForm",
+  browser_select_option: "select",
+  browser_press_key: "pressKey",
+  browser_snapshot: "snapshot",
+  browser_evaluate: "evaluate",
+  browser_find: "find",
+  browser_wait_for: "wait",
+  browser_file_upload: "upload",
+  browser_take_screenshot: "screenshot",
+  request_human_approval: "approval",
+};
+
+/** `toolPhrase` for agent-kit's folded tool groups ("abrió 3 páginas, pulsó 5 veces"); other tools keep the kit's. */
+export function toolPhrase(toolName: string): ToolPhrase | undefined {
+  const key = PHRASE_KEYS[toolName.slice(toolName.lastIndexOf("__") + 2)];
+  return key ? t().toolPhrases[key] : undefined;
+}

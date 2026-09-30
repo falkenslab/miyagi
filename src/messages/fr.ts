@@ -132,6 +132,23 @@ README.md pour plus de détails.`,
   manualLoginLines: ["Aucun identifiant enregistré pour cet espace de travail.", "Connectez-vous à la main dans la fenêtre du navigateur déjà ouverte."],
   manualLoginQuestion: "Appuyez sur Entrée une fois connecté (ou 'q' pour annuler) : ",
 
+  toolPhrases: {
+    navigate: ["a ouvert {n} page", "a ouvert {n} pages"],
+    back: ["est revenu en arrière", "est revenu en arrière {n} fois"],
+    click: ["a cliqué {n} fois", "a cliqué {n} fois"],
+    type: ["a écrit dans {n} champ", "a écrit dans {n} champs"],
+    fillForm: ["a rempli {n} formulaire", "a rempli {n} formulaires"],
+    select: ["a choisi {n} option", "a choisi {n} options"],
+    pressKey: ["a appuyé sur {n} touche", "a appuyé sur {n} touches"],
+    snapshot: ["a lu la page", "a lu la page {n} fois"],
+    evaluate: ["a examiné la page", "a examiné la page {n} fois"],
+    find: ["a cherché dans la page", "a cherché dans la page {n} fois"],
+    wait: ["a attendu", "a attendu {n} fois"],
+    upload: ["a téléversé des fichiers", "a téléversé des fichiers {n} fois"],
+    screenshot: ["a pris {n} capture", "a pris {n} captures"],
+    approval: ["a demandé une approbation", "a demandé une approbation {n} fois"],
+  },
+
   tool: {
     navigate: (url) => `Ouverture de ${url}`,
     aPage: "une page",

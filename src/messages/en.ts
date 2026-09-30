@@ -3,6 +3,11 @@
  * is typed as `Messages`, so a missing key fails typecheck. Text for the model (prompts,
  * skills, tool descriptions, hook deny reasons) never goes here: it stays in English.
  */
+/** How each kind of browser action counts in a folded group's summary: [one, many], "{n}" the count. */
+export type ToolPhraseKey =
+  | "navigate" | "back" | "click" | "type" | "fillForm" | "select" | "pressKey" | "snapshot"
+  | "evaluate" | "find" | "wait" | "upload" | "screenshot" | "approval";
+
 export interface Messages {
   // cli.ts
   help: (globalConfigPath: string) => string;
@@ -87,6 +92,8 @@ export interface Messages {
   manualLoginQuestion: string;
 
   // toolLabels.ts: one line per browser tool call
+  toolPhrases: Record<ToolPhraseKey, [one: string, many: string]>;
+
   tool: {
     navigate: (url: string) => string;
     aPage: string;
@@ -259,6 +266,23 @@ details.`,
   manualLoginTitle: "Manual login required",
   manualLoginLines: ["No saved credentials for this workspace.", "Log in manually in the already-open browser window."],
   manualLoginQuestion: "Press Enter once you've finished logging in (or 'q' to cancel): ",
+
+  toolPhrases: {
+    navigate: ["opened {n} page", "opened {n} pages"],
+    back: ["went back", "went back {n} times"],
+    click: ["clicked once", "clicked {n} times"],
+    type: ["typed in {n} field", "typed in {n} fields"],
+    fillForm: ["filled in {n} form", "filled in {n} forms"],
+    select: ["chose {n} option", "chose {n} options"],
+    pressKey: ["pressed {n} key", "pressed {n} keys"],
+    snapshot: ["read the page", "read the page {n} times"],
+    evaluate: ["inspected the page", "inspected the page {n} times"],
+    find: ["searched the page", "searched the page {n} times"],
+    wait: ["waited", "waited {n} times"],
+    upload: ["uploaded files", "uploaded files {n} times"],
+    screenshot: ["took {n} screenshot", "took {n} screenshots"],
+    approval: ["asked for approval", "asked for approval {n} times"],
+  },
 
   tool: {
     navigate: (url) => `Navigating to ${url}`,

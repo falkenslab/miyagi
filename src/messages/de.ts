@@ -132,6 +132,23 @@ Mehr in README.md.`,
   manualLoginLines: ["Für diesen Arbeitsbereich sind keine Zugangsdaten gespeichert.", "Melden Sie sich im bereits geöffneten Browserfenster von Hand an."],
   manualLoginQuestion: "Drücken Sie Enter, sobald Sie angemeldet sind (oder 'q' zum Abbrechen): ",
 
+  toolPhrases: {
+    navigate: ["hat {n} Seite geöffnet", "hat {n} Seiten geöffnet"],
+    back: ["ist zurückgegangen", "ist {n}-mal zurückgegangen"],
+    click: ["hat {n}-mal geklickt", "hat {n}-mal geklickt"],
+    type: ["hat in {n} Feld geschrieben", "hat in {n} Felder geschrieben"],
+    fillForm: ["hat {n} Formular ausgefüllt", "hat {n} Formulare ausgefüllt"],
+    select: ["hat {n} Option gewählt", "hat {n} Optionen gewählt"],
+    pressKey: ["hat {n} Taste gedrückt", "hat {n} Tasten gedrückt"],
+    snapshot: ["hat die Seite gelesen", "hat die Seite {n}-mal gelesen"],
+    evaluate: ["hat die Seite untersucht", "hat die Seite {n}-mal untersucht"],
+    find: ["hat die Seite durchsucht", "hat die Seite {n}-mal durchsucht"],
+    wait: ["hat gewartet", "hat {n}-mal gewartet"],
+    upload: ["hat Dateien hochgeladen", "hat {n}-mal Dateien hochgeladen"],
+    screenshot: ["hat {n} Screenshot erstellt", "hat {n} Screenshots erstellt"],
+    approval: ["hat um Freigabe gebeten", "hat {n}-mal um Freigabe gebeten"],
+  },
+
   tool: {
     navigate: (url) => `Öffne ${url}`,
     aPage: "eine Seite",
