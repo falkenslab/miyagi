@@ -37,7 +37,8 @@ For whoever develops this repo (not the runtime agent's skills, which are in `pl
 - `simulate-course <description>` — creates an empty course in the sandbox (`npm run course`), has teacher-agent build it with `course-building` while `auto-approve.mjs` answers and logs every approval (sandbox only), captures the whole course (`capture-course.mjs`) and writes the report.
 - `test-report` — writes a test's report into `tests/<YYYY-MM-DDTHH-MM>-<slug>/` (README.md + `assets/`), indexes it in `tests/README.md` and turns its findings into changes; see `tests/CLAUDE.md`.
 - `sandbox-e2e` — end-to-end runs against the moodle-sandbox repo (`$MOODLE_SANDBOX_DIR`, default `../moodle-sandbox`; a separate repo on purpose, not a submodule), using its `info` contract and its `activity` seed (students, submissions of known quality, forum doubts) so every grade and reply has a right answer.
-- `minispec-feature` / `minispec-adr` / `minispec-bugfix` / `minispec-implement` — write a feature, an ADR or a bugfix note in `.minispec/`, and implement a pending feature.
+- `minispec-feature` / `minispec-adr` / `minispec-bugfix` / `minispec-implement` — write a feature, an ADR or a bugfix note in `.minispec/`, and implement a pending feature. Every feature and fix note has a GitHub issue in Spanish (label `feature` or `fix`), linked from an `Issue:` line under its title, and closed with a summary of the solution when the note is done.
+- `sync-issues` — repairs whatever drifted between the notes and the issues: opens and links a missing issue, closes the one whose note is done.
 
 ## MiniSpec (read first)
 

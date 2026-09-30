@@ -1,5 +1,7 @@
 # Open Moodle only when a request needs it
 
+Issue: [#4](https://github.com/falkenslab/teacher-agent/issues/4)
+
 ## Goal
 
 In `chat`, start from the knowledge base and open the browser (log into Moodle) only when something the teacher asks needs the live course; for exploring the course on its own initiative, ask first.

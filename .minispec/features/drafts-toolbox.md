@@ -1,5 +1,7 @@
 # A toolbox for drafts/
 
+Issue: [#1](https://github.com/falkenslab/teacher-agent/issues/1)
+
 ## Goal
 
 Let the agent do almost anything with files in `drafts/` — download a site, copy, move, delete, zip and unzip, make a PDF — through its own deterministic tools, never a shell, so it can build SCORM, H5P or IMS packages and any other material it uploads to Moodle.

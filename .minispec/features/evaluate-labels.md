@@ -1,5 +1,7 @@
 # Say what a JavaScript call does, not its code
 
+Issue: [#7](https://github.com/falkenslab/teacher-agent/issues/7)
+
 ## Goal
 
 In the chat, label each `browser_evaluate` call with what it does ("Leyendo los mensajes del foro", "Escribiendo en el editor"), not with the start of its code.

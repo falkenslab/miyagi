@@ -1,5 +1,7 @@
 # Deterministic validation of files before they're uploaded to Moodle
 
+Issue: [#2](https://github.com/falkenslab/teacher-agent/issues/2)
+
 ## Goal
 
 Check the files the agent uploads to Moodle (GIFT first, then HTML) with code, not with the model's judgment, and refuse the upload until they pass.

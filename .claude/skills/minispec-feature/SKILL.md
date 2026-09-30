@@ -24,7 +24,8 @@ Create a temporal feature document under `.minispec/features/`.
    (`gh issue create -R <owner>/<repo>`): title and body in Spanish, for someone who
    uses the project (what and why, not the file's wording), label `feature` (create it
    with `gh label create feature` if the repo lacks it), and a last line pointing to
-   `.minispec/features/<slug>.md`. Give the user the issue's URL.
+   `.minispec/features/<slug>.md`. Then link the file to it: a line `Issue: [#N](<issue URL>)`
+   right under the file's title. Give the user the issue's URL.
 
 ## Rules
 

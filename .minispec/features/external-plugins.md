@@ -1,5 +1,7 @@
 # External plugins and the FP teaching-plan plugin
 
+Issue: [#3](https://github.com/falkenslab/teacher-agent/issues/3)
+
 ## Goal
 
 Load extra skill plugins into teacher-agent from configuration, and move the teaching-plan skills, plus new ones for Spanish vocational training (FP), into a separate `fp-didactica` plugin.
