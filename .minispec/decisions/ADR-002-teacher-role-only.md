@@ -2,7 +2,7 @@
 
 ## Decision
 
-teacher-agent only ever acts as a teacher. There is no student role: `agent.role: "student"` is rejected and a missing role is written as `"teacher"`.
+miyagi only ever acts as a teacher. There is no student role: `agent.role: "student"` is rejected and a missing role is written as `"teacher"`.
 
 ## Motivation
 

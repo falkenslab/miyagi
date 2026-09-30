@@ -1,17 +1,17 @@
 <h1 align="center">
-  <img src="docs/assets/owl.svg" width="120" alt="Búho con birrete, el logo de teacher-agent"><br>
-  teacher-agent
+  <img src="docs/assets/miyagi.svg" width="120" alt="La cara de un maestro con su cinta en la frente, el logo de miyagi"><br>
+  miyagi
 </h1>
 
-[![Web](https://img.shields.io/badge/web-falkenslab.github.io%2Fteacher--agent-1f3129)](https://falkenslab.github.io/teacher-agent/) [![Version](https://img.shields.io/github/v/release/falkenslab/teacher-agent?label=version)](https://github.com/falkenslab/teacher-agent/releases/latest) [![Downloads](https://img.shields.io/github/downloads/falkenslab/teacher-agent/total?label=downloads)](https://github.com/falkenslab/teacher-agent/releases) [![verify](https://github.com/falkenslab/teacher-agent/actions/workflows/verify.yml/badge.svg)](https://github.com/falkenslab/teacher-agent/actions/workflows/verify.yml) [![Moodle](https://img.shields.io/badge/Moodle-5.2-f98012?logo=moodle&logoColor=white)](https://github.com/falkenslab/moodle-sandbox) [![License](https://img.shields.io/github/license/falkenslab/teacher-agent?label=license)](LICENSE) [![agent-kit](https://img.shields.io/github/package-json/dependency-version/falkenslab/teacher-agent/@falkenslab/agent-kit?label=agent-kit)](https://www.npmjs.com/package/@falkenslab/agent-kit) [![Node](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffalkenslab%2Fteacher-agent%2Fmain%2Fpackage.json&query=%24.engines.node&label=node&logo=node.js&logoColor=white&color=339933)](https://nodejs.org) [![Issues](https://img.shields.io/github/issues/falkenslab/teacher-agent?label=issues)](https://github.com/falkenslab/teacher-agent/issues) [![Last commit](https://img.shields.io/github/last-commit/falkenslab/teacher-agent?label=last%20commit)](https://github.com/falkenslab/teacher-agent/commits/main)
+[![Web](https://img.shields.io/badge/web-falkenslab.github.io%2Fmiyagi-1f3129)](https://falkenslab.github.io/miyagi/) [![Version](https://img.shields.io/github/v/release/falkenslab/miyagi?label=version)](https://github.com/falkenslab/miyagi/releases/latest) [![Downloads](https://img.shields.io/github/downloads/falkenslab/miyagi/total?label=downloads)](https://github.com/falkenslab/miyagi/releases) [![verify](https://github.com/falkenslab/miyagi/actions/workflows/verify.yml/badge.svg)](https://github.com/falkenslab/miyagi/actions/workflows/verify.yml) [![Moodle](https://img.shields.io/badge/Moodle-5.2-f98012?logo=moodle&logoColor=white)](https://github.com/falkenslab/moodle-sandbox) [![License](https://img.shields.io/github/license/falkenslab/miyagi?label=license)](LICENSE) [![agent-kit](https://img.shields.io/github/package-json/dependency-version/falkenslab/miyagi/@falkenslab/agent-kit?label=agent-kit)](https://www.npmjs.com/package/@falkenslab/agent-kit) [![Node](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffalkenslab%2Fmiyagi%2Fmain%2Fpackage.json&query=%24.engines.node&label=node&logo=node.js&logoColor=white&color=339933)](https://nodejs.org) [![Issues](https://img.shields.io/github/issues/falkenslab/miyagi?label=issues)](https://github.com/falkenslab/miyagi/issues) [![Last commit](https://img.shields.io/github/last-commit/falkenslab/miyagi?label=last%20commit)](https://github.com/falkenslab/miyagi/commits/main)
 
 Un asistente que te ayuda a gestionar tu curso de Moodle. Entra con tu cuenta de profesor en una ventana de Chrome y trabaja como lo harías tú: **corrige entregas**, **responde en el foro**, **crea o revisa contenido** y te **resume cómo va la clase**. Antes de publicar nada que vean tus estudiantes (una nota, una respuesta, un recurso nuevo), te pide permiso.
 
 Además, va tomando apuntes del curso (criterios de corrección, rúbricas, dudas que se repiten, cómo evoluciona la clase) para acordarse de todo en la siguiente sesión.
 
-![teacher-agent en el chat: tras dejar listo y visible un escape room de bucles, atiende una duda del foro y pide permiso antes de publicar la respuesta](docs/assets/chat.png)
+![miyagi en el chat: encuentra en el foro una duda de Marcos sobre el else de un for y pide permiso antes de publicar la respuesta, con su código](docs/assets/chat.png)
 
-> 🌐 **Web:** [falkenslab.github.io/teacher-agent](https://falkenslab.github.io/teacher-agent/) (también [en inglés](https://falkenslab.github.io/teacher-agent/en/)): qué hace, en un minuto.
+> 🌐 **Web:** [falkenslab.github.io/miyagi](https://falkenslab.github.io/miyagi/) (también [en inglés](https://falkenslab.github.io/miyagi/en/)): qué hace, en un minuto.
 
 > 📋 **¿Quieres empezar rápido?** La [CheatSheet](docs/CHEATSHEET.md) explica paso a paso cómo instalarlo y conectarlo a un curso, y recorre casos de uso en el chat de menos a más.
 
@@ -33,19 +33,19 @@ Y, por supuesto, un curso de Moodle en el que tengas rol de **profesor**.
 2. Copia esta línea, pégala en la terminal y pulsa Intro:
 
    ```
-   npm install -g https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz
+   npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz
    ```
 
    Tarda uno o dos minutos. Es normal que aparezca algún aviso en amarillo (`warn`). En Mac, si da un error de permisos, ponle `sudo ` delante y escribe tu contraseña.
 3. Comprueba que ha funcionado:
 
    ```
-   teacher-agent --version
+   miyagi --version
    ```
 
    Si ves un número de versión (por ejemplo `0.1.0`), ya está instalado.
 
-Para **actualizarlo** más adelante, repite el paso 2. Para **desinstalarlo**: `npm uninstall -g teacher-agent`.
+Para **actualizarlo** más adelante, repite el paso 2. Para **desinstalarlo**: `npm uninstall -g miyagi`.
 
 ## 3. Prepara tu curso (solo la primera vez)
 
@@ -61,7 +61,7 @@ Cada curso tiene su propia carpeta. En ella el asistente guarda los datos del cu
 2. Configúrala:
 
    ```
-   teacher-agent init
+   miyagi init
    ```
 
    Te hará unas preguntas:
@@ -83,7 +83,7 @@ Siempre desde la carpeta del curso (`cd mi-curso`).
 ### Conversar con el asistente (recomendado para empezar)
 
 ```
-teacher-agent chat
+miyagi chat
 ```
 
 El chat ocupa toda la terminal y se abre Chrome, que entra en tu curso; el asistente te pregunta qué necesitas. Pídeselo con tus palabras, por ejemplo:
@@ -104,7 +104,7 @@ Antes de guardar una nota, responder en el foro, publicar algo o cambiar la conf
 ### Dejar que gestione el curso entero
 
 ```
-teacher-agent run
+miyagi run
 ```
 
 Recorre el curso de principio a fin: corrige lo pendiente, atiende el foro, revisa el contenido y termina con un resumen de cómo va la clase. Te preguntará cuánto quieres supervisarlo:
@@ -118,8 +118,8 @@ Recorre el curso de principio a fin: corrige lo pendiente, atiende el foro, revi
 ### Encargarle una sola tarea
 
 ```
-teacher-agent run --task "corrige las entregas de la Tarea 2"
-teacher-agent run --task "construye un curso de introducción a Docker de tres temas para FP"
+miyagi run --task "corrige las entregas de la Tarea 2"
+miyagi run --task "construye un curso de introducción a Docker de tres temas para FP"
 ```
 
 Hace solo eso, con las mismas reglas (y las mismas aprobaciones) que el resto.
@@ -132,16 +132,16 @@ Todas aceptan `--dir <carpeta>` para trabajar con un curso sin entrar en su carp
 
 | Orden | Qué hace | Opciones |
 | --- | --- | --- |
-| `teacher-agent init` | Prepara una carpeta nueva para un curso (las preguntas del paso 3) y ofrece explorar tu Moodle. | |
-| `teacher-agent chat` | Conversación con el asistente a pantalla completa, siempre pidiendo permiso antes de publicar. Dentro, `/resume` retoma una conversación anterior. | `--headless`, `--inline` (sin pantalla completa), `--plain` (chat de texto simple), `--continue` (retoma la última conversación) |
-| `teacher-agent run` | Gestiona el curso entero de una sentada: corregir, foro, contenido y resumen del progreso. | `--mode guided\|interactive\|autonomous`, `--task "…"`, `--headless`, `--plain` (texto simple, sin spinner ni paneles) |
-| `teacher-agent explore` | Mira (sin crear nada) qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. | `--headless` |
-| `teacher-agent ingest` | Lee los documentos de `sources` (o los que indiques) y toma apuntes, sin abrir Moodle. | `[archivos…]` |
-| `teacher-agent skills` | Lista las habilidades del asistente, incluidas las tuyas. | |
-| `teacher-agent commands` | Lista los atajos que puedes usar dentro del chat. | |
-| `teacher-agent --help` / `--version` | Ayuda y versión instalada. | |
+| `miyagi init` | Prepara una carpeta nueva para un curso (las preguntas del paso 3) y ofrece explorar tu Moodle. | |
+| `miyagi chat` | Conversación con el asistente a pantalla completa, siempre pidiendo permiso antes de publicar. Dentro, `/resume` retoma una conversación anterior. | `--headless`, `--inline` (sin pantalla completa), `--plain` (chat de texto simple), `--continue` (retoma la última conversación) |
+| `miyagi run` | Gestiona el curso entero de una sentada: corregir, foro, contenido y resumen del progreso. | `--mode guided\|interactive\|autonomous`, `--task "…"`, `--headless`, `--plain` (texto simple, sin spinner ni paneles) |
+| `miyagi explore` | Mira (sin crear nada) qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. | `--headless` |
+| `miyagi ingest` | Lee los documentos de `sources` (o los que indiques) y toma apuntes, sin abrir Moodle. | `[archivos…]` |
+| `miyagi skills` | Lista las habilidades del asistente, incluidas las tuyas. | |
+| `miyagi commands` | Lista los atajos que puedes usar dentro del chat. | |
+| `miyagi --help` / `--version` | Ayuda y versión instalada. | |
 
-Sin ninguna orden (`teacher-agent` a secas) te pregunta si quieres `run` o `chat`. Si la carpeta aún no es un curso, primero te hace las preguntas del paso 3, guarda la configuración y termina: vuelve a lanzarlo para empezar.
+Sin ninguna orden (`miyagi` a secas) te pregunta si quieres `run` o `chat`. Si la carpeta aún no es un curso, primero te hace las preguntas del paso 3, guarda la configuración y termina: vuelve a lanzarlo para empezar.
 
 ### Atajos dentro del chat
 
@@ -149,18 +149,18 @@ Escríbelos en el chat, con lo que necesites detrás.
 
 | Atajo | Qué hace |
 | --- | --- |
-| `/teacher-agent:grade` | Corrige las entregas pendientes con un criterio justo y coherente. |
-| `/teacher-agent:forum` | Revisa el foro y decide si hace falta que intervenga el profesor. |
-| `/teacher-agent:quiz <tema>` | Crea un cuestionario sobre ese tema (o le añade preguntas), con preguntas bien escritas importadas de golpe. |
-| `/teacher-agent:build-course <descripción>` | Construye un curso completo: planifica, crea cada sección con apuntes, prácticas y cuestionarios, y lo revisa como lo vería un alumno. |
-| `/teacher-agent:build-unit <descripción>` | Construye un solo tema dentro del curso, encajado en su programación, su calendario y su estilo. |
-| `/teacher-agent:teaching-plan` | Escribe o revisa tu programación didáctica a partir de tu material y tus decisiones. |
-| `/teacher-agent:align` | Comprueba si el aula está acorde con tu programación y corrige lo que no. |
-| `/teacher-agent:research <tema>` | Investiga un tema en internet y guarda lo que encuentra con sus fuentes. |
-| `/teacher-agent:progress` | Revisa cómo va la clase y quién se está quedando atrás. |
-| `/teacher-agent:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
-| `/teacher-agent:orient` | Se orienta en el curso: evaluación, plazos, canales de comunicación. |
-| `/teacher-agent:map` | Muestra las direcciones del curso que tiene apuntadas. |
+| `/miyagi:grade` | Corrige las entregas pendientes con un criterio justo y coherente. |
+| `/miyagi:forum` | Revisa el foro y decide si hace falta que intervenga el profesor. |
+| `/miyagi:quiz <tema>` | Crea un cuestionario sobre ese tema (o le añade preguntas), con preguntas bien escritas importadas de golpe. |
+| `/miyagi:build-course <descripción>` | Construye un curso completo: planifica, crea cada sección con apuntes, prácticas y cuestionarios, y lo revisa como lo vería un alumno. |
+| `/miyagi:build-unit <descripción>` | Construye un solo tema dentro del curso, encajado en su programación, su calendario y su estilo. |
+| `/miyagi:teaching-plan` | Escribe o revisa tu programación didáctica a partir de tu material y tus decisiones. |
+| `/miyagi:align` | Comprueba si el aula está acorde con tu programación y corrige lo que no. |
+| `/miyagi:research <tema>` | Investiga un tema en internet y guarda lo que encuentra con sus fuentes. |
+| `/miyagi:progress` | Revisa cómo va la clase y quién se está quedando atrás. |
+| `/miyagi:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
+| `/miyagi:orient` | Se orienta en el curso: evaluación, plazos, canales de comunicación. |
+| `/miyagi:map` | Muestra las direcciones del curso que tiene apuntadas. |
 | `/knowledge:ingest` | Incorpora a sus apuntes lo que haya en `sources` sin procesar. |
 | `/knowledge:query <pregunta>` | Responde a partir de sus apuntes del curso. |
 | `/knowledge:lint` | Revisa que sus apuntes estén completos y bien enlazados. |
@@ -213,9 +213,9 @@ Para algunas tareas, el asistente se apoya en ayudantes especializados que traba
 El asistente puede ayudarte a escribir tu **programación didáctica** y a que tu aula de Moodle esté de acuerdo con ella:
 
 1. Deja en `sources` lo que tengas: un borrador, la programación del año pasado, los criterios del departamento. Si quieres que siga una normativa concreta, déjala también o díselo.
-2. En el chat, `/teacher-agent:teaching-plan`. La escribe a partir de tu material, te pregunta lo que solo tú puedes decidir (horas, calendario, pesos) y la hace revisar por el revisor pedagógico. Queda en sus apuntes (`knowledge/teaching-plan.md`, enlazada con cada tema), no se publica en Moodle salvo que se lo pidas.
-3. `/teacher-agent:align` compara el aula con la programación: criterios que ninguna actividad evalúa, rúbricas que faltan, pesos o fechas distintos, temas sin construir. Te propone los cambios y los hace con tu aprobación.
-4. `/teacher-agent:build-unit` construye los temas que falten.
+2. En el chat, `/miyagi:teaching-plan`. La escribe a partir de tu material, te pregunta lo que solo tú puedes decidir (horas, calendario, pesos) y la hace revisar por el revisor pedagógico. Queda en sus apuntes (`knowledge/teaching-plan.md`, enlazada con cada tema), no se publica en Moodle salvo que se lo pidas.
+3. `/miyagi:align` compara el aula con la programación: criterios que ninguna actividad evalúa, rúbricas que faltan, pesos o fechas distintos, temas sin construir. Te propone los cambios y los hace con tu aprobación.
+4. `/miyagi:build-unit` construye los temas que falten.
 
 Al diseñar un tema o una actividad elige una metodología que encaje con lo que se quiere aprender (aprendizaje basado en proyectos o en retos, clase invertida, gamificación con insignias y niveles, trabajo cooperativo, estudio de casos…) y la monta con las piezas de Moodle que la hacen posible. Si tienes una en mente, pídesela.
 
@@ -231,7 +231,7 @@ Está **desactivada por defecto**, porque es lo único que le da acceso a ejecut
 Para activarla:
 
 1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/) (en Linux, Docker Engine) y comprueba que funciona con `docker version`.
-2. Responde que sí a la pregunta de `teacher-agent init`, o en un curso ya creado edita su `config.json` y añade `"allowPracticeRunner": true` dentro de `"agent"`.
+2. Responde que sí a la pregunta de `miyagi init`, o en un curso ya creado edita su `config.json` y añade `"allowPracticeRunner": true` dentro de `"agent"`.
 
 ## Preguntas frecuentes
 
@@ -249,9 +249,11 @@ Para activarla:
 
 **¿Puede descargar, comprimir o hacer PDF?** Sí, dentro de la carpeta `drafts` del curso y con sus propias herramientas, sin terminal: descarga archivos y páginas web completas, copia, comprime y descomprime (por ejemplo, para un paquete SCORM) y convierte apuntes a PDF. Por seguridad, una descarga no pasa de 50 MB y un ZIP descomprimido de 200 MB y 2000 archivos; para cambiarlo, en el `config.json` del curso: `"agent": { "draftsLimits": { "downloadMB": 100, "unzipMB": 500, "unzipFiles": 5000 } }`.
 
-**No quiero ver la ventana de Chrome.** Añade `--headless` (por ejemplo `teacher-agent run --headless`). Necesita el usuario y la contraseña guardados.
+**No quiero ver la ventana de Chrome.** Añade `--headless` (por ejemplo `miyagi run --headless`). Necesita el usuario y la contraseña guardados.
 
-**Venía usando moodle-agent.** Tu carpeta de aula de profesor sirve tal cual: ejecuta `teacher-agent chat` dentro de ella y el asistente reorganizará sus apuntes al formato nuevo la primera vez.
+**Venía usando teacher-agent.** Es el mismo proyecto con otro nombre desde la versión 0.10. Instala miyagi con el comando de arriba; tu configuración (incluido el acceso a Claude) y tus carpetas de curso sirven tal cual. El comando `teacher-agent` sigue funcionando un tiempo, con un aviso; cuando quieras, quita el paquete antiguo con `npm uninstall -g teacher-agent`.
+
+**Venía usando moodle-agent.** Tu carpeta de aula de profesor sirve tal cual: ejecuta `miyagi chat` dentro de ella y el asistente reorganizará sus apuntes al formato nuevo la primera vez.
 
 ## Avanzado: enséñale habilidades nuevas
 
@@ -294,7 +296,7 @@ description: Corregir las prácticas de Docker Compose de este curso ejecutándo
 - **`description`**: la parte más importante. Es lo que el asistente lee para decidir **cuándo** usarla, así que di qué hace y en qué situaciones ("úsala al corregir...", "cuando se pida crear...").
 - **El cuerpo**: los pasos, como se los explicarías a un profesor en prácticas. Sé concreto: rutas de archivos, criterios, lo que no debe hacer.
 
-Comprueba que la ve con `teacher-agent skills` (aparece como `[propia]`) y pruébala en el chat pidiéndole justo esa tarea.
+Comprueba que la ve con `miyagi skills` (aparece como `[propia]`) y pruébala en el chat pidiéndole justo esa tarea.
 
 ### Lo que una habilidad puede y no puede hacer
 
@@ -304,20 +306,20 @@ Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene:
 
 - **Atajos propios para el chat**: un archivo `.claude/commands/<nombre>.md` con la instrucción (puedes usar `$ARGUMENTS` para lo que escribas detrás). Por ejemplo, `.claude/commands/semana.md` con *"Revisa lo que se ha entregado esta semana en las prácticas de $ARGUMENTS y resume qué falla más"* se usa como `/semana Docker Compose`.
 - **Instrucciones generales**: `instructions.md` en la carpeta del curso, para lo que debe tener en cuenta siempre, no solo en una tarea.
-- **Material de referencia**: tus rúbricas, soluciones y apuntes en `sources`; ejecuta `teacher-agent ingest` para que los incorpore.
+- **Material de referencia**: tus rúbricas, soluciones y apuntes en `sources`; ejecuta `miyagi ingest` para que los incorpore.
 
 ## Para desarrolladores
 
-teacher-agent está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit), igual que [student-agent](https://github.com/falkenslab/student-agent). Sus habilidades, comandos y prompts proceden del rol de profesor de moodle-agent. La especificación del proyecto (qué es, arquitectura, stack, convenciones y decisiones) está en [.minispec/](.minispec/README.md), y [CLAUDE.md](CLAUDE.md) explica cómo trabajar en el repo.
+miyagi está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit), igual que [student-agent](https://github.com/falkenslab/student-agent). Sus habilidades, comandos y prompts proceden del rol de profesor de moodle-agent. La especificación del proyecto (qué es, arquitectura, stack, convenciones y decisiones) está en [.minispec/](.minispec/README.md), y [CLAUDE.md](CLAUDE.md) explica cómo trabajar en el repo.
 
 ```
-git clone https://github.com/falkenslab/teacher-agent.git
-cd teacher-agent
+git clone https://github.com/falkenslab/miyagi.git
+cd miyagi
 npm install
 npm start -- chat --dir <carpeta-del-curso>
 npm run build                 # compila dist/ (necesario para npm link y las skills de prueba)
 npm run typecheck && npm run lint
-npm link                      # comando global teacher-agent desde este clon
+npm link                      # comando global miyagi desde este clon
 npm pack                      # genera el .tgz que se publica en cada release
 ```
 

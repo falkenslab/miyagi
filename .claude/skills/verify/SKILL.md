@@ -1,9 +1,9 @@
 ---
 name: verify
-description: Run the full quality gate for teacher-agent (typecheck, lint, build, system prompts rendered for every session kind and mode, skill/command catalog) and report the result. Use before committing, before a release, and after any change under src/, prompts/ or plugin/.
+description: Run the full quality gate for miyagi (typecheck, lint, build, system prompts rendered for every session kind and mode, skill/command catalog) and report the result. Use before committing, before a release, and after any change under src/, prompts/ or plugin/.
 ---
 
-# Verify teacher-agent
+# Verify miyagi
 
 There are no unit tests yet, so the prompts themselves are part of the gate: most of this
 agent's behavior lives in `prompts/` and `plugin/`, and a typo in a `{{placeholder}}` or a

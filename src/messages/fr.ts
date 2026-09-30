@@ -1,7 +1,7 @@
 import type { Messages } from "./en.js";
 
 export const fr: Messages = {
-  help: (globalConfigPath) => `teacher-agent [<commande>] [options]
+  help: (globalConfigPath) => `miyagi [<commande>] [options]
 
 Commandes :
   init [--dir <chemin>]
@@ -33,25 +33,27 @@ Commandes :
 Options :
   -h, --help         Affiche cette aide.
   -v, --version      Affiche la version installée.
-  --language=<code>  Langue des textes de teacher-agent et du chat : es, en, fr ou de
+  --language=<code>  Langue des textes de miyagi et du chat : es, en, fr ou de
                      (par défaut, celle de "agent.language" de l'espace de travail, ou
                      celle du système).
 
 Chaque espace de travail est un dossier (l'actuel, ou celui donné avec --dir) avec son
-propre config.json, comme un dépôt git. Sans arguments, teacher-agent demande si vous
+propre config.json, comme un dépôt git. Sans arguments, miyagi demande si vous
 voulez "run" ou "chat" et utilise le dossier actuel ; si ce n'est pas encore un espace de
 travail, il le configure et s'arrête (relancez-le pour commencer). --headless (demande des
 identifiants enregistrés) et la langue préférée peuvent aussi être fixés durablement :
 dans le config.json de l'espace de travail ("agent.headless", "agent.language") ou, pour
 tous, dans ${globalConfigPath} ("defaultHeadless", "defaultLanguage"). Voir
 README.md pour plus de détails.`,
-  alreadyWorkspace: (dir) => `${dir} est déjà un espace de travail teacher-agent (config.json existe). Choisissez un autre dossier.`,
-  exploreFailed: (reason) => `Impossible d'explorer le Moodle (${reason}). L'espace de travail est créé ; vous pouvez réessayer avec "teacher-agent explore".`,
+  alreadyWorkspace: (dir) => `${dir} est déjà un espace de travail miyagi (config.json existe). Choisissez un autre dossier.`,
+  exploreFailed: (reason) => `Impossible d'explorer le Moodle (${reason}). L'espace de travail est créé ; vous pouvez réessayer avec "miyagi explore".`,
   catalogBuiltin: "[intégrée]",
   catalogCustom: "[propre]",
   skillsTitle: (dir) => `Compétences disponibles dans ${dir}`,
   commandsTitle: (dir) => `Commandes disponibles dans ${dir} (dans "chat")`,
-  unknownCommand: (command) => `Commande inconnue "${command}". Utilisez teacher-agent --help.`,
+  unknownCommand: (command) => `Commande inconnue "${command}". Utilisez miyagi --help.`,
+  renamedCommand: "teacher-agent s'appelle désormais miyagi : utilisez la commande miyagi (teacher-agent fonctionnera encore quelque temps).",
+  globalConfigMigrated: (file) => `Vos réglages de ~/.teacher-agent ont été copiés dans ${file}.`,
 
   initHeading: (dir) => `\n=== Configuration d'un espace de travail dans ${dir} ===`,
   required: "Obligatoire",
@@ -79,7 +81,7 @@ README.md pour plus de détails.`,
   workspaceCreated: (dir) => `Espace de travail créé dans ${dir}\n`,
   exploreNow:
     "Explorer maintenant quels types d'activité et de question admet ce Moodle ? (il se connecte et ne fait que " +
-    'regarder, sans rien créer ; vous pouvez aussi le faire plus tard avec "teacher-agent explore")',
+    'regarder, sans rien créer ; vous pouvez aussi le faire plus tard avec "miyagi explore")',
   whatToDo: "Que voulez-vous faire ?",
   kindRun: "Gérer le cours d'une traite (run)",
   kindChat: "Discuter avec l'agent (chat)",
@@ -88,16 +90,16 @@ README.md pour plus de détails.`,
   modeGuided: "guided — ne s'arrête qu'avant de publier quelque chose de visible par les élèves",
   modeAutonomous: "autonomous — sans pauses",
 
-  studentRole: (dir) => `${dir} est une classe avec le rôle "student" : teacher-agent n'agit qu'en tant qu'enseignant.`,
+  studentRole: (dir) => `${dir} est une classe avec le rôle "student" : miyagi n'agit qu'en tant qu'enseignant.`,
   draftsLimitsInvalid: (dir, key, valid) => `${dir}/config.json : agent.draftsLimits.${key} doit être un nombre positif, parmi : ${valid}.`,
   defaultLabel: (host, courseId) => `${host} · cours ${courseId}`,
 
   unknownMode: (value, valid) => `Mode inconnu "${value}". Utilisez l'un de : ${valid}.`,
-  notAWorkspace: (dir) => `${dir} n'est pas un espace de travail teacher-agent (pas de config.json). Lancez "teacher-agent init" là-bas, ou passez --dir avec un espace de travail existant.`,
+  notAWorkspace: (dir) => `${dir} n'est pas un espace de travail miyagi (pas de config.json). Lancez "miyagi init" là-bas, ou passez --dir avec un espace de travail existant.`,
   contextMoved: (count, sourcesDir) => `context/ n'est plus utilisé : ses ${count} fichiers ont été déplacés vers ${sourcesDir}.\n`,
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ avait l'ancienne structure : il a été déplacé vers ${legacyDir} (ses fichiers téléchargés, vers ${sourcesDir}) et l'agent reconstruira la base de connaissances à partir de là.\n`,
-  setupSaved: (kind, dir) => `Configuration enregistrée. Quand vous voudrez commencer : teacher-agent ${kind} --dir "${dir}"`,
+  setupSaved: (kind, dir) => `Configuration enregistrée. Quand vous voudrez commencer : miyagi ${kind} --dir "${dir}"`,
   autonomousNeedsCredentials:
     "Le mode autonomous ne permet pas de se connecter à la main (aucun moyen de demander de l'aide à un humain) : enregistrez l'utilisateur et le mot de passe dans config.json, ou utilisez --mode guided/interactive.",
   headlessNeedsCredentials:
@@ -110,8 +112,8 @@ README.md pour plus de détails.`,
   headingCourse: (url, courseId) => `Cours : ${url} (id ${courseId})\n`,
   headerWorkspace: "espace",
   headerCourse: "cours",
-  welcomePlain: "teacher-agent se connecte à Moodle. Échap interrompt la réponse en cours ; /resume reprend une conversation précédente ; /exit ou Ctrl+C (sans réponse en cours) ferment la session.",
-  welcomeInk: "teacher-agent se connecte à Moodle. Maj+Tab bascule entre guided et interactive, /resume reprend une conversation précédente, ? affiche les raccourcis et /exit ferme la session.",
+  welcomePlain: "miyagi est prêt. Échap interrompt la réponse en cours ; /resume reprend une conversation précédente ; /exit ou Ctrl+C (sans réponse en cours) ferment la session.",
+  welcomeInk: "miyagi est prêt. Maj+Tab bascule entre guided et interactive, /resume reprend une conversation précédente, ? affiche les raccourcis et /exit ferme la session.",
   promptLabel: "vous>",
   exitingNow: "Sortie sans attendre. Ce qui a été enregistré jusqu'ici est déjà sur le disque.",
   interrupting: "Interruption et fermeture de la session… (Ctrl+C à nouveau pour sortir sans attendre)",

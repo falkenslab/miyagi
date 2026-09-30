@@ -1,11 +1,11 @@
 ---
 name: sync-issues
-description: Keep teacher-agent's MiniSpec feature and fix notes (.minispec/features/) and its GitHub issues in sync, issues in Spanish - open and link the issue a note lacks, close with a solution summary the issue whose note is done. Use when the user asks to sync issues and features, after creating or finishing a note by hand, or when asked what's pending.
+description: Keep miyagi's MiniSpec feature and fix notes (.minispec/features/) and its GitHub issues in sync, issues in Spanish - open and link the issue a note lacks, close with a solution summary the issue whose note is done. Use when the user asks to sync issues and features, after creating or finishing a note by hand, or when asked what's pending.
 ---
 
 # Sync features and issues
 
-Every note in `.minispec/features/` (a feature `<slug>.md` or a fix `fix-<slug>.md`) has exactly one GitHub issue in this repo, and every open issue labelled `feature` or `fix` has its note. Issues are in Spanish (titles, bodies, comments), for a teacher who uses teacher-agent; the notes stay in English, like the rest of `.minispec/`.
+Every note in `.minispec/features/` (a feature `<slug>.md` or a fix `fix-<slug>.md`) has exactly one GitHub issue in this repo, and every open issue labelled `feature` or `fix` has its note. Issues are in Spanish (titles, bodies, comments), for a teacher who uses miyagi; the notes stay in English, like the rest of `.minispec/`.
 
 ## 1. Collect both sides
 
@@ -19,7 +19,7 @@ A note is linked when it has an `Issue: [#N](<issue URL>)` line right under its 
 
 ## 2. Fix each mismatch
 
-- **Note without an issue:** open one (`gh issue create --label feature` or `--label fix`; `gh label create` if the label is missing). Title: what it achieves, for a teacher who uses teacher-agent. Body: the problem and the proposal in a few sentences (not the note's wording), and a last line `Feature: \`.minispec/features/<slug>.md\`` (`Fix:` for a fix). Then add the `Issue:` line under the note's title, with a blank line before and after.
+- **Note without an issue:** open one (`gh issue create --label feature` or `--label fix`; `gh label create` if the label is missing). Title: what it achieves, for a teacher who uses miyagi. Body: the problem and the proposal in a few sentences (not the note's wording), and a last line `Feature: \`.minispec/features/<slug>.md\`` (`Fix:` for a fix). Then add the `Issue:` line under the note's title, with a blank line before and after.
 - **Note with an issue that isn't linked from it:** add the `Issue:` line.
 - **Issue not in Spanish:** translate its title and body with `gh issue edit`; don't open a duplicate.
 - **Open issue whose note no longer exists:** the work is done or dropped. Find the commits (`git log --oneline -- .minispec/features/<file>.md` and the ones after), then close it with a comment describing the solution and how it was implemented: what changed for the user, the design choices, how it was verified, the commits (`gh issue close N --comment "…"`). If it was dropped, say why instead. Ask the user when you can't tell which.

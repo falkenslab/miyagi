@@ -1,6 +1,6 @@
 # A process for building activities: plan, build, test, serve
 
-Issue: [#17](https://github.com/falkenslab/teacher-agent/issues/17)
+Issue: [#17](https://github.com/falkenslab/miyagi/issues/17)
 
 ## Goal
 
@@ -24,7 +24,7 @@ Give new or complex activities a process with four phases — a plan agreed with
 - The agent suggests the process when a request fits (and the teacher can decline it); it can also be asked for ("con el proceso completo").
 - `plan.md` is the activity's reference afterwards: the activity's knowledge page links to it.
 - The phase of each activity is recorded in `knowledge/drafts.md` (see `drafts-oven`).
-- Prompts and `check-prompts.mjs` for the plan mode's wording in teacher-agent (what the plan is for, `planFiles` = `drafts/*/plan.md`, which browser actions modify, reusing the publish gate's classification).
+- Prompts and `check-prompts.mjs` for the plan mode's wording in miyagi (what the plan is for, `planFiles` = `drafts/*/plan.md`, which browser actions modify, reusing the publish gate's classification).
 
 ## Acceptance
 

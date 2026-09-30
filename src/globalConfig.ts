@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -5,7 +6,7 @@ import { parseEnv } from "node:util";
 import { ensureClaudeAuth } from "@falkenslab/agent-kit";
 
 /**
- * ~/.teacher-agent/config.json — the only config not tied to a workspace: the Claude token
+ * ~/.miyagi/config.json — the only config not tied to a workspace: the Claude token
  * and per-user defaults for workspaces that don't set their own.
  */
 export interface GlobalConfig {
@@ -19,7 +20,26 @@ export interface GlobalConfig {
 }
 
 export function globalConfigPath(): string {
+  return path.join(os.homedir(), ".miyagi", "config.json");
+}
+
+/** Where it lived while the project was called teacher-agent (before 0.10). */
+function legacyGlobalConfigPath(): string {
   return path.join(os.homedir(), ".teacher-agent", "config.json");
+}
+
+/**
+ * Copies ~/.teacher-agent/config.json to ~/.miyagi/config.json the first time, so an upgraded
+ * install keeps its Claude token and defaults. Returns whether it copied. The old file stays.
+ */
+export async function migrateLegacyGlobalConfig(): Promise<boolean> {
+  if (existsSync(globalConfigPath()) || !existsSync(legacyGlobalConfigPath())) return false;
+  try {
+    await writeGlobalConfig(JSON.parse(await readFile(legacyGlobalConfigPath(), "utf-8")) as GlobalConfig);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export async function readGlobalConfig(): Promise<GlobalConfig> {

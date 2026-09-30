@@ -2,7 +2,7 @@
 
 ## Decision
 
-`teacher-agent chat` runs agent-kit's `runChatInk()` in full screen. `--inline` keeps the Ink chat in the terminal's scrollback, and `--plain` (or no TTY) falls back to the readline chat. Setting up a workspace from `run` or `chat` saves it and exits, so a session always starts from its own command.
+`miyagi chat` runs agent-kit's `runChatInk()` in full screen. `--inline` keeps the Ink chat in the terminal's scrollback, and `--plain` (or no TTY) falls back to the readline chat. Setting up a workspace from `run` or `chat` saves it and exits, so a session always starts from its own command.
 
 ## Motivation
 

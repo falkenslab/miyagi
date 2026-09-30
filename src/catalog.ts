@@ -6,8 +6,8 @@ import { knowledgePluginRoot } from "@falkenslab/agent-kit";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pluginDir = path.join(__dirname, "..", "plugin");
 
-/** Namespace the SDK gives the plugin's slash commands (`/teacher-agent:grade`). */
-const PLUGIN_NAMESPACE = "teacher-agent";
+/** Namespace the SDK gives the plugin's slash commands (`/miyagi:grade`). */
+const PLUGIN_NAMESPACE = "miyagi";
 
 /** agent-kit's built-in knowledge base plugin (skills knowledge-*, commands `/knowledge:ingest`, `/knowledge:query`, `/knowledge:lint`), loaded into every session with a knowledge base. */
 const kitKnowledgeDir = knowledgePluginRoot();
@@ -87,7 +87,7 @@ export async function listSkills(workspaceDir: string): Promise<CatalogEntry[]> 
 
 /**
  * The skills a session offers (agent-kit's `AgentSpec.skills`): this plugin's, as
- * `teacher-agent:<name>`, and the workspace's own. The kit adds the knowledge base's. Leaves
+ * `miyagi:<name>`, and the workspace's own. The kit adds the knowledge base's. Leaves
  * out the SDK's own (pdf, docx…), which run scripts through a shell the main agent doesn't
  * have, and which cost context on every turn.
  */

@@ -1,4 +1,4 @@
-// Answers teacher-agent's approval requests during a sandbox simulation, and logs each one.
+// Answers miyagi's approval requests during a sandbox simulation, and logs each one.
 // ONLY for moodle-sandbox: it approves everything, so the review happens afterwards, in the
 // report, from the log this writes. Runs until the session's console log says it closed.
 //   node .claude/skills/simulate-course/auto-approve.mjs <workspaceDir> <consoleLog> <approvalsJsonl>

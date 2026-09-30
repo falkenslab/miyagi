@@ -1,9 +1,9 @@
 ---
 name: commit
-description: Create atomic commits for teacher-agent following the repo's conventions (Conventional Commits, Spanish messages, one logical change per commit, split mixed files by hunk). Use whenever the user asks to commit, or when finishing a piece of work that should be committed.
+description: Create atomic commits for miyagi following the repo's conventions (Conventional Commits, Spanish messages, one logical change per commit, split mixed files by hunk). Use whenever the user asks to commit, or when finishing a piece of work that should be committed.
 ---
 
-# Commits for teacher-agent
+# Commits for miyagi
 
 Commit only when the user asked, or when they asked for a piece of work "done" that
 obviously ends in a commit. Never push unless they also asked to push. The repo is

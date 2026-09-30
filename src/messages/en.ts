@@ -1,5 +1,5 @@
 /**
- * teacher-agent's texts for a person, in English: the reference catalog. Every other catalog
+ * miyagi's texts for a person, in English: the reference catalog. Every other catalog
  * is typed as `Messages`, so a missing key fails typecheck. Text for the model (prompts,
  * skills, tool descriptions, hook deny reasons) never goes here: it stays in English.
  */
@@ -23,6 +23,8 @@ export interface Messages {
   skillsTitle: (dir: string) => string;
   commandsTitle: (dir: string) => string;
   unknownCommand: (command: string) => string;
+  renamedCommand: string;
+  globalConfigMigrated: (file: string) => string;
 
   // menu.ts: the setup wizard and the other questions
   initHeading: (dir: string) => string;
@@ -155,7 +157,7 @@ export interface Messages {
 }
 
 export const en: Messages = {
-  help: (globalConfigPath) => `teacher-agent [<command>] [options]
+  help: (globalConfigPath) => `miyagi [<command>] [options]
 
 Commands:
   init [--dir <path>]
@@ -186,24 +188,26 @@ Commands:
 Options:
   -h, --help         Shows this help.
   -v, --version      Shows the installed version.
-  --language=<code>  Language of teacher-agent's and the chat's texts: es, en, fr or de
+  --language=<code>  Language of miyagi's and the chat's texts: es, en, fr or de
                      (by default, the workspace's "agent.language", or the system's).
 
 Each workspace is a directory (the current one, or the one given with --dir) with its
-own config.json, like a git repository. Without arguments, teacher-agent asks whether
+own config.json, like a git repository. Without arguments, miyagi asks whether
 you want "run" or "chat" and uses the current directory; if it isn't a workspace yet, it
 sets it up and exits (run it again to start). --headless (needs saved credentials) and
 the preferred language can also be set for good: in the workspace's config.json
 ("agent.headless", "agent.language") or, for all of them, in
 ${globalConfigPath} ("defaultHeadless", "defaultLanguage"). See README.md for
 details.`,
-  alreadyWorkspace: (dir) => `${dir} is already a teacher-agent workspace (config.json exists). Choose another directory.`,
-  exploreFailed: (reason) => `Couldn't explore the Moodle (${reason}). The workspace is created; you can try again with "teacher-agent explore".`,
+  alreadyWorkspace: (dir) => `${dir} is already a miyagi workspace (config.json exists). Choose another directory.`,
+  exploreFailed: (reason) => `Couldn't explore the Moodle (${reason}). The workspace is created; you can try again with "miyagi explore".`,
   catalogBuiltin: "[built-in]",
   catalogCustom: "[own]",
   skillsTitle: (dir) => `Skills available in ${dir}`,
   commandsTitle: (dir) => `Commands available in ${dir} (inside "chat")`,
-  unknownCommand: (command) => `Unknown command "${command}". Use teacher-agent --help.`,
+  unknownCommand: (command) => `Unknown command "${command}". Use miyagi --help.`,
+  renamedCommand: "teacher-agent is now called miyagi: use the miyagi command (teacher-agent still works for a while).",
+  globalConfigMigrated: (file) => `Your settings from ~/.teacher-agent were copied to ${file}.`,
 
   initHeading: (dir) => `\n=== Setting up a workspace in ${dir} ===`,
   required: "Required",
@@ -231,7 +235,7 @@ details.`,
   workspaceCreated: (dir) => `Workspace created in ${dir}\n`,
   exploreNow:
     'Explore now which activity and question types this Moodle supports? (it logs in and only looks, creating ' +
-    'nothing; you can also do it later with "teacher-agent explore")',
+    'nothing; you can also do it later with "miyagi explore")',
   whatToDo: "What do you want to do?",
   kindRun: "Manage the course in one go (run)",
   kindChat: "Talk to the agent (chat)",
@@ -240,16 +244,16 @@ details.`,
   modeGuided: "guided — only pauses before publishing something students can see",
   modeAutonomous: "autonomous — no pauses",
 
-  studentRole: (dir) => `${dir} is a classroom with the "student" role: teacher-agent only acts as a teacher.`,
+  studentRole: (dir) => `${dir} is a classroom with the "student" role: miyagi only acts as a teacher.`,
   draftsLimitsInvalid: (dir, key, valid) => `${dir}/config.json: agent.draftsLimits.${key} must be a positive number, and one of: ${valid}.`,
   defaultLabel: (host, courseId) => `${host} · course ${courseId}`,
 
   unknownMode: (value, valid) => `Unknown mode "${value}". Use one of: ${valid}.`,
-  notAWorkspace: (dir) => `${dir} isn't a teacher-agent workspace (no config.json). Run "teacher-agent init" there, or pass --dir with an existing workspace.`,
+  notAWorkspace: (dir) => `${dir} isn't a miyagi workspace (no config.json). Run "miyagi init" there, or pass --dir with an existing workspace.`,
   contextMoved: (count, sourcesDir) => `context/ isn't used anymore: its ${count} files were moved to ${sourcesDir}.\n`,
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ had the old layout: it was moved to ${legacyDir} (its downloaded files, to ${sourcesDir}) and the agent will rebuild the knowledge base from there.\n`,
-  setupSaved: (kind, dir) => `Settings saved. When you want to start: teacher-agent ${kind} --dir "${dir}"`,
+  setupSaved: (kind, dir) => `Settings saved. When you want to start: miyagi ${kind} --dir "${dir}"`,
   autonomousNeedsCredentials:
     "autonomous mode can't log in by hand (there's no way to ask a human for help): save the user and password in config.json, or use --mode guided/interactive.",
   headlessNeedsCredentials:
@@ -262,8 +266,8 @@ details.`,
   headingCourse: (url, courseId) => `Course: ${url} (id ${courseId})\n`,
   headerWorkspace: "workspace",
   headerCourse: "course",
-  welcomePlain: "teacher-agent connecting to Moodle. Esc interrupts the reply in progress; /resume picks up an earlier conversation; /exit or Ctrl+C (with no reply in progress) close the session.",
-  welcomeInk: "teacher-agent connecting to Moodle. Shift+Tab switches between guided and interactive, /resume picks up an earlier conversation, ? shows the shortcuts and /exit closes the session.",
+  welcomePlain: "miyagi is ready. Esc interrupts the reply in progress; /resume picks up an earlier conversation; /exit or Ctrl+C (with no reply in progress) close the session.",
+  welcomeInk: "miyagi is ready. Shift+Tab switches between guided and interactive, /resume picks up an earlier conversation, ? shows the shortcuts and /exit closes the session.",
   promptLabel: "you>",
   exitingNow: "Exiting without waiting. What was recorded so far is already saved on disk.",
   interrupting: "Interrupting and closing the session… (Ctrl+C again to exit without waiting)",

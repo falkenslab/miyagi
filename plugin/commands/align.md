@@ -9,4 +9,4 @@ activities that assess them, rubrics, weights, dates), write the comparison in t
 base, and fix or propose each gap — every change in Moodle with its own approval.
 
 If there is no teaching plan yet, say so and offer to write it first with
-`/teacher-agent:teaching-plan`.
+`/miyagi:teaching-plan`.

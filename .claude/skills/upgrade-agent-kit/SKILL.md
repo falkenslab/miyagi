@@ -1,11 +1,11 @@
 ---
 name: upgrade-agent-kit
-description: Move teacher-agent's @falkenslab/agent-kit dependency to a new agent-kit release from npm - read what changed, install the exact version, update .minispec/core/stack.md, verify, commit. Use when a new agent-kit release is out, or when the user asks to update the kit.
+description: Move miyagi's @falkenslab/agent-kit dependency to a new agent-kit release from npm - read what changed, install the exact version, update .minispec/core/stack.md, verify, commit. Use when a new agent-kit release is out, or when the user asks to update the kit.
 ---
 
 # Upgrade the agent-kit dependency
 
-agent-kit is on npm (its ADR-017). teacher-agent depends on it at an **exact version**, never
+agent-kit is on npm (its ADR-017). miyagi depends on it at an **exact version**, never
 a range (ADR-010):
 
 ```
@@ -13,14 +13,14 @@ a range (ADR-010):
 ```
 
 While the kit is 0.x a minor can break, and a range would let a user's `npm install -g` pick a
-version teacher-agent was never checked against. Never go back to a git dependency: npm runs
+version miyagi was never checked against. Never go back to a git dependency: npm runs
 the kit's `prepare` during a user's global install and fails without `tsc`.
 
 ## 0. Before
 
 - See what's new: `npm view @falkenslab/agent-kit versions dist-tags` and the release notes
   (`gh release view vNEW -R falkenslab/agent-kit`). A "Breaking changes" section other than
-  "None", or a `!` in `git -C ../agent-kit log --oneline vOLD..vNEW`, means teacher-agent's code
+  "None", or a `!` in `git -C ../agent-kit log --oneline vOLD..vNEW`, means miyagi's code
   probably has to change too.
 - student-agent uses the same kit: check what it did for the same upgrade
   (`git -C ../student-agent log --oneline -- package.json src/`).
@@ -50,6 +50,6 @@ npm install --save-exact @falkenslab/agent-kit@X.Y.Z
 ## 4. Commit
 
 One commit, `build(deps): agent-kit vNEW`, whose body says in a line what the release brings
-to teacher-agent. Files: `package.json`, `package-lock.json`, `.minispec/core/stack.md` (plus any
+to miyagi. Files: `package.json`, `package-lock.json`, `.minispec/core/stack.md` (plus any
 code the upgrade required). Push only if the user asks. Users get the new kit with the next
-teacher-agent release.
+miyagi release.

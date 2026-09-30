@@ -1,7 +1,7 @@
 import type { Messages } from "./en.js";
 
 export const es: Messages = {
-  help: (globalConfigPath) => `teacher-agent [<comando>] [opciones]
+  help: (globalConfigPath) => `miyagi [<comando>] [opciones]
 
 Comandos:
   init [--dir <ruta>]
@@ -33,25 +33,27 @@ Comandos:
 Opciones:
   -h, --help           Muestra esta ayuda.
   -v, --version        Muestra la versión instalada.
-  --language=<código>  Idioma de los textos de teacher-agent y del chat: es, en, fr o de
+  --language=<código>  Idioma de los textos de miyagi y del chat: es, en, fr o de
                        (por defecto, el de "agent.language" del workspace, o el del
                        sistema).
 
 Cada workspace es un directorio (el actual, o el indicado con --dir) con su propio
-config.json, como un repositorio git. Sin argumentos, teacher-agent pregunta si quieres
+config.json, como un repositorio git. Sin argumentos, miyagi pregunta si quieres
 "run" o "chat" y usa el directorio actual; si todavía no es un workspace, lo configura
 y termina (vuelve a lanzarlo para empezar). --headless (necesita credenciales guardadas)
 y el idioma preferido también se pueden fijar de forma persistente: en el config.json
 del workspace ("agent.headless", "agent.language") o, para todos, en
 ${globalConfigPath} ("defaultHeadless", "defaultLanguage"). Ver README.md para más
 detalle.`,
-  alreadyWorkspace: (dir) => `${dir} ya es un workspace de teacher-agent (config.json existe). Elige otro directorio.`,
-  exploreFailed: (reason) => `No se pudo explorar el Moodle (${reason}). El workspace está creado; puedes reintentarlo con "teacher-agent explore".`,
+  alreadyWorkspace: (dir) => `${dir} ya es un workspace de miyagi (config.json existe). Elige otro directorio.`,
+  exploreFailed: (reason) => `No se pudo explorar el Moodle (${reason}). El workspace está creado; puedes reintentarlo con "miyagi explore".`,
   catalogBuiltin: "[incorporada]",
   catalogCustom: "[propia]",
   skillsTitle: (dir) => `Habilidades disponibles en ${dir}`,
   commandsTitle: (dir) => `Comandos disponibles en ${dir} (dentro de "chat")`,
-  unknownCommand: (command) => `Comando desconocido "${command}". Usa teacher-agent --help.`,
+  unknownCommand: (command) => `Comando desconocido "${command}". Usa miyagi --help.`,
+  renamedCommand: "teacher-agent ahora se llama miyagi: usa el comando miyagi (teacher-agent seguirá funcionando un tiempo).",
+  globalConfigMigrated: (file) => `Tu configuración de ~/.teacher-agent se ha copiado a ${file}.`,
 
   initHeading: (dir) => `\n=== Inicializando workspace en ${dir} ===`,
   required: "Obligatorio",
@@ -79,7 +81,7 @@ detalle.`,
   workspaceCreated: (dir) => `Workspace creado en ${dir}\n`,
   exploreNow:
     "¿Explorar ahora qué tipos de actividad y de pregunta admite este Moodle? (inicia sesión y solo mira, sin crear " +
-    'nada; también puedes hacerlo luego con "teacher-agent explore")',
+    'nada; también puedes hacerlo luego con "miyagi explore")',
   whatToDo: "¿Qué quieres hacer?",
   kindRun: "Gestionar el curso de una sentada (run)",
   kindChat: "Conversar con el agente (chat)",
@@ -88,16 +90,16 @@ detalle.`,
   modeGuided: "guided — solo pausa antes de publicar algo visible para los estudiantes",
   modeAutonomous: "autonomous — sin pausas",
 
-  studentRole: (dir) => `${dir} es un aula con rol "student": teacher-agent solo actúa como profesor.`,
+  studentRole: (dir) => `${dir} es un aula con rol "student": miyagi solo actúa como profesor.`,
   draftsLimitsInvalid: (dir, key, valid) => `${dir}/config.json: agent.draftsLimits.${key} tiene que ser un número positivo, y uno de: ${valid}.`,
   defaultLabel: (host, courseId) => `${host} · curso ${courseId}`,
 
   unknownMode: (value, valid) => `Modo desconocido "${value}". Usa uno de: ${valid}.`,
-  notAWorkspace: (dir) => `${dir} no es un workspace de teacher-agent (falta config.json). Ejecuta "teacher-agent init" ahí, o pasa --dir con un workspace existente.`,
+  notAWorkspace: (dir) => `${dir} no es un workspace de miyagi (falta config.json). Ejecuta "miyagi init" ahí, o pasa --dir con un workspace existente.`,
   contextMoved: (count, sourcesDir) => `context/ ya no se usa: sus ${count} ficheros se han movido a ${sourcesDir}.\n`,
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ tenía la estructura antigua: se ha movido a ${legacyDir} (sus ficheros descargados, a ${sourcesDir}) y el agente reconstruirá la base de conocimiento a partir de ahí.\n`,
-  setupSaved: (kind, dir) => `Configuración guardada. Cuando quieras empezar: teacher-agent ${kind} --dir "${dir}"`,
+  setupSaved: (kind, dir) => `Configuración guardada. Cuando quieras empezar: miyagi ${kind} --dir "${dir}"`,
   autonomousNeedsCredentials:
     "El modo autonomous no admite login manual (no hay forma de pedir ayuda a un humano): guarda usuario y contraseña en config.json, o usa --mode guided/interactive.",
   headlessNeedsCredentials:
@@ -110,8 +112,8 @@ detalle.`,
   headingCourse: (url, courseId) => `Curso: ${url} (id ${courseId})\n`,
   headerWorkspace: "workspace",
   headerCourse: "curso",
-  welcomePlain: "teacher-agent conectando con Moodle. Esc interrumpe la respuesta en curso; /resume retoma una conversación anterior; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión.",
-  welcomeInk: "teacher-agent conectando con Moodle. Shift+Tab alterna entre guided e interactive, /resume retoma una conversación anterior, ? muestra los atajos y /exit cierra la sesión.",
+  welcomePlain: "miyagi está listo. Esc interrumpe la respuesta en curso; /resume retoma una conversación anterior; /exit o Ctrl+C (sin respuesta en curso) cierran la sesión.",
+  welcomeInk: "miyagi está listo. Shift+Tab alterna entre guided e interactive, /resume retoma una conversación anterior, ? muestra los atajos y /exit cierra la sesión.",
   promptLabel: "tú>",
   exitingNow: "Saliendo sin esperar. Lo registrado hasta ahora ya está guardado en disco.",
   interrupting: "Interrumpiendo y cerrando la sesión… (Ctrl+C otra vez para salir sin esperar)",

@@ -1,5 +1,5 @@
 {
-  "name": "teacher-agent",
+  "name": "miyagi",
   "version": "0.9.0",
   "private": true,
   "description": "Agent that manages a Moodle course as a teacher, built on @falkenslab/agent-kit",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "teacher-agent": "./dist/cli.js"
+    "miyagi": "./dist/cli.js"
   },
   "files": [
     "dist",

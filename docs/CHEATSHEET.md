@@ -1,6 +1,6 @@
-# teacher-agent · CheatSheet
+# miyagi · CheatSheet
 
-**teacher-agent** es un asistente que lleva contigo tu curso de Moodle. Entra con tu cuenta de profesor en una ventana de Chrome y trabaja como lo harías tú: corrige entregas, responde en el foro, crea apuntes y cuestionarios, revisa el curso y te dice cómo va la clase. Tú hablas con él en la terminal, con tus palabras, y **nada que vean tus estudiantes se publica sin tu permiso**.
+**miyagi** es un asistente que lleva contigo tu curso de Moodle. Entra con tu cuenta de profesor en una ventana de Chrome y trabaja como lo harías tú: corrige entregas, responde en el foro, crea apuntes y cuestionarios, revisa el curso y te dice cómo va la clase. Tú hablas con él en la terminal, con tus palabras, y **nada que vean tus estudiantes se publica sin tu permiso**.
 
 Esta CheatSheet está pensada para empezar a usarlo hoy mismo: instalarlo, conectarlo a un curso y probarlo con casos de uso que van de lo más sencillo a lo más ambicioso. La guía completa está en el [README](../README.md).
 
@@ -18,7 +18,7 @@ Esta CheatSheet está pensada para empezar a usarlo hoy mismo: instalarlo, conec
    - [Nivel 5 · Construir temas y cursos enteros](#nivel-5--construir-temas-y-cursos-enteros)
    - [Nivel 6 · Adaptarlo a tu forma de trabajar](#nivel-6--adaptarlo-a-tu-forma-de-trabajar)
 6. [La memoria: se acuerda de tu curso](#6-la-memoria-se-acuerda-de-tu-curso)
-7. [Una semana con teacher-agent](#7-una-semana-con-teacher-agent)
+7. [Una semana con miyagi](#7-una-semana-con-miyagi)
 8. [Fuera del chat: tareas de una sola orden](#8-fuera-del-chat-tareas-de-una-sola-orden)
 9. [Consejos y problemas frecuentes](#9-consejos-y-problemas-frecuentes)
 10. [Referencia rápida](#10-referencia-rápida)
@@ -49,17 +49,17 @@ Esta CheatSheet está pensada para empezar a usarlo hoy mismo: instalarlo, conec
 2. Pega esta línea y pulsa Intro (tarda uno o dos minutos; los avisos amarillos `warn` son normales):
 
    ```bash
-   npm install -g https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz
+   npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz
    ```
 
    En Mac, si da un error de permisos, ponle `sudo ` delante.
 3. Comprueba que está:
 
    ```bash
-   teacher-agent --version
+   miyagi --version
    ```
 
-Para **actualizarlo**, repite el paso 2. Para **desinstalarlo**: `npm uninstall -g teacher-agent`.
+Para **actualizarlo**, repite el paso 2. Para **desinstalarlo**: `npm uninstall -g miyagi`.
 
 ## 3. Conectarlo a tu curso: un ejemplo completo
 
@@ -74,10 +74,10 @@ mkdir bases-de-datos
 cd bases-de-datos
 ```
 
-### Paso 2 · `teacher-agent init`
+### Paso 2 · `miyagi init`
 
 ```bash
-teacher-agent init
+miyagi init
 ```
 
 Responde a sus preguntas (esto es lo que contestaría nuestro profesor):
@@ -89,7 +89,7 @@ Responde a sus preguntas (esto es lo que contestaría nuestro profesor):
 | Contraseña | `********` | Solo si has puesto usuario. |
 | Etiqueta / descripción | `Bases de Datos 1.º DAW` | Solo para reconocer la carpeta. |
 | Tono de voz | Cercano | Es como hablará a tus estudiantes en el foro y en la retroalimentación. |
-| Idioma | `español` | También el de los menús y avisos de teacher-agent. En blanco, te responde en el idioma en que le escribas y los menús siguen el del sistema. |
+| Idioma | `español` | También el de los menús y avisos de miyagi. En blanco, te responde en el idioma en que le escribas y los menús siguen el del sistema. |
 | ¿Probar prácticas en Docker? | No | Actívalo más tarde si das informática y tienes Docker. |
 | ¿Crear `instructions.md`? | Sí | Un archivo para tus instrucciones fijas ([nivel 6](#nivel-6--adaptarlo-a-tu-forma-de-trabajar)). |
 | ¿Explorar ahora este Moodle? | **Sí** | Mira qué tipos de actividad y de pregunta admite tu centro, sin crear ni cambiar nada. |
@@ -112,7 +112,7 @@ bases-de-datos/
 Copia en `sources/` lo que tengas: la programación, las rúbricas, los enunciados con su solución, tus criterios ("las entregas tarde, un 20 % menos"). Luego:
 
 ```bash
-teacher-agent ingest
+miyagi ingest
 ```
 
 Los lee sin abrir Moodle y los incorpora a su memoria. También puedes hacerlo desde el chat con `/knowledge:ingest`.
@@ -120,12 +120,12 @@ Los lee sin abrir Moodle y los incorpora a su memoria. También puedes hacerlo d
 ### Paso 4 · Tu primera conversación
 
 ```bash
-teacher-agent chat
+miyagi chat
 ```
 
 Se abre Chrome, entra en el curso y te pregunta qué necesitas. Buen primer mensaje:
 
-> **Tú:** /teacher-agent:orient
+> **Tú:** /miyagi:orient
 >
 > **Asistente:** *(recorre la página del curso, la guía docente y el calificador)* El curso tiene 6 temas y se evalúa con 4 tareas (60 %) y 2 cuestionarios (40 %). La próxima entrega es la Tarea 3, el día 14. Los avisos van por el foro de Novedades y las dudas por el foro general. Lo he apuntado en mis notas del curso.
 
@@ -133,7 +133,7 @@ A partir de aquí, sigue con los casos de uso. 👇
 
 ## 4. El chat en un minuto
 
-Siempre desde la carpeta del curso: `teacher-agent chat` (o `teacher-agent chat --dir <carpeta>` desde cualquier sitio).
+Siempre desde la carpeta del curso: `miyagi chat` (o `miyagi chat --dir <carpeta>` desde cualquier sitio).
 
 | Qué quieres | Qué haces |
 | --- | --- |
@@ -146,30 +146,30 @@ Siempre desde la carpeta del curso: `teacher-agent chat` (o `teacher-agent chat 
 | Copiar texto | Arrástralo con el ratón y haz clic derecho |
 | Ver los atajos de teclado | `?` con el prompt vacío |
 | Salir | `/exit` (todo se guarda solo) |
-| Seguir donde lo dejaste | `teacher-agent chat --continue`, o `/resume` dentro del chat para elegir una conversación anterior: recuerda lo que hablasteis |
-| Ver los atajos disponibles | `teacher-agent commands` (fuera del chat) |
+| Seguir donde lo dejaste | `miyagi chat --continue`, o `/resume` dentro del chat para elegir una conversación anterior: recuerda lo que hablasteis |
+| Ver los atajos disponibles | `miyagi commands` (fuera del chat) |
 
 **Atajos** (escríbelos con lo que necesites detrás):
 
 | Atajo | Para qué |
 | --- | --- |
-| `/teacher-agent:orient` | Conocer el aula: evaluación, plazos, canales |
-| `/teacher-agent:grade` | Corregir las entregas pendientes |
-| `/teacher-agent:forum` | Revisar el foro e intervenir si hace falta |
-| `/teacher-agent:progress` | Ver cómo va la clase y quién se queda atrás |
-| `/teacher-agent:quiz <tema>` | Crear un cuestionario |
-| `/teacher-agent:build-unit <descripción>` | Construir un tema |
-| `/teacher-agent:build-course <descripción>` | Construir un curso completo |
-| `/teacher-agent:teaching-plan` | Escribir o revisar la programación didáctica |
-| `/teacher-agent:align` | Comprobar que el aula sigue la programación |
-| `/teacher-agent:audit` | Auditar el aula y proponer mejoras |
-| `/teacher-agent:research <tema>` | Investigar un tema con fuentes |
-| `/teacher-agent:map` | Ver las direcciones del curso que tiene apuntadas |
+| `/miyagi:orient` | Conocer el aula: evaluación, plazos, canales |
+| `/miyagi:grade` | Corregir las entregas pendientes |
+| `/miyagi:forum` | Revisar el foro e intervenir si hace falta |
+| `/miyagi:progress` | Ver cómo va la clase y quién se queda atrás |
+| `/miyagi:quiz <tema>` | Crear un cuestionario |
+| `/miyagi:build-unit <descripción>` | Construir un tema |
+| `/miyagi:build-course <descripción>` | Construir un curso completo |
+| `/miyagi:teaching-plan` | Escribir o revisar la programación didáctica |
+| `/miyagi:align` | Comprobar que el aula sigue la programación |
+| `/miyagi:audit` | Auditar el aula y proponer mejoras |
+| `/miyagi:research <tema>` | Investigar un tema con fuentes |
+| `/miyagi:map` | Ver las direcciones del curso que tiene apuntadas |
 | `/knowledge:ingest` | Incorporar a su memoria los documentos nuevos de `sources/` |
 | `/knowledge:query <pregunta>` | Responder a partir de su memoria del curso, sin abrir Moodle |
 | `/knowledge:lint` | Revisar que su memoria esté completa y bien enlazada |
 
-Los atajos son solo comodidad: *"corrige lo pendiente"* funciona igual que `/teacher-agent:grade`.
+Los atajos son solo comodidad: *"corrige lo pendiente"* funciona igual que `/miyagi:grade`.
 
 ## 5. Casos de uso, de menos a más
 
@@ -223,7 +223,7 @@ Te propone criterios, espera tu visto bueno, los guarda en su memoria y los apli
 
 **Atender el foro**
 
-> /teacher-agent:forum
+> /miyagi:forum
 
 Revisa los hilos recientes y decide si hace falta intervenir: responder una duda sin contestar, animar la participación o dejar que los estudiantes sigan entre ellos. Cada respuesta, con tu aprobación. Apunta las dudas que se repiten, para el tema correspondiente.
 
@@ -233,7 +233,7 @@ Revisa los hilos recientes y decide si hace falta intervenir: responder una duda
 
 **Ver quién se queda atrás**
 
-> /teacher-agent:progress
+> /miyagi:progress
 
 Mira el informe de progreso y las calificaciones, separa a quien va bien de quien se está descolgando y te propone qué hacer. Apunta la tendencia de la clase (no fichas personales), así que la próxima vez te dirá si ha mejorado.
 
@@ -245,7 +245,7 @@ Mira el informe de progreso y las calificaciones, separa a quien va bien de quie
 
 **Un cuestionario**
 
-> /teacher-agent:quiz tema 3, consultas SQL con JOIN, 12 preguntas, de repaso (no puntúa)
+> /miyagi:quiz tema 3, consultas SQL con JOIN, 12 preguntas, de repaso (no puntúa)
 
 Escribe las preguntas (distractores creíbles, niveles variados, retroalimentación por opción), te las enseña todas y las importa de golpe. Guarda una copia en su memoria para reutilizarlas.
 
@@ -271,19 +271,19 @@ Los redacta, los revisa como lo vería un alumno (legibilidad, accesibilidad) y 
 
 **Auditar el curso**
 
-> /teacher-agent:audit
+> /miyagi:audit
 
 Revisa organización, accesibilidad, coherencia pedagógica, evaluación, fechas y recursos caducados, y te da recomendaciones ordenadas por prioridad. Guarda cada auditoría con su fecha, así que la siguiente te dirá qué ha mejorado desde la anterior.
 
 **Escribir la programación didáctica**
 
-> /teacher-agent:teaching-plan Tengo en sources el borrador del departamento. 6 horas semanales, de septiembre a junio.
+> /miyagi:teaching-plan Tengo en sources el borrador del departamento. 6 horas semanales, de septiembre a junio.
 
 La escribe a partir de tu material, te pregunta lo que solo tú puedes decidir (pesos, calendario) y la hace revisar por el revisor pedagógico. Queda en su memoria, no se publica salvo que se lo pidas.
 
 **Comprobar que el aula cumple la programación**
 
-> /teacher-agent:align
+> /miyagi:align
 
 Busca criterios que ninguna actividad evalúa, rúbricas que faltan, pesos o fechas que no cuadran, temas sin construir. Te propone cada cambio y lo hace con tu aprobación.
 
@@ -297,7 +297,7 @@ Busca criterios que ninguna actividad evalúa, rúbricas que faltan, pesos o fec
 
 **Investigar antes de enseñar**
 
-> /teacher-agent:research novedades de PostgreSQL 17 que merezca la pena contar en clase
+> /miyagi:research novedades de PostgreSQL 17 que merezca la pena contar en clase
 
 Delega en el investigador, contrasta fuentes oficiales y guarda lo encontrado con sus enlaces y fechas.
 
@@ -305,13 +305,13 @@ Delega en el investigador, contrasta fuentes oficiales y guarda lo encontrado co
 
 **Un tema nuevo, encajado en lo que ya hay**
 
-> /teacher-agent:build-unit Tema 7: bases de datos NoSQL con MongoDB, 3 semanas, con una práctica por parejas al final
+> /miyagi:build-unit Tema 7: bases de datos NoSQL con MongoDB, 3 semanas, con una práctica por parejas al final
 
 Lee el curso y su programación, planifica el tema, lo hace revisar, lo construye (apuntes, actividades, cuestionario, rúbricas), lo mira como un alumno y te dice qué conviene que revises.
 
 **Un curso completo desde cero** (sobre un curso vacío)
 
-> /teacher-agent:build-course Introducción a HTML5 y CSS3 para 1.º de DAW, 5 temas, con un proyecto final de página web personal
+> /miyagi:build-course Introducción a HTML5 y CSS3 para 1.º de DAW, 5 temas, con un proyecto final de página web personal
 
 Planifica primero en su memoria, luego crea sección a sección con contenido de verdad y termina con una revisión. Es la tarea más larga: déjala en marcha y ve aprobando.
 
@@ -340,7 +340,7 @@ Revisa lo entregado esta semana en $ARGUMENTS, resume los errores más repetidos
 
 y en el chat: `/semana Tarea 3`.
 
-**Habilidades propias**: `.claude/skills/<nombre>/SKILL.md` para enseñarle a hacer algo siempre de una manera concreta (por ejemplo, cómo corregir tus prácticas). Ver [el README](../README.md#avanzado-enséñale-habilidades-nuevas). Comprueba que las ve con `teacher-agent skills`.
+**Habilidades propias**: `.claude/skills/<nombre>/SKILL.md` para enseñarle a hacer algo siempre de una manera concreta (por ejemplo, cómo corregir tus prácticas). Ver [el README](../README.md#avanzado-enséñale-habilidades-nuevas). Comprueba que las ve con `miyagi skills`.
 
 ## 6. La memoria: se acuerda de tu curso
 
@@ -380,32 +380,32 @@ Cada conversación empieza de cero en el chat, pero **no en el conocimiento**: e
 - No guarda fichas de estudiantes concretos: solo tendencias de la clase.
 - Cada curso tiene su propia memoria, en su carpeta.
 
-## 7. Una semana con teacher-agent
+## 7. Una semana con miyagi
 
-Un ejemplo de cómo encaja en la rutina, siempre con `teacher-agent chat`:
+Un ejemplo de cómo encaja en la rutina, siempre con `miyagi chat`:
 
 | Día | Le pides | Tiempo tuyo |
 | --- | --- | --- |
-| **Lunes** | *"¿Qué ha pasado este fin de semana y qué vence esta semana?"* + `/teacher-agent:forum` | 5 min leyendo y aprobando respuestas |
-| **Martes** | `/teacher-agent:quiz` del tema que empieza, de repaso | Revisar las preguntas |
+| **Lunes** | *"¿Qué ha pasado este fin de semana y qué vence esta semana?"* + `/miyagi:forum` | 5 min leyendo y aprobando respuestas |
+| **Martes** | `/miyagi:quiz` del tema que empieza, de repaso | Revisar las preguntas |
 | **Miércoles** | *"Corrige la Tarea 3 con su rúbrica"* | Aprobar notas y ajustar alguna |
-| **Jueves** | `/teacher-agent:progress` y *"escribe un aviso animando a quien va retrasado, sin señalar a nadie"* | Un par de minutos |
+| **Jueves** | `/miyagi:progress` y *"escribe un aviso animando a quien va retrasado, sin señalar a nadie"* | Un par de minutos |
 | **Viernes** | *"Prepara el tema de la semana que viene: apuntes y una práctica"* | Revisar y aprobar |
-| **Cada mes** | `/teacher-agent:audit` y `/teacher-agent:align` | Decidir qué mejoras aplicar |
+| **Cada mes** | `/miyagi:audit` y `/miyagi:align` | Decidir qué mejoras aplicar |
 
 ## 8. Fuera del chat: tareas de una sola orden
 
 Para encargos concretos sin conversación, `run --task`. Se aplican las mismas reglas y aprobaciones.
 
 ```bash
-teacher-agent run --task "Corrige la Tarea 2"
-teacher-agent run --task "Revisa el foro y responde las dudas sin contestar"
-teacher-agent run --task "Crea un cuestionario de 10 preguntas sobre el tema 3"
-teacher-agent run --task "Audita el curso y detecta problemas"
-teacher-agent run --task "Construye un curso de introducción a HTML5 y CSS3 para 1.º de DAW"
+miyagi run --task "Corrige la Tarea 2"
+miyagi run --task "Revisa el foro y responde las dudas sin contestar"
+miyagi run --task "Crea un cuestionario de 10 preguntas sobre el tema 3"
+miyagi run --task "Audita el curso y detecta problemas"
+miyagi run --task "Construye un curso de introducción a HTML5 y CSS3 para 1.º de DAW"
 ```
 
-`teacher-agent run` sin `--task` recorre el curso entero: corrige, atiende el foro, revisa el contenido y termina con un resumen de la clase. Te pregunta cuánto supervisarlo:
+`miyagi run` sin `--task` recorre el curso entero: corrige, atiende el foro, revisa el contenido y termina con un resumen de la clase. Te pregunta cuánto supervisarlo:
 
 | Modo | Comportamiento |
 | --- | --- |
@@ -414,7 +414,7 @@ teacher-agent run --task "Construye un curso de introducción a HTML5 y CSS3 par
 | `autonomous` | No pregunta nada. Solo en cursos de prueba |
 
 ```bash
-teacher-agent run --mode guided
+miyagi run --mode guided
 ```
 
 ## 9. Consejos y problemas frecuentes
@@ -432,31 +432,32 @@ teacher-agent run --mode guided
 
 | Problema | Solución |
 | --- | --- |
-| `teacher-agent` no se reconoce | Cierra y abre la terminal; comprueba `node --version` (20 o más) |
+| `miyagi` no se reconoce | Cierra y abre la terminal; comprueba `node --version` (20 o más) |
 | Se queda en la pantalla de inicio de sesión | Sin usuario guardado, inicia sesión tú en la ventana de Chrome |
 | Los menús salen en otro idioma | Añade `--language=es` (o `en`, `fr`, `de`) |
-| Quiero que no se vea Chrome | `teacher-agent chat --headless` (necesita usuario y contraseña guardados) |
+| Quiero que no se vea Chrome | `miyagi chat --headless` (necesita usuario y contraseña guardados) |
 | Está haciendo algo que no quería | `Esc`, y dile qué hacer en su lugar |
 | Recuerda algo mal | Díselo en el chat o edita la página de `knowledge/` |
-| Venía de moodle-agent | Abre `teacher-agent chat` en la carpeta del aula: reorganiza sus apuntes solo |
+| Venía de teacher-agent | Es el mismo con otro nombre: instala miyagi (arriba); tu configuración y tus cursos sirven tal cual |
+| Venía de moodle-agent | Abre `miyagi chat` en la carpeta del aula: reorganiza sus apuntes solo |
 
 ## 10. Referencia rápida
 
 | Orden | Para qué |
 | --- | --- |
-| `teacher-agent init` | Preparar la carpeta de un curso (y explorar su Moodle) |
-| `teacher-agent chat` | Conversar con el asistente |
-| `teacher-agent run [--task "…"] [--mode …]` | Gestionar el curso o hacer un encargo de una vez |
-| `teacher-agent explore` | Ver qué admite tu Moodle, sin cambiar nada |
-| `teacher-agent ingest [archivos…]` | Incorporar tus documentos a su memoria, sin abrir Moodle |
-| `teacher-agent skills` | Listar las habilidades, incluidas las tuyas |
-| `teacher-agent commands` | Listar los atajos del chat, incluidos los tuyos |
-| `teacher-agent --help` | Ver todas las órdenes y opciones |
-| `teacher-agent --version` | Ver la versión instalada |
+| `miyagi init` | Preparar la carpeta de un curso (y explorar su Moodle) |
+| `miyagi chat` | Conversar con el asistente |
+| `miyagi run [--task "…"] [--mode …]` | Gestionar el curso o hacer un encargo de una vez |
+| `miyagi explore` | Ver qué admite tu Moodle, sin cambiar nada |
+| `miyagi ingest [archivos…]` | Incorporar tus documentos a su memoria, sin abrir Moodle |
+| `miyagi skills` | Listar las habilidades, incluidas las tuyas |
+| `miyagi commands` | Listar los atajos del chat, incluidos los tuyos |
+| `miyagi --help` | Ver todas las órdenes y opciones |
+| `miyagi --version` | Ver la versión instalada |
 
 Todas aceptan `--dir <carpeta>` y `--language=es|en|fr|de`; `chat`, `run` y `explore`, también `--headless`.
 
-**Habilidades** que aplica solo cuando la tarea lo pide (`teacher-agent skills` para verlas; cada una explicada con ejemplos en [skills.md](skills.md)):
+**Habilidades** que aplica solo cuando la tarea lo pide (`miyagi skills` para verlas; cada una explicada con ejemplos en [skills.md](skills.md)):
 
 - **Construir**: `course-building`, `unit-building`, `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`, `quiz-building`, `rubric-design`, `scorm-packaging`, `practice-testing`, `publish-check`.
 - **Diseñar**: `course-design`, `teaching-methodologies`, `teaching-plan`, `course-alignment`, `topic-research`.

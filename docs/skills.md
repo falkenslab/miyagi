@@ -1,10 +1,10 @@
-# Las habilidades de teacher-agent
+# Las habilidades de miyagi
 
 Una **habilidad** es un conocimiento que el asistente aplica por su cuenta cuando la tarea lo pide: cómo corregir con justicia, cómo escribir una buena pregunta de test, cómo montar un taller de coevaluación en Moodle… No hace falta llamarlas ni saberse sus nombres. Basta con pedirle el trabajo con tus palabras, y él elige las que necesita (a menudo varias a la vez).
 
-Aquí están todas, agrupadas por lo que hacen, con un ejemplo de cómo pedírselo en el chat. Algunas tienen además un **atajo** (`/teacher-agent:...`) que la pone en marcha directamente.
+Aquí están todas, agrupadas por lo que hacen, con un ejemplo de cómo pedírselo en el chat. Algunas tienen además un **atajo** (`/miyagi:...`) que la pone en marcha directamente.
 
-Para verlas desde la terminal: `teacher-agent skills`. Para empezar a usar el asistente, mira la [CheatSheet](CHEATSHEET.md).
+Para verlas desde la terminal: `miyagi skills`. Para empezar a usar el asistente, mira la [CheatSheet](CHEATSHEET.md).
 
 ## Índice
 
@@ -22,7 +22,7 @@ Para verlas desde la terminal: `teacher-agent skills`. Para empezar a usar el as
 Antes de hacer algo complejo, se sitúa: cómo está organizado el curso, cómo se evalúa, qué plazos hay, por dónde se comunica la clase y qué puede hacer realmente con tu cuenta. Busca lo justo para la tarea, sin recopilar de más, y lo apunta en su memoria para no tener que volver a mirarlo.
 
 - **Pídeselo así:** *"Antes de nada, conoce el curso: cómo se evalúa y qué entregas vienen."*
-- **Atajo:** `/teacher-agent:orient`
+- **Atajo:** `/miyagi:orient`
 
 ### 🗺️ `moodle-navigation` · Leer el curso tal como es
 
@@ -35,28 +35,28 @@ Lee la estructura real del curso en Moodle 4 y 5: secciones, actividades y recur
 Corrige tareas, preguntas abiertas de los cuestionarios y la participación en foros evaluables con un criterio justo y **el mismo para todos**. Si le has dado tu rúbrica o tu solucionario, mandan sobre su criterio. Escribe una retroalimentación útil para cada estudiante, te enseña cada nota antes de guardarla y apunta qué criterio aplicó para mantenerlo en la siguiente corrección.
 
 - **Pídeselo así:** *"Corrige las entregas de la Tarea 2 con la rúbrica que te dejé en sources."*
-- **Atajo:** `/teacher-agent:grade`
+- **Atajo:** `/miyagi:grade`
 
 ### 💬 `forum` · Llevar el foro
 
 Decide cuándo conviene que intervenga el profesor y cuándo es mejor dejar que los estudiantes se respondan entre ellos. Escribe respuestas y correcciones útiles, publica avisos para toda la clase, se asegura de que cada mensaje se publique una sola vez y apunta las dudas que se repiten, en el tema al que pertenecen.
 
 - **Pídeselo así:** *"¿Hay dudas sin responder en el foro? Contéstalas con tono cercano."*
-- **Atajo:** `/teacher-agent:forum`
+- **Atajo:** `/miyagi:forum`
 
 ### 📈 `progress-monitoring` · Ver cómo va la clase
 
 Revisa el progreso y las calificaciones y, en lugar de darte una lista de notas, separa a quien va bien de quien se está quedando atrás, prioriza y te propone qué hacer. Compara con las revisiones anteriores, así que te dice si la clase mejora o empeora. Solo guarda tendencias de la clase, nunca fichas de estudiantes concretos.
 
 - **Pídeselo así:** *"¿Quién se está quedando atrás y qué le está costando más a la clase?"*
-- **Atajo:** `/teacher-agent:progress`
+- **Atajo:** `/miyagi:progress`
 
 ### 🔍 `course-auditor` · Auditar el curso
 
 Hace una revisión completa del curso (organización, accesibilidad, coherencia pedagógica, evaluación, enlaces rotos, contenido caducado) o una pasada ligera de mantenimiento, y te da recomendaciones ordenadas por prioridad en vez de una lista sin más. También sirve para preparar una nueva edición del curso. Guarda cada auditoría con su fecha para saber qué ha mejorado desde la anterior.
 
 - **Pídeselo así:** *"Revisa el curso y dime qué mejorarías antes de que empiece el trimestre."*
-- **Atajo:** `/teacher-agent:audit`
+- **Atajo:** `/miyagi:audit`
 
 ## Crear contenido y actividades
 
@@ -83,14 +83,14 @@ Construye una rúbrica o guía de corrección desde cero cuando una actividad no
 Escribe preguntas de cuestionario bien hechas: distractores creíbles, niveles variados (recordar, aplicar, analizar), enunciados sin ambigüedades y retroalimentación útil en cada opción. También revisa un cuestionario existente en busca de preguntas triviales, repetidas o mal redactadas.
 
 - **Pídeselo así:** *"Revisa las preguntas del cuestionario del tema 1: ¿hay alguna demasiado fácil o confusa?"*
-- **Atajo:** `/teacher-agent:quiz <tema>` (junto con `quiz-building`)
+- **Atajo:** `/miyagi:quiz <tema>` (junto con `quiz-building`)
 
 ### 🧩 `quiz-building` · Montar cuestionarios
 
 Crea o modifica cuestionarios en Moodle: su configuración (fechas, tiempo, intentos, método de calificación, comportamiento de las preguntas, qué ve el alumno al revisar), añade las preguntas una a una o las importa de golpe en formato GIFT, y comprueba el orden y la puntuación total. Cambia los cuestionarios que ya tienen intentos con cuidado de no perjudicar a nadie.
 
 - **Pídeselo así:** *"Crea un cuestionario de repaso de 12 preguntas sobre JOIN, sin límite de intentos."*
-- **Atajo:** `/teacher-agent:quiz <tema>`
+- **Atajo:** `/miyagi:quiz <tema>`
 
 ### 🎲 `activity-building` · Otras actividades de Moodle
 
@@ -135,21 +135,21 @@ Elige y aplica una metodología que encaje con lo que se quiere aprender, y la m
 Te ayuda a escribir o revisar la programación didáctica del curso (contexto, objetivos, contenidos y temas, metodología, evaluación y calificación, temporalización, atención a la diversidad, recursos) a partir de tu material y tus decisiones. Te pregunta lo que solo tú puedes decidir, como las horas, el calendario o los pesos, y marca como propuesta lo que no hayas decidido. Queda en su memoria, enlazada con cada tema. No se publica en Moodle salvo que se lo pidas.
 
 - **Pídeselo así:** *"Escribe la programación a partir del borrador del departamento que te dejé en sources."*
-- **Atajo:** `/teacher-agent:teaching-plan`
+- **Atajo:** `/miyagi:teaching-plan`
 
 ### 🎯 `course-alignment` · Comprobar que el curso sigue la programación
 
 Compara el curso de Moodle con la programación: objetivos o criterios que ninguna actividad evalúa, rúbricas que faltan, temas, fechas o pesos distintos de lo previsto, y cosas del curso que la programación no contempla. Te propone los cambios para alinearlos y los hace con tu aprobación.
 
 - **Pídeselo así:** *"¿Mi aula evalúa todos los criterios de la programación?"*
-- **Atajo:** `/teacher-agent:align`
+- **Atajo:** `/miyagi:align`
 
 ### 🔎 `topic-research` · Investigar un tema
 
 Investiga en internet cuando el material del curso no basta: el estado actual de una tecnología o una versión, documentación oficial, buenas prácticas, recursos didácticos, ejemplos, datos. Se apoya en su ayudante investigador, contrasta las fuentes (primero las oficiales) y guarda lo encontrado en su memoria con las fuentes citadas. La usa también por su cuenta antes de escribir sobre algo que puede haber cambiado.
 
 - **Pídeselo así:** *"Investiga qué novedades de PostgreSQL 17 merece la pena contar en clase."*
-- **Atajo:** `/teacher-agent:research <tema>`
+- **Atajo:** `/miyagi:research <tema>`
 
 ## Construir temas y cursos
 
@@ -158,14 +158,14 @@ Investiga en internet cuando el material del curso no basta: el estado actual de
 Construye un tema completo dentro de un curso que ya existe, encajado en su programación, su calendario, sus pesos y su estilo: elige la metodología, lo planifica, lo hace revisar por el revisor pedagógico, crea los apuntes, las actividades y las rúbricas, lo comprueba como lo vería un alumno y te dice qué conviene que revises.
 
 - **Pídeselo así:** *"Añade un tema 7 sobre MongoDB, de 3 semanas, con una práctica por parejas al final."*
-- **Atajo:** `/teacher-agent:build-unit <descripción>`
+- **Atajo:** `/miyagi:build-unit <descripción>`
 
 ### 🏗️ `course-building` · Construir un curso completo
 
 Construye un curso entero a partir de una descripción (materia, nivel, duración): primero la programación, luego la sección de bienvenida y cada tema con contenido real, actividades y rúbricas, y al final las comprobaciones de todo el curso (libro de calificaciones, calendario, vista de estudiante). Para cada tema usa `unit-building`. Está pensada para un curso vacío.
 
 - **Pídeselo así:** *"Monta un curso de introducción a HTML5 y CSS3 para 1.º de DAW, de 5 temas."*
-- **Atajo:** `/teacher-agent:build-course <descripción>`
+- **Atajo:** `/miyagi:build-course <descripción>`
 
 ## Su memoria del curso
 
@@ -176,7 +176,7 @@ Estas cuatro mantienen la carpeta `knowledge/`, donde el asistente guarda lo que
 Lee un documento (un archivo de `sources/`, una página de Moodle) y lo incorpora a su memoria: escribe un resumen, crea o actualiza las páginas de los conceptos que trata y lo enlaza todo con el índice.
 
 - **Pídeselo así:** *"Te he dejado en sources la rúbrica de la práctica final. Incorpórala."*
-- **Atajo:** `/knowledge:ingest` (o `teacher-agent ingest` desde la terminal)
+- **Atajo:** `/knowledge:ingest` (o `miyagi ingest` desde la terminal)
 
 ### 🧠 `knowledge-query` · Consultar su memoria
 
@@ -198,4 +198,4 @@ Las plantillas con las que escribe cada tipo de página de su memoria (índice, 
 
 ## Tus propias habilidades
 
-Puedes enseñarle habilidades nuevas para tu asignatura sin programar: una carpeta `.claude/skills/<nombre>/` con un archivo `SKILL.md` dentro de la carpeta del curso, con las instrucciones escritas como se las explicarías a un profesor en prácticas. Aparecen en `teacher-agent skills` marcadas como `[propia]`. Cómo escribirlas, con un ejemplo, en el [README](../README.md#avanzado-enséñale-habilidades-nuevas).
+Puedes enseñarle habilidades nuevas para tu asignatura sin programar: una carpeta `.claude/skills/<nombre>/` con un archivo `SKILL.md` dentro de la carpeta del curso, con las instrucciones escritas como se las explicarías a un profesor en prácticas. Aparecen en `miyagi skills` marcadas como `[propia]`. Cómo escribirlas, con un ejemplo, en el [README](../README.md#avanzado-enséñale-habilidades-nuevas).

@@ -9,8 +9,8 @@ export type { Messages } from "./en.js";
 const CATALOGS: Record<string, Messages> = { en, es, fr, de };
 
 /**
- * teacher-agent's texts for a person in agent-kit's current language (`getLanguage()`), so
- * teacher-agent and the kit always show the same one. English when there's no catalog.
+ * miyagi's texts for a person in agent-kit's current language (`getLanguage()`), so
+ * miyagi and the kit always show the same one. English when there's no catalog.
  */
 export function t(): Messages {
   return CATALOGS[getLanguage()] ?? en;

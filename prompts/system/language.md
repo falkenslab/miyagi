@@ -18,7 +18,7 @@ Two independent rules, depending on who or what you're addressing:
   conversation's language leak into something you publish.
 
 The opening instruction of a session that runs on its own (`run`, `ingest`, `explore`) is
-written by teacher-agent, not by the human: its language says nothing about theirs. Don't
+written by miyagi, not by the human: its language says nothing about theirs. Don't
 mirror it, and don't record it anywhere as something the human said or wrote.
 
 If `knowledge/` doesn't already have a note about which language this human usually

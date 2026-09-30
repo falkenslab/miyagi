@@ -1,21 +1,26 @@
 ---
 name: release
-description: Cut a new teacher-agent release - decide the semver bump from the commits since the last tag, bump the version, commit, tag, push, build the installable package and create the GitHub release with it and Spanish notes. Only when the user explicitly asks to release or publish a version.
+description: Cut a new miyagi release - decide the semver bump from the commits since the last tag, bump the version, commit, tag, push, build the installable package and create the GitHub release with it and Spanish notes. Only when the user explicitly asks to release or publish a version.
 disable-model-invocation: true
 ---
 
-# Release teacher-agent
+# Release miyagi
 
 A release is a version commit, a `vX.Y.Z` tag on `main` and a GitHub release in the
-**public** `falkenslab/teacher-agent` repo carrying the installable package. Users don't
+**public** `falkenslab/miyagi` repo carrying the installable package. Users don't
 clone: they run
 
 ```
-npm install -g https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz
+npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz
 ```
 
-so a release without a `teacher-agent.tgz` asset (that exact name) breaks installation for
-everyone the moment it becomes "latest".
+so a release without a `miyagi.tgz` asset (that exact name) breaks installation for
+everyone the moment it becomes "latest". The project was called teacher-agent until v0.9.0,
+and older instructions say `…/releases/latest/download/teacher-agent.tgz`: until v1.0.0, every
+release also carries a `teacher-agent.tgz` bridge (`compat/`), a package still called
+teacher-agent whose dependency is this release's `miyagi.tgz` and whose `teacher-agent`
+command runs it (with a notice). It must be a separate package: `miyagi` can't declare the
+`teacher-agent` command itself, npm refuses to install it over the old package (EEXIST).
 
 ## 1. Preconditions
 
@@ -50,34 +55,42 @@ Tags are lightweight. Never move or delete a published tag, never force-push.
 
 ```
 npm pack --pack-destination <scratchpad>          # prepack builds dist/ first
-mv <scratchpad>/teacher-agent-X.Y.Z.tgz <scratchpad>/teacher-agent.tgz
+mv <scratchpad>/miyagi-X.Y.Z.tgz <scratchpad>/miyagi.tgz
+# the bridge for the old install command, until v1.0.0, pointing at this release's miyagi.tgz
+node .claude/skills/release/compat/pack-teacher-agent.mjs X.Y.Z https://github.com/falkenslab/miyagi/releases/download/vX.Y.Z/miyagi.tgz <scratchpad>
 ```
 
 It must be tens of kB, with no `node_modules/` inside (`tar -tzf` it). A package in the
 hundreds of MB means dependencies got bundled — among them the Claude SDK's Windows-only
 `claude.exe` — and it won't install on Mac or Linux: don't publish it.
 
+To test the bridge before the release exists, build it once with `file:<scratchpad>/miyagi.tgz`
+instead of the URL: install the previous release's `teacher-agent.tgz` and then the bridge into
+the same throwaway prefix, and `teacher-agent --version` must print this version with the
+rename notice. Rebuild it with the URL before uploading.
+
 Install it into a throwaway prefix, never the user's global npm, and run `--version` from
-there (`<scratchpad>/g/teacher-agent.cmd` on Windows):
+there (`<scratchpad>/g/miyagi.cmd` on Windows):
 
 ```
-npm install -g --prefix <scratchpad>/g <scratchpad>/teacher-agent.tgz
+npm install -g --prefix <scratchpad>/g <scratchpad>/miyagi.tgz
 ```
 
 ## 5. GitHub release
 
-Notes in Spanish, for a teacher who uses teacher-agent (not its code), from the commits since
+Notes in Spanish, for a teacher who uses miyagi (not its code), from the commits since
 the last tag: the install command, novedades, correcciones, cambios que afectan a los
 workspaces existentes (with what the user must do, if anything), and the agent-kit version it
 uses.
 
 ```
-gh release create vX.Y.Z <scratchpad>/teacher-agent.tgz --verify-tag --title "teacher-agent vX.Y.Z" --notes-file <notes>
+gh release create vX.Y.Z <scratchpad>/miyagi.tgz <scratchpad>/teacher-agent.tgz --verify-tag --title "miyagi vX.Y.Z" --notes-file <notes>
 ```
 
 Then check the real user path: install from
-`https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz` into
-another throwaway prefix and run `--version`.
+`https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz` into
+another throwaway prefix and run `--version`; until v1.0.0, also the old
+`https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz`.
 
 Report the version, the release URL and the notes. If a step fails half-way, report exactly
 what is pushed and published and what isn't instead of retrying blindly.

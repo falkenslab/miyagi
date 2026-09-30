@@ -24,8 +24,8 @@ uploaded hidden. Say so and stop if you're asked to.
     say why in the report), `--memory 512m --cpus 1`, and a time limit (`timeout 120 docker run ...`).
   - Mount only the practice folder, read-only when the code doesn't need to write
     (`-v "<dir>:/work:ro"`); never mount the home folder, the workspace root or the Docker socket.
-  - Label every container and image you create `--label teacher-agent=practice`, and name images
-    `teacher-agent-practice/<activity-slug>`.
+  - Label every container and image you create `--label miyagi=practice`, and name images
+    `miyagi-practice/<activity-slug>`.
 - **Your own names, always.** A statement written for students uses generic names (`web1`,
   a volume `datos-web`, a Compose project named after its folder) and fixed ports (`8080`,
   `8081`). On this machine those can already exist — another Moodle, the teacher's own

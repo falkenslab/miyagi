@@ -50,7 +50,7 @@ async function exitOnCancel<T>(fn: () => Promise<T>): Promise<T> {
 
 /**
  * Asks for a new workspace's data and creates it in `workspaceDir` (config.json, sources/,
- * knowledge/, .gitignore and, optionally, instructions.md). Used by `teacher-agent init`
+ * knowledge/, .gitignore and, optionally, instructions.md). Used by `miyagi init`
  * and by run/chat when the directory isn't a workspace yet.
  */
 export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConfig> {
@@ -150,7 +150,7 @@ export function promptExploreNow(): Promise<boolean> {
   return exitOnCancel(() => ask<boolean>({ type: "confirm", name: "explore", message: t().exploreNow, default: true }));
 }
 
-/** Only used by "teacher-agent" with no subcommand. */
+/** Only used by "miyagi" with no subcommand. */
 export function promptRunKind(): Promise<"run" | "chat"> {
   return exitOnCancel(() => ask<"run" | "chat">({
     type: "select",

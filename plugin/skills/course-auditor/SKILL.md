@@ -8,7 +8,7 @@ description: Run a holistic audit of a Moodle course - organization, accessibili
 Two related but different uses of this skill:
 
 - **A full audit**: a one-off, thorough pass, usually requested explicitly ("review this
-  course", "audit unit 3") or run by the `/teacher-agent:audit` command.
+  course", "audit unit 3") or run by the `/miyagi:audit` command.
 - **Routine maintenance**: a lighter periodic pass — stale dates, broken restrictions,
   empty sections — or preparing the course for a new edition/term. Run the same checks
   below, but scoped to what's likely to have changed since the last pass (see

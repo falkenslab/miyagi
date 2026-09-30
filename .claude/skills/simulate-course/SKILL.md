@@ -1,6 +1,6 @@
 ---
 name: simulate-course
-description: Simulate teacher-agent building a complete course from a description passed as the argument (e.g. "Introducción a Docker, 3 temas, FP de grado superior") - create an empty course in moodle-sandbox, run teacher-agent with the course-building skill, auto-approve and log every publication, capture the result and write the test report into tests/. Use to test or demo course creation end to end.
+description: Simulate miyagi building a complete course from a description passed as the argument (e.g. "Introducción a Docker, 3 temas, FP de grado superior") - create an empty course in moodle-sandbox, run miyagi with the course-building skill, auto-approve and log every publication, capture the result and write the test report into tests/. Use to test or demo course creation end to end.
 ---
 
 # Simulate building a complete course
@@ -9,14 +9,14 @@ The course to build: **$ARGUMENTS**
 
 If that line is empty, ask for a description (subject, level, length) before doing anything.
 
-This drives teacher-agent against the sandbox with no human answering approvals: every
+This drives miyagi against the sandbox with no human answering approvals: every
 publication is approved automatically and logged, and the review happens afterwards, in the
 report. That's only acceptable against moodle-sandbox — never point this at a real Moodle.
 
 ## 1. Sandbox and build
 
 Follow steps 1-2 of `sandbox-e2e` (find the sandbox, check it's up; ask before a first setup).
-Build teacher-agent from the working tree: `npm run build`.
+Build miyagi from the working tree: `npm run build`.
 
 ## 2. An empty course
 

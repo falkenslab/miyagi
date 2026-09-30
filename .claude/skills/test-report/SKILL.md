@@ -1,6 +1,6 @@
 ---
 name: test-report
-description: Write the report of an end-to-end teacher-agent test into tests/<YYYY-MM-DDTHH-MM>-<slug>/ - README.md with the full report and its screenshots in assets/ - add it to the tests/README.md index, and turn its findings into changes in the agent. Use at the end of sandbox-e2e, simulate-course, or any test of the agent against a real Moodle.
+description: Write the report of an end-to-end miyagi test into tests/<YYYY-MM-DDTHH-MM>-<slug>/ - README.md with the full report and its screenshots in assets/ - add it to the tests/README.md index, and turn its findings into changes in the agent. Use at the end of sandbox-e2e, simulate-course, or any test of the agent against a real Moodle.
 ---
 
 # Write a test report into tests/

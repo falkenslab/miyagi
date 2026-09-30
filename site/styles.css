@@ -1,4 +1,4 @@
-/* teacher-agent — promotional site. One stylesheet for both languages. */
+/* miyagi — promotional site. One stylesheet for both languages. */
 
 /* Atkinson Hyperlegible Next and Mono (SIL Open Font License 1.1), variable, served from this site. */
 @font-face {
@@ -36,15 +36,17 @@
 
 
 :root {
-  --pizarra: #1f3129;      /* blackboard: dark sections, the terminal */
-  --pizarra-2: #2a4136;    /* its raised surface */
-  --tiza: #f1f3ec;         /* chalk: text on the blackboard */
-  --papel: #f6f7f3;        /* paper: page background (cool, not cream) */
-  --tinta: #17221d;        /* ink: text on paper */
-  --tinta-suave: #4a5a52;  /* secondary text on paper */
-  --borla: #dfa23a;        /* the owl's tassel: accent on the blackboard */
-  --borla-texto: #8a5a06;  /* the same amber, dark enough for text on paper */
-  --linea: #d5dbd3;        /* hairlines on paper */
+  /* The hinomaru palette (src/theme.ts): sumi ink, washi paper and the sun's red. */
+  --pizarra: #18181b;      /* sumi: dark sections, the terminal */
+  --pizarra-2: #26262b;    /* its raised surface */
+  --tiza: #f3f3f0;         /* washi: text on sumi */
+  --papel: #f7f7f4;        /* page background */
+  --tinta: #18181b;        /* text on paper */
+  --tinta-suave: #52525b;  /* secondary text on paper */
+  --borla: #e0564a;        /* the sun, light enough to read on sumi */
+  --borla-texto: #bc002d;  /* the sun on paper: links, days, accents */
+  --sol: #bc002d;          /* the sun as a fill: primary buttons, step numbers */
+  --linea: #dcdcd6;        /* hairlines on paper */
 
   --bg: var(--papel);
   --fg: var(--tinta);
@@ -68,11 +70,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #15211b;
+    --bg: #121214;
     --fg: var(--tiza);
     --fg-2: #b9c4bc;
     --accent-text: var(--borla);
-    --rule: #2f463a;
+    --rule: #2e2e33;
     color-scheme: dark;
   }
 }
@@ -98,7 +100,7 @@ a:hover { text-decoration-thickness: 0.14em; }
 
 .skip {
   position: absolute; left: var(--gutter); top: -4rem;
-  background: var(--borla); color: var(--tinta); padding: 0.6rem 1rem; border-radius: 6px; z-index: 10;
+  background: var(--sol); color: #ffffff; padding: 0.6rem 1rem; border-radius: 6px; z-index: 10;
 }
 .skip:focus { top: 0.75rem; }
 
@@ -156,7 +158,7 @@ p { margin: 0 0 1em; max-width: var(--measure); }
   padding: 0.7rem 1.3rem; border-radius: 10px; font-weight: 700; text-decoration: none;
   border: 2px solid var(--fg); color: var(--fg);
 }
-.button.primary { background: var(--borla); border-color: var(--borla); color: var(--tinta); }
+.button.primary { background: var(--sol); border-color: var(--sol); color: #ffffff; }
 .button:hover { transform: translateY(-1px); }
 .fine { font-size: var(--step--1); color: var(--fg-2); margin-top: 1rem; }
 
@@ -179,10 +181,10 @@ p { margin: 0 0 1em; max-width: var(--measure); }
 .t-tool::before { content: "● "; color: var(--borla); }
 .t-agent { padding-left: 1.2rem; text-indent: -1.2rem; }
 .t-agent::before { content: "● "; color: var(--tiza); }
-.t-panel { border: 1.5px solid #d77757; border-radius: 10px; padding: 0.8rem 1rem; margin-top: 0.3rem; }
+.t-panel { border: 1.5px solid var(--sol); border-radius: 10px; padding: 0.8rem 1rem; margin-top: 0.3rem; }
 .t-panel strong { display: block; margin-bottom: 0.35rem; }
 .t-panel .opts { margin: 0.6rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.1rem; }
-.t-panel .on { color: #e38a6b; font-weight: 600; }
+.t-panel .on { color: var(--borla); font-weight: 600; }
 
 @media (prefers-reduced-motion: no-preference) {
   .js .terminal li { opacity: 0; transform: translateY(4px); transition: opacity 0.35s ease, transform 0.35s ease; }
@@ -228,7 +230,7 @@ section { padding-block: clamp(3rem, 8vw, 6rem); }
 .steps > li { counter-increment: step; display: grid; grid-template-columns: 2.6rem 1fr; gap: 0 1rem; }
 .steps > li::before {
   content: counter(step); display: grid; place-items: center; width: 2.6rem; height: 2.6rem;
-  border-radius: 50%; background: var(--borla); color: var(--tinta); font-weight: 800;
+  border-radius: 50%; background: var(--sol); color: #ffffff; font-weight: 800;
 }
 /* Grid items don't shrink below their content by default: the install command would widen its step. */
 .steps > li > div, .week li > div, .hero .wrap > div, .split > div, .points > div { min-width: 0; }

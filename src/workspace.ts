@@ -28,7 +28,7 @@ export interface WorkspaceConfig {
   };
   /** How the agent shows up on that course. */
   agent: {
-    /** Never asked: teacher-agent always writes "teacher" (see ensureTeacherRole()), so another
+    /** Never asked: miyagi always writes "teacher" (see ensureTeacherRole()), so another
      * agent opening the same workspace knows whose it is; "student" is rejected when reading. */
     role?: "student" | "teacher";
     persona?: AgentPersona;
@@ -146,7 +146,7 @@ export async function ensureTeacherRole(workspaceDir: string, config: WorkspaceC
   return updated;
 }
 
-const GITIGNORE_TEMPLATE = `# Generado por "teacher-agent init" — config.json guarda tu contraseña de Moodle en
+const GITIGNORE_TEMPLATE = `# Generado por "miyagi init" — config.json guarda tu contraseña de Moodle en
 # claro, .env (si lo creas) puede guardar tu CLAUDE_CODE_OAUTH_TOKEN, y sessions/
 # acumula transcripciones y perfiles de navegador pesados. Si versionas este workspace
 # con git, no subas ninguno de los tres.
@@ -216,7 +216,7 @@ export function defaultWorkspaceLabel(url: string, courseId: string): string {
 }
 
 /**
- * The interface language ("en", "es", "fr", "de": teacher-agent's and agent-kit's texts) for
+ * The interface language ("en", "es", "fr", "de": miyagi's and agent-kit's texts) for
  * `agent.language`, which is free text ("español", "English"). Undefined when it's none of
  * them, so the system's language decides. `--language=<code>` on the command line still wins.
  */

@@ -1,7 +1,7 @@
 import type { Messages } from "./en.js";
 
 export const de: Messages = {
-  help: (globalConfigPath) => `teacher-agent [<Befehl>] [Optionen]
+  help: (globalConfigPath) => `miyagi [<Befehl>] [Optionen]
 
 Befehle:
   init [--dir <Pfad>]
@@ -33,25 +33,27 @@ Befehle:
 Optionen:
   -h, --help         Zeigt diese Hilfe.
   -v, --version      Zeigt die installierte Version.
-  --language=<Code>  Sprache der Texte von teacher-agent und des Chats: es, en, fr oder
+  --language=<Code>  Sprache der Texte von miyagi und des Chats: es, en, fr oder
                      de (standardmäßig die aus "agent.language" des Arbeitsbereichs,
                      sonst die des Systems).
 
 Jeder Arbeitsbereich ist ein Verzeichnis (das aktuelle oder das mit --dir angegebene)
-mit eigener config.json, wie ein Git-Repository. Ohne Argumente fragt teacher-agent, ob
+mit eigener config.json, wie ein Git-Repository. Ohne Argumente fragt miyagi, ob
 Sie "run" oder "chat" wollen, und nutzt das aktuelle Verzeichnis; ist es noch kein
 Arbeitsbereich, richtet es ihn ein und beendet sich (starten Sie es erneut). --headless
 (braucht gespeicherte Zugangsdaten) und die bevorzugte Sprache lassen sich auch dauerhaft
 festlegen: in der config.json des Arbeitsbereichs ("agent.headless", "agent.language")
 oder, für alle, in ${globalConfigPath} ("defaultHeadless", "defaultLanguage").
 Mehr in README.md.`,
-  alreadyWorkspace: (dir) => `${dir} ist bereits ein teacher-agent-Arbeitsbereich (config.json existiert). Wählen Sie ein anderes Verzeichnis.`,
-  exploreFailed: (reason) => `Das Moodle konnte nicht erkundet werden (${reason}). Der Arbeitsbereich ist angelegt; Sie können es mit "teacher-agent explore" erneut versuchen.`,
+  alreadyWorkspace: (dir) => `${dir} ist bereits ein miyagi-Arbeitsbereich (config.json existiert). Wählen Sie ein anderes Verzeichnis.`,
+  exploreFailed: (reason) => `Das Moodle konnte nicht erkundet werden (${reason}). Der Arbeitsbereich ist angelegt; Sie können es mit "miyagi explore" erneut versuchen.`,
   catalogBuiltin: "[eingebaut]",
   catalogCustom: "[eigene]",
   skillsTitle: (dir) => `Verfügbare Fähigkeiten in ${dir}`,
   commandsTitle: (dir) => `Verfügbare Befehle in ${dir} (im "chat")`,
-  unknownCommand: (command) => `Unbekannter Befehl "${command}". Nutzen Sie teacher-agent --help.`,
+  unknownCommand: (command) => `Unbekannter Befehl "${command}". Nutzen Sie miyagi --help.`,
+  renamedCommand: "teacher-agent heißt jetzt miyagi: Nutzen Sie den Befehl miyagi (teacher-agent funktioniert noch eine Weile).",
+  globalConfigMigrated: (file) => `Ihre Einstellungen aus ~/.teacher-agent wurden nach ${file} kopiert.`,
 
   initHeading: (dir) => `\n=== Arbeitsbereich wird eingerichtet in ${dir} ===`,
   required: "Pflichtfeld",
@@ -79,7 +81,7 @@ Mehr in README.md.`,
   workspaceCreated: (dir) => `Arbeitsbereich angelegt in ${dir}\n`,
   exploreNow:
     "Jetzt erkunden, welche Aktivitäts- und Fragetypen dieses Moodle unterstützt? (er meldet sich an und schaut nur, " +
-    'ohne etwas anzulegen; geht später auch mit "teacher-agent explore")',
+    'ohne etwas anzulegen; geht später auch mit "miyagi explore")',
   whatToDo: "Was möchten Sie tun?",
   kindRun: "Den Kurs in einem Durchgang betreuen (run)",
   kindChat: "Mit dem Agenten sprechen (chat)",
@@ -88,16 +90,16 @@ Mehr in README.md.`,
   modeGuided: "guided — hält nur an, bevor etwas für die Lernenden Sichtbares veröffentlicht wird",
   modeAutonomous: "autonomous — ohne Pausen",
 
-  studentRole: (dir) => `${dir} ist ein Kursraum mit der Rolle "student": teacher-agent handelt nur als Lehrkraft.`,
+  studentRole: (dir) => `${dir} ist ein Kursraum mit der Rolle "student": miyagi handelt nur als Lehrkraft.`,
   draftsLimitsInvalid: (dir, key, valid) => `${dir}/config.json: agent.draftsLimits.${key} muss eine positive Zahl sein, und eines von: ${valid}.`,
   defaultLabel: (host, courseId) => `${host} · Kurs ${courseId}`,
 
   unknownMode: (value, valid) => `Unbekannter Modus "${value}". Nutzen Sie einen von: ${valid}.`,
-  notAWorkspace: (dir) => `${dir} ist kein teacher-agent-Arbeitsbereich (keine config.json). Führen Sie dort "teacher-agent init" aus oder geben Sie mit --dir einen vorhandenen Arbeitsbereich an.`,
+  notAWorkspace: (dir) => `${dir} ist kein miyagi-Arbeitsbereich (keine config.json). Führen Sie dort "miyagi init" aus oder geben Sie mit --dir einen vorhandenen Arbeitsbereich an.`,
   contextMoved: (count, sourcesDir) => `context/ wird nicht mehr genutzt: seine ${count} Dateien wurden nach ${sourcesDir} verschoben.\n`,
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ hatte die alte Struktur: es wurde nach ${legacyDir} verschoben (seine heruntergeladenen Dateien nach ${sourcesDir}), und der Agent baut die Wissensbasis daraus neu auf.\n`,
-  setupSaved: (kind, dir) => `Einstellungen gespeichert. Wenn Sie beginnen möchten: teacher-agent ${kind} --dir "${dir}"`,
+  setupSaved: (kind, dir) => `Einstellungen gespeichert. Wenn Sie beginnen möchten: miyagi ${kind} --dir "${dir}"`,
   autonomousNeedsCredentials:
     "Der Modus autonomous erlaubt keine Anmeldung von Hand (es gibt keinen Weg, einen Menschen um Hilfe zu bitten): speichern Sie Benutzer und Passwort in config.json oder nutzen Sie --mode guided/interactive.",
   headlessNeedsCredentials:
@@ -110,8 +112,8 @@ Mehr in README.md.`,
   headingCourse: (url, courseId) => `Kurs: ${url} (id ${courseId})\n`,
   headerWorkspace: "Bereich",
   headerCourse: "Kurs",
-  welcomePlain: "teacher-agent verbindet sich mit Moodle. Esc unterbricht die laufende Antwort; /resume setzt ein früheres Gespräch fort; /exit oder Strg+C (ohne laufende Antwort) beenden die Sitzung.",
-  welcomeInk: "teacher-agent verbindet sich mit Moodle. Umschalt+Tab wechselt zwischen guided und interactive, /resume setzt ein früheres Gespräch fort, ? zeigt die Tastenkürzel und /exit beendet die Sitzung.",
+  welcomePlain: "miyagi ist bereit. Esc unterbricht die laufende Antwort; /resume setzt ein früheres Gespräch fort; /exit oder Strg+C (ohne laufende Antwort) beenden die Sitzung.",
+  welcomeInk: "miyagi ist bereit. Umschalt+Tab wechselt zwischen guided und interactive, /resume setzt ein früheres Gespräch fort, ? zeigt die Tastenkürzel und /exit beendet die Sitzung.",
   promptLabel: "du>",
   exitingNow: "Beenden ohne zu warten. Was bisher aufgezeichnet wurde, ist bereits gespeichert.",
   interrupting: "Unterbreche und beende die Sitzung… (Strg+C noch einmal, um ohne Warten zu beenden)",

@@ -1,11 +1,11 @@
 ---
 name: student-impact-review
-description: Review any change that affects what teacher-agent publishes or changes in Moodle (grades, feedback, forum replies and announcements, new or edited content, quiz imports) against what students will see and the guardrails that protect them - the approval step, fairness and consistency, no deletions or enrolment changes, no personal data in the knowledge base. Use when changing prompts/system/teacher-*, evaluable-submission-*, plugin/skills that act in Moodle, or the approval wiring.
+description: Review any change that affects what miyagi publishes or changes in Moodle (grades, feedback, forum replies and announcements, new or edited content, quiz imports) against what students will see and the guardrails that protect them - the approval step, fairness and consistency, no deletions or enrolment changes, no personal data in the knowledge base. Use when changing prompts/system/teacher-*, evaluable-submission-*, plugin/skills that act in Moodle, or the approval wiring.
 ---
 
 # Review a change against what students will see
 
-Everything teacher-agent publishes lands on real students: a grade and its feedback, a reply
+Everything miyagi publishes lands on real students: a grade and its feedback, a reply
 under their question, an announcement to the whole class, a quiz they'll sit. It's hard to
 take back once seen. A change that works but weakens one of the guardrails below is a
 regression, even if no test fails.

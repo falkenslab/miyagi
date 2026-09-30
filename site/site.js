@@ -1,4 +1,4 @@
-// teacher-agent — promotional site: menu, copy button and the terminal's one reveal.
+// miyagi — promotional site: menu, copy button and the terminal's one reveal.
 document.documentElement.classList.add("js");
 
 // The menu folds on narrow screens; on wide ones the links are always shown.

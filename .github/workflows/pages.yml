@@ -1,5 +1,5 @@
 # Publishes the promotional site (site/, static: no build step) to GitHub Pages at
-# https://falkenslab.github.io/teacher-agent/ whenever it changes on main.
+# https://falkenslab.github.io/miyagi/ whenever it changes on main.
 name: pages
 
 on:

@@ -1,6 +1,6 @@
 ---
 name: sandbox-e2e
-description: Exercise teacher-agent end to end against a local Moodle from the moodle-sandbox repo - locate the sandbox, check it's up, seed the teacher's workload (students, submissions, forum doubts), build a scratch workspace from the sandbox's info contract, run explore/run/chat, check what the students would see (grades, feedback, forum replies), and deliver a report with screenshots whose lessons go back into the agent's skills. Use to validate changes that act in Moodle (grading, forum, content, explore) before trying them on a real course.
+description: Exercise miyagi end to end against a local Moodle from the moodle-sandbox repo - locate the sandbox, check it's up, seed the teacher's workload (students, submissions, forum doubts), build a scratch workspace from the sandbox's info contract, run explore/run/chat, check what the students would see (grades, feedback, forum replies), and deliver a report with screenshots whose lessons go back into the agent's skills. Use to validate changes that act in Moodle (grading, forum, content, explore) before trying them on a real course.
 ---
 
 # End-to-end test against the Moodle sandbox
@@ -79,7 +79,7 @@ weighs concepts 6, examples 3, clarity 1, and says a missing submission gets 0 w
 ## 6. Run it
 
 A Claude token must be available: `CLAUDE_CODE_OAUTH_TOKEN` in the environment, or the one
-saved in `~/.teacher-agent/config.json` (or `~/.student-agent/config.json`, passed through the
+saved in `~/.miyagi/config.json` (or `~/.student-agent/config.json`, passed through the
 environment for the run — never copied into a workspace file). In Git Bash, build that path
 with `path.join(os.homedir(), ".student-agent", "config.json")` inside `node -e`: a literal
 `"/.student-agent/..."` argument gets rewritten to `C:/Program Files/Git/...`, the variable

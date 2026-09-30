@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>teacher-agent: un asistente para tu curso de Moodle que pregunta antes de publicar</title>
-  <meta name="description" content="teacher-agent entra en tu curso de Moodle con tu cuenta de profesor: corrige entregas, atiende el foro, crea actividades y te resume cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
-  <link rel="canonical" href="https://falkenslab.github.io/teacher-agent/">
-  <link rel="alternate" hreflang="es" href="https://falkenslab.github.io/teacher-agent/">
-  <link rel="alternate" hreflang="en" href="https://falkenslab.github.io/teacher-agent/en/">
-  <link rel="alternate" hreflang="x-default" href="https://falkenslab.github.io/teacher-agent/">
+  <title>miyagi: un asistente para tu curso de Moodle que pregunta antes de publicar</title>
+  <meta name="description" content="miyagi entra en tu curso de Moodle con tu cuenta de profesor: corrige entregas, atiende el foro, crea actividades y te resume cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
+  <link rel="canonical" href="https://falkenslab.github.io/miyagi/">
+  <link rel="alternate" hreflang="es" href="https://falkenslab.github.io/miyagi/">
+  <link rel="alternate" hreflang="en" href="https://falkenslab.github.io/miyagi/en/">
+  <link rel="alternate" hreflang="x-default" href="https://falkenslab.github.io/miyagi/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_ES">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:title" content="teacher-agent: tu curso de Moodle, con un asistente que pregunta antes de publicar">
+  <meta property="og:title" content="miyagi: tu curso de Moodle, con un asistente que pregunta antes de publicar">
   <meta property="og:description" content="Corrige, atiende el foro, crea actividades y resume la clase. Nada llega a tus alumnos sin tu permiso.">
-  <meta property="og:url" content="https://falkenslab.github.io/teacher-agent/">
-  <meta property="og:image" content="https://falkenslab.github.io/teacher-agent/assets/og-es.png">
+  <meta property="og:url" content="https://falkenslab.github.io/miyagi/">
+  <meta property="og:image" content="https://falkenslab.github.io/miyagi/assets/og-es.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="El búho con birrete de teacher-agent y el lema de la página">
+  <meta property="og:image:alt" content="La cara del maestro de miyagi, con su cinta, y el lema de la página">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#1f3129">
-  <link rel="icon" href="assets/owl.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#18181b">
+  <link rel="icon" href="assets/miyagi.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/atkinson-next-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
   <script src="site.js" defer></script>
@@ -31,7 +31,7 @@
 
   <header class="site-header">
     <div class="wrap">
-      <a class="brand" href="./"><img src="assets/owl.svg" alt="" width="34" height="43">teacher-agent</a>
+      <a class="brand" href="./"><img src="assets/miyagi.svg" alt="" width="34" height="36">miyagi</a>
       <nav class="nav" aria-label="Principal">
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menú</button>
         <ul class="nav-links" id="menu">
@@ -50,16 +50,16 @@
       <div class="wrap">
         <div>
           <h1 id="titulo">Tu curso de Moodle, con un asistente que pregunta antes de publicar</h1>
-          <p class="lead">teacher-agent entra con tu cuenta de profesor, corrige entregas, atiende el foro, crea actividades y te resume cómo va la clase. Nada llega a tus alumnos sin tu permiso.</p>
+          <p class="lead">miyagi entra con tu cuenta de profesor, corrige entregas, atiende el foro, crea actividades y te resume cómo va la clase. Nada llega a tus alumnos sin tu permiso.</p>
           <div class="actions">
-            <a class="button primary" href="#instalar">Instalar teacher-agent</a>
-            <a class="button" href="https://github.com/falkenslab/teacher-agent">Ver el código en GitHub</a>
+            <a class="button primary" href="#instalar">Instalar miyagi</a>
+            <a class="button" href="https://github.com/falkenslab/miyagi">Ver el código en GitHub</a>
           </div>
           <p class="fine">Software libre (licencia MIT). Funciona con tu suscripción de Claude.</p>
         </div>
 
         <div class="terminal" role="img" aria-label="Ejemplo de conversación: le preguntas si hay algo nuevo en el foro, el asistente encuentra una duda de Lucía, prepara la respuesta y te pide permiso antes de publicarla.">
-          <div class="bar" aria-hidden="true"><img src="assets/owl.svg" alt="" width="26" height="33">teacher-agent</div>
+          <div class="bar" aria-hidden="true"><img src="assets/miyagi.svg" alt="" width="26" height="28">miyagi</div>
           <ol aria-hidden="true">
             <li class="t-you"><b>tú&gt;</b> ¿Hay algo nuevo en el foro?</li>
             <li class="t-tool">Abriendo el foro de dudas</li>
@@ -160,11 +160,11 @@
       <div class="wrap">
         <div class="section-intro">
           <h2 id="real-t">Así se ve de verdad</h2>
-          <p>Una sesión real en un Moodle de pruebas: acaba de publicar un escape room y ahora pide permiso para responder en el foro.</p>
+          <p>Una sesión real en un Moodle de pruebas: encuentra en el foro una duda de Marcos y pide permiso antes de publicar la respuesta.</p>
         </div>
         <figure class="shot">
           <a href="assets/chat-es-1100.jpg">
-            <img src="assets/chat-es-720.jpg" srcset="assets/chat-es-720.jpg 720w, assets/chat-es-1100.jpg 1100w" sizes="(max-width: 72rem) calc(100vw - 2rem), 72rem" width="1100" height="1094" loading="lazy" alt="La terminal de teacher-agent: arriba, el resumen del escape room ya visible; debajo, las acciones en el foro y el panel que pide confirmación antes de publicar la respuesta a Sara.">
+            <img src="assets/chat-es-720.jpg" srcset="assets/chat-es-720.jpg 720w, assets/chat-es-1100.jpg 1100w" sizes="(max-width: 72rem) calc(100vw - 2rem), 72rem" width="1100" height="879" loading="lazy" alt="La terminal de miyagi: las acciones en el foro y el panel que pide confirmación antes de publicar la respuesta a Marcos sobre el else de un for, con su código.">
           </a>
           <figcaption>En el móvil, toca la imagen para verla a tamaño completo.</figcaption>
         </figure>
@@ -181,7 +181,7 @@
           <li>
             <div>
               <h3>Instala Google Chrome</h3>
-              <p>Si no lo tienes ya, desde <a href="https://www.google.com/chrome/">google.com/chrome</a>. teacher-agent lo usa para entrar en Moodle.</p>
+              <p>Si no lo tienes ya, desde <a href="https://www.google.com/chrome/">google.com/chrome</a>. miyagi lo usa para entrar en Moodle.</p>
             </div>
           </li>
           <li>
@@ -192,17 +192,17 @@
           </li>
           <li>
             <div>
-              <h3>Instala teacher-agent</h3>
+              <h3>Instala miyagi</h3>
               <p>Abre una terminal (PowerShell en Windows, Terminal en Mac), pega esta línea y pulsa Intro:</p>
               <div class="command">
-                <code>npm install -g https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz</code>
+                <code>npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz</code>
                 <button class="copy" type="button" data-label="Copiar" data-done="Copiado" data-fail="Selecciónalo y cópialo">Copiar</button>
               </div>
-              <p>Después, escribe <code>teacher-agent init</code> en la carpeta que quieras usar para tu curso y responde a sus preguntas.</p>
+              <p>Después, escribe <code>miyagi init</code> en la carpeta que quieras usar para tu curso y responde a sus preguntas.</p>
             </div>
           </li>
         </ol>
-        <p class="needs">Necesitas un curso de Moodle en el que tengas rol de profesor y una suscripción de Claude Pro o Max. La <a href="https://github.com/falkenslab/teacher-agent/blob/main/docs/CHEATSHEET.md">guía paso a paso</a> lo explica todo con ejemplos.</p>
+        <p class="needs">Necesitas un curso de Moodle en el que tengas rol de profesor y una suscripción de Claude Pro o Max. La <a href="https://github.com/falkenslab/miyagi/blob/main/docs/CHEATSHEET.md">guía paso a paso</a> lo explica todo con ejemplos.</p>
       </div>
     </section>
 
@@ -211,7 +211,7 @@
         <h2 id="preguntas-t">Preguntas frecuentes</h2>
         <details>
           <summary>¿Cuánto cuesta?</summary>
-          <p>teacher-agent es gratuito y de código abierto. Lo que hace funcionar al asistente es tu suscripción de Claude (Pro o Max).</p>
+          <p>miyagi es gratuito y de código abierto. Lo que hace funcionar al asistente es tu suscripción de Claude (Pro o Max).</p>
         </details>
         <details>
           <summary>¿Funciona con el Moodle de mi centro?</summary>
@@ -235,11 +235,11 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <span>teacher-agent, de <a href="https://github.com/falkenslab">falkenslab</a></span>
+      <span>miyagi, de <a href="https://github.com/falkenslab">falkenslab</a></span>
       <ul>
-        <li><a href="https://github.com/falkenslab/teacher-agent">GitHub</a></li>
-        <li><a href="https://github.com/falkenslab/teacher-agent/releases/latest">Última versión</a></li>
-        <li><a href="https://github.com/falkenslab/teacher-agent/blob/main/LICENSE">Licencia MIT</a></li>
+        <li><a href="https://github.com/falkenslab/miyagi">GitHub</a></li>
+        <li><a href="https://github.com/falkenslab/miyagi/releases/latest">Última versión</a></li>
+        <li><a href="https://github.com/falkenslab/miyagi/blob/main/LICENSE">Licencia MIT</a></li>
         <li><a href="en/" hreflang="en" lang="en">English</a></li>
       </ul>
     </div>

@@ -2,7 +2,7 @@
 
 ## Decision
 
-`teacher-agent chat` uses agent-kit's runs (its ADR-020): each chat is a run folder `sessions/<timestamp>/` in the workspace holding its session log, its transcript and the whole conversation (`conversation.jsonl`, `subagents/`, `session.json`). `--continue` resumes the latest one and `/resume` picks another from inside the chat. The session is built by an opener, run by run: the Playwright config, the MCP servers, the hooks and the publish gate (ADR-008) are bound to the run's folder.
+`miyagi chat` uses agent-kit's runs (its ADR-020): each chat is a run folder `sessions/<timestamp>/` in the workspace holding its session log, its transcript and the whole conversation (`conversation.jsonl`, `subagents/`, `session.json`). `--continue` resumes the latest one and `/resume` picks another from inside the chat. The session is built by an opener, run by run: the Playwright config, the MCP servers, the hooks and the publish gate (ADR-008) are bound to the run's folder.
 
 ## Motivation
 

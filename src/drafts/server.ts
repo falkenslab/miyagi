@@ -9,7 +9,7 @@ import { resolveInDrafts, shown } from "./paths.js";
 
 /**
  * The drafts toolbox: file operations the agent needs to build what it uploads to Moodle
- * (download a site, copy, zip a SCORM package, print a PDF), as code inside teacher-agent's
+ * (download a site, copy, zip a SCORM package, print a PDF), as code inside miyagi's
  * own process instead of a shell (ADR-003). Every path is checked to stay inside drafts/
  * (paths.ts); URLs are http(s) only; downloads and unzips have limits; nothing it handles is
  * ever executed. Registered in run and chat, as the in-process MCP server "drafts".

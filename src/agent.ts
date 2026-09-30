@@ -51,6 +51,7 @@ import { installUploadGate } from "./uploadGate.js";
 import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
 import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
+import { LOGO } from "./theme.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -69,18 +70,6 @@ const PLAYWRIGHT_MCP_CLI = path.join(
 /** "explore" is a bounded task (login, a few look-and-cancel screens, one page written): it
  * doesn't need the headroom of a full run. */
 const EXPLORE_MAX_TURNS = 60;
-
-/**
- * The chat header's logo: an owl in a mortarboard. One-column characters only (ASCII):
- * agent-kit measures the logo to place the title beside it, and an emoji would shift it.
- */
-const LOGO = [
-  ui.dim("  ____"),
-  ui.dim(" /___/|"),
-  `${ui.accent(" {o,o}")}${ui.warn("'")}`,
-  ui.accent(" |)__)"),
-  ui.dim(" -\"-\"-"),
-];
 
 const VALID_MODES: readonly Mode[] = ["interactive", "guided", "autonomous"];
 
@@ -339,7 +328,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         runsDir: sessionsDirFor(workspaceDir),
         language: config.language,
         header: {
-          title: `teacher-agent v${VERSION}`,
+          title: `miyagi v${VERSION}`,
           art: LOGO,
           // One line, cut to the terminal's width: short values only (the full paths are
           // printed again when the session ends).
@@ -353,7 +342,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         fullscreen: parseBooleanFlag(args, "--inline") !== true,
         welcomeMessage: plain ? t().welcomePlain : ui.dim(t().welcomeInk),
         promptLabel: `\n${ui.user(t().promptLabel)} `,
-        agentLabel: ui.agent("teacher-agent>"),
+        agentLabel: ui.agent("miyagi>"),
         formatAction: friendlyToolLabel,
         toolPhrase,
         initialPrompt: loadPrompt("messages/chat-opening-teacher.md"),
@@ -441,7 +430,7 @@ function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string
 function initialPrompt(kind: SessionKind, workspaceDir: string, args: string[]): string {
   if (kind === "ingest") return ingestPrompt(workspaceDir, args);
   if (kind === "explore") return loadPrompt("messages/explore-initial.md");
-  // --task "<text>" gives the run one concrete job (e.g. "/teacher-agent:build-course ..." or
+  // --task "<text>" gives the run one concrete job (e.g. "/miyagi:build-course ..." or
   // "corrige la Tarea 2") instead of managing the whole course.
   const task = parseFlag(args, "--task")?.trim();
   const mission = task

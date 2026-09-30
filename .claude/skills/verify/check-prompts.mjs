@@ -51,8 +51,8 @@ for (const [kind, modes] of Object.entries(MODES)) {
       const problems = [];
       const left = prompt.match(/\{\{[^}]+\}\}/g);
       if (left) problems.push(`unsubstituted: ${[...new Set(left)].join(", ")}`);
-      if (/\bstudent-agent\b|moodle-agent|context\/|knowledge\/README\.md|save_to_knowledge/.test(prompt)) {
-        problems.push("mentions a student-agent/moodle-agent leftover");
+      if (/\bstudent-agent\b|moodle-agent|teacher-agent|context\/|knowledge\/README\.md|save_to_knowledge/.test(prompt)) {
+        problems.push("mentions a student-agent/moodle-agent/teacher-agent leftover");
       }
       for (const [name, { text, when, loose }] of Object.entries(SECTIONS)) {
         const expected = Boolean(when(config));

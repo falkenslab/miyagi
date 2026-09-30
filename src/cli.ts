@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { isExitPromptError, ui } from "@falkenslab/agent-kit";
 import { resolveWorkspaceDir, runSession } from "./agent.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
-import { globalConfigPath, resolveLanguage } from "./globalConfig.js";
+import { globalConfigPath, migrateLegacyGlobalConfig, resolveLanguage } from "./globalConfig.js";
 import { promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
 import { chooseInterfaceLanguage, t } from "./messages/index.js";
 import { applyTeacherTheme } from "./theme.js";
@@ -62,7 +62,7 @@ async function commandsCommand(args: string[]): Promise<void> {
 /**
  * The process's language, before anything is printed: `--language`, then the workspace's
  * `agent.language`, then the global `defaultLanguage`, then the system's. agent-kit takes the
- * same one, so its texts and teacher-agent's always agree.
+ * same one, so its texts and miyagi's always agree.
  */
 async function chooseLanguage(args: string[]): Promise<void> {
   const workspaceDir = resolveWorkspaceDir(args);
@@ -80,6 +80,11 @@ async function main(): Promise<void> {
   const [first, ...rest] = process.argv.slice(2);
   await chooseLanguage(process.argv.slice(2));
   applyTeacherTheme();
+  // Renamed from teacher-agent in 0.10: the old command still works, and the old global config
+  // (Claude token, defaults) is carried over once.
+  // The old command comes from the teacher-agent bridge package (.claude/skills/release/compat/).
+  if (process.env.MIYAGI_LEGACY_COMMAND === "teacher-agent") console.error(ui.warn(t().renamedCommand));
+  if (await migrateLegacyGlobalConfig()) console.error(ui.dim(t().globalConfigMigrated(globalConfigPath())));
 
   switch (first) {
     case "-h":
@@ -102,7 +107,7 @@ async function main(): Promise<void> {
     case undefined:
       return runSession(await promptRunKind(), []);
     default:
-      // Flags without a subcommand ("teacher-agent --mode guided") are taken as "run" flags.
+      // Flags without a subcommand ("miyagi --mode guided") are taken as "run" flags.
       if (first.startsWith("-")) return runSession("run", process.argv.slice(2));
       console.error(ui.error(t().unknownCommand(first)));
       process.exitCode = 1;
@@ -111,6 +116,6 @@ async function main(): Promise<void> {
 
 main().catch((error) => {
   if (isExitPromptError(error)) process.exit(0);
-  console.error(ui.error(`teacher-agent: ${error instanceof Error ? error.message : String(error)}`));
+  console.error(ui.error(`miyagi: ${error instanceof Error ? error.message : String(error)}`));
   process.exitCode = 1;
 });

@@ -1,6 +1,6 @@
 ---
 name: smoke-ingest
-description: Run a real `teacher-agent ingest` on a fixed fixture (a topic syllabus and an assignment rubric) in a scratch workspace and check the knowledge base it builds (links, index, one summary per source, the course layer's topic and activity pages, the teacher's grading criteria kept, no student names). Use after changing prompts/, plugin/skills that feed the knowledge base, or the agent-kit knowledge plugin - typecheck can't catch a prompt the model stops following.
+description: Run a real `miyagi ingest` on a fixed fixture (a topic syllabus and an assignment rubric) in a scratch workspace and check the knowledge base it builds (links, index, one summary per source, the course layer's topic and activity pages, the teacher's grading criteria kept, no student names). Use after changing prompts/, plugin/skills that feed the knowledge base, or the agent-kit knowledge plugin - typecheck can't catch a prompt the model stops following.
 ---
 
 # Smoke-test the knowledge base with a real ingest
@@ -35,7 +35,7 @@ node dist/cli.js ingest --dir "$WS" </dev/null > "$WS/../smoke-ingest.log" 2>&1
 ```
 
 It takes a few minutes: run it in the background and wait for it to finish. A Claude token
-must be available (environment or `~/.teacher-agent/config.json`); the run is non-interactive.
+must be available (environment or `~/.miyagi/config.json`); the run is non-interactive.
 
 ## 3. Check
 

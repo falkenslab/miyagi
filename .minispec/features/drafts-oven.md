@@ -1,6 +1,6 @@
 # The oven: every artefact in drafts/ with its phase
 
-Issue: [#18](https://github.com/falkenslab/teacher-agent/issues/18)
+Issue: [#18](https://github.com/falkenslab/miyagi/issues/18)
 
 ## Goal
 

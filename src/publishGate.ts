@@ -117,7 +117,7 @@ function describe(toolName: string, toolInput: unknown): string {
 
 /**
  * Adds the gate to `options.hooks`. `approvedText` is the response request_human_approval
- * gives when the teacher approves (teacher-agent's own `humanApprovalTexts.approved`).
+ * gives when the teacher approves (miyagi's own `humanApprovalTexts.approved`).
  *
  * An approval lasts until the next request_human_approval call or the teacher's next message,
  * so one approval covers a batch (six grades, one "Save changes" each). A publication the

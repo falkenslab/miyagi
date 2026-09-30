@@ -1,6 +1,6 @@
-// Screenshots of a whole course as built by teacher-agent: its front page (as admin and as a
+// Screenshots of a whole course as built by miyagi: its front page (as admin and as a
 // student), every activity and resource in course order, and each quiz's question list.
-// Run from the teacher-agent repo root:
+// Run from the miyagi repo root:
 //   (cd ../moodle-sandbox && npm run --silent info -- --json) | node .claude/skills/simulate-course/capture-course.mjs <outDir> <courseId> ["Student Name"]
 // Credentials come from stdin and are never printed. Writes <outDir>/shots.json with a
 // caption per image, in reading order.
