@@ -1,15 +1,15 @@
-# Activity catalog
+# Activity catalog: katalog
 
 Issue: [#16](https://github.com/falkenslab/miyagi/issues/16)
 
 ## Goal
 
-Connect miyagi to a shared catalog of activities where the teacher can search, download and install an activity in their Moodle course, and publish their own activities after signing up.
+Connect miyagi to katalog, a shared catalog of activities (each one a kata) where the teacher can search, download and install an activity in their Moodle course, and publish their own activities after signing up.
 
 ## Context
 
 - Today every activity is built from scratch in `drafts/` (GIFT, HTML, rubrics, packages) and uploaded hidden (ADR-009). Nothing built in one course can be reused by another teacher.
-- The catalog doesn't exist yet: it will be a separate project (its own repo, service and API). **This feature is blocked until that project exists**; it is recorded now so the idea and its constraints aren't lost.
+- The catalog doesn't exist yet: it will be a separate project, `katalog` (`falkenslab/katalog`: its own repo, service and API), meant to be shared by other agents too, not only miyagi. **This feature is blocked until that project exists**; it is recorded now so the idea and its constraints aren't lost.
 - Searching and downloading may be anonymous; publishing needs an account in the catalog.
 - Constraints that already apply:
   - installing in Moodle is a change students would see: built in `drafts/`, uploaded hidden, tested, and approved by the teacher (ADR-008, ADR-009);
