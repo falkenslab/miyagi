@@ -1,6 +1,6 @@
 {
   "name": "teacher-agent",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "description": "Agent that manages a Moodle course as a teacher, built on @falkenslab/agent-kit",
   "author": "Francisco Vargas Ruiz",
