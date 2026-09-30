@@ -1,5 +1,4 @@
-import { confirm, input, password, select } from "@inquirer/prompts";
-import { isExitPromptError, ui, type Mode } from "@falkenslab/agent-kit";
+import { isExitPromptError, runWizard, ui, type Mode, type WizardAnswers, type WizardStep } from "@falkenslab/agent-kit";
 import {
   createWorkspace,
   defaultWorkspaceLabel,
@@ -34,6 +33,11 @@ export function parseCourseUrl(raw: string): { url: string; courseId?: string } 
   return { url: `${parsed.origin}${parsed.pathname.slice(0, -suffix.length)}`, courseId };
 }
 
+/** One question with agent-kit's wizard (the chat's look); its answer. */
+async function ask<T>(step: WizardStep): Promise<T> {
+  return (await runWizard([step]))[step.name] as T;
+}
+
 /** Runs `fn`, exiting cleanly instead of throwing when the user hits Ctrl+C on a prompt. */
 async function exitOnCancel<T>(fn: () => Promise<T>): Promise<T> {
   try {
@@ -51,58 +55,60 @@ async function exitOnCancel<T>(fn: () => Promise<T>): Promise<T> {
  */
 export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConfig> {
   return exitOnCancel(async () => {
-    console.log(ui.heading(t().initHeading(workspaceDir)));
     const required = (v: string) => v.trim() !== "" || t().required;
-
-    const parsedUrl = parseCourseUrl(await input({ message: t().moodleUrl, validate: required }));
-    const url = parsedUrl.url;
-    let courseId = parsedUrl.courseId;
-    if (courseId) {
-      console.log(ui.dim(t().urlParsed(url, courseId)));
-    } else {
-      courseId = await input({ message: t().courseId, validate: required });
-    }
-
-    const username = await input({ message: t().username });
-    const pass = username ? await password({ message: t().password, mask: "*" }) : "";
-    const label = await input({ message: t().label, default: defaultWorkspaceLabel(url, courseId) });
-    const description = await input({ message: t().description });
-    const persona = await select<AgentPersona | undefined>({
-      message: t().persona,
-      default: undefined,
-      choices: [
-        { name: t().personaNone, value: undefined },
-        { name: t().personaFormal, value: "formal" },
-        { name: t().personaWarm, value: "warm" },
-        { name: t().personaMotivating, value: "motivating" },
+    // The course id comes from a full course URL when there is one; otherwise it's asked.
+    const courseOf = (a: WizardAnswers) => parseCourseUrl(String(a.url)).courseId ?? String(a.courseId ?? "");
+    const answers = await runWizard(
+      [
+        { type: "input", name: "url", message: t().moodleUrl, validate: required },
+        { type: "input", name: "courseId", message: t().courseId, validate: required, when: (a) => !parseCourseUrl(String(a.url)).courseId },
+        { type: "input", name: "username", message: t().username },
+        { type: "password", name: "password", message: t().password, when: (a) => String(a.username ?? "") !== "" },
+        { type: "input", name: "label", message: t().label, default: (a) => defaultWorkspaceLabel(parseCourseUrl(String(a.url)).url, courseOf(a)) },
+        { type: "input", name: "description", message: t().description },
+        {
+          type: "select",
+          name: "persona",
+          message: t().persona,
+          choices: [
+            { name: t().personaNone, value: undefined },
+            { name: t().personaFormal, value: "formal" },
+            { name: t().personaWarm, value: "warm" },
+            { name: t().personaMotivating, value: "motivating" },
+          ],
+        },
+        { type: "input", name: "language", message: t().conversationLanguage },
+        // Saved as explicit true/false (never omitted): offerPracticeRunner() reads an absent key
+        // as "never asked", and would otherwise keep asking after a deliberate "no". It's the only
+        // opt-in capability: the one thing that grants a shell (Docker only).
+        { type: "confirm", name: "allowPracticeRunner", message: t().practiceRunnerQuestion, default: false },
+        { type: "confirm", name: "instructions", message: t().createInstructions, default: false },
       ],
-    });
-    const language = await input({ message: t().conversationLanguage });
+      { title: t().initHeading(workspaceDir).trim() },
+    );
 
-    // Saved as explicit true/false (never omitted): offerPracticeRunner() reads an absent key
-    // as "never asked", and would otherwise keep asking after a deliberate "no". It's the only
-    // opt-in capability: the one thing that grants a shell (Docker only).
-    const allowPracticeRunner = await confirm({ message: t().practiceRunnerQuestion, default: false });
-
+    const url = parseCourseUrl(String(answers.url)).url;
+    const username = String(answers.username ?? "");
+    const description = String(answers.description ?? "");
+    const language = String(answers.language ?? "");
+    const persona = answers.persona as AgentPersona | undefined;
     const config: WorkspaceConfig = {
       classroom: {
-        label,
+        label: String(answers.label),
         ...(description ? { description } : {}),
         url,
-        courseId,
-        ...(username ? { username, password: pass } : {}),
+        courseId: courseOf(answers),
+        ...(username ? { username, password: String(answers.password ?? "") } : {}),
       },
       agent: {
         role: "teacher",
         ...(persona ? { persona } : {}),
         ...(language ? { language } : {}),
-        allowPracticeRunner,
+        allowPracticeRunner: answers.allowPracticeRunner === true,
       },
     };
     await createWorkspace(workspaceDir, config);
-
-    const wantsInstructions = await confirm({ message: t().createInstructions, default: false });
-    if (wantsInstructions) await writeInstructionsTemplate(workspaceDir);
+    if (answers.instructions === true) await writeInstructionsTemplate(workspaceDir);
 
     console.log(ui.success(t().workspaceCreated(workspaceDir)));
     return config;
@@ -126,7 +132,7 @@ export async function offerPracticeRunner(
     return config;
   }
   try {
-    const wants = await confirm({ message: t().practiceRunnerQuestion, default: false });
+    const wants = await ask<boolean>({ type: "confirm", name: "practiceRunner", message: t().practiceRunnerQuestion, default: false });
     const updated = { ...config, agent: { ...config.agent, allowPracticeRunner: wants } };
     await writeWorkspaceConfig(workspaceDir, updated);
     console.log();
@@ -141,12 +147,14 @@ export async function offerPracticeRunner(
 /** Asked right after "init": probing the Moodle's activity/question types is what the
  * authoring skills check before creating anything. */
 export function promptExploreNow(): Promise<boolean> {
-  return exitOnCancel(() => confirm({ message: t().exploreNow, default: true }));
+  return exitOnCancel(() => ask<boolean>({ type: "confirm", name: "explore", message: t().exploreNow, default: true }));
 }
 
 /** Only used by "teacher-agent" with no subcommand. */
 export function promptRunKind(): Promise<"run" | "chat"> {
-  return exitOnCancel(() => select<"run" | "chat">({
+  return exitOnCancel(() => ask<"run" | "chat">({
+    type: "select",
+    name: "kind",
     message: t().whatToDo,
     choices: [
       { name: t().kindRun, value: "run" },
@@ -157,7 +165,9 @@ export function promptRunKind(): Promise<"run" | "chat"> {
 
 /** Only used by "run" without --mode (chat is always guided). */
 export function promptMode(): Promise<Mode> {
-  return exitOnCancel(() => select<Mode>({
+  return exitOnCancel(() => ask<Mode>({
+    type: "select",
+    name: "mode",
     message: t().whichMode,
     choices: [
       { name: t().modeInteractive, value: "interactive" },

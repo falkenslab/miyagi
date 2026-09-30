@@ -23,7 +23,6 @@ export interface Messages {
   initHeading: (dir: string) => string;
   required: string;
   moodleUrl: string;
-  urlParsed: (url: string, courseId: string) => string;
   courseId: string;
   username: string;
   password: string;
@@ -191,7 +190,6 @@ details.`,
   initHeading: (dir) => `\n=== Setting up a workspace in ${dir} ===`,
   required: "Required",
   moodleUrl: "Moodle URL (or paste the course's full URL, e.g. https://moodle.myuniversity.edu/course/view.php?id=4):",
-  urlParsed: (url, courseId) => `  → URL: ${url} · course: ${courseId}`,
   courseId: "Course ID:",
   username: "User with the teacher role (leave it blank to log in by hand):",
   password: "Password:",

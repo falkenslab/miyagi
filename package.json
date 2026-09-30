@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@falkenslab/agent-kit": "0.13.0",
-    "@inquirer/prompts": "^8.5.2",
     "@playwright/mcp": "^0.0.79"
   },
   "devDependencies": {
