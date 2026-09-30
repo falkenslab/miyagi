@@ -1,10 +1,10 @@
 # Activity catalog
 
-Issue: [#16](https://github.com/falkenslab/teacher-agent/issues/16)
+Issue: [#16](https://github.com/falkenslab/miyagi/issues/16)
 
 ## Goal
 
-Connect teacher-agent to a shared catalog of activities where the teacher can search, download and install an activity in their Moodle course, and publish their own activities after signing up.
+Connect miyagi to a shared catalog of activities where the teacher can search, download and install an activity in their Moodle course, and publish their own activities after signing up.
 
 ## Context
 
@@ -34,7 +34,7 @@ To be settled once the catalog's API is known. Expected shape:
 
 Open questions (decided with the catalog project):
 
-- Package format: a Moodle activity backup (`.mbz`), or teacher-agent's own sources (GIFT, HTML, SCORM, rubric) plus metadata.
+- Package format: a Moodle activity backup (`.mbz`), or miyagi's own sources (GIFT, HTML, SCORM, rubric) plus metadata.
 - Sign-up and authentication (token, OAuth), and whether downloads need an account.
 - Licence of published activities (e.g. CC BY-SA) and moderation.
 
