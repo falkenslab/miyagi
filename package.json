@@ -26,7 +26,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "0.13.0",
+    "@falkenslab/agent-kit": "0.13.1",
     "@playwright/mcp": "^0.0.79"
   },
   "devDependencies": {

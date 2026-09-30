@@ -373,16 +373,13 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   // kept. The first one interrupts the run and lets it close normally (so the end message
   // below still prints); a second one exits without waiting.
   let interrupted = false;
-  // As an "info" event, not writeLine(): agent-kit 0.13's progress view drops writeLine()'s
-  // text (it goes to its inner, silent console renderer); an event shows in both views.
-  const notice = (text: string) => renderer.render({ type: "info", level: "warning", text });
   const onSigint = () => {
     if (interrupted) {
-      notice(t().exitingNow);
+      renderer.writeLine(ui.warn(t().exitingNow));
       process.exit(130);
     }
     interrupted = true;
-    notice(t().interrupting);
+    renderer.writeLine(ui.warn(t().interrupting));
     void run.interrupt().finally(() => run.close());
   };
   process.on("SIGINT", onSigint);
