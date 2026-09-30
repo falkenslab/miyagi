@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>miyagi: an assistant for your Moodle course that asks before it publishes</title>
-  <meta name="description" content="miyagi works in your Moodle course with your teacher account: it grades submissions, answers the forum, builds activities and sums up how the class is doing. Nothing reaches your students without your say-so.">
+  <title>miyagi: the assistant that runs your Moodle course and asks before it publishes</title>
+  <meta name="description" content="miyagi works in your Moodle course with your teacher account: it grades with your rubric, answers the forum, builds units, quizzes and games, writes your course plan and tells you how the class is doing. Nothing reaches your students without your say-so.">
   <link rel="canonical" href="https://falkenslab.github.io/miyagi/en/">
   <link rel="alternate" hreflang="es" href="https://falkenslab.github.io/miyagi/">
   <link rel="alternate" hreflang="en" href="https://falkenslab.github.io/miyagi/en/">
@@ -13,7 +13,7 @@
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="es_ES">
   <meta property="og:title" content="miyagi: your Moodle course, with an assistant that asks before it publishes">
-  <meta property="og:description" content="It grades, answers the forum, builds activities and sums up the class. Nothing reaches your students without your say-so.">
+  <meta property="og:description" content="It grades, answers the forum, builds units and quizzes, writes your course plan and sums up the class. Nothing reaches your students without your say-so.">
   <meta property="og:url" content="https://falkenslab.github.io/miyagi/en/">
   <meta property="og:image" content="https://falkenslab.github.io/miyagi/assets/og-en.png">
   <meta property="og:image:width" content="1200">
@@ -35,7 +35,8 @@
       <nav class="nav" aria-label="Main">
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
         <ul class="nav-links" id="menu">
-          <li><a href="#week">What it does</a></li>
+          <li><a href="#what">What it does</a></li>
+          <li><a href="#how">How it works</a></li>
           <li><a href="#control">You're in charge</a></li>
           <li><a href="#install">Install</a></li>
           <li><a href="#questions">Questions</a></li>
@@ -49,70 +50,203 @@
     <section class="hero" aria-labelledby="title">
       <div class="wrap">
         <div>
-          <h1 id="title">Your Moodle course, with an assistant that asks before it publishes</h1>
-          <p class="lead">miyagi signs in with your teacher account, grades submissions, answers the forum, builds activities and tells you how the class is doing. Nothing reaches your students without your say-so.</p>
+          <p class="kicker">An assistant for Moodle teachers</p>
+          <h1 id="title">miyagi runs your Moodle course. You give the go-ahead.</h1>
+          <p class="lead">It grades with your rubric, answers the forum, builds units, quizzes and games, and tells you how the class is doing. It works with your teacher account and publishes nothing without your say-so.</p>
           <div class="actions">
             <a class="button primary" href="#install">Install miyagi</a>
-            <a class="button" href="https://github.com/falkenslab/miyagi">See the code on GitHub</a>
+            <a class="button" href="#what">See what it does</a>
           </div>
-          <p class="fine">Free software (MIT license). Runs on your Claude subscription.</p>
+          <p class="fine">Free and open source (MIT license). Runs on your Claude subscription.</p>
         </div>
 
-        <div class="terminal" role="img" aria-label="Example conversation: you ask whether there's anything new in the forum, the assistant finds a question from Lucía, drafts an answer and asks your permission before posting it.">
-          <div class="bar" aria-hidden="true"><img src="../assets/miyagi.svg" alt="" width="26" height="28">miyagi</div>
-          <ol aria-hidden="true">
-            <li class="t-you"><b>you&gt;</b> Anything new in the forum?</li>
-            <li class="t-tool">Opening the Q&amp;A forum</li>
-            <li class="t-tool">Reading a table on the page</li>
-            <li class="t-agent">There's a new question from Lucía: "What's the difference between break and continue?" I'll draft an answer with an example of each.</li>
-            <li class="t-panel">
-              <strong>Your confirmation is needed before publishing</strong>
-              Reply to Lucía in the forum, in Spanish like the course: break leaves the loop; continue skips to the next round, with two code examples.
-              <ul class="opts"><li class="on">❯ 1. Yes</li><li>&nbsp; 2. No</li><li>&nbsp; 3. Stop</li></ul>
-            </li>
-          </ol>
+        <div class="demo">
+          <div class="terminal">
+            <div class="bar" aria-hidden="true"><img src="../assets/miyagi.svg" alt="" width="26" height="28">miyagi</div>
+            <ol class="scene" data-scene="grade" aria-label="Example: grading an assignment">
+              <li class="t-you"><b>you&gt;</b> <span class="typed">Grade Assignment 2 with the unit's rubric</span></li>
+              <li class="t-tool">Reading your rubric and your criteria</li>
+              <li class="t-tool">Opening the Assignment 2 submissions</li>
+              <li class="t-tool">Grading 3 submissions, criterion by criterion</li>
+              <li class="t-agent">All three are graded, with a breakdown per criterion. Starting with Lucy's: 7.5.</li>
+              <li class="t-panel">
+                <strong>Your confirmation is needed before publishing</strong>
+                Save Lucy's grade (7.5) and her feedback: the query works, but it doesn't validate the input; I explain how to.
+                <ul class="opts"><li class="on">❯ 1. Yes</li><li>&nbsp; 2. No</li><li>&nbsp; 3. Stop</li></ul>
+              </li>
+            </ol>
+            <ol class="scene" data-scene="forum" aria-label="Example: answering the forum" hidden>
+              <li class="t-you"><b>you&gt;</b> <span class="typed">Anything new in the forum?</span></li>
+              <li class="t-tool">Opening the Q&amp;A forum</li>
+              <li class="t-tool">Reading the unanswered threads</li>
+              <li class="t-agent">There's a new question from Mark: "What's the difference between break and continue?". It's the second time it comes up: Unit 3 may need one more example.</li>
+              <li class="t-panel">
+                <strong>Your confirmation is needed before publishing</strong>
+                Reply to Mark in the forum: break leaves the loop; continue skips to the next round, with two code examples.
+                <ul class="opts"><li class="on">❯ 1. Yes</li><li>&nbsp; 2. No</li><li>&nbsp; 3. Stop</li></ul>
+              </li>
+            </ol>
+            <ol class="scene" data-scene="unit" aria-label="Example: building a unit" hidden>
+              <li class="t-you"><b>you&gt;</b> <span class="typed">Add a unit 4 on security, as a team challenge</span></li>
+              <li class="t-tool">Reading your course plan</li>
+              <li class="t-tool">Preparing notes, challenge, rubric and quiz</li>
+              <li class="t-tool">Uploading the unit hidden and testing it as a teacher</li>
+              <li class="t-agent">Unit 4 is ready and hidden: notes, the team challenge with its rubric and a review quiz. I've tested it and everything works.</li>
+              <li class="t-panel">
+                <strong>Your confirmation is needed before showing it</strong>
+                Make the section "Unit 4: Security" visible to students, with its four activities.
+                <ul class="opts"><li class="on">❯ 1. Yes</li><li>&nbsp; 2. No</li><li>&nbsp; 3. Stop</li></ul>
+              </li>
+            </ol>
+          </div>
+          <div class="scenes" role="group" aria-label="See another example">
+            <button type="button" data-scene="grade" aria-pressed="true">Grade</button>
+            <button type="button" data-scene="forum" aria-pressed="false">Forum</button>
+            <button type="button" data-scene="unit" aria-pressed="false">Build a unit</button>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="week" aria-labelledby="week-t">
+    <section class="problem" aria-labelledby="problem-t">
       <div class="wrap">
         <div class="section-intro">
-          <h2 id="week-t">A week with teacher&#8209;agent</h2>
-          <p>You ask for things the way you'd ask a colleague, in a conversation. It works in your Moodle the way you would.</p>
+          <h2 id="problem-t">The part of the course that isn't teaching</h2>
+          <p>It has to be done, it comes back every week, and it eats your evenings.</p>
         </div>
-        <ol class="week">
-          <li>
-            <span class="day">Monday</span>
+        <ul class="chores">
+          <li><strong>Piles of submissions.</strong> Thirty assignments with the same rubric, and each one deserves feedback that helps.</li>
+          <li><strong>The same question, again.</strong> The forum asks what was already answered, and the new question gets lost among the old ones.</li>
+          <li><strong>Moodle, one click at a time.</strong> A unit with notes, an assignment, a rubric and a quiz is dozens of forms.</li>
+          <li><strong>The course plan, in a drawer.</strong> Checking that the course still matches what you promised rarely fits in the week.</li>
+        </ul>
+        <p class="answer"><span>miyagi takes care of that part.</span> You decide what reaches your students.</p>
+      </div>
+    </section>
+
+    <section id="what" class="board" aria-labelledby="what-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="what-t">What it does for you</h2>
+          <p>You ask in your own words, as you would a colleague. It works in your Moodle the way you would.</p>
+        </div>
+        <div class="tabs">
+          <div class="tablist" role="tablist" aria-label="What it does" hidden>
+            <button type="button" role="tab" id="tab-build" aria-controls="panel-build">Build courses</button>
+            <button type="button" role="tab" id="tab-quizzes" aria-controls="panel-quizzes">Quizzes and games</button>
+            <button type="button" role="tab" id="tab-grade" aria-controls="panel-grade">Grade</button>
+            <button type="button" role="tab" id="tab-forum" aria-controls="panel-forum">Forum</button>
+            <button type="button" role="tab" id="tab-plan" aria-controls="panel-plan">Course plan</button>
+            <button type="button" role="tab" id="tab-follow" aria-controls="panel-follow">Follow-up</button>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-build" aria-labelledby="tab-build">
             <div>
-              <h3>Grades the assignment</h3>
-              <p>It applies your rubric and your criteria, writes feedback that says what went wrong and how to improve, and shows you each student's grade before saving it.</p>
+              <h3>Builds whole courses and units</h3>
+              <p>Describe the course or the unit and it builds it: the plan first, then each unit with real notes, practicals with their rubric and quizzes, and finally it checks it the way a student would see it.</p>
+              <span class="says">"Build a three-unit introduction to Docker for vocational students"</span>
+            </div>
+            <ul class="ticks">
+              <li>Notes as pages or books, with their sources cited</li>
+              <li>Assignments of every kind: written, group, drafts, portfolio</li>
+              <li>Peer-assessment workshops, branching lessons, glossaries, wikis and H5P</li>
+              <li>Completion, access restrictions, badges and groups</li>
+              <li>Downloads materials, zips them or turns them into PDF</li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-quizzes" aria-labelledby="tab-quizzes">
+            <div>
+              <h3>Quizzes that teach, and games that score</h3>
+              <p>It writes questions with believable distractors, a range of difficulty and feedback that explains, and imports them in one go. If you have a web game or simulation, it packages it so the grade lands in the gradebook on its own.</p>
+              <span class="says">"Create a 10-question quiz on unit 3"</span>
+            </div>
+            <ul class="ticks">
+              <li>Sets dates, attempts and review options</li>
+              <li>Imports questions in bulk (GIFT format)</li>
+              <li>Reviews and improves the quizzes you already have</li>
+              <li>Games and simulations as a SCORM package, with grade and completion</li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-grade" aria-labelledby="tab-grade">
+            <div>
+              <h3>Grades with your rubric, the same for everyone</h3>
+              <p>It applies your rubric and your criteria the same way to the whole class, and writes feedback that says what went wrong and how to improve it. It shows you every grade before saving it.</p>
               <span class="says">"Grade Assignment 2 with the unit's rubric"</span>
             </div>
-          </li>
-          <li>
-            <span class="day">Tuesday</span>
+            <ul class="ticks">
+              <li>Assignments, open quiz answers and graded forums</li>
+              <li>Your criteria come before its own</li>
+              <li>Feedback broken down by criterion</li>
+              <li>Designs rubrics with observable criteria and clear levels</li>
+              <li>In computing courses, it can run the submitted practical and use the result as evidence</li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-forum" aria-labelledby="tab-forum">
             <div>
-              <h3>Answers the forum</h3>
-              <p>It finds the unanswered questions, replies in the tone you chose, and tells you when the same question keeps coming back because the notes fall short.</p>
+              <h3>Looks after the forum and misses nothing</h3>
+              <p>It finds the unanswered questions, decides when to step in and when to let the class help each other, and replies in the tone you chose. When a question keeps coming back, it tells you: your notes are missing something.</p>
               <span class="says">"Anything new in the forum?"</span>
             </div>
+            <ul class="ticks">
+              <li>Replies and corrections with examples</li>
+              <li>Announcements to the whole class</li>
+              <li>Each message posted exactly once</li>
+              <li>Remembers the questions that keep coming up</li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-plan" aria-labelledby="tab-plan">
+            <div>
+              <h3>Your course plan, written and kept</h3>
+              <p>It writes it with you from your own material, asks what only you can decide (hours, calendar, weights) and has a teaching expert review it. Then it checks the course matches: every criterion assessed, dates and weights in line.</p>
+              <span class="says">"Help me with my course plan and tell me if the course matches it"</span>
+            </div>
+            <ul class="ticks">
+              <li>Objectives, units, methodology, assessment and diversity</li>
+              <li>Linked to each unit in its notes</li>
+              <li>Proposes fixes to the course and applies them with your permission</li>
+              <li>Not published in Moodle unless you ask</li>
+            </ul>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-follow" aria-labelledby="tab-follow">
+            <div>
+              <h3>Follows the class and reviews the course</h3>
+              <p>It tells you how the class is doing, starting with whoever is falling behind, and audits the whole course with recommendations ordered by priority.</p>
+              <span class="says">"Which students are falling behind?"</span>
+            </div>
+            <ul class="ticks">
+              <li>Submissions, grades and which units are hardest</li>
+              <li>The course's organisation, pedagogy and assessment</li>
+              <li>Accessibility: headings, alt text, links, colours</li>
+              <li>Broken links and stale content</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" aria-labelledby="how-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="how-t">How it works</h2>
+          <p>Nothing to install on your school's server: it uses Moodle through Chrome, with your account, like you do.</p>
+        </div>
+        <ol class="how">
+          <li>
+            <h3>Install it</h3>
+            <p>One line in the terminal, on Windows, Mac or Linux.</p>
           </li>
           <li>
-            <span class="day">Wednesday</span>
-            <div>
-              <h3>Builds an activity</h3>
-              <p>A quiz, notes, a lab or something bolder, like an escape room. It tries it out hidden in Moodle and shows it to you before your students see it.</p>
-              <span class="says">"Make a loops review escape room in Unit 3"</span>
-            </div>
+            <h3>Introduce your course</h3>
+            <p><code>miyagi init</code> asks for the course's address, your account and the tone. It explores your Moodle, without touching anything, to learn what it supports. Leave it your course plan, rubrics or criteria and it takes them into account.</p>
           </li>
           <li>
-            <span class="day">Thursday</span>
-            <div>
-              <h3>Sums up the class</h3>
-              <p>Submissions, grades, who's falling behind and which topics are hardest, from what's in your course.</p>
-              <span class="says">"How is the class doing overall?"</span>
-            </div>
+            <h3>Ask, and approve</h3>
+            <p>Chat with it, or let it go through the whole course in one pass. Whenever something is about to reach your students, it shows you and waits for your yes.</p>
           </li>
         </ol>
       </div>
@@ -121,23 +255,71 @@
     <section id="control" class="board" aria-labelledby="control-t">
       <div class="wrap">
         <div class="section-intro">
-          <h2 id="control-t">You decide what gets published</h2>
+          <h2 id="control-t">You decide what reaches your students</h2>
           <p>It works with your account in your real course, so it's built not to act on its own where your students would see it.</p>
         </div>
-        <div class="points">
-          <div class="point">
-            <h3>It asks first</h3>
-            <p>Before saving a grade, replying in the forum or publishing a resource, it shows you exactly what it's about to publish and waits for your yes. If you say no, it doesn't publish it.</p>
+        <div class="control">
+          <div class="points">
+            <div class="point">
+              <h3>It asks, every time</h3>
+              <p>Before saving a grade, replying in the forum, publishing a resource or changing an activity, it shows you exactly what it's about to do and waits for your yes. If you say no, it doesn't. And it doesn't rely on remembering: the program itself watches Moodle's publishing buttons and stops what you haven't approved.</p>
+            </div>
+            <div class="point">
+              <h3>It reminds you of what's pending</h3>
+              <p>If something stays hidden halfway through review, it reminds you when you close, so nothing gets forgotten or goes out too early.</p>
+            </div>
           </div>
-          <div class="point">
-            <h3>It tests before showing</h3>
-            <p>Whatever it builds goes up hidden first, gets tried out in Moodle as a teacher, and needs your yes again to be shown. Anything still hidden, it reminds you of when you close.</p>
-          </div>
-          <div class="point">
-            <h3>It stays in your course</h3>
-            <p>Its instructions are not to delete anything, not to touch enrolments or Moodle's settings, and not to enter other courses. Your password never goes through the model.</p>
+          <div>
+            <h3 class="flow-t">Anything new, tested before it's shown</h3>
+            <ol class="flow">
+              <li><strong>It prepares it</strong> as a draft, on your computer.</li>
+              <li><strong>It uploads it hidden</strong> to your course.</li>
+              <li><strong>It tests it</strong> as a teacher and the way a student would see it: wording, accessibility, that it works.</li>
+              <li><strong>It shows it</strong> only when you say yes.</li>
+            </ol>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section id="never" aria-labelledby="never-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="never-t">What it never does</h2>
+          <p>There are things an assistant shouldn't do in your course. miyagi doesn't do them.</p>
+        </div>
+        <ul class="nevers">
+          <li><strong>It deletes nothing.</strong> No resources, no activities, no messages.</li>
+          <li><strong>It doesn't touch enrolments</strong> or your Moodle site's settings.</li>
+          <li><strong>It stays in your course.</strong> It doesn't enter other courses.</li>
+          <li><strong>It never sees your password.</strong> It types a placeholder and Chrome fills in the real one.</li>
+          <li><strong>It keeps no files on students.</strong> Its notes only hold trends across the class.</li>
+          <li><strong>It doesn't run programs on your computer.</strong> Unless you turn on practical testing, and then only inside Docker containers.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="tinted" aria-labelledby="method-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="method-t">Teach the way you want to teach</h2>
+          <p>Tell it how you want to run the unit and it builds it with Moodle pieces that really exist: peer-assessment workshops, branching lessons, badges, groups, restrictions. Then a teaching reviewer goes over it.</p>
+        </div>
+        <ul class="chips">
+          <li>Project-based learning</li>
+          <li>Challenges and problems</li>
+          <li>Flipped classroom</li>
+          <li>Gamification</li>
+          <li>Cooperative learning</li>
+          <li>Case studies</li>
+          <li>Service-learning</li>
+          <li>Design thinking</li>
+          <li>Inquiry-based learning</li>
+          <li>Thinking routines</li>
+          <li>Debate, role-play and simulation</li>
+          <li>Formative assessment</li>
+          <li>Universal Design for Learning (UDL)</li>
+        </ul>
       </div>
     </section>
 
@@ -145,18 +327,73 @@
       <div class="wrap split">
         <div>
           <h2 id="memory-t">It remembers your course</h2>
-          <p>It keeps notes as it goes: your grading criteria, the rubrics, the questions that keep coming up, how the class is doing. The next session starts from there, without going through everything in Moodle again.</p>
-          <p>They're plain text files in your course's folder, which you can open and correct with any editor. It keeps no files on individual students, only trends across the class.</p>
+          <p>It keeps notes as it works: your grading criteria, the rubrics, the course plan, the questions that keep coming up, how the class is doing. The next session starts from there, and it only opens Moodle when it needs to.</p>
+          <p>Leave it documents (the syllabus, rubrics, solutions) and it reads them into its notes. They're plain text files in your course's folder, which you can open and correct with any editor.</p>
         </div>
-        <div>
-          <h2 id="languages-t">Talks your language, publishes in the course's</h2>
-          <p>Its menus and messages come in English, Spanish, French and German, and it replies in whatever language you write to it in.</p>
-          <p>What it publishes in Moodle always follows your course's language: you can talk to it in English about a course taught in Spanish, and its forum replies will be in Spanish.</p>
+        <figure class="tree" aria-label="A course's folder">
+          <pre><code>my-course/
+├─ sources/         <span>your documents: plan, rubrics</span>
+├─ knowledge/       <span>its notes on the course</span>
+│  ├─ teaching-plan.md
+│  ├─ progress.md
+│  └─ drafts.md
+├─ drafts/          <span>what it prepares before uploading</span>
+└─ instructions.md  <span>what it must always keep in mind</span></code></pre>
+        </figure>
+      </div>
+    </section>
+
+    <section class="tinted" aria-labelledby="helpers-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="helpers-t">It works with helpers</h2>
+          <p>For some tasks it relies on specialists that hand it back a report. None of them can publish anything in Moodle.</p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <h3>Researcher</h3>
+            <p>Searches the web, reads the official sources first, cross-checks them and saves what it finds with its links. So your notes stay up to date.</p>
+            <span class="says">"Research what changed in Docker Compose this year"</span>
+          </div>
+          <div class="card">
+            <h3>Teaching reviewer</h3>
+            <p>Reviews a course plan or an activity: coherence between objectives, activities and assessment, methodology, workload and diversity.</p>
+          </div>
+          <div class="card">
+            <h3>Practical tester</h3>
+            <p>Optional, for computing courses: follows the practical step by step in Docker containers before publishing it, because a practical that doesn't work costs the whole class an afternoon.</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section aria-labelledby="real-t">
+    <section aria-labelledby="way-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="way-t">Your way</h2>
+        </div>
+        <div class="cards four">
+          <div class="card">
+            <h3>In your tone</h3>
+            <p>Formal, warm or motivating: you choose how it speaks to your students in the forum and in feedback.</p>
+          </div>
+          <div class="card">
+            <h3>In your language</h3>
+            <p>It talks to you in English, Spanish, French or German. What it publishes always follows your course's language.</p>
+          </div>
+          <div class="card">
+            <h3>Chat or delegate</h3>
+            <p>A chat you can pick up another day, or one pass through the whole course. Press Esc and it stops what it's doing.</p>
+          </div>
+          <div class="card">
+            <h3>Make it yours</h3>
+            <p>Instructions it always follows ("grade out of 10"), your own skills and shortcuts. All in text files, no programming.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tinted" aria-labelledby="real-t">
       <div class="wrap">
         <div class="section-intro">
           <h2 id="real-t">What it really looks like</h2>
@@ -171,7 +408,29 @@
       </div>
     </section>
 
-    <section id="install" aria-labelledby="install-t">
+    <section aria-labelledby="open-t">
+      <div class="wrap">
+        <div class="section-intro">
+          <h2 id="open-t">Free, open, and tested on a real Moodle</h2>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <h3>Free, MIT licensed</h3>
+            <p>No plans, no fees. What runs the assistant is your Claude subscription.</p>
+          </div>
+          <div class="card">
+            <h3>All the code, in the open</h3>
+            <p>You can read what it does and how, and suggest improvements on <a href="https://github.com/falkenslab/miyagi">GitHub</a>. <span class="release" data-prefix="Latest release:"></span></p>
+          </div>
+          <div class="card">
+            <h3>Tested before release</h3>
+            <p>Every change to how it works is tried on a test Moodle with students, submissions and questions, and the report is published with its <a href="https://github.com/falkenslab/miyagi/blob/main/tests/README.md">screenshots</a> (in Spanish).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="install" class="tinted" aria-labelledby="install-t">
       <div class="wrap">
         <div class="section-intro">
           <h2 id="install-t">Install it in three steps</h2>
@@ -214,12 +473,24 @@
           <p>miyagi is free and open source. What runs the assistant is your Claude subscription (Pro or Max).</p>
         </details>
         <details>
+          <summary>How is it different from asking an AI chat?</summary>
+          <p>A chat gives you text and you do the rest in Moodle. miyagi goes into your course and does the work there: it saves the grade with its feedback, replies in the forum, creates the assignment with its rubric. It also remembers your course from one session to the next and asks your permission before your students see anything.</p>
+        </details>
+        <details>
           <summary>Does it work with my school's Moodle?</summary>
-          <p>It works with the Moodle you already use, through the browser and your teacher account: nothing to install on the server. While setting it up, it can look (without changing anything) at which activity and question types your Moodle supports.</p>
+          <p>It works with the Moodle you already use, through the browser and your teacher account: nothing to install on the server. It's built for Moodle 4 and 5, and tested on Moodle 5.2. While setting it up, it can look (without changing anything) at which activity and question types your Moodle supports.</p>
+        </details>
+        <details>
+          <summary>Do I need to know how to program?</summary>
+          <p>No. You install it by pasting one line into the terminal, and then you use it by chatting. The step-by-step <a href="https://github.com/falkenslab/miyagi/blob/main/docs/CHEATSHEET.md">guide</a> (in Spanish) walks you through it.</p>
         </details>
         <details>
           <summary>Could it publish something without me noticing?</summary>
           <p>In the chat, before saving a grade, replying in the forum or publishing content, it asks your permission with a summary of what it will publish. If it tries to publish without having asked, that's stopped and you're asked.</p>
+        </details>
+        <details>
+          <summary>What if it gets something wrong?</summary>
+          <p>You see every grade, reply and resource before it reaches your students, and you can say no or ask it to change it. Anything new is tested hidden before it's shown. If you don't like how it works, correct its notes or write it down in <code>instructions.md</code>.</p>
         </details>
         <details>
           <summary>What about my students' data?</summary>
@@ -229,6 +500,17 @@
           <summary>Can I give it my own instructions?</summary>
           <p>Yes. Write whatever it should always keep in mind in an <code>instructions.md</code> file in the course's folder: "grade out of 10", "keep forum replies short", "spelling counts for 10%".</p>
         </details>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="closing-t">
+      <div class="wrap">
+        <h2 id="closing-t">Wax on, wax off: leave that to miyagi</h2>
+        <p>You keep what matters, which is teaching.</p>
+        <div class="actions">
+          <a class="button primary" href="#install">Install miyagi</a>
+          <a class="button" href="https://github.com/falkenslab/miyagi">See the code on GitHub</a>
+        </div>
       </div>
     </section>
   </main>
