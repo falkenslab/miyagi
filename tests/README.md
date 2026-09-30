@@ -4,6 +4,7 @@ Cada prueba de principio a fin de teacher-agent contra un Moodle real queda aqu�
 
 | Fecha | Prueba | Entorno | Resultado | Hallazgos |
 | --- | --- | --- | --- | --- |
+| 30 sep 2026 | [Web rediseñada](2026-09-30T19-44-site-redesign/README.md): una página por idioma con 15 secciones y la terminal animada que acaba en la aprobación, comprobada a ocho tamaños, sin JS, con movimiento reducido y con Lighthouse en móvil y escritorio | Servidor local · Chrome · Lighthouse 12 | Superada con hallazgos | 2 (corregidos) |
 | 30 sep 2026 | [Caja de herramientas de drafts/](2026-09-30T16-03-drafts-toolbox/README.md): «Terminal implacable» empaquetado como SCORM sin terminal, subido oculto y jugado entero (nota 100 en el calificador), y unos apuntes convertidos a PDF y subidos como Archivo | moodle-sandbox · Moodle 5.2 · Docker 29 | Superada con hallazgos | 3 (2 corregidos, 1 aceptado) |
 | 30 sep 2026 | [Web promocional en español e inglés](2026-09-30T15-35-promo-site/README.md): la web en GitHub Pages, comprobada a seis anchos (y en horizontal) y con Lighthouse en móvil y escritorio, diseñada con `frontend-design` | GitHub Pages · Chrome · Lighthouse 12 | Superada con hallazgos | 6 (todos corregidos) |
 | 30 sep 2026 | [Abrir Moodle solo cuando haga falta](2026-09-30T14-52-browser-on-demand/README.md): el chat saluda desde la base de conocimiento sin navegador, responde desde sus notas cuando basta y solo inicia sesión cuando la pregunta necesita Moodle; sin notas, ofrece explorar o ingerir | moodle-sandbox · Moodle 5.2 · Docker 29 | Superada | 0 |
