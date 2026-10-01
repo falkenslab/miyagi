@@ -358,7 +358,15 @@ section { padding-block: clamp(3rem, 8vw, 6rem); }
 
 /* The real screenshot. */
 .shot { margin: 0; }
-.shot img { border-radius: 12px; border: 1px solid var(--rule); width: 100%; }
+/* Framed as a macOS window: rounded corners, a title bar with the three lights, a soft shadow. */
+.window { border-radius: 12px; overflow: hidden; background: #0c0c0c; box-shadow: 0 0 0 1px #ffffff1f, 0 0 0 1.5px #00000080, 0 22px 50px -12px #00000066, 0 8px 18px -8px #0000004d; }
+.window-bar { position: relative; display: flex; align-items: center; height: 2.25rem; background: linear-gradient(#2c2c2e, #232325); border-bottom: 1px solid #000; }
+.window-dots { display: flex; gap: 0.5rem; padding-left: 0.9rem; }
+.window-dots i { width: 0.75rem; height: 0.75rem; border-radius: 50%; background: #ff5f57; box-shadow: inset 0 0 0 0.5px #0000004d; }
+.window-dots i:nth-child(2) { background: #febc2e; }
+.window-dots i:nth-child(3) { background: #28c840; }
+.window-title { position: absolute; inset: 0 5rem; display: flex; align-items: center; justify-content: center; color: #a1a1a6; font-size: 0.8rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shot img { display: block; width: 100%; height: auto; }
 .shot figcaption { font-size: var(--step--1); color: var(--fg-2); margin-top: 0.8rem; max-width: var(--measure); }
 
 /* Install: a real sequence, so numbered. */
