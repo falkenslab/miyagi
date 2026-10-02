@@ -44,6 +44,14 @@ it. Activities are `assignment-building`, `quiz-building` and `activity-building
 - **Descriptive names**: "Apuntes del Tema 2: Dockerfile y construcción de imágenes", not
   "Tema 2" or "Página 1".
 
+## Into Moodle's editor
+
+Write the content as HTML (headings, lists, `<pre><code>` for code and commands) in
+`drafts/<slug>/`, and put it into Moodle's rich-text editor through its source-code view (the
+`<>` / "Source code" button; `Ctrl+A` there, then type the HTML). Typing into the editor itself
+turns everything into plain paragraphs: code blocks, lists and headings are lost, and commands
+can no longer be copied. Before saving the form, check the editor shows the structure you wrote.
+
 ## Editing existing content
 
 Keep what works; fix what's wrong or outdated, and say what you changed and why. Don't rewrite a

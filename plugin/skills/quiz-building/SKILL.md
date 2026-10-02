@@ -92,7 +92,12 @@ list of lines. Fix the file in `drafts/` and upload it again; don't work around 
    "Import"). Import into a category named after the topic, not the default one.
 4. Choose "GIFT", upload the file, and read Moodle's summary: every question imported, no
    syntax errors (fix the file and re-import only what's missing).
-5. Add them to the quiz: "Add" → "from question bank".
+   Preview one or two: if an imported question came out wrong (escapes, lost code), fix it with
+   the question's own "Edit" form. Never delete questions — not from the bank, not from the
+   quiz — to re-import them: deleting needs its own approval, naming what goes, and the teacher
+   may prefer the fix by hand.
+5. Add them to the quiz: "Add" → "from question bank", one by one in the file's order when the
+   order matters (see below), rather than all at once and then removing and re-adding them.
 
 ### Order and total
 
