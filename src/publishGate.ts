@@ -58,10 +58,28 @@ const PUBLISH_PATTERNS = [
 /** "Show" alone is also a link ("Show more", "Show parent"): only as a menu item or option. */
 const SHOW_ITEM = /^(show|mostrar)\b.*\b(menu item|option|opcion|elemento)\b/;
 const NEVER_PUBLISH = [/\bcancel(ar)?\b/, /\bsearch\b/, /\bbuscar\b/, /\bfilter\b/, /\bfiltrar\b/];
+/** The rich-text editor's source-code dialog: its "Save" only puts the HTML back into the editor
+ * (but not the form's own "Save changes"/"Save and display", whatever else the label says). */
+const EDITOR_DIALOG = /\b(source code|codigo fuente)\b/;
+const FORM_SAVE = /\b(save changes|guardar cambios|and display|y mostrar|return to course|regresar al curso)\b/;
+
+/**
+ * Deleting is never part of an approved batch: an approval to publish a rubric doesn't cover
+ * deleting quiz questions ten minutes later (docs tutorial, 2026-10-01). It always asks.
+ */
+const DESTRUCTIVE = [/\bdelete\b/, /\bremove\b/, /\beliminar\b/, /\bborrar\b/];
+
+export function isDestructiveAction(toolName: string, toolInput: unknown): boolean {
+  if (toolName !== `${BROWSER}click`) return false;
+  const input = (toolInput ?? {}) as Record<string, unknown>;
+  const t = norm(`${input.element ?? ""} ${input.target ?? ""}`);
+  return !NEVER_PUBLISH.some((re) => re.test(t)) && DESTRUCTIVE.some((re) => re.test(t));
+}
 
 function namesPublishing(text: string): boolean {
   const t = norm(text);
   if (NEVER_PUBLISH.some((re) => re.test(t))) return false;
+  if (EDITOR_DIALOG.test(t) && !FORM_SAVE.test(t)) return false;
   return PUBLISH_PATTERNS.some((re) => re.test(t)) || SHOW_ITEM.test(t);
 }
 
@@ -120,8 +138,8 @@ function describe(toolName: string, toolInput: unknown): string {
  * gives when the teacher approves (miyagi's own `humanApprovalTexts.approved`).
  *
  * An approval lasts until the next request_human_approval call or the teacher's next message,
- * so one approval covers a batch (six grades, one "Save changes" each). A publication the
- * gate itself lets through covers only that call.
+ * so one approval covers a batch (six grades, one "Save changes" each), but never a deletion,
+ * which always asks. A publication the gate itself lets through covers only that call.
  */
 export function installPublishGate(options: Options, runDir: string, modeControl: ModeControl, approvedText: string): void {
   let approved = false;
@@ -134,7 +152,8 @@ export function installPublishGate(options: Options, runDir: string, modeControl
       approved = false;
       return {};
     }
-    if (modeControl.mode !== "guided" || input.agent_id || approved || !isPublishAction(tool, input.tool_input)) return {};
+    if (modeControl.mode !== "guided" || input.agent_id || !isPublishAction(tool, input.tool_input)) return {};
+    if (approved && !isDestructiveAction(tool, input.tool_input)) return {};
 
     const answer = await askForDecision(runDir, {
       title: t().gateTitle,

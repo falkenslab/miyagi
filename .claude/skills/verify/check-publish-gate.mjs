@@ -39,6 +39,10 @@ const CASES = [
 
   // Didn't publish anything.
   [...click("Log in button", "e42"), false],
+  // The editor's source-code dialog (docs tutorial, 2026-10-01): it only fills the editor.
+  [...click("Guardar (código fuente)", "f31e12"), false],
+  [...click("Save (source code dialog)"), false],
+  [...click("Guardar cambios y mostrar (tras editar el código fuente)"), true],
   [...click("Edit mode checkbox", "f14e16"), false],
   [...click("Botón Insert content in section 'UT6. Proyecto final: mi sitio web'", "f15e1346"), false],
   [...click("Activity or resource menu item", "text=Activity or resource"), false],
@@ -105,6 +109,7 @@ function gate(initialMode) {
   return {
     mode,
     save: (extra = {}) => run("PreToolUse", { tool_name: pw("click"), tool_input: { element: "Save and display", target: "e1" }, ...extra }),
+    remove: () => run("PreToolUse", { tool_name: pw("click"), tool_input: { element: "Eliminar seleccionados button", target: "f66e589" } }),
     look: () => run("PreToolUse", { tool_name: pw("click"), tool_input: { element: "Expand Feedback types", target: "e2" } }),
     ask: () => run("PreToolUse", { tool_name: APPROVAL, tool_input: { summary: "…" } }),
     answered: (text) => run("PostToolUse", { tool_name: APPROVAL, tool_response: { content: [{ type: "text", text }] } }),
@@ -123,6 +128,10 @@ const SCENARIOS = [
     const out = [await g.save(), await g.save(), await g.save()].map(decision);
     return [out.every((d) => d === "none") ? "none" : out.join(","), 0];
   }, "none"],
+  ["approved batch: a deletion → still asked", async () => {
+    const g = gate("guided"); await g.ask(); await g.answered(APPROVED); nextAnswer = "n";
+    return [decision(await g.remove()), 1];
+  }, "deny"],
   ["rejected approval → next save asked", async () => { const g = gate("guided"); nextAnswer = "n"; await g.ask(); await g.answered("Rejected by the human."); return [decision(await g.save()), 1]; }, "deny"],
   ["approval, then a new request → the old one no longer counts", async () => { const g = gate("guided"); nextAnswer = "n"; await g.ask(); await g.answered(APPROVED); await g.ask(); return [decision(await g.save()), 1]; }, "deny"],
   ["approval, then a teacher message → no longer counts", async () => { const g = gate("guided"); nextAnswer = "n"; await g.ask(); await g.answered(APPROVED); await g.message(); return [decision(await g.save()), 1]; }, "deny"],
