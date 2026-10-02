@@ -1,0 +1,115 @@
+/* miyagi's identity on top of Docusaurus' Infima: the hinomaru palette (src/theme.ts) — sumi
+   ink, washi paper and the sun's red — and the Atkinson Hyperlegible fonts, served from here. */
+
+/* The @font-face rules are in static/fonts/fonts.css (see docusaurus.config.js). */
+
+:root {
+  --pizarra: #18181b;      /* sumi: dark sections, the terminal */
+  --pizarra-2: #26262b;
+  --tiza: #f3f3f0;         /* washi: text on sumi */
+  --papel: #f7f7f4;        /* page background */
+  --tinta: #18181b;
+  --tinta-suave: #52525b;
+  --borla: #e0564a;        /* the sun, light enough to read on sumi */
+  --borla-texto: #bc002d;  /* the sun on paper: links, accents */
+  --sol: #bc002d;          /* the sun as a fill */
+  --linea: #dcdcd6;
+
+  --logo-hair: #7c8088; --logo-band: #18181b; --logo-sun: #bc002d; --logo-skin: #a86b3d; --logo-beard: #5c6068;
+
+  --font: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  --ifm-font-family-base: var(--font);
+  --ifm-heading-font-family: var(--font);
+  --ifm-font-family-monospace: var(--mono);
+  --ifm-font-size-base: 106%;
+  --ifm-line-height-base: 1.65;
+  --ifm-heading-font-weight: 800;
+  --ifm-background-color: var(--papel);
+  --ifm-background-surface-color: var(--papel);
+  --ifm-font-color-base: var(--tinta);
+  --ifm-color-emphasis-300: var(--linea);
+  --ifm-toc-border-color: var(--linea);
+  --ifm-hr-border-color: var(--linea);
+  --ifm-navbar-background-color: color-mix(in srgb, var(--papel) 92%, transparent);
+  --ifm-navbar-shadow: none;
+  --ifm-code-font-size: 92%;
+  --ifm-color-primary: #bc002d;
+  --ifm-color-primary-dark: #a90029;
+  --ifm-color-primary-darker: #a00026;
+  --ifm-color-primary-darkest: #84001f;
+  --ifm-color-primary-light: #cf0032;
+  --ifm-color-primary-lighter: #d90034;
+  --ifm-color-primary-lightest: #f8003c;
+  --ifm-footer-background-color: var(--pizarra);
+  --docusaurus-highlighted-code-line-bg: rgba(188, 0, 45, 0.1);
+}
+
+[data-theme="dark"] {
+  --ifm-background-color: #121214;
+  --ifm-background-surface-color: #18181b;
+  --ifm-font-color-base: var(--tiza);
+  --ifm-color-emphasis-300: #2e2e33;
+  --ifm-toc-border-color: #2e2e33;
+  --ifm-hr-border-color: #2e2e33;
+  --ifm-navbar-background-color: color-mix(in srgb, #121214 92%, transparent);
+  --ifm-footer-background-color: #0c0c0e;
+  --ifm-color-primary: #e0564a;
+  --ifm-color-primary-dark: #dc4234;
+  --ifm-color-primary-darker: #d93a2b;
+  --ifm-color-primary-darkest: #b82d20;
+  --ifm-color-primary-light: #e46a60;
+  --ifm-color-primary-lighter: #e6746b;
+  --ifm-color-primary-lightest: #ec958e;
+  --logo-hair: #b9bcc2; --logo-band: #f3f3f0; --logo-sun: #e0303f; --logo-skin: #e2b48a; --logo-beard: #cfd1d6;
+  --docusaurus-highlighted-code-line-bg: rgba(224, 86, 74, 0.15);
+}
+
+.navbar { backdrop-filter: blur(8px); border-bottom: 1px solid var(--ifm-toc-border-color); }
+.navbar__title { font-weight: 800; }
+.navbar__link, .menu__link, .footer__link-item { min-height: 44px; display: inline-flex; align-items: center; }
+.menu__link { display: flex; }
+
+a { text-underline-offset: 0.18em; }
+.markdown a { text-decoration: underline; text-decoration-thickness: 0.08em; }
+.markdown a:hover { text-decoration-thickness: 0.14em; }
+:focus-visible { outline: 3px solid var(--borla); outline-offset: 3px; border-radius: 4px; }
+
+.markdown h1 { font-size: clamp(2rem, 1.6rem + 1.6vw, 2.8rem); letter-spacing: -0.01em; }
+.markdown h2 { letter-spacing: -0.01em; }
+.markdown > p, .markdown li { max-width: 72ch; }
+
+/* A real screenshot, framed as a window: the terminal or a Moodle page (src/components/Shot.js). */
+.shot { margin: 1.5rem 0 2rem; }
+.shot-window { border-radius: 12px; overflow: hidden; background: #0c0c0c; box-shadow: 0 0 0 1px #0000001f, 0 18px 40px -14px #00000055, 0 6px 14px -8px #00000040; }
+[data-theme="dark"] .shot-window { box-shadow: 0 0 0 1px #ffffff1f, 0 18px 40px -14px #000000aa; }
+.shot-bar { position: relative; display: flex; align-items: center; height: 2rem; background: linear-gradient(#2c2c2e, #232325); border-bottom: 1px solid #000; }
+.shot-bar.browser { background: linear-gradient(#ececec, #e2e2e2); border-bottom-color: #c8c8c8; }
+.shot-dots { display: flex; gap: 0.45rem; padding-left: 0.8rem; }
+.shot-dots i { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: #ff5f57; }
+.shot-dots i:nth-child(2) { background: #febc2e; }
+.shot-dots i:nth-child(3) { background: #28c840; }
+.shot-title { position: absolute; inset: 0 4.5rem; display: flex; align-items: center; justify-content: center; color: #a1a1a6; font-size: 0.78rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shot-bar.browser .shot-title { color: #555; }
+.shot-window a { display: block; }
+.shot-window img { display: block; width: 100%; height: auto; }
+.shot figcaption { font-size: 0.92rem; color: var(--ifm-color-emphasis-700); margin-top: 0.7rem; max-width: 72ch; }
+
+/* What the teacher types in the chat, as a quote with the sun's mark. */
+.pide { border-left: 4px solid var(--ifm-color-primary); background: color-mix(in srgb, var(--ifm-color-primary) 7%, transparent); padding: 0.8rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0 1.5rem; font-family: var(--mono); font-size: 0.95rem; }
+.pide::before { content: "Tú › "; font-weight: 700; color: var(--ifm-color-primary); }
+
+/* The active breadcrumb: the sun's red on its tinted pill falls short of 4.5:1 in dark. */
+[data-theme="dark"] .breadcrumbs__item--active .breadcrumbs__link { color: var(--tiza); }
+
+/* Footer links on the dark footer: the sun's red falls short of 4.5:1 on it. */
+.footer--dark .footer__link-item { color: #e4e4e7; }
+.footer--dark .footer__link-item:hover { color: #f3a39b; }
+
+/* 44 px touch targets for Docusaurus' own controls. */
+.navbar__brand, .navbar__toggle, .navbar-sidebar__close, .navbar-sidebar__back,
+.navbar .clean-btn, .theme-doc-toc-mobile > button { min-height: 44px; min-width: 44px; }
+.navbar-sidebar__close, .navbar .clean-btn:not(.navbar__toggle) { display: inline-flex; align-items: center; justify-content: center; }
+@media (max-width: 996px) { .navbar__toggle { display: inline-flex; align-items: center; justify-content: center; } }
+.navbar-sidebar__back { display: flex; align-items: center; }

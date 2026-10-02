@@ -66,8 +66,7 @@ A moodle-agent teacher aula opens as-is: `moveLegacyContext()` moves `context/` 
 - `src/` — CLI and session wiring.
 - `plugin/` — runtime skills and slash commands.
 - `prompts/` — system prompt sections and messages.
-- `site/` — the promotional site (es + en, static), deployed to GitHub Pages by `.github/workflows/pages.yml`.
-- `docs/` — user documentation beyond the README: the skills guide (`skills.md`) and `CHEATSHEET.md`.
+- `docs/` — the documentation site (Docusaurus, Spanish): the landing page in `src/pages/`, pages in `content/` (`guia/` for teachers, `casos-de-uso/` the SQL course tutorial with real screenshots in `static/img/casos/`, `avanzado/`), deployed to GitHub Pages by `.github/workflows/pages.yml`; kept in step with the code by the `update-docs` skill.
 - `tests/` — end-to-end test reports (see `tests/CLAUDE.md`).
 - `.claude/skills/` — skills for developing this repo.
 - `.minispec/` — this specification.

@@ -7,3 +7,7 @@ dist/
 
 # Paquete generado con "npm pack" para las releases
 *.tgz
+
+# Documentation site (docs/, Docusaurus): build output and cache
+docs/build/
+docs/.docusaurus/

@@ -2,7 +2,7 @@ import { setTheme } from "@falkenslab/agent-kit";
 
 /**
  * The hinomaru palette: the sensei's face in the chat header (`LOGO` below) and
- * docs/assets/miyagi.svg, and miyagi's colours in the terminal. The brand's red is
+ * docs/static/img/miyagi.svg, and miyagi's colours in the terminal. The brand's red is
  * `SUN` (#bc002d); on a dark terminal it needs a lighter shade to read.
  */
 export const PALETTE = {

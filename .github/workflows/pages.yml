@@ -1,11 +1,13 @@
-# Publishes the promotional site (site/, static: no build step) to GitHub Pages at
+# Builds the documentation site (docs/, Docusaurus) and publishes it to GitHub Pages at
 # https://falkenslab.github.io/miyagi/ whenever it changes on main.
 name: pages
 
 on:
   push:
     branches: [main]
-    paths: ["site/**", ".github/workflows/pages.yml"]
+    paths: ["docs/**", ".github/workflows/pages.yml"]
+  pull_request:
+    paths: ["docs/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -18,13 +20,26 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/upload-pages-artifact@v5
+      - uses: actions/setup-node@v4
         with:
-          path: site
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - run: npm ci
+      # Fails on broken links and anchors (onBrokenLinks: "throw").
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request'
+        with:
+          path: docs/build
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:

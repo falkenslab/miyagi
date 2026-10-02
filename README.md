@@ -1,5 +1,5 @@
 <h1>
-  <img src="docs/assets/miyagi-wordmark.svg" width="300" alt="miyagi: la cara de un maestro con su cinta en la frente y el nombre al lado">
+  <img src="docs/static/img/miyagi-wordmark.svg" width="300" alt="miyagi: la cara de un maestro con su cinta en la frente y el nombre al lado">
 </h1>
 
 [![Web](https://img.shields.io/badge/web-falkenslab.github.io%2Fmiyagi-1f3129)](https://falkenslab.github.io/miyagi/) [![Version](https://img.shields.io/github/v/release/falkenslab/miyagi?label=version)](https://github.com/falkenslab/miyagi/releases/latest) [![Downloads](https://img.shields.io/github/downloads/falkenslab/miyagi/total?label=downloads)](https://github.com/falkenslab/miyagi/releases) [![verify](https://github.com/falkenslab/miyagi/actions/workflows/verify.yml/badge.svg)](https://github.com/falkenslab/miyagi/actions/workflows/verify.yml) [![Moodle](https://img.shields.io/badge/Moodle-5.2-f98012?logo=moodle&logoColor=white)](https://github.com/falkenslab/moodle-sandbox) [![License](https://img.shields.io/github/license/falkenslab/miyagi?label=license)](LICENSE) [![agent-kit](https://img.shields.io/github/package-json/dependency-version/falkenslab/miyagi/@falkenslab/agent-kit?label=agent-kit)](https://www.npmjs.com/package/@falkenslab/agent-kit) [![Node](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffalkenslab%2Fmiyagi%2Fmain%2Fpackage.json&query=%24.engines.node&label=node&logo=node.js&logoColor=white&color=339933)](https://nodejs.org) [![Issues](https://img.shields.io/github/issues/falkenslab/miyagi?label=issues)](https://github.com/falkenslab/miyagi/issues) [![Last commit](https://img.shields.io/github/last-commit/falkenslab/miyagi?label=last%20commit)](https://github.com/falkenslab/miyagi/commits/main)
@@ -8,11 +8,11 @@ Un asistente que te ayuda a gestionar tu curso de Moodle. Entra con tu cuenta de
 
 Además, va tomando apuntes del curso (criterios de corrección, rúbricas, dudas que se repiten, cómo evoluciona la clase) para acordarse de todo en la siguiente sesión.
 
-![miyagi en el chat: encuentra en el foro una duda de Marcos sobre el else de un for y pide permiso antes de publicar la respuesta, con su código](docs/assets/chat.png)
+![miyagi en el chat: encuentra en el foro una duda de Marcos sobre el else de un for y pide permiso antes de publicar la respuesta, con su código](docs/static/img/chat.png)
 
-> 🌐 **Web:** [falkenslab.github.io/miyagi](https://falkenslab.github.io/miyagi/) (también [en inglés](https://falkenslab.github.io/miyagi/en/)): qué hace, en un minuto.
+> 🌐 **Documentación:** [falkenslab.github.io/miyagi](https://falkenslab.github.io/miyagi/): qué hace, la guía de uso, los detalles para usuarios avanzados y un aula de Introducción a SQL montada paso a paso con capturas reales.
 
-> 📋 **¿Quieres empezar rápido?** La [CheatSheet](docs/CHEATSHEET.md) explica paso a paso cómo instalarlo y conectarlo a un curso, y recorre casos de uso en el chat de menos a más.
+> 📋 **¿Quieres empezar rápido?** Los [primeros pasos](https://falkenslab.github.io/miyagi/guia/primeros-pasos/) explican cómo instalarlo y conectarlo a un curso, y [qué pedirle](https://falkenslab.github.io/miyagi/guia/ideas/) recorre casos de uso de menos a más.
 
 ## 1. Qué necesitas
 
