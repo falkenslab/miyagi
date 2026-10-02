@@ -25,6 +25,10 @@ password or Claude token — grep the staged diff for any credential you handled
 
 Run the `verify` skill. Don't commit a tree that fails it.
 
+If the change touches `src/`, `plugin/`, `prompts/`, `package.json` or `README.md`, or anything a
+teacher sees, run the `update-docs` skill too: the docs site (`docs/`) is updated in the same
+commit as the change it describes, or in a `docs(site)` commit right before it.
+
 ## 3. Group
 
 One logical change per commit, ordered so each builds on the previous ones: a dependency

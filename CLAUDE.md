@@ -29,6 +29,7 @@ To try unreleased agent-kit changes locally, `npm link ../agent-kit` (after `npm
 For whoever develops this repo (not the runtime agent's skills, which are in `plugin/`):
 
 - `verify` — quality gate: typecheck, lint, build and `check-prompts.mjs`, which renders the system prompt for every session kind and mode and asserts which sections are in it (and that no student-agent/moodle-agent leftover is). There are no unit tests, so this is the gate.
+- `update-docs` — before a commit or a release, brings the docs site (`docs/`) in step with what changed, flags screenshots to retake, and checks it with `check-docs.mjs` and the site's build.
 - `commit` / `release` — commit conventions (Spanish, one logical change each; the repo is public) and cutting a version, including building and testing the `miyagi.tgz` users install from.
 - `upgrade-agent-kit` — moving the kit to a new release from npm, at an exact version, and checking it with `verify`.
 - `try-agent-kit-local` — testing unreleased kit changes without the global npm (ask before touching `../agent-kit`).
@@ -40,11 +41,13 @@ For whoever develops this repo (not the runtime agent's skills, which are in `pl
 - `minispec-feature` / `minispec-adr` / `minispec-bugfix` / `minispec-implement` — write a feature, an ADR or a bugfix note in `.minispec/`, and implement a pending feature. Every feature and fix note has a GitHub issue in Spanish (label `feature` or `fix`), linked from an `Issue:` line under its title, and closed with a summary of the solution when the note is done.
 - `sync-issues` — repairs whatever drifted between the notes and the issues: opens and links a missing issue, closes the one whose note is done.
 
-## Promotional site (`site/`)
+## Documentation site (`docs/`)
 
-A static page in Spanish (`site/index.html`) and English (`site/en/index.html`), with one stylesheet, one script and self-hosted fonts, published to https://falkenslab.github.io/miyagi/ by `.github/workflows/pages.yml` on every push to `main` that touches it. No build step and no framework; it isn't in the npm package. Texts are for teachers, the English one an adaptation of the Spanish one; say nothing the product doesn't back.
+A Docusaurus site in Spanish, published to https://falkenslab.github.io/miyagi/ by `.github/workflows/pages.yml` on every push to `main` that touches `docs/` (pull requests only build it). It has its own `package.json` (`cd docs && npm ci && npm run build`, `npm start` to preview) and isn't in the npm package. Three parts: the landing page (`src/pages/index.js`) and `content/guia/` for teachers with no technical background, `content/casos-de-uso/` (an Introducción a SQL course built step by step against moodle-sandbox, with real screenshots of the chat and of Moodle), and `content/avanzado/` for advanced users. Say nothing the product doesn't back; broken links and anchors fail the build.
 
-`.claude/settings.json` enables Anthropic's `example-skills` plugin (`anthropics/skills`) for whoever works on the site: `frontend-design` for any design change (its plan-then-critique process, and its list of generic-page tells), `canvas-design` for the social preview images (`site/assets/og-*.png`) and `webapp-testing` to check it. Every change is checked at 360, 390, 768, 1024, 1440 and 1920 px (no horizontal scroll, touch targets of 44 px, the menu and the language switch working) and with Lighthouse's mobile and desktop runs, all four scores at 90 or more.
+Every change to the project updates the docs before it's committed or released: the `update-docs` skill maps what changed to the pages that describe it, flags screenshots to retake, and runs `check-docs.mjs` (every skill, command, subcommand and config key documented) and the build. `commit` and `release` call it.
+
+`.claude/settings.json` enables Anthropic's `example-skills` plugin (`anthropics/skills`): `frontend-design` for design changes, `canvas-design` for the social preview image (`docs/static/img/og-es.png`) and `webapp-testing` to check it. Every visual change is checked at 360, 390, 768, 1024, 1440 and 1920 px (no horizontal scroll, 44 px touch targets, the menu working) and with Lighthouse's mobile and desktop runs, all four scores at 90 or more.
 
 ## MiniSpec (read first)
 

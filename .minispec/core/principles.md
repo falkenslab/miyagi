@@ -15,3 +15,4 @@ Consult **before** writing code.
 - No pages about individual students in the knowledge base (ADR-005).
 - agent-kit comes from npm at an exact version, never a git dependency (ADR-010).
 - Prompt and skill changes are proven against a real Moodle, and the report stays in `tests/` (ADR-006).
+- The docs site is updated with every change users would notice, before it's committed or released (ADR-012).

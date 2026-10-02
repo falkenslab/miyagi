@@ -28,6 +28,9 @@ command runs it (with a notice). It must be a separate package: `miyagi` can't d
   Uncommitted changes: stop and ask (or use `commit` first if the user wants them in).
 - `node_modules/@falkenslab/agent-kit` is a real folder installed from npm at the version in
   `package.json`, not a symlink to `../agent-kit` (finish a local-kit trial first).
+- The `update-docs` skill has run over the commits since the last tag and its docs changes are
+  committed: `check-docs.mjs` and the site's build pass, and no screenshot is left pending
+  without the user knowing.
 - The `verify` skill passes. If prompts or plugin skills changed since the last tag,
   `smoke-ingest` too; if something that acts in Moodle changed, `sandbox-e2e`.
 - `gh auth status` works.
