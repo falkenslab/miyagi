@@ -242,14 +242,14 @@ function LatestRelease() {
 export default function Home() {
   const shot = useBaseUrl("/img/casos/40-aprobacion-foro.webp");
   return (
-    <Layout title="El asistente que lleva tu curso de Moodle" description="miyagi entra en tu curso de Moodle con tu cuenta de profesor: corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, escribe tu programación y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
+    <Layout title="Tú enseñas, y miyagi se ocupa del resto" description="miyagi entra en tu curso de Moodle con tu cuenta de profesor: corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, escribe tu programación y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
       <main className={s.landing}>
         <section className={s.hero} aria-labelledby="titulo">
           <div className={s.wrap}>
             <p className={s.heroBrand}><Logo />miyagi</p>
             <div>
-              <p className={s.kicker}>Asistente de IA de gestión de aulas Moodle para profesores</p>
-              <h1 id="titulo">Tu curso de Moodle lo lleva miyagi. Tú das el visto bueno.</h1>
+              <p className={s.kicker}>Asistente de IA para llevar tu aula virtual</p>
+              <h1 id="titulo">Tú enseñas, y <span className={s.brandWord}>miyagi</span> se ocupa del resto.</h1>
               <p className={s.lead}>Corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, y te dice cómo va la clase. Puedes enseñarle habilidades nuevas para adaptarlo a tu asignatura. Entra con tu cuenta de profesor y no publica nada sin tu permiso.</p>
               <div className={s.actions}>
                 <Link className={`${s.button} ${s.primary}`} to="/guia/instalar/">Instalar miyagi</Link>

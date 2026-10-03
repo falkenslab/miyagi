@@ -8,7 +8,7 @@ const repo = "https://github.com/falkenslab/miyagi";
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "miyagi",
-  tagline: "El asistente que lleva tu curso de Moodle y pregunta antes de publicar",
+  tagline: "Tú enseñas, y miyagi se ocupa del resto",
   favicon: "img/miyagi.svg",
   url: "https://falkenslab.github.io",
   baseUrl: "/miyagi/",

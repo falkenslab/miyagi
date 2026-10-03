@@ -229,3 +229,5 @@
 .heroBrand svg { width: clamp(3.6rem, 3rem + 3vw, 5.5rem); height: auto; }
 .bar svg { width: 1.6rem; height: auto; }
 .panel[hidden] { display: none; }
+/* The name in the headline as in the wordmark: Atkinson 800 in the sun's red (the logo's --logo-sun). */
+.brandWord { color: var(--logo-sun); }
