@@ -7,6 +7,6 @@
 - Resolve `plugin/` and `prompts/` relative to the source file (`path.join(__dirname, "..", ...)`), so it also works from `dist/`.
 - Run the CLI with `--dir` pointing at a workspace outside this repo.
 - The knowledge base layout is named in `course-knowledge.md`, `explore.md` and every skill that writes there: change it in all of them at once.
-- After renaming or merging skills, update `README.md` (skills table) and `.minispec/core/architecture.md`.
+- After renaming or merging skills, update the docs site (`update-docs`: `docs/content/guia/habilidades.md` and the reference) and `.minispec/core/architecture.md`.
 - Every end-to-end test leaves its report in `tests/` and its lessons in `plugin/skills/` or `prompts/` (see ADR-006).
 - Run the `verify` skill before committing any change under `src/`, `prompts/` or `plugin/`.

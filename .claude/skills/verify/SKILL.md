@@ -37,7 +37,7 @@ if:
 
 `check-references.mjs` fails if a skill, a command or a prompt names a skill or subagent that
 doesn't exist — what a merge or a rename leaves behind. After renaming or merging skills, also
-update `README.md` (skills table) and `.minispec/core/architecture.md`, which it doesn't read.
+update the docs site (`update-docs`; `check-docs.mjs` catches a missing skill) and `.minispec/core/architecture.md`, which it doesn't read.
 
 `check-publish-gate.mjs` classifies real tool calls (clicks, scripts, navigations taken from
 test transcripts) with the publish gate's `isPublishAction()` and fails on any that would
