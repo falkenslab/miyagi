@@ -18,3 +18,4 @@ Rejected: a local preview server (partial coverage), Docker (too much for teache
 - The hidden upload is a publication with its own approval that says "hidden"; showing is another one, and the publish gate (ADR-008) enforces both.
 - A draft left hidden is recorded in `drafts.md`, named at the end of `run`, greeted in the next chat, and pointed at by the CLI when the session closes.
 - The course keeps hidden items until the teacher shows or removes them; the agent never deletes (principles).
+- Amended by ADR-014: this is the `staged-publishing` capability of a connector; on a platform without it, the approval says the material goes straight to students.

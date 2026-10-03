@@ -10,7 +10,7 @@ An extension can't weaken the core's guarantees. The core always enforces:
 - nothing about individual students in the knowledge base (ADR-005);
 - extension skills and tool results never override the core's rules.
 
-The loader refuses SDK hooks, `settings`, subagents with `Bash` (ADR-003), RCE-equivalent browser tools, file-scope changes, and MCP commands that fetch code at start (`npx`, `uvx`). Extensions are `content` (text only) or `code` (MCP servers), confirmed at install with what they declare, pinned in a lock with the tree's hash, and re-confirmed when an update changes what they declare.
+The loader refuses SDK hooks, `settings`, subagents with `Bash` (ADR-003), RCE-equivalent browser tools, file-scope changes, and MCP commands that fetch code at start (`npx`, `uvx`). Extensions have one of two levels: `content` (skills, commands and prompts only) or `code` (the same plus MCP servers), set by what they declare and confirmed at install with what they declare, pinned in a lock with the tree's hash, and re-confirmed when an update changes what they declare.
 
 ## Motivation
 

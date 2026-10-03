@@ -12,6 +12,7 @@ A workspace without a Moodle classroom works: chat, run and ingest with no brows
 - Every kind but `ingest` starts Playwright and both gates (`src/agent.ts:117-137, 293-300`); the chat header calls `new URL(moodleUrl)` (`:337`) and would throw.
 - `teacher-run.md`, `teacher-chat.md`, `teacher-ingest.md` and `course-knowledge.md` assume Moodle; `init` requires the Moodle URL (`src/menu.ts:63`).
 - `config.json` keeps `classroom` here; `aulas[]` comes with `extensions`.
+- Transitional: `hasMoodle`, the Moodle-named messages and the `*-standalone.md` bases are removed by `extensions`, where the standalone base becomes the only one.
 
 ## Changes
 

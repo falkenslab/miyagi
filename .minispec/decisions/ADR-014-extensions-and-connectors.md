@@ -10,8 +10,12 @@ The core knows how to teach (plan, units, questions, rubrics); only publishing a
 
 ## Consequences
 
+- The core never imports an extension's code (`src/extensions/<name>/`) nor names a platform in `plugin/` or `prompts/system/`; built-in extensions are loaded by the same loader, by the entry in their manifest, like installed ones, and only add what they register (gate predicates, upload validators, prompt sections, capabilities). `check-prompts.mjs` enforces it.
 - Built-in connectors may run in-process TypeScript (MCP servers, publish predicates, upload validators); third-party extensions never do (ADR-016).
 - A capability's contract is what goes in, what it must achieve and what it returns, through the core's tools (`record_publication`, `record_structure`…), so the publication record is the same whatever the platform.
 - Never a capability: enrolling, creating groups or changing who is in one, private messages to a student, attendance, deleting.
+- `miyagi.json` has a published JSON Schema and a `miyagiApi` version; the contract is that schema plus the capability contracts, not shared code. No runtime library for authors until third-party connectors repeat the same code; then only types and helpers (`@falkenslab/miyagi-extension-sdk`).
+- One repo per extension, falkenslab's official ones included; the catalog repo is an index that pins each version's commit and tree hash, with no code.
 - `miyagi ext test` runs a fixed conformance scenario per capability against a sandbox classroom.
+- Amends ADR-008 (the publish gate is the core's, fed by each connector's predicates) and ADR-009 (testing hidden before showing is the `staged-publishing` capability; without it the teacher is told before publishing).
 - Delivered by the features `extensions` (Moodle extracted) and `classroom-connector`.

@@ -21,3 +21,4 @@ Rejected alternatives:
 - A missed publishing action found in a test is added to `.claude/skills/verify/check-publish-gate.mjs` together with its fix. A false positive only costs an extra panel.
 - `interactive` (the kit's step gate) and `autonomous` are unchanged.
 - Batch approvals leave a gap: an unrelated publication in the same turn after an approval goes through. Accepted, since the prompt rule still asks the model to request each approval.
+- Amended by ADR-014: the gate moves to the core and each connector registers what counts as publishing on its platform; `isPublishAction()` becomes the Moodle extension's predicate.
