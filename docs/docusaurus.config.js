@@ -55,7 +55,6 @@ const config = {
       colorMode: { respectPrefersColorScheme: true },
       navbar: {
         title: "miyagi",
-        logo: { alt: "", src: "img/miyagi.svg", width: 32, height: 34 },
         items: [
           { type: "docSidebar", sidebarId: "guia", label: "Guía", position: "left" },
           { type: "docSidebar", sidebarId: "casos", label: "Casos de uso", position: "left" },
