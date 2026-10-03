@@ -248,7 +248,7 @@ export default function Home() {
           <div className={s.wrap}>
             <p className={s.heroBrand}><Logo />miyagi</p>
             <div>
-              <p className={s.kicker}>Asistente de IA para llevar tu aula virtual</p>
+              <p className={s.kicker}>Asistente de IA para docentes</p>
               <h1 id="titulo">Tú enseñas, y <span className={s.brandWord}>miyagi</span> se ocupa del resto.</h1>
               <p className={s.lead}>Corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, y te dice cómo va la clase. Puedes enseñarle habilidades nuevas para adaptarlo a tu asignatura. Entra con tu cuenta de profesor y no publica nada sin tu permiso.</p>
               <div className={s.actions}>
