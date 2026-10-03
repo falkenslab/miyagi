@@ -250,7 +250,7 @@ export default function Home() {
             <div>
               <p className={s.kicker}>Asistente de IA para docentes</p>
               <h1 id="titulo">Tú enseñas, y <span className={s.brandWord}>miyagi</span> se ocupa del resto.</h1>
-              <p className={s.lead}>Corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, y te dice cómo va la clase. Puedes enseñarle habilidades nuevas para adaptarlo a tu asignatura. Entra con tu cuenta de profesor y no publica nada sin tu permiso.</p>
+              <p className={s.lead}>Corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, y te dice cómo va la clase. Puedes enseñarle habilidades nuevas para adaptarlo a tu asignatura.</p>
               <div className={s.actions}>
                 <Link className={`${s.button} ${s.primary}`} to="/guia/instalar/">Instalar miyagi</Link>
                 <Link className={s.button} to="/casos-de-uso/">Verlo en un aula real</Link>
@@ -273,7 +273,7 @@ export default function Home() {
               <li><strong>Moodle, clic a clic.</strong> Un tema con apuntes, tarea, rúbrica y cuestionario son decenas de formularios.</li>
               <li><strong>La programación, en un cajón.</strong> Comprobar que el aula sigue cuadrando con lo que prometiste casi nunca da tiempo.</li>
             </ul>
-            <p className={s.answer}><span>miyagi se encarga de esa parte.</span> Tú decides qué llega a tus alumnos.</p>
+            <p className={s.answer}><span>miyagi se encarga de esa parte.</span> Tú, de enseñar.</p>
           </div>
         </section>
 
@@ -298,53 +298,6 @@ export default function Home() {
               <li><h3>Preséntale tu curso</h3><p><code>miyagi init</code> te pregunta la dirección del curso, tu cuenta y el tono. Explora tu Moodle, sin tocar nada, para saber qué admite. Si le dejas tu programación, tus rúbricas o tus criterios, los tiene en cuenta.</p></li>
               <li><h3>Pídeselo y aprueba</h3><p>Conversa con él o déjale recorrer el curso de una vez. Cuando algo vaya a llegar a tus alumnos, te lo enseña y espera tu sí.</p></li>
             </ol>
-          </div>
-        </section>
-
-        <section id="control" className={s.board} aria-labelledby="control-t">
-          <div className={s.wrap}>
-            <div className={s.sectionIntro}>
-              <h2 id="control-t">Tú decides qué llega a tus alumnos</h2>
-              <p>Trabaja con tu cuenta en tu curso real, así que está hecho para no dar pasos por su cuenta donde tus alumnos lo verían.</p>
-            </div>
-            <div className={s.control}>
-              <div className={s.points}>
-                <div className={s.point}>
-                  <h3>Te pide permiso, cada vez</h3>
-                  <p>Antes de guardar una nota, responder en el foro, publicar un recurso o cambiar una actividad, te enseña exactamente qué va a hacer y espera tu sí. Si dices que no, no lo hace. Y no depende solo de que se acuerde: el propio programa vigila los botones de publicar de Moodle y detiene lo que no hayas aprobado.</p>
-                </div>
-                <div className={s.point}>
-                  <h3>Te recuerda lo pendiente</h3>
-                  <p>Si algo se queda oculto a medio revisar, te lo recuerda al cerrar, para que nada se quede olvidado ni salga antes de tiempo.</p>
-                </div>
-              </div>
-              <div>
-                <h3>Lo nuevo, probado antes de mostrarlo</h3>
-                <ol className={s.flow}>
-                  <li><strong>Lo prepara</strong> en borradores, en tu ordenador.</li>
-                  <li><strong>Lo sube oculto</strong> a tu curso.</li>
-                  <li><strong>Lo prueba</strong> como profesor y como lo vería un alumno: redacción, accesibilidad, que funcione.</li>
-                  <li><strong>Lo muestra</strong> solo cuando tú dices sí.</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section aria-labelledby="nunca-t">
-          <div className={s.wrap}>
-            <div className={s.sectionIntro}>
-              <h2 id="nunca-t">Lo que nunca hace</h2>
-              <p>Hay cosas que un asistente no debería hacer en tu curso. miyagi no las hace.</p>
-            </div>
-            <ul className={s.nevers}>
-              <li><strong>No borra nada.</strong> Ni recursos, ni actividades, ni mensajes.</li>
-              <li><strong>No toca las matrículas</strong> ni la configuración del sitio de Moodle.</li>
-              <li><strong>No sale de tu curso.</strong> No entra en otros cursos.</li>
-              <li><strong>No ve tu contraseña.</strong> Escribe un marcador y es Chrome quien pone la real.</li>
-              <li><strong>No guarda fichas de alumnos.</strong> En sus apuntes solo hay tendencias de la clase.</li>
-              <li><strong>No ejecuta programas en tu ordenador.</strong> Salvo que actives la prueba de prácticas, y entonces solo dentro de contenedores Docker.</li>
-            </ul>
           </div>
         </section>
 
@@ -418,7 +371,21 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="abierto-t">
+        <section id="control" aria-labelledby="control-t">
+          <div className={s.wrap}>
+            <div className={s.sectionIntro}>
+              <h2 id="control-t">Con tu visto bueno</h2>
+              <p>Trabaja con tu cuenta en tu curso real, así que te consulta antes de lo que verían tus alumnos.</p>
+            </div>
+            <div className={s.cards}>
+              <div className={s.card}><h3>Te pide permiso</h3><p>Antes de guardar una nota, responder en el foro o publicar algo, te enseña qué va a hacer y espera tu sí. Además, el programa vigila los botones de publicar de Moodle y para lo que no hayas aprobado.</p></div>
+              <div className={s.card}><h3>Lo nuevo, primero oculto</h3><p>Lo prepara en borradores, lo sube oculto, lo prueba como lo vería un alumno y lo muestra cuando tú dices sí. Lo que quede a medias te lo recuerda al cerrar.</p></div>
+              <div className={s.card}><h3>Lo que no hace</h3><p>No borra contenido sin preguntarte, no toca matrículas ni la configuración del sitio, no sale de tu curso, no ve tu contraseña y no guarda fichas de alumnos.</p></div>
+            </div>
+          </div>
+        </section>
+
+        <section className={s.tinted} aria-labelledby="abierto-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}><h2 id="abierto-t">Libre, abierto y probado en un Moodle de verdad</h2></div>
             <div className={s.cards}>
@@ -429,7 +396,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="instalar" className={s.tinted} aria-labelledby="instalar-t">
+        <section id="instalar" aria-labelledby="instalar-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="instalar-t">Instálalo en tres pasos</h2>
@@ -451,7 +418,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="preguntas" className={s.faq} aria-labelledby="preguntas-t">
+        <section id="preguntas" className={`${s.faq} ${s.tinted}`} aria-labelledby="preguntas-t">
           <div className={s.wrap}>
             <h2 id="preguntas-t">Preguntas frecuentes</h2>
             {FAQ.map(([q, a]) => (

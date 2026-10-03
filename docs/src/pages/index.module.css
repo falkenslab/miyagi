@@ -137,33 +137,6 @@
 .how p { color: var(--fg-2); margin: 0; }
 .how code, .steps code { font-family: var(--mono); }
 
-/* Control */
-.control { display: grid; gap: clamp(2rem, 5vw, 4rem); }
-.control > div { min-width: 0; }
-@media (min-width: 56rem) { .control { grid-template-columns: 1fr 1fr; } }
-.points { display: grid; gap: clamp(1.5rem, 4vw, 2.5rem); align-content: start; }
-.point { border-left: 3px solid var(--borla); padding-left: 1.1rem; }
-.point p { color: #c9d4cc; }
-.flow { counter-reset: flow; list-style: none; display: grid; }
-.flow li { counter-increment: flow; position: relative; padding: 0 0 1.2rem 3rem; color: #c9d4cc; }
-.flow li::before {
-  content: counter(flow); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem;
-  display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--borla); color: var(--tiza); font-weight: 800; font-size: 0.9em;
-}
-.flow li:not(:last-child)::after { content: ""; position: absolute; left: calc(1rem - 0.75px); top: 2.1rem; bottom: 0.1rem; border-left: 1.5px dashed #5a5a62; }
-.flow li:last-child::before { background: var(--sol); border-color: var(--sol); color: #ffffff; }
-.flow strong { color: var(--tiza); }
-
-/* Never */
-.nevers { list-style: none; display: grid; gap: 1rem 2.5rem; }
-@media (min-width: 48rem) { .nevers { grid-template-columns: 1fr 1fr; } }
-.nevers li { position: relative; padding-left: 2.3rem; color: var(--fg-2); }
-.nevers li::before {
-  content: "✕"; position: absolute; left: 0; top: 0.05em; width: 1.6rem; height: 1.6rem;
-  display: grid; place-items: center; border-radius: 50%; background: var(--sol); color: #ffffff; font-size: 0.8rem; font-weight: 800;
-}
-.nevers strong { color: var(--fg); }
-
 /* Methodologies */
 .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .chips li { border: 1.5px solid var(--rule); background: var(--bg); border-radius: 999px; padding: 0.45rem 1rem; font-size: var(--step--1); font-weight: 700; }
