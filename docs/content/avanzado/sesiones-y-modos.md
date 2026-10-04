@@ -1,7 +1,7 @@
 ---
 title: Sesiones y modos
 sidebar_position: 8
-description: "Los cuatro tipos de sesión (chat, run, ingest, explore), los tres modos de supervisión, cómo se retoma un chat y qué queda guardado en sessions/."
+description: "Los cuatro tipos de sesión (chat, run, ingest, explore), los modos de supervisión y el modo plan, cómo se retoma un chat y qué queda guardado en sessions/."
 ---
 
 # Sesiones y modos
@@ -12,17 +12,17 @@ Cada orden abre un tipo de sesión, con sus propias instrucciones de sistema ([`
 
 | Sesión | Para qué | Navegador | Modo |
 | --- | --- | --- | --- |
-| `chat` | Conversación, a pantalla completa por defecto, que se puede retomar | Sí, se abre cuando hace falta | `guided`, y `Shift+Tab` alterna con `interactive` |
+| `chat` | Conversación, a pantalla completa por defecto, que se puede retomar | Sí, se abre cuando hace falta | Empieza en `guided`; `Shift+Tab` pasa a `interactive` y a `plan` |
 | `run` | Una pasada por todo el curso, o el encargo de `--task` | Sí | El de `--mode`, o lo pregunta (sin terminal interactiva, `guided`) |
 | `ingest` | Incorporar documentos de `sources/` a la base de conocimiento | No | No publica nada: no pregunta |
 | `explore` | Apuntar qué tipos de actividad y de pregunta admite tu Moodle | Sí | `guided`, como mucho 60 turnos |
 
 Algunos detalles:
 
-- **`chat`** saluda con lo que ya sabe, leyendo `knowledge/index.md` y la última entrada de `knowledge/log.md`, sin abrir el navegador. Si hay borradores ocultos, lo menciona. Si la base de conocimiento está vacía, te ofrece explorar el curso o incorporar tus documentos. Luego espera tus instrucciones.
+- **`chat`** saluda con lo que ya sabe, mirando el catálogo de la base de conocimiento (`knowledge_index`) y su visión general (`overview`), sin abrir el navegador, y dice de cuándo es lo más reciente. Si hay borradores ocultos, lo menciona. Si la base de conocimiento está vacía, te ofrece explorar el curso o incorporar tus documentos. Luego espera tus instrucciones.
 - **`run`** sin `--task` gestiona el curso en cuatro frentes: corregir lo pendiente, atender el foro, crear o arreglar contenido y resumir el progreso de la clase. Con `--task "…"`, ese encargo sustituye a la misión general, con todas las demás reglas (aprobaciones incluidas).
 - **`ingest`** sin archivos procesa todo lo de `sources/` que aún no tiene página de resumen; con archivos, solo esos (rutas relativas a la carpeta actual). Ver [La base de conocimiento](base-de-conocimiento.md).
-- **`explore`** entra en el curso, abre el selector de actividades, el de tipos de pregunta (desde un cuestionario del propio curso) y la configuración del calificador, y cancela cada formulario sin guardar. Escribe `knowledge/moodle-capabilities.md`. Si el curso aún no tiene cuestionarios, apunta que los tipos de pregunta quedan por comprobar.
+- **`explore`** entra en el curso, abre el selector de actividades, el de tipos de pregunta (desde un cuestionario del propio curso) y la configuración del calificador, y cancela cada formulario sin guardar. Escribe la página `course/moodle-capabilities` (`knowledge/moodle-capabilities.md`). Si el curso aún no tiene cuestionarios, apunta que los tipos de pregunta quedan por comprobar.
 
 Las herramientas de `drafts/` y los ayudantes (`researcher`, `pedagogy-reviewer`, `practice-runner`) solo existen en `chat` y `run`.
 
@@ -31,8 +31,15 @@ Las herramientas de `drafts/` y los ayudantes (`researcher`, `pedagogy-reviewer`
 - **`guided`**: trabaja solo y pide aprobación antes de cada publicación. El [gancho de publicación](aprobaciones-y-borradores.md) detiene cualquier acción de publicar que no se haya aprobado.
 - **`interactive`**: antes de cada herramienta que usa (abrir una página, leer un archivo, pulsar un botón) te muestra cuál y con qué parámetros, y espera tu sí. Útil para ver cómo trabaja.
 - **`autonomous`**: no pregunta nada y no tiene forma de pedirte ayuda. Publica sin aprobación. Necesita usuario y contraseña guardados, porque nadie puede iniciar sesión a mano. Al corregir, decide y guarda la nota por su cuenta.
+- **`plan`** (solo en el chat): piensa antes de construir. Un gancho de agent-kit solo le deja leer (tus documentos con `Read`, `list_sources` y `extract_text`, la base de conocimiento con sus herramientas de lectura, la web), delegar en los ayudantes y preguntarte; cualquier otra herramienta se deniega, también las del navegador, porque miyagi no declara ninguna como de solo lectura, así que en este modo no abre Moodle. Cuando tiene el plan, lo presenta con `present_plan` y eliges: **ejecutarlo** (vuelve al modo anterior y se pone a ello), **seguir planificando** (le dices qué cambiar) o **cancelar**.
 
-En el chat, `Shift+Tab` cambia entre `guided` e `interactive` en cualquier momento; el chat nunca va en `autonomous`.
+En el chat, `Shift+Tab` recorre `guided` → `interactive` → `plan` en cualquier momento, y `/plan` (también en el chat de texto simple) entra en el modo plan y, escrito otra vez, vuelve al modo de antes. El chat nunca va en `autonomous`; `run` no admite `plan`.
+
+## Lo que el chat te muestra y te pregunta
+
+- **Lista de tareas.** En un trabajo largo, el asistente lleva una lista de tareas (la herramienta `TodoWrite` del SDK) que el chat dibuja encima de la caja de texto: `☐` pendiente, `◼` en curso, `☑` hecha. Se queda mientras quede alguna y desaparece cuando están todas hechas.
+- **Elegir entre opciones.** Cuando necesita que decidas algo, puede preguntarte con `ask_human`: un panel con dos a ocho opciones (una o varias, según la pregunta) y una última, «Otra», para escribir tu respuesta. En el chat de texto simple, las opciones salen numeradas y respondes con los números.
+- **Fecha y hora.** Las entradas con fecha de la base de conocimiento y los plazos («dentro de 10 días») salen del reloj del sistema, con `current_time` y `date_math`, nunca de memoria del modelo.
 
 ## Retomar un chat
 
@@ -69,7 +76,7 @@ Al cerrar cualquier sesión, miyagi te recuerda dónde ha quedado cada cosa y qu
 
 ## Pantalla completa, en línea o texto simple
 
-- Por defecto, el chat ocupa toda la ventana de la terminal ([ADR-007](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-007-full-screen-ink-chat.md)), con la respuesta escrita en directo, las herramientas resumidas en una línea (`Ctrl+O` las despliega), paneles para las aprobaciones y selección con el ratón.
+- Por defecto, el chat ocupa toda la ventana de la terminal ([ADR-007](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-007-full-screen-ink-chat.md)), con la respuesta escrita en directo, cada herramienta con la primera línea de su resultado (`Ctrl+O` pliega cada grupo en una línea de resumen y vuelve a desplegarlo), paneles para las aprobaciones y selección con el ratón.
 - `--inline` mantiene el mismo chat pero dentro del historial normal de la terminal.
 - `--plain` usa un chat de texto simple línea a línea; en `run`, `ingest` y `explore`, texto simple sin animación ni paneles. Se activa solo si la entrada o la salida no son una terminal (por ejemplo, si rediriges la salida a un archivo).
 

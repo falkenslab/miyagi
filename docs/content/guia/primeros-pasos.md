@@ -61,7 +61,7 @@ bases-de-datos/
 
 ## 3. Dale tu material
 
-Este paso es opcional, pero marca la diferencia. Copia en la carpeta `sources` lo que tengas: la programación, las rúbricas, los enunciados con su solución, tus criterios («las entregas tarde, un 20 % menos»). Sirven documentos PDF, Word (DOCX), texto e incluso fotos de apuntes a mano o de diapositivas.
+Este paso es opcional, pero marca la diferencia. Copia en la carpeta `sources` lo que tengas: la programación, las rúbricas, los enunciados con su solución, tus criterios («las entregas tarde, un 20 % menos»). Sirven documentos PDF, Word, PowerPoint (también lee las notas del orador), Excel, texto e incluso fotos de apuntes a mano o de diapositivas.
 
 Después, en la terminal:
 

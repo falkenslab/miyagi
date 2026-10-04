@@ -56,6 +56,7 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat`. Si 
 | `/knowledge:ingest` | Incorpora a sus apuntes lo que haya en `sources` sin procesar. |
 | `/knowledge:query <pregunta>` | Responde a partir de sus apuntes del curso. |
 | `/knowledge:lint` | Revisa que sus apuntes estén completos y bien enlazados. |
+| `/plan` | Entra en el modo plan (te propone un plan sin cambiar nada) o, si ya estás en él, vuelve al modo de antes. |
 | `/resume` | Elige una conversación anterior para retomarla. |
 | `/copy` | Copia su última respuesta. |
 | `/exit` | Cierra la sesión. |

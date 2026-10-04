@@ -1,7 +1,7 @@
 ---
 title: El chat
 sidebar_position: 4
-description: "Cómo conversar con miyagi: aprobar o rechazar lo que publica, interrumpirlo, retomar una conversación y usar los atajos."
+description: "Cómo conversar con miyagi: aprobar o rechazar lo que publica, pedirle un plan antes de que actúe, interrumpirlo, retomar una conversación y usar los atajos."
 ---
 
 # El chat
@@ -18,11 +18,12 @@ description: "Cómo conversar con miyagi: aprobar o rechazar lo que publica, int
 | Rechazarlo | `2` o `n`, y dile qué cambiar |
 | Pararlo todo en una aprobación | `3` (Parar) |
 | Cortar lo que está haciendo sin salir | `Esc` |
-| Que te consulte cada paso, no solo lo que publica | `Shift+Tab` (pasa de guided a interactive y vuelta) |
+| Que te consulte cada paso, no solo lo que publica | `Shift+Tab` (pasa de guided a interactive) |
+| Que primero te proponga un plan, sin cambiar nada | `/plan`, o `Shift+Tab` hasta llegar a plan |
 | Ver lo que ya ha salido de pantalla | Rueda del ratón o `RePág`/`AvPág` |
 | Copiar texto | Arrástralo con el ratón y haz clic derecho |
 | Copiar su última respuesta | `/copy` |
-| Ver con detalle las herramientas que ha usado | `Ctrl+O` |
+| Resumir en una línea las herramientas que ha usado, o volver a verlas una a una | `Ctrl+O` |
 | Mencionar un archivo de la carpeta del curso | `@` y el nombre del archivo |
 | Recuperar un mensaje que ya escribiste | Flechas arriba y abajo, o `Ctrl+R` para buscar |
 | Ver todos los atajos de teclado | `?` con el mensaje vacío |
@@ -42,11 +43,25 @@ Una sola aprobación puede cubrir un lote (por ejemplo, seis notas), pero solo s
 
 Y no depende solo de que se acuerde de preguntar: si intenta pulsar un botón de publicar de Moodle sin haberte pedido permiso, el propio programa lo detiene y te pregunta. Lo tienes explicado a fondo en [Aprobaciones y borradores](../avanzado/aprobaciones-y-borradores.md).
 
-## Dos formas de supervisarlo
+## Tres formas de trabajar con él
 
 El chat empieza siempre en modo **guided**: trabaja solo y te pide permiso únicamente antes de publicar algo que verán tus estudiantes.
 
-Si quieres ver cómo trabaja paso a paso, pulsa `Shift+Tab`: pasa a modo **interactive** y te consultará antes de cada acción, aunque solo sea abrir una página. Vuelve a pulsarlo para regresar a guided.
+Si quieres ver cómo trabaja paso a paso, pulsa `Shift+Tab`: pasa a modo **interactive** y te consultará antes de cada acción, aunque solo sea abrir una página.
+
+Púlsalo otra vez y pasa a modo **plan**: lee tus documentos y sus apuntes, busca en internet si hace falta y te prepara un plan, sin cambiar nada y sin abrir Moodle. Cuando lo tiene, te lo enseña y eliges:
+
+- **Ejecutarlo**: vuelve al modo de antes y se pone a ello.
+- **Seguir planificando**: dile qué cambiar y te presenta otro.
+- **Cancelar**: no hace nada y te pregunta qué prefieres.
+
+Es útil antes de un encargo grande, como construir un tema entero. También puedes escribir `/plan` para entrar en el modo plan, y otra vez `/plan` para salir. Un tercer `Shift+Tab` te devuelve a guided.
+
+## Lo que verás mientras trabaja
+
+- **Su lista de tareas.** En un trabajo largo, encima de la caja de texto aparece la lista de lo que va a hacer: `☐` pendiente, `◼` en curso, `☑` hecho. Desaparece cuando lo ha terminado todo.
+- **Preguntas con opciones.** Cuando necesita que decidas algo (cuántas sesiones dar a un tema, qué enfoque seguir), te muestra las opciones en un panel. Elige con las flechas y pulsa Intro; si te deja marcar varias, márcalas con la barra espaciadora. La última opción, «Otra», te deja escribir tu propia respuesta.
+- **Fechas correctas.** Las fechas que apunta y los plazos que calcula salen del reloj de tu ordenador, no de lo que el modelo cree que es hoy.
 
 ## Interrumpir y retomar
 

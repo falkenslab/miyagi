@@ -129,7 +129,7 @@ Las habilidades se leen al arrancar miyagi: si tenías el chat abierto, ciérral
 Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: el navegador con tu Moodle, sus apuntes, la carpeta `drafts`, los documentos de `sources` y, si lo has activado, el probador de prácticas. **No le da herramientas nuevas.**
 
 - **Puede**: fijar criterios, pasos, convenciones, plantillas y ejemplos; decirle qué documento de `sources` leer; apoyarse en otras habilidades (por ejemplo, «corrige con `grading-rubric`» o «pruébalo con `practice-testing`»).
-- **No puede**: darle una terminal, permitirle escribir fuera de `knowledge`, `drafts` y `practice`, leer `config.json` o `.env`, saltarse las aprobaciones ni conectarlo a otros servicios.
+- **No puede**: darle una terminal, permitirle tocar `knowledge` sin sus herramientas `knowledge_*`, escribir archivos fuera de `drafts` y `practice`, leer `config.json` o `.env`, saltarse las aprobaciones ni conectarlo a otros servicios.
 
 Por eso una habilidad que diga «ejecuta este programa» solo funcionará si has activado el [probador de prácticas](practicas-docker.md), y entonces a través de él, dentro de Docker. Sin esa opción, el asistente te dirá que no puede.
 

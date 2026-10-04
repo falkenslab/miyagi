@@ -13,7 +13,7 @@ Para el aula de SQL dejamos dos documentos:
 - **`temario-introduccion-sql.md`**: 6 semanas, 4 temas (MariaDB en Docker, DDL, DML y consultas), los objetivos, la base de datos de trabajo (`tienda`) y la evaluación: cuestionarios 20 %, ejercicios 30 %, práctica final 50 %, y un 20 % menos por entregar tarde.
 - **`rubrica-practica-consultas.md`**: la rúbrica de la práctica final, sobre 10: resultados correctos (5), uso adecuado de SQL (3) y legibilidad (2), con qué hacer si no hay entrega.
 
-Pueden ser PDF, Word, Markdown o incluso fotos de apuntes a mano. Después:
+Pueden ser PDF, Word, PowerPoint, Excel, Markdown o incluso fotos de apuntes a mano. Después:
 
 ```powershell
 miyagi ingest

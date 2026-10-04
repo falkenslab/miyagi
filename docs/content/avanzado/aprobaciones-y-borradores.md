@@ -38,7 +38,7 @@ Que el asistente pida permiso no depende solo de que se acuerde. En una sesión 
 
 Un falso positivo solo cuesta un panel de más; por eso la lista es generosa. Pulsar Intro suelto no lo detecta el gancho (no lleva destino para distinguir un buscador de un formulario); ahí sigue valiendo la regla de las instrucciones.
 
-**Cuándo actúa**: solo en `guided`, que es el modo del chat y el recomendado para `run`. En `interactive` ya se te pregunta antes de cada acción, y `autonomous` publica sin preguntar por diseño. Si en el chat cambias de modo con `Shift+Tab`, el gancho lo sigue al momento. No revisa lo que hacen los ayudantes, que no pueden publicar.
+**Cuándo actúa**: solo en `guided`, que es el modo del chat y el recomendado para `run`. En `interactive` ya se te pregunta antes de cada acción, en `plan` no puede usar el navegador, y `autonomous` publica sin preguntar por diseño. Si en el chat cambias de modo con `Shift+Tab`, el gancho lo sigue al momento. No revisa lo que hacen los ayudantes, que no pueden publicar.
 
 ## Lo nuevo, primero oculto: los borradores
 
@@ -47,7 +47,7 @@ Todo recurso nuevo (una página, un archivo, un cuestionario, un H5P, una tarea,
 1. **Lo construye en `drafts/<slug>/`**: el código fuente editable (el HTML, el archivo GIFT, el texto de la página, sus imágenes).
 2. **Lo sube oculto.** Marca «Ocultar en la página del curso» antes del primer guardado (o oculta la sección si es un tema nuevo). El resumen de la aprobación dice que sube **oculto, para probarlo**. No envía notificación de cambio de contenido.
 3. **Lo prueba como profesor, en Moodle**: lo abre y lo usa como lo haría un alumno: la vista previa del cuestionario, el H5P, cada enlace y cada parte interactiva, y la página en una ventana estrecha. Si algo falla, lo corrige en `drafts/` y lo reemplaza (con otra aprobación).
-4. **Lo apunta en `knowledge/drafts.md`**: una línea por borrador oculto, con su enlace y lo que falta.
+4. **Lo apunta en la página `course/drafts`** (`knowledge/drafts.md`): una línea por borrador oculto, con su enlace y lo que falta.
 5. **Te cuenta qué ha probado y te pide permiso para mostrarlo.** Mostrarlo es otra publicación, con su propia aprobación. Después lo quita de `drafts.md` y lo revisa ya como alumno («Cambiar rol a… Estudiante»).
 
 Si prefieres no mostrarlo todavía, se queda oculto y en `drafts.md`. Al cerrar la sesión, miyagi te avisa de que hay recursos ocultos sin mostrar, y en el siguiente chat te los menciona al saludar.

@@ -166,11 +166,11 @@ Construye un curso entero a partir de una descripción (materia, nivel, duració
 
 ## Sus apuntes del curso
 
-Estas cuatro mantienen la carpeta `knowledge`, donde el asistente guarda lo que aprende del curso para acordarse en la siguiente conversación. Lo tienes explicado en [La memoria del curso](memoria.md).
+Estas tres mantienen la carpeta `knowledge`, donde el asistente guarda lo que aprende del curso para acordarse en la siguiente conversación. Lo tienes explicado en [La memoria del curso](memoria.md).
 
 ### 📥 `knowledge-ingest` · Incorporar documentos
 
-Lee un documento (un archivo de `sources`, una página de Moodle) y lo incorpora a sus apuntes: escribe un resumen, crea o actualiza las páginas de los conceptos que trata y lo enlaza todo con el índice.
+Lee un documento (un archivo de `sources`, una página de Moodle) y lo incorpora a sus apuntes: escribe un resumen, crea o actualiza las páginas de los conceptos que trata y lo enlaza desde la página del tema al que pertenece.
 
 - **Pídeselo así:** *«Te he dejado en sources la rúbrica de la práctica final. Incorpórala.»*
 - **Atajo:** `/knowledge:ingest` (o `miyagi ingest` desde la terminal)
@@ -184,14 +184,10 @@ Responde a una pregunta a partir de lo que tiene apuntado, con enlaces a las pá
 
 ### 🧹 `knowledge-lint` · Revisar sus apuntes
 
-Revisa que sus apuntes estén sanos: enlaces rotos, páginas que no están en el índice o que nadie enlaza, conceptos duplicados, contradicciones y huecos. Arregla lo mecánico y te cuenta el resto.
+Revisa que sus apuntes estén sanos: enlaces rotos, páginas que nadie enlaza, documentos de `sources` sin incorporar o que han cambiado, conceptos duplicados, contradicciones y huecos. Arregla lo mecánico y te cuenta el resto.
 
 - **Pídeselo así:** *«Revisa tus apuntes del curso y dime si hay algo contradictorio.»*
 - **Atajo:** `/knowledge:lint`
-
-### 📄 `knowledge-pages` · El formato de sus apuntes
-
-Las plantillas con las que escribe cada tipo de página de sus apuntes (índice, diario de cambios, resumen, concepto, síntesis), para que todas tengan la misma forma y los mismos enlaces. No hace falta pedírsela: la usa sola cada vez que escribe en `knowledge`.
 
 ## Sus ayudantes
 

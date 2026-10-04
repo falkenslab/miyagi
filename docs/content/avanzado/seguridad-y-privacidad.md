@@ -21,9 +21,10 @@ El `.env` del curso, donde puede ir un token de Claude propio, también está pr
 
 Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto del asistente como de sus ayudantes:
 
-- **Escribir y editar**: solo dentro de `knowledge/` y `drafts/` (y de `practice/` si has activado el probador de prácticas).
-- **`sources/`**: solo lectura. Lo único que puede añadir ahí es un documento descargado de Moodle, con su herramienta `save_to_sources`, que nunca sobrescribe.
-- **Buscar en el contenido** (`Grep`): solo en `knowledge/`, `sources/`, `drafts/` y `practice/`.
+- **Escribir y editar** (`Write`, `Edit`): solo dentro de `drafts/` (y de `practice/` si has activado el probador de prácticas).
+- **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado de Moodle), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
+- **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
+- **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y `practice/`.
 - **`config.json` y `.env`**: prohibidos, ni leer ni escribir.
 
 Tus habilidades, atajos e `instructions.md` quedan fuera de las carpetas en las que puede escribir: el asistente los usa, pero no puede cambiarlos.

@@ -21,7 +21,9 @@ miyagi (CLI)
  └─ sesión (agent-kit + Claude Agent SDK)
      ├─ instrucciones de sistema (prompts/system/*.md + instructions.md)
      ├─ habilidades y atajos (plugin/, el plugin de conocimiento de agent-kit, .claude/ del curso)
-     ├─ herramientas de archivos, limitadas a knowledge/, drafts/ y practice/ (sources/ solo lectura)
+     ├─ herramientas de archivos: escriben solo en drafts/ y practice/ (sources/ solo lectura)
+     ├─ herramientas knowledge_* de agent-kit: lo único que llega a knowledge/
+     ├─ herramientas de fuentes de agent-kit: list_sources, extract_text, save_to_sources…
      ├─ Playwright MCP ──> Chrome ──> tu Moodle
      ├─ caja de herramientas de drafts/ (descargar, comprimir, PDF…)
      ├─ ganchos: aprobación antes de publicar, validación de subidas
@@ -44,8 +46,9 @@ Lo tienes en detalle en [Sesiones y modos](sesiones-y-modos.md).
 - **`guided`**: trabaja solo y pide aprobación antes de publicar algo que verán los alumnos. Un gancho del programa lo hace cumplir, no solo las instrucciones.
 - **`interactive`**: pide confirmación antes de cada herramienta que usa.
 - **`autonomous`**: no pregunta nada. No tiene herramienta para pedir aprobación ni para pedir que alguien inicie sesión a mano.
+- **`plan`**: solo en el chat. Lee y prepara un plan sin cambiar nada, y te lo presenta para que decidas si lo ejecuta.
 
-`chat` y `explore` van siempre en guided (en el chat, `Shift+Tab` alterna con interactive). `run` pregunta el modo o lo toma de `--mode`. `ingest` no publica nada y no pregunta.
+`chat` y `explore` empiezan siempre en guided (en el chat, `Shift+Tab` pasa por guided, interactive y plan, y `/plan` entra y sale del modo plan). `run` pregunta el modo o lo toma de `--mode`. `ingest` no publica nada y no pregunta.
 
 ## Los ayudantes
 

@@ -49,7 +49,7 @@ El asistente usa la habilidad [`practice-testing`](https://github.com/falkenslab
 1. El asistente escribe la práctica en `practice/<slug>/`: el enunciado (`statement.md`), los archivos de partida del alumno (`start/`) y la solución (`solution/`).
 2. Pide a `practice-runner` que siga `statement.md` paso a paso como un alumno, desde `start/`, y le diga dónde se rompe; y después que ejecute `solution/` y compruebe que da lo que promete el enunciado.
 3. Corrige cada problema que le devuelve (un paso que falta, una versión que no existe, una salida distinta de la prometida) y repite hasta que pase. Solo entonces publica la práctica, con su aprobación.
-4. Anota en la página de la actividad (`knowledge/activities/<slug>.md`) que se comprobó, cuándo, con qué imagen base y qué órdenes ejecutará el alumno.
+4. Anota en la página de la actividad (`activity/<slug>`, archivo `knowledge/activities/<slug>.md`) que se comprobó, cuándo, con qué imagen base y qué órdenes ejecutará el alumno.
 
 ### Al corregir una entrega
 
