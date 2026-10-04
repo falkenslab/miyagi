@@ -33,18 +33,19 @@ miyagi init
 
 Te hará unas preguntas, una detrás de otra:
 
+- **¿Conectar un aula Moodle ahora?** Si dices que no, miyagi te ayuda igual con la programación, los temas y los materiales, sin abrir el navegador, y se salta las preguntas de Moodle de abajo. Puedes conectarla cuando quieras volviendo a ejecutar `miyagi init` en la misma carpeta.
 - **URL de Moodle.** Lo más fácil: abre tu curso en el navegador y copia la dirección completa, algo como `https://moodle.micentro.es/course/view.php?id=42`. De ahí saca él solo la dirección de tu Moodle y el número del curso.
 - **ID del curso.** Solo te lo pregunta si la dirección que pegaste no lo llevaba. Es el número que aparece tras `id=` en la dirección del curso.
 - **Usuario con rol de profesor.** Tu usuario de Moodle. Si prefieres no guardarlo, déjalo en blanco: cada vez que empiece, te pedirá que inicies sesión tú en la ventana de Chrome.
 - **Contraseña.** Solo si has puesto usuario. Se guarda en tu ordenador y el asistente nunca la ve: es Chrome quien la escribe en Moodle.
-- **Etiqueta.** Un nombre para reconocer el curso, como `Bases de Datos 1.º DAW`. Si la dejas en blanco, usa la dirección de tu Moodle y el número del curso.
+- **Etiqueta.** Un nombre para reconocer el curso, como `Bases de Datos 1.º DAW`. Si la dejas en blanco, usa la dirección de tu Moodle y el número del curso (sin aula, el nombre de la carpeta).
 - **Descripción.** Opcional, para ti.
 - **Tono de voz.** Cómo hablará a tus estudiantes en el foro, en la retroalimentación y en los avisos: sin preferencia (neutro), formal, cercano, o cercano y motivador.
 - **Idioma.** El idioma en el que prefieres hablar con él, por ejemplo `español`. También decide el de sus menús y avisos si es español, inglés, francés o alemán. En blanco, te responde en el idioma en que le escribas.
 - **¿Probar prácticas en Docker?** Solo tiene sentido en cursos de informática y si tienes Docker instalado. Si no lo sabes, di que no: se puede activar más tarde (lo tienes en [Prácticas en Docker](../avanzado/practicas-docker.md)).
 - **¿Crear `instructions.md`?** Un archivo donde escribir las instrucciones que quieres que tenga siempre en cuenta, como «puntúa sobre 10». Puedes crearlo después a mano.
 
-Al final te propone **explorar ahora tu Moodle**. Te recomendamos decir que sí: entra en tu curso, mira qué tipos de actividad y de pregunta admite tu centro y cómo se pueden calcular las notas, y lo apunta. No crea ni cambia nada. Si algo falla (una contraseña mal escrita, por ejemplo), el curso queda configurado igual y puedes repetirlo cuando quieras con `miyagi explore`.
+Si has conectado un aula, al final te propone **explorar ahora tu Moodle**. Te recomendamos decir que sí: entra en tu curso, mira qué tipos de actividad y de pregunta admite tu centro y cómo se pueden calcular las notas, y lo apunta. No crea ni cambia nada. Si algo falla (una contraseña mal escrita, por ejemplo), el curso queda configurado igual y puedes repetirlo cuando quieras con `miyagi explore`.
 
 Si es la primera vez que usas miyagi en este ordenador, en este momento te pedirá [conectar tu cuenta de Claude](instalar.md).
 

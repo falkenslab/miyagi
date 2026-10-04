@@ -5,6 +5,8 @@ description: Build a rubric or grading guide from scratch - observable criteria 
 
 # Building a rubric, not just applying one
 
+What this skill says about Moodle applies to the connected classroom, if any; without one, keep it in the plan or build it in `drafts/`.
+
 `grading-rubric` covers grading with criteria that already exist (Moodle's own rubric,
 something left in `sources/`, or one already noted in the activity's knowledge base page). This skill is for
 when none of those exist yet and criteria need to be constructed — typically while setting

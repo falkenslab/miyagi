@@ -5,6 +5,8 @@ description: Grade Moodle submissions (assignments, open-response quiz questions
 
 # Grading a submission
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 ## Before grading
 
 1. Check whether the activity itself has a native Moodle rubric or grading guide

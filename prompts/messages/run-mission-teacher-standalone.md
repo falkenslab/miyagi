@@ -1,0 +1,1 @@
+review the subject as its teacher's assistant: ingest what's new in `sources/`, check the teaching plan against what the knowledge base knows (filling in what's missing, with your proposals marked as proposals), and finish with a summary of what's ready and what's left for the teacher to decide

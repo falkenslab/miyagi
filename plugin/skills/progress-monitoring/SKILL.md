@@ -5,6 +5,8 @@ description: Review the class's progress and grades, prioritizing who's falling 
 
 # Monitoring the class's progress
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 ## Before looking at Moodle
 
 If `course/progress` exists, read it first (`knowledge_read`): it's your own history of earlier

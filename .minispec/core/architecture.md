@@ -10,7 +10,7 @@ cli.ts → workspace config → toSessionConfig() → AgentSpec (agent.ts) → a
                                                     └─ subagents: researcher, pedagogy-reviewer, practice-runner (opt-in)
 ```
 
-Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink chat, full screen by default; `--inline`, `--plain` for readline; starts guided, Shift+Tab switches to interactive; each chat is an agent-kit run folder `sessions/<timestamp>/` keeping its conversation, resumed with `--continue` or `/resume`, ADR-011), `ingest` (no browser, builds the knowledge base), `explore` (guided probe of the Moodle site, capped at 60 turns, no legacy migration).
+Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink chat, full screen by default; `--inline`, `--plain` for readline; starts guided, Shift+Tab switches to interactive; each chat is an agent-kit run folder `sessions/<timestamp>/` keeping its conversation, resumed with `--continue` or `/resume`, ADR-011), `ingest` (no browser, builds the knowledge base), `explore` (guided probe of the Moodle site, capped at 80 turns, no legacy migration). A workspace without a classroom (`config.json` with no `classroom`, ADR-013) has no browser in any kind: no Playwright, no publish or upload gate, no manual login, standalone base prompts (`teacher-*-standalone.md`) and no classroom pages in the knowledge layer (`classroom-knowledge.md`); `explore` stops with a message. `hasMoodle` and the standalone bases are transitional: the `extensions` feature replaces them.
 
 ## Key pieces
 

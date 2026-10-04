@@ -5,6 +5,8 @@ description: Build one unit (a topic, a section) inside an existing Moodle cours
 
 # Building one unit
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 A unit has to fit the course it lands in: same style and level as the other units, dates that
 continue the calendar, weights that the gradebook and the teaching plan can absorb, and
 objectives that the teaching plan says this unit covers. A good unit that contradicts the course

@@ -6,7 +6,7 @@ import { isExitPromptError, ui } from "@falkenslab/agent-kit";
 import { resolveWorkspaceDir, runSession } from "./agent.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
 import { globalConfigPath, migrateLegacyGlobalConfig, resolveLanguage } from "./globalConfig.js";
-import { promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
+import { promptConnectClassroom, promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
 import { chooseInterfaceLanguage, t } from "./messages/index.js";
 import { applyTeacherTheme } from "./theme.js";
 import { interfaceLanguage, readWorkspaceConfig, workspaceExists } from "./workspace.js";
@@ -24,11 +24,17 @@ async function installedVersion(): Promise<string> {
 
 async function initCommand(args: string[]): Promise<void> {
   const workspaceDir = resolveWorkspaceDir(args);
+  let config;
   if (await workspaceExists(workspaceDir)) {
-    throw new Error(t().alreadyWorkspace(workspaceDir));
+    // A workspace without a classroom can connect one later (ADR-013); one with a classroom is done.
+    const existing = await readWorkspaceConfig(workspaceDir);
+    if (existing.classroom) throw new Error(t().alreadyWorkspace(workspaceDir));
+    config = await promptConnectClassroom(workspaceDir, existing);
+  } else {
+    config = await promptInitWorkspace(workspaceDir);
   }
-  await promptInitWorkspace(workspaceDir);
-  if (!(await promptExploreNow())) return;
+  // Exploring needs a Moodle: without a classroom there's nothing to offer.
+  if (!config.classroom || !(await promptExploreNow())) return;
 
   // The workspace already exists at this point: a failed exploration (wrong URL or
   // credentials) shouldn't make "init" itself look failed.

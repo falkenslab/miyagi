@@ -5,6 +5,8 @@ description: Write or edit the learning content of a course - notes as a page or
 
 # Writing learning content
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 Activities make students practise; resources are where they learn what they'll practise. Notes
 that list what "will be covered" instead of explaining it leave the activity with nothing behind
 it. Activities are `assignment-building`, `quiz-building` and `activity-building`.

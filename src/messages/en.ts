@@ -75,6 +75,13 @@ export interface Messages {
   headingCourse: (url: string, courseId: string) => string;
   headerWorkspace: string;
   headerCourse: string;
+  /** The chat header's field for the classroom, when there's none. */
+  headerClassroom: string;
+  noClassroom: string;
+  connectMoodleNow: string;
+  exploreNeedsClassroom: (dir: string) => string;
+  classroomIncomplete: (dir: string) => string;
+  workspaceName: string;
   welcomePlain: string;
   welcomeInk: string;
   promptLabel: string;
@@ -266,6 +273,12 @@ details.`,
   headingCourse: (url, courseId) => `Course: ${url} (id ${courseId})\n`,
   headerWorkspace: "workspace",
   headerCourse: "course",
+  headerClassroom: "classroom",
+  noClassroom: "no classroom",
+  connectMoodleNow: "Connect a Moodle classroom now? (without one, miyagi helps with your teaching plan and materials, and can connect one later with \"miyagi init\")",
+  exploreNeedsClassroom: (dir) => `${dir} has no classroom connected: there's no Moodle to explore. Connect one with "miyagi init --dir ${dir}".`,
+  classroomIncomplete: (dir) => `The classroom in ${dir}/config.json needs both "url" and "courseId".`,
+  workspaceName: "Name of the subject or workspace:",
   welcomePlain: "miyagi is ready. Esc interrupts the reply in progress; /resume picks up an earlier conversation; /exit or Ctrl+C (with no reply in progress) close the session.",
   welcomeInk: "miyagi is ready. Shift+Tab switches between guided and interactive, /resume picks up an earlier conversation, ? shows the shortcuts and /exit closes the session.",
   promptLabel: "you>",

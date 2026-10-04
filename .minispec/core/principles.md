@@ -6,6 +6,7 @@ Consult **before** writing code.
 - Avoid premature abstractions; propose a simpler alternative before adding complexity.
 - Preserve existing behavior; don't refactor outside the task's scope.
 - Document decisions, not implementation.
+- miyagi works without a classroom; a classroom is something the teacher connects (ADR-013).
 - The teacher approves every change students would see; never delete or change enrolments.
 - In guided, that approval is enforced by a hook, not only asked for in the prompt (ADR-008).
 - New resources are built in `drafts/`, uploaded hidden and tested in Moodle before being shown (ADR-009).

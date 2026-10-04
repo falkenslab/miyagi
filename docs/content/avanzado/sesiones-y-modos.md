@@ -15,7 +15,9 @@ Cada orden abre un tipo de sesión, con sus propias instrucciones de sistema ([`
 | `chat` | Conversación, a pantalla completa por defecto, que se puede retomar | Sí, se abre cuando hace falta | Empieza en `guided`; `Shift+Tab` pasa a `interactive` y a `plan` |
 | `run` | Una pasada por todo el curso, o el encargo de `--task` | Sí | El de `--mode`, o lo pregunta (sin terminal interactiva, `guided`) |
 | `ingest` | Incorporar documentos de `sources/` a la base de conocimiento | No | No publica nada: no pregunta |
-| `explore` | Apuntar qué tipos de actividad y de pregunta admite tu Moodle | Sí | `guided`, como mucho 60 turnos |
+| `explore` | Apuntar qué tipos de actividad y de pregunta admite tu Moodle (solo con aula) | Sí | `guided`, como mucho 80 turnos |
+
+Sin aula conectada (sin `classroom` en `config.json`), ninguna sesión abre el navegador: `chat` y `run` trabajan con la programación, los temas y los materiales en `drafts/`, sin nada que publicar ni aprobar, y la misión de `run` sin `--task` es repasar la materia (incorporar lo nuevo de `sources/` y revisar la programación).
 
 Algunos detalles:
 

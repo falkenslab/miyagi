@@ -2,7 +2,7 @@
 
 ## What
 
-`miyagi` is a CLI agent that manages a Moodle course as its teacher, driving a real browser through Playwright MCP. It is built on `@falkenslab/agent-kit`, with the same structure as its sibling `student-agent`. It was called teacher-agent until v0.9.0: the old command, global config (`~/.teacher-agent`) and install URL still work through compatibility paths (`src/globalConfig.ts`, `.claude/skills/release/compat/`) until v1.0.0.
+`miyagi` is a CLI assistant for a teacher: it prepares a subject with them (teaching plan, units, materials) and, when a Moodle classroom is connected, manages that course as its teacher, driving a real browser through Playwright MCP. The classroom is optional (ADR-013). It is built on `@falkenslab/agent-kit`, with the same structure as its sibling `student-agent`. It was called teacher-agent until v0.9.0: the old command, global config (`~/.teacher-agent`) and install URL still work through compatibility paths (`src/globalConfig.ts`, `.claude/skills/release/compat/`) until v1.0.0.
 
 ## What it does
 

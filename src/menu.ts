@@ -1,3 +1,4 @@
+import path from "node:path";
 import { isExitPromptError, runWizard, ui, type Mode, type WizardAnswers, type WizardStep } from "@falkenslab/agent-kit";
 import {
   createWorkspace,
@@ -48,23 +49,51 @@ async function exitOnCancel<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
+const required = (v: string) => v.trim() !== "" || t().required;
+/** The course id comes from a full course URL when there is one; otherwise it's asked. */
+const courseOf = (a: WizardAnswers) => parseCourseUrl(String(a.url)).courseId ?? String(a.courseId ?? "");
+
+/** The Moodle classroom's questions, asked only when `when` holds. */
+function classroomSteps(when: (a: WizardAnswers) => boolean): WizardStep[] {
+  return [
+    { type: "input", name: "url", message: t().moodleUrl, validate: required, when },
+    { type: "input", name: "courseId", message: t().courseId, validate: required, when: (a) => when(a) && !parseCourseUrl(String(a.url)).courseId },
+    { type: "input", name: "username", message: t().username, when },
+    { type: "password", name: "password", message: t().password, when: (a) => when(a) && String(a.username ?? "") !== "" },
+  ];
+}
+
+/** The classroom from the wizard's answers. */
+function classroomOf(answers: WizardAnswers, label: string, description: string): NonNullable<WorkspaceConfig["classroom"]> {
+  const username = String(answers.username ?? "");
+  return {
+    label,
+    ...(description ? { description } : {}),
+    url: parseCourseUrl(String(answers.url)).url,
+    courseId: courseOf(answers),
+    ...(username ? { username, password: String(answers.password ?? "") } : {}),
+  };
+}
+
 /**
  * Asks for a new workspace's data and creates it in `workspaceDir` (config.json, sources/,
- * knowledge/, .gitignore and, optionally, instructions.md). Used by `miyagi init`
+ * knowledge/, .gitignore and, optionally, instructions.md). The Moodle classroom is optional
+ * (ADR-013): the first question is whether to connect one now. Used by `miyagi init`
  * and by run/chat when the directory isn't a workspace yet.
  */
 export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConfig> {
   return exitOnCancel(async () => {
-    const required = (v: string) => v.trim() !== "" || t().required;
-    // The course id comes from a full course URL when there is one; otherwise it's asked.
-    const courseOf = (a: WizardAnswers) => parseCourseUrl(String(a.url)).courseId ?? String(a.courseId ?? "");
+    const connected = (a: WizardAnswers) => a.connect === true;
     const answers = await runWizard(
       [
-        { type: "input", name: "url", message: t().moodleUrl, validate: required },
-        { type: "input", name: "courseId", message: t().courseId, validate: required, when: (a) => !parseCourseUrl(String(a.url)).courseId },
-        { type: "input", name: "username", message: t().username },
-        { type: "password", name: "password", message: t().password, when: (a) => String(a.username ?? "") !== "" },
-        { type: "input", name: "label", message: t().label, default: (a) => defaultWorkspaceLabel(parseCourseUrl(String(a.url)).url, courseOf(a)) },
+        { type: "confirm", name: "connect", message: t().connectMoodleNow, default: true },
+        ...classroomSteps(connected),
+        {
+          type: "input",
+          name: "label",
+          message: (a) => (connected(a) ? t().label : t().workspaceName),
+          default: (a) => (connected(a) ? defaultWorkspaceLabel(parseCourseUrl(String(a.url)).url, courseOf(a)) : path.basename(path.resolve(workspaceDir))),
+        },
         { type: "input", name: "description", message: t().description },
         {
           type: "select",
@@ -87,19 +116,13 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
       { title: t().initHeading(workspaceDir).trim() },
     );
 
-    const url = parseCourseUrl(String(answers.url)).url;
-    const username = String(answers.username ?? "");
+    const label = String(answers.label);
     const description = String(answers.description ?? "");
     const language = String(answers.language ?? "");
     const persona = answers.persona as AgentPersona | undefined;
     const config: WorkspaceConfig = {
-      classroom: {
-        label: String(answers.label),
-        ...(description ? { description } : {}),
-        url,
-        courseId: courseOf(answers),
-        ...(username ? { username, password: String(answers.password ?? "") } : {}),
-      },
+      // Without a classroom the name and description live at the root.
+      ...(connected(answers) ? { classroom: classroomOf(answers, label, description) } : { label, ...(description ? { description } : {}) }),
       agent: {
         role: "teacher",
         ...(persona ? { persona } : {}),
@@ -142,6 +165,25 @@ export async function offerPracticeRunner(
     console.log();
     return config;
   }
+}
+
+/**
+ * `miyagi init` on a workspace without a classroom: offers to connect one, and saves it
+ * with the workspace's own name and description. Returns the config, updated or not.
+ */
+export function promptConnectClassroom(workspaceDir: string, config: WorkspaceConfig): Promise<WorkspaceConfig> {
+  return exitOnCancel(async () => {
+    const answers = await runWizard(
+      [{ type: "confirm", name: "connect", message: t().connectMoodleNow, default: true }, ...classroomSteps((a) => a.connect === true)],
+      { title: t().initHeading(workspaceDir).trim() },
+    );
+    if (answers.connect !== true) return config;
+    const { label, description, ...rest } = config;
+    const updated: WorkspaceConfig = { ...rest, classroom: classroomOf(answers, label ?? path.basename(path.resolve(workspaceDir)), description ?? "") };
+    await writeWorkspaceConfig(workspaceDir, updated);
+    console.log(ui.success(t().workspaceCreated(workspaceDir)));
+    return updated;
+  });
 }
 
 /** Asked right after "init": probing the Moodle's activity/question types is what the

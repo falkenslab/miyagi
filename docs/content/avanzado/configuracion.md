@@ -10,7 +10,7 @@ miyagi tiene tres sitios de configuración: el `config.json` de cada curso, un `
 
 ## `config.json` del curso
 
-Lo crea `miyagi init` en la carpeta del curso. Es un JSON con dos partes: `classroom` (el curso de Moodle) y `agent` (cómo trabaja el asistente en él). Puedes editarlo a mano con cualquier editor; los cambios se aplican en la siguiente sesión.
+Lo crea `miyagi init` en la carpeta del curso. Es un JSON con dos partes: `classroom` (el curso de Moodle, opcional) y `agent` (cómo trabaja el asistente). Puedes editarlo a mano con cualquier editor; los cambios se aplican en la siguiente sesión.
 
 Un ejemplo completo:
 
@@ -55,6 +55,25 @@ Un ejemplo completo:
 | `password` | Tu contraseña de Moodle. | Igual que sin usuario. |
 
 Sin usuario y contraseña no se puede usar `--headless` ni el modo `autonomous`, porque nadie podría iniciar sesión a mano.
+
+### Sin aula
+
+`classroom` es opcional. Sin ella, miyagi ayuda con la programación, los temas y los materiales (en `drafts/`), sin navegador ni nada que publicar, y `explore` no hace nada. El nombre y la descripción van entonces en la raíz:
+
+```json
+{
+  "label": "Programación 1.º DAM",
+  "description": "Módulo de Programación, sin aula todavía",
+  "agent": { "role": "teacher", "language": "español" }
+}
+```
+
+| Clave | Qué es | Si falta |
+| --- | --- | --- |
+| `label` | Nombre de la materia; aparece en la cabecera del chat. Con aula, se usa el de `classroom`. | El nombre de la carpeta. |
+| `description` | Descripción libre, para ti. | Sin descripción. |
+
+Para conectar un aula más tarde, vuelve a ejecutar `miyagi init` en la carpeta: te pregunta los datos de Moodle y guarda `classroom` con ese nombre y esa descripción. Si `classroom` está pero le falta `url` o `courseId`, miyagi no arranca y te dice qué falta.
 
 ### `agent`
 

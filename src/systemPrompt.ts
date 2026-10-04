@@ -19,9 +19,10 @@ export function buildSystemPrompt(config: WorkspaceSessionConfig): string {
   // except the file-safety rule (it drives the browser like any other session).
   if (config.kind === "explore") return `${buildExploreSystemPrompt(config)}${playwrightFileSafetySection()}`;
 
-  const base =
-    config.kind === "chat" ? buildChatSystemPrompt(config) : config.kind === "ingest" ? buildIngestSystemPrompt(config) : buildRunSystemPrompt(config);
-  const browserOnly = config.kind === "ingest" ? "" : playwrightFileSafetySection();
+  const base = !config.hasMoodle
+    ? buildStandaloneSystemPrompt(config)
+    : config.kind === "chat" ? buildChatSystemPrompt(config) : config.kind === "ingest" ? buildIngestSystemPrompt(config) : buildRunSystemPrompt(config);
+  const browserOnly = config.kind === "ingest" || !config.hasMoodle ? "" : playwrightFileSafetySection();
   return `${base}${migrationSection(config)}${subagentsSection(config)}${practiceSection(config)}${languageSection(config)}${personaSection(config)}${customInstructionsSection(config)}${webResearchSection(config)}${browserOnly}`;
 }
 
@@ -67,7 +68,11 @@ function languageSection(config: WorkspaceSessionConfig): string {
 }
 
 function webResearchSection(config: WorkspaceSessionConfig): string {
-  const firstSourcesLine = config.kind === "ingest"
+  const toolDoubts = config.hasMoodle
+    ? "how to use Moodle (an uncommon configuration option, an activity type you don't know where to start with)"
+    : "how to do something in a format or a tool (a GIFT detail, a spreadsheet formula, an accessibility rule)";
+  // Without a browser (ingest, or no classroom) there are no course forums or Moodle UI to try first.
+  const firstSourcesLine = config.kind === "ingest" || !config.hasMoodle
     ? "Before reaching out, always try what you already have first: the workspace's " +
       "`sources/` and the knowledge base. Only go out to the internet to " +
       "clarify something the material itself leaves unclear, and label it as outside the " +
@@ -77,7 +82,7 @@ function webResearchSection(config: WorkspaceSessionConfig): string {
       "the teacher has uploaded), the course's own forums (an existing thread may have " +
       "already asked and answered the same doubt), and the Moodle UI itself for usage " +
       "doubts. Only go out to the internet once you're truly out of leads there.";
-  return `\n\n${loadPrompt("system/web-research.md", { firstSourcesLine })}`;
+  return `\n\n${loadPrompt("system/web-research.md", { firstSourcesLine, toolDoubts })}`;
 }
 
 function personaSection(config: WorkspaceSessionConfig): string {
@@ -90,10 +95,17 @@ function customInstructionsSection(config: WorkspaceSessionConfig): string {
   return `\n\n${loadPrompt("system/custom-instructions.md", { label: "teacher", customInstructions: config.customInstructions })}`;
 }
 
+/** A workspace without a classroom (ADR-013): the teacher's assistant for the plan and the
+ * materials, no browser, nothing to publish, no Moodle in the prompt. */
+function buildStandaloneSystemPrompt(config: WorkspaceSessionConfig): string {
+  const kind = config.kind === "chat" ? "chat" : config.kind === "ingest" ? "ingest" : "run";
+  return loadPrompt(`system/teacher-${kind}-standalone.md`, { contextAndKnowledgeSection: contextAndKnowledgeSection(config) });
+}
+
 function buildRunSystemPrompt(config: WorkspaceSessionConfig): string {
   return loadPrompt("system/teacher-run.md", {
-    moodleUrl: config.moodleUrl,
-    moodleCourseId: config.moodleCourseId,
+    moodleUrl: config.moodleUrl ?? "",
+    moodleCourseId: config.moodleCourseId ?? "",
     credentialsSection: credentialsSection(config),
     contextAndKnowledgeSection: contextAndKnowledgeSection(config),
     evaluableSubmissionRule: evaluableSubmissionRule(config.mode),
@@ -102,16 +114,16 @@ function buildRunSystemPrompt(config: WorkspaceSessionConfig): string {
 
 function buildIngestSystemPrompt(config: WorkspaceSessionConfig): string {
   return loadPrompt("system/teacher-ingest.md", {
-    moodleUrl: config.moodleUrl,
-    moodleCourseId: config.moodleCourseId,
+    moodleUrl: config.moodleUrl ?? "",
+    moodleCourseId: config.moodleCourseId ?? "",
     contextAndKnowledgeSection: contextAndKnowledgeSection(config),
   });
 }
 
 function buildChatSystemPrompt(config: WorkspaceSessionConfig): string {
   return loadPrompt("system/teacher-chat.md", {
-    moodleUrl: config.moodleUrl,
-    moodleCourseId: config.moodleCourseId,
+    moodleUrl: config.moodleUrl ?? "",
+    moodleCourseId: config.moodleCourseId ?? "",
     credentialsSection: credentialsSection(config),
     contextAndKnowledgeSection: contextAndKnowledgeSection(config),
   });
@@ -119,14 +131,15 @@ function buildChatSystemPrompt(config: WorkspaceSessionConfig): string {
 
 function buildExploreSystemPrompt(config: WorkspaceSessionConfig): string {
   return loadPrompt("system/explore.md", {
-    moodleUrl: config.moodleUrl,
-    moodleCourseId: config.moodleCourseId,
+    moodleUrl: config.moodleUrl ?? "",
+    moodleCourseId: config.moodleCourseId ?? "",
     credentialsSection: credentialsSection(config),
   });
 }
 
 /** No saved username/password → the agent has to ask a human to log in by hand. */
 function credentialsSection(config: WorkspaceSessionConfig): string {
+  if (!config.hasMoodle) return "";
   if (config.moodleUsername && config.moodlePassword) {
     // In autonomous, or with --headless, there's no human-intervention channel at all
     // (see includeManualLoginTool in agent-kit's session.ts), so the fallback isn't
@@ -140,7 +153,7 @@ function credentialsSection(config: WorkspaceSessionConfig): string {
       manualLoginFallback,
     });
   }
-  return loadPrompt("system/credentials-manual-login.md", { moodleUrl: config.moodleUrl });
+  return loadPrompt("system/credentials-manual-login.md", { moodleUrl: config.moodleUrl ?? "" });
 }
 
 /**
@@ -152,10 +165,20 @@ function credentialsSection(config: WorkspaceSessionConfig): string {
 function contextAndKnowledgeSection(config: WorkspaceSessionConfig): string {
   if (!config.knowledgeDir || !config.sourcesDir) return "";
 
-  const contextBlock = `\n${loadPrompt("system/sources.md", { sourcesDir: config.sourcesDir })}`;
-  const knowledgeBlock = loadPrompt("system/course-knowledge.md", { knowledgeDir: config.knowledgeDir });
+  const hasBrowser = config.hasMoodle && config.kind !== "ingest";
+  const contextBlock = `\n${loadPrompt("system/sources.md", {
+    sourcesDir: config.sourcesDir,
+    authorityLine: config.hasMoodle ? ", alongside (or even above) whatever you find on Moodle itself" : "",
+    linksLine: hasBrowser
+      ? "you can navigate to those specific URLs with the browser tools to consult them — it's the only situation where it's fine to leave Moodle itself."
+      : "you may use WebFetch for a public web page it links to, clearly labelled as outside the course's material.",
+  })}`;
+  // The classroom's pages (orientation, map, capabilities, progress, audit, hidden drafts)
+  // only exist with a classroom.
+  const classroomBlock = config.hasMoodle ? `\n\n${loadPrompt("system/classroom-knowledge.md")}` : "";
+  const knowledgeBlock = `${loadPrompt("system/course-knowledge.md")}${classroomBlock}`;
   // Without a browser there's no Moodle to navigate or download from.
-  if (config.kind === "ingest") return `${contextBlock}\n\n${knowledgeBlock}`;
+  if (config.kind === "ingest" || !config.hasMoodle) return `${contextBlock}\n\n${knowledgeBlock}`;
 
   const navigationMapBlock = loadPrompt("system/navigation-map.md");
   const moodleFileAccessBlock = loadPrompt("system/moodle-file-access.md");

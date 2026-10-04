@@ -5,6 +5,8 @@ description: Choose and apply a teaching methodology to a unit or activity - pro
 
 # Teaching methodologies
 
+What this skill says about Moodle applies to the connected classroom, if any; without one, keep it in the plan or build it in `drafts/`.
+
 A methodology is a decision about how students learn, not a label to put on an activity. Pick it
 from the objectives, the students and the time available — never the other way round — and say
 why in the plan. Most units combine one main methodology with a few supporting techniques (a

@@ -5,6 +5,8 @@ description: Design and build Moodle's other activities - workshop (peer assessm
 
 # Designing and building other activities
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 For each type: what makes it work (the design) and how to set it up in Moodle so it behaves that
 way. Assignments are `assignment-building`, quizzes `quiz-building`, pages and books
 `resource-authoring`. Which type fits a point of the unit, and why, comes from `course-design`

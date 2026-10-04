@@ -37,7 +37,7 @@ Cada orden abre un tipo de sesión distinto:
 - **`chat`**: una conversación a pantalla completa, que se puede retomar. Siempre empieza en modo guided.
 - **`run`**: un encargo de una sola vez, sin conversación. Recorre el curso entero o hace la tarea de `--task`.
 - **`ingest`**: incorpora tus documentos a la base de conocimiento. Sin navegador y sin Moodle: solo archivos.
-- **`explore`**: una visita corta (como mucho 60 turnos) para apuntar qué tipos de actividad y de pregunta admite tu Moodle y cómo se calculan las notas. Solo mira y cancela; no crea nada.
+- **`explore`**: una visita corta (como mucho 80 turnos) para apuntar qué tipos de actividad y de pregunta admite tu Moodle y cómo se calculan las notas. Solo mira y cancela; no crea nada.
 
 Lo tienes en detalle en [Sesiones y modos](sesiones-y-modos.md).
 

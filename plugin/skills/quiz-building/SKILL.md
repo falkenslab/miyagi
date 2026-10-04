@@ -5,6 +5,8 @@ description: Create or change a Moodle quiz - its settings (dates, time limit, a
 
 # Building a quiz
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 A quiz is its **settings** (when, how many times, how it's graded, what students see after) plus
 its **questions** (written with `quiz-design`, added by form or imported). Both have to agree
 with what the quiz is for: a formative check wants several attempts and immediate feedback, a

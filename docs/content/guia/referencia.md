@@ -10,11 +10,11 @@ description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, 
 
 | Orden | Qué hace |
 | --- | --- |
-| `miyagi init` | Prepara una carpeta nueva para un curso (las preguntas de [Primeros pasos](primeros-pasos.md)) y ofrece explorar tu Moodle. |
+| `miyagi init` | Prepara una carpeta nueva para un curso (las preguntas de [Primeros pasos](primeros-pasos.md)), con o sin aula Moodle, y ofrece explorar tu Moodle si la conectas. En una carpeta sin aula, te ofrece conectarla. |
 | `miyagi chat` | Conversación con el asistente a pantalla completa, siempre pidiendo permiso antes de publicar. |
 | `miyagi run` | Recorre el curso entero de una sentada: corrige, atiende el foro, revisa el contenido y resume cómo va la clase. |
 | `miyagi run --task "…"` | Hace solo el encargo que le indicas, con las mismas reglas. |
-| `miyagi explore` | Mira, sin crear nada, qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. |
+| `miyagi explore` | Mira, sin crear nada, qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. Sin aula conectada, te avisa y no hace nada. |
 | `miyagi ingest` | Incorpora a sus apuntes los documentos de `sources` que aún no tenía, sin abrir Moodle. |
 | `miyagi ingest <archivos…>` | Incorpora solo esos documentos. |
 | `miyagi skills` | Lista sus habilidades, incluidas las tuyas (marcadas `[propia]`). |

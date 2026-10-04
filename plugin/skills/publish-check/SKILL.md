@@ -5,6 +5,8 @@ description: The last check before anything goes out to students, and the checkl
 
 # Checking before publishing
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 Whatever skill produced the content (`resource-authoring`, `assignment-building`,
 `activity-building`, `quiz-building`, `forum`, `grading-rubric`'s feedback…), it goes through this
 before it's saved — and the same checklist is how `course-auditor` reviews what's already there.

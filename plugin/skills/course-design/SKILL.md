@@ -5,6 +5,8 @@ description: Plan a course or unit's pedagogical structure - progressive organiz
 
 # Designing a course or unit, not just its individual pieces
 
+What this skill says about Moodle applies to the connected classroom, if any; without one, keep it in the plan or build it in `drafts/`.
+
 This is about **planning**, one level above the skills that build each resource or activity. Use it before adding several new pieces of content, when
 restructuring a section, or whenever a request is really "how should this unit look",
 not "add this one page".

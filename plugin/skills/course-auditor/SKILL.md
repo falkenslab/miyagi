@@ -5,6 +5,8 @@ description: Run a holistic audit of a Moodle course - organization, accessibili
 
 # Auditing a course
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 Two related but different uses of this skill:
 
 - **A full audit**: a one-off, thorough pass, usually requested explicitly ("review this

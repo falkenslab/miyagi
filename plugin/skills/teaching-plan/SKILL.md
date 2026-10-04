@@ -5,6 +5,8 @@ description: Help the teacher write the teaching plan (programación didáctica)
 
 # Writing the teaching plan (programación didáctica)
 
+What this skill says about Moodle applies to the connected classroom, if any; without one, keep it in the plan or build it in `drafts/`.
+
 The teaching plan is the teacher's document: what the course is for, how it's organised, how
 students learn and how they're assessed. You help write it, well structured and coherent; the
 decisions are the teacher's. It's generic — not tied to any particular law or regulation — unless

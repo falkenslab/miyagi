@@ -5,6 +5,8 @@ description: Package a web activity (an HTML game, a simulation, an interactive 
 
 # Packaging an activity as SCORM
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 A SCORM package is a ZIP with the activity's files and an `imsmanifest.xml` at its root. In
 Moodle it becomes a "SCORM package" activity that opens the activity and records what it
 reports: whether the student completed it, and a score that goes to the gradebook. Without a

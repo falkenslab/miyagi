@@ -14,11 +14,15 @@ export type SessionKind = "run" | "chat" | "ingest" | "explore";
 
 /**
  * The shape of `<workspace>/config.json` — the same one moodle-agent wrote for a teacher
- * aula, so an existing one opens as-is.
+ * aula, so an existing one opens as-is. The classroom is optional (ADR-013): without one,
+ * miyagi helps with the teaching plan and the materials, with no browser.
  */
 export interface WorkspaceConfig {
+  /** The workspace's name and description when it has no classroom (with one, the classroom's). */
+  label?: string;
+  description?: string;
   /** Everything about *this* Moodle course, independent of who is acting on it. */
-  classroom: {
+  classroom?: {
     label: string;
     description?: string;
     url: string;
@@ -48,8 +52,10 @@ export interface WorkspaceConfig {
  * resolved headless/language, instructions.md's content) into what `AgentSpec`'s methods
  * actually see. */
 export interface WorkspaceSessionConfig extends BaseSessionConfig {
-  moodleUrl: string;
-  moodleCourseId: string;
+  /** A Moodle classroom is connected: the browser, the gates and the Moodle prompts exist only then. */
+  hasMoodle: boolean;
+  moodleUrl?: string;
+  moodleCourseId?: string;
   moodleUsername?: string;
   moodlePassword?: string;
   agentPersona?: AgentPersona;
@@ -127,7 +133,11 @@ export async function workspaceExists(workspaceDir: string): Promise<boolean> {
 export async function readWorkspaceConfig(workspaceDir: string): Promise<WorkspaceConfig> {
   const raw = await readFile(workspaceConfigPath(workspaceDir), "utf-8");
   const config = JSON.parse(raw) as WorkspaceConfig;
-  if (config.agent?.role === "student") {
+  config.agent ??= {};
+  if (config.classroom && (!config.classroom.url || !config.classroom.courseId)) {
+    throw new Error(t().classroomIncomplete(workspaceDir));
+  }
+  if (config.agent.role === "student") {
     throw new Error(t().studentRole(workspaceDir));
   }
   for (const [key, value] of Object.entries(config.agent?.draftsLimits ?? {})) {
@@ -204,6 +214,11 @@ export async function writeInstructionsTemplate(workspaceDir: string): Promise<v
   await writeFile(instructionsPath(workspaceDir), INSTRUCTIONS_TEMPLATE, { encoding: "utf-8", flag: "wx" }).catch(() => {});
 }
 
+/** The workspace's name: its classroom's label, its own, or its folder's. */
+export function workspaceLabel(workspaceDir: string, config: WorkspaceConfig): string {
+  return config.classroom?.label ?? config.label ?? path.basename(path.resolve(workspaceDir));
+}
+
 /** Default label when the user doesn't give one while creating the workspace. */
 export function defaultWorkspaceLabel(url: string, courseId: string): string {
   let host: string;
@@ -245,11 +260,13 @@ export function toSessionConfig(
     extraWritableDirs: [draftsDirFor(workspaceDir), ...(workspace.agent.allowPracticeRunner ? [practiceDirFor(workspaceDir)] : [])],
     // The password lives in config.json and the Claude token may live in .env.
     deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env")],
-    secrets: workspace.classroom.password ? [workspace.classroom.password] : [],
-    moodleUrl: workspace.classroom.url,
-    moodleCourseId: workspace.classroom.courseId,
-    moodleUsername: workspace.classroom.username,
-    moodlePassword: workspace.classroom.password,
+    // Only with a classroom: without one there's no Moodle password to keep from the model.
+    secrets: workspace.classroom?.password ? [workspace.classroom.password] : [],
+    hasMoodle: Boolean(workspace.classroom),
+    moodleUrl: workspace.classroom?.url,
+    moodleCourseId: workspace.classroom?.courseId,
+    moodleUsername: workspace.classroom?.username,
+    moodlePassword: workspace.classroom?.password,
     agentPersona: workspace.agent.persona,
     allowPracticeRunner: workspace.agent.allowPracticeRunner,
     practiceDir: practiceDirFor(workspaceDir),

@@ -5,6 +5,8 @@ description: Read a Moodle course's real structure - sections, activities, resou
 
 # Reading a Moodle course's structure
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 This underlies almost everything else: before deciding what to do next (grade a
 submission, audit a section), read what the course's structure actually says, not
 what a resource's title suggests it might contain.

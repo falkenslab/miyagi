@@ -5,6 +5,8 @@ description: Get enough context on a Moodle course before doing anything complex
 
 # Getting oriented in the course
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 This happens **once**, near the start (or once per aula, since it belongs in
 the knowledge base, not in the current turn's context) — before a first grading/content/audit pass. It isn't
 repeated every session once it's been done, and it isn't a substitute for

@@ -22,6 +22,7 @@ import {
   ensureTeacherRole,
   isMigrationPending,
   knowledgeDirFor,
+  workspaceLabel,
   legacyKnowledgeDirFor,
   moveLegacyContext,
   moveLegacyKnowledge,
@@ -70,8 +71,10 @@ const PLAYWRIGHT_MCP_CLI = path.join(
 );
 
 /** "explore" is a bounded task (login, a few look-and-cancel screens, one page written): it
- * doesn't need the headroom of a full run. */
-const EXPLORE_MAX_TURNS = 60;
+ * doesn't need the headroom of a full run. 80 since agent-kit 0.16: a real explore of the
+ * sandbox ran out at 60 with the page still unwritten (the task list and the knowledge tools
+ * take turns the file tools didn't). */
+const EXPLORE_MAX_TURNS = 80;
 
 /** The knowledge base's reading tools (agent-kit's `knowledge` server), for the subagents:
  * the file tools don't reach knowledge/ any more (agent-kit's ADR-024). */
@@ -117,20 +120,22 @@ export function resolveWorkspaceDir(args: string[]): string {
  * wording). Everything else (tool/hook wiring per mode, file-tool scoping, the
  * approval/manual-login/save-to-sources MCP tools themselves) is agent-kit's own
  * `buildSessionOptions()`, not repeated here. Subagents: see buildSubagents() below. An
- * "ingest" session has no browser: no Playwright server, no manual login.
+ * "ingest" session has no browser: no Playwright server, no manual login. Neither has a
+ * workspace without a classroom (ADR-013): it works on the plan and the materials only.
  */
-function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSessionConfig> {
-  const hasBrowser = kind !== "ingest";
+function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasMoodle: boolean): AgentSpec<WorkspaceSessionConfig> {
+  const hasBrowser = kind !== "ingest" && hasMoodle;
   return {
     skills,
     // The course's pages (course/, topic/, activity/) next to the kit's four, all through the
     // kit's knowledge_* tools, never the file tools (agent-kit's ADR-024).
     knowledgePageTypes: COURSE_PAGE_TYPES,
     buildSystemPrompt,
-    buildMcpServers: (config): Record<string, McpServerConfig> => (!hasBrowser ? {} : {
-      // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a shell.
+    buildMcpServers: (config): Record<string, McpServerConfig> => ({
+      // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a
+      // shell; with or without a classroom.
       ...(kind === "run" || kind === "chat" ? { [DRAFTS_SERVER]: createDraftsServer(config.draftsDir, config.draftsLimits) } : {}),
-      playwright: {
+      ...(hasBrowser ? { playwright: {
         command: process.execPath,
         args: [
           PLAYWRIGHT_MCP_CLI,
@@ -142,7 +147,7 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSp
           path.join(runDir, "browser-profile"),
           ...(config.headless ? ["--headless"] : []),
         ],
-      },
+      } } : {}),
     }),
     pluginRoots: () => [path.join(__dirname, "..", "plugin")],
     // In run/chat: two helpers without a shell (researcher: public web; pedagogy-reviewer:
@@ -270,16 +275,22 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     console.log(ui.dim(t().setupSaved(kind, workspaceDir)));
     return;
   }
+  const classroom = workspace.classroom;
+  if (kind === "explore" && !classroom) {
+    console.log(ui.warn(t().exploreNeedsClassroom(workspaceDir)));
+    return;
+  }
+  const hasBrowser = kind !== "ingest" && Boolean(classroom);
   const mode = await resolveMode(kind, modeFlag);
   const headless = await resolveHeadless(parseBooleanFlag(args, "--headless"), workspace.agent.headless);
-  const hasCredentials = Boolean(workspace.classroom.username && workspace.classroom.password);
+  const hasCredentials = Boolean(classroom?.username && classroom?.password);
 
   // Manual login needs a visible browser window — no channel for it in autonomous or
   // headless (mirrors agent-kit's own includeManualLoginTool condition in session.ts).
-  if (kind !== "ingest" && mode === "autonomous" && !hasCredentials) {
+  if (hasBrowser && mode === "autonomous" && !hasCredentials) {
     throw new Error(t().autonomousNeedsCredentials);
   }
-  if (kind !== "ingest" && headless && !hasCredentials) {
+  if (hasBrowser && headless && !hasCredentials) {
     throw new Error(t().headlessNeedsCredentials);
   }
 
@@ -300,11 +311,12 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
 
   /** The session's options for a run folder: its browser, its tools and hooks, the publish gate. */
   async function openSession(runDir: string, run?: RunFolder) {
-    if (kind !== "ingest") await writePlaywrightConfig(runDir, config.moodlePassword);
-    const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills), { autoCompactEnabled, run });
+    if (hasBrowser) await writePlaywrightConfig(runDir, config.moodlePassword);
+    const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills, config.hasMoodle), { autoCompactEnabled, run });
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
-    // The approval before publishing, enforced (it only acts in guided; ingest has no browser).
-    if (kind !== "ingest") {
+    // The approval before publishing, enforced (it only acts in guided). Without a browser
+    // (ingest, or no classroom) nothing can be published or uploaded.
+    if (hasBrowser) {
       installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
       installUploadGate(options);
     }
@@ -316,9 +328,10 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   const plain = parseBooleanFlag(args, "--plain") === true || !process.stdin.isTTY || !process.stdout.isTTY;
   const printHeading = (runDir?: string): void => {
     console.log(ui.heading(sessionHeading(kind, mode)));
-    console.log(ui.dim(t().headingWorkspace(workspace.classroom.label, workspaceDir)));
+    console.log(ui.dim(t().headingWorkspace(workspaceLabel(workspaceDir, workspace), workspaceDir)));
     if (runDir) console.log(ui.dim(t().headingSession(runDir)));
-    console.log(ui.dim(t().headingCourse(config.moodleUrl, config.moodleCourseId)));
+    console.log(ui.dim(classroom ? t().headingCourse(classroom.url, classroom.courseId) : `${t().headerClassroom}: ${t().noClassroom}
+`));
   };
 
   if (kind === "chat") {
@@ -343,8 +356,10 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
           // One line, cut to the terminal's width: short values only (the full paths are
           // printed again when the session ends).
           fields: {
-            [t().headerWorkspace]: workspace.classroom.label,
-            [t().headerCourse]: `${new URL(config.moodleUrl).host} · id ${config.moodleCourseId}`,
+            [t().headerWorkspace]: workspaceLabel(workspaceDir, workspace),
+            ...(classroom
+              ? { [t().headerCourse]: `${new URL(classroom.url).host} · id ${classroom.courseId}` }
+              : { [t().headerClassroom]: t().noClassroom }),
           },
         },
         mode,
@@ -355,7 +370,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         agentLabel: ui.agent("miyagi>"),
         formatAction: friendlyToolLabel,
         toolPhrase,
-        initialPrompt: loadPrompt("messages/chat-opening-teacher.md"),
+        initialPrompt: loadPrompt(classroom ? "messages/chat-opening-teacher.md" : "messages/chat-opening-teacher-standalone.md"),
         historyPath: path.join(sessionsDirFor(workspaceDir), "history.jsonl"),
       },
     );
@@ -373,7 +388,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   // current action, the chat's approval panels and a status bar. --plain (or no TTY) keeps
   // the plain console lines.
   const renderer = createProgressView({ formatAction: friendlyToolLabel, toolPhrase, mode, plain });
-  const run = runQuery(initialPrompt(kind, workspaceDir, args), options);
+  const run = runQuery(initialPrompt(kind, workspaceDir, args, config.hasMoodle), options);
 
   // Without a handler, Ctrl+C killed the process on the spot, with no word about what was
   // kept. The first one interrupts the run and lets it close normally (so the end message
@@ -437,15 +452,17 @@ function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string
   console.log(lines.join("\n"));
 }
 
-function initialPrompt(kind: SessionKind, workspaceDir: string, args: string[]): string {
+function initialPrompt(kind: SessionKind, workspaceDir: string, args: string[], hasMoodle: boolean): string {
   if (kind === "ingest") return ingestPrompt(workspaceDir, args);
   if (kind === "explore") return loadPrompt("messages/explore-initial.md");
   // --task "<text>" gives the run one concrete job (e.g. "/miyagi:build-course ..." or
-  // "corrige la Tarea 2") instead of managing the whole course.
+  // "corrige la Tarea 2") instead of managing the whole course. Without a classroom there's
+  // no Moodle to log into: the general mission reviews the subject instead.
   const task = parseFlag(args, "--task")?.trim();
+  const suffix = hasMoodle ? "" : "-standalone";
   const mission = task
-    ? loadPrompt("messages/run-mission-task.md", { task })
-    : loadPrompt("messages/run-mission-teacher.md");
+    ? loadPrompt(`messages/run-mission-task${suffix}.md`, { task })
+    : loadPrompt(`messages/run-mission-teacher${suffix}.md`);
   return loadPrompt("messages/run-initial.md", { mission });
 }
 

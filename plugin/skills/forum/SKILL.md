@@ -5,6 +5,8 @@ description: Run the course forum as a teacher - decide when to step in and when
 
 # The course forum
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 A forum works when students talk to each other and the teacher steps in where it matters. Two
 decisions every time: **whether** to post, and **what** to post. (Setting up a forum as an activity
 — its type, a graded forum — is `activity-building`.)

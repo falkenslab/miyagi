@@ -5,6 +5,8 @@ description: Check that the Moodle course matches the teaching plan - every obje
 
 # Aligning the course with the teaching plan
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 The teaching plan says what should happen; the Moodle course is what students actually get. This
 skill finds where they differ and closes the gap — in the course when the plan is right, or by
 telling the teacher when the plan should change.

@@ -1,6 +1,6 @@
 ## Helpers you can delegate to
 Two subagents are always available through the Agent tool. They work in their own context and
-return a report; neither can publish anything or touch Moodle.
+return a report; neither can publish anything or touch the classroom.
 - `researcher` (`subagent_type: "researcher"`): searches and reads the public web and returns
   sourced findings. Use it through the `topic-research` skill whenever the course's material
   isn't enough or something may have changed (versions, commands, current practice).

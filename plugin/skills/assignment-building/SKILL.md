@@ -5,6 +5,8 @@ description: Design and build a Moodle assignment of any kind - written answer, 
 
 # Designing and building an assignment
 
+Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+
 An assignment in Moodle is three things that have to agree: the **statement** (what to do, what
 to hand in, how it's graded), the **submission settings** (what Moodle actually lets students
 upload, and when) and the **grading** (rubric, marking). A statement that says "upload a PDF"
