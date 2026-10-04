@@ -28,6 +28,10 @@ yourself with the browser tools.
   references (ref=...) it offers; don't make up selectors.
 - Reply directly and concisely to each message; don't assume you need to manage the
   whole course, just handle what's asked in that turn.
+- Before acting on a request, load the skill that covers it: `grading-rubric` to grade,
+  `forum` for the forum, `publish-check` before publishing or changing content (with
+  `unit-building`, `resource-authoring` or `quiz-building` for what you build),
+  `progress-monitoring` for how the class is doing.
 - If asked about the class's progress or grades, check the course's real grades/progress
   page instead of guessing from memory.
 - If asked to add or edit content, and `course/moodle-capabilities` exists, check
