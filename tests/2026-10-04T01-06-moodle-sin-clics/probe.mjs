@@ -1,6 +1,7 @@
 // Pruebas de la vía "sin clics" para moodle-mcp: login por formulario y después
 // solo peticiones HTTP con la sesión (AJAX lib/ajax/service.php y formularios GET→POST).
 // Uso (desde la raíz de miyagi, con la sandbox levantada): node tests/2026-10-04T01-06-moodle-sin-clics/probe.mjs --sandbox <dir moodle-sandbox> --course <id> [--only a,b] [--out file]
+/* global window, document, M, DOMParser -- used inside page.evaluate(), in the browser (M is Moodle's own global) */
 import { createRequire } from "node:module";
 import { spawnSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
