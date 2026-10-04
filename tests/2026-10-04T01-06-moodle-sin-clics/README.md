@@ -88,6 +88,11 @@ No aplica: no se ejecutó el agente ni la puerta de publicación. El script publ
 5. **En la 5.x el formulario de importación es `_qf__qbank_importquestions_form_question_import_form`** y en las dos versiones tiene el campo `newfile`: buscar los formularios por sus campos y no por el nombre de la clase. Estado: regla de `client.ts` en la ficha.
 6. **La sandbox no instala la 4.5 tal como está:** el proyecto Docker tiene nombre fijo y la raíz web es `public/` (solo existe desde 5.1); en Windows el clon necesita `core.longpaths`. Se probó con una copia con esos tres cambios. Estado: abierto, para moodle-sandbox (está en la ficha).
 
+## Anexos
+
+- [Inventario](inventario.md): lo que el agente hizo en Moodle en 101 sesiones reales y en los informes anteriores, por caso de uso, con la primera lista de herramientas.
+- [Estabilidad](estabilidad.md): el estudio del código de Moodle 4.5, 5.0, 5.1 y 5.2 que predijo lo que esta prueba confirmó.
+
 ## Qué se añadió y dónde
 
 - [ADR-019](../../.minispec/decisions/ADR-019-moodle-mcp.md) y la ficha [`moodle-mcp`](../../.minispec/features/moodle-mcp.md) recogen la vía y los hallazgos. Nada cambió todavía en `plugin/` ni en `prompts/`: el agente sigue usando el navegador hasta que exista el MCP.
