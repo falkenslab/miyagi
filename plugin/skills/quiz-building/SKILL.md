@@ -41,7 +41,7 @@ order is visible in the bank and the quiz.
 ### GIFT import
 
 GIFT covers multiple choice, true/false, short answer, numerical, matching and essay; check
-`knowledge/moodle-capabilities.md`, and use the form for other types.
+`course/moodle-capabilities`, and use the form for other types.
 
 ```
 // Multiple choice, with feedback per option after #
@@ -123,5 +123,5 @@ each.
 ## 4. After
 
 Run `publish-check` on the quiz (preview it as a student: questions in order, feedback where
-expected, review options as intended). Record in `knowledge/activities/<quiz-slug>.md` — one page per quiz, even when it repeats another quiz's settings — the settings, the questions (types, how many, the criteria followed) and the quiz's URL, with
+expected, review options as intended). Record in `activity/<quiz-slug>` — one page per quiz, even when it repeats another quiz's settings — the settings, the questions (types, how many, the criteria followed) and the quiz's URL, with
 a link to its GIFT file in `drafts/`.

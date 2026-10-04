@@ -1,6 +1,6 @@
 // Renders the system prompt for every session kind from dist/ and checks it.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-prompts.mjs
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -9,6 +9,9 @@ const { buildSystemPrompt } = await import(pathToFileURL(path.join(root, "dist/s
 const { toSessionConfig } = await import(pathToFileURL(path.join(root, "dist/workspace.js")).href);
 
 const browser = (c) => c.kind !== "ingest";
+// Since agent-kit 0.16 the knowledge base is reached only through its knowledge_* tools: no
+// prompt, skill or command may send the agent to its files (index.md, log.md, a page's path).
+const KNOWLEDGE_FILES = /\b(index|log|overview|orientation|course-map|moodle-capabilities|teaching-plan|progress|course-audit|drafts)\.md\b|knowledge\/(topics|activities|summaries|concepts|entities|syntheses)\b|\bknowledge\/[a-z-]+\.md/;
 const course = (c) => c.kind !== "explore";
 
 // Marker text of each conditional section -> in which renders it must appear.
@@ -54,6 +57,8 @@ for (const [kind, modes] of Object.entries(MODES)) {
       if (/\bstudent-agent\b|moodle-agent|teacher-agent|context\/|knowledge\/README\.md|save_to_knowledge/.test(prompt)) {
         problems.push("mentions a student-agent/moodle-agent/teacher-agent leftover");
       }
+      const file = prompt.match(KNOWLEDGE_FILES);
+      if (file) problems.push(`sends the agent to a knowledge file (${file[0]}) instead of the knowledge_* tools`);
       for (const [name, { text, when, loose }] of Object.entries(SECTIONS)) {
         const expected = Boolean(when(config));
         const present = prompt.includes(text);
@@ -76,6 +81,17 @@ if (/log into moodle|log in to moodle|enter the given course/i.test(opening)) {
   console.log("FAIL chat opening message still logs into Moodle");
 } else {
   console.log("ok   chat opening message greets from the knowledge base, no login");
+}
+// The same for the plugin's skills and commands, and every prompt file.
+const mdFiles = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? mdFiles(path.join(dir, e.name)) : e.name.endsWith(".md") ? [path.join(dir, e.name)] : []));
+const leftovers = [...mdFiles(path.join(root, "plugin")), ...mdFiles(path.join(root, "prompts"))]
+  .map((f) => [path.relative(root, f), readFileSync(f, "utf-8").match(KNOWLEDGE_FILES)?.[0]])
+  .filter(([, hit]) => hit);
+if (leftovers.length > 0) {
+  failures++;
+  for (const [f, hit] of leftovers) console.log(`FAIL ${f}: knowledge file ${hit} instead of the knowledge_* tools`);
+} else {
+  console.log("ok   no skill, command or prompt sends the agent to a knowledge file");
 }
 if (failures > 0) {
   console.log(`\n${failures} render(s) failed`);

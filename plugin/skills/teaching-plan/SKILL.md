@@ -14,7 +14,7 @@ There is only one plan per course: when `course-building` or `unit-building` nee
 isn't one, they draft this one (every decision the teacher didn't take marked as a proposal)
 rather than keeping a plan of their own.
 
-It lives in the knowledge base, as linked pages, not as a separate document: `teaching-plan.md`
+It lives in the knowledge base, as linked pages, not as a separate document: `course/teaching-plan`
 is the hub, and each unit's topic page holds that unit's part. That's what lets
 `course-alignment` compare it with the course in Moodle.
 
@@ -29,14 +29,14 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
 
 ## 2. Structure
 
-`knowledge/teaching-plan.md` (a synthesis page, listed in `index.md`), with these sections:
+`course/teaching-plan` (a `course` page, created with `knowledge_create`), with these sections:
 
 1. **Context**: the course, the students (level, prior knowledge, diversity), the hours and the
    calendar, the resources available (the Moodle course, equipment).
 2. **Objectives**: general objectives of the course, observable, numbered (`O1`, `O2`…) so units
    and criteria can reference them.
 3. **Contents and units**: the units in order, each with its hours and dates, its objectives,
-   and a link to its topic page (`topics/<slug>.md`).
+   and a link to its topic page (`[name](topic/<slug>)`).
 4. **Methodology** (`teaching-methodologies`): the principles and the methodologies used in the
    course and in which units, with why.
 5. **Assessment**: the criteria of evaluation, numbered (`CE1.1`, `CE1.2`… by objective), each
@@ -49,18 +49,18 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
 9. **Review**: how and when the plan is revised.
 
 Each unit's topic page gets a "Teaching plan" section with its objectives and criteria (linking
-back to `teaching-plan.md`), its methodology, its activities and instruments, and its weight.
+back to `course/teaching-plan`), its methodology, its activities and instruments, and its weight.
 
 ## 3. Check coherence
 
 Before calling it done: every objective has criteria; every criterion is assessed by at least one
 instrument in some unit; weights add up to 100 %; unit hours add up to the total and fit the
 calendar; nothing in grading contradicts the assessment section. Then ask `pedagogy-reviewer` to
-review `teaching-plan.md` and the topic pages, and revise with its critique.
+review `course/teaching-plan` and the topic pages, and revise with its critique.
 
 ## 4. Deliver
 
-Tell the teacher where it is (`knowledge/teaching-plan.md` and the topic pages), what you
+Tell the teacher where it is (`course/teaching-plan` and the topic pages), what you
 proposed on your own and needs their confirmation, and what `pedagogy-reviewer` flagged. Offer
 the next step: `course-alignment` to check the Moodle course against it, or `unit-building` for
 units that don't exist yet.

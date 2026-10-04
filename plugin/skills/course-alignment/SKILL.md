@@ -9,7 +9,7 @@ The teaching plan says what should happen; the Moodle course is what students ac
 skill finds where they differ and closes the gap — in the course when the plan is right, or by
 telling the teacher when the plan should change.
 
-It needs `knowledge/teaching-plan.md` (see `teaching-plan`). If there isn't one, say so and offer
+It needs `course/teaching-plan` (see `teaching-plan`). If there isn't one, say so and offer
 to write it first; don't reconstruct a plan from the course and then "align" the course to it.
 
 ## 1. Build the two maps
@@ -22,8 +22,8 @@ to write it first; don't reconstruct a plan from the course and then "align" the
 
 ## 2. Compare
 
-Write the comparison into `knowledge/syntheses/course-alignment.md` (dated, a new entry each
-time), as a table per unit and a list of gaps:
+Write the comparison into `synthesis/course-alignment` (dated from `current_time`, a new entry
+each time with `knowledge_edit`, never rewriting earlier ones), as a table per unit and a list of gaps:
 
 - **Coverage**: criteria with no activity assessing them; activities that assess nothing in the
   plan.
@@ -48,7 +48,7 @@ For each gap, decide with the teacher (in `chat`) or propose (in `run`):
   change a publication with its own approval (an identical setting change on several items may
   share one, naming each; new or rewritten texts never do);
 - the plan is wrong or outdated → don't touch the course; tell the teacher what to change in the
-  plan, and update `teaching-plan.md` only if they confirm.
+  plan, and update `course/teaching-plan` only if they confirm.
 
 Never delete activities or student work to "align" anything: propose it.
 

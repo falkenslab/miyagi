@@ -12,8 +12,8 @@ around it is a bad unit.
 
 ## 1. Read the course first
 
-- The knowledge base: `teaching-plan.md` if there is one (the objectives and criteria this unit
-  must cover, its dates and weight), `overview.md`, the other topics' pages.
+- The knowledge base (`knowledge_read`): `course/teaching-plan` if there is one (the objectives
+  and criteria this unit must cover, its dates and weight), the `overview`, the other topics' pages.
 - The course in Moodle (`moodle-navigation`): the sections before and after, two or three
   existing activities (names, tone, level of detail, how statements are written), the gradebook
   (categories, weights), what the students already did.
@@ -21,11 +21,11 @@ around it is a bad unit.
 
 If something the unit needs is undecided (its weight, its dates, whether it's graded), take it
 from the teaching plan; if the plan doesn't say, ask in `chat`, or propose it in `run` — adding it
-to `teaching-plan.md` marked as a proposal — and say so.
+to `course/teaching-plan` marked as a proposal — and say so.
 
 ## 2. Plan it
 
-Write the unit's plan into its topic page (`knowledge/topics/<slug>.md`) before touching Moodle:
+Write the unit's plan into its topic page (`topic/<slug>`) before touching Moodle:
 
 - **Objectives** (observable) and, if there's a teaching plan, the criteria of evaluation this
   unit assesses — each linked to the teaching plan.
@@ -63,8 +63,9 @@ order, nothing is empty or locked without explanation, every statement is comple
 order with a non-zero total, rubrics visible where intended. Then the gradebook: the unit's items
 with the planned weights.
 
-Update the topic page with what was actually created (URLs), the activity pages, `course-map.md`,
-`index.md` and `log.md`, and — if there's a teaching plan — mark in it that the unit is built.
+Update the topic page with what was actually created (URLs), the activity pages and
+`course/course-map` (`knowledge_edit`, or `knowledge_create` for a new page), `knowledge_log` it,
+and — if there's a teaching plan — mark in it that the unit is built.
 
 ## 5. Report
 

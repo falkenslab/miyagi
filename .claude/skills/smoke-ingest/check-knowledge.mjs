@@ -1,5 +1,5 @@
-// Checks a workspace's knowledge base. Exits 1 on broken links, pages missing from index.md, or
-// (with --names) a student's name in any page; everything else is reported for review.
+// Checks a workspace's knowledge base. Exits 1 on broken links, pages missing from index.md, a
+// root page that isn't a typed course page, or (with --names) a student's name in any page; everything else is reported for review.
 // Usage: node .claude/skills/smoke-ingest/check-knowledge.mjs <workspace> [--names "Ana,Luis,..."]
 import fs from "node:fs";
 import path from "node:path";
@@ -54,12 +54,23 @@ console.log(`links: ${links}, broken: ${broken.length}, into knowledge-legacy/: 
 
 // index.md lists every page.
 const index = text.get(path.join(kb, "index.md")) ?? "";
-const unindexed = pages.filter((f) => !["index.md", "log.md"].includes(rel(f)) && !index.includes(rel(f)));
+// The overview isn't a page of the index (agent-kit 0.16): it's read as "overview".
+const unindexed = pages.filter((f) => !["index.md", "log.md", "overview.md"].includes(rel(f)) && !index.includes(rel(f)));
 console.log(`pages missing from index.md: ${unindexed.length}`);
 unindexed.slice(0, 15).forEach((f) => console.log(`  ${rel(f)}`));
 
+// Root pages: only the course's own (type course, see src/knowledgeTypes.ts) besides the kit's
+// index, log and overview, and each says its type, or the knowledge_* tools can't see it.
+const COURSE_SLUGS = ["orientation", "course-map", "moodle-capabilities", "teaching-plan", "progress", "course-audit", "drafts"];
+const rootPages = pages.filter((f) => !rel(f).includes("/") && !["index.md", "log.md", "overview.md"].includes(rel(f)));
+const strayRoot = rootPages.filter((f) => !COURSE_SLUGS.includes(path.basename(f, ".md")));
+const untyped = rootPages.filter((f) => !/^---\r?\n(?:.*\r?\n)*?type:\s*course\s*\r?\n/.test(text.get(f)));
+console.log(`root pages: ${rootPages.length}, not a course page: ${strayRoot.length}, without type course: ${untyped.length}`);
+[...strayRoot, ...untyped].slice(0, 15).forEach((f) => console.log(`  ${rel(f)}`));
+
 // Originals in sources/ that no page mentions (by file name).
-const originals = files(sources);
+// sources/.agent-kit/ is the kit's record of where each original came from, not an original.
+const originals = files(sources).filter((f) => !path.relative(sources, f).split(path.sep).includes(".agent-kit"));
 const unreferenced = originals.filter((f) => !allText.includes(path.basename(f)));
 console.log(`originals in sources/: ${originals.length}, not mentioned by any page: ${unreferenced.length}`);
 unreferenced.slice(0, 15).forEach((f) => console.log(`  ${path.relative(ws, f)}`));
@@ -100,4 +111,4 @@ for (const history of ["progress.md", "course-audit.md"]) {
   if (t) console.log(`${history}: ${(t.match(/\d{4}-\d{2}-\d{2}/g) ?? []).length} dated entries`);
 }
 
-if (broken.length > 0 || unindexed.length > 0 || named.length > 0) process.exit(1);
+if (broken.length > 0 || unindexed.length > 0 || named.length > 0 || strayRoot.length > 0 || untyped.length > 0) process.exit(1);

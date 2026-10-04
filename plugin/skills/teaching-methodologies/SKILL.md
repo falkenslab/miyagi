@@ -76,7 +76,7 @@ A methodology that doesn't fit the time available is worse than a well-run lectu
   order; badges ("Manage badges" → "Add a new badge", awarded on activity or course
   completion); quizzes with several attempts as "missions"; a lesson with branching as an
   escape room (`activity-building`); the gradebook as experience points if the teacher wants.
-  Plugins like leaderboards or XP blocks are not core: check `moodle-capabilities.md` first.
+  Plugins like leaderboards or XP blocks are not core: check `course/moodle-capabilities` first.
 
 ### Cooperative learning
 - **What**: structured group work where everyone is needed (positive interdependence) and

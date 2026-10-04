@@ -29,8 +29,7 @@ later can't be saved.
    the steps above are look-and-cancel only.
 
 ## What to write
-Save the result in `knowledge/moodle-capabilities.md`, with two lists (activity/resource types and question types) exactly as you saw them on screen, and a short "Grades" note: the aggregations offered and whether late penalties are available. List it in `knowledge/index.md` (creating `index.md` and `log.md` if the knowledge base
-doesn't exist yet) and append the operation to `knowledge/log.md`, so it's indexed from
+Save the result in `course/moodle-capabilities` (`knowledge_create` with type `course` if it doesn't exist yet, `knowledge_rewrite` if it does), with two lists (activity/resource types and question types) exactly as you saw them on screen, and a short "Grades" note: the aggregations offered and whether late penalties are available. Then `knowledge_log` the operation (`update`), so it's on record from
 the start.
 
 When you finish, summarize in one sentence what you found.

@@ -21,6 +21,7 @@ import {
   draftsDirFor,
   ensureTeacherRole,
   isMigrationPending,
+  knowledgeDirFor,
   legacyKnowledgeDirFor,
   moveLegacyContext,
   moveLegacyKnowledge,
@@ -52,6 +53,7 @@ import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
 import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
 import { LOGO } from "./theme.js";
+import { COURSE_PAGE_TYPES, tagCoursePages } from "./knowledgeTypes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -70,6 +72,10 @@ const PLAYWRIGHT_MCP_CLI = path.join(
 /** "explore" is a bounded task (login, a few look-and-cancel screens, one page written): it
  * doesn't need the headroom of a full run. */
 const EXPLORE_MAX_TURNS = 60;
+
+/** The knowledge base's reading tools (agent-kit's `knowledge` server), for the subagents:
+ * the file tools don't reach knowledge/ any more (agent-kit's ADR-024). */
+const KNOWLEDGE_READ_TOOLS = ["mcp__knowledge__knowledge_index", "mcp__knowledge__knowledge_search", "mcp__knowledge__knowledge_read"];
 
 const VALID_MODES: readonly Mode[] = ["interactive", "guided", "autonomous"];
 
@@ -117,6 +123,9 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSp
   const hasBrowser = kind !== "ingest";
   return {
     skills,
+    // The course's pages (course/, topic/, activity/) next to the kit's four, all through the
+    // kit's knowledge_* tools, never the file tools (agent-kit's ADR-024).
+    knowledgePageTypes: COURSE_PAGE_TYPES,
     buildSystemPrompt,
     buildMcpServers: (config): Record<string, McpServerConfig> => (!hasBrowser ? {} : {
       // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a shell.
@@ -147,13 +156,13 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[]): AgentSp
       const agents: Record<string, AgentDefinition> = {
         researcher: {
           description: "Researches concrete questions on the public web (official documentation first) and returns sourced findings with dates and confidence. Invoke with the questions and what you need back.",
-          tools: ["WebSearch", "WebFetch", "Read", "Glob", "Grep"],
+          tools: ["WebSearch", "WebFetch", "Read", "Glob", "Grep", ...KNOWLEDGE_READ_TOOLS],
           prompt: loadPrompt("system/researcher.md"),
           maxTurns: 40,
         },
         "pedagogy-reviewer": {
           description: "Instructional-design expert that reviews a plan or an activity (alignment of objectives, activities and assessment; methodology fit; workload; diversity) and returns a prioritized critique. Invoke with what to review and the knowledge-base pages where it's written.",
-          tools: ["Read", "Glob", "Grep"],
+          tools: ["Read", "Glob", "Grep", ...KNOWLEDGE_READ_TOOLS],
           prompt: loadPrompt("system/pedagogy-reviewer.md"),
           maxTurns: 20,
         },
@@ -285,6 +294,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   });
 
   await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
+  await tagCoursePages(knowledgeDirFor(workspaceDir)); // root pages from before the knowledge_* tools
   const autoCompactEnabled = await isAutoCompactEnabled();
   const skills = await sessionSkills(workspaceDir);
 

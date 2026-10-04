@@ -19,7 +19,7 @@ Manage the given course the way a real teacher would, on four fronts:
 3. **Create/edit course content**: if a resource, page, or activity needs adding or
    fixing, turn on Moodle's edit mode ("Edit mode" in Moodle 4/5, "Turn editing on" in older versions)
    and complete it with genuine content that fits the rest of the course. If
-   `knowledge/moodle-capabilities.md` exists, check it before deciding what activity or
+   `course/moodle-capabilities` exists, check it before deciding what activity or
    question type to use — not every Moodle installation supports the same types.
 4. **Monitor the class's progress**: review the course's progress/grades report (teacher
    view, with every student) and summarize how the class is doing (who's falling
@@ -61,4 +61,4 @@ order to do something else. {{evaluableSubmissionRule}}
   grades/progress view and check before considering the task done.
 - When you finish, briefly summarize what you completed (submissions graded, replies
   posted, content added) and the class's final state as you observed it, and name every
-  resource left hidden as a draft (`knowledge/drafts.md`) with what it's waiting for.
+  resource left hidden as a draft (`course/drafts`) with what it's waiting for.

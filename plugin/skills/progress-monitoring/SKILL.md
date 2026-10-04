@@ -7,7 +7,7 @@ description: Review the class's progress and grades, prioritizing who's falling 
 
 ## Before looking at Moodle
 
-If `knowledge/progress.md` exists, read it first: it's your own history of earlier
+If `course/progress` exists, read it first (`knowledge_read`): it's your own history of earlier
 reviews — class-level, without names — so you can compare ("3 students without the first
 practice last week, 2 now") and focus on what's changed. Who exactly is behind you read live
 from Moodle each time; it goes in your reply to the teacher, never in the knowledge base.
@@ -52,9 +52,10 @@ the activity, instead of just noting it — see the announcements section of the
 `forum` skill. A single student falling behind on their own doesn't justify it; a
 pattern affecting several does.
 
-## Update knowledge/progress.md
+## Update course/progress
 
-Add an entry with this review's date and the summary above, as counts and patterns
+Add an entry with `knowledge_edit` (create the page the first time), with this review's date
+(from `current_time`) and the summary above, as counts and patterns
 without any student's name — don't rewrite earlier entries, it's a history. The knowledge base is the agent's memory across sessions: without
 this, every progress review would start from zero and you wouldn't be able to tell
 whether the class is catching up or falling further behind.

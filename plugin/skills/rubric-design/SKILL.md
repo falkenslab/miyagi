@@ -38,7 +38,7 @@ Rubric → "Define new grading form from scratch" → criteria and levels → "S
 it ready". Each level needs its own description and points; the points of each criterion's top
 level add up to the activity's maximum grade. Saving it is a publication (students see the
 rubric on the activity): ask for approval with the criteria and levels in the summary. Also
-keep a copy in the activity's page, `knowledge/activities/<slug>.md`, so `grading-rubric`
+keep a copy in the activity's page, `activity/<slug>`, so `grading-rubric`
 and later sessions can read it without opening Moodle.
 
 A rubric on the grading form is the norm for anything graded by hand; a criteria table in

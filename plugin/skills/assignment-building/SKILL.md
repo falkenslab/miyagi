@@ -11,7 +11,7 @@ upload, and when) and the **grading** (rubric, marking). A statement that says "
 on an assignment that only accepts online text is the most common way to break one.
 
 Its rubric comes from `rubric-design`; hands-on work is checked with `practice-testing` when the
-workspace allows it. Check `knowledge/moodle-capabilities.md` for what this Moodle has.
+workspace allows it. Check `course/moodle-capabilities` for what this Moodle has.
 
 ## 1. Pick the kind
 
@@ -77,5 +77,5 @@ key settings: dates, submission type, grade); saving its rubric is another. Run 
 before and after saving: the writing, accessibility, and — as a student — that the submission form
 accepts exactly what the statement asks and the rubric is visible if it's meant to be.
 
-Record it in `knowledge/activities/<slug>.md`: the statement's summary, the settings, the rubric
+Record it in its page `activity/<slug>`: the statement's summary, the settings, the rubric
 (copy), and the assignment's URL.

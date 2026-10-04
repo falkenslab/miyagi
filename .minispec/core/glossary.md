@@ -10,7 +10,7 @@ A folder with one course's `config.json`, `.env`, `sources/`, `knowledge/`, `ses
 
 ## Knowledge base
 
-`knowledge/`: the agent's pages about the course, with `index.md` and `log.md`. The only folder it writes to (besides `practice/`).
+`knowledge/`: the agent's pages about the course (`course/`, `topic/`, `activity/` and the kit's summaries, concepts, entities and syntheses), reached only through agent-kit's `knowledge_*` tools; the kit keeps its `index.md` and `log.md`.
 
 ## Teaching plan (programación didáctica)
 

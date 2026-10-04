@@ -72,7 +72,7 @@ detection.
 
 ## Remembering past audits
 
-If `knowledge/course-audit.md` exists, read it first: it's the history of previous
-findings. Note in it what you found this time (date, findings, what's new vs. still
+If `course/course-audit` exists, read it first: it's the history of previous
+findings. Add a new entry with `knowledge_edit` (date from `current_time`, findings, what's new vs. still
 unresolved from before) so a later audit doesn't start from zero and can tell whether a
 known issue was ever fixed.

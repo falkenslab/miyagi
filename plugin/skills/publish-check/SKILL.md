@@ -1,6 +1,6 @@
 ---
 name: publish-check
-description: The last check before anything goes out to students, and the checklist for reviewing what's already published - new resources go up hidden and are tested in Moodle before being shown (drafts/, knowledge/drafts.md), the writing (no filler, redundancy or unverified claims, the course's own terms), accessibility (headings, alt text, link text, tables, color), and how it actually looks and works for a student (preview or "Switch role to..."). Use on every page, activity, question, feedback or forum post before saving it, and on existing content when auditing.
+description: The last check before anything goes out to students, and the checklist for reviewing what's already published - new resources go up hidden and are tested in Moodle before being shown (drafts/, the course/drafts page), the writing (no filler, redundancy or unverified claims, the course's own terms), accessibility (headings, alt text, link text, tables, color), and how it actually looks and works for a student (preview or "Switch role to..."). Use on every page, activity, question, feedback or forum post before saving it, and on existing content when auditing.
 ---
 
 # Checking before publishing
@@ -17,7 +17,7 @@ H5P, an assignment, a whole unit — is tested in Moodle before students can see
 its type:
 
 1. **Build it in `drafts/<slug>/`**: the editable source (the HTML, the GIFT file, the page's
-   text, its images). Never in `knowledge/`; the activity's or topic's page links to it. Beyond
+   text, its images). Never in the knowledge base; the activity's or topic's page names it. Beyond
    writing text files, the drafts toolbox (`drafts_*` tools) downloads files and whole pages,
    copies and moves binaries, zips and unzips (a SCORM package: `scorm-packaging`), prints
    HTML or Markdown to PDF and tells a file's real type: use it, never a shell.
@@ -28,14 +28,14 @@ its type:
 3. **Test it as the teacher, in Moodle**: open it and use it the way a student would — the
    quiz's "Preview", the H5P, every link and interactive part, and the page at a narrow window
    width. If something fails, fix it in `drafts/` and replace it (another approval).
-4. **Note it in `knowledge/drafts.md`**: one list item per hidden draft, with its link and
-   what's pending.
+4. **Note it in `course/drafts`** (`knowledge_edit`): one list item per hidden draft, with its
+   link and what's pending.
 5. **Report what you tested, and ask to show it**: showing it ("Show on course page") is a
    publication with its own approval. The same change on several drafts (a whole unit) can
-   share one approval if the summary names each. Once shown, take it out of `drafts.md` and
+   share one approval if the summary names each. Once shown, take it out of `course/drafts` and
    do pass 3 below as a student.
 
-A draft the teacher doesn't want shown yet stays hidden and in `drafts.md`: say so when you
+A draft the teacher doesn't want shown yet stays hidden and in `course/drafts`: say so when you
 finish, and offer it again when the teacher next asks what's pending.
 
 Changes to something students can already see (a typo, a date, a fixed link) don't go through
@@ -92,7 +92,7 @@ saving, with a summary of what's being published.
 - **One item per approval when it's new content** — a section's text, a page, a statement, a set
   of questions (listing each question, see `quiz-building`), a rubric. Three sections are three
   approvals; creating a quiz and importing its questions are two.
-- **Commitments in the teacher's name** — a reply time in the forum, feedback by a date, extra material on request — are the teacher's decision: if the teacher didn't make them, leave them out of what students read (keep them as a proposal in `teaching-plan.md`), or, in `guided`/`chat`, name each one in the approval summary so it's approved knowingly.
+- **Commitments in the teacher's name** — a reply time in the forum, feedback by a date, extra material on request — are the teacher's decision: if the teacher didn't make them, leave them out of what students read (keep them as a proposal in `course/teaching-plan`), or, in `guided`/`chat`, name each one in the approval summary so it's approved knowingly.
 - A summary that announces "and then I'll add X", or bundles several different texts, hides them
   from whoever approves it.
 - The one exception: the **same setting change** on several items (unlimited attempts on three

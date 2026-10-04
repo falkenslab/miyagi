@@ -49,13 +49,14 @@ agent-kit's `knowledge` plugin adds 4 skills and 3 commands.
 
 ## Knowledge base
 
-agent-kit's generic knowledge base plus the course layer in `prompts/system/course-knowledge.md`:
+agent-kit's knowledge base, reached only through its `knowledge_*` tools over its file store (agent-kit ADR-024), plus the course layer: the page types in `src/knowledgeTypes.ts` and the rules in `prompts/system/course-knowledge.md`. Pages are `type/slug` ids; the index and backlinks are kept by the kit.
 
-- Root pages: `orientation.md`, `course-map.md`, `moodle-capabilities.md`, `progress.md` and `course-audit.md` (dated entries), `teaching-plan.md` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading).
-- `syntheses/course-alignment.md` — dated comparisons of the course with the plan.
-- `topics/<slug>.md`, `activities/<slug>.md` — criteria, rubric, questions; a quiz's GIFT file sits next to it as `activities/<slug>.gift`.
+- `course/<slug>` (root files with `type: course`): `orientation`, `course-map`, `moodle-capabilities`, `teaching-plan` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading), `progress` and `course-audit` (dated entries), `drafts` (resources still hidden). `tagCoursePages()` gives older root pages that type at the start of every session.
+- `synthesis/course-alignment` — dated comparisons of the course with the plan.
+- `topic/<slug>`, `activity/<slug>` — criteria, rubric, questions; a quiz's GIFT file is in `drafts/<slug>/`.
+- The `researcher` and `pedagogy-reviewer` subagents read pages with `knowledge_index`, `knowledge_search` and `knowledge_read`.
 
-File scope (agent-kit's hook, set in `toSessionConfig()`): writes only in `knowledge/` and `drafts/` (and `practice/` with the practice-runner), `sources/` read-only, `config.json` and `.env` denied.
+File scope (agent-kit's hook, set in `toSessionConfig()`): no file tool reaches `knowledge/`; `Read`/`Glob`/`Grep` read `sources/` (plus `extract_text` for DOCX, PPTX and XLSX), `Write`/`Edit` only `drafts/` (and `practice/` with the practice-runner); `config.json` and `.env` denied.
 
 ## Legacy migration
 

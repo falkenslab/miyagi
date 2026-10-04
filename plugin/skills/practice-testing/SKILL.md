@@ -25,7 +25,7 @@ practice as tested.
    check it produces what the statement promises".
 3. Fix every point it reports (a missing step, a version that doesn't exist, an output that
    differs), and repeat until it passes. Only then publish the activity (with its approval).
-4. Note in the activity's page (`knowledge/activities/<slug>.md`) that it was checked, when,
+4. Note in the activity's page (`activity/<slug>`) that it was checked, when (`current_time`),
    with which base image, and the commands a student will run.
 
 ## While grading a submission that can be run

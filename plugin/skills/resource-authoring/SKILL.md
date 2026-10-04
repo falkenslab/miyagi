@@ -60,5 +60,5 @@ teacher's text into your own style when a correction would do.
 ## Publishing
 
 Run `publish-check` (writing, accessibility, how it looks as a student) and save it with its
-approval — one resource per approval. Record in the topic's page (`knowledge/topics/<slug>.md`)
+approval — one resource per approval. Record in the topic's page (`topic/<slug>`)
 what you wrote and where (its URL), so a later session doesn't duplicate or contradict it.

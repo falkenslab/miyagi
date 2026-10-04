@@ -155,7 +155,7 @@ package's files go at the archive's root, `imsmanifest.xml` among them (the tool
 - Test it as the teacher: open it (normal mode, not only "Preview", which records nothing),
   play a step, leave, and check "Reports" → "Attempts": the attempt has a status and a score.
   Fix in `drafts/`, re-zip and replace the package if not.
-- Note it in `knowledge/drafts.md` and ask before showing it.
+- Note it in `course/drafts` and ask before showing it.
 
 Never try to get around the toolbox (a shell, a subagent, another site to host it): if a step
 can't be done with it, say which and why.

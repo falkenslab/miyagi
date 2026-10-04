@@ -30,10 +30,11 @@ Always look first at what you have: `sources/`, the knowledge base, the course i
    standards, the publisher of a dataset) over blogs; note the date of each source; when two
    disagree, keep both and say which is more authoritative and why.
 4. **Keep it**: write what's worth keeping into the knowledge base — a summary page per important
-   source (`summaries/<slug>.md` with `origin: web`, its URL and the date consulted) and the
-   facts into the concept or topic pages that use them, each linking its source. A synthesis page
-   (`syntheses/<slug>.md`) for a question answered from several sources. Follow
-   `knowledge-pages` and update `index.md` and `log.md`.
+   source (`summary/<slug>` with `origin: web`, its URL and the date consulted, from
+   `current_time`) and the facts into the concept or topic pages that use them (`knowledge_edit`),
+   each linking its source. A synthesis page (`synthesis/<slug>`) for a question answered from
+   several sources. `knowledge_create` without content gives each type's template; then
+   `knowledge_log` it.
 5. **Use it with care**: in anything published to students, what comes from outside the course
    says so where it matters (a link to the documentation, "según la documentación oficial de…").
 

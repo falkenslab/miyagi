@@ -19,7 +19,7 @@ description: Grade Moodle submissions (assignments, open-response quiz questions
    submission by submission, is how the same answer ends up graded differently depending
    on when it was reviewed.
 4. If you've already graded a submission for this same activity in this session (or an
-   earlier one — check the activity's page, `knowledge/activities/<slug>.md`), review what criteria you applied, so you're not
+   earlier one — check the activity's page, `activity/<slug>`), review what criteria you applied, so you're not
    stricter or more lenient with one student than another for the same answer.
 5. Check that the grading form can actually hold what you're going to write. An assignment
    only shows a feedback box if "Feedback comments" is enabled in its settings ("Feedback
@@ -78,7 +78,7 @@ feedback when it decides the grade.
 ## After grading
 
 If this is the first time you're grading this activity in the aula, leave a note in
-its `knowledge/activities/<slug>.md` with the criteria you applied (what's required for full marks, common
+its page `activity/<slug>` with the criteria you applied (what's required for full marks, common
 mistakes and how much they cost) — so later gradings of the same activity stay
 consistent with the first ones, without having to re-read every submission already
 graded.

@@ -6,7 +6,7 @@ description: Get enough context on a Moodle course before doing anything complex
 # Getting oriented in the course
 
 This happens **once**, near the start (or once per aula, since it belongs in
-`knowledge/`, not in the current turn's context) — before a first grading/content/audit pass. It isn't
+the knowledge base, not in the current turn's context) — before a first grading/content/audit pass. It isn't
 repeated every session once it's been done, and it isn't a substitute for
 `moodle-navigation` — use that skill for how to actually read the course's structure;
 this one is about what to gather and when to stop.
@@ -31,13 +31,13 @@ enabled, question bank access, grading permissions) instead of assuming full cap
 — what "Edit mode" and the course's menus actually expose is the real answer,
 not what a teacher role usually has elsewhere.
 
-If none of this exists, don't make it up: note in `knowledge/orientation.md` that the course has no
+If none of this exists, don't make it up: note in `course/orientation` that the course has no
 explicit guide and move on with whatever topic/section structure is actually visible.
 
 ## What to note in the knowledge base
 
-Save a brief summary in `knowledge/orientation.md` (at the knowledge base's root — it's
-whole-course information) with what you found:
+Save a brief summary in `course/orientation` (a `course` page — it's whole-course
+information) with what you found:
 
 - How the final grade is calculated (if explained).
 - Deadlines and key dates for evaluable activities.
@@ -45,7 +45,7 @@ whole-course information) with what you found:
 - Any specific instructions about submission format.
 - Which capabilities you confirmed are actually available in this course.
 
-This file is the reference you'll consult first whenever you're unsure what's expected in
+This page is the reference you'll consult first whenever you're unsure what's expected in
 a specific activity or what's actually possible to do in this course.
 
 ## Don't over-collect
@@ -57,7 +57,8 @@ capture everything about the course up front.
 
 ## Start the knowledge base
 
-If `knowledge/index.md` doesn't exist yet, this is the knowledge base's first session: create
-`index.md` (listing `orientation.md`), an initial `overview.md` (what the course is about, its
-blocks as you see them now, with a topic page per block under `topics/` so later skills have
-somewhere to link) and `log.md`. Every other page gets added later, as you work on the course.
+If `knowledge_index` shows the knowledge base empty, this is its first session: create
+`course/orientation`, write an initial `overview` with `knowledge_rewrite` (what the course is
+about, its blocks as you see them now), create a topic page `topic/<slug>` per block so later
+skills have somewhere to link, and `knowledge_log` it. Every other page gets added later, as you
+work on the course.

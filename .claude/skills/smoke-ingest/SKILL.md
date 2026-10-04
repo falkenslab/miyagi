@@ -43,18 +43,22 @@ must be available (environment or `~/.miyagi/config.json`); the run is non-inter
 node .claude/skills/smoke-ingest/check-knowledge.mjs "$WS"
 ```
 
-Must pass: no broken links, every page in `index.md` (the script exits 1 otherwise), and both
-fixture files mentioned by some page. Then look at, in the log and the pages:
+Must pass: no broken links, every page in `index.md`, every root page a `type: course` page
+(the script exits 1 otherwise), and both fixture files mentioned by some page. Then look at,
+in the log and the pages:
 
-- **Skills loaded**: the log shows `knowledge:knowledge-ingest`, `knowledge:knowledge-pages`
+- **Tools, not files**: the knowledge base is written only with the `knowledge_*` tools
+  (`knowledge_create`, `knowledge_edit`, `knowledge_log`...), never `Write`/`Edit` on
+  `knowledge/`; `list_sources` finds the originals; the log shows `knowledge:knowledge-ingest`
   and `knowledge:knowledge-lint` being applied.
-- **Course layer**: a `topics/` page for topic 1 linking both summaries, and an `activities/`
+- **Course layer**: a `topic/` page for topic 1 linking both summaries, and an `activity/`
   page for "Tarea 1" holding the rubric's weights and both submission policies (late ×0.8,
   missing → 0 with "No se ha recibido ninguna entrega") — that page is what `grading-rubric`
   reads before grading.
 - **Concepts**: variable, the four types and type conversion get their own pages, with the
   syllabus's common mistakes attached to them.
-- **The closing summary** counts pages from `log.md` and matches the files on disk.
+- **The closing summary** counts the pages it passed to `knowledge_log` and matches the files
+  on disk.
 
 Report what passed and what didn't, quoting the offending page lines. A failure here usually
 means a prompt or skill instruction the model skipped: fix the wording and run again rather

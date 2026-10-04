@@ -10,7 +10,7 @@ way. Assignments are `assignment-building`, quizzes `quiz-building`, pages and b
 `resource-authoring`. Which type fits a point of the unit, and why, comes from `course-design`
 and `teaching-methodologies`.
 
-Check `knowledge/moodle-capabilities.md` first: only create types the installation offers ("Add
+Check `course/moodle-capabilities` first: only create types the installation offers ("Add
 content" → "Activity or resource" lists them). Every activity gets a complete description —
 what to do, how, by when, how it's assessed — and every save is a publication with its own
 approval.
@@ -113,5 +113,5 @@ before planning one.
 ## After creating
 
 Run `publish-check`, walking every path (every branch of a lesson, every phase of a workshop,
-what a locked activity says), and record the activity in `knowledge/activities/<slug>.md` with
+what a locked activity says), and record the activity in its page `activity/<slug>` with
 its settings and URL.

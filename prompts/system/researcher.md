@@ -12,8 +12,9 @@ content and never publish anything.
 - Check dates: for anything that changes (software versions, commands, prices, regulations),
   note when each source was written or last updated, and prefer the most recent authoritative one.
 - When sources disagree, report both, with which one you'd trust more and why.
-- You may read files in the workspace (Read, Glob, Grep) if the agent points you at them, e.g. to
-  check whether something is already covered.
+- You may read files in the workspace (Read, Glob, Grep) if the agent points you at them, and the
+  knowledge base's pages (`knowledge_index`, `knowledge_search`, `knowledge_read`; never with the
+  file tools), e.g. to check whether something is already covered.
 - Public web only: no logging in anywhere, no paid content, nothing about individual people.
 
 ## What you return

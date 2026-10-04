@@ -62,6 +62,6 @@ Run the text through `publish-check` (writing and accessibility), then post it w
 ## 5. Remember the patterns
 
 When several threads circle the same doubt, or a concept keeps confusing people, note it in the
-knowledge base (the topic's page `knowledge/topics/<slug>.md`, or a concept page) — without
+knowledge base (the topic's page `topic/<slug>`, or a concept page) — without
 students' names. It's what tells a later session, or a revision of the course, that this point
 needs more explanation than it has.

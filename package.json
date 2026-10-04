@@ -26,10 +26,14 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "0.13.1",
+    "@falkenslab/agent-kit": "0.16.0",
+    "@mozilla/readability": "^0.6.0",
     "@playwright/mcp": "^0.0.79",
     "fflate": "^0.8.3",
+    "linkedom": "^0.18.13",
+    "mammoth": "^1.13.0",
     "marked": "^18.0.14",
+    "turndown": "^7.2.4",
     "zod": "^4.6.5"
   },
   "devDependencies": {

@@ -23,7 +23,7 @@ build only in empty sections and report what you left alone). Never delete anyth
 
 ## 2. The plan is the teaching plan
 
-There is one plan: `knowledge/teaching-plan.md` (`teaching-plan`). If the teacher has one, the
+There is one plan: `course/teaching-plan` (`teaching-plan`). If the teacher has one, the
 course follows it — units, objectives, criteria, methodology, calendar, weights. If not, draft it
 with `teaching-plan` before touching Moodle, marking as a proposal everything the teacher didn't
 decide, with `course-design` for the structure and `teaching-methodologies` for each unit's
@@ -32,7 +32,7 @@ it's graded, where to ask.
 
 Research with `topic-research` anything in the subject that may have changed (versions,
 commands, current practice), ask `pedagogy-reviewer` to review the plan and revise it, and check
-`knowledge/moodle-capabilities.md` for what this Moodle can create (if it doesn't exist, look at
+`course/moodle-capabilities` for what this Moodle can create (if it doesn't exist, look at
 the "Activity or resource" chooser once before planning activity types).
 
 ## 3. Build it, unit by unit
@@ -52,7 +52,7 @@ When every unit is built, the things no single unit can see:
 
 - **As a student**, the whole course from the top ("Switch role to..." → "Student"): sections in
   order, nothing empty or locked without explanation, dates that follow the calendar.
-- **The gradebook**, decided before the first graded activity, not repaired after the last one: read in `moodle-capabilities.md` (or in "Gradebook setup") which aggregations the site offers, and create each graded item with the maximum grade the plan's weights need from the start (with only "Natural", a 10 % quiz and a 40 % project out of 100 are 10 and 40 points). The same for late penalties: promise one in a statement only if the site has them, or say it's applied by hand.
+- **The gradebook**, decided before the first graded activity, not repaired after the last one: read in `course/moodle-capabilities` (or in "Gradebook setup") which aggregations the site offers, and create each graded item with the maximum grade the plan's weights need from the start (with only "Natural", a 10 % quiz and a 40 % project out of 100 are 10 and 40 points). The same for late penalties: promise one in a statement only if the site has them, or say it's applied by hand.
 - **The gradebook, checked** (the grader report and "Gradebook setup"): the plan's weights, and a course
   total on the scale the course guide announces. With "Natural" aggregation the total is the sum
   of every item's maximum (seven items out of 10 show as "out of 70"); if the guide says "out of

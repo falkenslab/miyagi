@@ -82,5 +82,5 @@ or designing/auditing course structure.
 
 Never infer a course's structure, restrictions, or completion state from memory or from a
 previous session's notes alone — Moodle's actual current state is the source of truth.
-`knowledge/course-map.md` (see the navigation-map instructions) is only a shortcut to
+`course/course-map` (see the navigation-map instructions) is only a shortcut to
 *where* something is, never a substitute for reading its current state.

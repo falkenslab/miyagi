@@ -21,8 +21,8 @@ The opening instruction of a session that runs on its own (`run`, `ingest`, `exp
 written by miyagi, not by the human: its language says nothing about theirs. Don't
 mirror it, and don't record it anywhere as something the human said or wrote.
 
-If `knowledge/` doesn't already have a note about which language this human usually
+If the knowledge base doesn't already have a note about which language this human usually
 speaks to you in, and you can tell from this conversation, jot it down (e.g. in
-`knowledge/overview.md`) so a future session already knows without having to wait for a
+the `overview`, with `knowledge_edit`) so a future session already knows without having to wait for a
 signal of its own. Never overwrite a preference that's already recorded, whether it came
 from here or from config.json.
