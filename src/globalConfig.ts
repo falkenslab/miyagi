@@ -39,6 +39,37 @@ export function secretFilePaths(): string[] {
 }
 
 /**
+ * Well-known places outside the workspace that hold other credentials (SSH and cloud keys,
+ * git and npm tokens, browser profiles with their cookies and passwords), denied to the
+ * file tools too. A stopgap until agent-kit lets Read and Glob be allow-listed
+ * (falkenslab/agent-kit#28): a deny-list can't cover student data kept elsewhere nor every
+ * spelling of a path, and the kit's Glob doesn't check it yet. All three OSes' paths are
+ * listed whatever the OS: a path that doesn't exist denies nothing.
+ */
+export function sensitivePaths(): string[] {
+  const home = os.homedir();
+  const appData = process.env.APPDATA ?? path.join(home, "AppData", "Roaming");
+  const localAppData = process.env.LOCALAPPDATA ?? path.join(home, "AppData", "Local");
+  const macSupport = path.join(home, "Library", "Application Support");
+  return [
+    // Keys and tokens.
+    ...[".ssh", ".aws", ".azure", ".gnupg", ".kube", ".npmrc", ".git-credentials", ".netrc", ".pypirc"].map((p) => path.join(home, p)),
+    path.join(home, ".config", "gh"),
+    path.join(home, ".docker", "config.json"),
+    path.join(home, "Library", "Keychains"),
+    // Browser profiles (cookies, saved passwords).
+    path.join(localAppData, "Google", "Chrome", "User Data"),
+    path.join(localAppData, "Microsoft", "Edge", "User Data"),
+    path.join(appData, "Mozilla", "Firefox"),
+    path.join(macSupport, "Google", "Chrome"),
+    path.join(macSupport, "Microsoft Edge"),
+    path.join(macSupport, "Firefox"),
+    ...["google-chrome", "chromium", "microsoft-edge"].map((p) => path.join(home, ".config", p)),
+    path.join(home, ".mozilla"),
+  ];
+}
+
+/**
  * Copies ~/.teacher-agent/config.json to ~/.miyagi/config.json the first time, so an upgraded
  * install keeps its Claude token and defaults. Returns whether it copied. The old file stays.
  */

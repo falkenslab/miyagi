@@ -26,6 +26,11 @@ Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto de
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
 - **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y `practice/`.
 - **`config.json` y `.env` del curso, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
+- **Otras credenciales en sitios conocidos**, también prohibidas: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS y los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas).
+
+:::warning[Leer fuera del curso]
+Hoy el asistente aún puede **leer** otros archivos de tu ordenador fuera de las carpetas del curso, y **listar** las carpetas que hay junto a él (por ejemplo, `Documentos` o tus otros proyectos). Lo de arriba son prohibiciones concretas, no un cierre completo. El arreglo de fondo, que solo pueda leer las carpetas del curso, está pedido a agent-kit ([agent-kit#28](https://github.com/falkenslab/agent-kit/issues/28), [miyagi#42](https://github.com/falkenslab/miyagi/issues/42)). Mientras tanto, no guardes datos de alumnos (entregas, listas de clase, actas) en carpetas junto a la del curso, ni dejes que trabaje en modo autónomo con contenido del que no te fías.
+:::
 
 Tus habilidades, atajos e `instructions.md` quedan fuera de las carpetas en las que puede escribir: el asistente los usa, pero no puede cambiarlos.
 

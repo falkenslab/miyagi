@@ -30,6 +30,12 @@ const denied = [
   path.join(home, ".claude", ".credentials.json"),
   path.join(ws, "config.json"),
   path.join(ws, ".env"),
+  // sensitivePaths(): a stopgap until agent-kit allow-lists Read and Glob (falkenslab/agent-kit#28;
+  // until then Glob ignores deniedPaths, so only Read/Write/Edit/Grep are checked here).
+  path.join(home, ".ssh", "id_ed25519"),
+  path.join(home, ".aws", "credentials"),
+  path.join(home, ".git-credentials"),
+  path.join(process.env.LOCALAPPDATA ?? path.join(home, "AppData", "Local"), "Google", "Chrome", "User Data", "Default", "Cookies"),
 ];
 const allowed = [
   ["Read", { file_path: path.join(ws, "sources", "temario.pdf") }],
@@ -56,4 +62,4 @@ if (failures > 0) {
   console.log(`\n${failures} file-scope check(s) failed`);
   process.exit(1);
 }
-console.log(`ok   ${denied.length} secret files can't be read, searched or written; sources/ and drafts/ still work`);
+console.log(`ok   ${denied.length} files with secrets can't be read, searched or written; sources/ and drafts/ still work`);

@@ -12,7 +12,7 @@ agent-kit's file scope gate allow-lists `Write`/`Edit` and `Grep` but only deny-
 
 ## Solution
 
-- **Interim, in miyagi**: deny the most obvious places too (`~/.ssh`, `~/.aws`, `~/.npmrc`, `~/.git-credentials`, `~/.config/gh`, the browsers' profile folders), knowing that a deny-list can't cover student data elsewhere nor every spelling of a path, and that `Glob` ignores it until the kit changes.
+- **Interim, in miyagi (done)**: `sensitivePaths()` denies the most obvious places too (`~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, the macOS keychain, the browsers' profile folders on Windows, macOS and Linux), checked by `check-file-scope.mjs`; the docs warn that reading outside the course isn't closed yet. Knowing that a deny-list can't cover student data elsewhere nor every spelling of a path, and that `Glob` ignores it until the kit changes.
 - **With the kit's `readableDirs`**: miyagi declares what it reads: `sources/`, `drafts/`, `practice/`, `plugin/` and the installed extensions' folders (`~/.miyagi/extensions/`); the kit adds its own (the session's tool results, the run folder, its plugins) and keeps `knowledge/` behind its tools. `secretFilePaths()` stays as the files denied inside what's allowed.
 - `docs/content/avanzado/seguridad-y-privacidad.md` says what the agent can read, plainly.
 - `upgrade-agent-kit` to the version that brings it.
