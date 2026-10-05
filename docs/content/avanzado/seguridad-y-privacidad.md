@@ -15,7 +15,7 @@ El asistente lee contenido que no controlas: páginas de Moodle, entregas de alu
 - En la transcripción de cada sesión (`transcript.jsonl`), la contraseña aparece tapada.
 - Si no quieres guardarla, deja el usuario en blanco en `init`: iniciarás sesión tú a mano en la ventana de Chrome.
 
-El `.env` del curso, donde puede ir un token de Claude propio, también está prohibido para sus herramientas.
+Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no pueden leer el `.env` del curso (donde puede ir un token propio), ni `~/.miyagi/config.json` (donde lo guarda miyagi), ni su copia antigua `~/.teacher-agent/config.json`, ni `~/.claude/.credentials.json` (las credenciales del SDK de Claude).
 
 ## Qué archivos puede tocar
 
@@ -25,7 +25,7 @@ Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto de
 - **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado de Moodle), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
 - **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y `practice/`.
-- **`config.json` y `.env`**: prohibidos, ni leer ni escribir.
+- **`config.json` y `.env` del curso, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
 
 Tus habilidades, atajos e `instructions.md` quedan fuera de las carpetas en las que puede escribir: el asistente los usa, pero no puede cambiarlos.
 

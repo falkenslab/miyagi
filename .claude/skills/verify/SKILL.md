@@ -21,6 +21,7 @@ node .claude/skills/verify/check-publish-gate.mjs
 node .claude/skills/verify/check-tool-labels.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
+node .claude/skills/verify/check-file-scope.mjs
 node .claude/skills/update-docs/check-docs.mjs
 node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
 ```
@@ -60,6 +61,12 @@ add the file there with the rule that fixes it.
 archive, downloads and unzips over the limits, drafts/ itself as a target) and a round trip
 (copy, zip, unzip, info, and a PDF when Chrome is installed; skipped, and said, otherwise).
 A new tool or limit gets its refusal here in the same change.
+
+`check-file-scope.mjs` builds a session's file scope from `dist/` and checks that every file
+holding a secret (the workspace's `config.json` and `.env`, `~/.miyagi/config.json`, its legacy
+copy, the SDK's `~/.claude/.credentials.json`) can't be read, searched or written, while
+`sources/` and `drafts/` still work. A new file with a secret goes in `secretFilePaths()` and
+here in the same change.
 
 `check-docs.mjs` (from the `update-docs` skill) fails if the docs site doesn't mention a skill,
 a command, a CLI subcommand or a config key the code has. When it fails, run `update-docs`.

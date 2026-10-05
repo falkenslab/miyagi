@@ -29,6 +29,16 @@ function legacyGlobalConfigPath(): string {
 }
 
 /**
+ * Files outside the workspace that hold a secret the model must never read (ADR-004): the
+ * global config and its legacy copy (`claudeCodeOAuthToken`), and the Claude Agent SDK's own
+ * credentials. Denied to the file tools in every session, existing or not. Only these files:
+ * `~/.miyagi/` and `~/.claude/` also hold things the agent may need to read.
+ */
+export function secretFilePaths(): string[] {
+  return [globalConfigPath(), legacyGlobalConfigPath(), path.join(os.homedir(), ".claude", ".credentials.json")];
+}
+
+/**
  * Copies ~/.teacher-agent/config.json to ~/.miyagi/config.json the first time, so an upgraded
  * install keeps its Claude token and defaults. Returns whether it copied. The old file stays.
  */

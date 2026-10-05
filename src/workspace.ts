@@ -3,6 +3,7 @@ import path from "node:path";
 import type { BaseSessionConfig, Mode } from "@falkenslab/agent-kit";
 import { t } from "./messages/index.js";
 import { DEFAULT_DRAFTS_LIMITS, type DraftsLimits } from "./drafts/files.js";
+import { secretFilePaths } from "./globalConfig.js";
 
 export type AgentPersona = "formal" | "warm" | "motivating";
 
@@ -258,8 +259,9 @@ export function toSessionConfig(
     knowledgeDir: knowledgeDirFor(workspaceDir),
     sourcesDir: sourcesDirFor(workspaceDir),
     extraWritableDirs: [draftsDirFor(workspaceDir), ...(workspace.agent.allowPracticeRunner ? [practiceDirFor(workspaceDir)] : [])],
-    // The password lives in config.json and the Claude token may live in .env.
-    deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env")],
+    // The password lives in config.json and the Claude token may live in .env, in the global
+    // config or in the SDK's credentials (ADR-004).
+    deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env"), ...secretFilePaths()],
     // Only with a classroom: without one there's no Moodle password to keep from the model.
     secrets: workspace.classroom?.password ? [workspace.classroom.password] : [],
     hasMoodle: Boolean(workspace.classroom),
