@@ -8,7 +8,9 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const read = (p) => fs.readFileSync(path.join(root, p), "utf8");
+// Line endings normalized: with core.autocrlf a checkout may be CRLF, and keysOf() looks for
+// the interface's closing brace on a line of its own.
+const read = (p) => fs.readFileSync(path.join(root, p), "utf8").replace(/\r\n/g, "\n");
 const dirs = (p) => fs.readdirSync(path.join(root, p), { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name);
 const page = (p) => {
   const file = path.join("docs/content", p);
