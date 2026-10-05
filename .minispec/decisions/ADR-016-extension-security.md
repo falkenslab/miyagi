@@ -23,3 +23,4 @@ A local MCP server is a process with the teacher's permissions: miyagi can't sto
 - Network limits are declared, not enforced, until third-party MCP servers run in Docker; the confirmation says so.
 - `check-extensions.mjs` keeps a malicious toy extension that tries each attack.
 - Delivered by the features `extensions` (content level) and `third-party-extensions` (code level and catalog).
+- Partly superseded by ADR-020: no catalog or trust tiers; the user adds non-official repositories by hand after a warning, and their extensions may bring code and run it on the host once accepted. The guarantees above still hold.

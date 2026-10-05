@@ -8,7 +8,7 @@ Official tool extensions that turn a step-by-step script into a narrated video w
 
 ## Context
 
-- Needs `third-party-extensions` (code level) and a connector's `link` capability.
+- Needs `extension-repositories` (code level; it ships in the official repository) and a classroom extension's `link` capability.
 - Only sketched for now: redesign in detail when it starts.
 
 ## Changes

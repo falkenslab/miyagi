@@ -29,7 +29,7 @@ Replace the free browser in Moodle with the `moodle` MCP server of the Moodle ex
 
 ## Acceptance
 
-- `miyagi ext test moodle`: every tool's conformance scenario green against moodle-sandbox 4.5 and 5.2, in Boost and Classic.
+- `miyagi extension test moodle`: every tool's conformance scenario green against moodle-sandbox 4.5 and 5.2, in Boost and Classic.
 - `sandbox-e2e` and `simulate-course` through the MCP: same course as before, no browser calls, a fraction of the calls; report in `tests/`; `student-impact-review`.
 - Sign-in on a real campus (EVAGD) once, then several chats with no new sign-in; an expired session recovered in the middle of a tool.
 - No cookie or password reaches the model or the workspace.

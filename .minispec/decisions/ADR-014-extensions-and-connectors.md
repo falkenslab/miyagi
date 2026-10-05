@@ -19,3 +19,4 @@ The core knows how to teach (plan, units, questions, rubrics); only publishing a
 - `miyagi ext test` runs a fixed conformance scenario per capability against a sandbox classroom.
 - Amends ADR-008 (the publish gate is the core's, fed by each connector's predicates) and ADR-009 (testing hidden before showing is the `staged-publishing` capability; without it the teacher is told before publishing).
 - Delivered by the features `extensions` (Moodle extracted) and `classroom-connector`.
+- Partly superseded by ADR-020: the package is an extension with an `extension.json` manifest that declares the capabilities it provides (these classroom operations among them); the official extensions share one repository.

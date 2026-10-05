@@ -15,3 +15,4 @@ Most of what a teacher prepares (the plan, the curriculum, units, rubrics, quest
 - The typical case stays simple: one Moodle classroom, its groups, nothing asked about where to publish.
 - Compatibility with moodle-agent's workspaces is no longer a requirement.
 - Delivered by the features `classroom-optional` and `extensions`.
+- Amended by ADR-020: the keys are `classrooms[]` and `groups[]`, in `workspace.json`, each classroom with its `type`; secrets in `.env`.

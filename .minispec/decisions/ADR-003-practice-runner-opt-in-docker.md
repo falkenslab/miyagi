@@ -11,3 +11,4 @@ Testing a practice (a statement, a solution, a student's submission) by running 
 ## Consequences
 
 Its prompt forbids installing anything, sudo, mounting beyond the practice folder or the Docker socket, and touching containers it didn't create. agent-kit's three subagent gates keep Bash away from the main agent. Don't give the main agent Bash to "simplify" it, and don't let external plugins register subagents with Bash.
+- Amended by ADR-020: extensions from a repository the user added, or a workspace's own, may run code on the host, a shell included, once the user accepts an explicit warning. The main agent still never gets Bash, and the official runtime extensions run code in containers.

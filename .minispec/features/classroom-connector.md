@@ -23,7 +23,7 @@ A built-in connector that publishes to and reads from Google Classroom through i
 - Groups: native (expanded to students at publish time, never stored) or one class per group.
 - Forms exporter with its losses (numeric tolerance, matching/ordering, per-option feedback, code formatting, essay).
 - Setup: Google login, pick a class, map its groups.
-- Sandbox repo `classroom-sandbox` with a seed script; `miyagi ext test classroom`.
+- Sandbox repo `classroom-sandbox` with a seed script; `miyagi extension test classroom`.
 - No browser fallback in 1.1 (decided); revisit with pilot teachers.
 
 ## Acceptance
