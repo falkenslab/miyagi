@@ -8,7 +8,8 @@ Write a subject's materials once in `materials/` and publish them to any classro
 
 ## Context
 
-- Today GIFT and HTML are written by hand in `drafts/` and checked by `validators/`; activity pages and `.gift` files live in `knowledge/activities/`.
+- Today GIFT and HTML are written by hand in `drafts/` and checked by `validators/`; activity pages are `activity/<slug>` in the knowledge base.
+- Where things go, from here on: `materials/` holds the neutral source the teacher can read and edit (questions, notes, assignments, rubrics, units); `drafts/` holds what's generated or isn't neutral (the exported GIFT or HTML, a SCORM package, an HTML app, the plans of `activity-lifecycle`). `course-knowledge.md`, `publish-check` and the building skills say so in the step that introduces each type.
 - Needs the `extensions` feature (connectors, capabilities). Split into four releases; each type moves in its own step and its old path goes in the same step.
 
 ## Changes

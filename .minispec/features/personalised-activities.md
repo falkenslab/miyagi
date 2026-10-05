@@ -14,7 +14,7 @@ Equivalent variants of an activity set in what a group cares about, from an anon
 
 - `materials/surveys/<slug>.survey.md`; validator requires the purpose/anonymity header and refuses sensitive or identifying questions.
 - Published anonymously (Moodle Feedback anonymous; Forms with `DO_NOT_COLLECT`); read only in aggregate (Moodle's analysis page, `forms_responses_summary`); no category under 3 answers; free text summarised, never quoted.
-- `knowledge/groups/<group>/interests.md`: date, answers, themes with counts ≥ 3, school year.
+- An `interests/<group>` page (a new page type in `src/knowledgeTypes.ts`; the group is an id of `groups[]` in `workspace.json`): date (from `current_time`), answers, themes with counts ≥ 3, school year.
 - `variants:` in `.assignment.md`/`.quiz.md`: only the context changes; validator enforces same criteria, rubric, points and question types; `pedagogy-reviewer` checks difficulty; 2-4 variants plus a neutral one.
 - Delivery: "choose your context" by default; one variant per group with `restrictions` if the teacher decides; never per named student or by creating groups.
 - Reminder the first time a survey goes to a classroom: check with the school whether families must be told (model text in the guide).

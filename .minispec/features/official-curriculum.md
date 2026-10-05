@@ -18,10 +18,10 @@ Find the official curriculum of a subject (state and regional) and keep it, quot
   - asks stage (FP básica/media/superior, specialisation courses, ESO, Bachillerato), title or subject and module, region, school year; what `sources/` says isn't asked;
   - searches state law (BOE: the title's Real Decreto or minimum teachings, LO 3/2022 for FP) and the regional order or decree (BOC, BOJA, DOGC, BOCM, DOGV…), consolidated version first, checking it's in force and not replaced; the BOE open-data API to be confirmed at implementation;
   - downloads PDFs to `drafts/`, keeps originals in `sources/curriculum/`.
-- Writes `knowledge/curriculum/index.md` (each provision: type, number, date, gazette, URL, in force, date consulted; state vs regional) and `knowledge/curriculum/<module>.md` (learning outcomes and criteria verbatim with official numbering RA1, CE1a…; ESO/Bachillerato: specific competences, criteria, basic knowledge; hours; basic contents). Verbatim and summary always distinguished.
+- A `curriculum` page type (`src/knowledgeTypes.ts`, folder `curriculum/`), written with `knowledge_create`/`knowledge_edit`: `curriculum/provisions` (each provision: type, number, date, gazette, URL, in force, date consulted; state vs regional) and `curriculum/<module>` (learning outcomes and criteria verbatim with official numbering RA1, CE1a…; ESO/Bachillerato: specific competences, criteria, basic knowledge; hours; basic contents). Verbatim and summary always distinguished.
 - Never invents or completes a criterion, mixes regions, or assumes a provision is in force; if not found, says so and logs the search.
-- `teaching-plan`: "don't go looking" becomes "offer it once; use `official-curriculum` if the teacher agrees"; with `knowledge/curriculum/`, objectives and criteria use official RA/CE numbering and grading is weighted by RA.
-- `check-knowledge.mjs`: curriculum pages have URL, provision date and date consulted.
+- `teaching-plan`: "don't go looking" becomes "offer it once; use `official-curriculum` if the teacher agrees"; with `curriculum/` pages, objectives and criteria use official RA/CE numbering and grading is weighted by RA.
+- `check-knowledge.mjs`: curriculum pages have URL, provision date and date consulted (the `url`, `date` and `consulted` fields); the date consulted comes from `current_time`.
 - Glossary: RA, CE (FP sense), módulo profesional.
 
 ## Acceptance

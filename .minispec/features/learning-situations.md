@@ -8,15 +8,15 @@ Design LOMLOE learning situations (ESO, Bachillerato) and the FP intermodular pr
 
 ## Context
 
-- The plan lives in `knowledge/teaching-plan.md`; `official-curriculum` brings the provisions to `knowledge/curriculum/`.
-- No skill covers either today; region- or school-specific templates will arrive as content extensions (feature `extensions`); until then, `sources/` or `instructions.md`.
+- The plan is the `course/teaching-plan` page; `official-curriculum` brings the provisions as `curriculum/` pages.
+- No skill covers either today; region- or school-specific templates will arrive as domain extensions (ADR-020: in the official repository, a repository the teacher adds, or the workspace's own `extensions/`); until then, `sources/` or `instructions.md`.
 
 ## Changes
 
-- Skill `learning-situation`: title, context (a challenge close to the students), specific competences, criteria, basic knowledge, exit-profile descriptors, sequence of activities, resources, assessment (instruments tied to criteria), UDL. Writes `knowledge/situations/<slug>.md`, linked to the plan and the curriculum; can feed `unit-building`.
-- Skill `intermodular-project`: the challenge, the modules and RA it integrates (the whole title's curriculum through `official-curriculum`), phases, deliverables, assessment by RA of each module, coordination with the teaching team. Writes `knowledge/intermodular-project.md`.
+- Skill `learning-situation`: title, context (a challenge close to the students), specific competences, criteria, basic knowledge, exit-profile descriptors, sequence of activities, resources, assessment (instruments tied to criteria), UDL. Writes a `situation/<slug>` page (a new page type in `src/knowledgeTypes.ts`), linked to the plan and the curriculum; can feed `unit-building`.
+- Skill `intermodular-project`: the challenge, the modules and RA it integrates (the whole title's curriculum through `official-curriculum`), phases, deliverables, assessment by RA of each module, coordination with the teaching team. Writes the `course/intermodular-project` page (a new slug of the `course` type).
 - Both reviewed by `pedagogy-reviewer` before they're done.
-- `course-knowledge.md` (and the standalone prompts) name the new pages.
+- `course-knowledge.md` names the new page type and slug.
 
 ## Acceptance
 

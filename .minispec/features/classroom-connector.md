@@ -16,9 +16,9 @@ A built-in connector that publishes to and reads from Google Classroom through i
 
 ## Changes
 
-- `extensions/classroom/` and `src/extensions/classroom/`: in-process MCP over the REST APIs with `fetch` (no `googleapis`), no browser.
+- `extensions/classroom/` and `src/extensions/classroom/`: the implementation of the core's classroom tools (see `moodle-mcp`) over the REST APIs with `fetch` (no `googleapis`), in-process, no browser.
 - OAuth: loopback with PKCE; falkenslab's client and "bring your own client" (`~/.miyagi/secrets/google-client.json`), with a guide for school admins; token in `~/.miyagi/secrets/google-token.json`, never seen by the model; minimal scopes per capability, `drive.file` not `drive`.
-- Tools: read (`classroom_list_courses`, `classroom_structure`, `classroom_submissions`, `forms_responses_summary`) and publishing (`classroom_publish_material`, `classroom_publish_assignment`, `classroom_publish_quiz`, `classroom_announce`, `classroom_set_state`, `classroom_grade`).
+- The core's classroom tools implemented for Classroom (structure, submissions, grade, post, set visibility as DRAFT/PUBLISHED…), plus the extension's own: `gclassroom_list_courses` (to link a class) and `forms_responses_summary`.
 - Capabilities: full for structure, orientation, publish-notes/assignment/unit, announcements, link, staged-publishing (DRAFT), survey; partial for publish-quiz (Form linked, no grade import), submissions (own work only, no written feedback), forum, progress, restrictions; `gradebook` absent or partial.
 - Groups: native (expanded to students at publish time, never stored) or one class per group.
 - Forms exporter with its losses (numeric tolerance, matching/ordering, per-option feedback, code formatting, essay).

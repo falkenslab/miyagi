@@ -15,9 +15,12 @@ Not confirmed. Candidates, from the transcripts:
 
 ## Solution
 
+Provisional: with `moodle-mcp` (#40) every tool creates hidden by default, which fixes this at the root. Until then:
+
+
 - `unit-building`: one unit per pass — when several are asked for, finish (and show) one before starting the next, and restate the hidden-first rule at each piece.
 - `resource-authoring`, `assignment-building`, `quiz-building`: at creation, set "Availability: Hide on course page" in the same form, before the first save.
-- Consider a gate rule: a "Save and display" on a new activity's form (`course/modedit.php?add=`) without a prior approval is the pattern to flag in the panel ("se va a publicar visible una actividad nueva").
+- Consider a gate rule (dropped once the gate asks by tool name): a "Save and display" on a new activity's form (`course/modedit.php?add=`) without a prior approval is the pattern to flag in the panel ("se va a publicar visible una actividad nueva").
 
 ## Verification
 
