@@ -8,7 +8,7 @@ Add the workspace kinds `department` and `exam-prep` next to `subject` (ADR-017,
 
 ## Context
 
-- `workspace-registry` writes `kind: "subject"` in `config.json`; it's the only kind.
+- `config.json` has `kind: "subject"` (written when missing, `ensureWorkspaceDefaults()`); it's the only kind.
 - Same engine, extensions and approval; what changes is the base prompt, default skills and knowledge-base pages.
 - The interface says the kind's word in the teacher's language ("espacio de departamento", "preparación de oposición"), never "workspace".
 - Only sketched for now: redesign in detail when it starts.

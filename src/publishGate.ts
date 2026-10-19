@@ -3,7 +3,7 @@ import { t } from "./messages/index.js";
 import { MOODLE_PASSWORD_SECRET_NAME } from "./playwrightConfig.js";
 
 /**
- * The publish gate: in "guided" mode, a browser action that publishes something in Moodle only
+ * The publish gate: in "guided" mode, a browser action (or a moodle-teacher tool) that publishes something in Moodle only
  * runs if the teacher approved it just before (request_human_approval); otherwise the teacher is
  * asked right there. The approval used to be only a rule in the prompt, and a real session
  * forgot it: a File resource was visible to students for ~35 s before the agent noticed (see
@@ -30,6 +30,13 @@ interface GateHookInput {
 
 const APPROVAL_TOOL = "mcp__approvals__request_human_approval";
 const BROWSER = "mcp__playwright__browser_";
+/** moodle-teacher's tools (its local server is `moodle`), ADR-021. */
+const MOODLE = "mcp__moodle__";
+
+/** moodle-teacher's tools that only read, by their verb as moodle-mcp names them, and its session tools (signing in is the teacher's, in its window); anything else publishes. */
+const MOODLE_READS = /^(get|list)_|^browser_(snapshot|screenshot|wait)$|^(login|logout|show_browser|server_info|use_site)$/;
+/** Its tools that remove or roll back something: never covered by an approved batch. */
+const MOODLE_DESTRUCTIVE = /^(delete|remove|reset|restore)_/;
 
 /** Lowercase, without diacritics, so "Página" and "pagina" match the same pattern. */
 function norm(text: string): string {
@@ -70,6 +77,7 @@ const FORM_SAVE = /\b(save changes|guardar cambios|and display|y mostrar|return 
 const DESTRUCTIVE = [/\bdelete\b/, /\bremove\b/, /\beliminar\b/, /\bborrar\b/];
 
 export function isDestructiveAction(toolName: string, toolInput: unknown): boolean {
+  if (toolName.startsWith(MOODLE)) return MOODLE_DESTRUCTIVE.test(toolName.slice(MOODLE.length));
   if (toolName !== `${BROWSER}click`) return false;
   const input = (toolInput ?? {}) as Record<string, unknown>;
   const t = norm(`${input.element ?? ""} ${input.target ?? ""}`);
@@ -105,6 +113,7 @@ function scriptPublishes(code: string): boolean {
  * and the prompt rule still covers it.
  */
 export function isPublishAction(toolName: string, toolInput: unknown): boolean {
+  if (toolName.startsWith(MOODLE)) return !MOODLE_READS.test(toolName.slice(MOODLE.length));
   if (!toolName.startsWith(BROWSER)) return false;
   const tool = toolName.slice(BROWSER.length);
   const input = (toolInput ?? {}) as Record<string, unknown>;
@@ -129,6 +138,7 @@ export function isPublishAction(toolName: string, toolInput: unknown): boolean {
 
 function describe(toolName: string, toolInput: unknown): string {
   const input = (toolInput ?? {}) as Record<string, unknown>;
+  if (toolName.startsWith(MOODLE)) return `${toolName.slice(MOODLE.length)}: ${JSON.stringify(input).slice(0, 400)}`;
   const summary = input.element ?? input.url ?? (typeof input.function === "string" ? input.function.slice(0, 300) : undefined);
   return `${toolName.replace(BROWSER, "")}: ${String(summary ?? JSON.stringify(input).slice(0, 300))}`;
 }

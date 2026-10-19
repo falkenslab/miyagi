@@ -74,6 +74,15 @@ const CASES = [
   [pw("type"), { element: "Username or email textbox", target: "e32", text: "profesor", submit: true }, false],
   [pw("fill_form"), { fields: [{ name: "Username", type: "textbox", value: "profesor" }] }, false],
   ["mcp__approvals__request_human_approval", { summary: "Save changes" }, false],
+  // moodle-teacher's tools (ADR-021): reading never asks, anything else publishes.
+  ["mcp__moodle__get_course_structure", { courseid: 2 }, false],
+  ["mcp__moodle__list_assignments", { courseid: 2 }, false],
+  ["mcp__moodle__browser_snapshot", {}, false],
+  ["mcp__moodle__login", {}, false],
+  ["mcp__moodle__grade_submission", { assignment: 3, student: "Alumno 1", grade: 8 }, true],
+  ["mcp__moodle__create_activity", { type: "page", section: 1 }, true],
+  ["mcp__moodle__browser_click", { target: "e1" }, true],
+  ["mcp__moodle__delete_activity", { cmid: 9 }, true],
   ["Write", { file_path: "knowledge/log.md", content: "Save and display" }, false],
 ];
 
@@ -111,6 +120,7 @@ function gate(initialMode) {
     save: (extra = {}) => run("PreToolUse", { tool_name: pw("click"), tool_input: { element: "Save and display", target: "e1" }, ...extra }),
     remove: () => run("PreToolUse", { tool_name: pw("click"), tool_input: { element: "Eliminar seleccionados button", target: "f66e589" } }),
     look: () => run("PreToolUse", { tool_name: pw("click"), tool_input: { element: "Expand Feedback types", target: "e2" } }),
+    moodle: (tool) => run("PreToolUse", { tool_name: `mcp__moodle__${tool}`, tool_input: { cmid: 9 } }),
     ask: () => run("PreToolUse", { tool_name: APPROVAL, tool_input: { summary: "…" } }),
     answered: (text) => run("PostToolUse", { tool_name: APPROVAL, tool_response: { content: [{ type: "text", text }] } }),
     message: () => run("UserPromptSubmit", { prompt: "…" }),
@@ -138,6 +148,17 @@ const SCENARIOS = [
   ["interactive (the step gate asks) → not asked", async () => { const g = gate("guided"); g.mode.set("interactive"); return [decision(await g.save()), 0]; }, "none"],
   ["back to guided after Shift+Tab → asked", async () => { const g = gate("guided"); g.mode.set("interactive"); g.mode.set("guided"); nextAnswer = "n"; return [decision(await g.save()), 1]; }, "deny"],
   ["autonomous → not asked", async () => { const g = gate("autonomous"); return [decision(await g.save()), 0]; }, "none"],
+  ["moodle-teacher grade, no approval → asked", async () => { const g = gate("guided"); nextAnswer = "n"; return [decision(await g.moodle("grade_submission")), 1]; }, "deny"],
+  ["moodle-teacher read → not asked", async () => { const g = gate("guided"); return [decision(await g.moodle("get_submissions")), 0]; }, "none"],
+  ["moodle-teacher approved batch: two grades → not asked", async () => {
+    const g = gate("guided"); await g.ask(); await g.answered(APPROVED);
+    const out = [await g.moodle("grade_submission"), await g.moodle("grade_submission")].map(decision);
+    return [out.every((d) => d === "none") ? "none" : out.join(","), 0];
+  }, "none"],
+  ["moodle-teacher approved batch: a delete → still asked", async () => {
+    const g = gate("guided"); await g.ask(); await g.answered(APPROVED); nextAnswer = "n";
+    return [decision(await g.moodle("delete_activity")), 1];
+  }, "deny"],
   ["a subagent's call → not asked", async () => { const g = gate("guided"); return [decision(await g.save({ agent_id: "a1" })), 0]; }, "none"],
 ];
 

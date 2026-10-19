@@ -8,10 +8,10 @@ In the app, a teacher creates, opens and switches between their workspaces by na
 
 ## Context
 
-- `workspace-registry` gives the registry (`~/.miyagi/workspaces.json`), the default folder and the creation code; this note is the screens on top of it.
+- `src/workspaces.ts` has the registry (`~/.miyagi/workspaces.json`), the default folder and `locateWorkspace()`; `promptInitWorkspace()` the creation code (ADR-023). This note is the screens on top of them.
 - The interaction port is one per process: one workspace open at a time.
 - The mockup has a switcher in the sidebar and a "new subject" dialog.
-- Needs `gui-host`, `gui-chat` and `workspace-registry`.
+- Needs `gui-host` and `gui-chat`.
 
 ## Changes
 

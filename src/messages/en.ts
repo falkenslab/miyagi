@@ -92,6 +92,14 @@ export interface Messages {
   headerClassroom: string;
   noClassroom: string;
   connectMoodleNow: string;
+  connectingMoodleTeacher: string;
+  moodleTeacherRetry: string;
+  moodleTeacherInstallFailed: string;
+  migrateClassroomIntro: string;
+  migrateClassroomQuestion: string;
+  keptBrowser: string;
+  migratedClassroom: string;
+  moodleTeacherMissing: string;
   exploreNeedsClassroom: (dir: string) => string;
   classroomIncomplete: (dir: string) => string;
   workspaceName: string;
@@ -309,7 +317,15 @@ README.md for details.`,
   headerCourse: "course",
   headerClassroom: "classroom",
   noClassroom: "no classroom",
-  connectMoodleNow: "Connect a Moodle classroom now? (without one, miyagi helps with your teaching plan and materials, and can connect one later with \"miyagi init\")",
+  connectMoodleNow: "Connect a Moodle classroom now? miyagi installs the moodle-teacher extension and you sign in to Moodle in its window; without one, it helps with your plan and materials, and you can connect it later with \"miyagi init -w <name>\"",
+  connectingMoodleTeacher: "Connecting the classroom through moodle-teacher…",
+  moodleTeacherRetry: "The subject is saved: try again with \"miyagi init -w <name>\", or \"miyagi extension add moodle-teacher\".",
+  moodleTeacherInstallFailed: "Couldn't install or set up moodle-teacher.",
+  migrateClassroomIntro: "miyagi now works in Moodle through the moodle-teacher extension: fixed tools instead of clicking around, and you sign in in its own window instead of a saved password. This subject's classroom still uses the browser.",
+  migrateClassroomQuestion: "Move this classroom to moodle-teacher? (its saved username and password are removed from config.json)",
+  keptBrowser: "The classroom keeps using the browser. To move it later, remove \"connector\" from its config.json.",
+  migratedClassroom: "Classroom moved to moodle-teacher.",
+  moodleTeacherMissing: "This subject's classroom works through moodle-teacher, which isn't installed or is off: this session works without the classroom. \"miyagi extension add moodle-teacher\" (or \"enable\") fixes it.",
   exploreNeedsClassroom: (dir) => `${dir} has no classroom connected: there's no Moodle to explore. Connect one with "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `The classroom in ${dir}/config.json needs both "url" and "courseId".`,
   workspaceName: "Name of the subject:",

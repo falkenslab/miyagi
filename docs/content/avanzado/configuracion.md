@@ -47,14 +47,15 @@ Un ejemplo completo:
 
 | Clave | Qué es | Si falta |
 | --- | --- | --- |
-| `label` | Nombre para reconocer el curso; aparece en la cabecera del chat. | Obligatoria. `init` propone la dirección de tu Moodle y el número del curso. |
+| `label` | Nombre de la asignatura; aparece en la cabecera del chat. | Obligatoria. `init` la pide como nombre de la asignatura. |
 | `description` | Descripción libre, para ti. | Sin descripción. |
 | `url` | Dirección base de tu Moodle, sin `/course/view.php` (incluye la subcarpeta si Moodle está instalado en una). | Obligatoria. |
 | `courseId` | Número del curso, el `id` de `course/view.php?id=…`. | Obligatoria. |
-| `username` | Tu usuario de Moodle con rol de profesor. | Inicias sesión tú a mano en la ventana de Chrome cada vez. |
-| `password` | Tu contraseña de Moodle. | Igual que sin usuario. |
+| `connector` | Cómo llega miyagi a tu Moodle: `"moodle-teacher"` (la [extensión](extensiones.md), con tu sesión y sin contraseña guardada) o `"browser"` (el navegador de miyagi, como antes). | En un aula anterior, miyagi te pregunta una vez si quieres pasarla a moodle-teacher; si dices que no, guarda `"browser"`. |
+| `username` | Solo con `"browser"`: tu usuario de Moodle con rol de profesor. | Inicias sesión tú a mano en la ventana de Chrome cada vez. |
+| `password` | Solo con `"browser"`: tu contraseña de Moodle. Al pasar el aula a moodle-teacher, se borra. | Igual que sin usuario. |
 
-Sin usuario y contraseña no se puede usar `--headless` ni el modo `autonomous`, porque nadie podría iniciar sesión a mano.
+Con `"browser"`, sin usuario y contraseña no se puede usar `--headless` ni el modo `autonomous`, porque nadie podría iniciar sesión a mano. Con `"moodle-teacher"`, la sesión la guarda la extensión: inicias sesión una vez en su ventana y sirve para las siguientes.
 
 ### Sin aula
 

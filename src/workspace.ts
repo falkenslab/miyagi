@@ -36,6 +36,11 @@ export interface WorkspaceConfig {
     courseId: string;
     username?: string;
     password?: string;
+    /**
+     * How miyagi reaches it: `moodle-teacher` (the extension's tools, ADR-021) or `browser`
+     * (Playwright, as before it). Missing on a classroom from before: miyagi asks once.
+     */
+    connector?: "browser" | "moodle-teacher";
   };
   /** How the agent shows up on that course. */
   agent: {
@@ -65,6 +70,8 @@ export interface WorkspaceSessionConfig extends BaseSessionConfig {
   sourcesDir: string;
   /** A Moodle classroom is connected: the browser, the gates and the Moodle prompts exist only then. */
   hasMoodle: boolean;
+  /** The classroom is reached through moodle-teacher's tools and skills, not a browser of miyagi's own. */
+  moodleTeacher: boolean;
   moodleUrl?: string;
   moodleCourseId?: string;
   moodleUsername?: string;
@@ -259,7 +266,7 @@ export function interfaceLanguage(language: string | undefined): string | undefi
 export function toSessionConfig(
   workspaceDir: string,
   workspace: WorkspaceConfig,
-  options: { mode: Mode; kind: SessionKind; headless: boolean; migrationPending: boolean; language?: string; instructions?: string },
+  options: { mode: Mode; kind: SessionKind; headless: boolean; migrationPending: boolean; language?: string; instructions?: string; moodleTeacher?: boolean },
 ): WorkspaceSessionConfig {
   return {
     mode: options.mode,
@@ -279,6 +286,7 @@ export function toSessionConfig(
     // Only with a classroom: without one there's no Moodle password to keep from the model.
     secrets: workspace.classroom?.password ? [workspace.classroom.password] : [],
     hasMoodle: Boolean(workspace.classroom),
+    moodleTeacher: Boolean(workspace.classroom) && options.moodleTeacher === true,
     moodleUrl: workspace.classroom?.url,
     moodleCourseId: workspace.classroom?.courseId,
     moodleUsername: workspace.classroom?.username,

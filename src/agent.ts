@@ -46,7 +46,8 @@ import {
   resolveHeadless,
   resolveLanguage,
 } from "./globalConfig.js";
-import { offerPracticeRunner, promptInitWorkspace, promptMode, promptPickWorkspace } from "./menu.js";
+import { offerPracticeRunner, promptInitWorkspace, promptMigrateClassroom, promptMode, promptPickWorkspace } from "./menu.js";
+import { moodleTeacherActive } from "./classroom.js";
 import { listWorkspaces, locateWorkspace, registerWorkspace, workspaceIds } from "./workspaces.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
@@ -121,8 +122,7 @@ function positionalArgs(args: string[]): string[] {
  * "ingest" session has no browser: no Playwright server, no manual login. Neither has a
  * workspace without a classroom (ADR-013): it works on the plan and the materials only.
  */
-function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasMoodle: boolean): AgentSpec<WorkspaceSessionConfig> {
-  const hasBrowser = kind !== "ingest" && hasMoodle;
+function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasBrowser: boolean): AgentSpec<WorkspaceSessionConfig> {
   return {
     skills,
     extensions: [
@@ -220,7 +220,9 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasMoodl
 async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promise<WorkspaceConfig | { created: string }> {
   if (await workspaceExists(workspaceDir)) {
     const config = await ensureWorkspaceDefaults(workspaceDir, await readWorkspaceConfig(workspaceDir));
-    return offerPracticeRunner(workspaceDir, config, canPrompt);
+    // A classroom from before moodle-teacher: asked once whether to move it there (#43).
+    const migrated = canPrompt ? await promptMigrateClassroom(workspaceDir, config) : config;
+    return offerPracticeRunner(workspaceDir, migrated, canPrompt);
   }
   if (!process.stdin.isTTY) {
     throw new Error(t().notAWorkspace(workspaceDir));
@@ -287,12 +289,18 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     return;
   }
   await registerWorkspace(workspaceDir, workspaceLabel(workspaceDir, workspace), workspace.kind ?? "subject");
-  const classroom = workspace.classroom;
+  // Through moodle-teacher, the classroom needs it installed and on; otherwise the session works
+  // as if there were none, and says how to fix it.
+  const viaMoodleTeacher = workspace.classroom?.connector === "moodle-teacher";
+  const moodleTeacher = viaMoodleTeacher && (await moodleTeacherActive(workspaceDir));
+  if (viaMoodleTeacher && !moodleTeacher) console.log(ui.warn(t().moodleTeacherMissing));
+  const classroom = viaMoodleTeacher && !moodleTeacher ? undefined : workspace.classroom;
   if (kind === "explore" && !classroom) {
     console.log(ui.warn(t().exploreNeedsClassroom(workspaceDir)));
     return;
   }
-  const hasBrowser = kind !== "ingest" && Boolean(classroom);
+  // miyagi's own browser only for a classroom that isn't moodle-teacher's.
+  const hasBrowser = kind !== "ingest" && Boolean(classroom) && !moodleTeacher;
   const mode = await resolveMode(kind, modeFlag);
   const headless = await resolveHeadless(parseBooleanFlag(args, "--headless"), workspace.agent.headless);
   const hasCredentials = Boolean(classroom?.username && classroom?.password);
@@ -314,7 +322,9 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     migrationPending: kind === "explore" ? false : await prepareKnowledgeBase(workspaceDir),
     language: await resolveLanguage(workspace.agent.language),
     instructions: await readInstructions(workspaceDir),
+    moodleTeacher,
   });
+  if (!classroom) config.hasMoodle = false;
 
   await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
   await tagCoursePages(knowledgeDirFor(workspaceDir)); // root pages from before the knowledge_* tools
@@ -325,15 +335,13 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   async function openSession(runDir: string, run?: RunFolder) {
     if (hasBrowser) await writePlaywrightConfig(runDir, config.moodlePassword);
     // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
-    const opened = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills, config.hasMoodle), { autoCompactEnabled, run });
+    const opened = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills, hasBrowser), { autoCompactEnabled, run });
     const { options, modeControl } = opened;
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
-    // The approval before publishing, enforced (it only acts in guided). Without a browser
-    // (ingest, or no classroom) nothing can be published or uploaded.
-    if (hasBrowser) {
-      installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
-      installUploadGate(options);
-    }
+    // The approval before publishing, enforced (it only acts in guided): over the browser's
+    // clicks, or over moodle-teacher's tools. Without a classroom (or in ingest) nothing publishes.
+    if (hasBrowser || (moodleTeacher && kind !== "ingest")) installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
+    if (hasBrowser) installUploadGate(options);
     return opened;
   }
 

@@ -15,6 +15,9 @@ Keep in miyagi only the teaching practice, and let the Moodle side (tools and ho
 
 ## Changes
 
+**Step 1, done** (`src/classroom.ts`): `classroom.connector` (`moodle-teacher` or `browser`); `init` asks the subject first and the classroom last (no by default), installs or extends moodle-teacher with the site, no username or password; an old classroom is offered the move once; with moodle-teacher there's no Playwright, the publish gate covers its tools by verb (`get_`/`list_` and its session tools read, `delete_`/`remove_`/`reset_`/`restore_` always ask), and the prompts are `teacher-*-moodle-teacher.md` and `explore-moodle-teacher.md`. Left: `explore` against the sandbox once signed in, then steps 2 and 3 below.
+
+
 - Split each skill; what leaves is already in the extension:
   - Unchanged: `quiz-design`, `teaching-plan`, `teaching-methodologies`, `course-design`, `topic-research`, `practice-testing`.
   - Removed: `quiz-building` (→ `moodle-teacher:quizzes`), `moodle-navigation` (→ `moodle-teacher:read-a-course`), `scorm-packaging` (→ `moodle-teacher:scorm`; miyagi may keep its `drafts_*` for the ZIP).
@@ -23,8 +26,6 @@ Keep in miyagi only the teaching practice, and let the Moodle side (tools and ho
 - "Needs a connected Moodle classroom" becomes "Needs a connected classroom (a classroom extension installed)".
 - miyagi offers `moodle-teacher@falkenslab` in its catalogue (topic `miyagi`) and requires it to work in a classroom (`requires: ["moodle-teacher"]` or what the kit allows).
 - Remove the browser path for Moodle: Playwright MCP, `request_manual_login`, the `browser_*` labels.
-- `init` ends asking whether to connect a classroom (default no) and, if yes, installs `moodle-teacher` (`addExtension` from the official marketplace) and asks its options (sites); the chat's opening without a classroom says how.
-- `config.json`'s `classroom` migrated: its URL becomes moodle-teacher's `sites`, its password dropped (moodle-teacher signs in through a window).
 - Docs: "Conectar tu aula" (installing moodle-teacher).
 - moodle-teacher 0.2.10 (moodle-mcp 0.4.1) installs with `miyagi extension add moodle-teacher`; 0.2.9 didn't, because moodle-mcp listed bundled packages in `dependencies` (falkenslab/moodle-mcp#48).
 
