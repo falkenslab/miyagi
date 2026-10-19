@@ -78,7 +78,7 @@ function classroomOf(answers: WizardAnswers, label: string, description: string)
 }
 
 /** Installs or extends moodle-teacher for the classroom; a failure leaves the workspace as it is and says how to retry. */
-async function connectClassroom(workspaceDir: string, url: string): Promise<void> {
+export async function connectClassroom(workspaceDir: string, url: string): Promise<void> {
   console.log(ui.dim(t().connectingMoodleTeacher));
   try {
     await connectMoodleTeacher(workspaceDir, url);

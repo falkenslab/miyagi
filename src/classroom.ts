@@ -32,11 +32,22 @@ export async function moodleTeacherActive(workspaceDir: string): Promise<boolean
   return (await enabledExtensions(workspaceDir)).some((ext) => ext.name === MOODLE_TEACHER);
 }
 
-/** The kit's `extension` command, as `miyagi extension …` runs it; throws when it fails. */
+/**
+ * The kit's `extension` command, as `miyagi extension …` runs it; throws when it fails. It never
+ * asks: an option not given keeps its default (the kit's own prompt would read the terminal under
+ * miyagi's wizard, and stop it).
+ */
 async function extensionCommand(workspaceDir: string | undefined, args: string[]): Promise<void> {
   const before = process.exitCode;
   process.exitCode = undefined;
-  await runExtensionCommand(["extension", ...args], { dirs: extensionDirsFor(workspaceDir), command: "miyagi", official: OFFICIAL_MARKETPLACE, catalogTopics: CATALOG_TOPICS });
+  await runExtensionCommand(["extension", ...args], {
+    dirs: extensionDirsFor(workspaceDir),
+    command: "miyagi",
+    official: OFFICIAL_MARKETPLACE,
+    catalogTopics: CATALOG_TOPICS,
+    ask: async () => "",
+    askSecret: async () => "",
+  });
   const failed = process.exitCode === 1;
   process.exitCode = before;
   if (failed) throw new Error(t().moodleTeacherInstallFailed);

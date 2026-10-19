@@ -7,7 +7,7 @@ import { runSession } from "./agent.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
 import { CATALOG_TOPICS, extensionDirsFor, OFFICIAL_MARKETPLACE } from "./extensions.js";
 import { globalConfigPath, migrateLegacyGlobalConfig, resolveLanguage } from "./globalConfig.js";
-import { promptConnectClassroom, promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
+import { connectClassroom, promptConnectClassroom, promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
 import { chooseInterfaceLanguage, t } from "./messages/index.js";
 import { applyTeacherTheme } from "./theme.js";
 import { interfaceLanguage, readWorkspaceConfig, workspaceExists, workspaceLabel } from "./workspace.js";
@@ -32,9 +32,16 @@ async function initCommand(args: string[]): Promise<void> {
   if (located && (await workspaceExists(located))) {
     // A workspace without a classroom can connect one later (ADR-013); one with a classroom is done.
     const existing = await readWorkspaceConfig(located);
-    if (existing.classroom) throw new Error(t().alreadyWorkspace(located));
     workspaceDir = located;
-    config = await promptConnectClassroom(workspaceDir, existing);
+    if (existing.classroom?.connector === "moodle-teacher") {
+      // Connected through moodle-teacher: connect it again (installs it, adds the site if missing), then explore.
+      config = existing;
+      await connectClassroom(workspaceDir, existing.classroom.url);
+    } else if (existing.classroom) {
+      throw new Error(t().alreadyWorkspace(located));
+    } else {
+      config = await promptConnectClassroom(workspaceDir, existing);
+    }
     await registerWorkspace(workspaceDir, workspaceLabel(workspaceDir, config), config.kind ?? "subject");
   } else {
     ({ dir: workspaceDir, config } = await promptInitWorkspace(located));
