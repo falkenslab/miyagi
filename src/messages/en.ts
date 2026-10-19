@@ -20,6 +20,7 @@ export interface Messages {
   exploreFailed: (reason: string) => string;
   catalogBuiltin: string;
   catalogCustom: string;
+  catalogExtension: (name: string) => string;
   skillsTitle: (dir: string) => string;
   commandsTitle: (dir: string) => string;
   unknownCommand: (command: string) => string;
@@ -191,6 +192,10 @@ Commands:
       (<workspace>/.claude/skills/).
   commands [--dir <path>]
       Lists the slash commands you can use inside "chat".
+  extension <list|info|add|remove|enable|disable|config|update|search|marketplace> [--dir <path>] [--project]
+      Installs and manages extensions, from Falken's Lab's official repository or one you
+      add: for every subject (~/.miyagi/extensions) or, with --project, only this one.
+      "miyagi extension" alone explains each subcommand.
 
 Options:
   -h, --help         Shows this help.
@@ -210,6 +215,7 @@ details.`,
   exploreFailed: (reason) => `Couldn't explore the Moodle (${reason}). The workspace is created; you can try again with "miyagi explore".`,
   catalogBuiltin: "[built-in]",
   catalogCustom: "[own]",
+  catalogExtension: (name) => `[${name}]`,
   skillsTitle: (dir) => `Skills available in ${dir}`,
   commandsTitle: (dir) => `Commands available in ${dir} (inside "chat")`,
   unknownCommand: (command) => `Unknown command "${command}". Use miyagi --help.`,

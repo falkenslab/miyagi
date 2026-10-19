@@ -17,7 +17,7 @@
 
 ## Consequences
 
-- Needs agent-kit 0.19 or later (the controller): after the kit upgrade of `extensions`.
+- Needs agent-kit 0.19 or later (the controller): miyagi is on 0.25.
 - The host keeps ADR-026's rules: `127.0.0.1` only, the token, one person at a time, the modes and their gates unchanged; a strict CSP; no navigation or new windows out of its origin.
 - The interaction port is one per process: one open subject (workspace) at a time per app.
 - Windows first (NSIS installer, unsigned at first, SmartScreen warns); macOS and Linux later. A download of ~200–300 MB.

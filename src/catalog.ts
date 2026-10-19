@@ -1,7 +1,8 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { knowledgePluginRoot } from "@falkenslab/agent-kit";
+import { knowledgePluginRoot, type InstalledExtension } from "@falkenslab/agent-kit";
+import { enabledExtensions } from "./extensions.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pluginDir = path.join(__dirname, "..", "plugin");
@@ -16,7 +17,9 @@ const KIT_KNOWLEDGE_NAMESPACE = "knowledge";
 export interface CatalogEntry {
   name: string;
   description?: string;
-  origin: "builtin" | "custom";
+  origin: "builtin" | "custom" | "extension";
+  /** The extension it comes from, for `origin: "extension"`. */
+  extension?: string;
 }
 
 /** Reads `key:` from a markdown file's leading `---` frontmatter block — single-line values only. */
@@ -82,6 +85,7 @@ export async function listSkills(workspaceDir: string): Promise<CatalogEntry[]> 
     ...(await readSkills(path.join(pluginDir, "skills"), "builtin")),
     ...(await readSkills(path.join(kitKnowledgeDir, "skills"), "builtin")),
     ...(await readSkills(path.join(workspaceDir, ".claude", "skills"), "custom")),
+    ...(await extensionEntries(workspaceDir, (ext) => readSkills(path.join(ext.dir, "skills"), "extension"), (ext, s) => `${ext.manifest!.name}:${s.name}`)),
   ];
 }
 
@@ -104,5 +108,19 @@ export async function listCommands(workspaceDir: string): Promise<CatalogEntry[]
     ...(await readCommands(path.join(pluginDir, "commands"), "builtin", `${PLUGIN_NAMESPACE}:`)),
     ...(await readCommands(path.join(kitKnowledgeDir, "commands"), "builtin", `${KIT_KNOWLEDGE_NAMESPACE}:`)),
     ...(await readCommands(path.join(workspaceDir, ".claude", "commands"), "custom", "")),
+    ...(await extensionEntries(workspaceDir, (ext) => readCommands(path.join(ext.dir, "commands"), "extension", `${ext.manifest!.name}:`), (_ext, c) => c.name)),
   ];
+}
+
+/** One extension's skills or commands, tagged with it; the kit offers them in the session by itself. */
+async function extensionEntries(
+  workspaceDir: string,
+  read: (ext: InstalledExtension) => Promise<CatalogEntry[]>,
+  name: (ext: InstalledExtension, entry: CatalogEntry) => string,
+): Promise<CatalogEntry[]> {
+  const entries: CatalogEntry[] = [];
+  for (const ext of await enabledExtensions(workspaceDir)) {
+    for (const entry of await read(ext)) entries.push({ ...entry, name: name(ext, entry), extension: ext.manifest!.name });
+  }
+  return entries;
 }

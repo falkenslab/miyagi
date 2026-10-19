@@ -12,7 +12,7 @@ Test a practice (a statement, its solution, a student's submission) with the `do
 - docker-lab 0.1.x is in agent-extensions with docker-mcp 0.1.0 and two neutral capabilities: `sandbox` (skills `try-in-a-lab`, `build-a-lab`: a folder with `compose.yaml` and optionally `lab.json` with its check) and `run-and-verify` (skill `verify-by-running`: a verdict with the commands, exit codes and literal output; never a mark).
 - docker-mcp enforces the policy when a lab starts (no internet unless allowed, no mount outside the lab's folder, never the Docker socket, CPU, memory and process limits, no new privileges) and refuses a lab that breaks it.
 - `run_container` can't limit or isolate a single container yet (falkenslab/docker-mcp#6): everything isolated goes through a lab.
-- Needs `extensions` (the kit's extensions in miyagi).
+- The kit's extensions are wired in miyagi (`miyagi extension`, `/extensions`), so docker-lab installs from the official repository.
 
 ## Changes
 

@@ -10,7 +10,7 @@ A local server (`src/host/`) that runs a miyagi chat through agent-kit's chat co
 
 - Today `chat` runs `runChatInk()` (`src/agent.ts`) and signs in with `ensureClaudeAuthPersisted()` (`src/globalConfig.ts`), which offers `claude setup-token` in a terminal.
 - agent-kit 0.19+ has `createChatController(opener, { runsDir, historyPath, panels: "state" })`: `getState()`, `subscribe()`, `send`, `interrupt`, `setMode`, `answer`, `choose`, `listRuns`, `resume`, `newConversation`, the extension actions, `setLanguage`, `api("sources")`. Captain Whiskers' `web/server.ts` (343 lines) is the model.
-- Needs the kit upgrade (`extensions`, first step).
+- miyagi is on agent-kit 0.25, which has the controller.
 
 ## Changes
 

@@ -2,9 +2,10 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { isExitPromptError, ui } from "@falkenslab/agent-kit";
+import { isExitPromptError, runExtensionCommand, ui } from "@falkenslab/agent-kit";
 import { resolveWorkspaceDir, runSession } from "./agent.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
+import { CATALOG_TOPICS, extensionDirsFor, OFFICIAL_MARKETPLACE } from "./extensions.js";
 import { globalConfigPath, migrateLegacyGlobalConfig, resolveLanguage } from "./globalConfig.js";
 import { promptConnectClassroom, promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
 import { chooseInterfaceLanguage, t } from "./messages/index.js";
@@ -49,7 +50,7 @@ async function initCommand(args: string[]): Promise<void> {
 function printCatalog(title: string, entries: CatalogEntry[]): void {
   console.log(ui.heading(title));
   for (const entry of entries) {
-    const origin = ui.dim(entry.origin === "builtin" ? t().catalogBuiltin : t().catalogCustom);
+    const origin = ui.dim(entry.origin === "builtin" ? t().catalogBuiltin : entry.origin === "extension" ? t().catalogExtension(entry.extension ?? "") : t().catalogCustom);
     const description = entry.description ? ` — ${entry.description}` : "";
     console.log(`- ${entry.name} ${origin}${description}`);
   }
@@ -63,6 +64,23 @@ async function skillsCommand(args: string[]): Promise<void> {
 async function commandsCommand(args: string[]): Promise<void> {
   const workspaceDir = resolveWorkspaceDir(args);
   printCatalog(t().commandsTitle(workspaceDir), await listCommands(workspaceDir));
+}
+
+/**
+ * agent-kit's `extension` command (list, add, remove, enable, disable, config, update, search,
+ * marketplace…) on the agent's scope and, when --dir (or the current directory) is a workspace,
+ * on its own. Without a workspace, `--project` has nowhere to go and the kit says so.
+ */
+async function extensionCommand(argv: string[]): Promise<void> {
+  const workspaceDir = resolveWorkspaceDir(argv);
+  const dirIndex = argv.indexOf("--dir");
+  const kitArgs = dirIndex >= 0 ? [...argv.slice(0, dirIndex), ...argv.slice(dirIndex + 2)] : argv;
+  await runExtensionCommand(kitArgs, {
+    dirs: extensionDirsFor((await workspaceExists(workspaceDir)) ? workspaceDir : undefined),
+    command: "miyagi",
+    official: OFFICIAL_MARKETPLACE,
+    catalogTopics: CATALOG_TOPICS,
+  });
 }
 
 /**
@@ -110,6 +128,8 @@ async function main(): Promise<void> {
       return skillsCommand(rest);
     case "commands":
       return commandsCommand(rest);
+    case "extension":
+      return extensionCommand(process.argv.slice(2));
     case undefined:
       return runSession(await promptRunKind(), []);
     default:

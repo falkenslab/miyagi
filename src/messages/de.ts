@@ -29,6 +29,10 @@ Befehle:
       Arbeitsbereichs (<workspace>/.claude/skills/).
   commands [--dir <Pfad>]
       Listet die Slash-Befehle auf, die im "chat" nutzbar sind.
+  extension <list|info|add|remove|enable|disable|config|update|search|marketplace> [--dir <Pfad>] [--project]
+      Installiert und verwaltet Erweiterungen aus dem offiziellen Repository von Falken's Lab
+      oder einem eigenen: für alle Fächer (~/.miyagi/extensions) oder, mit --project, nur für dieses.
+      "miyagi extension" allein erklärt jeden Unterbefehl.
 
 Optionen:
   -h, --help         Zeigt diese Hilfe.
@@ -49,6 +53,7 @@ Mehr in README.md.`,
   exploreFailed: (reason) => `Das Moodle konnte nicht erkundet werden (${reason}). Der Arbeitsbereich ist angelegt; Sie können es mit "miyagi explore" erneut versuchen.`,
   catalogBuiltin: "[eingebaut]",
   catalogCustom: "[eigene]",
+  catalogExtension: (name) => `[${name}]`,
   skillsTitle: (dir) => `Verfügbare Fähigkeiten in ${dir}`,
   commandsTitle: (dir) => `Verfügbare Befehle in ${dir} (im "chat")`,
   unknownCommand: (command) => `Unbekannter Befehl "${command}". Nutzen Sie miyagi --help.`,

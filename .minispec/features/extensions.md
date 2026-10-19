@@ -14,7 +14,6 @@ Use agent-kit's extensions (ADR-021): a teacher installs, updates and turns off 
 
 ## Changes
 
-- `extensionDirs`: agent scope `~/.miyagi/extensions/`, project scope `<workspace>/extensions/` (their folders readable to the agent); `officialMarketplace` = agent-extensions; `catalogTopics: ["miyagi"]`.
 - `miyagi extension …` subcommand through `runExtensionCommand()`; `/extensions` in both chats.
 - `catalog.ts` and `sessionSkills()` read the enabled extensions too.
 - `init` ends asking whether to connect a classroom (default no) and, if yes, installs `moodle-teacher` and asks its options (sites); the chat's opening without a classroom says how.

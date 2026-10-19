@@ -13,6 +13,7 @@ Esta sección es para quien quiere entender o adaptar miyagi: profesores curioso
 - **El modelo.** miyagi es un agente sobre el [Claude Agent SDK](https://www.npmjs.com/package/@anthropic-ai/claude-agent-sdk): el razonamiento lo hace Claude, con tu suscripción.
 - **agent-kit.** La base común ([`@falkenslab/agent-kit`](https://www.npmjs.com/package/@falkenslab/agent-kit)) aporta lo que todo agente necesita: los modos de supervisión, las aprobaciones, el inicio de sesión manual, la base de conocimiento, el límite de carpetas en las que puede escribir, el chat de la terminal y el registro de cada sesión.
 - **Playwright MCP y Chrome.** Para trabajar en Moodle, miyagi arranca el servidor [Playwright MCP](https://github.com/microsoft/playwright-mcp), que maneja el Google Chrome instalado en tu ordenador: abre páginas, lee su estructura, pulsa botones y rellena formularios, como lo harías tú.
+- **Extensiones.** Lo que miyagi no trae de serie se le añade con [extensiones](extensiones.md) del repositorio oficial de Falken's Lab, para todas tus asignaturas o solo para una.
 - **El dominio de Moodle.** Lo que miyagi sabe del oficio de profesor está en archivos de texto: las instrucciones de sistema en [`prompts/`](https://github.com/falkenslab/miyagi/tree/main/prompts) y las habilidades y atajos en [`plugin/`](https://github.com/falkenslab/miyagi/tree/main/plugin).
 
 ```text
@@ -20,7 +21,7 @@ miyagi (CLI)
  ├─ carpeta del curso: config.json, instructions.md, .claude/
  └─ sesión (agent-kit + Claude Agent SDK)
      ├─ instrucciones de sistema (prompts/system/*.md + instructions.md)
-     ├─ habilidades y atajos (plugin/, el plugin de conocimiento de agent-kit, .claude/ del curso)
+     ├─ habilidades y atajos (plugin/, el plugin de conocimiento de agent-kit, .claude/ del curso, extensiones)
      ├─ herramientas de archivos: escriben solo en drafts/ y practice/ (sources/ solo lectura)
      ├─ herramientas knowledge_* de agent-kit: lo único que llega a knowledge/
      ├─ herramientas de fuentes de agent-kit: list_sources, extract_text, save_to_sources…

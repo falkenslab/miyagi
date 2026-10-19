@@ -2,7 +2,7 @@
 
 ## Workspace (aula)
 
-A folder with one course's `config.json`, `.env`, `sources/`, `knowledge/`, `sessions/` and optionally `practice/`. Same shape as a moodle-agent teacher aula.
+A folder with one course's `config.json`, `.env`, `sources/`, `knowledge/`, `sessions/`, optionally `practice/`, and `extensions/` when it has extensions of its own. Same shape as a moodle-agent teacher aula.
 
 ## Sources
 
@@ -39,3 +39,11 @@ Opt-in subagent that runs hands-on practices in Docker inside `practice/`.
 ## Sandbox
 
 The local Moodle from the `moodle-sandbox` repo, used for end-to-end tests.
+
+## Extension
+
+A Claude Code plugin installed through agent-kit (ADR-021): skills, commands and MCP servers, from the official repository `falkenslab/agent-extensions` or one the teacher added, for every subject (`~/.miyagi/extensions/`) or one (`<workspace>/extensions/`, only its lock).
+
+## Capability
+
+What an extension lets miyagi do (`provides`), named neutrally (`sandbox`, `lms-grading`); a skill that `requires:` one is offered only when an enabled extension provides it.

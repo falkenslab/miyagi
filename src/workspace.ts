@@ -4,6 +4,7 @@ import type { BaseSessionConfig, Mode } from "@falkenslab/agent-kit";
 import { t } from "./messages/index.js";
 import { DEFAULT_DRAFTS_LIMITS, type DraftsLimits } from "./drafts/files.js";
 import { secretFilePaths, sensitivePaths } from "./globalConfig.js";
+import { CATALOG_TOPICS, extensionDirsFor, OFFICIAL_MARKETPLACE } from "./extensions.js";
 
 export type AgentPersona = "formal" | "warm" | "motivating";
 
@@ -262,6 +263,10 @@ export function toSessionConfig(
     projectDir: workspaceDir,
     knowledgeDir: knowledgeDirFor(workspaceDir),
     sourcesDir: sourcesDirFor(workspaceDir),
+    // agent-kit's extensions (ADR-021): `/extensions` in the chats, their skills and tools.
+    extensionDirs: extensionDirsFor(workspaceDir),
+    officialMarketplace: OFFICIAL_MARKETPLACE,
+    catalogTopics: CATALOG_TOPICS,
     extraWritableDirs: [draftsDirFor(workspaceDir), ...(workspace.agent.allowPracticeRunner ? [practiceDirFor(workspaceDir)] : [])],
     // The password lives in config.json and the Claude token may live in .env, in the global
     // config or in the SDK's credentials (ADR-004); other credentials in well-known places.

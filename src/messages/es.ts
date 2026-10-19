@@ -29,6 +29,10 @@ Comandos:
       (<workspace>/.claude/skills/).
   commands [--dir <ruta>]
       Lista los comandos de barra que se pueden usar dentro de "chat".
+  extension <list|info|add|remove|enable|disable|config|update|search|marketplace> [--dir <ruta>] [--project]
+      Instala y gestiona extensiones, del repositorio oficial de Falken's Lab o de uno que
+      añadas: para todas las asignaturas (~/.miyagi/extensions) o, con --project, solo para esta.
+      "miyagi extension" a secas explica cada subcomando.
 
 Opciones:
   -h, --help           Muestra esta ayuda.
@@ -49,6 +53,7 @@ detalle.`,
   exploreFailed: (reason) => `No se pudo explorar el Moodle (${reason}). El workspace está creado; puedes reintentarlo con "miyagi explore".`,
   catalogBuiltin: "[incorporada]",
   catalogCustom: "[propia]",
+  catalogExtension: (name) => `[${name}]`,
   skillsTitle: (dir) => `Habilidades disponibles en ${dir}`,
   commandsTitle: (dir) => `Comandos disponibles en ${dir} (dentro de "chat")`,
   unknownCommand: (command) => `Comando desconocido "${command}". Usa miyagi --help.`,

@@ -11,7 +11,7 @@ A view where the teacher sees what miyagi can do (capabilities), installs, confi
 - The controller has the actions: `extensionCatalog`, `installExtension` (with `confirmed`), `updateExtension`, `removeExtension` (with `deleteData`), `setExtension` (on/off), `extensionOptions`, `setExtensionOptions`, `extensionImage`, `signInExtension`, `trustWorkspace`; `state.extensions` lists the active ones with their capabilities and what's unavailable.
 - Captain Whiskers' drawer is the model (installed, catalog with logos and search, a confirmation for a foreign marketplace, options as a form).
 - The mockup's tabs: installed, catalog, repositories, capabilities.
-- Needs `extensions` (the kit's extensions in miyagi) and `gui-chat`.
+- Needs `gui-chat`; the kit's extensions are already wired in miyagi (`src/extensions.ts`).
 
 ## Changes
 

@@ -19,6 +19,7 @@ description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, 
 | `miyagi ingest <archivos…>` | Incorpora solo esos documentos. |
 | `miyagi skills` | Lista sus habilidades, incluidas las tuyas (marcadas `[propia]`). |
 | `miyagi commands` | Lista los atajos del chat, incluidos los tuyos. |
+| `miyagi extension …` | Instala, configura, activa o quita [extensiones](../avanzado/extensiones.md): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
 | `miyagi --help` | Muestra la ayuda con todas las órdenes y opciones. |
 | `miyagi --version` | Muestra la versión instalada. |
 
@@ -58,6 +59,7 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat`. Si 
 | `/knowledge:lint` | Revisa que sus apuntes estén completos y bien enlazados. |
 | `/plan` | Entra en el modo plan (te propone un plan sin cambiar nada) o, si ya estás en él, vuelve al modo de antes. |
 | `/resume` | Elige una conversación anterior para retomarla. |
+| `/extensions` | Muestra con qué extensiones trabaja la sesión, y las activa o desactiva. |
 | `/copy` | Copia su última respuesta. |
 | `/exit` | Cierra la sesión. |
 

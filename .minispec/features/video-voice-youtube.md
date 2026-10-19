@@ -8,7 +8,7 @@ Official tool extensions that turn a step-by-step script into a narrated video w
 
 ## Context
 
-- Needs `extensions`; it ships as an extension in agent-extensions, and links the video in the classroom through the installed classroom extension.
+- It ships as an extension in agent-extensions, and links the video in the classroom through the installed classroom extension.
 - Only sketched for now: redesign in detail when it starts.
 
 ## Changes

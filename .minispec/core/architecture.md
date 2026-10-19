@@ -6,6 +6,7 @@
 cli.ts → workspace config → toSessionConfig() → AgentSpec (agent.ts) → agent-kit runQuery() + createProgressView() / runChatInk()
                                                     ├─ system prompt (prompts/system/*.md)
                                                     ├─ plugin/ skills + commands, agent-kit knowledge plugin
+                                                    ├─ installed extensions (agent-kit's: ~/.miyagi/extensions, <workspace>/extensions)
                                                     ├─ Playwright MCP → Moodle
                                                     └─ subagents: researcher, pedagogy-reviewer, practice-runner (opt-in)
 ```
@@ -22,7 +23,8 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 - `src/menu.ts` — the `init` wizard (practice-runner opt-in saved as explicit true/false), `offerPracticeRunner()`, run-kind and mode prompts.
 - `src/workspace.ts` — `config.json` schema (a moodle-agent teacher aula; `agent.role: "student"` rejected), paths, `toSessionConfig()`, legacy migration, `interfaceLanguage()` (agent-kit's interface language from `agent.language`; unknown → the system's).
 - `src/globalConfig.ts` — `~/.miyagi/config.json` (token, `defaultHeadless`, `defaultLanguage`, `autoCompactEnabled`) and the workspace `.env`.
-- `src/catalog.ts` — skill and command listing for the `skills`/`commands` subcommands, and the session's `AgentSpec.skills` (this plugin's and the workspace's; the SDK's own left out).
+- `src/extensions.ts` — miyagi's policy on agent-kit's extensions (ADR-021): the two scopes, the official marketplace (`falkenslab/agent-extensions`), the catalog topic `miyagi`; `miyagi extension` is the kit's `runExtensionCommand()` and `/extensions` the kit's chat command.
+- `src/catalog.ts` — skill and command listing for the `skills`/`commands` subcommands (the enabled extensions' too), and the session's `AgentSpec.skills` (this plugin's and the workspace's; the SDK's own left out, the kit adds the extensions').
 - `src/systemPrompt.ts` — assembles the prompt: teacher-run / teacher-chat / teacher-ingest / explore plus conditional sections.
 - `src/playwrightConfig.ts` — the `@playwright/mcp` config; its `secrets` map keeps the Moodle password away from the model.
 - `src/toolLabels.ts` — `browser_*` labels on top of agent-kit's `createFriendlyToolLabel()` (a `browser_evaluate` call by what its code does, `classifyEvaluate()`), and `toolPhrase()` for folded tool groups.
