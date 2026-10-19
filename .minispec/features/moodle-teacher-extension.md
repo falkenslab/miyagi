@@ -4,14 +4,14 @@ Issue: [#43](https://github.com/falkenslab/miyagi/issues/43)
 
 ## Goal
 
-Keep in miyagi only the teaching practice, and let the Moodle side (tools and how to use them well) come from the extension `moodle-teacher@falkenslab` of agent-kit-extensions, which brings moodle-mcp and its `moodle-teacher:*` skills.
+Keep in miyagi only the teaching practice, and let the Moodle side (tools and how to use them well) come from the extension `moodle-teacher@falkenslab` of agent-extensions, which brings moodle-mcp and its `moodle-teacher:*` skills.
 
 ## Context
 
 - The skills in `plugin/skills/` mix teaching judgement (how to design a question, when to step into a forum, what makes a good rubric) with Moodle mechanics (`mod/assign/view.php` URLs, TinyMCE, each form's settings, Moodle 5's question bank).
-- That Moodle side is written for the browser. moodle-mcp 0.3.0 has tools for almost all of it (`grade_submission`, `import_questions`, `create_activity`, `get_completion_report`…), and the extension already rewrote those instructions around them. Keeping both gives the agent two skills with different instructions for the same thing.
+- That Moodle side is written for the browser. moodle-mcp 0.4.0 has tools for almost all of it (`grade_submission`, `import_questions`, `create_activity`, `get_completion_report`…), and the extension already rewrote those instructions around them. Keeping both gives the agent two skills with different instructions for the same thing.
 - Students have their own extension, `moodle-student`, installed by padawan (falkenslab/padawan#1).
-- **Clashes with** `moodle-mcp` (#40: core `classroom_*` tools, Moodle in-process, no MCP server) and `extensions` (#33: Moodle as a built-in extension in this repo, `moodle:*` skills). Decide whether those notes are dropped or kept only for what this one doesn't cover, before implementing.
+- Decided in ADR-021: this replaces the in-process Moodle and the `classroom_*` tools of the dropped `moodle-mcp` note. Needs `extensions` (the kit's extensions in miyagi).
 
 ## Changes
 

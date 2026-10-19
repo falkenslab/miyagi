@@ -9,7 +9,7 @@ Design LOMLOE learning situations (ESO, Bachillerato) and the FP intermodular pr
 ## Context
 
 - The plan is the `course/teaching-plan` page; `official-curriculum` brings the provisions as `curriculum/` pages.
-- No skill covers either today; region- or school-specific templates will arrive as domain extensions (ADR-020: in the official repository, a repository the teacher adds, or the workspace's own `extensions/`); until then, `sources/` or `instructions.md`.
+- No skill covers either today; region- or school-specific templates will arrive as extensions (ADR-021: in agent-extensions, a marketplace the teacher adds, or the workspace's own `extensions/`); until then, `sources/` or `instructions.md`.
 
 ## Changes
 

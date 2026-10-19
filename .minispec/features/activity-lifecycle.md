@@ -16,7 +16,7 @@ New or complex activities go through four phases (a plan agreed with the teacher
 
 ## Changes
 
-- `AgentSpec.planMode` in `src/agent.ts`: plan files `drafts/*/plan.md`; read-only tools: the knowledge base's reading tools, `drafts_list`/`drafts_info`, and the classroom's read tools (the browser's snapshot today, the Moodle extension's read tools with `moodle-mcp`).
+- `AgentSpec.planMode` in `src/agent.ts`: plan files `drafts/*/plan.md`; read-only tools: the knowledge base's reading tools, `drafts_list`/`drafts_info`, and the classroom's read tools (the browser's snapshot today, moodle-teacher's read tools with `moodle-teacher-extension`).
 - Skill `activity-lifecycle` (the building skills point to it for new or complex activities):
   1. **Plan**, in plan mode: `drafts/<slug>/plan.md` with objectives and the criteria it serves, what students do and produce, how it's assessed, the classroom pieces and settings, materials, timing, risks. Iterated with the teacher; `pedagogy-reviewer` reviews it and its critique is addressed or answered in the plan. `present_plan` → approval to build.
   2. **Build** in `materials/` and `drafts/<slug>/`; then compare what was built with `plan.md`, point by point, saying what differs and why. Approval to upload.

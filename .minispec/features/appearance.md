@@ -12,8 +12,8 @@ Let the teacher pick a visual style for what miyagi publishes (assignment statem
 - moodle-ui-kit (noeper, CC0 1.0, no dependencies, about 22 kB) has templates with all styles inline: activity (Objective / Statement / Deliverable), code block, feedback, quiz question and question feedback. Inline because many regional Moodles don't allow CSS in statements or theme changes.
 - As it is, it breaks `publish-check`'s accessibility rules: bold `<p>` instead of headings, emojis read aloud inside titles, and a fixed white background, `#4174c0` and `Arial` that override the course theme.
 - With `neutral-materials`, the core turns Markdown into accessible HTML: that exporter, code and not the model, is where a style is applied.
-- A style is a domain extension (ADR-020): the official ones in the official repository, a school's in a repository the teacher adds, the teacher's own in the workspace's `extensions/`.
-- Unknown until `moodle-mcp`: whether the editor keeps inline `style` when the HTML is sent by POST instead of typed through the editor.
+- A style is an extension (ADR-021): the official ones in agent-extensions, a school's in a marketplace the teacher adds, the teacher's own in the workspace's `extensions/`.
+- Unknown until `moodle-teacher-extension`: whether the editor keeps inline `style` when the HTML is sent by POST instead of typed through the editor.
 
 ## Changes
 

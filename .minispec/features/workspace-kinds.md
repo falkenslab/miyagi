@@ -8,7 +8,7 @@ Add the workspace kinds `departamento` and `oposicion` next to `materia` (ADR-01
 
 ## Context
 
-- `kind: "materia"` exists since `extensions`; it's the only kind.
+- There's no `kind` yet: every workspace is a subject. `workspace.json` was dropped (ADR-021); the kind goes in `config.json`.
 - Same engine, extensions and approval; what changes is the base prompt, default skills and knowledge-base pages.
 - Only sketched for now: redesign in detail when it starts.
 

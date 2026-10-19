@@ -15,7 +15,7 @@ Not confirmed. Candidates, from the transcripts:
 
 ## Solution
 
-Provisional: with `moodle-mcp` (#40) every tool creates hidden by default, which fixes this at the root. Until then:
+Provisional: with moodle-teacher (`moodle-teacher-extension`, #43) publishing goes through its `publishing` skill, hidden first, which fixes this at the root. Until then:
 
 
 - `unit-building`: one unit per pass — when several are asked for, finish (and show) one before starting the next, and restate the hidden-first rule at each piece.

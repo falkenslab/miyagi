@@ -8,7 +8,7 @@ Give miyagi skills to assess by criteria, attend to diversity, write reports and
 
 ## Context
 
-- They were proposed as skill-only extensions in agent-kit-extensions (falkenslab/agent-kit-extensions#15), but they're the teaching craft: what miyagi knows. Extensions bring what miyagi lacks (platforms, official data, file formats, tools); the judgement to teach and assess is miyagi's.
+- They were proposed as skill-only extensions in agent-extensions (falkenslab/agent-kit-extensions#15), but they're the teaching craft: what miyagi knows. Extensions bring what miyagi lacks (platforms, official data, file formats, tools); the judgement to teach and assess is miyagi's.
 - Today `rubric-design` and `grading-rubric` grade by activity; nothing traces a mark to its evaluation criterion, and there's no skill for diversity, reports or a question bank across courses.
 - They lean on extensions that are being built elsewhere: `normativa-es` (official criteria, falkenslab/agent-kit-extensions#3), `documentos` (`.docx` with a template, falkenslab/agent-kit-extensions#5), and a classroom extension (`moodle-teacher`, see `moodle-teacher-extension`).
 
