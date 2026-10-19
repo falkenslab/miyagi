@@ -12,7 +12,7 @@ description: "Consejos para sacarle partido a miyagi y qué hacer cuando algo no
 - **Dale tu material.** Una rúbrica en `sources` vale más que diez explicaciones en el chat.
 - **Sé concreto.** *«Corrige la Tarea 2 de 1.º A»* mejor que *«corrige lo de la semana pasada»*.
 - **Rechazar también enseña.** Si dices que no a algo, explícale por qué.
-- **Mira la ventana de Chrome** las primeras veces: ves exactamente lo que hace.
+- **Lee bien cada permiso** las primeras veces: el resumen te dice exactamente qué va a cambiar en Moodle.
 - **Una carpeta por curso**, y no mezcles cursos en la misma.
 
 ## Si algo falla
@@ -21,11 +21,11 @@ description: "Consejos para sacarle partido a miyagi y qué hacer cuando algo no
 | --- | --- |
 | La terminal no reconoce `miyagi` | Cierra y abre la terminal. Comprueba `node --version` (tiene que ser 20 o más) y repite la instalación. |
 | Dice que aquí no hay ninguna asignatura | Estás fuera de la carpeta de una asignatura. Añade `-w <nombre>` a la orden (`miyagi workspaces` te da los nombres), o usa `miyagi` a secas para elegirla. |
-| Se queda en la pantalla de inicio de sesión de Moodle | Si no guardaste usuario y contraseña, inicia sesión tú en la ventana de Chrome y vuelve a la terminal para confirmarlo. |
-| La exploración del Moodle falló al configurar el curso | El curso ya está configurado. Revisa la dirección y la contraseña en `config.json` y repite con `miyagi explore`. |
+| Espera a que inicies sesión en Moodle | Entra tú en la ventana del navegador que ha abierto la extensión moodle-teacher. Solo pasa la primera vez o cuando la sesión caduca. |
+| La exploración del Moodle falló al conectar el aula | La asignatura ya está configurada. Comprueba que iniciaste sesión en la ventana y repite con `miyagi explore`. |
+| Te pregunta «¿Pasar ahora esta aula a moodle-teacher?» | El aula se conectó con el sistema anterior, que ya no existe. Di que sí: instala moodle-teacher y borra de `config.json` el usuario y la contraseña guardados. Si dices que no, esa sesión trabaja sin el aula (solo planes y borradores). |
+| Avisa de que trabaja sin el aula | La extensión moodle-teacher no está instalada o está desactivada. Vuelve a conectar el aula con `miyagi init -w <nombre>`, o actívala (ver [Extensiones](../avanzado/extensiones.md)). |
 | Los menús salen en otro idioma | Añade `--language=es` (o `en`, `fr`, `de`), o pon el idioma en `config.json` (ver [Configuración](../avanzado/configuracion.md)). |
-| No quiero que se vea Chrome | Añade `--headless`. Necesita usuario y contraseña guardados. |
-| `--headless` o `--mode autonomous` dan error | Los dos necesitan usuario y contraseña guardados, porque nadie puede iniciar sesión a mano. |
 | Está haciendo algo que no quería | Pulsa `Esc` (en `run`, `Ctrl+C`) y dile qué hacer en su lugar. |
 | Recuerda algo mal | Díselo en el chat o edita la página de `knowledge`. |
 | No lee un documento de `sources` | Comprueba el formato. Los de OpenDocument (`.odt`) no los lee bien: expórtalos a PDF o DOCX. Los vídeos tampoco los puede transcribir. |

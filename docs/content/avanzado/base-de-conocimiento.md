@@ -21,7 +21,7 @@ miyagi ingest                                  # todo lo de sources/ que aún no
 miyagi ingest sources/rubrica-tarea-2.pdf      # solo esos archivos
 ```
 
-Es una sesión sin navegador y sin Moodle: solo trabaja con archivos, y como no publica nada, no pide aprobaciones. Sus instrucciones ([`teacher-ingest.md`](https://github.com/falkenslab/miyagi/blob/main/prompts/system/teacher-ingest.md)) le marcan estos pasos, en orden:
+Es una sesión sin Moodle: solo trabaja con archivos, y como no publica nada, no pide aprobaciones. Sus instrucciones ([`teacher-ingest.md`](https://github.com/falkenslab/miyagi/blob/main/prompts/system/teacher-ingest.md)) le marcan estos pasos, en orden:
 
 1. Carga la habilidad `knowledge-ingest` antes de escribir ninguna página.
 2. Mira el catálogo (`knowledge_index`), lee la visión general (`knowledge_read` de `overview`) y pregunta a `list_sources` qué documentos son nuevos o han cambiado desde que los incorporó.
@@ -36,7 +36,7 @@ Un documento ya incorporado y sin cambios no se vuelve a procesar; si cambió, a
 - **Sí, con `Read`**: Markdown y texto, PDF e imágenes (fotos de apuntes a mano, de diapositivas), que interpreta directamente.
 - **Sí, con `extract_text`**: Word (`.docx`), PowerPoint (`.pptx`, diapositiva a diapositiva y con las notas del orador) y Excel (`.xlsx`), que convierte a Markdown.
 - **No**: OpenDocument (`.odt`): lo dirá en el resumen final en lugar de inventarse su contenido; expórtalo a PDF o DOCX. Tampoco transcribe vídeos: los anota como recursos pendientes de revisar.
-- **Enlaces**: un archivo de `sources/` que liste direcciones web (por ejemplo, un `enlaces.md`) es una fuente más. En `chat` y `run` puede visitar esas direcciones concretas con el navegador; en `ingest`, que no tiene navegador, puede leer las páginas públicas marcándolas como fuente externa al curso.
+- **Enlaces**: un archivo de `sources/` que liste direcciones web (por ejemplo, un `enlaces.md`) es una fuente más. Puede leer las páginas públicas que enlaza, marcándolas como fuente externa al curso.
 
 ## Cómo se organiza
 
@@ -52,7 +52,7 @@ knowledge/
   entities/               entity/<slug>: una página por cosa concreta (un sistema, una herramienta, un documento)
   syntheses/              synthesis/<slug>: respuestas que merece la pena guardar (comparaciones, análisis, informes)
   orientation.md          course/orientation: evaluación, plazos, canales y lo que su cuenta puede hacer
-  course-map.md           course/course-map: las direcciones de Moodle de lo que ha visitado
+  course-map.md           course/course-map: dónde está cada sección y actividad, con su id y su enlace
   moodle-capabilities.md  course/moodle-capabilities: tipos de actividad y de pregunta que admite este Moodle
   progress.md             course/progress: historial de revisiones del progreso de la clase
   course-audit.md         course/course-audit: historial de auditorías del curso

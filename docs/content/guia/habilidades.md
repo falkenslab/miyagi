@@ -12,6 +12,8 @@ Aquí están todas, agrupadas por lo que hacen, con un ejemplo de cómo pedírse
 
 Para verlas desde la terminal: `miyagi skills`.
 
+Las habilidades de miyagi ponen el criterio docente: qué hacer y cómo hacerlo bien. El trabajo dentro de Moodle lo hace la extensión **moodle-teacher**, que trae sus propias habilidades para cada cosa: `assignments`, `class-progress`, `copy-and-restore`, `course-check`, `course-content`, `forums`, `gradebook`, `grading`, `other-activities`, `publishing`, `quizzes`, `read-a-course`, `scorm`, `several-sites`, `to-grade` y `week` (su nombre completo lleva delante `moodle-teacher:`, como `moodle-teacher:grading`). Si algo no se puede hacer con ella, miyagi te lo dice, lo prepara en `drafts` y te da los pasos para hacerlo tú.
+
 ## Llevar el curso día a día
 
 ### 🧭 `course-orientation` · Conocer el curso
@@ -20,12 +22,6 @@ Antes de hacer algo complejo, se sitúa: cómo está organizado el curso, cómo 
 
 - **Pídeselo así:** *«Antes de nada, conoce el curso: cómo se evalúa y qué entregas vienen.»*
 - **Atajo:** `/miyagi:orient`
-
-### 🗺️ `moodle-navigation` · Leer el curso tal como es
-
-Lee la estructura real del curso en Moodle 4 y 5: secciones, actividades y recursos, restricciones de acceso, condiciones de finalización y cómo se relacionan unas actividades con otras. Así no supone qué es algo por su nombre: lo abre y lo comprueba. La usa por debajo de casi todo lo demás.
-
-- **Pídeselo así:** *«¿Qué hace falta para que se abra el tema 3? ¿Depende de alguna actividad anterior?»*
 
 ### ✅ `grading-rubric` · Corregir con justicia
 
@@ -75,31 +71,18 @@ Construye una rúbrica o guía de corrección desde cero cuando una actividad no
 
 - **Pídeselo así:** *«La Tarea 4 no tiene rúbrica. Propónme una de cuatro criterios antes de corregir.»*
 
-### ❓ `quiz-design` · Escribir buenas preguntas
+### ❓ `quiz-design` · Escribir y montar cuestionarios
 
-Escribe preguntas de cuestionario bien hechas: distractores creíbles, niveles variados (recordar, aplicar, analizar), enunciados sin ambigüedades y retroalimentación útil en cada opción. También revisa un cuestionario existente en busca de preguntas triviales, repetidas o mal redactadas.
-
-- **Pídeselo así:** *«Revisa las preguntas del cuestionario del tema 1: ¿hay alguna demasiado fácil o confusa?»*
-- **Atajo:** `/miyagi:quiz <tema>` (junto con `quiz-building`)
-
-### 🧩 `quiz-building` · Montar cuestionarios
-
-Crea o modifica cuestionarios en Moodle: su configuración (fechas, tiempo, intentos, método de calificación, comportamiento de las preguntas, qué ve el alumno al revisar), añade las preguntas una a una o las importa de golpe en formato GIFT, y comprueba el orden y la puntuación total. Cambia los cuestionarios que ya tienen intentos con cuidado de no perjudicar a nadie.
+Escribe preguntas de cuestionario bien hechas: distractores creíbles, niveles variados (recordar, aplicar, analizar), enunciados sin ambigüedades y retroalimentación útil en cada opción. También revisa un cuestionario existente en busca de preguntas triviales, repetidas o mal redactadas. Y decide cómo configurarlo según para qué sirva (un repaso no se configura igual que un examen), redacta las preguntas en formato GIFT para importarlas de golpe, te pide aprobar la importación con la lista de todas las preguntas y cambia los cuestionarios que ya tienen intentos con cuidado de no perjudicar a nadie.
 
 - **Pídeselo así:** *«Crea un cuestionario de repaso de 12 preguntas sobre JOIN, sin límite de intentos.»*
-- **Atajo:** `/miyagi:quiz <tema>`
+- **Atajo:** `/miyagi:quiz <tema>`: escribe las preguntas, crea el cuestionario si aún no existe, las importa (con tu aprobación) y comprueba su orden y la puntuación total.
 
 ### 🎲 `activity-building` · Otras actividades de Moodle
 
 Diseña y monta el resto de actividades para que funcionen como deben: talleres de coevaluación, lecciones con itinerarios, glosarios, wikis, bases de datos, consultas, encuestas, foros evaluables y H5P. Y también las piezas que conectan las actividades: condiciones de finalización, restricciones de acceso, insignias y grupos.
 
 - **Pídeselo así:** *«Añade un taller de coevaluación para la práctica final, con la rúbrica de la tarea.»*
-
-### 📦 `scorm-packaging` · Actividades web como SCORM
-
-Empaqueta una actividad web (un juego en HTML, una simulación, un ejercicio interactivo, tuyo o uno publicado en internet) como paquete SCORM para que Moodle registre si el alumno la completó y su nota en el calificador. Descarga la actividad con todos sus archivos, le añade un pequeño puente que habla con Moodle sin cambiar cómo se juega, la comprime y la sube oculta para probarla antes de mostrarla. Todo con sus propias herramientas de archivos, sin terminal.
-
-- **Pídeselo así:** *«Empaqueta como SCORM el juego de esta dirección y súbelo al Tema 2 para que cuente para la nota.»*
 
 ### 🐳 `practice-testing` · Probar las prácticas en Docker
 

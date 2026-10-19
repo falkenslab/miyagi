@@ -77,6 +77,6 @@ Y el informe que devuelve trae las órdenes exactas en orden, con su código de 
 
 ## Lo que no hace
 
-No sirve archivos para verlos en un navegador (un servidor web para una actividad HTML, por ejemplo): los recursos se prueban en Moodle, subidos ocultos (ver [Aprobaciones y borradores](aprobaciones-y-borradores.md)).
+No sirve archivos para verlos en un navegador (un servidor web para una actividad HTML, por ejemplo): los recursos se prueban en Moodle, puestos ocultos en el aula (ver [Aprobaciones y borradores](aprobaciones-y-borradores.md)).
 
 En el tutorial [Un curso de Introducción a SQL](../casos-de-uso/index.md) puedes verlo comprobando prácticas de MariaDB.

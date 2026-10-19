@@ -13,8 +13,8 @@ Cada conversación nueva empieza de cero en el chat, pero **no en lo que sabe de
 | Recuerda | Dónde |
 | --- | --- |
 | Cómo se evalúa, los plazos y los canales del curso | `orientation.md` |
-| Las direcciones de cada actividad y recurso que ha visitado | `course-map.md` |
-| Qué tipos de actividad y de pregunta admite tu Moodle | `moodle-capabilities.md` |
+| Dónde está cada sección y actividad del curso: su número y su enlace | `course-map.md` |
+| Qué tipos de actividad y de pregunta ha visto en tu curso, y cómo se calculan las notas | `moodle-capabilities.md` |
 | Tu programación didáctica | `teaching-plan.md` |
 | Cada tema: objetivos, lo que creó, las dudas que se repiten en el foro | `topics/` (una página por tema) |
 | Cada actividad evaluable: criterios que aplicó, rúbrica, preguntas importadas | `activities/` (una página por actividad) |
@@ -58,8 +58,8 @@ Para consultarlos desde el chat sin abrir Moodle, usa `/knowledge:query` con tu 
 
 ## Lo que no guarda
 
-- **No guarda fichas de estudiantes concretos.** En sus apuntes del progreso y del foro solo hay tendencias de la clase (cuántos se están quedando atrás y por qué), nunca un registro con nombres.
-- **No guarda tu contraseña.** Está en `config.json`, un archivo que el asistente no puede abrir.
+- **No guarda fichas de estudiantes concretos.** En sus apuntes del progreso y del foro solo hay tendencias de la clase (cuántos se están quedando atrás y por qué), nunca un registro con nombres. Además, tus alumnos le llegan con un alias («Alumno 3»), no con su nombre.
+- **No guarda tu contraseña.** Ni siquiera la conoce: inicias sesión tú en la ventana que abre la extensión moodle-teacher, y es ella la que guarda la sesión.
 
 ## Cada curso, su memoria
 

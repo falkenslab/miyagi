@@ -1,7 +1,7 @@
 ---
 title: Aprobaciones y borradores
 sidebar_position: 6
-description: "Cómo se controla lo que llega a los alumnos: la aprobación antes de publicar, el gancho que la hace cumplir, los borradores ocultos, la validación de subidas y lo que nunca hace."
+description: "Cómo se controla lo que llega a los alumnos: la aprobación antes de publicar, el gancho que la hace cumplir, los borradores ocultos, la revisión del GIFT y lo que nunca hace."
 ---
 
 # Aprobaciones y borradores
@@ -23,32 +23,25 @@ El resumen te habla en tu idioma, y cita tal cual, en el idioma del curso, el te
 
 ## El gancho que la hace cumplir
 
-Que el asistente pida permiso no depende solo de que se acuerde. En una sesión real, antes de existir este gancho, un recurso de tipo Archivo quedó visible para los alumnos unos 35 segundos antes de que el asistente se diera cuenta y lo ocultara ([ADR-008](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-008-publish-gate.md)). Desde entonces, en modo `guided`, un gancho del programa ([`src/publishGate.ts`](https://github.com/falkenslab/miyagi/blob/main/src/publishGate.ts)) revisa cada acción del navegador antes de que se ejecute:
+Que el asistente pida permiso no depende solo de que se acuerde. En una sesión real, antes de existir este gancho, un recurso de tipo Archivo quedó visible para los alumnos unos 35 segundos antes de que el asistente se diera cuenta y lo ocultara ([ADR-008](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-008-publish-gate.md)). Desde entonces, en modo `guided`, un gancho del programa ([`src/publishGate.ts`](https://github.com/falkenslab/miyagi/blob/main/src/publishGate.ts)) revisa cada herramienta de moodle-teacher antes de que se ejecute:
 
-- Si es una acción que publica y no hay una aprobación vigente, la detiene y te muestra el panel «Publicación sin aprobación previa» con lo que iba a hacer. Si dices que sí, se ejecuta esa acción y solo esa. Si dices que no, se bloquea y se le indica al asistente que no la repita sin pedir aprobación antes.
-- Una aprobación vale hasta la siguiente petición de aprobación o hasta tu siguiente mensaje, para que una aprobación de seis notas cubra los seis «Guardar cambios».
-- Un borrado nunca queda cubierto por una aprobación anterior: pulsar «Eliminar» o «Borrar» siempre te pregunta, aunque acabes de aprobar otra cosa.
+- Si es una herramienta que cambia algo y no hay una aprobación vigente, la detiene y te muestra el panel «Publicación sin aprobación previa» con la herramienta y sus parámetros. Si dices que sí, se ejecuta esa llamada y solo esa. Si dices que no, se bloquea y se le indica al asistente que no la repita sin pedir aprobación antes.
+- Una aprobación vale hasta la siguiente petición de aprobación o hasta tu siguiente mensaje, para que una aprobación de seis notas, con el resumen enumerándolas todas, cubra las seis llamadas.
+- Borrar, quitar, reiniciar o restaurar nunca queda cubierto por una aprobación anterior: esas herramientas siempre te preguntan, aunque acabes de aprobar otra cosa.
 
-**Qué cuenta como publicar** (`isPublishAction()`):
+**Qué cuenta como publicar** (`isPublishAction()`): cualquier herramienta de moodle-teacher salvo las que solo leen (las que empiezan por `get_` o `list_`) y las de su sesión (iniciar y cerrar sesión, elegir el sitio…), que nunca preguntan. Las que borran, quitan, reinician o restauran (`delete_`, `remove_`, `reset_`, `restore_`) son las que preguntan siempre. Un falso positivo solo cuesta un panel de más; por eso la regla es generosa.
 
-- Pulsar un botón o elemento de menú de Moodle cuyo nombre indica que guarda, envía, publica, importa, duplica, oculta, muestra, amplía un plazo, hace disponible o borra algo, en inglés o en español (con los textos de Moodle 5.2): «Guardar cambios», «Enviar al foro», «Importar», «Ocultar», «Mostrar en la página del curso», «Ampliar plazo»… No cuentan «Cancelar», «Buscar» ni «Filtrar».
-- Escribir en un campo y enviar con Intro, salvo en el formulario de inicio de sesión o en un buscador.
-- Un script en la página que envía un formulario, pulsa un botón de enviar o hace una petición POST a Moodle.
-- Abrir una dirección con `sesskey`, que es como Moodle firma sus enlaces de acción (ocultar, mostrar, mover).
-
-Un falso positivo solo cuesta un panel de más; por eso la lista es generosa. Pulsar Intro suelto no lo detecta el gancho (no lleva destino para distinguir un buscador de un formulario); ahí sigue valiendo la regla de las instrucciones.
-
-**Cuándo actúa**: solo en `guided`, que es el modo del chat y el recomendado para `run`. En `interactive` ya se te pregunta antes de cada acción, en `plan` no puede usar el navegador, y `autonomous` publica sin preguntar por diseño. Si en el chat cambias de modo con `Shift+Tab`, el gancho lo sigue al momento. No revisa lo que hacen los ayudantes, que no pueden publicar.
+**Cuándo actúa**: solo en `guided`, que es el modo del chat y el recomendado para `run`. En `interactive` ya se te pregunta antes de cada herramienta, en `plan` no cambia nada en Moodle, y `autonomous` publica sin preguntar por diseño. Si en el chat cambias de modo con `Shift+Tab`, el gancho lo sigue al momento. No revisa lo que hacen los ayudantes, que no pueden publicar.
 
 ## Lo nuevo, primero oculto: los borradores
 
 Todo recurso nuevo (una página, un archivo, un cuestionario, un H5P, una tarea, un tema entero) se prueba en Moodle antes de que lo vean los alumnos ([ADR-009](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-009-hidden-drafts.md)):
 
 1. **Lo construye en `drafts/<slug>/`**: el código fuente editable (el HTML, el archivo GIFT, el texto de la página, sus imágenes).
-2. **Lo sube oculto.** Marca «Ocultar en la página del curso» antes del primer guardado (o oculta la sección si es un tema nuevo). El resumen de la aprobación dice que sube **oculto, para probarlo**. No envía notificación de cambio de contenido.
-3. **Lo prueba como profesor, en Moodle**: lo abre y lo usa como lo haría un alumno: la vista previa del cuestionario, el H5P, cada enlace y cada parte interactiva, y la página en una ventana estrecha. Si algo falla, lo corrige en `drafts/` y lo reemplaza (con otra aprobación).
+2. **Lo pone oculto en el aula**, desde el primer guardado (o oculta la sección si es un tema nuevo). El resumen de la aprobación dice que va **oculto, para probarlo**. No avisa a los alumnos del cambio. Cómo se hace en Moodle lo trae la habilidad de publicación de moodle-teacher.
+3. **Lo prueba como profesor**: lee lo que ha guardado el aula y comprueba que funciona como lo usaría un alumno: el cuestionario, el H5P, cada enlace y cada parte interactiva, y la página en un ancho estrecho. Lo que sus herramientas no pueden probar, te pide que lo pruebes tú, con su enlace. Si algo falla, lo corrige en `drafts/` y lo reemplaza (con otra aprobación).
 4. **Lo apunta en la página `course/drafts`** (`knowledge/drafts.md`): una línea por borrador oculto, con su enlace y lo que falta.
-5. **Te cuenta qué ha probado y te pide permiso para mostrarlo.** Mostrarlo es otra publicación, con su propia aprobación. Después lo quita de `drafts.md` y lo revisa ya como alumno («Cambiar rol a… Estudiante»).
+5. **Te cuenta qué ha probado y te pide permiso para mostrarlo.** Mostrarlo es otra publicación, con su propia aprobación. Después lo quita de `drafts.md` y lo revisa ya como lo vería un alumno, hasta donde le deja la extensión (o te pide que lo mires con la vista de estudiante).
 
 Si prefieres no mostrarlo todavía, se queda oculto y en `drafts.md`. Al cerrar la sesión, miyagi te avisa de que hay recursos ocultos sin mostrar, y en el siguiente chat te los menciona al saludar.
 
@@ -56,9 +49,9 @@ Los cambios en algo que los alumnos ya ven (una errata, una fecha, un enlace rot
 
 En su primera prueba, este flujo encontró dos fallos reales que los alumnos no llegaron a ver: la importación GIFT perdía la sangría del código y una actividad HTML incrustada se veía en una caja de 500×400 px en el móvil ([informe](https://github.com/falkenslab/miyagi/blob/main/tests/2026-09-28T15-41-draft-testing/README.md)).
 
-## La validación de subidas
+## La revisión del GIFT
 
-Antes de que el navegador suba a Moodle un archivo `.gift` o `.html`, otro gancho ([`src/uploadGate.ts`](https://github.com/falkenslab/miyagi/blob/main/src/uploadGate.ts)) lo revisa con código. Si encuentra errores, rechaza la subida con la lista (línea a línea) para que el asistente corrija el archivo en `drafts/` y lo vuelva a subir. Los avisos dejan pasar la subida pero le llegan al asistente. Actúa en todos los modos: un archivo roto nunca se quiere, lo haya aprobado quien lo haya aprobado.
+Antes de que moodle-teacher importe preguntas en formato GIFT a un banco (`import_questions`, con el GIFT como texto o como archivo), otro gancho ([`src/uploadGate.ts`](https://github.com/falkenslab/miyagi/blob/main/src/uploadGate.ts)) lo revisa con código. Si encuentra errores, rechaza la importación con la lista (línea a línea) para que el asistente corrija el GIFT en `drafts/` y lo vuelva a importar. Los avisos dejan pasar la importación pero le llegan al asistente. Actúa en todos los modos: un banco roto nunca se quiere, lo haya aprobado quien lo haya aprobado.
 
 **En un GIFT**, lo que el importador de Moodle rechazaría o leería mal:
 
@@ -70,13 +63,6 @@ Antes de que el navegador suba a Moodle un archivo `.gift` o `.html`, otro ganch
 - respuestas numéricas mal escritas (por ejemplo, con coma decimal);
 - preguntas de emparejamiento a las que les falta `->`, o con menos de 3 pares (aviso);
 - líneas con sangría, que el importador pierde: el código debe ir como `[html]` con `&nbsp;` dentro de `<pre>`.
-
-**En un HTML**:
-
-- sin `<meta name="viewport">`, que en el móvil lo deja diminuto e ilegible (error);
-- un archivo local referenciado (imagen, script, hoja de estilos) que no existe junto a la página (error);
-- sin `lang` en `<html>`, que hace que los lectores de pantalla lo lean en otro idioma (aviso);
-- scripts u hojas de estilo cargados desde otro sitio, que pueden bloquearse o cambiar (aviso).
 
 ## La caja de herramientas de `drafts/`
 
@@ -102,9 +88,11 @@ Sus garantías: toda ruta se resuelve dentro de `drafts/` (sin `..`, rutas absol
 
 Sus instrucciones, en todos los modos, le prohíben:
 
-- **borrar** nada en Moodle (recursos, actividades, mensajes): lo que deja oculto se queda oculto hasta que tú lo muestres o lo quites;
-- **cambiar matrículas** de ningún estudiante;
+- **borrar** en Moodle nada que no haya creado él: lo que deja oculto se queda oculto hasta que tú lo muestres o lo quites;
+- **cambiar matrículas** de ningún estudiante, ni los grupos;
 - **tocar la configuración de la plataforma** Moodle;
 - **salir de tu curso** o entrar en otros cursos de Moodle.
+
+Lo que moodle-teacher no tiene herramienta para hacer, no lo intenta por otro camino: te lo dice, lo prepara en `drafts/` y te da los pasos para hacerlo tú.
 
 Aun así, usa `guided` (o el chat) para revisar lo que publica: la regla está en las instrucciones, y el gancho de publicación detendría también un borrado sin aprobar.

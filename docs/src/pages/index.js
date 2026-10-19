@@ -83,11 +83,11 @@ const METHODS = ["Aprendizaje basado en proyectos", "Retos y problemas", "Clase 
 const FAQ = [
   ["¿Cuánto cuesta?", "miyagi es gratuito y de código abierto. Lo que hace funcionar al asistente es tu suscripción de Claude (Pro o Max)."],
   ["¿En qué se diferencia de preguntarle a un chat de IA?", "Un chat te da un texto y el resto lo haces tú en Moodle. miyagi entra en tu curso y hace el trabajo allí: pone la nota con su retroalimentación, responde en el foro, crea la tarea con su rúbrica. Además recuerda tu curso de una sesión a otra y te pide permiso antes de que tus alumnos vean nada."],
-  ["¿Funciona con el Moodle de mi centro?", "Trabaja con el Moodle que ya usas, desde el navegador y con tu cuenta de profesor: no hay que instalar nada en el servidor. Está hecho para Moodle 4 y 5, y se prueba en Moodle 5.2. Al configurarlo, puede mirar (sin cambiar nada) qué tipos de actividad y de pregunta admite tu Moodle."],
+  ["¿Funciona con el Moodle de mi centro?", "Trabaja con el Moodle que ya usas, con la extensión moodle-teacher y tu sesión de profesor: entras tú en Moodle una vez, en su ventana, y no hay que instalar nada en el servidor. Está hecho para Moodle 4 y 5, y se prueba en Moodle 5.2. Al configurarlo, puede mirar (sin cambiar nada) qué tipos de actividad y de pregunta admite tu Moodle."],
   ["¿Tengo que saber programar?", "No. Se instala pegando una línea en la terminal, y después se usa conversando. La guía te lleva de la mano, y el aula de ejemplo lo enseña paso a paso con capturas reales."],
   ["¿Puede publicar algo sin que me dé cuenta?", "En el chat, antes de guardar una nota, responder en el foro o publicar contenido, te pide permiso con un resumen de lo que va a publicar. Si intenta publicar sin haberlo pedido, lo detiene y te pregunta."],
   ["¿Y si se equivoca?", "Ves cada nota, cada respuesta y cada recurso antes de que llegue a tus alumnos, y puedes decir que no o pedirle que lo cambie. Lo nuevo lo prueba oculto antes de mostrarlo. Si algo no te gusta de cómo trabaja, corrige sus apuntes o escríbeselo en instructions.md."],
-  ["¿Qué pasa con los datos de mis alumnos?", "Lee lo que tú verías en Moodle para hacer su trabajo, pero en sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Tu contraseña de Moodle nunca se envía al modelo."],
+  ["¿Qué pasa con los datos de mis alumnos?", "Lee lo que tú verías en Moodle para hacer su trabajo, pero en sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Por defecto, los alumnos le llegan con un alias («Alumno 3»), nunca por su nombre. Tu contraseña de Moodle no la ve: entras tú, en la ventana de la extensión."],
   ["¿Puedo darle mis propias instrucciones?", "Sí. Escribe en un archivo instructions.md de la carpeta del curso lo que quieras que tenga siempre en cuenta: «puntúa sobre 10», «sé breve en el foro», «la ortografía cuenta un 10 %». Y si quieres ir más allá, puedes enseñarle habilidades propias."],
 ];
 
@@ -242,7 +242,7 @@ function LatestRelease() {
 export default function Home() {
   const shot = useBaseUrl("/img/casos/40-aprobacion-foro.webp");
   return (
-    <Layout title="Tú enseñas, y miyagi se ocupa del resto" description="miyagi entra en tu curso de Moodle con tu cuenta de profesor: corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, escribe tu programación y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
+    <Layout title="Tú enseñas, y miyagi se ocupa del resto" description="miyagi trabaja en tu curso de Moodle con tu sesión de profesor: corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, escribe tu programación y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
       <main className={s.landing}>
         <section className={s.hero} aria-labelledby="titulo">
           <div className={s.wrap}>
@@ -281,7 +281,7 @@ export default function Home() {
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="que-hace-t">Qué hace por ti</h2>
-              <p>Se lo pides con tus palabras, como a un compañero. Él trabaja en tu Moodle como lo harías tú.</p>
+              <p>Se lo pides con tus palabras, como a un compañero. Él hace el trabajo en tu Moodle, con tu sesión de profesor.</p>
             </div>
             <Tabs />
           </div>
@@ -291,11 +291,11 @@ export default function Home() {
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="como-t">Cómo funciona</h2>
-              <p>Sin instalar nada en el servidor de tu centro: usa Moodle desde Chrome, con tu cuenta, como tú.</p>
+              <p>Sin instalar nada en el servidor de tu centro: trabaja en tu Moodle con la extensión moodle-teacher y tu sesión de profesor.</p>
             </div>
             <ol className={s.how}>
               <li><h3>Instálalo</h3><p>Una línea en la terminal, en Windows, Mac o Linux.</p></li>
-              <li><h3>Preséntale tu curso</h3><p><code>miyagi init</code> te pregunta la dirección del curso, tu cuenta y el tono. Explora tu Moodle, sin tocar nada, para saber qué admite. Si le dejas tu programación, tus rúbricas o tus criterios, los tiene en cuenta.</p></li>
+              <li><h3>Preséntale tu curso</h3><p><code>miyagi init</code> te pregunta por tu asignatura (el nombre, el tono, el idioma) y, al final, si conectas tu aula de Moodle: basta con la dirección del curso. Entras tú en Moodle una vez, en la ventana de la extensión, y explora tu Moodle, sin tocar nada, para saber qué admite. Si le dejas tu programación, tus rúbricas o tus criterios, los tiene en cuenta.</p></li>
               <li><h3>Pídeselo y aprueba</h3><p>Conversa con él o déjale recorrer el curso de una vez. Cuando algo vaya a llegar a tus alumnos, te lo enseña y espera tu sí.</p></li>
             </ol>
           </div>
@@ -375,10 +375,10 @@ export default function Home() {
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="control-t">Con tu visto bueno</h2>
-              <p>Trabaja con tu cuenta en tu curso real, así que te consulta antes de lo que verían tus alumnos.</p>
+              <p>Trabaja con tu sesión en tu curso real, así que te consulta antes de lo que verían tus alumnos.</p>
             </div>
             <div className={s.cards}>
-              <div className={s.card}><h3>Te pide permiso</h3><p>Antes de guardar una nota, responder en el foro o publicar algo, te enseña qué va a hacer y espera tu sí. Además, el programa vigila los botones de publicar de Moodle y para lo que no hayas aprobado.</p></div>
+              <div className={s.card}><h3>Te pide permiso</h3><p>Antes de guardar una nota, responder en el foro o publicar algo, te enseña qué va a hacer y espera tu sí. Además, el programa vigila cada cambio que va a hacer en Moodle y para lo que no hayas aprobado.</p></div>
               <div className={s.card}><h3>Lo nuevo, primero oculto</h3><p>Lo prepara en borradores, lo sube oculto, lo prueba como lo vería un alumno y lo muestra cuando tú dices sí. Lo que quede a medias te lo recuerda al cerrar.</p></div>
               <div className={s.card}><h3>Lo que no hace</h3><p>No borra contenido sin preguntarte, no toca matrículas ni la configuración del sitio, no sale de tu curso, no ve tu contraseña y no guarda fichas de alumnos.</p></div>
             </div>
@@ -403,7 +403,7 @@ export default function Home() {
               <p>En Windows, Mac o Linux. No hace falta saber programar.</p>
             </div>
             <ol className={s.steps}>
-              <li><div><h3>Instala Google Chrome</h3><p>Si no lo tienes ya, desde <a href="https://www.google.com/chrome/">google.com/chrome</a>. miyagi lo usa para entrar en Moodle.</p></div></li>
+              <li><div><h3>Instala Google Chrome</h3><p>Si no lo tienes ya, desde <a href="https://www.google.com/chrome/">google.com/chrome</a>. miyagi lo usa para pasar materiales a PDF y leer páginas web.</p></div></li>
               <li><div><h3>Instala Node.js</h3><p>La versión LTS desde <a href="https://nodejs.org/">nodejs.org</a>, con las opciones por defecto.</p></div></li>
               <li>
                 <div>

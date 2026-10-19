@@ -41,13 +41,13 @@ Antes de guardar una nota, responder en el foro, publicar contenido o cambiar la
 
 Una sola aprobación puede cubrir un lote (por ejemplo, seis notas), pero solo si el resumen enumera cada una con lo que se va a publicar.
 
-Y no depende solo de que se acuerde de preguntar: si intenta pulsar un botón de publicar de Moodle sin haberte pedido permiso, el propio programa lo detiene y te pregunta. Lo tienes explicado a fondo en [Aprobaciones y borradores](../avanzado/aprobaciones-y-borradores.md).
+Y no depende solo de que se acuerde de preguntar: si intenta cambiar algo en Moodle sin haberte pedido permiso, el propio programa lo detiene y te pregunta. Para borrar, quitar o restaurar algo te pregunta siempre otra vez. Lo tienes explicado a fondo en [Aprobaciones y borradores](../avanzado/aprobaciones-y-borradores.md).
 
 ## Tres formas de trabajar con él
 
 El chat empieza siempre en modo **guided**: trabaja solo y te pide permiso únicamente antes de publicar algo que verán tus estudiantes.
 
-Si quieres ver cómo trabaja paso a paso, pulsa `Shift+Tab`: pasa a modo **interactive** y te consultará antes de cada acción, aunque solo sea abrir una página.
+Si quieres ver cómo trabaja paso a paso, pulsa `Shift+Tab`: pasa a modo **interactive** y te consultará antes de cada acción, aunque solo sea leer algo en Moodle.
 
 Púlsalo otra vez y pasa a modo **plan**: lee tus documentos y sus apuntes, busca en internet si hace falta y te prepara un plan, sin cambiar nada y sin abrir Moodle. Cuando lo tiene, te lo enseña y eliges:
 
@@ -89,7 +89,7 @@ Son instrucciones listas para usar. Escríbelos en el chat, con lo que necesites
 | `/miyagi:align` | Comprobar que el aula sigue la programación y corregir lo que no |
 | `/miyagi:audit` | Auditar el aula y proponer mejoras por prioridad |
 | `/miyagi:research <tema>` | Investigar un tema en internet y guardar lo encontrado con sus fuentes |
-| `/miyagi:map` | Ver las direcciones del curso que tiene apuntadas |
+| `/miyagi:map` | Ver dónde está cada sección y actividad del curso: su número y su enlace |
 | `/knowledge:ingest` | Incorporar a sus apuntes los documentos nuevos de `sources` |
 | `/knowledge:query <pregunta>` | Responder a partir de sus apuntes, sin abrir Moodle |
 | `/knowledge:lint` | Revisar que sus apuntes estén completos y bien enlazados |
@@ -100,4 +100,3 @@ Los atajos son solo comodidad: *«corrige lo pendiente»* funciona igual que `/m
 
 - `miyagi chat --inline` deja la conversación en el historial normal de la terminal, en lugar de ocupar toda la ventana.
 - `miyagi chat --plain` usa un chat de texto simple, sin paneles.
-- `miyagi chat --headless` trabaja sin mostrar la ventana de Chrome. Necesita tu usuario y contraseña guardados.

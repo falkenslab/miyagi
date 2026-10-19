@@ -55,16 +55,14 @@ miyagi construye el tema pieza a pieza: lo sube **oculto**, lo revisa como lo ve
 
 <Shot src="/img/casos/13-aprobacion-libro.webp" alt="Panel de aprobación: publicar el libro Apuntes: MariaDB en Docker con sus 6 capítulos, del SGBD a parar, arrancar y borrar el contenedor; todos los comandos verificados en Docker.">Antes de mostrar los apuntes: un libro de 6 capítulos, con los comandos ya verificados.</Shot>
 
-El cuestionario se escribe en formato GIFT y se importa de golpe. El panel enseña cada pregunta con su respuesta correcta y sus distractores, para que puedas revisarlas antes de que existan en Moodle:
+El cuestionario se escribe en formato GIFT y se importa de golpe. Antes de importarlo, el programa comprueba el GIFT y, si tiene errores, no lo importa y dice en qué líneas están. El panel enseña cada pregunta con su respuesta correcta y sus distractores, para que puedas revisarlas antes de que existan en Moodle:
 
 <Shot src="/img/casos/14-aprobacion-gift.webp" alt="Panel de aprobación: importar 10 preguntas GIFT al banco del cuestionario del Tema 1, cada una con su enunciado, la respuesta correcta y los distractores, por ejemplo qué comando borra los datos para siempre: docker volume rm.">Diez preguntas que se centran en lo que el entregable no comprueba: parar, arrancar y borrar sin perder datos, y los permisos.</Shot>
 
 En total, el Tema 1 pasó por diez aprobaciones: el nombre y el resumen de la sección, los apuntes, la práctica guiada, una escala «Apto / No apto» (el Moodle solo traía escalas en inglés), el entregable, las preguntas, el cuestionario y el peso del entregable en el libro de calificaciones (0 %, porque decidimos que no entra en la nota).
 
 :::caution Y si intenta publicar sin preguntar
-La aprobación no depende solo de que el agente se acuerde. El programa vigila los botones de Moodle que publican algo y, si el agente pulsa uno sin haber pedido permiso, lo detiene y te pregunta. Ocurrió al renombrar la sección:
-
-<Shot src="/img/casos/11-publish-gate.webp" alt="Panel Publicación sin aprobación previa: el agente va a escribir el nuevo nombre de la sección sin haber pedido aprobación antes; opciones Sí, No y Parar.">El vigilante de publicación, parando un cambio que el agente no había pedido.</Shot>
+La aprobación no depende solo de que el agente se acuerde. El programa vigila cada cambio que va a hacer en Moodle y, si el agente no ha pedido permiso justo antes, lo detiene y te pregunta en un panel «Publicación sin aprobación previa», con las opciones Sí, No y Parar. Borrar o quitar algo te lo pregunta siempre, aunque lo hayas aprobado antes.
 :::
 
 ## El resultado
@@ -89,7 +87,7 @@ Se lo dijimos con nuestras palabras:
 
 <p className="pide">Las fechas me valen. Una cosa: en la Práctica guiada los comandos salen como texto normal dentro del párrafo. Ponlos en bloques de código, uno por paso, para que se puedan copiar.</p>
 
-Rehízo la página desde la vista de código fuente del editor, la volvió a revisar y la guardó con nuestro permiso:
+Rehízo la página, la volvió a revisar y la guardó con nuestro permiso:
 
 <Shot kind="moodle" src="/img/casos/19-practica-despues.webp" alt="La práctica guiada corregida: cada paso con su título en negrita y su comando en un bloque de código monoespaciado, listo para copiar.">Después: cada paso con su comando en un bloque de código.</Shot>
 

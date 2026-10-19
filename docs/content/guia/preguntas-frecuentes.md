@@ -18,7 +18,7 @@ Un chat te da un texto y el resto lo haces tú en Moodle. miyagi entra en tu cur
 
 ### ¿Funciona con el Moodle de mi centro?
 
-Trabaja con el Moodle que ya usas, desde el navegador y con tu cuenta de profesor: no hay que instalar nada en el servidor. Está hecho para Moodle 4 y 5, y se prueba en Moodle 5.2. Al configurarlo, puede mirar (sin cambiar nada) qué tipos de actividad y de pregunta admite tu Moodle.
+Trabaja con el Moodle que ya usas y con tu propia sesión de profesor, a través de la extensión **moodle-teacher**: no hay que instalar nada en el servidor. Está hecho para Moodle 4 y 5, y se prueba en Moodle 5.2. Al conectar el aula, puede mirar (sin cambiar nada) qué tipos de actividad y de pregunta ve en tu curso.
 
 ### ¿Tengo que saber programar?
 
@@ -28,7 +28,7 @@ No. Se instala pegando una línea en la terminal y después se usa conversando. 
 
 ### ¿Puede publicar algo sin que me dé cuenta?
 
-En el chat, antes de guardar una nota, responder en el foro o publicar contenido, te pide permiso con un resumen de lo que va a publicar. Si intenta pulsar un botón de publicar de Moodle sin haberlo pedido, el propio programa lo detiene y te pregunta. La única forma de que publique sin preguntar es que lo lances a propósito en modo `autonomous` con `miyagi run`.
+En el chat, antes de guardar una nota, responder en el foro o publicar contenido, te pide permiso con un resumen de lo que va a publicar. Si intenta cambiar algo en Moodle sin haberlo pedido, el propio programa lo detiene y te pregunta. Para borrar, quitar o restaurar algo te pregunta siempre otra vez. La única forma de que publique sin preguntar es que lo lances a propósito en modo `autonomous` con `miyagi run`.
 
 ### ¿Y si se equivoca?
 
@@ -40,11 +40,11 @@ Tiene instrucciones de no borrar nada, no cambiar matrículas, no tocar la confi
 
 ### ¿Mi contraseña está segura?
 
-Se guarda en el archivo `config.json` de la carpeta del curso, en tu ordenador. El asistente nunca la ve: escribe un marcador en el campo de contraseña y es el propio Chrome quien pone la real. Tampoco puede abrir ese archivo. Si prefieres no guardarla, deja el usuario en blanco al configurar el curso y entra tú a mano cada vez.
+miyagi no te la pide ni la guarda. La primera vez que necesita entrar en Moodle, la extensión moodle-teacher abre una ventana del navegador para que inicies sesión tú, y ni miyagi ni el modelo ven tu contraseña. La extensión guarda esa sesión, así que no te lo vuelve a pedir hasta que caduque.
 
 ### ¿Qué pasa con los datos de mis alumnos?
 
-Lee lo que tú verías en Moodle para hacer su trabajo, pero en sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Tu contraseña de Moodle nunca se envía al modelo. Más detalle en [Seguridad y privacidad](../avanzado/seguridad-y-privacidad.md).
+Lee lo que tú verías en Moodle para hacer su trabajo, pero tus alumnos le llegan con un alias («Alumno 3»), nunca con su nombre. En sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Más detalle en [Seguridad y privacidad](../avanzado/seguridad-y-privacidad.md).
 
 ### ¿Ejecuta programas en mi ordenador?
 
@@ -72,9 +72,9 @@ En el que elegiste al configurar el curso, que es también el de sus menús y av
 
 Sí, dentro de la carpeta `drafts` del curso y con sus propias herramientas, sin terminal: descarga archivos y páginas web completas, copia, comprime y descomprime (por ejemplo, para un paquete SCORM) y convierte apuntes a PDF. Por seguridad hay límites de tamaño, que puedes cambiar: [Configuración](../avanzado/configuracion.md).
 
-### No quiero ver la ventana de Chrome
+### ¿Se abre una ventana del navegador mientras trabaja?
 
-Añade `--headless` a la orden, por ejemplo `miyagi chat --headless`. Necesita tu usuario y contraseña guardados.
+No. Trabaja en Moodle sin ventana. Solo se abre una para que inicies sesión, la primera vez o cuando tu sesión caduque.
 
 ### ¿Puedo retomar una conversación de otro día?
 

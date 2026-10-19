@@ -21,14 +21,12 @@ Un ejemplo completo:
     "description": "1.º de DAW, grupo A",
     "url": "https://moodle.micentro.es",
     "courseId": "42",
-    "username": "mgarcia",
-    "password": "tu-contraseña"
+    "connector": "moodle-teacher"
   },
   "agent": {
     "role": "teacher",
     "persona": "warm",
     "language": "español",
-    "headless": false,
     "allowPracticeRunner": true,
     "draftsLimits": {
       "downloadMB": 100,
@@ -39,8 +37,8 @@ Un ejemplo completo:
 }
 ```
 
-:::caution[La contraseña va en claro]
-`config.json` guarda tu contraseña de Moodle sin cifrar, en tu ordenador. El asistente no puede leer ese archivo (ver [Seguridad y privacidad](seguridad-y-privacidad.md)), pero cualquier persona o programa con acceso a tu carpeta sí. En Mac y Linux, miyagi le pone permisos solo para tu usuario. Si versionas la carpeta del curso con git, el `.gitignore` que crea `init` ya lo deja fuera.
+:::note[Sin contraseña]
+`config.json` no guarda tu usuario ni tu contraseña de Moodle: inicias sesión tú en la ventana que abre la extensión [moodle-teacher](extensiones.md) y la sesión la guarda ella. Aun así, el asistente no puede leer ese archivo (ver [Seguridad y privacidad](seguridad-y-privacidad.md)), y el `.gitignore` que crea `init` lo deja fuera.
 :::
 
 ### `classroom`
@@ -51,15 +49,19 @@ Un ejemplo completo:
 | `description` | Descripción libre, para ti. | Sin descripción. |
 | `url` | Dirección base de tu Moodle, sin `/course/view.php` (incluye la subcarpeta si Moodle está instalado en una). | Obligatoria. |
 | `courseId` | Número del curso, el `id` de `course/view.php?id=…`. | Obligatoria. |
-| `connector` | Cómo llega miyagi a tu Moodle: `"moodle-teacher"` (la [extensión](extensiones.md), con tu sesión y sin contraseña guardada) o `"browser"` (el navegador de miyagi, como antes). | En un aula anterior, miyagi te pregunta una vez si quieres pasarla a moodle-teacher; si dices que no, guarda `"browser"`. |
-| `username` | Solo con `"browser"`: tu usuario de Moodle con rol de profesor. | Inicias sesión tú a mano en la ventana de Chrome cada vez. |
-| `password` | Solo con `"browser"`: tu contraseña de Moodle. Al pasar el aula a moodle-teacher, se borra. | Igual que sin usuario. |
+| `connector` | Cómo llega miyagi a tu Moodle: siempre `"moodle-teacher"`, la [extensión](extensiones.md) que trabaja en Moodle con tu propia sesión. `init` lo escribe así. | Es un aula de antes (ver abajo). |
 
-Con `"browser"`, sin usuario y contraseña no se puede usar `--headless` ni el modo `autonomous`, porque nadie podría iniciar sesión a mano. Con `"moodle-teacher"`, la sesión la guarda la extensión: inicias sesión una vez en su ventana y sirve para las siguientes.
+La sesión la guarda la extensión: la primera vez que hace falta, moodle-teacher abre una ventana del navegador para que inicies sesión tú, y sirve para las siguientes sesiones hasta que caduque. miyagi y el modelo nunca ven tu contraseña. Si el aula es de moodle-teacher pero la extensión no está instalada o está desactivada, la sesión te avisa y trabaja sin el aula.
+
+### Aulas de antes
+
+Un aula creada antes de moodle-teacher (sin `connector`, o con `"browser"`) puede tener también `username` y `password`. Al abrir la asignatura en un chat (o en `run` desde la terminal, salvo en modo `autonomous`), miyagi te pregunta una vez por sesión si quieres pasarla ahora a moodle-teacher. Si dices que sí, instala la extensión con ese sitio, borra `username` y `password` de `config.json` y guarda `"connector": "moodle-teacher"`. Si dices que no (o no hay a quién preguntar, por ejemplo en `run` en modo `autonomous`), esa sesión trabaja sin el aula, solo con la programación y los borradores, y te dice cómo arreglarlo: abrirla en un chat o ejecutar `miyagi init -w <nombre>`. El navegador de antes ya no existe.
+
+Las opciones de la conexión no van en `config.json`, sino en la propia extensión: `sites` (el sitio de Moodle), `headless` (trabaja sin ventana; para iniciar sesión la abre igualmente), `access` (`write`: puede cambiar el curso, siempre con tu aprobación antes) y `student_data` (`pseudonymize`: los alumnos le llegan al modelo como alias). miyagi la instala con esos valores, y se cambian con `miyagi extension config moodle-teacher …` (ver [Extensiones](extensiones.md)).
 
 ### Sin aula
 
-`classroom` es opcional. Sin ella, miyagi ayuda con la programación, los temas y los materiales (en `drafts/`), sin navegador ni nada que publicar, y `explore` no hace nada. El nombre y la descripción van entonces en la raíz:
+`classroom` es opcional. Sin ella, miyagi ayuda con la programación, los temas y los materiales (en `drafts/`), sin Moodle ni nada que publicar, y `explore` no hace nada. El nombre y la descripción van entonces en la raíz:
 
 ```json
 {
@@ -74,7 +76,7 @@ Con `"browser"`, sin usuario y contraseña no se puede usar `--headless` ni el m
 | `label` | Nombre de la materia; aparece en la cabecera del chat. Con aula, se usa el de `classroom`. | El nombre de la carpeta. |
 | `description` | Descripción libre, para ti. | Sin descripción. |
 
-Para conectar un aula más tarde, vuelve a ejecutar `miyagi init` en la carpeta: te pregunta los datos de Moodle y guarda `classroom` con ese nombre y esa descripción. Si `classroom` está pero le falta `url` o `courseId`, miyagi no arranca y te dice qué falta.
+Para conectar un aula más tarde, vuelve a ejecutar `miyagi init -w <nombre>`: te pregunta la dirección del curso (y su número si la dirección no lo lleva), guarda `classroom` con ese nombre y esa descripción e instala moodle-teacher con ese sitio (o se lo añade si ya está instalada). Ni usuario ni contraseña. Si `classroom` está pero le falta `url` o `courseId`, miyagi no arranca y te dice qué falta.
 
 ### `agent`
 
@@ -83,7 +85,6 @@ Para conectar un aula más tarde, vuelve a ejecutar `miyagi init` en la carpeta:
 | `role` | Siempre `"teacher"`. miyagi lo escribe solo para que otro agente que abra la carpeta sepa de quién es. Una carpeta con `"student"` se rechaza. | miyagi lo añade la primera vez. |
 | `persona` | El tono con los alumnos (foro, retroalimentación, avisos): `"formal"`, `"warm"` (cercano) o `"motivating"` (cercano y motivador). | Tono neutro. |
 | `language` | Texto libre con tu idioma preferido para hablar con él, por ejemplo `"español"` o `"English"`. Si es español, inglés, francés o alemán, también fija el idioma de los menús. | El `defaultLanguage` global; si tampoco está, te responde en el idioma en que le escribas y los menús siguen el del sistema. |
-| `headless` | `true` para trabajar sin mostrar la ventana de Chrome. | El `defaultHeadless` global; si tampoco está, `false`. |
 | `allowPracticeRunner` | `true` activa el probador de prácticas en Docker ([Prácticas en Docker](practicas-docker.md)). | Desactivado. Si la clave no existe, miyagi te lo pregunta una vez al abrir `chat` o `run` y guarda tu respuesta. |
 | `draftsLimits` | Límites de la caja de herramientas de `drafts/` (ver abajo). | Los valores por defecto. |
 
@@ -119,7 +120,6 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 {
   "claudeCodeOAuthToken": "lo-escribe-miyagi",
   "defaultLanguage": "español",
-  "defaultHeadless": false,
   "autoCompactEnabled": true
 }
 ```
@@ -128,7 +128,6 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 | --- | --- | --- |
 | `claudeCodeOAuthToken` | Tu acceso a Claude. miyagi lo guarda aquí la primera vez que lo creas y no te lo vuelve a pedir. | Te ofrece crearlo al arrancar. |
 | `defaultLanguage` | El idioma para los cursos que no fijan `agent.language`. | Ninguno: te sigue en el idioma en que le escribas. |
-| `defaultHeadless` | Sin ventana de Chrome en los cursos que no fijan `agent.headless`. | `false` |
 | `autoCompactEnabled` | Si la conversación llena el contexto del modelo, la resume automáticamente para poder seguir. Pon `false` para desactivarlo. | `true` |
 
 El token es tan delicado como una contraseña: en Mac y Linux, miyagi deja el archivo legible solo para tu usuario. Si venías de teacher-agent, la primera vez copia `~/.teacher-agent/config.json` aquí (el antiguo se queda donde estaba).
@@ -154,7 +153,6 @@ Mandan sobre todo lo anterior, solo para esa ejecución:
 - **`-w <nombre>`** (`--workspace`): la asignatura de tu lista con la que trabajar.
 - **`--dir <carpeta>`**: la asignatura de esa carpeta (o dónde crearla con `init`). Sin ninguna de las dos, la de la carpeta actual si lo es; si no, te pregunta.
 - **`--language=<código>`**: el idioma de los textos de miyagi y del chat: `es`, `en`, `fr` o `de`. Por defecto, el de `agent.language`, luego `defaultLanguage`, luego el del sistema.
-- **`--headless`**: sin ventana de Chrome. Orden de preferencia: `--headless`, luego `agent.headless`, luego `defaultHeadless`, luego `false`. `--headless=false` la fuerza visible.
 - **`--mode`**, **`--task`**, **`--plain`**, **`--inline`**, **`--continue`**: ver [Sesiones y modos](sesiones-y-modos.md) y la [Referencia](../guia/referencia.md).
 
 ## El idioma, en detalle

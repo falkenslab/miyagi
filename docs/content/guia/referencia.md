@@ -10,11 +10,11 @@ description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, 
 
 | Orden | Qué hace |
 | --- | --- |
-| `miyagi init` | Prepara una asignatura nueva (las preguntas de [Primeros pasos](primeros-pasos.md)) en la carpeta de miyagi, o en la de `--dir`, con o sin aula Moodle, y ofrece explorar tu Moodle si la conectas. Con `-w` en una asignatura sin aula, te ofrece conectarla. |
+| `miyagi init` | Prepara una asignatura nueva (las preguntas de [Primeros pasos](primeros-pasos.md)) en la carpeta de miyagi, o en la de `--dir`, con o sin aula Moodle, y ofrece explorar tu Moodle si la conectas. Con `-w` en una asignatura sin aula, te ofrece conectarla; en una que ya la tiene, la vuelve a conectar. |
 | `miyagi chat` | Conversación con el asistente a pantalla completa, siempre pidiendo permiso antes de publicar. |
 | `miyagi run` | Recorre el curso entero de una sentada: corrige, atiende el foro, revisa el contenido y resume cómo va la clase. |
 | `miyagi run --task "…"` | Hace solo el encargo que le indicas, con las mismas reglas. |
-| `miyagi explore` | Mira, sin crear nada, qué tipos de actividad y de pregunta admite tu Moodle y lo apunta. Sin aula conectada, te avisa y no hace nada. |
+| `miyagi explore` | Mira, sin crear nada, qué tipos de actividad y de pregunta ve en tu curso y cómo se calculan las notas, y lo apunta. Sin aula conectada, te avisa y no hace nada. |
 | `miyagi ingest` | Incorpora a sus apuntes los documentos de `sources` que aún no tenía, sin abrir Moodle. |
 | `miyagi ingest <archivos…>` | Incorpora solo esos documentos. |
 | `miyagi skills` | Lista sus habilidades, incluidas las tuyas (marcadas `[propia]`). |
@@ -34,7 +34,6 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, s
 | `-w <nombre>`, `--workspace <nombre>` | Trabajar con esa asignatura de tu lista, desde cualquier carpeta | Todas |
 | `--dir <carpeta>` | Trabajar con la asignatura de esa carpeta, o crearla ahí con `init` | Todas |
 | `--language=<código>` | Idioma de los menús y avisos: `es`, `en`, `fr` o `de` | Todas |
-| `--headless` | Trabajar sin mostrar la ventana de Chrome (necesita usuario y contraseña guardados) | `chat`, `run`, `explore` |
 | `--plain` | Texto simple, sin pantalla completa, paneles ni animaciones | `chat`, `run`, `explore`, `ingest` |
 | `--inline` | El chat en el historial normal de la terminal, sin ocupar toda la ventana | `chat` |
 | `--continue` | Retomar la última conversación del curso | `chat` |
@@ -56,7 +55,7 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, s
 | `/miyagi:align` | Comprueba si el aula está acorde con tu programación y corrige lo que no. |
 | `/miyagi:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
 | `/miyagi:research <tema>` | Investiga un tema en internet y guarda lo que encuentra con sus fuentes. |
-| `/miyagi:map` | Muestra las direcciones del curso que tiene apuntadas. |
+| `/miyagi:map` | Muestra dónde está cada sección y actividad del curso: su número y su enlace. |
 | `/knowledge:ingest` | Incorpora a sus apuntes lo que haya en `sources` sin procesar. |
 | `/knowledge:query <pregunta>` | Responde a partir de sus apuntes del curso. |
 | `/knowledge:lint` | Revisa que sus apuntes estén completos y bien enlazados. |

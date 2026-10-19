@@ -38,7 +38,7 @@ Antes de empezar te pregunta en qué modo quieres que trabaje:
 | --- | --- |
 | `guided` (recomendado) | Trabaja solo, pero te pide permiso antes de publicar cualquier cosa que vean tus estudiantes. |
 | `interactive` | Te pide confirmación antes de cada paso. Útil para ver cómo trabaja. |
-| `autonomous` | No pregunta nada: publica sin pedirte permiso. Solo para cursos de prueba, y necesita tu usuario y contraseña guardados. |
+| `autonomous` | No pregunta nada: publica sin pedirte permiso. Solo para cursos de prueba. |
 
 Para no tener que elegirlo cada vez, pásalo en la orden:
 
@@ -52,13 +52,12 @@ En `autonomous` nadie revisa lo que publica: notas, respuestas del foro, conteni
 
 ## Mientras trabaja
 
-Verás en la terminal lo que va haciendo, y en la ventana de Chrome cada página que abre. Cuando necesite tu permiso, te mostrará el mismo panel que en el chat: **Sí**, **No** o **Parar**.
+Verás en la terminal lo que va haciendo. Si es la primera vez que entra en Moodle (o tu sesión ha caducado), se abre una ventana del navegador para que inicies sesión tú. Cuando necesite tu permiso, te mostrará el mismo panel que en el chat: **Sí**, **No** o **Parar**.
 
 Si quieres cortarlo, pulsa `Ctrl+C`: lo interrumpe y cierra la sesión con normalidad. Si lo pulsas otra vez, sale sin esperar. Lo que estuviera haciendo en ese momento puede quedar a medias (una nota sin guardar, por ejemplo); en la próxima sesión puedes pedirle que lo retome.
 
 ## Otras opciones
 
-- `--headless`: trabaja sin mostrar la ventana de Chrome. Necesita tu usuario y contraseña guardados.
 - `--plain`: muestra el progreso como texto simple, sin animaciones ni paneles. Útil si guardas la salida en un archivo.
 
 Todas las órdenes y opciones están en la [Referencia](referencia.md).

@@ -1,7 +1,7 @@
 ---
 title: Cómo funciona por dentro
 sidebar_position: 1
-description: "La arquitectura de miyagi: agent-kit, el Claude Agent SDK, Playwright con el Chrome del sistema, los tipos de sesión, los modos, los ayudantes y la carpeta del curso."
+description: "La arquitectura de miyagi: agent-kit, el Claude Agent SDK, la extensión moodle-teacher, los tipos de sesión, los modos, los ayudantes y la carpeta del curso."
 ---
 
 # Cómo funciona por dentro
@@ -11,10 +11,10 @@ Esta sección es para quien quiere entender o adaptar miyagi: profesores curioso
 ## Las piezas
 
 - **El modelo.** miyagi es un agente sobre el [Claude Agent SDK](https://www.npmjs.com/package/@anthropic-ai/claude-agent-sdk): el razonamiento lo hace Claude, con tu suscripción.
-- **agent-kit.** La base común ([`@falkenslab/agent-kit`](https://www.npmjs.com/package/@falkenslab/agent-kit)) aporta lo que todo agente necesita: los modos de supervisión, las aprobaciones, el inicio de sesión manual, la base de conocimiento, el límite de carpetas en las que puede escribir, el chat de la terminal y el registro de cada sesión.
-- **Playwright MCP y Chrome.** Para trabajar en Moodle, miyagi arranca el servidor [Playwright MCP](https://github.com/microsoft/playwright-mcp), que maneja el Google Chrome instalado en tu ordenador: abre páginas, lee su estructura, pulsa botones y rellena formularios, como lo harías tú.
+- **agent-kit.** La base común ([`@falkenslab/agent-kit`](https://www.npmjs.com/package/@falkenslab/agent-kit)) aporta lo que todo agente necesita: los modos de supervisión, las aprobaciones, las extensiones, la base de conocimiento, el límite de carpetas en las que puede escribir, el chat de la terminal y el registro de cada sesión.
+- **moodle-teacher.** miyagi no tiene navegador propio: llega a tu aula solo con la extensión moodle-teacher, del repositorio oficial [falkenslab/agent-extensions](https://github.com/falkenslab/agent-extensions). Ejecuta moodle-mcp, unas herramientas fijas que trabajan en Moodle con tu propia sesión, sin ir pulsando por las pantallas. La primera vez que hace falta, abre una ventana del navegador para que inicies sesión tú; miyagi y el modelo nunca ven tu contraseña.
 - **Extensiones.** Lo que miyagi no trae de serie se le añade con [extensiones](extensiones.md) del repositorio oficial de Falken's Lab, para todas tus asignaturas o solo para una.
-- **El dominio de Moodle.** Lo que miyagi sabe del oficio de profesor está en archivos de texto: las instrucciones de sistema en [`prompts/`](https://github.com/falkenslab/miyagi/tree/main/prompts) y las habilidades y atajos en [`plugin/`](https://github.com/falkenslab/miyagi/tree/main/plugin).
+- **El oficio de profesor.** Lo que miyagi sabe del oficio de profesor está en archivos de texto: las instrucciones de sistema en [`prompts/`](https://github.com/falkenslab/miyagi/tree/main/prompts) y las habilidades y atajos en [`plugin/`](https://github.com/falkenslab/miyagi/tree/main/plugin). Cómo se hace cada cosa en Moodle lo traen las habilidades `moodle-teacher:*` de la extensión.
 
 ```text
 miyagi (CLI)
@@ -25,9 +25,9 @@ miyagi (CLI)
      ├─ herramientas de archivos: escriben solo en drafts/ y practice/ (sources/ solo lectura)
      ├─ herramientas knowledge_* de agent-kit: lo único que llega a knowledge/
      ├─ herramientas de fuentes de agent-kit: list_sources, extract_text, save_to_sources…
-     ├─ Playwright MCP ──> Chrome ──> tu Moodle
+     ├─ extensión moodle-teacher (moodle-mcp) ──> tu Moodle, con tu sesión
      ├─ caja de herramientas de drafts/ (descargar, comprimir, PDF…)
-     ├─ ganchos: aprobación antes de publicar, validación de subidas
+     ├─ ganchos: aprobación antes de publicar, revisión del GIFT antes de importarlo
      └─ ayudantes: researcher, pedagogy-reviewer, practice-runner (opcional) ──> Docker
 ```
 
@@ -37,8 +37,8 @@ Cada orden abre un tipo de sesión distinto:
 
 - **`chat`**: una conversación a pantalla completa, que se puede retomar. Siempre empieza en modo guided.
 - **`run`**: un encargo de una sola vez, sin conversación. Recorre el curso entero o hace la tarea de `--task`.
-- **`ingest`**: incorpora tus documentos a la base de conocimiento. Sin navegador y sin Moodle: solo archivos.
-- **`explore`**: una visita corta (como mucho 80 turnos) para apuntar qué tipos de actividad y de pregunta admite tu Moodle y cómo se calculan las notas. Solo mira y cancela; no crea nada.
+- **`ingest`**: incorpora tus documentos a la base de conocimiento. Sin Moodle: solo archivos.
+- **`explore`**: una visita corta (como mucho 80 turnos) para apuntar qué tipos de actividad y de pregunta admite tu Moodle y cómo pueden funcionar las notas. Solo usa las herramientas de lectura de moodle-teacher; no crea ni cambia nada.
 
 Lo tienes en detalle en [Sesiones y modos](sesiones-y-modos.md).
 
@@ -46,7 +46,7 @@ Lo tienes en detalle en [Sesiones y modos](sesiones-y-modos.md).
 
 - **`guided`**: trabaja solo y pide aprobación antes de publicar algo que verán los alumnos. Un gancho del programa lo hace cumplir, no solo las instrucciones.
 - **`interactive`**: pide confirmación antes de cada herramienta que usa.
-- **`autonomous`**: no pregunta nada. No tiene herramienta para pedir aprobación ni para pedir que alguien inicie sesión a mano.
+- **`autonomous`**: no pregunta nada. No tiene herramienta para pedir aprobación.
 - **`plan`**: solo en el chat. Lee y prepara un plan sin cambiar nada, y te lo presenta para que decidas si lo ejecuta.
 
 `chat` y `explore` empiezan siempre en guided (en el chat, `Shift+Tab` pasa por guided, interactive y plan, y `/plan` entra y sale del modo plan). `run` pregunta el modo o lo toma de `--mode`. `ingest` no publica nada y no pregunta.
@@ -75,7 +75,7 @@ mi-curso/
   knowledge/         su base de conocimiento del curso
   drafts/            lo que construye para Moodle, editable
   practice/          solo con el probador de prácticas: una carpeta por práctica
-  sessions/          una carpeta por sesión: registro, transcripción, conversación, perfil del navegador
+  sessions/          una carpeta por sesión: registro, transcripción y conversación
 ```
 
 ## Sigue leyendo

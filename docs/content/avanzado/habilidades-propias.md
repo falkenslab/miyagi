@@ -126,7 +126,7 @@ Las habilidades se leen al arrancar miyagi: si tenías el chat abierto, ciérral
 
 ## Lo que una habilidad puede y no puede hacer
 
-Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: el navegador con tu Moodle, sus apuntes, la carpeta `drafts`, los documentos de `sources` y, si lo has activado, el probador de prácticas. **No le da herramientas nuevas.**
+Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: las de la extensión moodle-teacher con tu Moodle, sus apuntes, la carpeta `drafts`, los documentos de `sources` y, si lo has activado, el probador de prácticas. **No le da herramientas nuevas.**
 
 - **Puede**: fijar criterios, pasos, convenciones, plantillas y ejemplos; decirle qué documento de `sources` leer; apoyarse en otras habilidades (por ejemplo, «corrige con `grading-rubric`» o «pruébalo con `practice-testing`»).
 - **No puede**: darle una terminal, permitirle tocar `knowledge` sin sus herramientas `knowledge_*`, escribir archivos fuera de `drafts` y `practice`, leer `config.json` o `.env`, saltarse las aprobaciones ni conectarlo a otros servicios.

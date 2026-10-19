@@ -10,10 +10,10 @@ Se instala una vez por ordenador, en Windows, Mac o Linux. No hace falta saber p
 
 ## Lo que necesitas antes
 
-1. **Google Chrome.** Si no lo tienes, descárgalo de [google.com/chrome](https://www.google.com/chrome/). miyagi lo usa para entrar en Moodle.
+1. **Un navegador** como Google Chrome o Microsoft Edge. En él inicias sesión en Moodle la primera vez que miyagi lo necesita.
 2. **Node.js 20 o posterior.** Descárgalo de [nodejs.org](https://nodejs.org/), elige la versión **LTS** e instálalo con las opciones por defecto.
 3. **Una suscripción de Claude Pro o Max** ([claude.ai](https://claude.ai)). Es lo que hace funcionar al asistente.
-4. **Un curso de Moodle en el que seas profesor.** Para probar sin miedo, mejor un curso de pruebas o una copia de uno real.
+4. **Un curso de Moodle en el que seas profesor**, si quieres que trabaje en tu aula. Para probar sin miedo, mejor un curso de pruebas o una copia de uno real.
 
 ## Instalarlo
 
@@ -66,4 +66,4 @@ Las carpetas de tus cursos no se borran: son tuyas y siguen donde las dejaste.
 
 ## Siguiente paso
 
-Conéctalo a tu curso: [Primeros pasos](primeros-pasos.md).
+Prepara tu primera asignatura: [Primeros pasos](primeros-pasos.md).

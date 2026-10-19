@@ -6,7 +6,7 @@ description: "Un asistente que trabaja en tu curso de Moodle como lo harías tú
 
 # ¿Qué es miyagi?
 
-miyagi es un asistente que te ayuda a llevar tu curso de Moodle. Entra con tu cuenta de profesor en una ventana de Chrome y trabaja como lo harías tú: **corrige entregas**, **responde en el foro**, **crea o revisa contenido** y te **resume cómo va la clase**.
+miyagi es un asistente que te ayuda a llevar tu curso de Moodle. Trabaja en tu curso con tu propia sesión de profesor, a través de la extensión moodle-teacher, y hace lo que harías tú: **corrige entregas**, **responde en el foro**, **crea o revisa contenido** y te **resume cómo va la clase**.
 
 Tú hablas con él en la terminal, con tus palabras, como hablarías con un compañero. Y **nada que vean tus estudiantes se publica sin tu permiso**: antes de guardar una nota, responder en el foro o publicar un recurso, te enseña lo que va a hacer y espera tu sí.
 
@@ -27,15 +27,15 @@ Para profesores que llevan un curso en Moodle y quieren quitarse de encima el tr
 
 ## Qué necesitas
 
-- **Google Chrome**, que es el navegador con el que entra en Moodle.
+- **Un navegador** como Chrome o Edge, para iniciar sesión en Moodle.
 - **Node.js** 20 o posterior, el programa que hace funcionar a miyagi.
 - **Una suscripción de Claude Pro o Max**. miyagi es gratuito y de código abierto (licencia MIT); lo que hace funcionar al asistente es tu suscripción de Claude.
-- **Un curso de Moodle en el que tengas rol de profesor**. No hay que instalar nada en el servidor de tu centro: usa Moodle desde el navegador, como tú.
+- **Un curso de Moodle en el que tengas rol de profesor**. No hay que instalar nada en el servidor de tu centro: trabaja con tu sesión, como tú.
 
 ## Cómo funciona, en tres pasos
 
 1. **Lo instalas.** Una línea en la terminal, en Windows, Mac o Linux. Lo tienes en [Instalar](instalar.md).
-2. **Le presentas tu curso.** `miyagi init` te pregunta la dirección del curso, tu cuenta y el tono, y puede explorar tu Moodle (sin tocar nada) para saber qué admite. Si le dejas tu programación, tus rúbricas o tus criterios, los tiene en cuenta. Lo tienes en [Primeros pasos](primeros-pasos.md).
+2. **Le presentas tu curso.** `miyagi init` te pregunta el nombre de la asignatura y el tono y, si quieres, la dirección de tu curso de Moodle (nunca tu contraseña: inicias sesión tú en una ventana del navegador). Después puede explorar tu Moodle (sin tocar nada) para saber qué hay en él. Si le dejas tu programación, tus rúbricas o tus criterios, los tiene en cuenta. Lo tienes en [Primeros pasos](primeros-pasos.md).
 3. **Se lo pides y apruebas.** Conversas con él en el [chat](chat.md) o le encargas una tarea de una sola orden. Cuando algo vaya a llegar a tus alumnos, te lo enseña y espera tu sí.
 
 ## Por dónde seguir

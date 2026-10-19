@@ -6,7 +6,7 @@ description: "Prepara una carpeta para tu curso con miyagi init, dale tu materia
 
 # Primeros pasos
 
-Ya tienes miyagi [instalado](instalar.md). Ahora vas a conectarlo a un curso. Se hace una sola vez por curso.
+Ya tienes miyagi [instalado](instalar.md). Ahora vas a preparar una asignatura y, si quieres, conectarla a tu curso de Moodle. Se hace una sola vez por asignatura.
 
 :::tip[El recorrido completo, con capturas]
 Esta página es el resumen. Si prefieres verlo todo hecho de verdad, paso a paso y con capturas de Moodle, sigue el tutorial [Un curso de Introducción a SQL](../casos-de-uso/index.md).
@@ -40,7 +40,7 @@ Te hará unas preguntas, una detrás de otra:
 
   No te pide usuario ni contraseña. miyagi instala la [extensión](../avanzado/extensiones.md) **moodle-teacher**, que trabaja en Moodle con tu propia sesión: la primera vez que la necesita abre una ventana del navegador para que entres tú, y nunca ve tu contraseña. Por defecto puede cambiar tu curso, siempre pidiéndote permiso antes, y tus alumnos le llegan con un alias, nunca con su nombre.
 
-Si has conectado un aula, al final te propone **explorar ahora tu Moodle**. Te recomendamos decir que sí: entra en tu curso, mira qué tipos de actividad y de pregunta admite tu centro y cómo se pueden calcular las notas, y lo apunta. No crea ni cambia nada. Si algo falla (no llegas a iniciar sesión en la ventana, por ejemplo), la asignatura queda configurada igual y puedes repetirlo cuando quieras con `miyagi explore`.
+Si has conectado un aula, al final te propone **explorar ahora tu Moodle**. Te recomendamos decir que sí: entra en tu curso, mira qué tipos de actividad y de pregunta ve en él y cómo se calculan las notas, y lo apunta. No crea ni cambia nada. Si algo falla (no llegas a iniciar sesión en la ventana, por ejemplo), la asignatura queda configurada igual y puedes repetirlo cuando quieras con `miyagi explore`.
 
 Si es la primera vez que usas miyagi en este ordenador, en este momento te pedirá [conectar tu cuenta de Claude](instalar.md).
 
@@ -48,7 +48,7 @@ Al terminar, la carpeta de tu asignatura tendrá esto:
 
 ```text
 bases-de-datos/
-  config.json        tu Moodle y tu usuario (solo en tu ordenador; el asistente no puede leerlo)
+  config.json        tu asignatura y la dirección de tu Moodle (el asistente no puede leerlo)
   instructions.md    tus instrucciones fijas (si dijiste que sí)
   sources/           aquí dejas TUS documentos: programación, rúbricas, soluciones
   knowledge/         aquí escribe ÉL: sus apuntes del curso
@@ -75,7 +75,7 @@ Cuando añadas documentos nuevos, vuelve a ejecutarlo: solo procesa los que aún
 miyagi chat
 ```
 
-El chat ocupa toda la ventana de la terminal. El asistente te saluda con lo que ya sabe del curso, leyendo sus apuntes, sin abrir todavía el navegador. Si aún no sabe nada, te propone explorar el curso o leer tus documentos. Chrome se abre solo cuando lo que le pidas necesite entrar en Moodle.
+El chat ocupa toda la ventana de la terminal. El asistente te saluda con lo que ya sabe del curso, leyendo sus apuntes, sin entrar todavía en Moodle. Si aún no sabe nada, te propone explorar el curso o leer tus documentos. La primera vez que lo que le pidas necesite entrar en Moodle, se abre una ventana del navegador para que inicies sesión tú; después trabaja sin ventana.
 
 Un buen primer mensaje:
 
