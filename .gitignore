@@ -11,3 +11,6 @@ dist/
 # Documentation site (docs/, Docusaurus): build output and cache
 docs/build/
 docs/.docusaurus/
+
+# Prototipos locales (bocetos de interfaz): no se publican
+prototypes/
