@@ -1,5 +1,5 @@
 // Converts screenshots for the docs site to WebP, at most 1400 px wide, with the system Chrome
-// (the playwright-core that comes with @playwright/mcp; no image library to install).
+// (miyagi's playwright-core dependency; no image library to install).
 // Usage (from the repo root): node .claude/skills/update-docs/shot-to-webp.mjs <file.png>... [--quality=0.85]
 // Writes <file>.webp next to each one and prints the sizes; the PNG is left for you to delete.
 /* global Image, document -- used inside page.evaluate(), in the browser */

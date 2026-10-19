@@ -13,8 +13,6 @@ export interface GlobalConfig {
   claudeCodeOAuthToken?: string;
   /** SDK autocompact when the context fills up. On unless set to false here. */
   autoCompactEnabled?: boolean;
-  /** Fallback for workspaces with no `agent.headless` of their own. */
-  defaultHeadless?: boolean;
   /** Fallback for workspaces with no `agent.language` of their own. */
   defaultLanguage?: string;
 }
@@ -123,12 +121,6 @@ export async function ensureClaudeAuthPersisted(): Promise<void> {
   if (generated) await writeGlobalConfig({ ...config, claudeCodeOAuthToken: generated });
 }
 
-/** --headless (if passed), then the workspace's `agent.headless`, then `defaultHeadless`, then false. */
-export async function resolveHeadless(cliValue: boolean | undefined, workspaceValue: boolean | undefined): Promise<boolean> {
-  if (cliValue !== undefined) return cliValue;
-  if (workspaceValue !== undefined) return workspaceValue;
-  return (await readGlobalConfig()).defaultHeadless ?? false;
-}
 
 /** The workspace's `agent.language`, then `defaultLanguage`, then undefined (mirror the human). */
 export async function resolveLanguage(workspaceValue: string | undefined): Promise<string | undefined> {

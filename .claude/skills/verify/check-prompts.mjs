@@ -8,10 +8,8 @@ const root = process.cwd();
 const { buildSystemPrompt } = await import(pathToFileURL(path.join(root, "dist/systemPrompt.js")).href);
 const { toSessionConfig } = await import(pathToFileURL(path.join(root, "dist/workspace.js")).href);
 
-// A browser only with a classroom (ADR-013) that isn't moodle-teacher's (ADR-021), and never in ingest.
-const browser = (c) => c.kind !== "ingest" && c.hasMoodle && !c.moodleTeacher;
+// A classroom (ADR-013) is reached only through moodle-teacher (ADR-021): miyagi has no browser.
 const moodle = (c) => c.hasMoodle;
-const mt = (c) => c.hasMoodle && c.moodleTeacher;
 // Since agent-kit 0.16 the knowledge base is reached only through its knowledge_* tools: no
 // prompt, skill or command may send the agent to its files (index.md, log.md, a page's path).
 const KNOWLEDGE_FILES = /\b(index|log|overview|orientation|course-map|moodle-capabilities|teaching-plan|progress|course-audit|drafts)\.md\b|knowledge\/(topics|activities|summaries|concepts|entities|syntheses)\b|\bknowledge\/[a-z-]+\.md/;
@@ -19,52 +17,42 @@ const course = (c) => c.kind !== "explore";
 
 // Marker text of each conditional section -> in which renders it must appear.
 const SECTIONS = {
-  "teacher run": { text: "Manage the given course the way a real teacher would", when: (c) => c.kind === "run" && browser(c) },
-  "teacher chat": { text: "assistant for a teacher in an experimental Moodle", when: (c) => c.kind === "chat" && browser(c) },
-  "browser on demand": { text: "Don't open the browser at the start", when: (c) => c.kind === "chat" && browser(c) },
-  "moodle-teacher chat": { text: "Its classroom is a Moodle course you reach through the moodle-teacher extension", when: (c) => c.kind === "chat" && mt(c) },
-  "moodle-teacher run": { text: "running one subject's Moodle course on your own", when: (c) => c.kind === "run" && mt(c) },
-  "students as aliases": { text: "Students reach you as aliases", when: (c) => (c.kind === "run" || c.kind === "chat") && mt(c) },
+  "teacher chat": { text: "Its classroom is a Moodle course you reach through the moodle-teacher extension", when: (c) => c.kind === "chat" && moodle(c) },
+  "teacher run": { text: "running one subject's Moodle course on your own", when: (c) => c.kind === "run" && moodle(c) },
+  "students as aliases": { text: "Students reach you as aliases", when: (c) => (c.kind === "run" || c.kind === "chat") && moodle(c) },
+  "no browser": { text: "browser_", when: () => false },
   "teacher ingest": { text: "knowledge base of a teacher managing a Moodle course", when: (c) => c.kind === "ingest" && moodle(c) },
   "no classroom": { text: "No virtual classroom is connected to this workspace", when: (c) => course(c) && !moodle(c) },
   "classroom knowledge": { text: "### Classroom pages", when: (c) => course(c) && moodle(c) },
-  "explore": { text: "exploring the capabilities of a specific Moodle installation", when: (c) => c.kind === "explore" && !c.moodleTeacher },
-  "explore moodle-teacher": { text: "use only moodle-teacher's read tools", when: (c) => c.kind === "explore" && c.moodleTeacher },
-  "file-name safety": { text: "Never pass a `filename` to a Playwright tool", when: browser },
+  "explore": { text: "use only moodle-teacher's read tools", when: (c) => c.kind === "explore" },
   "migration": { text: "Pending: rebuild the knowledge base", when: (c) => c.migrationPending && course(c) },
   "course knowledge": { text: "The knowledge base of this course", when: course },
   "sources": { text: "## Course sources", when: course },
-  "navigation map": { text: "Course navigation map", when: (c) => browser(c) && course(c) },
   "language": { text: "español is this human's usual language", when: course },
   "persona": { text: "warm", when: course, loose: true },
   "custom instructions": { text: "Additional instructions from the teacher", when: course },
-  "approval before publishing": { text: "request_human_approval", when: (c) => moodle(c) && (c.kind === "chat" || (c.kind === "run" && (c.mode === "guided" || (mt(c) && c.mode === "interactive")))) },
-  "credentials": { text: "MOODLE_PASSWORD", when: browser },
+  "approval before publishing": { text: "request_human_approval", when: (c) => moodle(c) && (c.kind === "chat" || (c.kind === "run" && c.mode !== "autonomous")) },
   "subagents": { text: "## Helpers you can delegate to", when: (c) => c.kind === "run" || c.kind === "chat" },
   "practice runner": { text: "## Checking practical activities in Docker", when: (c) => c.allowPracticeRunner && (c.kind === "run" || c.kind === "chat") },
 };
 
-// A Moodle classroom through the browser or through moodle-teacher, and none (ADR-013: label at the root, no browser).
+// A Moodle classroom through moodle-teacher, and none (ADR-013: label at the root).
 const workspace = (practice, classroom) => ({
-  ...(classroom === "browser"
-    ? { classroom: { label: "check", url: "https://moodle.example.com", courseId: "1", username: "u", password: "p", connector: "browser" } }
-    : classroom === "moodle-teacher"
-      ? { classroom: { label: "check", url: "https://moodle.example.com", courseId: "1", connector: "moodle-teacher" } }
-      : { label: "check" }),
+  ...(classroom ? { classroom: { label: "check", url: "https://moodle.example.com", courseId: "1", connector: "moodle-teacher" } } : { label: "check" }),
   agent: { role: "teacher", language: "español", persona: "warm", allowPracticeRunner: practice },
 });
 
 const MODES = { run: ["guided", "interactive", "autonomous"], chat: ["guided"], ingest: ["autonomous"], explore: ["guided"] };
 
 let failures = 0;
-for (const classroom of ["browser", "moodle-teacher", undefined]) {
+for (const classroom of ["moodle-teacher", undefined]) {
 for (const [kind, modes] of Object.entries(MODES)) {
   // Without a classroom, explore stops before building a prompt.
   if (!classroom && kind === "explore") continue;
   for (const mode of modes) {
     for (const [migrationPending, practice] of [[false, false], [true, false], [false, true]]) {
       const config = toSessionConfig("C:/ws", workspace(practice, classroom), {
-        mode, kind, headless: false, migrationPending, language: "español", instructions: "Puntúa sobre 10.", moodleTeacher: classroom === "moodle-teacher",
+        mode, kind, migrationPending, language: "español", instructions: "Puntúa sobre 10.",
       });
       const prompt = buildSystemPrompt(config);
       const label = `${classroom ?? "no classroom"} ${kind} ${mode} migration=${migrationPending} practice=${practice}`;

@@ -2,8 +2,8 @@
 // assignment's submissions and grader, the gradebook, every forum thread, the quiz, and what
 // one student sees (admin "Log in as"). Run from the miyagi repo root:
 //   (cd ../moodle-sandbox && npm run --silent info -- --json) | node .claude/skills/sandbox-e2e/capture-moodle.mjs <outDir> ["Student Name"]
-// Credentials come from stdin and are never printed. Uses the playwright-core that comes with
-// @playwright/mcp, driving the system's Chrome.
+// Credentials come from stdin and are never printed. Uses miyagi's playwright-core dependency,
+// driving the system's Chrome.
 import { createRequire } from "node:module";
 import fs from "node:fs";
 import path from "node:path";

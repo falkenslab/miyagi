@@ -7,19 +7,19 @@ Commandes :
   init [--dir <chemin>]
       Crée une nouvelle matière dans le dossier de miyagi (~/.miyagi/workspaces/<nom>/)
       ou, avec --dir, dans ce dossier, et propose d'explorer son Moodle s'il en connecte un.
-  run [--dir <chemin>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<texte>"]
+  run [--dir <chemin>] [--mode interactive|guided|autonomous] [--plain] [--task "<texte>"]
       Gère le cours d'une traite : corrige les devoirs en attente, répond sur le forum,
       revoit ou ajoute du contenu et résume la progression de la classe. Sans --mode,
       demande le mode. Avec --task, ne fait que cette tâche (p. ex. --task "construis un
       cours d'introduction à Docker en 3 thèmes" ou --task "corrige le Devoir 2").
-  chat [--dir <chemin>] [--headless] [--inline] [--plain] [--continue]
+  chat [--dir <chemin>] [--inline] [--plain] [--continue]
       Conversation en plein écran. Commence en mode guided ; Maj+Tab bascule vers
       interactive. --inline garde la conversation dans l'historique du terminal et
       --plain utilise le chat en texte simple. --continue reprend la dernière
       conversation de ce cours, et /resume, dans le chat, permet d'en choisir une autre.
-  explore [--dir <chemin>] [--headless] [--plain]
+  explore [--dir <chemin>] [--plain]
       Regarde (sans rien créer) quels types d'activité et de question admet ce Moodle et
-      les note dans knowledge/moodle-capabilities.md.
+      les note dans la page course/moodle-capabilities.
   ingest [--dir <chemin>] [--plain] [fichiers...]
       Ajoute à la base de connaissances (knowledge/) les fichiers indiqués ou, sans
       fichier, tout ce qui est dans sources/ et n'y est pas encore. Sans navigateur ni
@@ -49,11 +49,9 @@ Chaque matière (un espace de travail) est un dossier avec son propre config.jso
 nouvelles vont dans ~/.miyagi/workspaces/<nom>/ et toutes sont listées dans
 ~/.miyagi/workspaces.json : -w <nom> l'ouvre depuis n'importe où ; --dir <chemin> marche
 toujours, et dans le dossier d'une matière miyagi utilise celle-ci. Sans arguments, miyagi
-demande si vous voulez "run" ou "chat" et quelle matière (ou une nouvelle). --headless
-(demande des identifiants enregistrés) et la langue préférée peuvent aussi être fixés
-durablement : dans le config.json de la matière ("agent.headless", "agent.language") ou,
-pour toutes, dans ${globalConfigPath} ("defaultHeadless", "defaultLanguage"). Voir
-README.md pour plus de détails.`,
+demande si vous voulez "run" ou "chat" et quelle matière (ou une nouvelle). La langue préférée peut aussi être fixée durablement : dans le config.json de la
+matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
+("defaultLanguage"). Voir README.md pour plus de détails.`,
   alreadyWorkspace: (dir) => `${dir} est déjà une matière miyagi (config.json existe). Choisissez un autre dossier.`,
   exploreFailed: (reason) => `Impossible d'explorer le Moodle (${reason}). La matière est créée ; vous pouvez réessayer avec "miyagi explore".`,
   catalogBuiltin: "[intégrée]",
@@ -81,9 +79,6 @@ README.md pour plus de détails.`,
   required: "Obligatoire",
   moodleUrl: "URL de Moodle (ou collez l'URL complète du cours, p. ex. https://moodle.monuniversite.fr/course/view.php?id=4) :",
   courseId: "ID du cours :",
-  username: "Utilisateur avec le rôle d'enseignant (laissez vide pour vous connecter à la main) :",
-  password: "Mot de passe :",
-  label: "Libellé :",
   description: "Description (facultative) :",
   persona: "Ton de l'agent (forums, retours, annonces) :",
   personaNone: "Pas de préférence (ton neutre)",
@@ -114,7 +109,6 @@ README.md pour plus de détails.`,
 
   studentRole: (dir) => `${dir} est une classe avec le rôle "student" : miyagi n'agit qu'en tant qu'enseignant.`,
   draftsLimitsInvalid: (dir, key, valid) => `${dir}/config.json : agent.draftsLimits.${key} doit être un nombre positif, parmi : ${valid}.`,
-  defaultLabel: (host, courseId) => `${host} · cours ${courseId}`,
 
   unknownMode: (value, valid) => `Mode inconnu "${value}". Utilisez l'un de : ${valid}.`,
   notAWorkspace: (dir) => `${dir} n'est pas une matière miyagi (pas de config.json). Lancez "miyagi init", ou ouvrez-en une avec -w <nom>.`,
@@ -122,10 +116,6 @@ README.md pour plus de détails.`,
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ avait l'ancienne structure : il a été déplacé vers ${legacyDir} (ses fichiers téléchargés, vers ${sourcesDir}) et l'agent reconstruira la base de connaissances à partir de là.\n`,
   setupSaved: (command) => `Configuration enregistrée. Quand vous voudrez commencer : ${command}`,
-  autonomousNeedsCredentials:
-    "Le mode autonomous ne permet pas de se connecter à la main (aucun moyen de demander de l'aide à un humain) : enregistrez l'utilisateur et le mot de passe dans config.json, ou utilisez --mode guided/interactive.",
-  headlessNeedsCredentials:
-    "--headless demande des identifiants enregistrés (aucune fenêtre visible pour se connecter à la main) : enregistrez l'utilisateur et le mot de passe dans config.json, ou retirez --headless.",
   headingIngest: "Ingestion dans la base de connaissances (sans navigateur)",
   headingExplore: "Exploration des capacités de ce Moodle",
   headingMode: (mode, chat) => `Mode : ${mode}${chat ? " (chat)" : ""}`,
@@ -140,11 +130,11 @@ README.md pour plus de détails.`,
   connectingMoodleTeacher: "Connexion de la classe avec moodle-teacher…",
   moodleTeacherRetry: "La matière est enregistrée : réessayez avec \"miyagi init -w <nom>\" ou \"miyagi extension add moodle-teacher\".",
   moodleTeacherInstallFailed: "Impossible d'installer ou de configurer moodle-teacher.",
-  migrateClassroomIntro: "miyagi travaille maintenant dans Moodle avec l'extension moodle-teacher : des outils fixes au lieu de cliquer partout, et vous vous connectez dans sa propre fenêtre au lieu d'un mot de passe enregistré. La classe de cette matière utilise encore le navigateur.",
-  migrateClassroomQuestion: "Passer cette classe à moodle-teacher ? (l'identifiant et le mot de passe enregistrés sont retirés du config.json)",
-  keptBrowser: "La classe garde le navigateur. Pour la passer plus tard, retirez \"connector\" de son config.json.",
+  migrateClassroomIntro: "miyagi travaille maintenant dans Moodle uniquement avec l'extension moodle-teacher : des outils fixes au lieu de cliquer partout, et vous vous connectez dans sa propre fenêtre au lieu d'un mot de passe enregistré. La classe de cette matière utilise encore l'ancien système, qui n'existe plus.",
+  migrateClassroomQuestion: "Passer maintenant cette classe à moodle-teacher ? (l'identifiant et le mot de passe enregistrés sont retirés du config.json ; sinon, cette session travaille sans la classe)",
   migratedClassroom: "Classe passée à moodle-teacher.",
   moodleTeacherMissing: "La classe de cette matière passe par moodle-teacher, qui n'est pas installée ou est désactivée : cette session travaille sans la classe. \"miyagi extension add moodle-teacher\" (ou \"enable\") le corrige.",
+  classroomNeedsMoving: "La classe de cette matière date d'avant moodle-teacher, et miyagi n'a plus de navigateur à lui : cette session travaille sans la classe. Ouvrez-la dans un chat pour la passer, ou lancez \"miyagi init -w <nom>\".",
   exploreNeedsClassroom: (dir) => `${dir} n'a aucune classe connectée : il n'y a pas de Moodle à explorer. Connectez-en une avec "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `La classe de ${dir}/config.json a besoin de "url" et de "courseId".`,
   workspaceName: "Nom de la matière :",
@@ -166,24 +156,8 @@ README.md pour plus de détails.`,
   gateTitle: "Publication sans approbation préalable",
   gateLine: "L'agent va publier ou modifier dans Moodle quelque chose que les élèves peuvent voir, sans vous l'avoir demandé avant.",
 
-  manualLoginTitle: "Connexion manuelle nécessaire",
-  manualLoginLines: ["Aucun identifiant enregistré pour cette matière.", "Connectez-vous à la main dans la fenêtre du navigateur déjà ouverte."],
-  manualLoginQuestion: "Appuyez sur Entrée une fois connecté (ou 'q' pour annuler) : ",
 
   toolPhrases: {
-    navigate: ["a ouvert {n} page", "a ouvert {n} pages"],
-    back: ["est revenu en arrière", "est revenu en arrière {n} fois"],
-    click: ["a cliqué {n} fois", "a cliqué {n} fois"],
-    type: ["a écrit dans {n} champ", "a écrit dans {n} champs"],
-    fillForm: ["a rempli {n} formulaire", "a rempli {n} formulaires"],
-    select: ["a choisi {n} option", "a choisi {n} options"],
-    pressKey: ["a appuyé sur {n} touche", "a appuyé sur {n} touches"],
-    snapshot: ["a lu la page", "a lu la page {n} fois"],
-    evaluate: ["a examiné la page", "a examiné la page {n} fois"],
-    find: ["a cherché dans la page", "a cherché dans la page {n} fois"],
-    wait: ["a attendu", "a attendu {n} fois"],
-    upload: ["a téléversé des fichiers", "a téléversé des fichiers {n} fois"],
-    screenshot: ["a pris {n} capture", "a pris {n} captures"],
     approval: ["a demandé une approbation", "a demandé une approbation {n} fois"],
     download: ["a téléchargé {n} fichier", "a téléchargé {n} fichiers"],
     files: ["a travaillé sur des fichiers", "a travaillé sur des fichiers {n} fois"],
@@ -191,52 +165,6 @@ README.md pour plus de détails.`,
   },
 
   tool: {
-    navigate: (url) => `Ouverture de ${url}`,
-    aPage: "une page",
-    back: "Retour à la page précédente",
-    forward: "Passage à la page suivante",
-    snapshot: "Lecture de la structure de la page",
-    click: (element) => `Clic sur « ${element} »`,
-    hover: (element) => `Survol de « ${element} »`,
-    drag: (from, to) => `Glissement de « ${from} » vers « ${to} »`,
-    select: (values, element) => `Choix de « ${values} » dans « ${element} »`,
-    type: (text, element) => `Saisie de « ${text} » dans « ${element} »`,
-    anElement: "un élément",
-    anotherElement: "un autre élément",
-    aDropdown: "une liste déroulante",
-    aField: "un champ",
-    pressKey: (key) => `Appui sur la touche « ${key} »`,
-    waitFor: (text) => `Attente de l'apparition de « ${text} »`,
-    waitGone: (text) => `Attente de la disparition de « ${text} »`,
-    waitSeconds: (seconds) => `Attente de ${seconds} s`,
-    wait: "Attente",
-    findText: (text) => `Recherche de « ${text} » dans la page`,
-    findPattern: (pattern) => `Recherche du motif « ${pattern} » dans la page`,
-    find: "Recherche dans la page",
-    fillForm: (fields) => `Remplissage d'un formulaire (${fields} champ${fields === 1 ? "" : "s"})`,
-    upload: "Envoi de fichiers",
-    evaluate: {
-      editor: "Écriture dans l'éditeur de texte",
-      form: "Remplissage du formulaire",
-      act: "Clic dans la page",
-      otherPages: "Consultation d'autres pages du cours",
-      formFields: "Vérification des champs du formulaire",
-      table: "Lecture d'un tableau de la page",
-      dialog: "Lecture d'une boîte de dialogue",
-      links: "Examen des liens de la page",
-      location: "Vérification de la page actuelle",
-      content: "Lecture du contenu de la page",
-      generic: "Examen de la page",
-    },
-    screenshot: "Capture d'écran",
-    tabs: "Gestion des onglets",
-    resize: "Redimensionnement de la fenêtre",
-    close: "Fermeture du navigateur",
-    console: "Vérification de la console du navigateur",
-    networkRequests: "Vérification des requêtes réseau",
-    saveResponse: "Enregistrement sur le disque de la réponse d'une requête",
-    requestDetails: "Lecture des détails d'une requête",
-    runCodeUnsafe: "Tentative d'exécuter du code sans restriction (bloquée)",
     drafts: {
       list: (p) => `Consultation de ${p} dans drafts/`,
       mkdir: (p) => `Création du dossier ${p}`,
@@ -250,7 +178,5 @@ README.md pour plus de détails.`,
       pdf: (to) => `Impression de ${to}`,
       info: (p) => `Vérification du fichier ${p}`,
     },
-    acceptDialog: "Acceptation d'une boîte de dialogue du navigateur",
-    dismissDialog: "Fermeture d'une boîte de dialogue du navigateur",
   },
 };

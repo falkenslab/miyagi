@@ -2,6 +2,7 @@
 // sandbox tests, the GIFT whose indentation Moodle lost (tests/2026-09-28T15-41-draft-testing)
 // before and after its fix, and files broken on purpose.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-validators.mjs
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -45,12 +46,14 @@ if (validateUpload(path.join(dir, "..", "..", "SKILL.md")) !== null) {
   failures++;
   console.log("FAIL a file that isn't GIFT or HTML should pass untouched");
 }
-// The gate itself: the hook denies the broken upload with its lines, lets the fixed one through.
+// The gate itself, on moodle-teacher's import_questions: it denies the broken GIFT (as a file or as
+// text) with its lines, lets the fixed one through, and leaves Moodle XML alone.
 const { installUploadGate } = await import(pathToFileURL(path.join(root, "dist/uploadGate.js")).href);
 const options = {};
 installUploadGate(options);
 const hook = options.hooks.PreToolUse[0].hooks[0];
-const upload = (file) => hook({ tool_name: "mcp__playwright__browser_file_upload", tool_input: { paths: [path.join(dir, file)] } });
+const upload = (file) => hook({ tool_name: "mcp__moodle__import_questions", tool_input: { format: "gift", file: path.join(dir, file) } });
+const importText = (file, format = "gift") => hook({ tool_name: "mcp__moodle__import_questions", tool_input: { format, text: readFileSync(path.join(dir, file), "utf-8") } });
 const denied = (await upload("loops-original.gift")).hookSpecificOutput;
 if (denied?.permissionDecision !== "deny" || !/line 5:/.test(denied.permissionDecisionReason)) {
   failures++;
@@ -60,10 +63,14 @@ if ((await upload("loops-fixed.gift")).hookSpecificOutput) {
   failures++;
   console.log("FAIL the gate should let loops-fixed.gift through untouched");
 }
-const warned = (await upload("page/good.html")).hookSpecificOutput;
-if (warned) {
+const deniedText = (await importText("loops-original.gift")).hookSpecificOutput;
+if (deniedText?.permissionDecision !== "deny" || !/line 5:/.test(deniedText.permissionDecisionReason)) {
   failures++;
-  console.log("FAIL good.html has nothing to report");
+  console.log("FAIL the gate should deny loops-original.gift given as text, citing line 5");
+}
+if ((await importText("loops-original.gift", "xml")).hookSpecificOutput) {
+  failures++;
+  console.log("FAIL the gate should leave a Moodle XML import alone");
 }
 if (failures > 0) {
   console.log(`\n${failures} validator case(s) failed`);

@@ -1,7 +1,6 @@
 import { mkdir } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import {
   buildSessionOptions,
@@ -43,14 +42,12 @@ import {
   ensureClaudeAuthPersisted,
   isAutoCompactEnabled,
   loadWorkspaceEnv,
-  resolveHeadless,
   resolveLanguage,
 } from "./globalConfig.js";
 import { offerPracticeRunner, promptInitWorkspace, promptMigrateClassroom, promptMode, promptPickWorkspace } from "./menu.js";
 import { moodleTeacherActive } from "./classroom.js";
 import { listWorkspaces, locateWorkspace, registerWorkspace, workspaceIds } from "./workspaces.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
-import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
 import { installPublishGate } from "./publishGate.js";
 import { installUploadGate } from "./uploadGate.js";
@@ -66,18 +63,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VERSION = (JSON.parse(readFileSync(path.join(__dirname, "..", "package.json"), "utf-8")) as { version: string }).version;
 const loadPrompt = createPromptLoader(path.join(__dirname, "..", "prompts"));
 
-/** The installed @playwright/mcp's CLI, launched with this same Node — its version is pinned
- * in package.json instead of whatever `npx @playwright/mcp@latest` happens to fetch. The
- * package doesn't export cli.js, so it's resolved next to its package.json. */
-const PLAYWRIGHT_MCP_CLI = path.join(
-  path.dirname(createRequire(import.meta.url).resolve("@playwright/mcp/package.json")),
-  "cli.js",
-);
-
-/** "explore" is a bounded task (login, a few look-and-cancel screens, one page written): it
- * doesn't need the headroom of a full run. 80 since agent-kit 0.16: a real explore of the
- * sandbox ran out at 60 with the page still unwritten (the task list and the knowledge tools
- * take turns the file tools didn't). */
+/** "explore" is a bounded task (sign in, a few read tools, one page written): it doesn't need
+ * the headroom of a full run. 80 since agent-kit 0.16: a real explore of the sandbox ran out at
+ * 60 with the page still unwritten (the task list and the knowledge tools take turns). */
 const EXPLORE_MAX_TURNS = 80;
 
 /** The knowledge base's reading tools (agent-kit's `knowledge` server), for the subagents:
@@ -114,15 +102,14 @@ function positionalArgs(args: string[]): string[] {
 }
 
 /**
- * The parts of the session that are genuinely domain-specific (system prompt, the Playwright
- * MCP server, the plugin root, the RCE-equivalent disallowed tool, human-approval/manual-login
- * wording). Everything else (tool/hook wiring per mode, file-tool scoping, the
- * approval/manual-login/save-to-sources MCP tools themselves) is agent-kit's own
- * `buildSessionOptions()`, not repeated here. Subagents: see buildSubagents() below. An
- * "ingest" session has no browser: no Playwright server, no manual login. Neither has a
- * workspace without a classroom (ADR-013): it works on the plan and the materials only.
+ * The parts of the session that are genuinely domain-specific (system prompt, the drafts
+ * toolbox, the plugin root, the approval wording). Everything else (tool/hook wiring per mode,
+ * file-tool scoping, the approval and sources tools themselves, the installed extensions with
+ * moodle-teacher among them) is agent-kit's own `buildSessionOptions()`, not repeated here.
+ * Subagents: see buildSubagents() below. miyagi has no browser: the classroom is moodle-teacher's
+ * (ADR-021).
  */
-function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasBrowser: boolean): AgentSpec<WorkspaceSessionConfig> {
+function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSessionConfig> {
   return {
     skills,
     extensions: [
@@ -136,19 +123,6 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasBrows
       // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a
       // shell; with or without a classroom.
       ...(kind === "run" || kind === "chat" ? { [DRAFTS_SERVER]: createDraftsServer(config.draftsDir, config.draftsLimits) } : {}),
-      ...(hasBrowser ? { playwright: {
-        command: process.execPath,
-        args: [
-          PLAYWRIGHT_MCP_CLI,
-          "--config",
-          playwrightConfigPathFor(runDir),
-          "--output-dir",
-          path.join(runDir, "browser-files"),
-          "--user-data-dir",
-          path.join(runDir, "browser-profile"),
-          ...(config.headless ? ["--headless"] : []),
-        ],
-      } } : {}),
     }),
     pluginRoots: () => [path.join(__dirname, "..", "plugin")],
     // In run/chat: two helpers without a shell (researcher: public web; pedagogy-reviewer:
@@ -188,27 +162,11 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasBrows
       }
       return { agents, allowedSubagentTypes: Object.keys(agents) };
     },
-    // browser_run_code_unsafe runs arbitrary JS in the Playwright server process (not the
-    // page) — Microsoft's own description calls it "RCE-equivalent". disallowedTools takes
-    // full precedence over canUseTool/allowAnyMcpTool (confirmed empirically, see
-    // agent-kit's own session.ts doc comment).
-    disallowedTools: ["mcp__playwright__browser_run_code_unsafe"],
     humanApprovalTexts: {
       description: loadPrompt("tools/human-approval-description.md"),
       approved: loadPrompt("tools/human-approval-approved.md"),
       rejected: loadPrompt("tools/human-approval-rejected.md"),
     },
-    ...(hasBrowser
-      ? {
-          manualInterventionTexts: {
-            toolDescription: loadPrompt("tools/manual-login-description.md"),
-            confirmedMessage: loadPrompt("tools/manual-login-confirmed.md"),
-            checkpointTitle: t().manualLoginTitle,
-            checkpointLines: t().manualLoginLines,
-            checkpointQuestion: t().manualLoginQuestion,
-          },
-        }
-      : {}),
   };
 }
 
@@ -220,7 +178,7 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasBrows
 async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promise<WorkspaceConfig | { created: string }> {
   if (await workspaceExists(workspaceDir)) {
     const config = await ensureWorkspaceDefaults(workspaceDir, await readWorkspaceConfig(workspaceDir));
-    // A classroom from before moodle-teacher: asked once whether to move it there (#43).
+    // A classroom from before moodle-teacher: moved there, or this session works without it (ADR-021).
     const migrated = canPrompt ? await promptMigrateClassroom(workspaceDir, config) : config;
     return offerPracticeRunner(workspaceDir, migrated, canPrompt);
   }
@@ -249,7 +207,7 @@ async function prepareKnowledgeBase(workspaceDir: string): Promise<boolean> {
 }
 
 /** The mode each kind runs in: "run" asks (or takes --mode), "chat" and "explore" are
- * guided (a human may have to log in by hand), "ingest" publishes nothing. */
+ * guided (the teacher may have to sign in in moodle-teacher's window), "ingest" publishes nothing. */
 async function resolveMode(kind: SessionKind, modeFlag: Mode | undefined): Promise<Mode> {
   if (kind === "ingest") return "autonomous";
   if (kind !== "run") return "guided";
@@ -289,40 +247,26 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     return;
   }
   await registerWorkspace(workspaceDir, workspaceLabel(workspaceDir, workspace), workspace.kind ?? "subject");
-  // Through moodle-teacher, the classroom needs it installed and on; otherwise the session works
-  // as if there were none, and says how to fix it.
-  const viaMoodleTeacher = workspace.classroom?.connector === "moodle-teacher";
-  const moodleTeacher = viaMoodleTeacher && (await moodleTeacherActive(workspaceDir));
-  if (viaMoodleTeacher && !moodleTeacher) console.log(ui.warn(t().moodleTeacherMissing));
-  const classroom = viaMoodleTeacher && !moodleTeacher ? undefined : workspace.classroom;
+  // The classroom is moodle-teacher's (ADR-021): it needs moving there if it's from before, and
+  // the extension installed and on. Otherwise the session works without it, and says how to fix it.
+  const pending = workspace.classroom && workspace.classroom.connector !== "moodle-teacher";
+  if (pending) console.log(ui.warn(t().classroomNeedsMoving));
+  const active = !pending && workspace.classroom ? await moodleTeacherActive(workspaceDir) : false;
+  if (workspace.classroom && !pending && !active) console.log(ui.warn(t().moodleTeacherMissing));
+  const classroom = active ? workspace.classroom : undefined;
   if (kind === "explore" && !classroom) {
     console.log(ui.warn(t().exploreNeedsClassroom(workspaceDir)));
     return;
   }
-  // miyagi's own browser only for a classroom that isn't moodle-teacher's.
-  const hasBrowser = kind !== "ingest" && Boolean(classroom) && !moodleTeacher;
   const mode = await resolveMode(kind, modeFlag);
-  const headless = await resolveHeadless(parseBooleanFlag(args, "--headless"), workspace.agent.headless);
-  const hasCredentials = Boolean(classroom?.username && classroom?.password);
-
-  // Manual login needs a visible browser window — no channel for it in autonomous or
-  // headless (mirrors agent-kit's own includeManualLoginTool condition in session.ts).
-  if (hasBrowser && mode === "autonomous" && !hasCredentials) {
-    throw new Error(t().autonomousNeedsCredentials);
-  }
-  if (hasBrowser && headless && !hasCredentials) {
-    throw new Error(t().headlessNeedsCredentials);
-  }
 
   const config = toSessionConfig(workspaceDir, workspace, {
     mode,
     kind,
-    headless,
     // "explore" only writes moodle-capabilities.md: a pending rebuild waits for a real session.
     migrationPending: kind === "explore" ? false : await prepareKnowledgeBase(workspaceDir),
     language: await resolveLanguage(workspace.agent.language),
     instructions: await readInstructions(workspaceDir),
-    moodleTeacher,
   });
   if (!classroom) config.hasMoodle = false;
 
@@ -331,17 +275,18 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   const autoCompactEnabled = await isAutoCompactEnabled();
   const skills = await sessionSkills(workspaceDir);
 
-  /** The session's options for a run folder: its browser, its tools and hooks, the publish gate. */
+  /** The session's options for a run folder: its tools and hooks, the publish and upload gates. */
   async function openSession(runDir: string, run?: RunFolder) {
-    if (hasBrowser) await writePlaywrightConfig(runDir, config.moodlePassword);
     // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
-    const opened = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills, hasBrowser), { autoCompactEnabled, run });
+    const opened = await buildSessionOptions(config, runDir, buildSpec(kind, skills), { autoCompactEnabled, run });
     const { options, modeControl } = opened;
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
-    // The approval before publishing, enforced (it only acts in guided): over the browser's
-    // clicks, or over moodle-teacher's tools. Without a classroom (or in ingest) nothing publishes.
-    if (hasBrowser || (moodleTeacher && kind !== "ingest")) installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
-    if (hasBrowser) installUploadGate(options);
+    // The approval before publishing, enforced over moodle-teacher's tools (it only acts in
+    // guided), and GIFT checked before it's imported. Without a classroom nothing publishes.
+    if (classroom && kind !== "ingest") {
+      installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
+      installUploadGate(options);
+    }
     return opened;
   }
 

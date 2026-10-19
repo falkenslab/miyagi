@@ -18,7 +18,6 @@ npm run build
 node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
 node .claude/skills/verify/check-publish-gate.mjs
-node .claude/skills/verify/check-tool-labels.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
 node .claude/skills/verify/check-file-scope.mjs
@@ -31,8 +30,8 @@ node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir .
 if:
 - any `{{placeholder}}` is left unsubstituted;
 - a section that must be there is missing, or one that must not be there is present
-  (browser-only sections in `ingest`, the course layer in `explore`, the approval step outside
-  `guided`/`chat`...);
+  (the classroom sections without a classroom, the course layer in `explore`, the approval step
+  in `autonomous`, any `browser_` tool: miyagi has none...);
 - a prompt mentions a leftover of the agents this one came from (`student-agent`,
   `moodle-agent`, `context/`, `knowledge/README.md`, `save_to_knowledge`).
 
@@ -40,19 +39,15 @@ if:
 doesn't exist — what a merge or a rename leaves behind. After renaming or merging skills, also
 update the docs site (`update-docs`; `check-docs.mjs` catches a missing skill) and `.minispec/core/architecture.md`, which it doesn't read.
 
-`check-publish-gate.mjs` classifies real tool calls (clicks, scripts, navigations taken from
-test transcripts) with the publish gate's `isPublishAction()` and fails on any that would
-publish without being caught, or be stopped without publishing. When a test finds a
-publishing action the gate missed, add it there with the fix.
-
-`check-tool-labels.mjs` runs `classifyEvaluate()` on real `browser_evaluate` calls and fails
-if one is labelled as the wrong kind (writing, acting, reading a table, the form...) or if
-its chat line shows code. When a session shows a JavaScript call with a misleading or
-generic label, add it there with the rule that fixes it.
+`check-publish-gate.mjs` classifies moodle-teacher's tools with the publish gate's
+`isPublishAction()` (reading and signing in never ask, anything else does, a deletion always)
+and runs the gate with a fake teacher answering. When a test finds a tool the gate missed, or
+one it stops without reason, add it there with the fix.
 
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT
-and HTML files broken on purpose, and the upload gate's hook itself. Each fixture has its
+and HTML files broken on purpose, and the upload gate's hook itself on moodle-teacher's
+`import_questions` (GIFT as a file and as text; Moodle XML left alone). Each fixture has its
 expected errors by line. When a real upload gets through broken, or a good one is refused,
 add the file there with the rule that fixes it.
 

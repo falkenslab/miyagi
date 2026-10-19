@@ -8,8 +8,8 @@ import { DraftsPathError } from "./paths.js";
 
 /**
  * The two toolbox operations that need a real browser — saving a web page with everything it
- * loads, and printing HTML or Markdown to PDF — with the same playwright-core and system
- * Chrome the Playwright MCP server uses, always headless, in their own short-lived browser.
+ * loads, and printing HTML or Markdown to PDF — with playwright-core and the system's Chrome,
+ * always headless, in their own short-lived browser.
  */
 
 interface Browser { newPage(): Promise<Page>; close(): Promise<void> }
@@ -24,10 +24,9 @@ interface Page {
 
 const MB = 1024 * 1024;
 
-/** playwright-core as @playwright/mcp installs it, so there's only one copy to keep up to date. */
+/** playwright-core, a dependency of miyagi's own: only the library, with the system's Chrome (no browser downloaded). */
 function chromium(): { launch(options: { channel: string; headless: boolean }): Promise<Browser> } {
-  const mcp = createRequire(import.meta.url).resolve("@playwright/mcp/package.json");
-  return createRequire(mcp)("playwright-core").chromium;
+  return createRequire(import.meta.url)("playwright-core").chromium;
 }
 
 async function withBrowser<T>(run: (browser: Browser) => Promise<T>): Promise<T> {

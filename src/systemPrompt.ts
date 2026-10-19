@@ -2,33 +2,25 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createPromptLoader } from "@falkenslab/agent-kit";
 import type { WorkspaceSessionConfig } from "./workspace.js";
-import { MOODLE_PASSWORD_SECRET_NAME } from "./playwrightConfig.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const loadPrompt = createPromptLoader(path.join(__dirname, "..", "prompts"));
 
 /**
- * Domain knowledge about Moodle and the teacher mission. All differentiation by activity
- * type (quiz/assignment/forum/resource) lives in the prompt text itself
- * (`prompts/system/*.md`), not in code — this function only decides which template to load
- * and with what variables.
+ * The teacher's assistant, with or without a classroom. The classroom is reached through the
+ * moodle-teacher extension (ADR-021): its tools and skills do Moodle, miyagi's prompt says the
+ * mission and the rules. This function only decides which template to load and with what variables.
  */
 export function buildSystemPrompt(config: WorkspaceSessionConfig): string {
   // "explore" is a short, bounded probe with its own prompt: nothing else applies to it
   // except the file-safety rule (it drives the browser like any other session).
-  // Through moodle-teacher (ADR-021) there's no browser of miyagi's own: its tools and skills are the classroom's.
-  if (config.kind === "explore") {
-    return config.moodleTeacher ? buildExploreSystemPrompt(config) : `${buildExploreSystemPrompt(config)}${playwrightFileSafetySection()}`;
-  }
+  if (config.kind === "explore") return buildExploreSystemPrompt(config);
 
   const base = !config.hasMoodle
     ? buildStandaloneSystemPrompt(config)
-    : config.kind === "ingest" ? buildIngestSystemPrompt(config)
-    : config.moodleTeacher ? buildMoodleTeacherSystemPrompt(config)
-    : config.kind === "chat" ? buildChatSystemPrompt(config) : buildRunSystemPrompt(config);
-  const browserOnly = config.kind === "ingest" || !config.hasMoodle || config.moodleTeacher ? "" : playwrightFileSafetySection();
-  return `${base}${migrationSection(config)}${subagentsSection(config)}${practiceSection(config)}${languageSection(config)}${personaSection(config)}${customInstructionsSection(config)}${webResearchSection(config)}${browserOnly}`;
+    : config.kind === "ingest" ? buildIngestSystemPrompt(config) : buildClassroomSystemPrompt(config);
+  return `${base}${migrationSection(config)}${subagentsSection(config)}${practiceSection(config)}${languageSection(config)}${personaSection(config)}${customInstructionsSection(config)}${webResearchSection(config)}`;
 }
 
 /** A legacy knowledge/ was moved to knowledge-legacy/: rebuilding the knowledge base comes before anything else. */
@@ -56,10 +48,6 @@ function practiceSection(config: WorkspaceSessionConfig): string {
   return `
 
 ${loadPrompt("system/practice-access.md")}`;
-}
-
-function playwrightFileSafetySection(): string {
-  return `\n\n${loadPrompt("system/playwright-file-safety.md")}`;
 }
 
 function languageSection(config: WorkspaceSessionConfig): string {
@@ -107,23 +95,13 @@ function buildStandaloneSystemPrompt(config: WorkspaceSessionConfig): string {
   return loadPrompt(`system/teacher-${kind}-standalone.md`, { contextAndKnowledgeSection: contextAndKnowledgeSection(config) });
 }
 
-/** A classroom reached through moodle-teacher: the same mission, with its tools and skills instead of a browser. */
-function buildMoodleTeacherSystemPrompt(config: WorkspaceSessionConfig): string {
-  return loadPrompt(`system/teacher-${config.kind === "chat" ? "chat" : "run"}-moodle-teacher.md`, {
+/** A classroom, reached through moodle-teacher's tools and skills (ADR-021). */
+function buildClassroomSystemPrompt(config: WorkspaceSessionConfig): string {
+  return loadPrompt(`system/teacher-${config.kind === "chat" ? "chat" : "run"}.md`, {
     moodleUrl: config.moodleUrl ?? "",
     moodleCourseId: config.moodleCourseId ?? "",
     contextAndKnowledgeSection: contextAndKnowledgeSection(config),
     approvalRule: config.mode === "autonomous" ? loadPrompt("system/evaluable-submission-autonomous.md") : loadPrompt("system/approval-before-tool.md"),
-  });
-}
-
-function buildRunSystemPrompt(config: WorkspaceSessionConfig): string {
-  return loadPrompt("system/teacher-run.md", {
-    moodleUrl: config.moodleUrl ?? "",
-    moodleCourseId: config.moodleCourseId ?? "",
-    credentialsSection: credentialsSection(config),
-    contextAndKnowledgeSection: contextAndKnowledgeSection(config),
-    evaluableSubmissionRule: evaluableSubmissionRule(config.mode),
   });
 }
 
@@ -135,41 +113,8 @@ function buildIngestSystemPrompt(config: WorkspaceSessionConfig): string {
   });
 }
 
-function buildChatSystemPrompt(config: WorkspaceSessionConfig): string {
-  return loadPrompt("system/teacher-chat.md", {
-    moodleUrl: config.moodleUrl ?? "",
-    moodleCourseId: config.moodleCourseId ?? "",
-    credentialsSection: credentialsSection(config),
-    contextAndKnowledgeSection: contextAndKnowledgeSection(config),
-  });
-}
-
 function buildExploreSystemPrompt(config: WorkspaceSessionConfig): string {
-  if (config.moodleTeacher) return loadPrompt("system/explore-moodle-teacher.md", { moodleUrl: config.moodleUrl ?? "", moodleCourseId: config.moodleCourseId ?? "" });
-  return loadPrompt("system/explore.md", {
-    moodleUrl: config.moodleUrl ?? "",
-    moodleCourseId: config.moodleCourseId ?? "",
-    credentialsSection: credentialsSection(config),
-  });
-}
-
-/** No saved username/password → the agent has to ask a human to log in by hand. */
-function credentialsSection(config: WorkspaceSessionConfig): string {
-  if (!config.hasMoodle || config.moodleTeacher) return "";
-  if (config.moodleUsername && config.moodlePassword) {
-    // In autonomous, or with --headless, there's no human-intervention channel at all
-    // (see includeManualLoginTool in agent-kit's session.ts), so the fallback isn't
-    // mentioned there — there'd be no request_manual_login tool registered to use it with.
-    const manualLoginFallback = config.mode !== "autonomous" && !config.headless
-      ? `\n\n${loadPrompt("system/credentials-fallback.md")}`
-      : "";
-    return loadPrompt("system/credentials-configured.md", {
-      username: config.moodleUsername,
-      passwordSecretName: MOODLE_PASSWORD_SECRET_NAME,
-      manualLoginFallback,
-    });
-  }
-  return loadPrompt("system/credentials-manual-login.md", { moodleUrl: config.moodleUrl ?? "" });
+  return loadPrompt("system/explore.md", { moodleUrl: config.moodleUrl ?? "", moodleCourseId: config.moodleCourseId ?? "" });
 }
 
 /**
@@ -179,28 +124,15 @@ function credentialsSection(config: WorkspaceSessionConfig): string {
  * to managing a course (topics, activities, progress and audit histories, course pages).
  */
 function contextAndKnowledgeSection(config: WorkspaceSessionConfig): string {
-  const hasBrowser = config.hasMoodle && config.kind !== "ingest" && !config.moodleTeacher;
   const contextBlock = `\n${loadPrompt("system/sources.md", {
     sourcesDir: config.sourcesDir,
     authorityLine: config.hasMoodle ? ", alongside (or even above) whatever you find on Moodle itself" : "",
-    linksLine: hasBrowser
-      ? "you can navigate to those specific URLs with the browser tools to consult them — it's the only situation where it's fine to leave Moodle itself."
-      : "you may use WebFetch for a public web page it links to, clearly labelled as outside the course's material.",
+    linksLine: "you may use WebFetch for a public web page it links to, clearly labelled as outside the course's material.",
   })}`;
   // The classroom's pages (orientation, map, capabilities, progress, audit, hidden drafts)
   // only exist with a classroom.
   const classroomBlock = config.hasMoodle ? `\n\n${loadPrompt("system/classroom-knowledge.md")}` : "";
   const knowledgeBlock = `${loadPrompt("system/course-knowledge.md")}${classroomBlock}`;
-  // Without a browser of its own there's no Moodle to navigate or download from.
-  if (!hasBrowser) return `${contextBlock}\n\n${knowledgeBlock}`;
-
-  const navigationMapBlock = loadPrompt("system/navigation-map.md");
-  const moodleFileAccessBlock = loadPrompt("system/moodle-file-access.md");
-  return `${contextBlock}\n\n${knowledgeBlock}\n\n${navigationMapBlock}\n\n${moodleFileAccessBlock}`;
+  return `${contextBlock}\n\n${knowledgeBlock}`;
 }
 
-function evaluableSubmissionRule(mode: WorkspaceSessionConfig["mode"]): string {
-  if (mode === "guided") return loadPrompt("system/evaluable-submission-guided.md");
-  if (mode === "interactive") return loadPrompt("system/evaluable-submission-interactive.md");
-  return loadPrompt("system/evaluable-submission-autonomous.md");
-}

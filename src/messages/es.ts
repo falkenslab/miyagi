@@ -7,19 +7,19 @@ Comandos:
   init [--dir <ruta>]
       Crea una asignatura nueva en la carpeta de miyagi (~/.miyagi/workspaces/<nombre>/)
       o, con --dir, en ese directorio, y ofrece explorar su Moodle si conecta uno.
-  run [--dir <ruta>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<texto>"]
+  run [--dir <ruta>] [--mode interactive|guided|autonomous] [--plain] [--task "<texto>"]
       Gestiona el curso de una sentada: corrige entregas pendientes, atiende el foro,
       revisa o añade contenido y resume el progreso de la clase. Sin --mode, pregunta
       el modo. Con --task hace solo esa tarea (p. ej. --task "construye un curso de
       introducción a Docker de 3 temas" o --task "corrige la Tarea 2").
-  chat [--dir <ruta>] [--headless] [--inline] [--plain] [--continue]
+  chat [--dir <ruta>] [--inline] [--plain] [--continue]
       Sesión conversacional a pantalla completa. Empieza en modo guided y Shift+Tab lo
       alterna con interactive. --inline deja la conversación en el historial de la
       terminal y --plain usa el chat de texto simple. --continue retoma la última
       conversación de este curso, y /resume, dentro del chat, deja elegir otra.
-  explore [--dir <ruta>] [--headless] [--plain]
+  explore [--dir <ruta>] [--plain]
       Mira (sin crear nada) qué tipos de actividad y de pregunta admite este Moodle y lo
-      apunta en knowledge/moodle-capabilities.md.
+      apunta en la página course/moodle-capabilities.
   ingest [--dir <ruta>] [--plain] [ficheros...]
       Incorpora a la base de conocimiento (knowledge/) los ficheros indicados o, sin
       ninguno, todo lo de sources/ que aún no esté en ella. Sin navegador ni
@@ -50,10 +50,9 @@ guardan en ~/.miyagi/workspaces/<nombre>/ y todas quedan apuntadas en
 ~/.miyagi/workspaces.json, así que -w <nombre> la abre desde cualquier sitio; --dir <ruta>
 sigue funcionando, y dentro de la carpeta de una asignatura miyagi usa esa. Sin
 argumentos, miyagi pregunta si quieres "run" o "chat" y con qué asignatura (o una nueva).
---headless (necesita credenciales guardadas) y el idioma preferido también se pueden fijar
-de forma persistente: en el config.json de la asignatura ("agent.headless",
-"agent.language") o, para todas, en ${globalConfigPath} ("defaultHeadless",
-"defaultLanguage"). Ver README.md para más detalle.`,
+El idioma preferido también se puede fijar de forma persistente: en el config.json de
+la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
+("defaultLanguage"). Ver README.md para más detalle.`,
   alreadyWorkspace: (dir) => `${dir} ya es una asignatura de miyagi (config.json existe). Elige otro directorio.`,
   exploreFailed: (reason) => `No se pudo explorar el Moodle (${reason}). La asignatura está creada; puedes reintentarlo con "miyagi explore".`,
   catalogBuiltin: "[incorporada]",
@@ -81,9 +80,6 @@ de forma persistente: en el config.json de la asignatura ("agent.headless",
   required: "Obligatorio",
   moodleUrl: "URL de Moodle (o pega la URL completa del curso, p. ej. https://moodle.miuniversidad.es/course/view.php?id=4):",
   courseId: "ID del curso:",
-  username: "Usuario con rol de profesor (déjalo en blanco para iniciar sesión a mano):",
-  password: "Contraseña:",
-  label: "Etiqueta:",
   description: "Descripción (opcional):",
   persona: "Tono de voz del agente (foros, retroalimentación, avisos):",
   personaNone: "Sin preferencia (tono neutro)",
@@ -114,7 +110,6 @@ de forma persistente: en el config.json de la asignatura ("agent.headless",
 
   studentRole: (dir) => `${dir} es un aula con rol "student": miyagi solo actúa como profesor.`,
   draftsLimitsInvalid: (dir, key, valid) => `${dir}/config.json: agent.draftsLimits.${key} tiene que ser un número positivo, y uno de: ${valid}.`,
-  defaultLabel: (host, courseId) => `${host} · curso ${courseId}`,
 
   unknownMode: (value, valid) => `Modo desconocido "${value}". Usa uno de: ${valid}.`,
   notAWorkspace: (dir) => `${dir} no es una asignatura de miyagi (falta config.json). Ejecuta "miyagi init", o abre una con -w <nombre>.`,
@@ -122,10 +117,6 @@ de forma persistente: en el config.json de la asignatura ("agent.headless",
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ tenía la estructura antigua: se ha movido a ${legacyDir} (sus ficheros descargados, a ${sourcesDir}) y el agente reconstruirá la base de conocimiento a partir de ahí.\n`,
   setupSaved: (command) => `Configuración guardada. Cuando quieras empezar: ${command}`,
-  autonomousNeedsCredentials:
-    "El modo autonomous no admite login manual (no hay forma de pedir ayuda a un humano): guarda usuario y contraseña en config.json, o usa --mode guided/interactive.",
-  headlessNeedsCredentials:
-    "--headless necesita credenciales guardadas (no hay ventana visible para iniciar sesión a mano): guarda usuario y contraseña en config.json, o quita --headless.",
   headingIngest: "Ingesta en la base de conocimiento (sin navegador)",
   headingExplore: "Explorando las capacidades de este Moodle",
   headingMode: (mode, chat) => `Modo: ${mode}${chat ? " (chat)" : ""}`,
@@ -140,11 +131,11 @@ de forma persistente: en el config.json de la asignatura ("agent.headless",
   connectingMoodleTeacher: "Conectando el aula con moodle-teacher…",
   moodleTeacherRetry: "La asignatura está guardada: vuelve a intentarlo con \"miyagi init -w <nombre>\" o \"miyagi extension add moodle-teacher\".",
   moodleTeacherInstallFailed: "No se pudo instalar o configurar moodle-teacher.",
-  migrateClassroomIntro: "miyagi trabaja ahora en Moodle con la extensión moodle-teacher: herramientas fijas en lugar de ir haciendo clic, y entras con tu sesión en su propia ventana en lugar de con una contraseña guardada. El aula de esta asignatura todavía usa el navegador.",
-  migrateClassroomQuestion: "¿Pasar esta aula a moodle-teacher? (se borran del config.json el usuario y la contraseña guardados)",
-  keptBrowser: "El aula sigue con el navegador. Para pasarla más adelante, quita \"connector\" de su config.json.",
+  migrateClassroomIntro: "miyagi trabaja ahora en Moodle solo con la extensión moodle-teacher: herramientas fijas en lugar de ir haciendo clic, y entras con tu sesión en su propia ventana en lugar de con una contraseña guardada. El aula de esta asignatura usa todavía el sistema anterior, que ya no existe.",
+  migrateClassroomQuestion: "¿Pasar ahora esta aula a moodle-teacher? (se borran del config.json el usuario y la contraseña guardados; si no, esta sesión trabaja sin el aula)",
   migratedClassroom: "Aula pasada a moodle-teacher.",
   moodleTeacherMissing: "El aula de esta asignatura funciona con moodle-teacher, que no está instalada o está desactivada: esta sesión trabaja sin el aula. Lo arregla \"miyagi extension add moodle-teacher\" (o \"enable\").",
+  classroomNeedsMoving: "El aula de esta asignatura es de antes de moodle-teacher, y miyagi ya no tiene navegador propio: esta sesión trabaja sin el aula. Ábrela en un chat para pasarla, o ejecuta \"miyagi init -w <nombre>\".",
   exploreNeedsClassroom: (dir) => `${dir} no tiene ningún aula conectada: no hay Moodle que explorar. Conéctala con "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `El aula de ${dir}/config.json necesita "url" y "courseId".`,
   workspaceName: "Nombre de la asignatura:",
@@ -166,24 +157,8 @@ de forma persistente: en el config.json de la asignatura ("agent.headless",
   gateTitle: "Publicación sin aprobación previa",
   gateLine: "El agente va a publicar o cambiar algo en Moodle que pueden ver los alumnos, sin haberte pedido aprobación antes.",
 
-  manualLoginTitle: "Hace falta iniciar sesión a mano",
-  manualLoginLines: ["Esta asignatura no tiene credenciales guardadas.", "Inicia sesión a mano en la ventana del navegador que ya está abierta."],
-  manualLoginQuestion: "Pulsa Intro cuando hayas iniciado sesión (o 'q' para cancelar): ",
 
   toolPhrases: {
-    navigate: ["abrió {n} página", "abrió {n} páginas"],
-    back: ["volvió atrás", "volvió atrás {n} veces"],
-    click: ["pulsó {n} vez", "pulsó {n} veces"],
-    type: ["escribió en {n} campo", "escribió en {n} campos"],
-    fillForm: ["rellenó {n} formulario", "rellenó {n} formularios"],
-    select: ["eligió {n} opción", "eligió {n} opciones"],
-    pressKey: ["pulsó {n} tecla", "pulsó {n} teclas"],
-    snapshot: ["leyó la página", "leyó la página {n} veces"],
-    evaluate: ["consultó la página", "consultó la página {n} veces"],
-    find: ["buscó en la página", "buscó en la página {n} veces"],
-    wait: ["esperó", "esperó {n} veces"],
-    upload: ["subió ficheros", "subió ficheros {n} veces"],
-    screenshot: ["hizo {n} captura", "hizo {n} capturas"],
     approval: ["pidió aprobación", "pidió aprobación {n} veces"],
     download: ["descargó {n} fichero", "descargó {n} ficheros"],
     files: ["trabajó con ficheros", "trabajó con ficheros {n} veces"],
@@ -191,52 +166,6 @@ de forma persistente: en el config.json de la asignatura ("agent.headless",
   },
 
   tool: {
-    navigate: (url) => `Abriendo ${url}`,
-    aPage: "una página",
-    back: "Volviendo a la página anterior",
-    forward: "Avanzando a la página siguiente",
-    snapshot: "Leyendo la estructura de la página",
-    click: (element) => `Pulsando «${element}»`,
-    hover: (element) => `Pasando el ratón por «${element}»`,
-    drag: (from, to) => `Arrastrando «${from}» a «${to}»`,
-    select: (values, element) => `Eligiendo «${values}» en «${element}»`,
-    type: (text, element) => `Escribiendo «${text}» en «${element}»`,
-    anElement: "un elemento",
-    anotherElement: "otro elemento",
-    aDropdown: "un desplegable",
-    aField: "un campo",
-    pressKey: (key) => `Pulsando la tecla «${key}»`,
-    waitFor: (text) => `Esperando a que aparezca «${text}»`,
-    waitGone: (text) => `Esperando a que desaparezca «${text}»`,
-    waitSeconds: (seconds) => `Esperando ${seconds} s`,
-    wait: "Esperando",
-    findText: (text) => `Buscando «${text}» en la página`,
-    findPattern: (pattern) => `Buscando el patrón «${pattern}» en la página`,
-    find: "Buscando en la página",
-    fillForm: (fields) => `Rellenando un formulario (${fields} campo${fields === 1 ? "" : "s"})`,
-    upload: "Subiendo ficheros",
-    evaluate: {
-      editor: "Escribiendo en el editor de texto",
-      form: "Rellenando el formulario",
-      act: "Pulsando en la página",
-      otherPages: "Consultando otras páginas del curso",
-      formFields: "Revisando los campos del formulario",
-      table: "Leyendo una tabla de la página",
-      dialog: "Leyendo un diálogo de la página",
-      links: "Mirando los enlaces de la página",
-      location: "Comprobando en qué página está",
-      content: "Leyendo el contenido de la página",
-      generic: "Consultando la página",
-    },
-    screenshot: "Haciendo una captura",
-    tabs: "Gestionando las pestañas",
-    resize: "Cambiando el tamaño de la ventana",
-    close: "Cerrando el navegador",
-    console: "Revisando la consola del navegador",
-    networkRequests: "Revisando las peticiones de red",
-    saveResponse: "Guardando en disco la respuesta de una petición",
-    requestDetails: "Leyendo los detalles de una petición",
-    runCodeUnsafe: "Intentando ejecutar código sin restricciones (bloqueado)",
     drafts: {
       list: (p) => `Mirando ${p} en drafts/`,
       mkdir: (p) => `Creando la carpeta ${p}`,
@@ -250,7 +179,5 @@ de forma persistente: en el config.json de la asignatura ("agent.headless",
       pdf: (to) => `Generando el PDF ${to}`,
       info: (p) => `Revisando el fichero ${p}`,
     },
-    acceptDialog: "Aceptando un diálogo del navegador",
-    dismissDialog: "Descartando un diálogo del navegador",
   },
 };

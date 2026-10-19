@@ -1,13 +1,13 @@
 import { askForDecision, type ModeControl, type Options } from "@falkenslab/agent-kit";
 import { t } from "./messages/index.js";
-import { MOODLE_PASSWORD_SECRET_NAME } from "./playwrightConfig.js";
 
 /**
- * The publish gate: in "guided" mode, a browser action (or a moodle-teacher tool) that publishes something in Moodle only
- * runs if the teacher approved it just before (request_human_approval); otherwise the teacher is
- * asked right there. The approval used to be only a rule in the prompt, and a real session
- * forgot it: a File resource was visible to students for ~35 s before the agent noticed (see
- * .minispec/decisions/ADR-008-publish-gate.md).
+ * The publish gate: in "guided" mode, a moodle-teacher tool that publishes or changes something in
+ * Moodle only runs if the teacher approved it just before (request_human_approval); otherwise the
+ * teacher is asked right there. The approval used to be only a rule in the prompt, and a real
+ * session forgot it: a File resource was visible to students for ~35 s before the agent noticed
+ * (see .minispec/decisions/ADR-008-publish-gate.md). agent-kit doesn't ask for an extension's
+ * tools in guided mode: its read-only list is only for plan mode.
  *
  * "interactive" already asks before every call (agent-kit's step gate) and "autonomous"
  * publishes without asking by design, so the gate only acts while the mode is "guided" —
@@ -29,118 +29,29 @@ interface GateHookInput {
 }
 
 const APPROVAL_TOOL = "mcp__approvals__request_human_approval";
-const BROWSER = "mcp__playwright__browser_";
 /** moodle-teacher's tools (its local server is `moodle`), ADR-021. */
 const MOODLE = "mcp__moodle__";
 
 /** moodle-teacher's tools that only read, by their verb as moodle-mcp names them, and its session tools (signing in is the teacher's, in its window); anything else publishes. */
 const MOODLE_READS = /^(get|list)_|^browser_(snapshot|screenshot|wait)$|^(login|logout|show_browser|server_info|use_site)$/;
-/** Its tools that remove or roll back something: never covered by an approved batch. */
+/**
+ * Its tools that remove or roll back something: never part of an approved batch. An approval to
+ * publish a rubric doesn't cover deleting quiz questions ten minutes later (docs tutorial,
+ * 2026-10-01). They always ask.
+ */
 const MOODLE_DESTRUCTIVE = /^(delete|remove|reset|restore)_/;
 
-/** Lowercase, without diacritics, so "Página" and "pagina" match the same pattern. */
-function norm(text: string): string {
-  return text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+export function isDestructiveAction(toolName: string): boolean {
+  return toolName.startsWith(MOODLE) && MOODLE_DESTRUCTIVE.test(toolName.slice(MOODLE.length));
 }
 
-/**
- * Moodle's buttons and menu items that publish, change or remove what students see, as the
- * model names them in a click's `element` or `target` — English and Spanish UI strings (lang
- * packs en and es of Moodle 5.2: savechangesanddisplay, savechangesandreturntocourse,
- * savechanges, assign/savenext, forum/posttoforum, submit, import, duplicate, hide,
- * showoncoursepage, makeavailable, assign/grantextension, gradingform_rubric/saverubric...),
- * plus the ids/names of Moodle's submit buttons. A false positive costs one extra panel; a
- * false negative, an unapproved publication.
- */
-const PUBLISH_PATTERNS = [
-  /\bsave\b/, /\bguardar\b/, /savechanges|submitbutton|saveandshownext/,
-  // "Post to forum", not "post" alone: "Reply link on Sara Gil's post" only opens the form.
-  /\bpost to forum\b/, /\bsubmit\b/, /\bsend\b/, /\benviar\b/, /\bpublish\b/, /\bpublicar\b/,
-  /\bimport\b/, /\bimportar\b/, /\bduplicate\b/, /\bduplicar\b/,
-  /\bgrant extension\b/, /\bampliar (el )?plazo\b/,
-  /\bmake available\b/, /\bhacer disponible\b/,
-  /\bhide\b/, /\bocultar\b/, /\bshow on course page\b/, /\bmostrar en la pagina del curso\b/,
-  /\bdelete\b/, /\bremove\b/, /\beliminar\b/, /\bborrar\b/,
-];
-/** "Show" alone is also a link ("Show more", "Show parent"): only as a menu item or option. */
-const SHOW_ITEM = /^(show|mostrar)\b.*\b(menu item|option|opcion|elemento)\b/;
-const NEVER_PUBLISH = [/\bcancel(ar)?\b/, /\bsearch\b/, /\bbuscar\b/, /\bfilter\b/, /\bfiltrar\b/];
-/** The rich-text editor's source-code dialog: its "Save" only puts the HTML back into the editor
- * (but not the form's own "Save changes"/"Save and display", whatever else the label says). */
-const EDITOR_DIALOG = /\b(source code|codigo fuente)\b/;
-const FORM_SAVE = /\b(save changes|guardar cambios|and display|y mostrar|return to course|regresar al curso)\b/;
-
-/**
- * Deleting is never part of an approved batch: an approval to publish a rubric doesn't cover
- * deleting quiz questions ten minutes later (docs tutorial, 2026-10-01). It always asks.
- */
-const DESTRUCTIVE = [/\bdelete\b/, /\bremove\b/, /\beliminar\b/, /\bborrar\b/];
-
-export function isDestructiveAction(toolName: string, toolInput: unknown): boolean {
-  if (toolName.startsWith(MOODLE)) return MOODLE_DESTRUCTIVE.test(toolName.slice(MOODLE.length));
-  if (toolName !== `${BROWSER}click`) return false;
-  const input = (toolInput ?? {}) as Record<string, unknown>;
-  const t = norm(`${input.element ?? ""} ${input.target ?? ""}`);
-  return !NEVER_PUBLISH.some((re) => re.test(t)) && DESTRUCTIVE.some((re) => re.test(t));
-}
-
-function namesPublishing(text: string): boolean {
-  const t = norm(text);
-  if (NEVER_PUBLISH.some((re) => re.test(t))) return false;
-  if (EDITOR_DIALOG.test(t) && !FORM_SAVE.test(t)) return false;
-  return PUBLISH_PATTERNS.some((re) => re.test(t)) || SHOW_ITEM.test(t);
-}
-
-/** The login form (the password is typed as its secret name, often into an unnamed field) or a search box. */
-function isLoginOrSearch(element: string, target: string, typed: string): boolean {
-  if (typed === MOODLE_PASSWORD_SECRET_NAME) return true;
-  const t = norm(`${element} ${target}`);
-  return NEVER_PUBLISH.some((re) => re.test(t)) || /\b(password|username|user ?name|log ?in|email|contrasena|usuario|acceder)\b/.test(t);
-}
-
-/** Scripts that submit a form, click a submit button or POST to Moodle. */
-function scriptPublishes(code: string): boolean {
-  const c = norm(code);
-  if (/\.(requestsubmit|submit)\(/.test(c)) return true;
-  if (/dispatchevent\(\s*new\s+\w*event\(\s*['"]submit/.test(c)) return true;
-  if (/method\s*:\s*['"]post['"]/.test(c) || /lib\/ajax\/service(-nologin)?\.php/.test(c)) return true;
-  return /\.click\(\s*\)/.test(c) && /savechanges|submitbutton|\bsave\b|\bguardar\b|\bpost\b|\bsubmit\b|\benviar\b/.test(c);
-}
-
-/**
- * Whether a tool call publishes something in Moodle. Pressing Enter on its own
- * (browser_press_key) isn't counted: it carries no target to tell a search box from a form,
- * and the prompt rule still covers it.
- */
-export function isPublishAction(toolName: string, toolInput: unknown): boolean {
-  if (toolName.startsWith(MOODLE)) return !MOODLE_READS.test(toolName.slice(MOODLE.length));
-  if (!toolName.startsWith(BROWSER)) return false;
-  const tool = toolName.slice(BROWSER.length);
-  const input = (toolInput ?? {}) as Record<string, unknown>;
-  const text = (key: string): string => (typeof input[key] === "string" ? (input[key] as string) : "");
-
-  switch (tool) {
-    case "click":
-      return namesPublishing(`${text("element")} ${text("target")}`);
-    case "type":
-    case "press_sequentially":
-      // Typing then Enter submits the form around the field, except a login or a search.
-      return input.submit === true && !isLoginOrSearch(text("element"), text("target"), text("text"));
-    case "evaluate":
-      return scriptPublishes(text("function"));
-    case "navigate":
-      // Moodle's action links carry the session key (course/mod.php?hide=…&sesskey=…).
-      return /[?&]sesskey=/.test(text("url"));
-    default:
-      return false;
-  }
+/** Whether a tool call publishes or changes something in Moodle: any moodle-teacher tool that doesn't only read. A false positive costs one extra panel; a false negative, an unapproved publication. */
+export function isPublishAction(toolName: string): boolean {
+  return toolName.startsWith(MOODLE) && !MOODLE_READS.test(toolName.slice(MOODLE.length));
 }
 
 function describe(toolName: string, toolInput: unknown): string {
-  const input = (toolInput ?? {}) as Record<string, unknown>;
-  if (toolName.startsWith(MOODLE)) return `${toolName.slice(MOODLE.length)}: ${JSON.stringify(input).slice(0, 400)}`;
-  const summary = input.element ?? input.url ?? (typeof input.function === "string" ? input.function.slice(0, 300) : undefined);
-  return `${toolName.replace(BROWSER, "")}: ${String(summary ?? JSON.stringify(input).slice(0, 300))}`;
+  return `${toolName.slice(MOODLE.length)}: ${JSON.stringify(toolInput ?? {}).slice(0, 400)}`;
 }
 
 /**
@@ -162,8 +73,8 @@ export function installPublishGate(options: Options, runDir: string, modeControl
       approved = false;
       return {};
     }
-    if (modeControl.mode !== "guided" || input.agent_id || !isPublishAction(tool, input.tool_input)) return {};
-    if (approved && !isDestructiveAction(tool, input.tool_input)) return {};
+    if (modeControl.mode !== "guided" || input.agent_id || !isPublishAction(tool)) return {};
+    if (approved && !isDestructiveAction(tool)) return {};
 
     const answer = await askForDecision(runDir, {
       title: t().gateTitle,

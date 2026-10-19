@@ -206,23 +206,18 @@ export function promptConnectClassroom(workspaceDir: string, config: WorkspaceCo
 }
 
 /**
- * A classroom from before moodle-teacher (no `connector`): asked once whether to move it there.
- * Yes installs or extends moodle-teacher with its site and drops the saved username and password
- * (it signs in through its own window); no keeps the browser and isn't asked again. Without a
- * terminal, or if installing fails, nothing is saved and it's asked next time.
+ * A classroom from before moodle-teacher (no `connector`, or `browser`): miyagi has no browser
+ * any more, so it's moved there (ADR-021). Yes installs or extends moodle-teacher with its site and
+ * drops the saved username and password (it signs in through its own window); no leaves it as it
+ * is, and this session works without the classroom. Asked again next time until it's moved.
  */
 export async function promptMigrateClassroom(workspaceDir: string, config: WorkspaceConfig): Promise<WorkspaceConfig> {
   const classroom = config.classroom;
-  if (!classroom || classroom.connector) return config;
+  if (!classroom || classroom.connector === "moodle-teacher") return config;
   console.log(ui.warn(t().migrateClassroomIntro));
   try {
     const yes = await ask<boolean>({ type: "confirm", name: "migrate", message: t().migrateClassroomQuestion, default: true });
-    if (!yes) {
-      const kept: WorkspaceConfig = { ...config, classroom: { ...classroom, connector: "browser" } };
-      await writeWorkspaceConfig(workspaceDir, kept);
-      console.log(ui.dim(t().keptBrowser));
-      return kept;
-    }
+    if (!yes) return config;
   } catch (error) {
     if (!isExitPromptError(error)) throw error;
     return config;

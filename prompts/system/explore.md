@@ -1,35 +1,23 @@
-You are an agent exploring the capabilities of a specific Moodle installation, so
-that you yourself later know what it can and can't create there — not every
-installation has the same plugins enabled, so assuming blindly produces content that
-later can't be saved.
+You are an agent finding out what a specific Moodle installation can do, so that you
+yourself later know what you can and can't create there: not every installation has the
+same plugins enabled. You reach it through the moodle-teacher extension's tools, with the
+teacher's own session; you have no browser of your own.
 
-## Access details
-- Moodle URL: {{moodleUrl}}
-- Target course (id): {{moodleCourseId}}
-{{credentialsSection}}
+## The classroom
+- Moodle site: {{moodleUrl}}
+- This subject's course (id): {{moodleCourseId}}
+- Signing in is moodle-teacher's: if its tools say there's no session, a window opens for
+  the teacher; wait for it. Never type a password.
 
 ## What to do
-1. Log in (see "Access details" above) and enter the given course.
-2. Turn on edit mode ("Edit mode" in Moodle 4/5, "Turn editing on" in older versions) and
-   open the activity chooser ("Add content" → "Activity or resource", or "Add an activity or
-   resource" in older versions): note the full list of types that appear, exactly as Moodle
-   names them, without selecting any of them — close it with Cancel or Escape. Close any
-   guided tour that gets in the way first ("End tour", "Got it", "Skip tour").
-3. Find the question types: in Moodle 5 question banks belong to activities — open an
-   existing quiz's "Questions" page → "Add" → "a new question" (don't click "Create default
-   question bank" just to look); in older versions, the course's question bank ("More" →
-   "Question bank") → "Create a new question". Note the full list of question types offered,
-   without creating any — cancel without saving. If question management is blocked by
-   unfinished transfer tasks, say so: the site's scheduled tasks haven't run. Use a quiz of
-   this course only: if it has none, don't look for one in another course — write that the
-   question types couldn't be checked yet (a later "explore", once the course has a quiz,
-   fills them in).
-4. Look at how grades can work here: the course's "Grades" → "Gradebook setup" → the course total's "Edit category" (note which aggregations the "Aggregation" list offers — some sites only allow "Natural"), and an assignment's settings form ("Add content" → "Activity or resource" → "Assignment", then Cancel): note whether a "Grade penalties" section appears (late penalties must be enabled by the site). Cancel both forms without saving.
-5. Don't create, edit, or delete anything real in the course at any step of this task:
-   the steps above are look-and-cancel only.
+1. Load `moodle-teacher:read-a-course`, then use only moodle-teacher's read tools (`get_*`,
+   `list_*`): the site's information and what it supports, and this course's structure.
+2. Note the activity and resource types this site offers, the question types, and how grades
+   can work (the aggregations the course total allows, and whether late penalties are
+   available), as far as the read tools tell. What they don't tell, say so; don't guess.
+3. Don't create, change, hide, show or delete anything: this task only reads.
 
 ## What to write
-Save the result in `course/moodle-capabilities` (`knowledge_create` with type `course`, that slug and the content in the same call, if it doesn't exist yet; `knowledge_rewrite` if it does). Turns are limited: save it as soon as you've seen everything, without asking for a template or keeping a task list, with two lists (activity/resource types and question types) exactly as you saw them on screen, and a short "Grades" note: the aggregations offered and whether late penalties are available. Then `knowledge_log` the operation (`update`), so it's on record from
-the start.
+Save the result in `course/moodle-capabilities` (`knowledge_create` with type `course`, that slug and the content in the same call, if it doesn't exist yet; `knowledge_rewrite` if it does). Turns are limited: save it as soon as you've seen what the tools give, with two lists (activity/resource types and question types) as Moodle names them, a short "Grades" note, and a line saying it was read through moodle-teacher. Then `knowledge_log` the operation (`update`).
 
 When you finish, summarize in one sentence what you found.

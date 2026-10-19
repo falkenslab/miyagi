@@ -37,8 +37,8 @@ export interface WorkspaceConfig {
     username?: string;
     password?: string;
     /**
-     * How miyagi reaches it: `moodle-teacher` (the extension's tools, ADR-021) or `browser`
-     * (Playwright, as before it). Missing on a classroom from before: miyagi asks once.
+     * How miyagi reaches it: `moodle-teacher`, the extension's tools (ADR-021), the only way since
+     * miyagi has no browser. Missing (or `browser`) on a classroom from before: it's moved there.
      */
     connector?: "browser" | "moodle-teacher";
   };
@@ -50,8 +50,6 @@ export interface WorkspaceConfig {
     persona?: AgentPersona;
     /** Free text, e.g. "español". Falls back to the global config's defaultLanguage. */
     language?: string;
-    /** Falls back to the global config's defaultHeadless, then false. --headless wins over both. */
-    headless?: boolean;
     /** Opt-in, off by default: registers the practice-runner subagent, the only thing that gets
      * a shell (Docker only, inside practice/) — see agent.ts's buildSubagents(). */
     allowPracticeRunner?: boolean;
@@ -68,18 +66,13 @@ export interface WorkspaceSessionConfig extends BaseSessionConfig {
   knowledgeDir: string;
   /** The course's sources: originals, read-only to the agent (the kit's sources extension). */
   sourcesDir: string;
-  /** A Moodle classroom is connected: the browser, the gates and the Moodle prompts exist only then. */
+  /** A Moodle classroom is connected through moodle-teacher: the gates and the classroom prompts exist only then. */
   hasMoodle: boolean;
-  /** The classroom is reached through moodle-teacher's tools and skills, not a browser of miyagi's own. */
-  moodleTeacher: boolean;
   moodleUrl?: string;
   moodleCourseId?: string;
-  moodleUsername?: string;
-  moodlePassword?: string;
   agentPersona?: AgentPersona;
   knownLanguage?: string;
   customInstructions?: string;
-  headless: boolean;
   allowPracticeRunner?: boolean;
   /** Where the practice-runner subagent works: one folder per activity. */
   practiceDir: string;
@@ -237,16 +230,6 @@ export function workspaceLabel(workspaceDir: string, config: WorkspaceConfig): s
   return config.classroom?.label ?? config.label ?? path.basename(path.resolve(workspaceDir));
 }
 
-/** Default label when the user doesn't give one while creating the workspace. */
-export function defaultWorkspaceLabel(url: string, courseId: string): string {
-  let host: string;
-  try {
-    host = new URL(url).host;
-  } catch {
-    host = url;
-  }
-  return t().defaultLabel(host, courseId);
-}
 
 /**
  * The interface language ("en", "es", "fr", "de": miyagi's and agent-kit's texts) for
@@ -266,7 +249,7 @@ export function interfaceLanguage(language: string | undefined): string | undefi
 export function toSessionConfig(
   workspaceDir: string,
   workspace: WorkspaceConfig,
-  options: { mode: Mode; kind: SessionKind; headless: boolean; migrationPending: boolean; language?: string; instructions?: string; moodleTeacher?: boolean },
+  options: { mode: Mode; kind: SessionKind; migrationPending: boolean; language?: string; instructions?: string },
 ): WorkspaceSessionConfig {
   return {
     mode: options.mode,
@@ -284,13 +267,9 @@ export function toSessionConfig(
     // config or in the SDK's credentials (ADR-004); other credentials in well-known places.
     deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env"), ...secretFilePaths(), ...sensitivePaths()],
     // Only with a classroom: without one there's no Moodle password to keep from the model.
-    secrets: workspace.classroom?.password ? [workspace.classroom.password] : [],
     hasMoodle: Boolean(workspace.classroom),
-    moodleTeacher: Boolean(workspace.classroom) && options.moodleTeacher === true,
     moodleUrl: workspace.classroom?.url,
     moodleCourseId: workspace.classroom?.courseId,
-    moodleUsername: workspace.classroom?.username,
-    moodlePassword: workspace.classroom?.password,
     agentPersona: workspace.agent.persona,
     allowPracticeRunner: workspace.agent.allowPracticeRunner,
     practiceDir: practiceDirFor(workspaceDir),
@@ -299,7 +278,6 @@ export function toSessionConfig(
     knownLanguage: options.language,
     language: interfaceLanguage(options.language),
     customInstructions: options.instructions,
-    headless: options.headless,
   };
 }
 
