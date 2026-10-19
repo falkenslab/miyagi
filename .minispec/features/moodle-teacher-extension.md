@@ -26,7 +26,7 @@ Keep in miyagi only the teaching practice, and let the Moodle side (tools and ho
 - `init` ends asking whether to connect a classroom (default no) and, if yes, installs `moodle-teacher` (`addExtension` from the official marketplace) and asks its options (sites); the chat's opening without a classroom says how.
 - `config.json`'s `classroom` migrated: its URL becomes moodle-teacher's `sites`, its password dropped (moodle-teacher signs in through a window).
 - Docs: "Conectar tu aula" (installing moodle-teacher).
-- Blocked upstream: `@falkenslab/moodle-mcp@0.4.0` bundles `gift-pegjs` and `parse5` but still lists them in `dependencies`, so the kit (which checks `package.json` and installs no dependencies) refuses moodle-teacher 0.2.9. Fix in falkenslab/moodle-mcp#48, then moodle-teacher on 0.4.1 (falkenslab/agent-extensions#24); clearer kit message in falkenslab/agent-kit#71.
+- moodle-teacher 0.2.10 (moodle-mcp 0.4.1) installs with `miyagi extension add moodle-teacher`; 0.2.9 didn't, because moodle-mcp listed bundled packages in `dependencies` (falkenslab/moodle-mcp#48).
 
 - - -
 
