@@ -42,11 +42,11 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 
 ## Plugin (`plugin/`, name `miyagi`)
 
-One home per concern:
+One home per concern, and none names the platform (`check-neutral-skills.mjs`): how to do each thing in Moodle is moodle-teacher's `moodle-teacher:*` skills (ADR-021).
 
-- Building — `course-building` → `unit-building` → `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design` + `quiz-building`, `rubric-design`, `scorm-packaging`, `practice-testing`.
+- Building — `course-building` → `unit-building` → `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`, `rubric-design`, `practice-testing`.
 - Pedagogy — `course-design`, `teaching-methodologies`, `teaching-plan`, `course-alignment`.
-- Running the course — `grading-rubric`, `forum`, `progress-monitoring`, `course-auditor`, `course-orientation`, `moodle-navigation`.
+- Running the course — `grading-rubric`, `forum`, `progress-monitoring`, `course-auditor`, `course-orientation`.
 - `topic-research`, and `publish-check`: the one pre-publication check and the approval rules the other skills point to.
 
 agent-kit's `knowledge` plugin adds 4 skills and 3 commands.

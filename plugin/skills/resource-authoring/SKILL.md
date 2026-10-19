@@ -5,28 +5,29 @@ description: Write or edit the learning content of a course - notes as a page or
 
 # Writing learning content
 
-Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+Without a classroom, build it in `drafts/` and say where it is; with one, it also goes into the
+classroom, hidden first (`publish-check`).
 
 Activities make students practise; resources are where they learn what they'll practise. Notes
 that list what "will be covered" instead of explaining it leave the activity with nothing behind
-it. Activities are `assignment-building`, `quiz-building` and `activity-building`.
+it. Activities are `assignment-building`, `quiz-design` and `activity-building`.
 
 ## Before writing
 
-- **The course's style**: look at two or three existing resources — names, tone, level of detail,
-  how code or formulas are shown — and match it.
+- **The course's style**: look at two or three existing resources (names, tone, level of detail,
+  how code or formulas are shown) and match it.
 - **The source of truth**: the teacher's material in `sources/` and the knowledge base's concept
   pages come first; anything that may have changed (a tool's version, a command's syntax, a
   statistic) is checked with `topic-research` before it's written.
 - **What it's for**: the unit's objectives (in its topic page or the teaching plan) and the
-  activities that follow — the notes cover what those activities need, in that order.
+  activities that follow: the notes cover what those activities need, in that order.
 
 ## Choosing the resource
 
 | Content | Resource |
 | --- | --- |
 | A unit's notes of reasonable length | Page |
-| Long notes, several sub-topics | Book, one chapter per sub-topic ("Add new chapter") |
+| Long notes, several sub-topics | Book, one chapter per sub-topic |
 | A document the student downloads (the syllabus, a dataset, a template) | File, or folder for several; notes as PDF with `drafts_pdf` from their HTML or Markdown |
 | An external reference (official documentation, a video) | URL, with what to look at and why |
 | A short note between activities on the course page | Text and media area |
@@ -46,13 +47,13 @@ it. Activities are `assignment-building`, `quiz-building` and `activity-building
 - **Descriptive names**: "Apuntes del Tema 2: Dockerfile y construcción de imágenes", not
   "Tema 2" or "Página 1".
 
-## Into Moodle's editor
+## As HTML
 
 Write the content as HTML (headings, lists, `<pre><code>` for code and commands) in
-`drafts/<slug>/`, and put it into Moodle's rich-text editor through its source-code view (the
-`<>` / "Source code" button; `Ctrl+A` there, then type the HTML). Typing into the editor itself
-turns everything into plain paragraphs: code blocks, lists and headings are lost, and commands
-can no longer be copied. Before saving the form, check the editor shows the structure you wrote.
+`drafts/<slug>/`, and hand that HTML to the classroom as it is: the classroom extension's
+course-content skill says what the classroom keeps and how images and files go with it. Flattened
+into plain paragraphs, code blocks, lists and headings are lost and commands can no longer be
+copied. After saving, read it back and check the structure is still there.
 
 ## Editing existing content
 
@@ -62,5 +63,5 @@ teacher's text into your own style when a correction would do.
 ## Publishing
 
 Run `publish-check` (writing, accessibility, how it looks as a student) and save it with its
-approval — one resource per approval. Record in the topic's page (`topic/<slug>`)
-what you wrote and where (its URL), so a later session doesn't duplicate or contradict it.
+approval, one resource per approval. Record in the topic's page (`topic/<slug>`) what you wrote
+and where (its link), so a later session doesn't duplicate or contradict it.

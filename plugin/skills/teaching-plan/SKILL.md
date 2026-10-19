@@ -5,7 +5,7 @@ description: Help the teacher write the teaching plan (programación didáctica)
 
 # Writing the teaching plan (programación didáctica)
 
-What this skill says about Moodle applies to the connected classroom, if any; without one, keep it in the plan or build it in `drafts/`.
+What this skill says about the classroom applies to the connected one, if any; without one, keep it in the plan or build it in `drafts/`.
 
 The teaching plan is the teacher's document: what the course is for, how it's organised, how
 students learn and how they're assessed. You help write it, well structured and coherent; the
@@ -18,13 +18,13 @@ rather than keeping a plan of their own.
 
 It lives in the knowledge base, as linked pages, not as a separate document: `course/teaching-plan`
 is the hub, and each unit's topic page holds that unit's part. That's what lets
-`course-alignment` compare it with the course in Moodle.
+`course-alignment` compare it with the course in the classroom.
 
 ## 1. Gather
 
 - `sources/`: previous plans, the syllabus, the department's criteria, a regulation if the
   teacher left one — read them all first; they win over your suggestions.
-- The course in Moodle, if it exists: what's already built.
+- The course in the classroom, if there is one: what's already built.
 - What's missing, ask (in `chat`) — the teacher's decisions shouldn't be invented: the group
   and its context, the total hours and calendar, the weights. In `run`, propose and mark each
   proposal clearly as such ("(propuesta, pendiente de confirmar)").
@@ -34,7 +34,7 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
 `course/teaching-plan` (a `course` page, created with `knowledge_create`), with these sections:
 
 1. **Context**: the course, the students (level, prior knowledge, diversity), the hours and the
-   calendar, the resources available (the Moodle course, equipment).
+   calendar, the resources available (the classroom, equipment).
 2. **Objectives**: general objectives of the course, observable, numbered (`O1`, `O2`…) so units
    and criteria can reference them.
 3. **Contents and units**: the units in order, each with its hours and dates, its objectives,
@@ -47,7 +47,7 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
    instrument), passing requirements, late and missing work, make-up assessments.
 7. **Attention to diversity**: general measures (UDL, multiple formats) and how to adapt for
    specific needs.
-8. **Resources**: materials, tools, the Moodle course.
+8. **Resources**: materials, tools, the classroom.
 9. **Review**: how and when the plan is revised.
 
 Each unit's topic page gets a "Teaching plan" section with its objectives and criteria (linking
@@ -64,7 +64,7 @@ review `course/teaching-plan` and the topic pages, and revise with its critique.
 
 Tell the teacher where it is (`course/teaching-plan` and the topic pages), what you
 proposed on your own and needs their confirmation, and what `pedagogy-reviewer` flagged. Offer
-the next step: `course-alignment` to check the Moodle course against it, or `unit-building` for
+the next step: `course-alignment` to check the course in the classroom against it, or `unit-building` for
 units that don't exist yet.
 
-Nothing here is published in Moodle unless the teacher asks for it.
+Nothing here is published in the classroom unless the teacher asks for it.

@@ -2,7 +2,7 @@
 description: Create a quiz (or add questions to an existing one) for a given topic, with well-written questions imported in bulk
 ---
 
-Apply the `quiz-design` and `quiz-building` skills right now for this topic: $ARGUMENTS
+Apply the `quiz-design` skill right now for this topic, with the classroom extension's quiz skill to build it: $ARGUMENTS
 
 Write the questions with `quiz-design` (plausible distractors, varied levels, feedback per
 option), create the quiz with settings that fit its purpose if it doesn't exist yet, import the

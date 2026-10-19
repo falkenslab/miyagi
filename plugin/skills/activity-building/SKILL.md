@@ -1,23 +1,23 @@
 ---
 name: activity-building
-description: Design and build Moodle's other activities - workshop (peer assessment), lesson (branching paths), glossary, wiki, database, choice, feedback survey, forum activities and graded forums, H5P - so each one really works as intended, plus the pieces that connect activities - completion conditions, access restrictions, badges and groups. Use when a unit needs something other than a resource, an assignment or a quiz, or a methodology needs these mechanics (peer review, itineraries, gamification, cooperative work).
+description: Design the classroom's other activities - workshop (peer assessment), lesson (branching paths), glossary, wiki, database, choice, feedback survey, forum activities and graded forums, H5P - so each one really works as intended, plus the pieces that connect activities - completion conditions, access restrictions, badges and groups. Use when a unit needs something other than a resource, an assignment or a quiz, or a methodology needs these mechanics (peer review, itineraries, gamification, cooperative work).
 ---
 
-# Designing and building other activities
+# Designing other activities
 
-Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+Without a classroom, design it in the unit's plan or in `drafts/` and say where it is; with one,
+the classroom extension's skill for other activities sets it up so it behaves this way. This
+skill is what makes each type work.
 
-For each type: what makes it work (the design) and how to set it up in Moodle so it behaves that
-way. Assignments are `assignment-building`, quizzes `quiz-building`, pages and books
+Assignments are `assignment-building`, quizzes `quiz-design`, pages and books
 `resource-authoring`. Which type fits a point of the unit, and why, comes from `course-design`
 and `teaching-methodologies`.
 
-Check `course/moodle-capabilities` first: only create types the installation offers ("Add
-content" → "Activity or resource" lists them). Every activity gets a complete description —
-what to do, how, by when, how it's assessed — and every save is a publication with its own
-approval.
+Check `course/moodle-capabilities` first: only plan types this classroom offers. Every activity
+gets a complete description (what to do, how, by when, how it's assessed) and every save is a
+publication with its own approval.
 
-## Workshop — peer assessment
+## Workshop: peer assessment
 
 For work students assess among themselves (project drafts, essays, designs).
 
@@ -25,32 +25,30 @@ For work students assess among themselves (project drafts, essays, designs).
   (`assignment-building`), and the assessment criteria as a rubric (`rubric-design`) so students
   know what to look for. 2–4 assessments per student: fewer defeats it, more is busywork. Give an
   assessed example if they haven't done peer review before.
-- **Phases**: "Setup phase" → "Submission phase" → "Assessment phase" → "Grading evaluation
-  phase" → "Closed". The dates ("Open for submissions from", "Open for assessment from" and
-  their deadlines) are what open and close each phase for students; switching the phase early is
-  harmless if they're set, and useless if they aren't. Say the dates in the description.
+- **Phases and dates**: setup, submission, assessment, grading evaluation, closed. The dates of
+  the submission and assessment windows are what open and close each phase for students: set
+  them, and say them in the description.
 - **Grades**: one for the submission (from peers' assessments), one for the quality of each
   student's assessments.
-- **Assessment form**: rubric or accumulative grading; it only takes whole points per level — if
-  the criteria use halves, scale the rubric (×2, ×4), the workshop normalizes it. "Use
-  self-assessment" if students also assess their own.
-- **Allocation**: "Allocate submissions" (random allocation); "Scheduled allocation" runs it when
-  the submission phase ends (it needs the site's cron, which every real Moodle has).
-- **Teams reviewing teams**: with "Separate groups" Moodle allocates reviewers from the same group
-  — the opposite of peer review between teams. Use "Visible groups" and "Prevent reviews by peers
-  from the same group".
+- **Assessment form**: a rubric or accumulative grading; levels take whole points, so if the
+  criteria use halves, scale the rubric (×2, ×4). Self-assessment if students also assess their
+  own.
+- **Allocation**: random, or scheduled to run when the submission phase ends.
+- **Teams reviewing teams**: separate groups would allocate reviewers from the same group, the
+  opposite of peer review between teams. Use visible groups and prevent reviews from the same
+  group.
 
-## Lesson — branching paths
+## Lesson: branching paths
 
 For guided sequences with decisions: an itinerary adapted to the answers, an escape-room style
 activity, a case with choices.
 
 - **Design the branches**: a wrong answer to a checkpoint leads to a page that addresses that
   misconception, not a generic "try again". A lesson without real branches is a page with extra
-  clicks — use a page instead. Draw the path in the unit's topic page before building it.
-- **Build**: content pages ("Add a content page") with buttons to other pages, question pages ("Add
-  a question page") that jump by answer; graded or practice; attempts per question; retakes.
-- Walk every branch: each one must end somewhere — a dead end blocks the student.
+  clicks: use a page instead. Draw the path in the unit's topic page before building it.
+- **Build**: content pages with buttons to other pages, question pages that jump by answer;
+  graded or practice; attempts per question; retakes.
+- Walk every branch: each one must end somewhere. A dead end blocks the student.
 
 ## Collaborative activities: glossary, wiki, database
 
@@ -58,11 +56,11 @@ Build in **individual accountability**: without a clear share of the work (a wik
 of glossary terms, entries per student), the first to contribute does everything and the rest
 free-ride. The history of each tool shows who did what, which makes it gradable.
 
-- **Glossary**: shared vocabulary; "Add a new entry", approval before entries are visible,
-  auto-linking of terms across the course.
-- **Wiki**: "Wiki mode" — "Collaborative wiki" (one per group with group mode) or "Individual
-  wiki" (e.g. a learning journal). Seed the first page with the expected structure.
-- **Database**: entries with the "Fields" you define (text, URL, image, file, menu…) — a
+- **Glossary**: shared vocabulary; entries approved before they're visible, terms linked across
+  the course.
+- **Wiki**: collaborative (one per group with group mode) or individual (e.g. a learning
+  journal). Seed the first page with the expected structure.
+- **Database**: entries with the fields you define (text, URL, image, file, menu…): a
   bibliography, a gallery of projects, solved exercises. Define fields and templates before
   opening it.
 
@@ -70,8 +68,8 @@ free-ride. The history of each tool shows who did what, which makes it gradable.
 
 (Running the forum day to day is `forum`.) The opening prompt invites more than a one-line
 reaction: a question with more than one defensible position, or a concept to apply to a case. If
-participation is graded, say the minimum (e.g. one post and two replies) and grade it with "Whole
-forum grading" and a rubric, not by counting posts.
+participation is graded, say the minimum (e.g. one post and two replies) and grade the whole
+forum with a rubric, not by counting posts.
 
 | Type | Use |
 | --- | --- |
@@ -85,12 +83,12 @@ Group mode for team forums.
 ## Choice and feedback (survey)
 
 - **Choice**: one question with a real purpose (assigning debate sides, choosing a project topic,
-  scheduling), stated in the prompt. "Allow choice to be updated" if they may change their mind;
+  scheduling), stated in the prompt. Let them change their answer if they may change their mind;
   limit answers per option to balance groups.
 - **Feedback**: questionnaires without right answers (course evaluation, a needs survey, a
   project retrospective). Every question has a reason to be asked; specific enough to need an
   honest answer ("what was the hardest part of this topic and why", not "how did you find it").
-  "Anonymous" when honesty matters more than follow-up.
+  Anonymous when honesty matters more than follow-up.
 
 ## H5P
 
@@ -101,19 +99,19 @@ before planning one.
 ## Connecting activities
 
 - **Completion conditions**: what counts as done (view, submit, receive a grade, pass). Needed
-  for everything below; turn completion tracking on for the course if it's off.
-- **Restrict access** ("Add restriction..."): by date, by completion of another activity, by
-  grade, by group — for itineraries and gamified levels. Say in the section summary what unlocks
-  what, or students will think content is missing.
-- **Badges**: "Manage badges" → "Add a new badge", awarded on "Activity completion", course
-  completion, or "Manual issue by role" when the condition isn't a completion or a grade ("the
-  team fixed the four critical flaws"). Name what it certifies ("Contenedores: nivel 1"), and
-  enable access once its criteria are set.
-- **Groups and groupings**: create them before the activities that use them; separate groups hide
-  other teams' work, visible groups show it.
+  for everything below; completion tracking has to be on for the course.
+- **Access restrictions**: by date, by completion of another activity, by grade, by group, for
+  itineraries and gamified levels. Say in the section summary what unlocks what, or students will
+  think content is missing.
+- **Badges**: awarded on an activity's completion, the course's completion, or by hand when the
+  condition isn't a completion or a grade ("the team fixed the four critical flaws"). Name what
+  it certifies ("Contenedores: nivel 1"), and make it available once its criteria are set.
+- **Groups and groupings**: they exist before the activities that use them; separate groups hide
+  other teams' work, visible groups show it. Creating groups or changing who is in one is never
+  miyagi's: it's the teacher's, in the classroom.
 
 ## After creating
 
 Run `publish-check`, walking every path (every branch of a lesson, every phase of a workshop,
-what a locked activity says), and record the activity in its page `activity/<slug>` with
-its settings and URL.
+what a locked activity says), and record the activity in its page `activity/<slug>` with its
+settings and link.

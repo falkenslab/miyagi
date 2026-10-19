@@ -1,11 +1,11 @@
 ---
 name: unit-building
-description: Build one unit (a topic, a section) inside an existing Moodle course from a description - fitted to the course's plan or teaching plan, calendar, weights and style - with its methodology, notes, activities of whatever kind it needs, rubrics and checks, reviewed before publishing. Use when asked to create or redo a single unit or topic; course-building uses it for each section of a new course.
+description: Build one unit (a topic, a section) inside an existing course in the classroom from a description - fitted to the course's plan or teaching plan, calendar, weights and style - with its methodology, notes, activities of whatever kind it needs, rubrics and checks, reviewed before publishing. Use when asked to create or redo a single unit or topic; course-building uses it for each section of a new course.
 ---
 
 # Building one unit
 
-Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 A unit has to fit the course it lands in: same style and level as the other units, dates that
 continue the calendar, weights that the gradebook and the teaching plan can absorb, and
@@ -16,7 +16,7 @@ around it is a bad unit.
 
 - The knowledge base (`knowledge_read`): `course/teaching-plan` if there is one (the objectives
   and criteria this unit must cover, its dates and weight), the `overview`, the other topics' pages.
-- The course in Moodle (`moodle-navigation`): the sections before and after, two or three
+- The course in the classroom (the classroom extension's read-a-course skill): the sections before and after, two or three
   existing activities (names, tone, level of detail, how statements are written), the gradebook
   (categories, weights), what the students already did.
 - `sources/`: the teacher's notes or syllabus for this unit win over your own idea of it.
@@ -27,7 +27,7 @@ to `course/teaching-plan` marked as a proposal — and say so.
 
 ## 2. Plan it
 
-Write the unit's plan into its topic page (`topic/<slug>`) before touching Moodle:
+Write the unit's plan into its topic page (`topic/<slug>`) before touching the classroom:
 
 - **Objectives** (observable) and, if there's a teaching plan, the criteria of evaluation this
   unit assesses — each linked to the teaching plan.
@@ -43,16 +43,16 @@ revise it with its critique before building.
 
 ## 3. Build it
 
-In edit mode, in the unit's section (or a new one, placed where the calendar says):
+In the unit's section (or a new one, placed where the calendar says), each item hidden first (`publish-check`):
 
 1. Section name and summary: what the student will learn and do, the dates, the order to follow.
 2. Resources (`resource-authoring`): the unit's actual content, at the course's level.
 3. Activities, each with the skill for its kind: `assignment-building` (any assignment),
-   `quiz-design` + `quiz-building` (quizzes), `activity-building` (workshop, lesson, glossary,
+   `quiz-design` (quizzes), `activity-building` (workshop, lesson, glossary,
    wiki, database, choice, feedback, forum activities, H5P, completion, restrictions, badges,
    groups). Hands-on work is checked with `practice-testing` when the
    workspace allows it.
-4. Every activity graded by hand gets its rubric in Moodle (`rubric-design`).
+4. Every activity graded by hand gets its rubric on its grading form (`rubric-design`).
 5. Grade items in the right category and weight; dates in the calendar's order.
 
 Every item goes through `publish-check` (writing and accessibility) and gets its approval, one

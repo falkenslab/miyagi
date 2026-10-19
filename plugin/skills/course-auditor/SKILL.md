@@ -1,11 +1,11 @@
 ---
 name: course-auditor
-description: Run a holistic audit of a Moodle course - organization, accessibility, pedagogy, evaluation, broken or stale content - or a lighter periodic maintenance pass, producing prioritized recommendations instead of a raw checklist.
+description: Run a holistic audit of the course in the classroom - organization, accessibility, pedagogy, evaluation, broken or stale content - or a lighter periodic maintenance pass, producing prioritized recommendations instead of a raw checklist.
 ---
 
 # Auditing a course
 
-Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 Two related but different uses of this skill:
 
@@ -23,11 +23,10 @@ Both compose the other skills' criteria rather than redefining them:
 - Against the teacher's teaching plan, if there is one: `course-alignment` (don't repeat its
   comparison here; run it, or cite its latest entry).
 - Writing, accessibility and how it works for a student: `publish-check` (its "When auditing").
-- Each activity's design: `assignment-building`, `activity-building`, `quiz-design` +
-  `quiz-building`; notes and resources: `resource-authoring`.
+- Each activity's design: `assignment-building`, `activity-building`, `quiz-design`; notes and resources: `resource-authoring`.
 - Grading criteria quality: `rubric-design`.
 - Outdated content (a tool version, a command, a statistic): `topic-research`.
-- Reading the course's real current state: `moodle-navigation`.
+- Reading the course's real current state, and what's broken in the platform itself (dates, restrictions, hidden leftovers): the classroom extension's read-a-course and course-check skills.
 
 ## What to check
 

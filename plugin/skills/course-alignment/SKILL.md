@@ -1,13 +1,13 @@
 ---
 name: course-alignment
-description: Check that the Moodle course matches the teaching plan - every objective and criterion assessed by some activity, units, dates and weights as planned, nothing in the course the plan doesn't account for - and propose or make the changes to align them. Use when the teacher asks whether their course follows their programación / teaching plan, after writing or changing the plan, or before the course starts.
+description: Check that the course in the classroom matches the teaching plan - every objective and criterion assessed by some activity, units, dates and weights as planned, nothing in the course the plan doesn't account for - and propose or make the changes to align them. Use when the teacher asks whether their course follows their programación / teaching plan, after writing or changing the plan, or before the course starts.
 ---
 
 # Aligning the course with the teaching plan
 
-Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
-The teaching plan says what should happen; the Moodle course is what students actually get. This
+The teaching plan says what should happen; the course in the classroom is what students actually get. This
 skill finds where they differ and closes the gap — in the course when the plan is right, or by
 telling the teacher when the plan should change.
 
@@ -18,7 +18,7 @@ to write it first; don't reconstruct a plan from the course and then "align" the
 
 - **From the plan**: units (order, dates, hours, weight), objectives and criteria per unit, the
   activities and instruments that assess each criterion, the grading weights.
-- **From Moodle** (`moodle-navigation`, the gradebook's setup and the grader report): sections in
+- **From the classroom** (the classroom extension's read-a-course and gradebook skills: the course, the gradebook's setup and the grader report): sections in
   order with their dates, every activity with its type, dates, grade and weight, its rubric's
   criteria if it has one, completion and restrictions.
 
@@ -29,13 +29,13 @@ each time with `knowledge_edit`, never rewriting earlier ones), as a table per u
 
 - **Coverage**: criteria with no activity assessing them; activities that assess nothing in the
   plan.
-- **Instruments**: an activity the plan grades with a rubric that has none in Moodle, or whose
+- **Instruments**: an activity the plan grades with a rubric that has none in the classroom, or whose
   rubric's criteria don't match the plan's.
 - **Weights**: gradebook weights vs. the plan's grading section; the course total's scale.
 - **Calendar**: section and activity dates vs. the plan's timing; deadlines out of order or
   colliding.
 - **Units**: planned units missing from the course, sections the plan doesn't mention.
-- **Methodology**: a unit planned as a project, a flipped classroom… that in Moodle is just notes
+- **Methodology**: a unit planned as a project, a flipped classroom… that in the classroom is just notes
   and a quiz.
 
 Rank the gaps: what students would hit first (a missing rubric, a wrong weight, a missing unit)

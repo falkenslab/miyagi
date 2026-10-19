@@ -5,7 +5,7 @@ description: Plan a course or unit's pedagogical structure - progressive organiz
 
 # Designing a course or unit, not just its individual pieces
 
-What this skill says about Moodle applies to the connected classroom, if any; without one, keep it in the plan or build it in `drafts/`.
+What this skill says about the classroom applies to the connected one, if any; without one, keep it in the plan or build it in `drafts/`.
 
 This is about **planning**, one level above the skills that build each resource or activity. Use it before adding several new pieces of content, when
 restructuring a section, or whenever a request is really "how should this unit look",
@@ -19,7 +19,7 @@ follows it. A whole course is built with `course-building`, one unit with `unit-
 
 Planning and executing are different steps. When the request is exploratory ("how would
 you organize unit 3?", "what's missing pedagogically?"), propose a structure and explain
-the reasoning — don't start creating activities in Moodle until the plan itself is
+the reasoning — don't start creating activities in the classroom until the plan itself is
 confirmed. When the request is explicit ("create this"), you can go straight to execution
 using this skill's principles, and the building skill of each piece.
 
@@ -27,7 +27,7 @@ using this skill's principles, and the building skill of each piece.
 
 Order sections/topics so each one builds on what came before, not an arbitrary sequence.
 A student shouldn't need knowledge from a later topic to complete an earlier activity.
-Check the course's current order with `moodle-navigation` before proposing changes — some
+Check the course's current order in the classroom (the classroom extension's read-a-course skill) before proposing changes — some
 sequencing may already be intentional even if it isn't obvious at first glance.
 
 ## Learning objectives
@@ -55,7 +55,7 @@ discussion/peer-review skills, an assignment for extended reasoning or productio
 for quick recall or applied problems, a lesson for guided, branching content. Reviewing a
 section that's five quizzes in a row is itself a signal to reconsider. This is only about
 *which* type fits — once it's chosen, its building skill designs and sets it up
-(`assignment-building`, `activity-building`, `quiz-design` + `quiz-building`).
+(`assignment-building`, `activity-building`, `quiz-design`).
 
 ## Evaluation balance
 
@@ -76,5 +76,4 @@ worth naming explicitly in a proposal.
 activity type fits where; it's the source of the principles the teaching plan (`teaching-plan`)
 and each unit's plan (`unit-building`) follow, and that `pedagogy-reviewer` and `course-auditor`
 check against. The methodology comes from `teaching-methodologies`; each piece is then designed
-and built with `resource-authoring`, `assignment-building`, `activity-building` or `quiz-design` +
-`quiz-building`, its grading with `rubric-design`, and everything goes through `publish-check`.
+and built with `resource-authoring`, `assignment-building`, `activity-building` or `quiz-design`, its grading with `rubric-design`, and everything goes through `publish-check`.

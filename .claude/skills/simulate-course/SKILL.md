@@ -81,5 +81,5 @@ the report needs, and write it with the `test-report` skill: folder
 per section), the plan vs. what exists, the approvals from `approvals.jsonl` (as a list, since
 nobody reviewed them live: flag any you wouldn't have approved), the findings, and the lessons
 fed back into `plugin/skills/` (most often `course-building`, `unit-building`,
-`resource-authoring`, `assignment-building`, `activity-building`, `quiz-building`,
-`publish-check`, `moodle-navigation`).
+`resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`,
+`publish-check`; and what belongs to Moodle itself, as an issue on moodle-teacher in falkenslab/agent-extensions).

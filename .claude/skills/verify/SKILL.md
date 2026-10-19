@@ -17,6 +17,7 @@ npm run lint
 npm run build
 node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
+node .claude/skills/verify/check-neutral-skills.mjs
 node .claude/skills/verify/check-publish-gate.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
@@ -38,6 +39,10 @@ if:
 `check-references.mjs` fails if a skill, a command or a prompt names a skill or subagent that
 doesn't exist — what a merge or a rename leaves behind. After renaming or merging skills, also
 update the docs site (`update-docs`; `check-docs.mjs` catches a missing skill) and `.minispec/core/architecture.md`, which it doesn't read.
+
+`check-neutral-skills.mjs` fails if a skill or command in `plugin/` names Moodle, a Moodle URL, a
+moodle-mcp tool or a browser action: miyagi's skills say the teaching act, the classroom
+extension's skills say how (ADR-021).
 
 `check-publish-gate.mjs` classifies moodle-teacher's tools with the publish gate's
 `isPublishAction()` (reading and signing in never ask, anything else does, a deletion always)

@@ -1,15 +1,16 @@
 ---
 name: forum
-description: Run the course forum as a teacher - decide when to step in and when to let students answer each other, write useful replies and corrections, post announcements to the whole class, post each message exactly once, and remember the doubts that keep coming back. Use whenever reading, answering or posting in a Moodle forum.
+description: Run the course forum as a teacher - decide when to step in and when to let students answer each other, write useful replies and corrections, post announcements to the whole class, post each message exactly once, and remember the doubts that keep coming back. Use whenever reading, answering or posting in a course forum.
 ---
 
 # The course forum
 
-Needs a connected Moodle classroom; without one, build what you can in `drafts/` and say so.
+Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 A forum works when students talk to each other and the teacher steps in where it matters. Two
-decisions every time: **whether** to post, and **what** to post. (Setting up a forum as an activity
-— its type, a graded forum — is `activity-building`.)
+decisions every time: **whether** to post, and **what** to post. Reading threads and posting
+in the classroom is the classroom extension's: load its forum skill alongside this one. (Setting
+up a forum as an activity, its type or a graded forum, is `activity-building`.)
 
 ## 1. Whether to step in
 
@@ -26,8 +27,8 @@ decisions every time: **whether** to post, and **what** to post. (Setting up a f
 ## 2. What to write
 
 Read the whole thread first (the opening prompt and every post), and check the course's own
-material on the topic (`sources/`, the knowledge base's concept pages, the resource in Moodle) —
-don't improvise on something the course already covers.
+material on the topic (`sources/`, the knowledge base's concept pages, the resource in the
+classroom): don't improvise on something the course already covers.
 
 - **One concrete idea**, referring to the part of the message you're answering.
 - **An argument or an example**: a quote from the material, a case, a short snippet students can
@@ -35,9 +36,11 @@ don't improvise on something the course already covers.
 - **Proportional length**: specific and complete, neither a one-liner nor an essay.
 - **End with a question** or an invitation to keep going when it makes sense.
 - **Correcting a student** (or a classmate's wrong answer): respectfully, explaining why, not just
-  what — and to both, the one who asked and the one who answered.
+  what, and to both: the one who asked and the one who answered.
 - **A repeated question**: adapt the answer to what this student actually asked; don't paste the
   previous one.
+- Students may reach you as aliases: address the student, never the alias, and never try to find
+  out who is behind one.
 
 ## 3. Announcements
 
@@ -54,16 +57,13 @@ not for one student's situation.
 
 Run the text through `publish-check` (writing and accessibility), then post it with its approval.
 
-- The reply form loads its rich-text editor after the page: typing before the editor is ready
-  leaves the message empty. Wait for the editor, fill it, check the text is there, then submit.
-- After submitting, open the discussion (`mod/forum/discuss.php?d=<id>`) and confirm the post is
-  there. Only if it isn't, retry once with the same approved text — never retry without checking,
-  or the student gets the reply twice. A retry of a post that never went out needs no new
-  approval; changing its content does.
+After posting, read the discussion back and confirm the post is there. Only if it isn't, retry
+once with the same approved text. Never retry without checking, or the student gets the reply
+twice. A retry of a post that never went out needs no new approval; changing its content does.
 
 ## 5. Remember the patterns
 
 When several threads circle the same doubt, or a concept keeps confusing people, note it in the
-knowledge base (the topic's page `topic/<slug>`, or a concept page) — without
-students' names. It's what tells a later session, or a revision of the course, that this point
-needs more explanation than it has.
+knowledge base (the topic's page `topic/<slug>`, or a concept page), without students' names or
+aliases. It's what tells a later session, or a revision of the course, that this point needs
+more explanation than it has.
