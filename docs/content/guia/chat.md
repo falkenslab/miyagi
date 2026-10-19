@@ -6,7 +6,7 @@ description: "Cómo conversar con miyagi: aprobar o rechazar lo que publica, ped
 
 # El chat
 
-`miyagi chat` es la forma más cómoda de trabajar con el asistente: le pides las cosas con tus palabras y él te va enseñando lo que hace. Ábrelo siempre desde la carpeta del curso (o con `miyagi chat --dir <carpeta>` desde cualquier sitio).
+`miyagi chat` es la forma más cómoda de trabajar con el asistente: le pides las cosas con tus palabras y él te va enseñando lo que hace. Ábrelo con el nombre de tu asignatura, `miyagi chat -w <nombre>`, desde cualquier sitio (o sin `-w`, dentro de su carpeta).
 
 ## El chat en un minuto
 

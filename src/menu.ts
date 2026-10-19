@@ -9,6 +9,7 @@ import {
   type WorkspaceConfig,
 } from "./workspace.js";
 import { t } from "./messages/index.js";
+import { newWorkspaceDir, registerWorkspace, type ListedWorkspace } from "./workspaces.js";
 
 /**
  * If `raw` is a full course URL (e.g. "http://localhost:8080/course/view.php?id=4"),
@@ -76,12 +77,13 @@ function classroomOf(answers: WizardAnswers, label: string, description: string)
 }
 
 /**
- * Asks for a new workspace's data and creates it in `workspaceDir` (config.json, sources/,
- * knowledge/, .gitignore and, optionally, instructions.md). The Moodle classroom is optional
- * (ADR-013): the first question is whether to connect one now. Used by `miyagi init`
- * and by run/chat when the directory isn't a workspace yet.
+ * Asks for a new workspace's data and creates it (config.json, sources/, knowledge/, .gitignore
+ * and, optionally, instructions.md): in `workspaceDir` when given (`--dir`), otherwise in
+ * miyagi's own folder under a slug of its name (ADR-023). The Moodle classroom is optional
+ * (ADR-013): the first question is whether to connect one now. Registers it, so it opens by
+ * name. Used by `miyagi init` and by run/chat when there's no workspace to open.
  */
-export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConfig> {
+export function promptInitWorkspace(workspaceDir?: string): Promise<{ dir: string; id: string; config: WorkspaceConfig }> {
   return exitOnCancel(async () => {
     const connected = (a: WizardAnswers) => a.connect === true;
     const answers = await runWizard(
@@ -92,7 +94,8 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
           type: "input",
           name: "label",
           message: (a) => (connected(a) ? t().label : t().workspaceName),
-          default: (a) => (connected(a) ? defaultWorkspaceLabel(parseCourseUrl(String(a.url)).url, courseOf(a)) : path.basename(path.resolve(workspaceDir))),
+          default: (a) => (connected(a) ? defaultWorkspaceLabel(parseCourseUrl(String(a.url)).url, courseOf(a)) : workspaceDir ? path.basename(path.resolve(workspaceDir)) : ""),
+          validate: required,
         },
         { type: "input", name: "description", message: t().description },
         {
@@ -113,7 +116,7 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
         { type: "confirm", name: "allowPracticeRunner", message: t().practiceRunnerQuestion, default: false },
         { type: "confirm", name: "instructions", message: t().createInstructions, default: false },
       ],
-      { title: t().initHeading(workspaceDir).trim() },
+      { title: (workspaceDir ? t().initHeading(workspaceDir) : t().initHeadingNew).trim() },
     );
 
     const label = String(answers.label);
@@ -121,6 +124,7 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
     const language = String(answers.language ?? "");
     const persona = answers.persona as AgentPersona | undefined;
     const config: WorkspaceConfig = {
+      kind: "subject",
       // Without a classroom the name and description live at the root.
       ...(connected(answers) ? { classroom: classroomOf(answers, label, description) } : { label, ...(description ? { description } : {}) }),
       agent: {
@@ -130,11 +134,13 @@ export function promptInitWorkspace(workspaceDir: string): Promise<WorkspaceConf
         allowPracticeRunner: answers.allowPracticeRunner === true,
       },
     };
-    await createWorkspace(workspaceDir, config);
-    if (answers.instructions === true) await writeInstructionsTemplate(workspaceDir);
+    const dir = workspaceDir ?? (await newWorkspaceDir(label));
+    await createWorkspace(dir, config);
+    if (answers.instructions === true) await writeInstructionsTemplate(dir);
+    const { id } = await registerWorkspace(dir, label, "subject");
 
-    console.log(ui.success(t().workspaceCreated(workspaceDir)));
-    return config;
+    console.log(ui.success(t().workspaceCreated(dir)));
+    return { dir, id, config };
   });
 }
 
@@ -190,6 +196,24 @@ export function promptConnectClassroom(workspaceDir: string, config: WorkspaceCo
  * authoring skills check before creating anything. */
 export function promptExploreNow(): Promise<boolean> {
   return exitOnCancel(() => ask<boolean>({ type: "confirm", name: "explore", message: t().exploreNow, default: true }));
+}
+
+/**
+ * Which workspace to open when the command names none and the current directory isn't one: the
+ * registered ones, last opened first, and "new". Undefined for a new one (also when there are none).
+ */
+export function promptPickWorkspace(workspaces: ListedWorkspace[]): Promise<string | undefined> {
+  const present = workspaces.filter((ws) => !ws.missing);
+  if (present.length === 0) return Promise.resolve(undefined);
+  return exitOnCancel(async () => {
+    const dir = await ask<string>({
+      type: "select",
+      name: "workspace",
+      message: t().whichWorkspace,
+      choices: [...present.map((ws) => ({ name: ws.name, value: ws.dir })), { name: t().newWorkspaceChoice, value: "" }],
+    });
+    return dir || undefined;
+  });
 }
 
 /** Only used by "miyagi" with no subcommand. */

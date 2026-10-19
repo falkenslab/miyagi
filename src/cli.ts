@@ -3,14 +3,15 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isExitPromptError, runExtensionCommand, ui } from "@falkenslab/agent-kit";
-import { resolveWorkspaceDir, runSession } from "./agent.js";
+import { runSession } from "./agent.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
 import { CATALOG_TOPICS, extensionDirsFor, OFFICIAL_MARKETPLACE } from "./extensions.js";
 import { globalConfigPath, migrateLegacyGlobalConfig, resolveLanguage } from "./globalConfig.js";
 import { promptConnectClassroom, promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
 import { chooseInterfaceLanguage, t } from "./messages/index.js";
 import { applyTeacherTheme } from "./theme.js";
-import { interfaceLanguage, readWorkspaceConfig, workspaceExists } from "./workspace.js";
+import { interfaceLanguage, readWorkspaceConfig, workspaceExists, workspaceLabel } from "./workspace.js";
+import { findWorkspace, forgetWorkspace, listWorkspaces, locateWorkspace, registerWorkspace, withoutWorkspaceFlags, workspaceIds } from "./workspaces.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,15 +25,19 @@ async function installedVersion(): Promise<string> {
 }
 
 async function initCommand(args: string[]): Promise<void> {
-  const workspaceDir = resolveWorkspaceDir(args);
+  // --dir creates it there; without it, in miyagi's own folder (ADR-023).
+  const located = await locateWorkspace(args);
+  let workspaceDir: string;
   let config;
-  if (await workspaceExists(workspaceDir)) {
+  if (located && (await workspaceExists(located))) {
     // A workspace without a classroom can connect one later (ADR-013); one with a classroom is done.
-    const existing = await readWorkspaceConfig(workspaceDir);
-    if (existing.classroom) throw new Error(t().alreadyWorkspace(workspaceDir));
+    const existing = await readWorkspaceConfig(located);
+    if (existing.classroom) throw new Error(t().alreadyWorkspace(located));
+    workspaceDir = located;
     config = await promptConnectClassroom(workspaceDir, existing);
+    await registerWorkspace(workspaceDir, workspaceLabel(workspaceDir, config), config.kind ?? "subject");
   } else {
-    config = await promptInitWorkspace(workspaceDir);
+    ({ dir: workspaceDir, config } = await promptInitWorkspace(located));
   }
   // Exploring needs a Moodle: without a classroom there's nothing to offer.
   if (!config.classroom || !(await promptExploreNow())) return;
@@ -57,26 +62,46 @@ function printCatalog(title: string, entries: CatalogEntry[]): void {
 }
 
 async function skillsCommand(args: string[]): Promise<void> {
-  const workspaceDir = resolveWorkspaceDir(args);
+  const workspaceDir = (await locateWorkspace(args)) ?? process.cwd();
   printCatalog(t().skillsTitle(workspaceDir), await listSkills(workspaceDir));
 }
 
 async function commandsCommand(args: string[]): Promise<void> {
-  const workspaceDir = resolveWorkspaceDir(args);
+  const workspaceDir = (await locateWorkspace(args)) ?? process.cwd();
   printCatalog(t().commandsTitle(workspaceDir), await listCommands(workspaceDir));
+}
+
+/** `miyagi workspaces`: the registered ones; `forget <name>` drops one from the list, never its folder. */
+async function workspacesCommand(args: string[]): Promise<void> {
+  if (args[0] === "forget") {
+    if (!args[1]) throw new Error(t().forgetUsage);
+    const found = await findWorkspace(args[1]);
+    if (!found) throw new Error(t().workspaceNotFound(args[1], await workspaceIds()));
+    await forgetWorkspace(found.id);
+    console.log(ui.success(t().workspaceForgotten(found.name, found.dir)));
+    return;
+  }
+  const workspaces = await listWorkspaces();
+  if (workspaces.length === 0) {
+    console.log(t().workspacesEmpty);
+    return;
+  }
+  console.log(ui.heading(t().workspacesTitle));
+  for (const ws of workspaces) {
+    const missing = ws.missing ? ` ${ui.warn(t().missingTag)}` : "";
+    console.log(`- ${ws.name} ${ui.dim(`(-w ${ws.id}, ${t().kindName(ws.kind)})`)}${missing}\n  ${ui.dim(ws.dir)}`);
+  }
 }
 
 /**
  * agent-kit's `extension` command (list, add, remove, enable, disable, config, update, search,
- * marketplace…) on the agent's scope and, when --dir (or the current directory) is a workspace,
- * on its own. Without a workspace, `--project` has nowhere to go and the kit says so.
+ * marketplace…) on the agent's scope and, when --dir, -w or the current directory names a
+ * workspace, on its own. Without a workspace, `--project` has nowhere to go and the kit says so.
  */
 async function extensionCommand(argv: string[]): Promise<void> {
-  const workspaceDir = resolveWorkspaceDir(argv);
-  const dirIndex = argv.indexOf("--dir");
-  const kitArgs = dirIndex >= 0 ? [...argv.slice(0, dirIndex), ...argv.slice(dirIndex + 2)] : argv;
-  await runExtensionCommand(kitArgs, {
-    dirs: extensionDirsFor((await workspaceExists(workspaceDir)) ? workspaceDir : undefined),
+  const workspaceDir = await locateWorkspace(argv);
+  await runExtensionCommand(withoutWorkspaceFlags(argv), {
+    dirs: extensionDirsFor(workspaceDir && (await workspaceExists(workspaceDir)) ? workspaceDir : undefined),
     command: "miyagi",
     official: OFFICIAL_MARKETPLACE,
     catalogTopics: CATALOG_TOPICS,
@@ -89,12 +114,12 @@ async function extensionCommand(argv: string[]): Promise<void> {
  * same one, so its texts and miyagi's always agree.
  */
 async function chooseLanguage(args: string[]): Promise<void> {
-  const workspaceDir = resolveWorkspaceDir(args);
   let workspaceLanguage: string | undefined;
   try {
-    if (await workspaceExists(workspaceDir)) workspaceLanguage = (await readWorkspaceConfig(workspaceDir)).agent.language;
+    const workspaceDir = await locateWorkspace(args);
+    if (workspaceDir && (await workspaceExists(workspaceDir))) workspaceLanguage = (await readWorkspaceConfig(workspaceDir)).agent.language;
   } catch {
-    // A broken or student config.json is reported by the command itself, in the chosen language.
+    // A broken or student config.json, or an unknown -w, is reported by the command itself, in the chosen language.
   }
   const warnings = chooseInterfaceLanguage(interfaceLanguage(await resolveLanguage(workspaceLanguage)));
   for (const warning of warnings) console.error(ui.warn(warning));
@@ -128,6 +153,8 @@ async function main(): Promise<void> {
       return skillsCommand(rest);
     case "commands":
       return commandsCommand(rest);
+    case "workspaces":
+      return workspacesCommand(rest);
     case "extension":
       return extensionCommand(process.argv.slice(2));
     case undefined:

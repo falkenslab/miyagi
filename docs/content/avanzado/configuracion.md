@@ -10,7 +10,7 @@ miyagi tiene tres sitios de configuración: el `config.json` de cada curso, un `
 
 ## `config.json` del curso
 
-Lo crea `miyagi init` en la carpeta del curso. Es un JSON con dos partes: `classroom` (el curso de Moodle, opcional) y `agent` (cómo trabaja el asistente). Puedes editarlo a mano con cualquier editor; los cambios se aplican en la siguiente sesión.
+Lo crea `miyagi init` en la carpeta de la asignatura. Es un JSON con `kind` (qué es: hoy siempre `"subject"`, una asignatura; miyagi lo escribe si falta), `classroom` (el curso de Moodle, opcional) y `agent` (cómo trabaja el asistente). Puedes editarlo a mano con cualquier editor; los cambios se aplican en la siguiente sesión.
 
 Un ejemplo completo:
 
@@ -132,11 +132,26 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 
 El token es tan delicado como una contraseña: en Mac y Linux, miyagi deja el archivo legible solo para tu usuario. Si venías de teacher-agent, la primera vez copia `~/.teacher-agent/config.json` aquí (el antiguo se queda donde estaba).
 
+## La lista de asignaturas: `~/.miyagi/workspaces.json`
+
+miyagi apunta aquí cada asignatura que creas o abres, para que la abras por su nombre (`-w`) desde cualquier sitio. Las nuevas se guardan en `~/.miyagi/workspaces/<nombre>/` salvo que uses `--dir`.
+
+```json
+{
+  "workspaces": [
+    { "id": "bases-de-datos", "name": "Bases de Datos", "kind": "subject", "dir": "C:\\Users\\ana\\.miyagi\\workspaces\\bases-de-datos", "createdAt": "…", "openedAt": "…" }
+  ]
+}
+```
+
+`id` es el nombre corto que acepta `-w` (también vale el nombre completo). Si mueves la carpeta de una asignatura, `miyagi workspaces` la marca como no encontrada; ábrela una vez con `--dir` en su sitio nuevo, o quítala con `miyagi workspaces forget <nombre>`. Nada de esto borra nunca una carpeta. No guarda ningún secreto.
+
 ## Opciones de la línea de órdenes
 
 Mandan sobre todo lo anterior, solo para esa ejecución:
 
-- **`--dir <carpeta>`**: el curso con el que trabajar. Por defecto, la carpeta actual.
+- **`-w <nombre>`** (`--workspace`): la asignatura de tu lista con la que trabajar.
+- **`--dir <carpeta>`**: la asignatura de esa carpeta (o dónde crearla con `init`). Sin ninguna de las dos, la de la carpeta actual si lo es; si no, te pregunta.
 - **`--language=<código>`**: el idioma de los textos de miyagi y del chat: `es`, `en`, `fr` o `de`. Por defecto, el de `agent.language`, luego `defaultLanguage`, luego el del sistema.
 - **`--headless`**: sin ventana de Chrome. Orden de preferencia: `--headless`, luego `agent.headless`, luego `defaultHeadless`, luego `false`. `--headless=false` la fuerza visible.
 - **`--mode`**, **`--task`**, **`--plain`**, **`--inline`**, **`--continue`**: ver [Sesiones y modos](sesiones-y-modos.md) y la [Referencia](../guia/referencia.md).

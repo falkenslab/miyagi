@@ -5,8 +5,8 @@ export const fr: Messages = {
 
 Commandes :
   init [--dir <chemin>]
-      Crée un nouvel espace de travail dans le dossier indiqué (ou l'actuel) et propose
-      ensuite d'explorer ce que permet ce Moodle.
+      Crée une nouvelle matière dans le dossier de miyagi (~/.miyagi/workspaces/<nom>/)
+      ou, avec --dir, dans ce dossier, et propose d'explorer son Moodle s'il en connecte un.
   run [--dir <chemin>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<texte>"]
       Gère le cours d'une traite : corrige les devoirs en attente, répond sur le forum,
       revoit ou ajoute du contenu et résume la progression de la classe. Sans --mode,
@@ -33,24 +33,29 @@ Commandes :
       Installe et gère des extensions, du dépôt officiel de Falken's Lab ou d'un dépôt que
       vous ajoutez : pour toutes les matières (~/.miyagi/extensions) ou, avec --project, pour celle-ci.
       "miyagi extension" seul explique chaque sous-commande.
+  workspaces [forget <nom>]
+      Liste vos matières avec leur dossier ; forget en retire une de la liste (son
+      dossier reste).
 
 Options :
   -h, --help         Affiche cette aide.
   -v, --version      Affiche la version installée.
+  -w, --workspace <nom>  Ouvre cette matière par son nom, depuis n'importe quel dossier.
   --language=<code>  Langue des textes de miyagi et du chat : es, en, fr ou de
                      (par défaut, celle de "agent.language" de l'espace de travail, ou
                      celle du système).
 
-Chaque espace de travail est un dossier (l'actuel, ou celui donné avec --dir) avec son
-propre config.json, comme un dépôt git. Sans arguments, miyagi demande si vous
-voulez "run" ou "chat" et utilise le dossier actuel ; si ce n'est pas encore un espace de
-travail, il le configure et s'arrête (relancez-le pour commencer). --headless (demande des
-identifiants enregistrés) et la langue préférée peuvent aussi être fixés durablement :
-dans le config.json de l'espace de travail ("agent.headless", "agent.language") ou, pour
-tous, dans ${globalConfigPath} ("defaultHeadless", "defaultLanguage"). Voir
+Chaque matière (un espace de travail) est un dossier avec son propre config.json. Les
+nouvelles vont dans ~/.miyagi/workspaces/<nom>/ et toutes sont listées dans
+~/.miyagi/workspaces.json : -w <nom> l'ouvre depuis n'importe où ; --dir <chemin> marche
+toujours, et dans le dossier d'une matière miyagi utilise celle-ci. Sans arguments, miyagi
+demande si vous voulez "run" ou "chat" et quelle matière (ou une nouvelle). --headless
+(demande des identifiants enregistrés) et la langue préférée peuvent aussi être fixés
+durablement : dans le config.json de la matière ("agent.headless", "agent.language") ou,
+pour toutes, dans ${globalConfigPath} ("defaultHeadless", "defaultLanguage"). Voir
 README.md pour plus de détails.`,
-  alreadyWorkspace: (dir) => `${dir} est déjà un espace de travail miyagi (config.json existe). Choisissez un autre dossier.`,
-  exploreFailed: (reason) => `Impossible d'explorer le Moodle (${reason}). L'espace de travail est créé ; vous pouvez réessayer avec "miyagi explore".`,
+  alreadyWorkspace: (dir) => `${dir} est déjà une matière miyagi (config.json existe). Choisissez un autre dossier.`,
+  exploreFailed: (reason) => `Impossible d'explorer le Moodle (${reason}). La matière est créée ; vous pouvez réessayer avec "miyagi explore".`,
   catalogBuiltin: "[intégrée]",
   catalogCustom: "[propre]",
   catalogExtension: (name) => `[${name}]`,
@@ -60,7 +65,19 @@ README.md pour plus de détails.`,
   renamedCommand: "teacher-agent s'appelle désormais miyagi : utilisez la commande miyagi (teacher-agent fonctionnera encore quelque temps).",
   globalConfigMigrated: (file) => `Vos réglages de ~/.teacher-agent ont été copiés dans ${file}.`,
 
-  initHeading: (dir) => `\n=== Configuration d'un espace de travail dans ${dir} ===`,
+  initHeading: (dir) => `\n=== Préparation de la matière dans ${dir} ===`,
+  initHeadingNew: "\n=== Nouvelle matière ===",
+  whichWorkspace: "Quelle matière ?",
+  newWorkspaceChoice: "Nouvelle matière…",
+  workspacesTitle: "Vos matières",
+  workspacesEmpty: "Aucune matière pour l'instant. \"miyagi init\" en crée une.",
+  missingTag: "[dossier introuvable]",
+  kindName: () => "matière",
+  workspaceForgotten: (name, dir) => `« ${name} » n'est plus dans la liste. Son dossier est intact : ${dir}`,
+  workspaceNotFound: (query, ids) => `Aucune matière « ${query} ». ${ids ? `Les vôtres : ${ids}` : "Vous n’en avez aucune"} ("miyagi workspaces" les liste).`,
+  workspaceFolderMissing: (name, dir, id) => `Le dossier de « ${name} » a disparu (${dir}). Remettez-le en place, ou retirez-le de la liste avec "miyagi workspaces forget ${id}".`,
+  noWorkspaceHere: (ids) => (ids ? `Aucune matière ici. Ouvrez-en une avec -w <nom> (${ids}), ou créez-en une avec "miyagi init".` : 'Aucune matière pour l’instant : créez-en une avec "miyagi init".'),
+  forgetUsage: "Laquelle ? miyagi workspaces forget <nom>",
   required: "Obligatoire",
   moodleUrl: "URL de Moodle (ou collez l'URL complète du cours, p. ex. https://moodle.monuniversite.fr/course/view.php?id=4) :",
   courseId: "ID du cours :",
@@ -77,13 +94,13 @@ README.md pour plus de détails.`,
   practiceRunnerQuestion:
     "Autoriser l'agent à tester des activités pratiques dans des conteneurs Docker (p. ex. vérifier qu'un énoncé " +
     "fonctionne avant de le publier, ou exécuter un rendu en le corrigeant) ? Il ne travaille que dans le dossier " +
-    "practice/ de l'espace de travail et seulement avec Docker ; il n'installe jamais rien : si Docker n'est pas installé, il vous le dit.",
+    "practice/ de la matière et seulement avec Docker ; il n'installe jamais rien : si Docker n'est pas installé, il vous le dit.",
   practiceRunnerNote:
-    "Note : cet espace de travail n'a pas encore configuré une capacité facultative — tester des activités pratiques " +
+    "Note : cette matière n'a pas encore configuré une capacité facultative — tester des activités pratiques " +
     "(un Dockerfile, un script, le code d'un rendu) dans des conteneurs Docker, avant de les publier ou en les " +
     'corrigeant. Désactivée par défaut ; changez-la à la main dans config.json ("agent.allowPracticeRunner": true/false) ou répondez à la question ci-dessous.',
   createInstructions: "Créer instructions.md pour ajouter vos propres instructions à l'agent ? (facultatif, vous pouvez le faire à la main plus tard)",
-  workspaceCreated: (dir) => `Espace de travail créé dans ${dir}\n`,
+  workspaceCreated: (dir) => `Matière créée dans ${dir}\n`,
   exploreNow:
     "Explorer maintenant quels types d'activité et de question admet ce Moodle ? (il se connecte et ne fait que " +
     'regarder, sans rien créer ; vous pouvez aussi le faire plus tard avec "miyagi explore")',
@@ -100,11 +117,11 @@ README.md pour plus de détails.`,
   defaultLabel: (host, courseId) => `${host} · cours ${courseId}`,
 
   unknownMode: (value, valid) => `Mode inconnu "${value}". Utilisez l'un de : ${valid}.`,
-  notAWorkspace: (dir) => `${dir} n'est pas un espace de travail miyagi (pas de config.json). Lancez "miyagi init" là-bas, ou passez --dir avec un espace de travail existant.`,
+  notAWorkspace: (dir) => `${dir} n'est pas une matière miyagi (pas de config.json). Lancez "miyagi init", ou ouvrez-en une avec -w <nom>.`,
   contextMoved: (count, sourcesDir) => `context/ n'est plus utilisé : ses ${count} fichiers ont été déplacés vers ${sourcesDir}.\n`,
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ avait l'ancienne structure : il a été déplacé vers ${legacyDir} (ses fichiers téléchargés, vers ${sourcesDir}) et l'agent reconstruira la base de connaissances à partir de là.\n`,
-  setupSaved: (kind, dir) => `Configuration enregistrée. Quand vous voudrez commencer : miyagi ${kind} --dir "${dir}"`,
+  setupSaved: (command) => `Configuration enregistrée. Quand vous voudrez commencer : ${command}`,
   autonomousNeedsCredentials:
     "Le mode autonomous ne permet pas de se connecter à la main (aucun moyen de demander de l'aide à un humain) : enregistrez l'utilisateur et le mot de passe dans config.json, ou utilisez --mode guided/interactive.",
   headlessNeedsCredentials:
@@ -112,17 +129,17 @@ README.md pour plus de détails.`,
   headingIngest: "Ingestion dans la base de connaissances (sans navigateur)",
   headingExplore: "Exploration des capacités de ce Moodle",
   headingMode: (mode, chat) => `Mode : ${mode}${chat ? " (chat)" : ""}`,
-  headingWorkspace: (label, dir) => `Espace de travail : ${label} (${dir})`,
+  headingWorkspace: (label, dir) => `Matière : ${label} (${dir})`,
   headingSession: (dir) => `Session : ${dir}`,
   headingCourse: (url, courseId) => `Cours : ${url} (id ${courseId})\n`,
-  headerWorkspace: "espace",
+  headerWorkspace: "matière",
   headerCourse: "cours",
   headerClassroom: "classe",
   noClassroom: "sans classe",
   connectMoodleNow: "Connecter une classe Moodle maintenant ? (sans classe, miyagi vous aide avec votre progression et vos supports, et vous pourrez en connecter une plus tard avec \"miyagi init\")",
   exploreNeedsClassroom: (dir) => `${dir} n'a aucune classe connectée : il n'y a pas de Moodle à explorer. Connectez-en une avec "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `La classe de ${dir}/config.json a besoin de "url" et de "courseId".`,
-  workspaceName: "Nom de la matière ou de l'espace de travail :",
+  workspaceName: "Nom de la matière :",
   welcomePlain: "miyagi est prêt. Échap interrompt la réponse en cours ; /resume reprend une conversation précédente ; /exit ou Ctrl+C (sans réponse en cours) ferment la session.",
   welcomeInk: "miyagi est prêt. Maj+Tab bascule entre guided et interactive, /resume reprend une conversation précédente, ? affiche les raccourcis et /exit ferme la session.",
   promptLabel: "vous>",
@@ -142,7 +159,7 @@ README.md pour plus de détails.`,
   gateLine: "L'agent va publier ou modifier dans Moodle quelque chose que les élèves peuvent voir, sans vous l'avoir demandé avant.",
 
   manualLoginTitle: "Connexion manuelle nécessaire",
-  manualLoginLines: ["Aucun identifiant enregistré pour cet espace de travail.", "Connectez-vous à la main dans la fenêtre du navigateur déjà ouverte."],
+  manualLoginLines: ["Aucun identifiant enregistré pour cette matière.", "Connectez-vous à la main dans la fenêtre du navigateur déjà ouverte."],
   manualLoginQuestion: "Appuyez sur Entrée une fois connecté (ou 'q' pour annuler) : ",
 
   toolPhrases: {

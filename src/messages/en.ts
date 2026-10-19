@@ -29,6 +29,18 @@ export interface Messages {
 
   // menu.ts: the setup wizard and the other questions
   initHeading: (dir: string) => string;
+  initHeadingNew: string;
+  whichWorkspace: string;
+  newWorkspaceChoice: string;
+  workspacesTitle: string;
+  workspacesEmpty: string;
+  missingTag: string;
+  kindName: (kind: string) => string;
+  workspaceForgotten: (name: string, dir: string) => string;
+  workspaceNotFound: (query: string, ids: string) => string;
+  workspaceFolderMissing: (name: string, dir: string, id: string) => string;
+  noWorkspaceHere: (ids: string) => string;
+  forgetUsage: string;
   required: string;
   moodleUrl: string;
   courseId: string;
@@ -65,7 +77,7 @@ export interface Messages {
   notAWorkspace: (dir: string) => string;
   contextMoved: (count: number, sourcesDir: string) => string;
   knowledgeMoved: (legacyDir: string, sourcesDir: string) => string;
-  setupSaved: (kind: string, dir: string) => string;
+  setupSaved: (command: string) => string;
   autonomousNeedsCredentials: string;
   headlessNeedsCredentials: string;
   headingIngest: string;
@@ -169,8 +181,8 @@ export const en: Messages = {
 
 Commands:
   init [--dir <path>]
-      Creates a new workspace in the given directory (or the current one) and offers
-      to explore what that Moodle supports next.
+      Creates a new subject in miyagi's folder (~/.miyagi/workspaces/<name>/) or, with
+      --dir, in that directory, and offers to explore its Moodle if it connects one.
   run [--dir <path>] [--mode interactive|guided|autonomous] [--headless] [--plain] [--task "<text>"]
       Manages the course in one go: grades pending submissions, answers the forum,
       reviews or adds content and summarizes the class's progress. Without --mode, asks
@@ -196,23 +208,27 @@ Commands:
       Installs and manages extensions, from Falken's Lab's official repository or one you
       add: for every subject (~/.miyagi/extensions) or, with --project, only this one.
       "miyagi extension" alone explains each subcommand.
+  workspaces [forget <name>]
+      Lists your subjects with their folder; forget drops one from the list (its folder
+      stays).
 
 Options:
   -h, --help         Shows this help.
   -v, --version      Shows the installed version.
+  -w, --workspace <name>  Opens that subject by its name, from any folder.
   --language=<code>  Language of miyagi's and the chat's texts: es, en, fr or de
                      (by default, the workspace's "agent.language", or the system's).
 
-Each workspace is a directory (the current one, or the one given with --dir) with its
-own config.json, like a git repository. Without arguments, miyagi asks whether
-you want "run" or "chat" and uses the current directory; if it isn't a workspace yet, it
-sets it up and exits (run it again to start). --headless (needs saved credentials) and
-the preferred language can also be set for good: in the workspace's config.json
-("agent.headless", "agent.language") or, for all of them, in
-${globalConfigPath} ("defaultHeadless", "defaultLanguage"). See README.md for
-details.`,
-  alreadyWorkspace: (dir) => `${dir} is already a miyagi workspace (config.json exists). Choose another directory.`,
-  exploreFailed: (reason) => `Couldn't explore the Moodle (${reason}). The workspace is created; you can try again with "miyagi explore".`,
+A subject (a workspace) is a folder with its own config.json. New ones go to
+~/.miyagi/workspaces/<name>/ and every one is listed in ~/.miyagi/workspaces.json, so
+-w <name> opens it from anywhere; --dir <path> still works, and inside a subject's folder
+miyagi uses it. Without arguments, miyagi asks whether you want "run" or "chat" and which
+subject (or a new one). --headless (needs saved credentials) and the preferred language can
+also be set for good: in the subject's config.json ("agent.headless", "agent.language") or,
+for all of them, in ${globalConfigPath} ("defaultHeadless", "defaultLanguage"). See
+README.md for details.`,
+  alreadyWorkspace: (dir) => `${dir} is already a miyagi subject (config.json exists). Choose another directory.`,
+  exploreFailed: (reason) => `Couldn't explore the Moodle (${reason}). The subject is created; you can try again with "miyagi explore".`,
   catalogBuiltin: "[built-in]",
   catalogCustom: "[own]",
   catalogExtension: (name) => `[${name}]`,
@@ -222,7 +238,19 @@ details.`,
   renamedCommand: "teacher-agent is now called miyagi: use the miyagi command (teacher-agent still works for a while).",
   globalConfigMigrated: (file) => `Your settings from ~/.teacher-agent were copied to ${file}.`,
 
-  initHeading: (dir) => `\n=== Setting up a workspace in ${dir} ===`,
+  initHeading: (dir) => `\n=== Setting up a subject in ${dir} ===`,
+  initHeadingNew: "\n=== New subject ===",
+  whichWorkspace: "Which subject?",
+  newWorkspaceChoice: "New subject…",
+  workspacesTitle: "Your subjects",
+  workspacesEmpty: "No subjects yet. \"miyagi init\" creates one.",
+  missingTag: "[folder not found]",
+  kindName: () => "subject",
+  workspaceForgotten: (name, dir) => `"${name}" is no longer in the list. Its folder is untouched: ${dir}`,
+  workspaceNotFound: (query, ids) => `There's no subject "${query}". ${ids ? `Yours: ${ids}` : "You have none yet"} ("miyagi workspaces" lists them).`,
+  workspaceFolderMissing: (name, dir, id) => `The folder of "${name}" is gone (${dir}). Put it back, or remove it from the list with "miyagi workspaces forget ${id}".`,
+  noWorkspaceHere: (ids) => (ids ? `No subject here. Open one with -w <name> (${ids}), or create one with "miyagi init".` : 'No subject yet: create one with "miyagi init".'),
+  forgetUsage: "Which one? miyagi workspaces forget <name>",
   required: "Required",
   moodleUrl: "Moodle URL (or paste the course's full URL, e.g. https://moodle.myuniversity.edu/course/view.php?id=4):",
   courseId: "Course ID:",
@@ -238,14 +266,14 @@ details.`,
   conversationLanguage: "Language you'd rather talk to the agent in (blank, no preference: it answers in the language you use):",
   practiceRunnerQuestion:
     "Let the agent test practical activities in Docker containers (e.g. check that a statement works before " +
-    "publishing it, or run a submission while grading it)? It only works in the workspace's practice/ folder and " +
+    "publishing it, or run a submission while grading it)? It only works in the subject's practice/ folder and " +
     "only with Docker; it never installs anything: if Docker isn't installed, it tells you.",
   practiceRunnerNote:
-    "Note: this workspace hasn't set up an optional capability yet — testing practical activities (a Dockerfile, a " +
+    "Note: this subject hasn't set up an optional capability yet — testing practical activities (a Dockerfile, a " +
     "script, a submission's code) in Docker containers, before publishing them or while grading them. Off by " +
     'default; change it by hand in config.json ("agent.allowPracticeRunner": true/false) or answer the question below.',
   createInstructions: "Create instructions.md to add your own instructions for the agent? (optional, you can do it by hand later)",
-  workspaceCreated: (dir) => `Workspace created in ${dir}\n`,
+  workspaceCreated: (dir) => `Subject created in ${dir}\n`,
   exploreNow:
     'Explore now which activity and question types this Moodle supports? (it logs in and only looks, creating ' +
     'nothing; you can also do it later with "miyagi explore")',
@@ -262,11 +290,11 @@ details.`,
   defaultLabel: (host, courseId) => `${host} · course ${courseId}`,
 
   unknownMode: (value, valid) => `Unknown mode "${value}". Use one of: ${valid}.`,
-  notAWorkspace: (dir) => `${dir} isn't a miyagi workspace (no config.json). Run "miyagi init" there, or pass --dir with an existing workspace.`,
+  notAWorkspace: (dir) => `${dir} isn't a miyagi subject (no config.json). Run "miyagi init", or open one with -w <name>.`,
   contextMoved: (count, sourcesDir) => `context/ isn't used anymore: its ${count} files were moved to ${sourcesDir}.\n`,
   knowledgeMoved: (legacyDir, sourcesDir) =>
     `knowledge/ had the old layout: it was moved to ${legacyDir} (its downloaded files, to ${sourcesDir}) and the agent will rebuild the knowledge base from there.\n`,
-  setupSaved: (kind, dir) => `Settings saved. When you want to start: miyagi ${kind} --dir "${dir}"`,
+  setupSaved: (command) => `Settings saved. When you want to start: ${command}`,
   autonomousNeedsCredentials:
     "autonomous mode can't log in by hand (there's no way to ask a human for help): save the user and password in config.json, or use --mode guided/interactive.",
   headlessNeedsCredentials:
@@ -274,17 +302,17 @@ details.`,
   headingIngest: "Ingesting into the knowledge base (no browser)",
   headingExplore: "Exploring what this Moodle supports",
   headingMode: (mode, chat) => `Mode: ${mode}${chat ? " (chat)" : ""}`,
-  headingWorkspace: (label, dir) => `Workspace: ${label} (${dir})`,
+  headingWorkspace: (label, dir) => `Subject: ${label} (${dir})`,
   headingSession: (dir) => `Session: ${dir}`,
   headingCourse: (url, courseId) => `Course: ${url} (id ${courseId})\n`,
-  headerWorkspace: "workspace",
+  headerWorkspace: "subject",
   headerCourse: "course",
   headerClassroom: "classroom",
   noClassroom: "no classroom",
   connectMoodleNow: "Connect a Moodle classroom now? (without one, miyagi helps with your teaching plan and materials, and can connect one later with \"miyagi init\")",
   exploreNeedsClassroom: (dir) => `${dir} has no classroom connected: there's no Moodle to explore. Connect one with "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `The classroom in ${dir}/config.json needs both "url" and "courseId".`,
-  workspaceName: "Name of the subject or workspace:",
+  workspaceName: "Name of the subject:",
   welcomePlain: "miyagi is ready. Esc interrupts the reply in progress; /resume picks up an earlier conversation; /exit or Ctrl+C (with no reply in progress) close the session.",
   welcomeInk: "miyagi is ready. Shift+Tab switches between guided and interactive, /resume picks up an earlier conversation, ? shows the shortcuts and /exit closes the session.",
   promptLabel: "you>",
@@ -304,7 +332,7 @@ details.`,
   gateLine: "The agent is about to publish or change something students can see in Moodle, without having asked you first.",
 
   manualLoginTitle: "Manual login required",
-  manualLoginLines: ["No saved credentials for this workspace.", "Log in manually in the already-open browser window."],
+  manualLoginLines: ["No saved credentials for this subject.", "Log in manually in the already-open browser window."],
   manualLoginQuestion: "Press Enter once you've finished logging in (or 'q' to cancel): ",
 
   toolPhrases: {

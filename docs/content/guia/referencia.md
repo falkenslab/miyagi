@@ -10,7 +10,7 @@ description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, 
 
 | Orden | Qué hace |
 | --- | --- |
-| `miyagi init` | Prepara una carpeta nueva para un curso (las preguntas de [Primeros pasos](primeros-pasos.md)), con o sin aula Moodle, y ofrece explorar tu Moodle si la conectas. En una carpeta sin aula, te ofrece conectarla. |
+| `miyagi init` | Prepara una asignatura nueva (las preguntas de [Primeros pasos](primeros-pasos.md)) en la carpeta de miyagi, o en la de `--dir`, con o sin aula Moodle, y ofrece explorar tu Moodle si la conectas. Con `-w` en una asignatura sin aula, te ofrece conectarla. |
 | `miyagi chat` | Conversación con el asistente a pantalla completa, siempre pidiendo permiso antes de publicar. |
 | `miyagi run` | Recorre el curso entero de una sentada: corrige, atiende el foro, revisa el contenido y resume cómo va la clase. |
 | `miyagi run --task "…"` | Hace solo el encargo que le indicas, con las mismas reglas. |
@@ -19,17 +19,20 @@ description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, 
 | `miyagi ingest <archivos…>` | Incorpora solo esos documentos. |
 | `miyagi skills` | Lista sus habilidades, incluidas las tuyas (marcadas `[propia]`). |
 | `miyagi commands` | Lista los atajos del chat, incluidos los tuyos. |
+| `miyagi workspaces` | Lista tus asignaturas, con el nombre para `-w` y su carpeta. Marca las que ya no encuentra. |
+| `miyagi workspaces forget <nombre>` | Quita una asignatura de la lista. Su carpeta no se toca. |
 | `miyagi extension …` | Instala, configura, activa o quita [extensiones](../avanzado/extensiones.md): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
 | `miyagi --help` | Muestra la ayuda con todas las órdenes y opciones. |
 | `miyagi --version` | Muestra la versión instalada. |
 
-Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat`. Si la carpeta aún no es un curso, primero te hace las preguntas de `init`, guarda la configuración y termina: vuelve a lanzarlo para empezar.
+Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, si no estás dentro de la carpeta de una asignatura, con cuál de tu lista. Si eliges una nueva, te hace las preguntas de `init`, la guarda y termina: vuelve a lanzarlo para empezar.
 
 ## Opciones
 
 | Opción | Para qué | En qué órdenes |
 | --- | --- | --- |
-| `--dir <carpeta>` | Trabajar con el curso de esa carpeta sin entrar en ella | Todas |
+| `-w <nombre>`, `--workspace <nombre>` | Trabajar con esa asignatura de tu lista, desde cualquier carpeta | Todas |
+| `--dir <carpeta>` | Trabajar con la asignatura de esa carpeta, o crearla ahí con `init` | Todas |
 | `--language=<código>` | Idioma de los menús y avisos: `es`, `en`, `fr` o `de` | Todas |
 | `--headless` | Trabajar sin mostrar la ventana de Chrome (necesita usuario y contraseña guardados) | `chat`, `run`, `explore` |
 | `--plain` | Texto simple, sin pantalla completa, paneles ni animaciones | `chat`, `run`, `explore`, `ingest` |

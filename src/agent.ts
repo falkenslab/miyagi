@@ -21,7 +21,7 @@ import {
 } from "@falkenslab/agent-kit";
 import {
   draftsDirFor,
-  ensureTeacherRole,
+  ensureWorkspaceDefaults,
   isMigrationPending,
   knowledgeDirFor,
   workspaceLabel,
@@ -46,7 +46,8 @@ import {
   resolveHeadless,
   resolveLanguage,
 } from "./globalConfig.js";
-import { offerPracticeRunner, promptInitWorkspace, promptMode } from "./menu.js";
+import { offerPracticeRunner, promptInitWorkspace, promptMode, promptPickWorkspace } from "./menu.js";
+import { listWorkspaces, locateWorkspace, registerWorkspace, workspaceIds } from "./workspaces.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { playwrightConfigPathFor, writePlaywrightConfig } from "./playwrightConfig.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
@@ -107,13 +108,8 @@ function parseMode(args: string[]): Mode | undefined {
 
 /** Arguments that aren't flags nor a flag's value, e.g. the files given to "ingest". */
 function positionalArgs(args: string[]): string[] {
-  const valueFlags = new Set(["--dir", "--mode", "--task"]);
+  const valueFlags = new Set(["--dir", "--workspace", "-w", "--mode", "--task"]);
   return args.filter((arg, i) => !arg.startsWith("--") && !valueFlags.has(args[i - 1] ?? ""));
-}
-
-/** `--dir <path>`, or the current directory — a workspace works like a git repo. */
-export function resolveWorkspaceDir(args: string[]): string {
-  return path.resolve(parseFlag(args, "--dir") ?? process.cwd());
 }
 
 /**
@@ -220,17 +216,17 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasMoodl
  * Reads the workspace's config.json, or — with a terminal in front — offers to create it
  * right there.
  */
-/** The workspace's config, or null when it was just created here: then the session doesn't start. */
-async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promise<WorkspaceConfig | null> {
+/** The workspace's config, or the id of the one just created here: then the session doesn't start. */
+async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promise<WorkspaceConfig | { created: string }> {
   if (await workspaceExists(workspaceDir)) {
-    const config = await ensureTeacherRole(workspaceDir, await readWorkspaceConfig(workspaceDir));
+    const config = await ensureWorkspaceDefaults(workspaceDir, await readWorkspaceConfig(workspaceDir));
     return offerPracticeRunner(workspaceDir, config, canPrompt);
   }
   if (!process.stdin.isTTY) {
     throw new Error(t().notAWorkspace(workspaceDir));
   }
-  await promptInitWorkspace(workspaceDir);
-  return null;
+  const { id } = await promptInitWorkspace(workspaceDir);
+  return { created: id };
 }
 
 /**
@@ -266,8 +262,18 @@ function sessionHeading(kind: SessionKind, mode: Mode): string {
 
 /** Entry point for the "run", "chat", "ingest" and "explore" subcommands — `args` excludes the subcommand itself. */
 export async function runSession(kind: SessionKind, args: string[]): Promise<void> {
-  const workspaceDir = resolveWorkspaceDir(args);
   const modeFlag = kind === "run" ? parseMode(args) : undefined;
+  // Named by --dir/-w or the current directory; otherwise, with a terminal, the list (ADR-023).
+  let workspaceDir = await locateWorkspace(args);
+  if (!workspaceDir) {
+    if (!process.stdin.isTTY || (kind !== "run" && kind !== "chat")) throw new Error(t().noWorkspaceHere(await workspaceIds()));
+    workspaceDir = await promptPickWorkspace(await listWorkspaces());
+    if (!workspaceDir) {
+      const { id } = await promptInitWorkspace();
+      console.log(ui.dim(t().setupSaved(`miyagi ${kind} -w ${id}`)));
+      return;
+    }
+  }
 
   await loadWorkspaceEnv(workspaceDir);
   await ensureClaudeAuthPersisted();
@@ -276,10 +282,11 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   const workspace = await resolveWorkspace(workspaceDir, canPrompt);
   // Just configured: stop here, so the session starts clean (the full-screen chat) from its
   // own command instead of right after the setup wizard's prompts.
-  if (!workspace) {
-    console.log(ui.dim(t().setupSaved(kind, workspaceDir)));
+  if ("created" in workspace) {
+    console.log(ui.dim(t().setupSaved(`miyagi ${kind} -w ${workspace.created}`)));
     return;
   }
+  await registerWorkspace(workspaceDir, workspaceLabel(workspaceDir, workspace), workspace.kind ?? "subject");
   const classroom = workspace.classroom;
   if (kind === "explore" && !classroom) {
     console.log(ui.warn(t().exploreNeedsClassroom(workspaceDir)));

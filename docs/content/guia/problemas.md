@@ -20,7 +20,7 @@ description: "Consejos para sacarle partido a miyagi y qué hacer cuando algo no
 | Problema | Solución |
 | --- | --- |
 | La terminal no reconoce `miyagi` | Cierra y abre la terminal. Comprueba `node --version` (tiene que ser 20 o más) y repite la instalación. |
-| Dice que la carpeta no es un curso de miyagi | Estás en otra carpeta. Entra en la del curso (`cd mi-curso`) o añade `--dir mi-curso` a la orden. |
+| Dice que aquí no hay ninguna asignatura | Estás fuera de la carpeta de una asignatura. Añade `-w <nombre>` a la orden (`miyagi workspaces` te da los nombres), o usa `miyagi` a secas para elegirla. |
 | Se queda en la pantalla de inicio de sesión de Moodle | Si no guardaste usuario y contraseña, inicia sesión tú en la ventana de Chrome y vuelve a la terminal para confirmarlo. |
 | La exploración del Moodle falló al configurar el curso | El curso ya está configurado. Revisa la dirección y la contraseña en `config.json` y repite con `miyagi explore`. |
 | Los menús salen en otro idioma | Añade `--language=es` (o `en`, `fr`, `de`), o pon el idioma en `config.json` (ver [Configuración](../avanzado/configuracion.md)). |

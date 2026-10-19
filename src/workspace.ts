@@ -19,7 +19,12 @@ export type SessionKind = "run" | "chat" | "ingest" | "explore";
  * aula, so an existing one opens as-is. The classroom is optional (ADR-013): without one,
  * miyagi helps with the teaching plan and the materials, with no browser.
  */
+/** What a workspace is (ADR-017, ADR-023): only `subject` for now; `department` and `exam-prep` later. */
+export type WorkspaceKind = "subject";
+
 export interface WorkspaceConfig {
+  /** Written as `subject` when missing (ensureWorkspaceDefaults()). */
+  kind?: WorkspaceKind;
   /** The workspace's name and description when it has no classroom (with one, the classroom's). */
   label?: string;
   description?: string;
@@ -34,7 +39,7 @@ export interface WorkspaceConfig {
   };
   /** How the agent shows up on that course. */
   agent: {
-    /** Never asked: miyagi always writes "teacher" (see ensureTeacherRole()), so another
+    /** Never asked: miyagi always writes "teacher" (see ensureWorkspaceDefaults()), so another
      * agent opening the same workspace knows whose it is; "student" is rejected when reading. */
     role?: "student" | "teacher";
     persona?: AgentPersona;
@@ -155,9 +160,9 @@ export async function readWorkspaceConfig(workspaceDir: string): Promise<Workspa
 }
 
 /** Records `agent.role: "teacher"` in a workspace that has no role yet, and returns the updated config. */
-export async function ensureTeacherRole(workspaceDir: string, config: WorkspaceConfig): Promise<WorkspaceConfig> {
-  if (config.agent?.role) return config;
-  const updated = { ...config, agent: { ...config.agent, role: "teacher" as const } };
+export async function ensureWorkspaceDefaults(workspaceDir: string, config: WorkspaceConfig): Promise<WorkspaceConfig> {
+  if (config.agent?.role && config.kind) return config;
+  const updated: WorkspaceConfig = { kind: "subject", ...config, agent: { ...config.agent, role: config.agent?.role ?? "teacher" } };
   await writeWorkspaceConfig(workspaceDir, updated);
   return updated;
 }
