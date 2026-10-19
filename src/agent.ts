@@ -317,7 +317,9 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   /** The session's options for a run folder: its browser, its tools and hooks, the publish gate. */
   async function openSession(runDir: string, run?: RunFolder) {
     if (hasBrowser) await writePlaywrightConfig(runDir, config.moodlePassword);
-    const { options, modeControl } = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills, config.hasMoodle), { autoCompactEnabled, run });
+    // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
+    const opened = await buildSessionOptions(config, runDir, buildSpec(runDir, kind, skills, config.hasMoodle), { autoCompactEnabled, run });
+    const { options, modeControl } = opened;
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
     // The approval before publishing, enforced (it only acts in guided). Without a browser
     // (ingest, or no classroom) nothing can be published or uploaded.
@@ -325,7 +327,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
       installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
       installUploadGate(options);
     }
-    return { options, modeControl };
+    return opened;
   }
 
   // The Ink chat shows these in its own header (full screen would wipe anything printed
