@@ -12,7 +12,7 @@ Views that show the subject's work without asking the chat for it, as the mockup
 - The knowledge base is reached only through the kit's knowledge extension (`apis.knowledge.knowledgeStore`, `chat.api("knowledge")`), never by reading `knowledge/`.
 - Classroom views (submissions, forum, progress) depend on the classroom extension's tools and stay as chat actions for now.
 - The oven view waits for `activity-lifecycle` (the phases in `course/drafts`).
-- Needs `gui-chat` (and `gui-subjects` for the subject's name).
+- Needs `gui-chat` (and `gui-workspaces` for the workspace's name).
 
 ## Changes
 

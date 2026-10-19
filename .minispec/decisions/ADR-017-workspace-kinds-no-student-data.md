@@ -15,3 +15,4 @@ Beyond the classroom, the tasks that fit what the core already does are planning
 - The grading "calculator" is the scheme (weights CE → RA → module, checked and set up in the classroom's gradebook or a spreadsheet template), never per-student grades.
 - Paper exams are material (versions, answer key); they aren't marked outside the classroom.
 - The public roadmap lists this under "what miyagi won't do".
+- Amended by ADR-023: the kinds are named `subject`, `department` and `exam-prep`; the interface says each in the teacher's language.

@@ -11,7 +11,7 @@ An Electron app (`desktop/`) with an installer, so a teacher installs miyagi wit
 - Captain Whiskers' `desktop/` is the model: `main.mjs` (134 lines) imports the agent and its host, `startWebChat()`, `BrowserWindow.loadURL(url)`; `scripts/build.mjs`; electron-builder with NSIS; released by hand (no CI), unsigned.
 - The kit already rewrites its paths out of `app.asar` and finds the SDK's native CLI unpacked; the app must still `asarUnpack` the SDK's platform package, the kit's `assets/` and `extensions/`, and its own `plugin/` and `prompts/`.
 - `ELECTRON_RUN_AS_NODE` (set by VS Code's terminal) turns Electron into Node: the main process deletes it.
-- Needs `gui-host` and `gui-chat`; `gui-subjects` gives it more than one subject.
+- Needs `gui-host` and `gui-chat`; `gui-workspaces` gives it more than one workspace.
 
 ## Changes
 
