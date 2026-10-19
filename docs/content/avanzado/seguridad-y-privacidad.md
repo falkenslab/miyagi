@@ -1,7 +1,7 @@
 ---
 title: Seguridad y privacidad
 sidebar_position: 9
-description: "Cómo protege miyagi tu contraseña, qué archivos puede leer y escribir, por qué no tiene terminal y qué hace con los datos de tus alumnos."
+description: "Por qué tu contraseña nunca llega al modelo, qué archivos puede leer y escribir, por qué no tiene terminal y qué hace con los datos de tus alumnos."
 ---
 
 # Seguridad y privacidad
@@ -10,10 +10,9 @@ El asistente lee contenido que no controlas: páginas de Moodle, entregas de alu
 
 ## Tu contraseña nunca llega al modelo
 
-- Se guarda en el `config.json` del curso, en tu ordenador. El asistente **no puede leer** ese archivo: está en la lista de rutas prohibidas de sus herramientas.
-- Para iniciar sesión, el asistente escribe en el campo de contraseña el marcador `MOODLE_PASSWORD`. Es el servidor de Playwright, dentro del proceso del navegador, quien lo sustituye por la contraseña real ([`src/playwrightConfig.ts`](https://github.com/falkenslab/miyagi/blob/main/src/playwrightConfig.ts)). El modelo nunca ve el valor.
-- En la transcripción de cada sesión (`transcript.jsonl`), la contraseña aparece tapada.
-- Si no quieres guardarla, deja el usuario en blanco en `init`: iniciarás sesión tú a mano en la ventana de Chrome.
+- miyagi no la pide ni la guarda: `init` solo te pregunta la dirección del curso.
+- La sesión en Moodle es de la extensión [moodle-teacher](extensiones.md): la primera vez que hace falta, abre una ventana del navegador para que inicies sesión tú, y guarda la sesión en su propio perfil del navegador hasta que caduque. miyagi y el modelo nunca ven tu contraseña.
+- Un aula de antes que aún tenga `username` y `password` en `config.json` los pierde al pasarla a moodle-teacher (ver [Configuración](configuracion.md#aulas-de-antes)). Mientras tanto, el asistente **no puede leer** ese archivo: está en la lista de rutas prohibidas de sus herramientas.
 
 Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no pueden leer el `.env` del curso (donde puede ir un token propio), ni `~/.miyagi/config.json` (donde lo guarda miyagi), ni su copia antigua `~/.teacher-agent/config.json`, ni `~/.claude/.credentials.json` (las credenciales del SDK de Claude).
 
@@ -23,7 +22,7 @@ Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto de
 
 - **Leer y listar** (`Read`, `Glob`): solo `sources/`, `drafts/` (y `practice/` si has activado el probador de prácticas), las habilidades de miyagi y la carpeta de la conversación en curso. Nada más de tu ordenador: ni la carpeta del curso fuera de esas, ni `Documentos`, ni tus otros cursos o proyectos.
 - **Escribir y editar** (`Write`, `Edit`): solo dentro de `drafts/` (y de `practice/` si has activado el probador de prácticas).
-- **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado de Moodle), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
+- **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado durante la sesión), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
 - **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y `practice/`.
 - **`config.json` y `.env` del curso, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
@@ -37,16 +36,14 @@ El asistente principal **no tiene terminal**, ni siquiera para un `echo`: agent-
 
 Solo puede delegar en los ayudantes que miyagi declara (`researcher`, `pedagogy-reviewer` y, si lo activas, `practice-runner`), y cada uno tiene solo las herramientas que tiene en su lista. La única terminal de todo el sistema es la de `practice-runner`: desactivada por defecto y limitada por sus instrucciones a Docker dentro de `practice/` ([Prácticas en Docker](practicas-docker.md)).
 
-## Sin herramientas peligrosas del navegador
-
-Playwright MCP ofrece una herramienta, `browser_run_code_unsafe`, que ejecuta código arbitrario en el proceso del servidor (no en la página). La propia documentación de Playwright la describe como equivalente a ejecutar código remoto. miyagi la tiene **prohibida** en todas las sesiones.
-
 ## Lo que hace en Moodle
 
-Trabaja con tu cuenta, así que puede hacer lo que tú puedes hacer en el curso. Lo que lo frena:
+Trabaja con tu cuenta, a través de las herramientas fijas de moodle-teacher, así que puede hacer lo que esas herramientas permiten hacer con tu cuenta en el curso. Lo que lo frena:
 
-- Sus instrucciones le prohíben borrar, cambiar matrículas, tocar la configuración de la plataforma y salir de tu curso.
-- En `guided`, ninguna acción que publique se ejecuta sin tu aprobación: un [gancho del programa](aprobaciones-y-borradores.md) lo hace cumplir.
+- Sus instrucciones le prohíben borrar lo que no haya creado él, cambiar matrículas o grupos, tocar la configuración de la plataforma y salir de tu curso.
+- Algunas herramientas de moodle-teacher están bloqueadas en todas las sesiones, en cualquier modo, porque nunca son trabajo del asistente: matricular o dar de baja, cambiar roles, crear grupos o cambiar quién está en ellos, mandar mensajes privados, reiniciar el curso y copiarlo a otro curso o sitio.
+- En `guided`, ninguna herramienta de moodle-teacher que cambie algo se ejecuta sin tu aprobación: un [gancho del programa](aprobaciones-y-borradores.md) lo hace cumplir. Borrar, quitar, reiniciar o restaurar te lo pregunta siempre otra vez.
+- Lo que moodle-teacher no sabe hacer, no lo intenta por otro camino: te lo dice, lo prepara en `drafts/` y te da los pasos.
 - Todo lo nuevo se sube oculto y se prueba antes de mostrarlo.
 
 El modo `autonomous` quita las aprobaciones: úsalo solo en cursos de prueba.
@@ -54,10 +51,11 @@ El modo `autonomous` quita las aprobaciones: úsalo solo en cursos de prueba.
 ## Los datos de tus alumnos
 
 - **Lee lo que tú verías** en Moodle para hacer su trabajo: entregas, calificaciones, mensajes del foro, informes de progreso. Ese contenido lo procesa Claude, el modelo de Anthropic, a través de tu suscripción.
+- **Con seudónimos.** miyagi instala moodle-teacher con `student_data` en `pseudonymize`: los alumnos le llegan al modelo como alias («Alumno 3»), nunca por su nombre. Se cambia con `miyagi extension config moodle-teacher …` ([Extensiones](extensiones.md)).
 - **No guarda fichas de alumnos.** En la base de conocimiento no hay páginas sobre estudiantes concretos: las notas de progreso y del foro son de la clase y de patrones, nunca un registro con nombres ([ADR-005](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-005-no-individual-students-in-knowledge.md)).
 - **Entregas descargadas, con identificador.** Cuando guarda una entrega para ejecutarla, va a `sources/<actividad>/<id-del-alumno>/`, nunca con el nombre del alumno en la ruta.
 - **Las sesiones sí contienen lo que vio.** La carpeta `sessions/` guarda la conversación y la transcripción de cada sesión, con lo que el asistente leyó en Moodle. Además, el Claude Agent SDK guarda su propia copia de las conversaciones en `~/.claude/projects/`. Trátalas como datos del curso: `sessions/` está en el `.gitignore` que crea `init`, y puedes borrar las sesiones antiguas cuando ya no las necesites.
 
 ## Si versionas la carpeta del curso
 
-`miyagi init` crea un `.gitignore` que deja fuera `config.json` (la contraseña), `.env` (el token), `sessions/` (transcripciones y perfiles del navegador) y `practice/`. Si usas git, no los subas.
+`miyagi init` crea un `.gitignore` que deja fuera `config.json`, `.env` (el token), `sessions/` (las transcripciones) y `practice/`. Si usas git, no los subas.

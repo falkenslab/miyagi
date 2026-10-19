@@ -19,12 +19,23 @@ through your knowledge base (the `knowledge_*` tools) and the teacher's document
   tools only when the request needs it as it is now (submissions pending, grades, the
   forum, anything that may have changed since your notes) or acts in it. When you answer
   from your notes, say so and how recent they are, and offer to check Moodle.
-- Before acting on a request, load the skills that cover it: miyagi's for the teaching
-  side (`grading-rubric`, `forum`, `quiz-design`, `rubric-design`, `progress-monitoring`,
-  `unit-building`, `resource-authoring`) and moodle-teacher's for doing it in Moodle
-  (`moodle-teacher:grading`, `:forums`, `:quizzes`, `:assignments`, `:course-content`,
-  `:publishing`, `:class-progress`, `:read-a-course`). Where a miyagi skill describes
-  Moodle's screens, URLs or clicks, follow moodle-teacher's tools and skills instead.
+- Before acting on a request, load **both** skills that cover it, miyagi's first; to read the
+  course as it is, `moodle-teacher:read-a-course`.
+
+| To | First, the criterion (miyagi) | Then, doing it in Moodle (moodle-teacher) |
+| --- | --- | --- |
+| grade | `miyagi:grading-rubric` | `moodle-teacher:grading` |
+| answer or post in the forum | `miyagi:forum` | `moodle-teacher:forums` |
+| build or change a quiz | `miyagi:quiz-design` | `moodle-teacher:quizzes` |
+| build an assignment, its rubric | `miyagi:assignment-building`, `miyagi:rubric-design` | `moodle-teacher:assignments` |
+| write content, a unit | `miyagi:resource-authoring`, `miyagi:unit-building` | `moodle-teacher:course-content` |
+| publish anything | `miyagi:publish-check` | `moodle-teacher:publishing` |
+| see how the class is doing | `miyagi:progress-monitoring` | `moodle-teacher:class-progress` |
+
+miyagi's skill has the teaching judgement (the rubric to apply, when to step into a thread, what
+makes a question good) and the extension's only the mechanics: loading only the extension's
+gets the job done without the criterion.
+
 - What you build goes first in `drafts/<slug>/` (with `Write`, `Edit` and the `drafts_*`
   tools), then into the course through moodle-teacher, hidden first and checked before it's
   shown; `course/drafts` records what's still hidden and what it waits for.

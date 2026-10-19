@@ -72,6 +72,15 @@ const EXPLORE_MAX_TURNS = 80;
  * the file tools don't reach knowledge/ any more (agent-kit's ADR-024). */
 const KNOWLEDGE_READ_TOOLS = ["mcp__knowledge__knowledge_index", "mcp__knowledge__knowledge_search", "mcp__knowledge__knowledge_read"];
 
+/** moodle-mcp's tools miyagi never uses (they're the teacher's or the site's, not a teaching assistant's). */
+const NEVER_MOODLE_TOOLS = [
+  "enrol_users", "unenrol_user", "set_user_roles", "set_enrolment_method",
+  "create_group", "update_group", "delete_group", "set_group_members", "auto_create_groups", "import_groups",
+  "create_grouping", "delete_grouping", "set_grouping_groups",
+  "send_message", "message_participants",
+  "reset_course", "copy_course", "copy_between_sites",
+];
+
 const VALID_MODES: readonly Mode[] = ["interactive", "guided", "autonomous"];
 
 export function parseFlag(args: string[], name: string): string | undefined {
@@ -162,6 +171,10 @@ function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSess
       }
       return { agents, allowedSubagentTypes: Object.keys(agents) };
     },
+    // moodle-teacher's tools that are never miyagi's, whatever the mode (principles, ADR-014):
+    // enrolments and roles, groups and who is in them, private messages, a whole course reset or
+    // copied out of this one. The prompt says so; this makes it true in autonomous too.
+    disallowedTools: NEVER_MOODLE_TOOLS.map((tool) => `mcp__moodle__${tool}`),
     humanApprovalTexts: {
       description: loadPrompt("tools/human-approval-description.md"),
       approved: loadPrompt("tools/human-approval-approved.md"),

@@ -22,12 +22,22 @@ Unless the task says otherwise, manage the course the way its teacher would, on 
    `course/moodle-capabilities` exists, check it before choosing an activity or question type.
 4. **Monitor the class's progress** and summarize who's falling behind and why.
 
-Load the skills for each front before starting it: miyagi's for the teaching side
-(`grading-rubric`, `forum`, `unit-building`, `resource-authoring`, `quiz-design`,
-`progress-monitoring`) and moodle-teacher's for doing it in Moodle (`moodle-teacher:grading`,
-`:to-grade`, `:forums`, `:course-content`, `:quizzes`, `:publishing`, `:class-progress`). Where a
-miyagi skill describes Moodle's screens, URLs or clicks, follow moodle-teacher's tools and
-skills instead.
+Before starting each front, load **both** skills that cover it, miyagi's first
+(`moodle-teacher:to-grade` tells what's waiting to be graded):
+
+| To | First, the criterion (miyagi) | Then, doing it in Moodle (moodle-teacher) |
+| --- | --- | --- |
+| grade | `miyagi:grading-rubric` | `moodle-teacher:grading` |
+| answer or post in the forum | `miyagi:forum` | `moodle-teacher:forums` |
+| build or change a quiz | `miyagi:quiz-design` | `moodle-teacher:quizzes` |
+| build an assignment, its rubric | `miyagi:assignment-building`, `miyagi:rubric-design` | `moodle-teacher:assignments` |
+| write content, a unit | `miyagi:resource-authoring`, `miyagi:unit-building` | `moodle-teacher:course-content` |
+| publish anything | `miyagi:publish-check` | `moodle-teacher:publishing` |
+| see how the class is doing | `miyagi:progress-monitoring` | `moodle-teacher:class-progress` |
+
+miyagi's skill has the teaching judgement (the rubric to apply, when to step into a thread, what
+makes a question good) and the extension's only the mechanics: loading only the extension's
+gets the job done without the criterion.
 
 ## How to work
 1. Read the course's state with moodle-teacher's read tools; keep your own to-do list (one
