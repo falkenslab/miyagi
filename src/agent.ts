@@ -16,6 +16,8 @@ import {
   type AgentSpec,
   type McpServerConfig,
   type Mode,
+  knowledge,
+  sources,
 } from "@falkenslab/agent-kit";
 import {
   draftsDirFor,
@@ -127,9 +129,12 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasMoodl
   const hasBrowser = kind !== "ingest" && hasMoodle;
   return {
     skills,
-    // The course's pages (course/, topic/, activity/) next to the kit's four, all through the
-    // kit's knowledge_* tools, never the file tools (agent-kit's ADR-024).
-    knowledgePageTypes: COURSE_PAGE_TYPES,
+    extensions: [
+      sources<WorkspaceSessionConfig>({ dir: (config) => config.sourcesDir }),
+      // The course's pages (course/, topic/, activity/) next to the kit's own, all through the
+      // kit's knowledge_* tools, never the file tools (agent-kit's ADR-024).
+      knowledge<WorkspaceSessionConfig>({ dir: (config) => config.knowledgeDir, pageTypes: COURSE_PAGE_TYPES }),
+    ],
     buildSystemPrompt,
     buildMcpServers: (config): Record<string, McpServerConfig> => ({
       // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a
@@ -180,7 +185,7 @@ function buildSpec(runDir: string, kind: SessionKind, skills: string[], hasMoodl
           // Bash (Git Bash on Windows), which doesn't want backslashes.
           prompt: loadPrompt("system/practice-runner.md", {
             practiceDir: config.practiceDir.split(path.sep).join("/"),
-            sourcesDir: (config.sourcesDir ?? "").split(path.sep).join("/"),
+            sourcesDir: config.sourcesDir.split(path.sep).join("/"),
           }),
           maxTurns: 60,
         };

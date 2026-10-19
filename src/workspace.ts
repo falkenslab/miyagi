@@ -53,6 +53,10 @@ export interface WorkspaceConfig {
  * resolved headless/language, instructions.md's content) into what `AgentSpec`'s methods
  * actually see. */
 export interface WorkspaceSessionConfig extends BaseSessionConfig {
+  /** The knowledge base's folder, reached only through the kit's knowledge_* tools (its knowledge extension). */
+  knowledgeDir: string;
+  /** The course's sources: originals, read-only to the agent (the kit's sources extension). */
+  sourcesDir: string;
   /** A Moodle classroom is connected: the browser, the gates and the Moodle prompts exist only then. */
   hasMoodle: boolean;
   moodleUrl?: string;

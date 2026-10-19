@@ -21,16 +21,13 @@ Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no p
 
 Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto del asistente como de sus ayudantes:
 
+- **Leer y listar** (`Read`, `Glob`): solo `sources/`, `drafts/` (y `practice/` si has activado el probador de prácticas), las habilidades de miyagi y la carpeta de la conversación en curso. Nada más de tu ordenador: ni la carpeta del curso fuera de esas, ni `Documentos`, ni tus otros cursos o proyectos.
 - **Escribir y editar** (`Write`, `Edit`): solo dentro de `drafts/` (y de `practice/` si has activado el probador de prácticas).
 - **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado de Moodle), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
 - **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y `practice/`.
 - **`config.json` y `.env` del curso, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
-- **Otras credenciales en sitios conocidos**, también prohibidas: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS y los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas).
-
-:::warning[Leer fuera del curso]
-Hoy el asistente aún puede **leer** otros archivos de tu ordenador fuera de las carpetas del curso, y **listar** las carpetas que hay junto a él (por ejemplo, `Documentos` o tus otros proyectos). Lo de arriba son prohibiciones concretas, no un cierre completo. El arreglo de fondo, que solo pueda leer las carpetas del curso, está pedido a agent-kit ([agent-kit#28](https://github.com/falkenslab/agent-kit/issues/28), [miyagi#42](https://github.com/falkenslab/miyagi/issues/42)). Mientras tanto, no guardes datos de alumnos (entregas, listas de clase, actas) en carpetas junto a la del curso, ni dejes que trabaje en modo autónomo con contenido del que no te fías.
-:::
+- **Otras credenciales en sitios conocidos**, prohibidas además, por si acaso: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS y los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas).
 
 Tus habilidades, atajos e `instructions.md` quedan fuera de las carpetas en las que puede escribir: el asistente los usa, pero no puede cambiarlos.
 

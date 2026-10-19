@@ -163,8 +163,6 @@ function credentialsSection(config: WorkspaceSessionConfig): string {
  * to managing a course (topics, activities, progress and audit histories, course pages).
  */
 function contextAndKnowledgeSection(config: WorkspaceSessionConfig): string {
-  if (!config.knowledgeDir || !config.sourcesDir) return "";
-
   const hasBrowser = config.hasMoodle && config.kind !== "ingest";
   const contextBlock = `\n${loadPrompt("system/sources.md", {
     sourcesDir: config.sourcesDir,
