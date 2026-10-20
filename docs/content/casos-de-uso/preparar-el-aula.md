@@ -36,6 +36,8 @@ Primero pregunta por la asignatura y, al final, por el aula de Moodle. Estas son
 
 Con eso instala la extensión **moodle-teacher**, que es la que trabaja en Moodle con tu sesión de profesor, y apunta en ella la dirección de tu Moodle.
 
+<Shot src="/img/casos/01-init.webp" title="PowerShell — miyagi init" alt="La terminal con miyagi init: nombre Introducción a SQL, descripción 1.º DAM, tono Cercano, idioma español, pruebas en Docker activadas, sin instructions.md, aula conectada con la URL del curso, la asignatura creada en la carpeta de miyagi, moodle-teacher instalado con el sitio y la pregunta de si explorar ahora" />
+
 ## Explorar el Moodle
 
 Después propone explorar el Moodle, y decimos que sí. Como es la primera vez, moodle-teacher abre una ventana del navegador para que entres en Moodle tú mismo, con tu usuario y tu contraseña: ni miyagi ni el asistente la ven. La extensión guarda la sesión, así que las siguientes veces no vuelve a pedirla hasta que caduque.
