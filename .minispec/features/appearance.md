@@ -13,7 +13,7 @@ Let the teacher pick a visual style for what miyagi publishes (assignment statem
 - As it is, it breaks `publish-check`'s accessibility rules: bold `<p>` instead of headings, emojis read aloud inside titles, and a fixed white background, `#4174c0` and `Arial` that override the course theme.
 - With `neutral-materials`, the core turns Markdown into accessible HTML: that exporter, code and not the model, is where a style is applied.
 - A style is an extension (ADR-021): the official ones in agent-extensions, a school's in a marketplace the teacher adds, the teacher's own in the workspace's `extensions/`.
-- Unknown until `moodle-teacher-extension`: whether the editor keeps inline `style` when the HTML is sent by POST instead of typed through the editor.
+- To check with moodle-teacher: whether Moodle keeps inline `style` in the HTML its course-content tools send (moodle-ui-kit, in agent-extensions, already relies on it).
 
 ## Changes
 

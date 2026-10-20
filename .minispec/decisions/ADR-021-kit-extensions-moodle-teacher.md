@@ -16,7 +16,10 @@
 ## Consequences
 
 - Supersedes ADR-019 entirely, and ADR-014, ADR-016 and ADR-020 on everything the kit now does (manifest, store, lock, repositories, trust, levels, the loader's refusals, conformance tests per capability). Still miyagi's: extension and capability as words for the teacher, no community catalog or hub, and the guarantees the kit keeps for every extension (approvals, every MCP tool publishing unless read-only, secrets only to their extension, nothing about individual students in the knowledge base).
-- Playwright MCP, `request_manual_login`, `publishGate.ts`'s button patterns and the `browser_*` labels go with the browser path; the publish gate is the kit's, by tool name.
+- Playwright MCP, `request_manual_login`, `--headless` and the saved Moodle password go with the browser path. `classroom.connector` says how a workspace reaches Moodle; a classroom from before is moved to moodle-teacher when it's opened in a chat, or the session works without it (there's no browser to fall back on).
+- The publish gate stays miyagi's (`src/publishGate.ts`), by tool verb: moodle-teacher's `get_`/`list_` and session tools read, anything else asks in guided unless `request_human_approval` was approved just before, and `delete_`/`remove_`/`reset_`/`restore_` always ask. The kit doesn't ask for an extension's writing tools in guided (falkenslab/agent-kit#74); if it comes to, miyagi keeps only its stricter rules. The upload gate checks the GIFT of `import_questions`.
+- moodle-mcp's tools that are never miyagi's (enrolments and roles, groups and their members, private messages, resetting or copying the course) are in `disallowedTools`, whatever the mode.
+- miyagi's skills never name the platform (`check-neutral-skills.mjs`); the classroom prompts pair each teaching act with miyagi's skill first and moodle-teacher's after: loading only the extension's gets the job done without the criterion (e2e, `tests/2026-10-19T22-54-aula-moodle-teacher/`).
 - What moodle-teacher can't do is fixed there, not worked around here with a browser.
 - `workspace.json`, `classrooms[]` and `groups[]` are dropped: the sites are moodle-teacher's options, the workspace keeps its lock.
-- Delivered by the features `extensions` (adoption) and `moodle-teacher-extension`; a Google Classroom extension, if any, lives in agent-extensions.
+- Delivered by the features `extensions` (adoption) and `moodle-teacher-extension` (#33, #43); a Google Classroom extension, if any, lives in agent-extensions.

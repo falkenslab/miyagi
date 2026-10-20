@@ -15,13 +15,11 @@ Not confirmed. Candidates, from the transcripts:
 
 ## Solution
 
-Provisional: with moodle-teacher (`moodle-teacher-extension`, #43) publishing goes through its `publishing` skill, hidden first, which fixes this at the root. Until then:
+Since #43 there are no forms to forget: miyagi puts content in Moodle only through moodle-teacher, whose `publishing` skill creates hidden first, and its publish gate asks for every writing tool with what it will store (not a button's name). What's left is the skill side:
 
-
-- `unit-building`: one unit per pass — when several are asked for, finish (and show) one before starting the next, and restate the hidden-first rule at each piece.
-- `resource-authoring`, `assignment-building`, `quiz-building`: at creation, set "Availability: Hide on course page" in the same form, before the first save.
-- Consider a gate rule (dropped once the gate asks by tool name): a "Save and display" on a new activity's form (`course/modedit.php?add=`) without a prior approval is the pattern to flag in the panel ("se va a publicar visible una actividad nueva").
+- `unit-building`: one unit per pass. When several are asked for, finish (and show) one before starting the next, and restate the hidden-first rule at each piece (done: "each item hidden first", and `course-building`'s "Finish a unit before starting the next").
+- Check that a long request still loads `miyagi:unit-building` and `miyagi:publish-check` for the second unit, now that the prompts pair each act with miyagi's skill first (`tests/2026-10-19T22-54-aula-moodle-teacher/`).
 
 ## Verification
 
-`sandbox-e2e` / `simulate-course` asking for two units in one request: every new piece hidden at creation (check `mdl_course_modules.visible` right after each save), one approval per piece and one to show, and no gate panel.
+`sandbox-e2e` / `simulate-course` asking for two units in one request, through moodle-teacher: every new piece hidden at creation (check `mdl_course_modules.visible` right after each save), one approval per piece and one to show.
