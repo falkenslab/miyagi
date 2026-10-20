@@ -82,6 +82,7 @@ export async function connectClassroom(workspaceDir: string, url: string): Promi
   console.log(ui.dim(t().connectingMoodleTeacher));
   try {
     await connectMoodleTeacher(workspaceDir, url);
+    console.log(ui.success(t().moodleTeacherConnected));
   } catch (error) {
     console.log(ui.warn(`${error instanceof Error ? error.message : String(error)} ${t().moodleTeacherRetry}`));
   }

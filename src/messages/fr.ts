@@ -128,6 +128,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   noClassroom: "sans classe",
   connectMoodleNow: "Connecter une classe Moodle maintenant ? miyagi installe l'extension moodle-teacher et vous vous connectez à Moodle dans sa fenêtre ; sans classe, il vous aide pour la progression et les supports, et vous pourrez la connecter plus tard avec \"miyagi init -w <nom>\"",
   connectingMoodleTeacher: "Connexion de la classe avec moodle-teacher…",
+  moodleTeacherConnected: "Classe connectée : moodle-teacher est installée avec votre site. La première fois qu'il aura besoin de Moodle, une fenêtre s'ouvrira pour vous connecter.",
   moodleTeacherRetry: "La matière est enregistrée : réessayez avec \"miyagi init -w <nom>\" ou \"miyagi extension add moodle-teacher\".",
   moodleTeacherInstallFailed: "Impossible d'installer ou de configurer moodle-teacher.",
   migrateClassroomIntro: "miyagi travaille maintenant dans Moodle uniquement avec l'extension moodle-teacher : des outils fixes au lieu de cliquer partout, et vous vous connectez dans sa propre fenêtre au lieu d'un mot de passe enregistré. La classe de cette matière utilise encore l'ancien système, qui n'existe plus.",

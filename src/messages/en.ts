@@ -81,6 +81,7 @@ export interface Messages {
   noClassroom: string;
   connectMoodleNow: string;
   connectingMoodleTeacher: string;
+  moodleTeacherConnected: string;
   moodleTeacherRetry: string;
   moodleTeacherInstallFailed: string;
   migrateClassroomIntro: string;
@@ -257,6 +258,7 @@ See README.md for details.`,
   noClassroom: "no classroom",
   connectMoodleNow: "Connect a Moodle classroom now? miyagi installs the moodle-teacher extension and you sign in to Moodle in its window; without one, it helps with your plan and materials, and you can connect it later with \"miyagi init -w <name>\"",
   connectingMoodleTeacher: "Connecting the classroom through moodle-teacher…",
+  moodleTeacherConnected: "Classroom connected: moodle-teacher is installed with your site. The first time it needs Moodle, a window opens for you to sign in.",
   moodleTeacherRetry: "The subject is saved: try again with \"miyagi init -w <name>\", or \"miyagi extension add moodle-teacher\".",
   moodleTeacherInstallFailed: "Couldn't install or set up moodle-teacher.",
   migrateClassroomIntro: "miyagi now works in Moodle only through the moodle-teacher extension: fixed tools instead of clicking around, and you sign in in its own window instead of a saved password. This subject's classroom still uses the old way, which is gone.",

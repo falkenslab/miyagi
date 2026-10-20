@@ -129,6 +129,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   noClassroom: "sin aula",
   connectMoodleNow: "¿Conectar un aula Moodle ahora? miyagi instala la extensión moodle-teacher e inicias sesión en Moodle en su ventana; sin aula te ayuda con la programación y los materiales, y puedes conectarla después con \"miyagi init -w <nombre>\"",
   connectingMoodleTeacher: "Conectando el aula con moodle-teacher…",
+  moodleTeacherConnected: "Aula conectada: moodle-teacher está instalada con tu sitio. La primera vez que necesite entrar en Moodle se abrirá una ventana para que inicies sesión.",
   moodleTeacherRetry: "La asignatura está guardada: vuelve a intentarlo con \"miyagi init -w <nombre>\" o \"miyagi extension add moodle-teacher\".",
   moodleTeacherInstallFailed: "No se pudo instalar o configurar moodle-teacher.",
   migrateClassroomIntro: "miyagi trabaja ahora en Moodle solo con la extensión moodle-teacher: herramientas fijas en lugar de ir haciendo clic, y entras con tu sesión en su propia ventana en lugar de con una contraseña guardada. El aula de esta asignatura usa todavía el sistema anterior, que ya no existe.",
