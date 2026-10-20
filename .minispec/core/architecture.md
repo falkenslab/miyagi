@@ -8,7 +8,7 @@ cli.ts → workspace config → toSessionConfig() → AgentSpec (agent.ts) → a
                                                     ├─ plugin/ skills + commands, agent-kit knowledge plugin
                                                     ├─ installed extensions (agent-kit's: ~/.miyagi/extensions, <workspace>/extensions)
                                                     ├─ Playwright MCP → Moodle
-                                                    └─ subagents: researcher, pedagogy-reviewer, practice-runner (opt-in)
+                                                    └─ subagents: researcher, pedagogy-reviewer
 ```
 
 Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink chat, full screen by default; `--inline`, `--plain` for readline; starts guided, Shift+Tab switches to interactive; each chat is an agent-kit run folder `sessions/<timestamp>/` keeping its conversation, resumed with `--continue` or `/resume`, ADR-011), `ingest` (no browser, builds the knowledge base), `explore` (guided probe of the Moodle site, capped at 80 turns, no legacy migration). A workspace without a classroom (`config.json` with no `classroom`, ADR-013) has no browser in any kind: no Playwright, no publish or upload gate, no manual login, standalone base prompts (`teacher-*-standalone.md`) and no classroom pages in the knowledge layer (`classroom-knowledge.md`); `explore` stops with a message. `hasMoodle` and the standalone bases are transitional: the `extensions` feature replaces them.
@@ -20,7 +20,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 - `src/drafts/` — the drafts toolbox, in-process MCP server `drafts` in run/chat: list, mkdir, copy, move, delete, download, fetch_site, unzip, zip, pdf, info. Every path resolved inside drafts/ (`paths.ts`: no "..", absolute paths or links out), http(s) URLs only, size limits from `agent.draftsLimits`, zip-slip and zip-bomb checks, nothing executed; the site fetch and the PDF use @playwright/mcp's playwright-core with the system Chrome, headless.
 - `src/uploadGate.ts` + `src/validators/` — the upload gate: before `browser_file_upload`/`browser_drop`, a `.gift` or `.html` file is checked with code (GIFT syntax, answers, numbers, names, lost indentation; HTML viewport, lang, missing local files); errors deny the upload with the lines, warnings reach the model. Every mode.
 - `src/publishGate.ts` — the publish gate (ADR-008): in guided, a publishing browser action without a prior approval asks the teacher; `isPublishAction()` knows Moodle's publishing buttons.
-- `src/menu.ts` — the `init` wizard (practice-runner opt-in saved as explicit true/false), `offerPracticeRunner()`, run-kind and mode prompts.
+- `src/menu.ts` — the `init` wizard, run-kind and mode prompts.
 - `src/workspace.ts` — `config.json` schema (a moodle-agent teacher aula; `agent.role: "student"` rejected), paths, `toSessionConfig()`, legacy migration, `interfaceLanguage()` (agent-kit's interface language from `agent.language`; unknown → the system's).
 - `src/workspaces.ts` — the registry `~/.miyagi/workspaces.json` and the default folder `~/.miyagi/workspaces/<slug>/` (ADR-023); `locateWorkspace()` resolves `--dir`, `-w`/`--workspace` and the current directory, and the commands offer the list otherwise.
 - `src/classroom.ts` — a classroom through moodle-teacher (ADR-021): installing it or adding the site (`connectMoodleTeacher()`), whether it's active; `classroom.connector` says which way a workspace reaches Moodle.
@@ -36,7 +36,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 
 - `researcher` — WebSearch/WebFetch/read (`prompts/system/researcher.md`).
 - `pedagogy-reviewer` — read-only (`pedagogy-reviewer.md`).
-- `practice-runner` — opt-in (`agent.allowPracticeRunner`), `run`/`chat` only, Bash for Docker inside `practice/` (see ADR-003).
+- No `practice-runner`: practices run in docker-lab's labs (`src/practiceLabs.ts`: its labs folder writable, docker-mcp's non-lab tools in `disallowedTools`, ADR-024).
 
 `subagents.md` and `practice-access.md` tell the main agent they exist. Registering any subagent adds `Agent`/`Bash` to the session's tools; agent-kit's gates keep Bash only for subagents that list it.
 
@@ -60,7 +60,7 @@ agent-kit's knowledge base, reached only through its `knowledge_*` tools over it
 - `topic/<slug>`, `activity/<slug>` — criteria, rubric, questions; a quiz's GIFT file is in `drafts/<slug>/`.
 - The `researcher` and `pedagogy-reviewer` subagents read pages with `knowledge_index`, `knowledge_search` and `knowledge_read`.
 
-File scope (agent-kit's hook, set in `toSessionConfig()`): no file tool reaches `knowledge/`; `Read`/`Glob`/`Grep` read `sources/` (plus `extract_text` for DOCX, PPTX and XLSX), `Write`/`Edit` only `drafts/` (and `practice/` with the practice-runner); `config.json` and `.env` denied.
+File scope (agent-kit's hook, set in `toSessionConfig()`): no file tool reaches `knowledge/`; `Read`/`Glob`/`Grep` read `sources/` (plus `extract_text` for DOCX, PPTX and XLSX), `Write`/`Edit` only `drafts/` (and docker-lab's labs folder when it's on); `config.json` and `.env` denied.
 
 ## Legacy migration
 

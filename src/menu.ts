@@ -120,10 +120,6 @@ export function promptInitWorkspace(workspaceDir?: string): Promise<{ dir: strin
           ],
         },
         { type: "input", name: "language", message: t().conversationLanguage },
-        // Saved as explicit true/false (never omitted): offerPracticeRunner() reads an absent key
-        // as "never asked", and would otherwise keep asking after a deliberate "no". It's the only
-        // opt-in capability: the one thing that grants a shell (Docker only).
-        { type: "confirm", name: "allowPracticeRunner", message: t().practiceRunnerQuestion, default: false },
         { type: "confirm", name: "instructions", message: t().createInstructions, default: false },
         { type: "confirm", name: "connect", message: t().connectMoodleNow, default: false },
         ...classroomSteps(connected),
@@ -143,7 +139,6 @@ export function promptInitWorkspace(workspaceDir?: string): Promise<{ dir: strin
         role: "teacher",
         ...(persona ? { persona } : {}),
         ...(language ? { language } : {}),
-        allowPracticeRunner: answers.allowPracticeRunner === true,
       },
     };
     const dir = workspaceDir ?? (await newWorkspaceDir(label));
@@ -155,35 +150,6 @@ export function promptInitWorkspace(workspaceDir?: string): Promise<{ dir: strin
     if (config.classroom) await connectClassroom(dir, config.classroom.url);
     return { dir, id, config };
   });
-}
-
-/**
- * A workspace created before the practice runner existed (or by moodle-agent) has no
- * `agent.allowPracticeRunner`: offer it once — the answer, yes or no, is persisted — instead of
- * it silently staying off forever. Ctrl+C skips without persisting, so it's offered again.
- */
-export async function offerPracticeRunner(
-  workspaceDir: string,
-  config: WorkspaceConfig,
-  canPrompt: boolean,
-): Promise<WorkspaceConfig> {
-  if (config.agent.allowPracticeRunner !== undefined) return config;
-  console.log(ui.warn(t().practiceRunnerNote));
-  if (!canPrompt) {
-    console.log();
-    return config;
-  }
-  try {
-    const wants = await ask<boolean>({ type: "confirm", name: "practiceRunner", message: t().practiceRunnerQuestion, default: false });
-    const updated = { ...config, agent: { ...config.agent, allowPracticeRunner: wants } };
-    await writeWorkspaceConfig(workspaceDir, updated);
-    console.log();
-    return updated;
-  } catch (error) {
-    if (!isExitPromptError(error)) throw error;
-    console.log();
-    return config;
-  }
 }
 
 /**

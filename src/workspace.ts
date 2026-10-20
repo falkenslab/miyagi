@@ -50,9 +50,6 @@ export interface WorkspaceConfig {
     persona?: AgentPersona;
     /** Free text, e.g. "español". Falls back to the global config's defaultLanguage. */
     language?: string;
-    /** Opt-in, off by default: registers the practice-runner subagent, the only thing that gets
-     * a shell (Docker only, inside practice/) — see agent.ts's buildSubagents(). */
-    allowPracticeRunner?: boolean;
     /** Limits of the drafts toolbox (download and unzip sizes); each falls back to its default. */
     draftsLimits?: Partial<DraftsLimits>;
   };
@@ -73,9 +70,8 @@ export interface WorkspaceSessionConfig extends BaseSessionConfig {
   agentPersona?: AgentPersona;
   knownLanguage?: string;
   customInstructions?: string;
-  allowPracticeRunner?: boolean;
-  /** Where the practice-runner subagent works: one folder per activity. */
-  practiceDir: string;
+  /** docker-lab's labs when it's installed and on (#45): their folder (writable: the agent writes each lab's files) and the prefix of this subject's labs. */
+  labs?: { dir: string; prefix: string };
   /** The drafts toolbox's folder and limits. */
   draftsDir: string;
   draftsLimits: DraftsLimits;
@@ -105,12 +101,6 @@ export function sourcesDirFor(workspaceDir: string): string {
  * knowledge base. Uploaded hidden to be tested in Moodle before students see it. */
 export function draftsDirFor(workspaceDir: string): string {
   return path.join(workspaceDir, "drafts");
-}
-
-/** Practical activities checked in containers by the practice-runner subagent (Dockerfiles,
- * scripts, student submissions copied in): working files, not notes, so outside the knowledge base. */
-export function practiceDirFor(workspaceDir: string): string {
-  return path.join(workspaceDir, "practice");
 }
 
 /** Where a pre-knowledge base knowledge/ is moved so the agent can rebuild the knowledge base from it. */
@@ -174,7 +164,6 @@ const GITIGNORE_TEMPLATE = `# Generado por "miyagi init" — config.json guarda 
 config.json
 .env
 sessions/
-practice/
 `;
 
 /** Writes `config` (chmod 600 best-effort, no-op on Windows) — used both to create a
@@ -249,7 +238,7 @@ export function interfaceLanguage(language: string | undefined): string | undefi
 export function toSessionConfig(
   workspaceDir: string,
   workspace: WorkspaceConfig,
-  options: { mode: Mode; kind: SessionKind; migrationPending: boolean; language?: string; instructions?: string },
+  options: { mode: Mode; kind: SessionKind; migrationPending: boolean; language?: string; instructions?: string; labs?: { dir: string; prefix: string } },
 ): WorkspaceSessionConfig {
   return {
     mode: options.mode,
@@ -262,7 +251,7 @@ export function toSessionConfig(
     extensionDirs: extensionDirsFor(workspaceDir),
     officialMarketplace: OFFICIAL_MARKETPLACE,
     catalogTopics: CATALOG_TOPICS,
-    extraWritableDirs: [draftsDirFor(workspaceDir), ...(workspace.agent.allowPracticeRunner ? [practiceDirFor(workspaceDir)] : [])],
+    extraWritableDirs: [draftsDirFor(workspaceDir), ...(options.labs ? [options.labs.dir] : [])],
     // The password lives in config.json and the Claude token may live in .env, in the global
     // config or in the SDK's credentials (ADR-004); other credentials in well-known places.
     deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env"), ...secretFilePaths(), ...sensitivePaths()],
@@ -271,8 +260,7 @@ export function toSessionConfig(
     moodleUrl: workspace.classroom?.url,
     moodleCourseId: workspace.classroom?.courseId,
     agentPersona: workspace.agent.persona,
-    allowPracticeRunner: workspace.agent.allowPracticeRunner,
-    practiceDir: practiceDirFor(workspaceDir),
+    labs: options.labs,
     draftsDir: draftsDirFor(workspaceDir),
     draftsLimits: { ...DEFAULT_DRAFTS_LIMITS, ...workspace.agent.draftsLimits },
     knownLanguage: options.language,

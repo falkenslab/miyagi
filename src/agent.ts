@@ -44,8 +44,9 @@ import {
   loadWorkspaceEnv,
   resolveLanguage,
 } from "./globalConfig.js";
-import { offerPracticeRunner, promptInitWorkspace, promptMigrateClassroom, promptMode, promptPickWorkspace } from "./menu.js";
+import { promptInitWorkspace, promptMigrateClassroom, promptMode, promptPickWorkspace } from "./menu.js";
 import { moodleTeacherActive } from "./classroom.js";
+import { labsFor, NEVER_DOCKER_TOOL_NAMES } from "./practiceLabs.js";
 import { listWorkspaces, locateWorkspace, registerWorkspace, workspaceIds } from "./workspaces.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
@@ -135,12 +136,10 @@ function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSess
     }),
     pluginRoots: () => [path.join(__dirname, "..", "plugin")],
     // In run/chat: two helpers without a shell (researcher: public web; pedagogy-reviewer:
-    // read-only critique), always on; and the opt-in practice-runner
-    // (workspace.agent.allowPracticeRunner, off by default — the only thing that grants a shell).
-    // Registering any subagent puts Agent and Bash in the session's tools, but agent-kit's three
-    // subagent gates keep Bash away from the main agent, restrict the Agent tool to these
-    // registered types, and each subagent only gets the tools it lists.
-    buildSubagents: (config) => {
+    // read-only critique). miyagi has no shell at all: practices run in docker-lab's labs (#45).
+    // agent-kit's subagent gates restrict the Agent tool to these registered types, and each
+    // subagent only gets the tools it lists.
+    buildSubagents: () => {
       if (kind !== "run" && kind !== "chat") return undefined;
       const agents: Record<string, AgentDefinition> = {
         researcher: {
@@ -156,25 +155,13 @@ function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSess
           maxTurns: 20,
         },
       };
-      if (config.allowPracticeRunner) {
-        agents["practice-runner"] = {
-          description: "Runs a practical activity in Docker containers inside practice/<activity>/ - the teacher's own statement or solution before publishing it, or a student's submission while grading - and reports exactly what ran and what came out. Invoke with the activity's slug, what to check and where its files are (sources/ or practice/).",
-          tools: ["Bash", "Read", "Write", "Glob"],
-          // Forward slashes even on Windows: interpolated into shell commands run through
-          // Bash (Git Bash on Windows), which doesn't want backslashes.
-          prompt: loadPrompt("system/practice-runner.md", {
-            practiceDir: config.practiceDir.split(path.sep).join("/"),
-            sourcesDir: config.sourcesDir.split(path.sep).join("/"),
-          }),
-          maxTurns: 60,
-        };
-      }
       return { agents, allowedSubagentTypes: Object.keys(agents) };
     },
     // moodle-teacher's tools that are never miyagi's, whatever the mode (principles, ADR-014):
     // enrolments and roles, groups and who is in them, private messages, a whole course reset or
     // copied out of this one. The prompt says so; this makes it true in autonomous too.
-    disallowedTools: NEVER_MOODLE_TOOLS.map((tool) => `mcp__moodle__${tool}`),
+    // And docker-lab's tools on the computer's whole Docker: only its labs, under their policy (#45).
+    disallowedTools: [...NEVER_MOODLE_TOOLS.map((tool) => `mcp__moodle__${tool}`), ...NEVER_DOCKER_TOOL_NAMES],
     humanApprovalTexts: {
       description: loadPrompt("tools/human-approval-description.md"),
       approved: loadPrompt("tools/human-approval-approved.md"),
@@ -193,7 +180,7 @@ async function resolveWorkspace(workspaceDir: string, canPrompt: boolean): Promi
     const config = await ensureWorkspaceDefaults(workspaceDir, await readWorkspaceConfig(workspaceDir));
     // A classroom from before moodle-teacher: moved there, or this session works without it (ADR-021).
     const migrated = canPrompt ? await promptMigrateClassroom(workspaceDir, config) : config;
-    return offerPracticeRunner(workspaceDir, migrated, canPrompt);
+    return migrated;
   }
   if (!process.stdin.isTTY) {
     throw new Error(t().notAWorkspace(workspaceDir));
@@ -280,6 +267,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
     migrationPending: kind === "explore" ? false : await prepareKnowledgeBase(workspaceDir),
     language: await resolveLanguage(workspace.agent.language),
     instructions: await readInstructions(workspaceDir),
+    labs: await labsFor(workspaceDir, workspaceLabel(workspaceDir, workspace)),
   });
   if (!classroom) config.hasMoodle = false;
 

@@ -19,4 +19,4 @@
 - GitHub Pages: the documentation site, `docs/`, built with Docusaurus 3 (React 19, its own `package.json`, not in the npm package) by `.github/workflows/pages.yml`; Atkinson Hyperlegible fonts served from the site.
 - GitHub releases: `miyagi.tgz` (what users install). Releases up to v0.4.0 also carry the agent-kit tarball their versions depend on.
 - `moodle-sandbox` (sibling repo) for end-to-end tests.
-- Docker, only for the opt-in practice-runner.
+- Docker, only through the docker-lab extension's labs.

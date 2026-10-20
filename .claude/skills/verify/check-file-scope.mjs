@@ -11,7 +11,7 @@ const { toSessionConfig } = await import(pathToFileURL(path.join(root, "dist/wor
 const { checkFileScope } = await import(pathToFileURL(path.join(root, "node_modules/@falkenslab/agent-kit/dist/index.js")).href);
 
 const ws = path.join(os.tmpdir(), "miyagi-check-file-scope");
-const workspace = { label: "check", agent: { role: "teacher", language: "español", allowPracticeRunner: false } };
+const workspace = { label: "check", agent: { role: "teacher", language: "español" } };
 const config = toSessionConfig(ws, workspace, { mode: "guided", kind: "chat", headless: false, migrationPending: false, language: "español" });
 // The scope as agent-kit builds it for a session with its sources and knowledge extensions
 // (session.ts): Read and Glob only in the agent's folders, plus the run folder and the plugins.

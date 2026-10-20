@@ -86,14 +86,6 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   personaWarm: "Chaleureux",
   personaMotivating: "Chaleureux et motivant",
   conversationLanguage: "Langue dans laquelle vous préférez parler à l'agent (vide, pas de préférence : il répondra dans la langue que vous utilisez) :",
-  practiceRunnerQuestion:
-    "Autoriser l'agent à tester des activités pratiques dans des conteneurs Docker (p. ex. vérifier qu'un énoncé " +
-    "fonctionne avant de le publier, ou exécuter un rendu en le corrigeant) ? Il ne travaille que dans le dossier " +
-    "practice/ de la matière et seulement avec Docker ; il n'installe jamais rien : si Docker n'est pas installé, il vous le dit.",
-  practiceRunnerNote:
-    "Note : cette matière n'a pas encore configuré une capacité facultative — tester des activités pratiques " +
-    "(un Dockerfile, un script, le code d'un rendu) dans des conteneurs Docker, avant de les publier ou en les " +
-    'corrigeant. Désactivée par défaut ; changez-la à la main dans config.json ("agent.allowPracticeRunner": true/false) ou répondez à la question ci-dessous.',
   createInstructions: "Créer instructions.md pour ajouter vos propres instructions à l'agent ? (facultatif, vous pouvez le faire à la main plus tard)",
   workspaceCreated: (dir) => `Matière créée dans ${dir}\n`,
   exploreNow:

@@ -13,7 +13,7 @@ const known = new Set([
   ...skills,
   ...dirs(".claude/skills"),
   "knowledge-ingest", "knowledge-pages", "knowledge-query", "knowledge-lint", // agent-kit's plugin
-  "practice-runner", "pedagogy-reviewer", "researcher", // subagents
+  "pedagogy-reviewer", "researcher", // subagents
 ]);
 // Backticked names that look like a skill but aren't one: repos, courses, other projects' skills.
 const notSkills = new Set(["student-agent", "moodle-agent", "moodle-sandbox-troubleshooting", "sandbox-course", "docker-intro", "datos-web"]);

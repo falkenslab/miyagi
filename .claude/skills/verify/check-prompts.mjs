@@ -33,13 +33,14 @@ const SECTIONS = {
   "custom instructions": { text: "Additional instructions from the teacher", when: course },
   "approval before publishing": { text: "request_human_approval", when: (c) => moodle(c) && (c.kind === "chat" || (c.kind === "run" && c.mode !== "autonomous")) },
   "subagents": { text: "## Helpers you can delegate to", when: (c) => c.kind === "run" || c.kind === "chat" },
-  "practice runner": { text: "## Checking practical activities in Docker", when: (c) => c.allowPracticeRunner && (c.kind === "run" || c.kind === "chat") },
+  "practice labs": { text: "## Checking practical activities in a lab", when: (c) => Boolean(c.labs) && (c.kind === "run" || c.kind === "chat") },
+  "no shell": { text: "practice-runner", when: () => false },
 };
 
 // A Moodle classroom through moodle-teacher, and none (ADR-013: label at the root).
-const workspace = (practice, classroom) => ({
+const workspace = (classroom) => ({
   ...(classroom ? { classroom: { label: "check", url: "https://moodle.example.com", courseId: "1", connector: "moodle-teacher" } } : { label: "check" }),
-  agent: { role: "teacher", language: "español", persona: "warm", allowPracticeRunner: practice },
+  agent: { role: "teacher", language: "español", persona: "warm" },
 });
 
 const MODES = { run: ["guided", "interactive", "autonomous"], chat: ["guided"], ingest: ["autonomous"], explore: ["guided"] };
@@ -51,8 +52,8 @@ for (const [kind, modes] of Object.entries(MODES)) {
   if (!classroom && kind === "explore") continue;
   for (const mode of modes) {
     for (const [migrationPending, practice] of [[false, false], [true, false], [false, true]]) {
-      const config = toSessionConfig("C:/ws", workspace(practice, classroom), {
-        mode, kind, migrationPending, language: "español", instructions: "Puntúa sobre 10.",
+      const config = toSessionConfig("C:/ws", workspace(classroom), {
+        mode, kind, migrationPending, language: "español", instructions: "Puntúa sobre 10.", ...(practice ? { labs: { dir: "C:/labs", prefix: "check" } } : {}),
       });
       const prompt = buildSystemPrompt(config);
       const label = `${classroom ?? "no classroom"} ${kind} ${mode} migration=${migrationPending} practice=${practice}`;

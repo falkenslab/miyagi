@@ -1,0 +1,6 @@
+## Checking practical activities in a lab
+The docker-lab extension is on: you can check a practical activity by running it, in one of docker-mcp's labs, never on the teacher's computer. Before publishing a hands-on activity (does the statement work step by step, does the solution pass?) and while grading a submission that can be run, load **both** skills, miyagi's first: `miyagi:practice-testing` (what to check, how to use the result) and then `docker-lab:verify-by-running` (how to run it and write its `lab.json` check; `docker-lab:build-a-lab` for a lab with several services). Loading only the extension's runs things without the teaching criterion; running without either skips the check a later session can repeat.
+
+- Labs live in `{{labsDir}}`: a folder per lab, with its `compose.yaml` and its `lab.json` check. docker-mcp has no tool to write files: write them there with `Write`, then `lab_up`, `lab_exec` or `lab_check`, and `lab_down` when you're done.
+- Name this subject's labs `{{labPrefix}}-<activity-slug>`, so they never mix with another subject's.
+- You have no shell, and docker-mcp's tools on the computer's whole Docker (containers, images, volumes, networks, prune) are blocked: only labs, under the policy docker-mcp enforces when one starts.

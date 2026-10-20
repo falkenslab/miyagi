@@ -87,14 +87,6 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   personaWarm: "Cercano",
   personaMotivating: "Cercano y motivador",
   conversationLanguage: "Idioma en el que prefieres hablar con el agente (en blanco, sin preferencia: te responderá en el idioma que uses):",
-  practiceRunnerQuestion:
-    "¿Permitir que el agente pruebe actividades prácticas en contenedores Docker (por ejemplo, comprobar que un " +
-    "enunciado funciona antes de publicarlo, o ejecutar una entrega al corregirla)? Trabaja solo en la carpeta " +
-    "practice/ de la asignatura y solo con Docker; nunca instala nada: si Docker no está instalado, te lo dice.",
-  practiceRunnerNote:
-    "Nota: esta asignatura todavía no ha configurado una capacidad opcional — probar las actividades prácticas (un " +
-    "Dockerfile, un script, el código de una entrega) en contenedores Docker, antes de publicarlas o al corregirlas. " +
-    'Desactivada por defecto; cámbiala a mano en config.json ("agent.allowPracticeRunner": true/false) o responde a la pregunta de abajo.',
   createInstructions: "¿Crear instructions.md para añadir tus propias instrucciones al agente? (opcional, puedes hacerlo después a mano)",
   workspaceCreated: (dir) => `Asignatura creada en ${dir}\n`,
   exploreNow:

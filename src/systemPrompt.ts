@@ -38,16 +38,13 @@ ${loadPrompt("system/subagents.md")}`;
 }
 
 /**
- * The practice-runner subagent (registered in agent.ts's buildSubagents()) only exists in run/chat
- * when the workspace opted into `allowPracticeRunner` — off by default, since it's the only thing
- * that grants a shell. Without it, mentioning the subagent would send the model toward Agent
- * calls that are denied.
+ * docker-lab's labs (#45), when the extension is installed and on: where to write a lab and how to
+ * name it so subjects don't share one. The practice-testing skill (which requires its
+ * capabilities) says when and how; only run and chat check practices.
  */
 function practiceSection(config: WorkspaceSessionConfig): string {
-  if (!config.allowPracticeRunner || (config.kind !== "run" && config.kind !== "chat")) return "";
-  return `
-
-${loadPrompt("system/practice-access.md")}`;
+  if (!config.labs || (config.kind !== "run" && config.kind !== "chat")) return "";
+  return `\n\n${loadPrompt("system/practice-labs.md", { labsDir: config.labs.dir.split(path.sep).join("/"), labPrefix: config.labs.prefix })}`;
 }
 
 function languageSection(config: WorkspaceSessionConfig): string {

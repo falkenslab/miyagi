@@ -86,14 +86,6 @@ Mehr in README.md.`,
   personaWarm: "Herzlich",
   personaMotivating: "Herzlich und motivierend",
   conversationLanguage: "Sprache, in der Sie lieber mit dem Agenten sprechen (leer, keine Vorliebe: er antwortet in Ihrer Sprache):",
-  practiceRunnerQuestion:
-    "Dem Agenten erlauben, praktische Aktivitäten in Docker-Containern zu testen (z. B. prüfen, ob eine " +
-    "Aufgabenstellung funktioniert, bevor sie veröffentlicht wird, oder eine Abgabe beim Bewerten ausführen)? Er " +
-    "arbeitet nur im Ordner practice/ des Fachs und nur mit Docker; er installiert nie etwas: ist Docker nicht installiert, sagt er es Ihnen.",
-  practiceRunnerNote:
-    "Hinweis: Dieser Arbeitsbereich hat eine optionale Fähigkeit noch nicht eingerichtet — praktische Aktivitäten " +
-    "(ein Dockerfile, ein Skript, den Code einer Abgabe) in Docker-Containern testen, vor dem Veröffentlichen oder " +
-    'beim Bewerten. Standardmäßig aus; ändern Sie es von Hand in config.json ("agent.allowPracticeRunner": true/false) oder beantworten Sie die Frage unten.',
   createInstructions: "instructions.md anlegen, um dem Agenten eigene Anweisungen zu geben? (optional, geht später auch von Hand)",
   workspaceCreated: (dir) => `Fach angelegt in ${dir}\n`,
   exploreNow:

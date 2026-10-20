@@ -2,7 +2,7 @@
 
 ## Workspace (aula)
 
-A folder with one course's `config.json`, `.env`, `sources/`, `knowledge/`, `sessions/`, optionally `practice/`, and `extensions/` when it has extensions of its own. Same shape as a moodle-agent teacher aula.
+A folder with one course's `config.json`, `.env`, `sources/`, `knowledge/`, `sessions/`, and `extensions/` when it has extensions of its own. Same shape as a moodle-agent teacher aula.
 
 ## Sources
 
@@ -32,9 +32,9 @@ Checking that the Moodle course matches the teaching plan (`course-alignment`).
 
 The teacher's confirmation before each change students would see.
 
-## Practice runner
+## Lab
 
-Opt-in subagent that runs hands-on practices in Docker inside `practice/`.
+A docker-lab lab (ADR-024): a folder with its `compose.yaml` and `lab.json` check that docker-mcp runs under its policy. It replaces the practice-runner subagent.
 
 ## Sandbox
 

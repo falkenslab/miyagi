@@ -45,8 +45,6 @@ export interface Messages {
   personaWarm: string;
   personaMotivating: string;
   conversationLanguage: string;
-  practiceRunnerQuestion: string;
-  practiceRunnerNote: string;
   createInstructions: string;
   workspaceCreated: (dir: string) => string;
   exploreNow: string;
@@ -216,14 +214,6 @@ See README.md for details.`,
   personaWarm: "Warm",
   personaMotivating: "Warm and motivating",
   conversationLanguage: "Language you'd rather talk to the agent in (blank, no preference: it answers in the language you use):",
-  practiceRunnerQuestion:
-    "Let the agent test practical activities in Docker containers (e.g. check that a statement works before " +
-    "publishing it, or run a submission while grading it)? It only works in the subject's practice/ folder and " +
-    "only with Docker; it never installs anything: if Docker isn't installed, it tells you.",
-  practiceRunnerNote:
-    "Note: this subject hasn't set up an optional capability yet — testing practical activities (a Dockerfile, a " +
-    "script, a submission's code) in Docker containers, before publishing them or while grading them. Off by " +
-    'default; change it by hand in config.json ("agent.allowPracticeRunner": true/false) or answer the question below.',
   createInstructions: "Create instructions.md to add your own instructions for the agent? (optional, you can do it by hand later)",
   workspaceCreated: (dir) => `Subject created in ${dir}\n`,
   exploreNow:

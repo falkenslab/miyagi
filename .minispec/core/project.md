@@ -12,7 +12,7 @@
 - Answers and moderates the forum.
 - Monitors class progress and audits the course.
 - Keeps a knowledge base of the course (`knowledge/`) built from the teacher's documents (`sources/`) and its own work.
-- Optionally tests hands-on practices in Docker (practice-runner).
+- Optionally tests hands-on practices in docker-lab's labs (an extension).
 
 ## For whom
 
