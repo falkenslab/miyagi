@@ -6,7 +6,7 @@
 
 **Asistente de IA para docentes. Tú enseñas, y miyagi se ocupa del resto.**
 
-Hoy trabaja en tu curso de Moodle, con tu cuenta de profesor y como lo harías tú: corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, escribe tu programación didáctica y te dice cómo va la clase. Toma apuntes del curso para acordarse de todo en la siguiente sesión, puedes enseñarle habilidades nuevas para tu asignatura y te consulta antes de publicar lo que verán tus alumnos.
+Te ayuda a preparar tu asignatura (la programación didáctica, los temas, los materiales, las rúbricas y los cuestionarios) y, si conectas tu curso de Moodle, también a llevarlo: corrige con tu rúbrica, atiende el foro, publica lo que prepara y te dice cómo va la clase. En Moodle trabaja con la extensión moodle-teacher, con tu propia sesión: nunca ve tu contraseña, tus alumnos le llegan con un alias y te consulta antes de publicar lo que verán. Toma apuntes de la asignatura para acordarse de todo en la siguiente sesión, y puedes enseñarle habilidades nuevas o darle más capacidades con extensiones.
 
 ![El chat de miyagi al terminar el Tema 4 de un aula de Introducción a SQL: los cambios que pidió el revisor pedagógico, las decisiones que tomó por su cuenta para que las revises y lo que queda pendiente](docs/static/img/casos/32-t4-resumen.webp)
 
@@ -20,7 +20,7 @@ Todo está en **[falkenslab.github.io/miyagi](https://falkenslab.github.io/miyag
 
 ## Instalación
 
-Necesitas Google Chrome, [Node.js](https://nodejs.org/) 20 o posterior (la versión LTS), una suscripción de Claude Pro o Max y un curso de Moodle en el que seas profesor. En una terminal (PowerShell en Windows, Terminal en Mac):
+Necesitas [Node.js](https://nodejs.org/) 20 o posterior (la versión LTS), una suscripción de Claude Pro o Max y un navegador como Google Chrome o Microsoft Edge. Para trabajar en tu aula, además, un curso de Moodle en el que seas profesor. En una terminal (PowerShell en Windows, Terminal en Mac):
 
 ```
 npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz
@@ -31,18 +31,18 @@ Para actualizarlo, repite la misma línea; para desinstalarlo, `npm uninstall -g
 ## Primeros pasos
 
 ```
-mkdir mi-curso
-cd mi-curso
-miyagi init      # la dirección del curso, tu cuenta, el tono y el idioma
-miyagi ingest    # opcional: incorpora lo que dejes en sources/ (programación, rúbricas...)
-miyagi chat      # y pídeselo con tus palabras
+miyagi init                # la asignatura (nombre, tono, idioma) y, si quieres, la dirección de tu curso de Moodle
+miyagi ingest -w <nombre>  # opcional: incorpora lo que dejes en sources/ (programación, rúbricas...)
+miyagi chat -w <nombre>    # y pídeselo con tus palabras
 ```
+
+La asignatura se guarda en `~/.miyagi/workspaces/<nombre>/`, y `miyagi workspaces` te dice dónde está. Si conectas Moodle, la primera vez inicias sesión tú en la ventana que abre moodle-teacher.
 
 Por ejemplo: *«¿Qué entregas tengo sin corregir?»*, *«Corrige la Tarea 2 con la rúbrica que te dejé»*, *«¿Hay dudas sin responder en el foro?»* o *«Monta un tema sobre consultas SQL con su práctica y un cuestionario»*. Más ideas en [Qué pedirle](https://falkenslab.github.io/miyagi/guia/ideas/) y todas las órdenes en la [Referencia](https://falkenslab.github.io/miyagi/guia/referencia/).
 
 ## Para desarrolladores
 
-miyagi está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit), igual que [student-agent](https://github.com/falkenslab/student-agent). Sus habilidades, comandos y prompts proceden del rol de profesor de moodle-agent. La especificación del proyecto (qué es, arquitectura, stack, convenciones y decisiones) está en [.minispec/](.minispec/README.md), y [CLAUDE.md](CLAUDE.md) explica cómo trabajar en el repo.
+miyagi está construido sobre [`@falkenslab/agent-kit`](https://github.com/falkenslab/agent-kit), igual que [padawan](https://github.com/falkenslab/padawan), y trabaja en Moodle con la extensión moodle-teacher de [agent-extensions](https://github.com/falkenslab/agent-extensions). La especificación del proyecto (qué es, arquitectura, stack, convenciones y decisiones) está en [.minispec/](.minispec/README.md), y [CLAUDE.md](CLAUDE.md) explica cómo trabajar en el repo.
 
 ```
 git clone https://github.com/falkenslab/miyagi.git
