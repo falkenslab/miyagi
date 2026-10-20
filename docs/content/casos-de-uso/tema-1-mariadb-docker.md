@@ -61,6 +61,10 @@ El cuestionario se escribe en formato GIFT y se importa de golpe. Antes de impor
 
 En total, el Tema 1 pasó por diez aprobaciones: el nombre y el resumen de la sección, los apuntes, la práctica guiada, una escala «Apto / No apto» (el Moodle solo traía escalas en inglés), el entregable, las preguntas, el cuestionario y el peso del entregable en el libro de calificaciones (0 %, porque decidimos que no entra en la nota).
 
+Pregunta aunque le digas que no hace falta. Al pedirle que renombrara una sección «sin pedirme aprobación», contestó que sus instrucciones le piden confirmar cualquier cambio que vean los alumnos y abrió el panel igual (el cambio se rechazó y no se hizo):
+
+<Shot src="/img/casos/11-aprobacion.webp" title="PowerShell — miyagi chat" alt="El chat: el profesor pide renombrar la sección 1 sin aprobación; miyagi responde que debe confirmarlo igualmente y abre el panel «Hace falta confirmación humana antes de publicar» con el resumen del cambio y las opciones Sí, No y Parar" />
+
 :::caution Y si intenta publicar sin preguntar
 La aprobación no depende solo de que el agente se acuerde. El programa vigila cada cambio que va a hacer en Moodle y, si el agente no ha pedido permiso justo antes, lo detiene y te pregunta en un panel «Publicación sin aprobación previa», con las opciones Sí, No y Parar. Borrar o quitar algo te lo pregunta siempre, aunque lo hayas aprobado antes.
 :::

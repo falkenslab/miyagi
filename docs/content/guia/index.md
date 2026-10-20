@@ -10,7 +10,7 @@ miyagi es un asistente que te ayuda a llevar tu curso de Moodle. Trabaja en tu c
 
 Tú hablas con él en la terminal, con tus palabras, como hablarías con un compañero. Y **nada que vean tus estudiantes se publica sin tu permiso**: antes de guardar una nota, responder en el foro o publicar un recurso, te enseña lo que va a hacer y espera tu sí.
 
-![miyagi en el chat: encuentra en el foro una duda de Marcos y pide permiso antes de publicar la respuesta](/img/chat.png)
+![miyagi en el chat: revisa en Moodle qué hay sin corregir y cómo está el foro, y responde con una tabla de pendientes y lo que conviene hacer después](/img/chat.png)
 
 ## Qué hace por ti
 
