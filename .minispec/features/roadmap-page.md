@@ -15,7 +15,7 @@ Publish where miyagi is going (linking a classroom when you want, Moodle without
 ## Changes
 
 - `docs/content/hoja-de-ruta.md`, linked from the footer (`docs/docusaurus.config.js`), not from the landing page; a notice at the top that it's a plan and only items marked "disponible" exist.
-- One entry per open feature, grouped in the order of `.minispec/features/` (docker-lab-practices, neutral-materials, activity-lifecycle, appearance, official-curriculum, learning-situations, assessment-skills, personalised-activities, workspace-kinds, video-voice-youtube), in the teacher's language, each linking its issue.
+- One entry per open feature, grouped in the order of `.minispec/features/` (neutral-materials, activity-lifecycle, appearance, official-curriculum, learning-situations, assessment-skills, personalised-activities, workspace-kinds, video-voice-youtube), in the teacher's language, each linking its issue.
 - A "Lo que miyagi no hará" section: personal student data, tutoring, families (ADR-017); a community catalog or a hub to share extensions or activities (ADR-020, ADR-021).
 - ADR-012: one line recording that the roadmap is the only page about what doesn't exist yet, and says so.
 - `update-docs`: when a milestone closes, mark its entry "disponible" with a link to the guide.
