@@ -42,9 +42,7 @@ Con eso instala la extensión **moodle-teacher**, que es la que trabaja en Moodl
 
 Después propone explorar el Moodle, y decimos que sí. Como es la primera vez, moodle-teacher abre una ventana del navegador para que entres en Moodle tú mismo, con tu usuario y tu contraseña: ni miyagi ni el asistente la ven. La extensión guarda la sesión, así que las siguientes veces no vuelve a pedirla hasta que caduque.
 
-Ya dentro, miyagi mira qué tipos de actividad y de pregunta admite este Moodle, sin crear ni cambiar nada. Lo apunta en su memoria (`knowledge/moodle-capabilities.md`) para no proponer luego algo que el centro no tiene.
-
-<Shot src="/img/casos/02-explore.webp" title="PowerShell — miyagi explore" alt="El resumen de la exploración: los 19 tipos de actividad del Moodle, que el curso aún no tiene banco de preguntas, que la calificación solo admite Suma y que la tarea no tiene penalización por retraso; no ha creado ni modificado nada.">El resumen de la exploración. Fíjate en el detalle: la tarea de este Moodle no tiene penalización por retraso, algo que importará más adelante.</Shot>
+Ya dentro, miyagi mira qué tipos de actividad y de pregunta admite este Moodle, sin crear ni cambiar nada. Lo apunta en su memoria (la página `course/moodle-capabilities`) para no proponer luego algo que el centro no tiene.
 
 :::note
 La exploración solo usa las herramientas de lectura de moodle-teacher. Estas no listan todos los tipos de pregunta que tiene activados el Moodle, solo los que ya hay en los bancos del curso; en un curso vacío, esa parte queda por comprobar.
