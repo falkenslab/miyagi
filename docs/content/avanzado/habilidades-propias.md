@@ -126,16 +126,16 @@ Las habilidades se leen al arrancar miyagi: si tenías el chat abierto, ciérral
 
 ## Lo que una habilidad puede y no puede hacer
 
-Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: las de la extensión moodle-teacher con tu Moodle, sus apuntes, la carpeta `drafts`, los documentos de `sources` y, si lo has activado, el probador de prácticas. **No le da herramientas nuevas.**
+Una habilidad le enseña **cómo** hacer algo con las herramientas que ya tiene: las de la extensión moodle-teacher con tu Moodle, sus apuntes, la carpeta `drafts`, los documentos de `sources` y las de las [extensiones](extensiones.md) que tengas activadas, como los laboratorios de [docker-lab](practicas-docker.md). **No le da herramientas nuevas.**
 
 - **Puede**: fijar criterios, pasos, convenciones, plantillas y ejemplos; decirle qué documento de `sources` leer; apoyarse en otras habilidades (por ejemplo, «corrige con `grading-rubric`» o «pruébalo con `practice-testing`»).
-- **No puede**: darle una terminal, permitirle tocar `knowledge` sin sus herramientas `knowledge_*`, escribir archivos fuera de `drafts` y `practice`, leer `config.json` o `.env`, saltarse las aprobaciones ni conectarlo a otros servicios.
+- **No puede**: darle una terminal, permitirle tocar `knowledge` sin sus herramientas `knowledge_*`, escribir archivos fuera de `drafts` (y de la carpeta de laboratorios de docker-lab, si la tienes activada), leer `config.json` o `.env`, saltarse las aprobaciones ni conectarlo a otros servicios.
 
-Por eso una habilidad que diga «ejecuta este programa» solo funcionará si has activado el [probador de prácticas](practicas-docker.md), y entonces a través de él, dentro de Docker. Sin esa opción, el asistente te dirá que no puede.
+Por eso una habilidad que diga «ejecuta este programa» solo funcionará si tienes instalada y activada la extensión [docker-lab](practicas-docker.md), y entonces dentro de uno de sus laboratorios. Sin ella, el asistente te dirá que no puede ejecutar nada.
 
 ## Otro ejemplo: corregir prácticas de Docker Compose
 
-Una habilidad que se apoya en el probador de prácticas:
+Una habilidad que se apoya en los laboratorios de docker-lab:
 
 ```markdown
 ---
@@ -145,10 +145,10 @@ description: Corregir las prácticas de Docker Compose de este curso ejecutándo
 
 # Corregir una práctica de Docker Compose
 
-1. Descarga los archivos de la entrega y guárdalos en sources/<práctica>/<id-del-alumno>/.
-2. Con la habilidad practice-testing, pide que se ejecute `docker compose up -d` con esos
-   archivos y que se compruebe que el servicio web responde en el puerto 8080 con la página
-   del enunciado.
+1. Con la habilidad practice-testing, lleva los archivos de la entrega a un laboratorio de
+   la práctica, en una carpeta con el id del alumno (nunca su nombre).
+2. Levanta lo que pide el enunciado y comprueba que el servicio web responde en el puerto 8080
+   con la página del enunciado.
 3. Aplica la rúbrica de la práctica (sources/rubricas/):
    - Arranca sin errores: 4 puntos.
    - Responde en el 8080 con lo pedido: 4 puntos.

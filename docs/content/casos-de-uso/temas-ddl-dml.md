@@ -10,7 +10,7 @@ Con el primer tema montado y revisado, le pedimos los dos siguientes en un solo 
 
 <p className="pide">/miyagi:build-unit Temas 2 y 3, uno detrás de otro, siguiendo la programación: Tema 2 (DDL: CREATE TABLE con claves y restricciones, ALTER, DROP sobre la base de datos tienda) y Tema 3 (DML: INSERT, UPDATE, DELETE y los errores típicos). Cada uno con sus apuntes, ejercicios entregables, cuestionario y las prácticas probadas en Docker.</p>
 
-Sigue el mismo método que en el Tema 1: el probador de prácticas ejecuta en MariaDB cada `CREATE TABLE`, cada clave ajena y cada `ALTER TABLE` con datos ya dentro, y cada error que los apuntes van a explicar (por ejemplo, el `ERROR 1452` al insertar un pedido de un cliente que no existe). Después escribe los apuntes, la práctica guiada, los ejercicios con su rúbrica y el cuestionario.
+Sigue el mismo método que en el Tema 1: miyagi comprueba la práctica en un laboratorio de docker-lab: ejecuta en MariaDB cada `CREATE TABLE`, cada clave ajena y cada `ALTER TABLE` con datos ya dentro, y cada error que los apuntes van a explicar (por ejemplo, el `ERROR 1452` al insertar un pedido de un cliente que no existe). Después escribe los apuntes, la práctica guiada, los ejercicios con su rúbrica y el cuestionario.
 
 ## Lo que aprendió del Tema 1
 

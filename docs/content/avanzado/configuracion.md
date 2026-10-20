@@ -27,7 +27,6 @@ Un ejemplo completo:
     "role": "teacher",
     "persona": "warm",
     "language": "español",
-    "allowPracticeRunner": true,
     "draftsLimits": {
       "downloadMB": 100,
       "unzipMB": 500,
@@ -85,7 +84,6 @@ Para conectar un aula más tarde, vuelve a ejecutar `miyagi init -w <nombre>`: t
 | `role` | Siempre `"teacher"`. miyagi lo escribe solo para que otro agente que abra la carpeta sepa de quién es. Una carpeta con `"student"` se rechaza. | miyagi lo añade la primera vez. |
 | `persona` | El tono con los alumnos (foro, retroalimentación, avisos): `"formal"`, `"warm"` (cercano) o `"motivating"` (cercano y motivador). | Tono neutro. |
 | `language` | Texto libre con tu idioma preferido para hablar con él, por ejemplo `"español"` o `"English"`. Si es español, inglés, francés o alemán, también fija el idioma de los menús. | El `defaultLanguage` global; si tampoco está, te responde en el idioma en que le escribas y los menús siguen el del sistema. |
-| `allowPracticeRunner` | `true` activa el probador de prácticas en Docker ([Prácticas en Docker](practicas-docker.md)). | Desactivado. Si la clave no existe, miyagi te lo pregunta una vez al abrir `chat` o `run` y guarda tu respuesta. |
 | `draftsLimits` | Límites de la caja de herramientas de `drafts/` (ver abajo). | Los valores por defecto. |
 
 ### `draftsLimits`

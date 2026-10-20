@@ -20,11 +20,11 @@ Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no p
 
 Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto del asistente como de sus ayudantes:
 
-- **Leer y listar** (`Read`, `Glob`): solo `sources/`, `drafts/` (y `practice/` si has activado el probador de prácticas), las habilidades de miyagi y la carpeta de la conversación en curso. Nada más de tu ordenador: ni la carpeta del curso fuera de esas, ni `Documentos`, ni tus otros cursos o proyectos.
-- **Escribir y editar** (`Write`, `Edit`): solo dentro de `drafts/` (y de `practice/` si has activado el probador de prácticas).
+- **Leer y listar** (`Read`, `Glob`): solo `sources/`, `drafts/` (y la carpeta de laboratorios de docker-lab, si la tienes activada), las habilidades de miyagi y la carpeta de la conversación en curso. Nada más de tu ordenador: ni la carpeta del curso fuera de esas, ni `Documentos`, ni tus otros cursos o proyectos.
+- **Escribir y editar** (`Write`, `Edit`): solo dentro de `drafts/` (y de la carpeta de laboratorios de docker-lab, si la tienes activada: miyagi escribe ahí los archivos de cada laboratorio; ver [Prácticas en Docker](practicas-docker.md)).
 - **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado durante la sesión), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
-- **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y `practice/`.
+- **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y, con docker-lab activada, su carpeta de laboratorios.
 - **`config.json` y `.env` del curso, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
 - **Otras credenciales en sitios conocidos**, prohibidas además, por si acaso: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS y los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas).
 
@@ -32,9 +32,11 @@ Tus habilidades, atajos e `instructions.md` quedan fuera de las carpetas en las 
 
 ## Sin terminal
 
-El asistente principal **no tiene terminal**, ni siquiera para un `echo`: agent-kit le deniega `Bash` aunque esté registrada para algún ayudante. Para trabajar con archivos en `drafts/` (descargar, comprimir, generar un PDF) tiene herramientas propias escritas en código, que no ejecutan nada y no salen de esa carpeta (ver [Aprobaciones y borradores](aprobaciones-y-borradores.md)).
+En miyagi **no hay terminal** en ningún sitio, ni siquiera para un `echo`: agent-kit le deniega `Bash` al asistente principal y ningún ayudante la tiene. Para trabajar con archivos en `drafts/` (descargar, comprimir, generar un PDF) tiene herramientas propias escritas en código, que no ejecutan nada y no salen de esa carpeta (ver [Aprobaciones y borradores](aprobaciones-y-borradores.md)).
 
-Solo puede delegar en los ayudantes que miyagi declara (`researcher`, `pedagogy-reviewer` y, si lo activas, `practice-runner`), y cada uno tiene solo las herramientas que tiene en su lista. La única terminal de todo el sistema es la de `practice-runner`: desactivada por defecto y limitada por sus instrucciones a Docker dentro de `practice/` ([Prácticas en Docker](practicas-docker.md)).
+Solo puede delegar en los ayudantes que miyagi declara (`researcher` y `pedagogy-reviewer`), y cada uno tiene solo las herramientas que tiene en su lista.
+
+Para ejecutar prácticas está la extensión docker-lab: miyagi solo puede usar sus laboratorios, con la política que docker-mcp impone al arrancar cada uno (sin internet salvo que lo permitas, nada montado fuera del laboratorio, nunca el socket de Docker, límites de CPU y memoria). Sus herramientas sobre todo el Docker del ordenador (contenedores, imágenes, volúmenes, redes, proyectos de Compose, `prune`) están bloqueadas ([Prácticas en Docker](practicas-docker.md)).
 
 ## Lo que hace en Moodle
 
@@ -53,9 +55,9 @@ El modo `autonomous` quita las aprobaciones: úsalo solo en cursos de prueba.
 - **Lee lo que tú verías** en Moodle para hacer su trabajo: entregas, calificaciones, mensajes del foro, informes de progreso. Ese contenido lo procesa Claude, el modelo de Anthropic, a través de tu suscripción.
 - **Con seudónimos.** miyagi instala moodle-teacher con `student_data` en `pseudonymize`: los alumnos le llegan al modelo como alias («Alumno 3»), nunca por su nombre. Se cambia con `miyagi extension config moodle-teacher …` ([Extensiones](extensiones.md)).
 - **No guarda fichas de alumnos.** En la base de conocimiento no hay páginas sobre estudiantes concretos: las notas de progreso y del foro son de la clase y de patrones, nunca un registro con nombres ([ADR-005](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-005-no-individual-students-in-knowledge.md)).
-- **Entregas descargadas, con identificador.** Cuando guarda una entrega para ejecutarla, va a `sources/<actividad>/<id-del-alumno>/`, nunca con el nombre del alumno en la ruta.
+- **Entregas ejecutadas, con identificador.** Cuando lleva una entrega a un laboratorio para ejecutarla, va a una carpeta con un identificador o un alias, nunca con el nombre del alumno.
 - **Las sesiones sí contienen lo que vio.** La carpeta `sessions/` guarda la conversación y la transcripción de cada sesión, con lo que el asistente leyó en Moodle. Además, el Claude Agent SDK guarda su propia copia de las conversaciones en `~/.claude/projects/`. Trátalas como datos del curso: `sessions/` está en el `.gitignore` que crea `init`, y puedes borrar las sesiones antiguas cuando ya no las necesites.
 
 ## Si versionas la carpeta del curso
 
-`miyagi init` crea un `.gitignore` que deja fuera `config.json`, `.env` (el token), `sessions/` (las transcripciones) y `practice/`. Si usas git, no los subas.
+`miyagi init` crea un `.gitignore` que deja fuera `config.json`, `.env` (el token), y `sessions/` (las transcripciones). Si usas git, no los subas.

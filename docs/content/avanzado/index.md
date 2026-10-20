@@ -22,13 +22,14 @@ miyagi (CLI)
  └─ sesión (agent-kit + Claude Agent SDK)
      ├─ instrucciones de sistema (prompts/system/*.md + instructions.md)
      ├─ habilidades y atajos (plugin/, el plugin de conocimiento de agent-kit, .claude/ del curso, extensiones)
-     ├─ herramientas de archivos: escriben solo en drafts/ y practice/ (sources/ solo lectura)
+     ├─ herramientas de archivos: escriben solo en drafts/ (y en los laboratorios de docker-lab, si está activada; sources/ solo lectura)
      ├─ herramientas knowledge_* de agent-kit: lo único que llega a knowledge/
      ├─ herramientas de fuentes de agent-kit: list_sources, extract_text, save_to_sources…
      ├─ extensión moodle-teacher (moodle-mcp) ──> tu Moodle, con tu sesión
+     ├─ extensión docker-lab (docker-mcp, opcional) ──> laboratorios de Docker, solo eso
      ├─ caja de herramientas de drafts/ (descargar, comprimir, PDF…)
      ├─ ganchos: aprobación antes de publicar, revisión del GIFT antes de importarlo
-     └─ ayudantes: researcher, pedagogy-reviewer, practice-runner (opcional) ──> Docker
+     └─ ayudantes: researcher, pedagogy-reviewer
 ```
 
 ## Tipos de sesión
@@ -53,13 +54,11 @@ Lo tienes en detalle en [Sesiones y modos](sesiones-y-modos.md).
 
 ## Los ayudantes
 
-En `chat` y `run`, el asistente principal puede delegar en tres ayudantes (subagentes), cada uno con sus propias herramientas:
+En `chat` y `run`, el asistente principal puede delegar en dos ayudantes (subagentes), cada uno con sus propias herramientas:
 
 - **`researcher`**: busca y lee la web pública y devuelve lo encontrado con fuentes y fechas. Herramientas: búsqueda web, lectura web y lectura de archivos.
 - **`pedagogy-reviewer`**: experto en diseño didáctico que revisa un plan o una actividad. Solo puede leer archivos.
-- **`practice-runner`**: ejecuta prácticas en contenedores Docker. Desactivado por defecto; es lo único que tiene una terminal. Ver [Prácticas en Docker](practicas-docker.md).
-
-Ninguno puede publicar en Moodle. El asistente principal no tiene terminal: agent-kit le deniega `Bash` y solo le deja delegar en esos tipos de ayudante.
+Ninguno puede publicar en Moodle ni tiene terminal. En miyagi no hay terminal en ningún sitio: agent-kit le deniega `Bash` al asistente principal y solo le deja delegar en esos tipos de ayudante. Las prácticas se ejecutan en los laboratorios de la extensión docker-lab (ver [Prácticas en Docker](practicas-docker.md)).
 
 ## La carpeta del curso
 
@@ -67,14 +66,13 @@ Ninguno puede publicar en Moodle. El asistente principal no tiene terminal: agen
 mi-curso/
   config.json        la conexión con Moodle y las opciones del agente (el asistente no puede leerlo)
   .env               opcional: un token de Claude propio de este curso (el asistente no puede leerlo)
-  .gitignore         creado por init: deja fuera config.json, .env, sessions/ y practice/
+  .gitignore         creado por init: deja fuera config.json, .env y sessions/
   instructions.md    opcional: tus instrucciones, añadidas al final de las suyas
   .claude/skills/    opcional: tus habilidades propias
   .claude/commands/  opcional: tus atajos propios
   sources/           tus documentos originales (solo lectura para el asistente)
   knowledge/         su base de conocimiento del curso
   drafts/            lo que construye para Moodle, editable
-  practice/          solo con el probador de prácticas: una carpeta por práctica
   sessions/          una carpeta por sesión: registro, transcripción y conversación
 ```
 

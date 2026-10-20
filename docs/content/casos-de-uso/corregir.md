@@ -19,7 +19,7 @@ En un chat nuevo, con el atajo de corregir:
 
 ## Ejecutar antes de juzgar
 
-En vez de leer el SQL y suponer qué devuelve, miyagi pide al probador de prácticas que cargue los datos comunes de la tienda en un MariaDB limpio, ejecute cada `consultas.sql` y compare cada resultado con su solución de referencia. Así una consulta que parece correcta pero devuelve otras filas no se escapa, ni una que da error.
+En vez de leer el SQL y suponer qué devuelve, miyagi comprueba cada entrega en un laboratorio de docker-lab: carga los datos comunes de la tienda en un MariaDB limpio, ejecuta cada `consultas.sql` (en una carpeta con un identificador, nunca con el nombre del alumno) y compara cada resultado con su solución de referencia. Así una consulta que parece correcta pero devuelve otras filas no se escapa, ni una que da error.
 
 ## Cada nota, antes de guardarla
 

@@ -48,7 +48,7 @@ Lee lo que tú verías en Moodle para hacer su trabajo, pero tus alumnos le lleg
 
 ### ¿Ejecuta programas en mi ordenador?
 
-No, salvo que actives el probador de prácticas para cursos de informática. Y entonces solo dentro de contenedores Docker, en una carpeta del curso. Lo tienes en [Prácticas en Docker](../avanzado/practicas-docker.md).
+No: miyagi no tiene terminal. Para cursos de informática puedes instalar la extensión docker-lab, y entonces ejecuta las prácticas solo dentro de laboratorios de Docker, sin internet salvo que lo permitas y sin tocar nada fuera de cada laboratorio. Lo tienes en [Prácticas en Docker](../avanzado/practicas-docker.md).
 
 ## Su forma de trabajar
 

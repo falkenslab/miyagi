@@ -12,17 +12,17 @@ Con la programación cerrada, toca construir el curso en Moodle. Empezamos por e
 
 ## Primero, comprobar que funciona
 
-Antes de escribir una línea de los apuntes, miyagi delega en su **probador de prácticas** (lo activamos en `miyagi init`). Este ayudante solo puede usar Docker: levanta un contenedor `mariadb:11` de verdad, se conecta, crea la base de datos y el usuario, para, arranca y borra el contenedor, y comprueba que los datos sobreviven gracias al volumen.
+Antes de escribir una línea de los apuntes, miyagi comprueba la práctica en un **laboratorio de docker-lab** (la extensión que instalamos al [preparar el aula](preparar-el-aula.md)). Dentro del laboratorio levanta un `mariadb:11` de verdad, se conecta, crea la base de datos y el usuario, para, arranca y borra el servidor, y comprueba que los datos sobreviven gracias al volumen.
 
-<Shot src="/img/casos/10-practice-runner.webp" alt="El chat mientras delega en practice-runner: lee la programación y la página del tema y ejecuta en Docker la conexión con el usuario tienda_app, docker stop, docker rm y la limpieza del contenedor.">El probador de prácticas ejecutando en Docker cada paso que luego leerán los alumnos.</Shot>
+<Shot src="/img/casos/10-practice-runner.webp" alt="El chat mientras delega en practice-runner: lee la programación y la página del tema y ejecuta en Docker la conexión con el usuario tienda_app, docker stop, docker rm y la limpieza del contenedor.">Cada paso que luego leerán los alumnos, ejecutado en Docker.</Shot>
 
-Su informe no se queda en «funciona»: trae lo que un alumno se encontrará de verdad. Por ejemplo, que la primera vez MariaDB tarda entre 6 y 14 segundos en estar listo, que el cliente se llama `mariadb` y no `mysql`, o que en los registros aparece un aviso sobre `io_uring` que no es un error. Todo eso acaba en los apuntes.
+Lo que saca de esa comprobación no se queda en «funciona»: trae lo que un alumno se encontrará de verdad. Por ejemplo, que la primera vez MariaDB tarda entre 6 y 14 segundos en estar listo, que el cliente se llama `mariadb` y no `mysql`, o que en los registros aparece un aviso sobre `io_uring` que no es un error. Todo eso acaba en los apuntes.
 
 Después, el **revisor pedagógico** repasa el plan del tema. En este caso señaló siete mejoras, entre ellas comprobar Docker antes de la primera sesión y dar una segunda oportunidad a quien saque «no apto». miyagi las aplica antes de tocar Moodle.
 
 ## Lo que hacen tus alumnos
 
-Estos son los comandos que acaban en la práctica, comprobados en Docker por el probador (y también al escribir este tutorial):
+Estos son los comandos que acaban en la práctica, comprobados por miyagi en un laboratorio de docker-lab (y también al escribir este tutorial):
 
 ```bash
 # Un volumen para los datos y el servidor MariaDB 11

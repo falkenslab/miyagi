@@ -26,7 +26,7 @@ Algunos detalles:
 - **`ingest`** sin archivos procesa todo lo de `sources/` que aún no tiene página de resumen; con archivos, solo esos (rutas relativas a la carpeta actual). Ver [La base de conocimiento](base-de-conocimiento.md).
 - **`explore`** usa solo las herramientas de lectura de moodle-teacher, sin cambiar nada. Escribe la página `course/moodle-capabilities` (`knowledge/moodle-capabilities.md`) con los tipos de actividad, los tipos de pregunta que ha podido ver y cómo pueden funcionar las calificaciones. Esas herramientas no listan los tipos de pregunta activados en tu Moodle, solo los que ya hay en los bancos de preguntas del curso ([falkenslab/moodle-mcp#49](https://github.com/falkenslab/moodle-mcp/issues/49)).
 
-Las herramientas de `drafts/` y los ayudantes (`researcher`, `pedagogy-reviewer`, `practice-runner`) solo existen en `chat` y `run`.
+Las herramientas de `drafts/`, los ayudantes (`researcher`, `pedagogy-reviewer`) y los laboratorios de docker-lab ([Prácticas en Docker](practicas-docker.md)) solo existen en `chat` y `run`.
 
 ## Modos de supervisión
 

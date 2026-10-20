@@ -160,7 +160,7 @@ Planifica primero en sus apuntes, luego crea sección a sección con contenido d
 
 > Crea una práctica de Docker Compose con una web y una base de datos, y pruébala antes de publicarla.
 
-Con el probador de prácticas activado, la sigue paso a paso en contenedores como lo haría un alumno y corrige lo que falle antes de publicarla. Al corregir, puede ejecutar las entregas. Cómo activarlo: [Prácticas en Docker](../avanzado/practicas-docker.md).
+Con la extensión docker-lab instalada, la sigue paso a paso en un laboratorio de Docker como lo haría un alumno y corrige lo que falle antes de publicarla. Al corregir, puede ejecutar las entregas. Cómo instalarla: [Prácticas en Docker](../avanzado/practicas-docker.md).
 
 ## Nivel 6 · Adaptarlo a tu forma de trabajar
 

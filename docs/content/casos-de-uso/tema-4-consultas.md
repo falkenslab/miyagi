@@ -16,7 +16,7 @@ Esta vez cada pieza se crea oculta, con su aprobación, empezando por la propia 
 
 <Shot src="/img/casos/29-t4-seccion-oculta.webp" alt="Panel de aprobación: crear la sección del Tema 4 oculta, para probarla, con su nombre y su resumen de las semanas 5 y 6.">Primero la sección, oculta.</Shot>
 
-Antes de escribir nada, el probador de prácticas carga en MariaDB unos datos comunes de la tienda (8 clientes, 10 productos, 12 pedidos y 21 líneas) y ejecuta cada consulta de los apuntes, del ejercicio formativo y de la práctica final. Ese script de datos se publica también, para que toda la clase consulte lo mismo y pueda comparar resultados.
+Antes de escribir nada, miyagi comprueba la práctica en un laboratorio de docker-lab: carga en MariaDB unos datos comunes de la tienda (8 clientes, 10 productos, 12 pedidos y 21 líneas) y ejecuta cada consulta de los apuntes, del ejercicio formativo y de la práctica final. Ese script de datos se publica también, para que toda la clase consulte lo mismo y pueda comparar resultados.
 
 La práctica final usa tu rúbrica de `sources/`. miyagi la traduce a una rúbrica de Moodle (una línea por consulta, de 0,625 puntos, y los criterios de uso de SQL y legibilidad) y te dice qué ha redactado él:
 

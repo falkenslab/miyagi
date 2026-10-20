@@ -29,14 +29,13 @@ Primero pregunta por la asignatura y, al final, por el aula de Moodle. Estas son
 - **Nombre y descripción** de la asignatura: «Introducción a SQL», «Módulo de bases de datos de 1.º de DAM: SQL con MariaDB».
 - **Tono**: cercano. Es como hablará a los alumnos en el foro y en la retroalimentación.
 - **Idioma**: español.
-- **¿Probar prácticas en Docker?** Sí, porque el curso va de MariaDB en Docker y queremos que compruebe las prácticas antes de publicarlas. Necesita Docker Desktop instalado.
 - **¿Crear `instructions.md`?** Por ahora no. Lo veremos en el [último paso](habilidad-propia.md).
 - **¿Conectar un aula Moodle ahora?** Sí (por defecto dice que no: sin aula te ayuda igual con la programación y los materiales, y puedes conectarla más tarde volviendo a ejecutar `miyagi init` en su carpeta).
 - **URL de Moodle**: la dirección completa del curso, copiada del navegador. Así saca él solo el número de curso. No pide usuario ni contraseña.
 
 Con eso instala la extensión **moodle-teacher**, que es la que trabaja en Moodle con tu sesión de profesor, y apunta en ella la dirección de tu Moodle.
 
-<Shot src="/img/casos/01-init.webp" title="PowerShell — miyagi init" alt="La terminal con miyagi init: nombre Introducción a SQL, descripción 1.º DAM, tono Cercano, idioma español, pruebas en Docker activadas, sin instructions.md, aula conectada con la URL del curso, la asignatura creada en la carpeta de miyagi, moodle-teacher instalado con el sitio y la pregunta de si explorar ahora" />
+<Shot src="/img/casos/01-init.webp" title="PowerShell — miyagi init" alt="La terminal con miyagi init: nombre Introducción a SQL, descripción 1.º DAM, tono Cercano, idioma español, sin instructions.md, aula conectada con la URL del curso, la asignatura creada en la carpeta de miyagi, moodle-teacher instalado con el sitio y la pregunta de si explorar ahora" />
 
 ## Explorar el Moodle
 
@@ -47,5 +46,15 @@ Ya dentro, miyagi mira qué tipos de actividad y de pregunta admite este Moodle,
 :::note
 La exploración solo usa las herramientas de lectura de moodle-teacher. Estas no listan todos los tipos de pregunta que tiene activados el Moodle, solo los que ya hay en los bancos del curso; en un curso vacío, esa parte queda por comprobar.
 :::
+
+## Las prácticas, en laboratorios de Docker
+
+El curso va de MariaDB en Docker y queremos que miyagi compruebe las prácticas antes de publicarlas. Para eso instalamos la extensión **docker-lab**, con la que miyagi comprueba cada práctica en un laboratorio de Docker, aislado y sin tocar nada más del ordenador. Necesita Docker Desktop instalado:
+
+```powershell
+miyagi extension add docker-lab --set mode=lab
+```
+
+Lo tienes explicado en [Prácticas en Docker](../avanzado/practicas-docker.md).
 
 Siguiente paso: [darle tu material](tu-material.md).

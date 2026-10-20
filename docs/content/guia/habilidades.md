@@ -86,7 +86,7 @@ Diseña y monta el resto de actividades para que funcionen como deben: talleres 
 
 ### 🐳 `practice-testing` · Probar las prácticas en Docker
 
-Comprueba una práctica **ejecutándola de verdad** en contenedores Docker: sigue el enunciado como lo haría un alumno antes de publicarlo, o ejecuta la entrega de un estudiante al corregirla y usa el resultado como prueba. Es para cursos de informática (Docker, Linux, programación, bases de datos) y solo funciona si has activado el probador de prácticas (ver [Prácticas en Docker](../avanzado/practicas-docker.md)).
+Comprueba una práctica **ejecutándola de verdad** en un laboratorio de Docker: sigue el enunciado como lo haría un alumno antes de publicarlo, o ejecuta la entrega de un estudiante al corregirla y usa el resultado como prueba. Es para cursos de informática (Docker, Linux, programación, bases de datos) y solo aparece si tienes instalada la extensión docker-lab (ver [Prácticas en Docker](../avanzado/practicas-docker.md)).
 
 - **Pídeselo así:** *«Crea una práctica de Docker Compose con una web y una base de datos, y pruébala antes de publicarla.»*
 
@@ -180,7 +180,6 @@ Para algunas tareas, el asistente se apoya en ayudantes especializados que traba
 | --- | --- | --- |
 | Investigador | Busca en internet, lee las fuentes (primero las oficiales) y devuelve lo encontrado con enlaces y fechas. | Siempre, en `chat` y `run` |
 | Revisor pedagógico | Revisa un plan o una actividad: coherencia entre objetivos, actividades y evaluación, metodología, carga de trabajo y atención a la diversidad. | Siempre, en `chat` y `run` |
-| Probador de prácticas | Ejecuta las prácticas en contenedores Docker. | Solo si lo activas ([Prácticas en Docker](../avanzado/practicas-docker.md)) |
 
 ## Tus propias habilidades
 

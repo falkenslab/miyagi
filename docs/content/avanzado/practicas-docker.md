@@ -1,82 +1,73 @@
 ---
 title: Prácticas en Docker
 sidebar_position: 7
-description: "El probador de prácticas: cómo miyagi ejecuta enunciados, soluciones y entregas en contenedores Docker, con qué límites y cómo activarlo."
+description: "Cómo miyagi comprueba enunciados, soluciones y entregas ejecutándolos en laboratorios de la extensión docker-lab, con qué límites y cómo instalarla."
 ---
 
 # Prácticas en Docker
 
-En un curso de informática (Docker, Linux, programación, bases de datos), una práctica que no funciona tal como está escrita le cuesta la tarde a toda la clase. Y una entrega corregida «leyendo el código» puede llevarse la nota de algo que no se ejecuta. Con el **probador de prácticas**, miyagi puede ejecutar las prácticas de verdad, dentro de contenedores Docker:
+En un curso de informática (Docker, Linux, programación, bases de datos), una práctica que no funciona tal como está escrita le cuesta la tarde a toda la clase. Y una entrega corregida «leyendo el código» puede llevarse la nota de algo que no se ejecuta. Con la extensión **docker-lab**, miyagi puede ejecutar las prácticas de verdad, dentro de laboratorios de Docker:
 
 - **Antes de publicar una práctica**, la sigue paso a paso como lo haría un alumno y comprueba que la solución da lo que promete el enunciado. Si algo falla, la corrige antes de publicarla.
 - **Al corregir**, ejecuta la entrega del alumno y usa lo que sale como prueba en la nota y en la retroalimentación.
 
-## Por qué está desactivado por defecto
+## Qué es docker-lab
 
-Es lo único que le da a miyagi la capacidad de ejecutar programas en tu ordenador. El asistente principal no tiene terminal nunca; cuando activas esta opción, aparece un ayudante aparte, `practice-runner`, que sí tiene una, pero con instrucciones que la limitan a Docker y a la carpeta `practice` del curso ([ADR-003](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-003-practice-runner-opt-in-docker.md)).
+docker-lab es una [extensión](extensiones.md) del repositorio oficial ([falkenslab/agent-extensions](https://github.com/falkenslab/agent-extensions)) que pone en marcha docker-mcp, un servidor que ejecuta **laboratorios**: entornos de Docker aislados, cada uno con sus propias reglas. miyagi no tiene terminal, ni siquiera con docker-lab: todo lo que ejecuta pasa por las herramientas de los laboratorios ([ADR-024](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-024-no-shell-practices-in-docker-lab.md)).
 
-Ten en cuenta que esos límites están en sus instrucciones: el filtro de carpetas de agent-kit no cubre la terminal. Por eso es una decisión tuya, curso a curso.
+## Cómo instalarla
 
-## Cómo activarlo
-
-1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/) (en Linux, Docker Engine) y comprueba que funciona:
+1. Instala [Docker Desktop](https://www.docker.com/products/docker-desktop/) (en Linux, Docker Engine), versión 24 o posterior. Si falta, docker-lab te dice qué instalar.
+2. Instala la extensión en modo `lab`, el recomendado (solo laboratorios):
 
    ```bash
-   docker version
+   miyagi extension add docker-lab --set mode=lab
    ```
 
-2. Actívalo en el curso, de una de estas formas:
-   - Responde que sí a la pregunta de `miyagi init`.
-   - En un curso ya creado, edita su `config.json` y pon `"allowPracticeRunner": true` dentro de `"agent"` (el resto de claves, como estaban).
-   - Si tu curso es anterior a esta opción (no tiene la clave), miyagi te lo pregunta una vez al abrir `chat` o `run`, y guarda tu respuesta.
+Como cualquier extensión, puedes instalarla para todas tus asignaturas o solo para una con `--project` (ver [Extensiones](extensiones.md)). Está disponible en `chat` y `run`.
 
-```json
-{
-  "agent": {
-    "allowPracticeRunner": true
-  }
-}
-```
+## Los laboratorios
 
-Está disponible en `chat` y `run`. Si no lo activas y le pides probar una práctica, el asistente te dirá que no puede y nunca presentará como probada una práctica sin probar.
+Un laboratorio es una carpeta dentro de la carpeta de laboratorios de docker-lab, con un `compose.yaml` y, si hace falta, un `lab.json` con su comprobación. Esa carpeta es la opción `labs_dir` de la extensión o, si no la das, `labs` dentro de la carpeta de datos de la extensión.
+
+docker-mcp no tiene herramientas para escribir archivos, así que miyagi escribe los del laboratorio en esa carpeta: con docker-lab activada, es la única que puede escribir además de `drafts/` (ver [Seguridad y privacidad](seguridad-y-privacidad.md)). Llama a cada laboratorio `<asignatura>-<actividad>`, para que los de dos asignaturas no se mezclen, y los maneja con `lab_up` (levantarlo), `lab_exec` (ejecutar algo dentro), `lab_check` (pasar su comprobación) y `lab_down` (pararlo).
+
+## La política de cada laboratorio
+
+La impone docker-mcp al arrancar un laboratorio, no unas instrucciones al modelo: un laboratorio que se la salta no arranca.
+
+- **Sin internet**, salvo que lo permitas con la opción `allow_internet` (desactivada por defecto).
+- **Nada montado fuera de la carpeta del laboratorio**, y nunca el socket de Docker.
+- **Límites de CPU y memoria** por servicio: las opciones `cpus` (1 por defecto) y `memory` (`512m` por defecto).
+- **Sin privilegios nuevos** dentro de los contenedores.
+
+Las opciones se dan al instalar la extensión, con `--set clave=valor`, o cuando `miyagi extension add` te las pregunta.
+
+## Lo que miyagi bloquea
+
+docker-mcp también tiene herramientas que trabajan con todo el Docker del ordenador: contenedores, imágenes, volúmenes, redes, proyectos de Compose y la limpieza (`prune`). miyagi se las quita siempre, sea cual sea el modo de la extensión: solo le quedan los laboratorios.
 
 ## Cómo trabaja
 
-El asistente usa la habilidad [`practice-testing`](https://github.com/falkenslab/miyagi/blob/main/plugin/skills/practice-testing/SKILL.md) para decidir cuándo y cómo, y delega la ejecución en `practice-runner`. El ayudante nunca pone notas ni publica nada: ejecuta e informa, y el asistente principal decide con ese informe.
+El asistente usa la habilidad [`practice-testing`](https://github.com/falkenslab/miyagi/blob/main/plugin/skills/practice-testing/SKILL.md) para saber qué comprobar y qué hacer con el resultado; la mecánica de montar y ejecutar un laboratorio es de las habilidades de docker-lab, `build-a-lab` y `verify-by-running`.
 
 ### Antes de publicar una práctica
 
-1. El asistente escribe la práctica en `practice/<slug>/`: el enunciado (`statement.md`), los archivos de partida del alumno (`start/`) y la solución (`solution/`).
-2. Pide a `practice-runner` que siga `statement.md` paso a paso como un alumno, desde `start/`, y le diga dónde se rompe; y después que ejecute `solution/` y compruebe que da lo que promete el enunciado.
-3. Corrige cada problema que le devuelve (un paso que falta, una versión que no existe, una salida distinta de la prometida) y repite hasta que pase. Solo entonces publica la práctica, con su aprobación.
-4. Anota en la página de la actividad (`activity/<slug>`, archivo `knowledge/activities/<slug>.md`) que se comprobó, cuándo, con qué imagen base y qué órdenes ejecutará el alumno.
+1. Escribe el laboratorio: el `compose.yaml` con la imagen que usarán los alumnos (con versión fija, la que dice el enunciado), los archivos de partida, la solución si la hay y un `lab.json` cuya comprobación dice si la solución hace lo que promete el enunciado.
+2. Sigue el enunciado paso a paso como un alumno, dentro del laboratorio, y anota dónde se rompe.
+3. Ejecuta la solución y la comprobación. Corrige cada fallo (un paso que falta, una versión que no existe, una salida distinta de la prometida) en el enunciado o en la solución y repite hasta que pase. Solo entonces publica la práctica, con su aprobación.
+4. Anota en la página de la actividad (`activity/<slug>`) que se comprobó, cuándo, con qué imagen y qué órdenes ejecutará el alumno, y para el laboratorio.
 
 ### Al corregir una entrega
 
-1. Descarga los archivos del alumno y los guarda en `sources/<slug>/<id-del-alumno>/`, con un identificador y nunca con su nombre en la ruta.
-2. Pide a `practice-runner` que los ejecute contra lo que pedía la actividad («el contenedor tiene que responder en el puerto 8080 con…»). El ayudante los copia a su propia subcarpeta, `practice/<slug>/<id>/`, para que dos entregas no compartan archivos.
-3. Corrige con `grading-rubric`, usando lo que informa como prueba, y cita la salida relevante en la retroalimentación cuando explica la nota.
+1. Lleva los archivos del alumno a un laboratorio de la actividad, en una carpeta con un identificador o un alias, nunca con su nombre.
+2. Ejecuta lo que pedía la actividad («el contenedor tiene que responder en el puerto 8080 con…»), con su comprobación si la tiene.
+3. Corrige con `grading-rubric`, usando lo que se ejecutó como prueba, y cita la orden y la salida relevantes en la retroalimentación cuando explican la nota. Ejecutar nunca pone la nota: la pone el asistente.
 
-Ejecutar no es publicar: no necesita aprobación para ejecutar, solo para guardar la nota o publicar la práctica.
+Ejecutar es comprobar, no publicar: no necesita aprobación para ejecutar, solo para publicar la práctica o guardar la nota.
 
-## Sus límites
+## Sin docker-lab
 
-Las instrucciones del ayudante ([`practice-runner.md`](https://github.com/falkenslab/miyagi/blob/main/prompts/system/practice-runner.md)) le imponen:
-
-- **Solo Docker.** Sus órdenes son `docker ...` y leer, copiar y listar archivos en la carpeta de la práctica. Nunca instala nada (ni gestores de paquetes, ni `pip`, `npm` o `apt`), nunca cambia la configuración del equipo y nunca usa `sudo`. Si Docker no está instalado o no está en marcha, se detiene y te dice qué falta.
-- **Solo en `practice/<slug>/`.** Todo lo que escribe va ahí. Los originales de `sources/` son de solo lectura: copia lo que necesita.
-- **Todo lo que ejecuta es sospechoso**, el código de un alumno sobre todo:
-  - `docker run --rm` con `--network none` salvo que la práctica necesite red (y entonces lo justifica en el informe);
-  - `--memory 512m --cpus 1` y un límite de tiempo (`timeout 120 docker run ...`);
-  - solo monta la carpeta de la práctica, en solo lectura si el código no necesita escribir; nunca tu carpeta personal, la del curso ni el socket de Docker.
-- **Sus propios nombres.** Un enunciado para alumnos usa nombres genéricos (`web1`, un volumen `datos-web`) y puertos fijos (`8080`) que en tu equipo pueden existir ya. Por eso, al seguirlo, renombra y lo cuenta: contenedores, volúmenes y redes con el prefijo `tap-<slug>-`; Compose siempre con `docker compose -p tap-<slug>`; puertos publicados solo en `127.0.0.1`, a partir del 18000, comprobando antes que están libres. Los mismos límites de memoria, CPU y tiempo valen también cuando sigue el enunciado al pie de la letra.
-- **Imágenes oficiales con versión fija** (`python:3.12-slim`, `node:22-alpine`, `ubuntu:24.04`), nunca `latest`. Etiqueta lo que crea con `miyagi=practice` y nombra sus imágenes `miyagi-practice/<slug>`.
-- **Limpia lo suyo y solo lo suyo.** Antes de empezar anota qué imágenes había; al terminar quita sus contenedores, volúmenes, redes e imágenes, y una imagen base que descargó solo si no estaba antes. Nunca `docker system prune` ni borrados por patrón.
-
-Y el informe que devuelve trae las órdenes exactas en orden, con su código de salida, la salida relevante citada literalmente y lo que tardó; si el enunciado funciona paso a paso o dónde se rompe; para una entrega, qué funciona y qué no frente a lo pedido, con pruebas y sin nota; y lo que no pudo comprobar.
-
-## Lo que no hace
-
-No sirve archivos para verlos en un navegador (un servidor web para una actividad HTML, por ejemplo): los recursos se prueban en Moodle, puestos ocultos en el aula (ver [Aprobaciones y borradores](aprobaciones-y-borradores.md)).
+Si docker-lab no está instalada o está desactivada, la habilidad `practice-testing` no se ofrece. Si le pides probar una práctica, miyagi te dirá que no puede ejecutar nada y te sugerirá instalar docker-lab; nunca presentará como probada una práctica sin probar.
 
 En el tutorial [Un curso de Introducción a SQL](../casos-de-uso/index.md) puedes verlo comprobando prácticas de MariaDB.
