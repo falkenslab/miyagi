@@ -104,9 +104,6 @@ export interface Messages {
   endDrafts: (path: string) => string;
   endInterruptedNote: string;
 
-  // publishGate.ts
-  gateTitle: string;
-  gateLine: string;
 
 
   // toolLabels.ts: one line per browser tool call
@@ -274,8 +271,6 @@ See README.md for details.`,
   endInterruptedNote:
     "What it was doing when interrupted may be half done (a grade not saved, a reply not posted); in the next session you can ask it to pick it up.",
 
-  gateTitle: "Publishing without prior approval",
-  gateLine: "The agent is about to publish or change something students can see in Moodle, without having asked you first.",
 
 
   toolPhrases: {

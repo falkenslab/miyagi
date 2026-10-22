@@ -146,8 +146,6 @@ Mehr in README.md.`,
   endInterruptedNote:
     "Was er beim Unterbrechen tat, kann halb fertig sein (eine nicht gespeicherte Note, eine nicht veröffentlichte Antwort); in der nächsten Sitzung können Sie ihn bitten, es fortzusetzen.",
 
-  gateTitle: "Veröffentlichung ohne vorherige Zustimmung",
-  gateLine: "Der Agent will in Moodle etwas für die Lernenden Sichtbares veröffentlichen oder ändern, ohne Sie vorher gefragt zu haben.",
 
 
   toolPhrases: {

@@ -147,8 +147,6 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   endInterruptedNote:
     "Lo que estaba haciendo al interrumpir puede haber quedado a medias (una nota sin guardar, una respuesta sin publicar); en la próxima sesión puedes pedirle que lo retome.",
 
-  gateTitle: "Publicación sin aprobación previa",
-  gateLine: "El agente va a publicar o cambiar algo en Moodle que pueden ver los alumnos, sin haberte pedido aprobación antes.",
 
 
   toolPhrases: {

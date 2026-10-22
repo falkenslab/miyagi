@@ -64,7 +64,7 @@ El asistente usa la habilidad [`practice-testing`](https://github.com/falkenslab
 2. Ejecuta lo que pedía la actividad («el contenedor tiene que responder en el puerto 8080 con…»), con su comprobación si la tiene.
 3. Corrige con `grading-rubric`, usando lo que se ejecutó como prueba, y cita la orden y la salida relevantes en la retroalimentación cuando explican la nota. Ejecutar nunca pone la nota: la pone el asistente.
 
-Ejecutar es comprobar, no publicar: no necesita aprobación para ejecutar, solo para publicar la práctica o guardar la nota.
+Ejecutar es comprobar, no publicar, pero en `guided` agent-kit te pregunta antes de cada herramienta de docker-lab que cambia algo, como levantar un laboratorio. Si no quieres que te lo pregunte cada vez, responde «Sí, en esta sesión» o «Sí, siempre».
 
 ## Sin docker-lab
 

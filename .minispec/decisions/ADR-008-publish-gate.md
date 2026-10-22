@@ -1,5 +1,7 @@
 # ADR-008: The approval before publishing is enforced by a hook
 
+> Amended by ADR-021: the hook is now agent-kit's guided gate for extensions' tools; `src/publishGate.ts` and `isPublishAction()` are gone.
+
 ## Decision
 
 In `guided` mode, a PreToolUse hook in miyagi (`src/publishGate.ts`) stops any browser action that publishes, changes or removes what students see in Moodle unless `request_human_approval` was approved just before, and asks the teacher right there. An approval lasts until the next `request_human_approval` call or the teacher's next message, so one approval covers a batch. A publication the gate itself lets through covers only that call.

@@ -146,8 +146,6 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   endInterruptedNote:
     "Ce qu'il faisait au moment de l'interruption peut être à moitié fait (une note non enregistrée, une réponse non publiée) ; à la prochaine session, vous pouvez lui demander de reprendre.",
 
-  gateTitle: "Publication sans approbation préalable",
-  gateLine: "L'agent va publier ou modifier dans Moodle quelque chose que les élèves peuvent voir, sans vous l'avoir demandé avant.",
 
 
   toolPhrases: {

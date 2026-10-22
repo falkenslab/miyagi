@@ -50,7 +50,6 @@ import { labsFor, NEVER_DOCKER_TOOL_NAMES } from "./practiceLabs.js";
 import { listWorkspaces, locateWorkspace, registerWorkspace, workspaceIds } from "./workspaces.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
-import { installPublishGate } from "./publishGate.js";
 import { installUploadGate } from "./uploadGate.js";
 import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
 import { sessionSkills } from "./catalog.js";
@@ -162,6 +161,11 @@ function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSess
     // copied out of this one. The prompt says so; this makes it true in autonomous too.
     // And docker-lab's tools on the computer's whole Docker: only its labs, under their policy (#45).
     disallowedTools: [...NEVER_MOODLE_TOOLS.map((tool) => `mcp__moodle__${tool}`), ...NEVER_DOCKER_TOOL_NAMES],
+    // The approval before an extension's tool that changes something is the kit's guided gate
+    // (ADR-021): a deletion always asks (moodle-mcp's destructiveHint), and an approved
+    // request_human_approval covers the batch until the teacher's next message. Autonomous
+    // publishes by design, so it lets them run.
+    extensionGate: { autonomous: "allow" },
     humanApprovalTexts: {
       description: loadPrompt("tools/human-approval-description.md"),
       approved: loadPrompt("tools/human-approval-approved.md"),
@@ -280,14 +284,10 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   async function openSession(runDir: string, run?: RunFolder) {
     // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
     const opened = await buildSessionOptions(config, runDir, buildSpec(kind, skills), { autoCompactEnabled, run });
-    const { options, modeControl } = opened;
+    const { options } = opened;
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
-    // The approval before publishing, enforced over moodle-teacher's tools (it only acts in
-    // guided), and GIFT checked before it's imported. Without a classroom nothing publishes.
-    if (classroom && kind !== "ingest") {
-      installPublishGate(options, runDir, modeControl, loadPrompt("tools/human-approval-approved.md"));
-      installUploadGate(options);
-    }
+    // GIFT checked before it's imported. Without a classroom nothing publishes.
+    if (classroom && kind !== "ingest") installUploadGate(options);
     return opened;
   }
 

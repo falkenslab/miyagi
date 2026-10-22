@@ -18,7 +18,6 @@ npm run build
 node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
 node .claude/skills/verify/check-neutral-skills.mjs
-node .claude/skills/verify/check-publish-gate.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
 node .claude/skills/verify/check-file-scope.mjs
@@ -43,11 +42,6 @@ update the docs site (`update-docs`; `check-docs.mjs` catches a missing skill) a
 `check-neutral-skills.mjs` fails if a skill or command in `plugin/` names Moodle, a Moodle URL, a
 moodle-mcp tool or a browser action: miyagi's skills say the teaching act, the classroom
 extension's skills say how (ADR-021).
-
-`check-publish-gate.mjs` classifies moodle-teacher's tools with the publish gate's
-`isPublishAction()` (reading and signing in never ask, anything else does, a deletion always)
-and runs the gate with a fake teacher answering. When a test finds a tool the gate missed, or
-one it stops without reason, add it there with the fix.
 
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT

@@ -66,7 +66,7 @@ Pregunta aunque le digas que no hace falta. Al pedirle que renombrara una secci�
 <Shot src="/img/casos/11-aprobacion.webp" title="PowerShell — miyagi chat" alt="El chat: el profesor pide renombrar la sección 1 sin aprobación; miyagi responde que debe confirmarlo igualmente y abre el panel «Hace falta confirmación humana antes de publicar» con el resumen del cambio y las opciones Sí, No y Parar" />
 
 :::caution Y si intenta publicar sin preguntar
-La aprobación no depende solo de que el agente se acuerde. El programa vigila cada cambio que va a hacer en Moodle y, si el agente no ha pedido permiso justo antes, lo detiene y te pregunta en un panel «Publicación sin aprobación previa», con las opciones Sí, No y Parar. Borrar o quitar algo te lo pregunta siempre, aunque lo hayas aprobado antes.
+La aprobación no depende solo de que el agente se acuerde. El programa vigila cada cambio que va a hacer en Moodle y, si el agente no ha pedido permiso justo antes, lo detiene y te pregunta en un panel «¿Dejas que moodle-teacher haga esto?». Borrar o quitar algo te lo pregunta siempre, aunque lo hayas aprobado antes.
 :::
 
 ## El resultado
