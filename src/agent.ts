@@ -56,6 +56,7 @@ import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
 import { LOGO } from "./theme.js";
 import { COURSE_PAGE_TYPES, tagCoursePages } from "./knowledgeTypes.js";
+import { isActivityPlanFile, readPhaseCounts, registerPath, type PhaseCounts } from "./activityRegister.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -71,6 +72,8 @@ const EXPLORE_MAX_TURNS = 80;
 /** The knowledge base's reading tools (agent-kit's `knowledge` server), for the subagents:
  * the file tools don't reach knowledge/ any more (agent-kit's ADR-024). */
 const KNOWLEDGE_READ_TOOLS = ["mcp__knowledge__knowledge_index", "mcp__knowledge__knowledge_search", "mcp__knowledge__knowledge_read"];
+/** miyagi's own tools that plan mode lets run: they only read. */
+const PLAN_READ_TOOLS = new Set([...KNOWLEDGE_READ_TOOLS, `mcp__${DRAFTS_SERVER}__drafts_list`, `mcp__${DRAFTS_SERVER}__drafts_info`]);
 
 /** moodle-mcp's tools miyagi never uses (they're the teacher's or the site's, not a teaching assistant's). */
 const NEVER_MOODLE_TOOLS = [
@@ -166,6 +169,14 @@ function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSess
     // request_human_approval covers the batch until the teacher's next message. Autonomous
     // publishes by design, so it lets them run.
     extensionGate: { autonomous: "allow" },
+    // Plan mode (the first phase of activity-lifecycle, #17): the plan of an activity is its
+    // drafts/<slug>/plan.md, the only file written while the teacher reviews it; the drafts
+    // toolbox only lists and inspects there. The knowledge base's reading tools and an
+    // extension's read-only tools are the kit's to let through.
+    planMode: {
+      isPlanFile: (filePath, config) => isActivityPlanFile(config.draftsDir, filePath),
+      isReadOnlyTool: (toolName) => PLAN_READ_TOOLS.has(toolName),
+    },
     humanApprovalTexts: {
       description: loadPrompt("tools/human-approval-description.md"),
       approved: loadPrompt("tools/human-approval-approved.md"),
@@ -338,7 +349,9 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         agentLabel: ui.agent("miyagi>"),
         formatAction: friendlyToolLabel,
         toolPhrase,
-        initialPrompt: loadPrompt(classroom ? "messages/chat-opening-teacher.md" : "messages/chat-opening-teacher-standalone.md"),
+        initialPrompt: loadPrompt(classroom ? "messages/chat-opening-teacher.md" : "messages/chat-opening-teacher-standalone.md", {
+          inProgress: inProgressLine(readPhaseCounts(workspaceDir)),
+        }),
         historyPath: path.join(sessionsDirFor(workspaceDir), "history.jsonl"),
       },
     );
@@ -393,13 +406,14 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
  * What the human sees when a session ends, however it ended: that nothing needs saving —
  * everything is written as it happens — and where each part of it is.
  */
-/** knowledge/drafts.md lists only the drafts still hidden in Moodle, one list item each. */
-function hasPendingDrafts(workspaceDir: string): boolean {
-  try {
-    return /^\s*[-*] /m.test(readFileSync(path.join(workspaceDir, "knowledge", "drafts.md"), "utf-8"));
-  } catch {
-    return false;
-  }
+/** What the chat's greeting says about the activities in progress, counted from `course/drafts` by code. */
+function inProgressLine(counts: PhaseCounts | undefined): string {
+  if (!counts) return "`course/drafts` lists nothing in progress: say nothing about it.";
+  return (
+    `\`course/drafts\` lists activities in progress: ${counts.planning} planning, ${counts.building} being built, ` +
+    `${counts.hidden} being tested hidden, ${counts.served} just served. Read it and say in one line how many are in each phase, ` +
+    "naming them; tell the ones just served are out, then take them off the page (activity-lifecycle)."
+  );
 }
 
 function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string, interrupted: boolean): void {
@@ -410,14 +424,18 @@ function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string
     ui.dim(t().endTranscript(path.join(runDir, "transcript.jsonl"))),
     ...(kind === "chat" ? [ui.dim(t().endConversation(path.join(runDir, "session.log")))] : []),
     ui.dim(t().endKnowledge(path.join(workspaceDir, "knowledge"))),
-    ...(hasPendingDrafts(workspaceDir)
-      ? [ui.warn(t().endDrafts(path.join(workspaceDir, "knowledge", "drafts.md")))]
-      : []),
+    ...inProgressEnd(workspaceDir),
     ...(interrupted
       ? [ui.dim(t().endInterruptedNote)]
       : []),
   ];
   console.log(lines.join("\n"));
+}
+
+/** "En el horno: 1 en plan, 2 cocinándose" when `course/drafts` lists activities in progress. */
+function inProgressEnd(workspaceDir: string): string[] {
+  const counts = readPhaseCounts(workspaceDir);
+  return counts ? [ui.warn(t().endInProgress(counts, registerPath(workspaceDir)))] : [];
 }
 
 function initialPrompt(kind: SessionKind, workspaceDir: string, args: string[], hasMoodle: boolean): string {

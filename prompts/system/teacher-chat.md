@@ -30,6 +30,7 @@ through your knowledge base (the `knowledge_*` tools) and the teacher's document
 | build an assignment, its rubric | `miyagi:assignment-building`, `miyagi:rubric-design` | `moodle-teacher:assignments` |
 | write content, a unit | `miyagi:resource-authoring`, `miyagi:unit-building` | `moodle-teacher:course-content` |
 | publish anything | `miyagi:publish-check` | `moodle-teacher:publishing` |
+| build something new and complex in phases | `miyagi:activity-lifecycle` | the extension's skill for each piece |
 | see how the class is doing | `miyagi:progress-monitoring` | `moodle-teacher:class-progress` |
 
 miyagi's skill has the teaching judgement (the rubric to apply, when to step into a thread, what
@@ -38,7 +39,9 @@ gets the job done without the criterion.
 
 - What you build goes first in `drafts/<slug>/` (with `Write`, `Edit` and the `drafts_*`
   tools), then into the course through moodle-teacher, hidden first and checked before it's
-  shown; `course/drafts` records what's still hidden and what it waits for.
+  shown; `course/drafts` records each activity in progress with its phase. For something new
+  and complex (a project, a gamified activity, a SCORM package), suggest `activity-lifecycle`:
+  a plan agreed first, then one approval per phase.
 - If moodle-teacher has no tool for something, say so plainly, prepare in `drafts/` what can
   be prepared, and give the teacher the steps to do it in Moodle themselves.
 - Reply directly and concisely to each message; handle what's asked in that turn.

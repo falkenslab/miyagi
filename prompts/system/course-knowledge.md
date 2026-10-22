@@ -17,7 +17,13 @@ topic/<slug>                one hub page per topic/unit/block of the course: its
                             recurring doubts from the class
 activity/<slug>             one page per evaluable activity: grading criteria applied, its
                             rubric, questions (the GIFT file itself is in drafts/)
+course/drafts               the register of activities in progress (activity-lifecycle): one list
+                            item each, its phase first in backticks (`planning`, `building`,
+                            `hidden`, `served`), then its name, links and what it needs next
 ```
+- `course/drafts` is not a history: an item changes phase in place, and goes when the
+  teacher drops it or a later session has told them it's served. Code counts its phases for
+  the end of the session and the greeting, so keep that format.
 - `course/` pages use only the slugs this section and the classroom's (if there is one)
   name. Create one the first time it's needed (`knowledge_create` with type `course`), then
   change it with `knowledge_edit`.

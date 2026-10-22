@@ -7,6 +7,10 @@ description: Build one unit (a topic, a section) inside an existing course in th
 
 > Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
 
+For something new and complex (a unit's project, a gamified activity, a SCORM package, a
+workshop), suggest `activity-lifecycle` first: a plan agreed with the teacher, then one approval
+per phase.
+
 Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 A unit has to fit the course it lands in: same style and level as the other units, dates that

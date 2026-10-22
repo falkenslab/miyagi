@@ -1,3 +1,4 @@
+import { inOven } from "../activityRegister.js";
 import type { Messages } from "./en.js";
 
 export const de: Messages = {
@@ -142,7 +143,7 @@ Mehr in README.md.`,
   endTranscript: (path) => `  - Die Aktionen des Agenten und ihre Ergebnisse: ${path}`,
   endConversation: (path) => `  - Das Gespräch als reiner Text: ${path}`,
   endKnowledge: (path) => `  - Was der Agent gelernt hat: ${path}`,
-  endDrafts: (path) => `Es gibt verborgen in Moodle hochgeladene Materialien, die die Lernenden noch nicht sehen: ${path}`,
+  endInProgress: (counts, path) => `Im Ofen: ${inOven(counts, { planning: "in Planung", building: "in Arbeit", hidden: "verborgen im Test", served: "freigegeben" })} (${path})`,
   endInterruptedNote:
     "Was er beim Unterbrechen tat, kann halb fertig sein (eine nicht gespeicherte Note, eine nicht veröffentlichte Antwort); in der nächsten Sitzung können Sie ihn bitten, es fortzusetzen.",
 

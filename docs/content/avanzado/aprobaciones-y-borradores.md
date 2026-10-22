@@ -41,10 +41,21 @@ Todo recurso nuevo (una página, un archivo, un cuestionario, un H5P, una tarea,
 1. **Lo construye en `drafts/<slug>/`**: el código fuente editable (el HTML, el archivo GIFT, el texto de la página, sus imágenes).
 2. **Lo pone oculto en el aula**, desde el primer guardado (o oculta la sección si es un tema nuevo). El resumen de la aprobación dice que va **oculto, para probarlo**. No avisa a los alumnos del cambio. Cómo se hace en Moodle lo trae la habilidad de publicación de moodle-teacher.
 3. **Lo prueba como profesor**: lee lo que ha guardado el aula y comprueba que funciona como lo usaría un alumno: el cuestionario, el H5P, cada enlace y cada parte interactiva, y la página en un ancho estrecho. Lo que sus herramientas no pueden probar, te pide que lo pruebes tú, con su enlace. Si algo falla, lo corrige en `drafts/` y lo reemplaza (con otra aprobación).
-4. **Lo apunta en la página `course/drafts`** (`knowledge/drafts.md`): una línea por borrador oculto, con su enlace y lo que falta.
-5. **Te cuenta qué ha probado y te pide permiso para mostrarlo.** Mostrarlo es otra publicación, con su propia aprobación. Después lo quita de `drafts.md` y lo revisa ya como lo vería un alumno, hasta donde le deja la extensión (o te pide que lo mires con la vista de estudiante).
+4. **Lo apunta en la página `course/drafts`** (`knowledge/drafts.md`): una línea por borrador, que empieza por su fase (`hidden`), con su enlace y lo que falta.
+5. **Te cuenta qué ha probado y te pide permiso para mostrarlo.** Mostrarlo es otra publicación, con su propia aprobación. Después marca su línea como `served` y lo revisa ya como lo vería un alumno, hasta donde le deja la extensión (o te pide que lo mires con la vista de estudiante).
 
-Si prefieres no mostrarlo todavía, se queda oculto y en `drafts.md`. Al cerrar la sesión, miyagi te avisa de que hay recursos ocultos sin mostrar, y en el siguiente chat te los menciona al saludar.
+Si prefieres no mostrarlo todavía, se queda oculto y en `drafts.md`.
+
+## Las actividades en marcha
+
+`course/drafts` es el registro de todo lo que está en marcha, no solo de lo oculto: una línea por actividad, con su fase primero, entre comillas invertidas, para que el programa pueda contarlas:
+
+- `planning`: con su plan en `drafts/<slug>/plan.md`, a la espera de que lo apruebes.
+- `building`: construyéndose en `drafts/<slug>/`.
+- `hidden`: subida oculta al aula, probándose.
+- `served`: ya la ven los alumnos; la siguiente sesión te lo dice y la quita.
+
+Las tres primeras fases las recorre la habilidad `activity-lifecycle` con algo nuevo y complejo, con una aprobación para pasar de cada fase a la siguiente; un borrador oculto sin ese proceso es una línea `hidden`. Una página de antes, sin fases, cuenta todo como `hidden`. Al cerrar la sesión, miyagi te dice cuántas hay en cada fase («En el horno: 1 en plan, 2 cocinándose, 1 probándose oculto»), y el siguiente chat te lo cuenta al saludar.
 
 Los cambios en algo que los alumnos ya ven (una errata, una fecha, un enlace roto) no pasan por borrador: se guardan en su sitio, con su aprobación.
 

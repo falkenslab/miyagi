@@ -33,12 +33,13 @@ whatever its type:
    student would use it (the quiz, the H5P, every link and interactive part, the page at a narrow
    width). What the tools can't try, ask the teacher to try, with its link. If something fails,
    fix it in `drafts/` and replace it (another approval).
-4. **Note it in `course/drafts`** (`knowledge_edit`): one list item per hidden draft, with its
-   link and what's pending.
+4. **Note it in `course/drafts`** (`knowledge_edit`): one list item per hidden draft, starting
+   with `` `hidden` `` (the register's format is in `activity-lifecycle`), with its link and
+   what's pending.
 5. **Report what you tested, and ask to show it**: showing it is a publication with its own
    approval. The same change on several drafts (a whole unit) can share one approval if the
-   summary names each. Once shown, take it out of `course/drafts` and do pass 3 below as a
-   student would see it.
+   summary names each. Once shown, mark its item `` `served` `` with the date (a later session
+   tells the teacher and takes it off) and do pass 3 below as a student would see it.
 
 A draft the teacher doesn't want shown yet stays hidden and in `course/drafts`: say so when you
 finish, and offer it again when the teacher next asks what's pending.

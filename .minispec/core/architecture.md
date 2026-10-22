@@ -16,9 +16,10 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 ## Key pieces
 
 - `src/cli.ts` — `bin` entry and subcommand dispatch; bare `miyagi` asks run/chat; `run`/`chat` in a folder that isn't a workspace yet run the setup wizard, save and exit (the session starts from its own command, so the full-screen chat never follows the wizard's prompts); `init` offers `explore` afterwards (a failure only warns).
-- `src/agent.ts` — `runSession()` and the `AgentSpec`: Playwright MCP, disallowed tools, approval and manual-login texts, `buildSubagents()`. A chat's session is opened per run folder.
+- `src/agent.ts` — `runSession()` and the `AgentSpec`: disallowed tools, the extension gate, plan mode (`drafts/<slug>/plan.md`), approval texts, `buildSubagents()`. A chat's session is opened per run folder.
+- `src/activityRegister.ts` — the register of activities in progress (`course/drafts`, activity-lifecycle): counts its items by phase (`planning`, `building`, `hidden`, `served`; an item without one is `hidden`) for the end of the session and the chat's greeting, and says which file plan mode may write.
 - `src/drafts/` — the drafts toolbox, in-process MCP server `drafts` in run/chat: list, mkdir, copy, move, delete, download, fetch_site, unzip, zip, pdf, info. Every path resolved inside drafts/ (`paths.ts`: no "..", absolute paths or links out), http(s) URLs only, size limits from `agent.draftsLimits`, zip-slip and zip-bomb checks, nothing executed; the site fetch and the PDF use @playwright/mcp's playwright-core with the system Chrome, headless.
-- `src/uploadGate.ts` + `src/validators/` — the upload gate: before `browser_file_upload`/`browser_drop`, a `.gift` or `.html` file is checked with code (GIFT syntax, answers, numbers, names, lost indentation; HTML viewport, lang, missing local files); errors deny the upload with the lines, warnings reach the model. Every mode.
+- `src/uploadGate.ts` + `src/validators/` — the upload gate: before moodle-teacher's `import_questions`, its GIFT is checked with code (syntax, answers, numbers, names, lost indentation); errors deny the import with the lines, warnings reach the model. Every mode.
 - The publish gate (ADR-008) is agent-kit's guided gate for extensions' tools (`extensionGate` in the spec, ADR-021): a moodle-teacher tool that isn't read-only asks the teacher unless `request_human_approval` was just approved; a destructive one always asks.
 - `src/menu.ts` — the `init` wizard, run-kind and mode prompts.
 - `src/workspace.ts` — `config.json` schema (a moodle-agent teacher aula; `agent.role: "student"` rejected), paths, `toSessionConfig()`, legacy migration, `interfaceLanguage()` (agent-kit's interface language from `agent.language`; unknown → the system's).
@@ -55,7 +56,7 @@ agent-kit's `knowledge` plugin adds 4 skills and 3 commands.
 
 agent-kit's knowledge base, reached only through its `knowledge_*` tools over its file store (agent-kit ADR-024), plus the course layer: the page types in `src/knowledgeTypes.ts` and the rules in `prompts/system/course-knowledge.md`. Pages are `type/slug` ids; the index and backlinks are kept by the kit.
 
-- `course/<slug>` (root files with `type: course`): `orientation`, `course-map`, `moodle-capabilities`, `teaching-plan` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading), `progress` and `course-audit` (dated entries), `drafts` (resources still hidden). `tagCoursePages()` gives older root pages that type at the start of every session.
+- `course/<slug>` (root files with `type: course`): `orientation`, `course-map`, `moodle-capabilities`, `teaching-plan` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading), `progress` and `course-audit` (dated entries), `drafts` (the activities in progress, by phase). `tagCoursePages()` gives older root pages that type at the start of every session.
 - `synthesis/course-alignment` — dated comparisons of the course with the plan.
 - `topic/<slug>`, `activity/<slug>` — criteria, rubric, questions; a quiz's GIFT file is in `drafts/<slug>/`.
 - The `researcher` and `pedagogy-reviewer` subagents read pages with `knowledge_index`, `knowledge_search` and `knowledge_read`.

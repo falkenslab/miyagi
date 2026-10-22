@@ -84,6 +84,14 @@ Diseña y monta el resto de actividades para que funcionen como deben: talleres 
 
 - **Pídeselo así:** *«Añade un taller de coevaluación para la práctica final, con la rúbrica de la tarea.»*
 
+### 🍳 `activity-lifecycle` · La vida de una actividad
+
+Para algo nuevo y complejo (el proyecto de un tema, una actividad gamificada, un escape room, un paquete SCORM, un taller), te propone ir por fases en vez de construirlo de golpe: primero **un plan** que acordáis (objetivos y criterios, qué hacen y entregan los alumnos, cómo se evalúa, las piezas del aula, materiales, tiempos y riesgos), revisado por su ayudante de pedagogía; luego **lo construye** y te dice en qué se aparta del plan y por qué; después **lo prueba oculto** en el aula; y por último **lo sirve** a los alumnos. Cada paso de una fase a la siguiente lleva tu aprobación. Si no lo quieres, lo construye como siempre; para una errata o una pregunta suelta no lo propone.
+
+Cada actividad en marcha queda apuntada con su fase en la página `course/drafts`. Al cerrar la sesión ves cuántas hay en cada una («En el horno: 1 en plan, 2 cocinándose, 1 probándose oculto»), y el siguiente chat te lo recuerda al saludar.
+
+- **Pídeselo así:** *«Prepara un escape room de SQL para el tema 3, con el proceso completo.»* Si escribes `/plan` antes, el plan lo escribe en modo plan, sin poder tocar nada más.
+
 ### 🐳 `practice-testing` · Probar las prácticas en Docker
 
 Comprueba una práctica **ejecutándola de verdad** en un laboratorio de Docker: sigue el enunciado como lo haría un alumno antes de publicarlo, o ejecuta la entrega de un estudiante al corregirla y usa el resultado como prueba. Es para cursos de informática (Docker, Linux, programación, bases de datos) y solo aparece si tienes instalada la extensión docker-lab (ver [Prácticas en Docker](../avanzado/practicas-docker.md)).

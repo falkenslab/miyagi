@@ -20,7 +20,7 @@ export const COURSE_PAGE_TYPES: PageType[] = [
     description:
       "One of the course's own pages, only these slugs: orientation (grading, deadlines, your real capabilities), course-map (Moodle URLs of what you've visited), " +
       "moodle-capabilities (what this Moodle supports), teaching-plan (the course's only plan: objectives O1…, criteria CE…, units, methodology, grading), " +
-      "progress and course-audit (dated histories: add an entry, never rewrite earlier ones), drafts (resources still hidden in Moodle, one list item each).",
+      "progress and course-audit (dated histories: add an entry, never rewrite earlier ones), drafts (the activities in progress, one list item each, its phase first in backticks: `planning`, `building`, `hidden`, `served`).",
     template: `<What this page holds for the course, in one or two sentences.>
 
 ## <First section>

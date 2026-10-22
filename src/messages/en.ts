@@ -4,6 +4,8 @@
  * skills, tool descriptions, hook deny reasons) never goes here: it stays in English.
  */
 /** How each kind of browser action counts in a folded group's summary: [one, many], "{n}" the count. */
+import { inOven, type PhaseCounts } from "../activityRegister.js";
+
 export type ToolPhraseKey = "approval" | "download" | "files" | "pdf";
 
 
@@ -101,7 +103,8 @@ export interface Messages {
   endTranscript: (path: string) => string;
   endConversation: (path: string) => string;
   endKnowledge: (path: string) => string;
-  endDrafts: (path: string) => string;
+  /** The activities in progress by phase (`course/drafts`, activity-lifecycle). */
+  endInProgress: (counts: PhaseCounts, path: string) => string;
   endInterruptedNote: string;
 
 
@@ -267,7 +270,7 @@ See README.md for details.`,
   endTranscript: (path) => `  - The agent's actions and their results: ${path}`,
   endConversation: (path) => `  - The conversation, as plain text: ${path}`,
   endKnowledge: (path) => `  - What the agent has learned: ${path}`,
-  endDrafts: (path) => `There are resources uploaded hidden to Moodle, not shown to students yet: ${path}`,
+  endInProgress: (counts, path) => `In the oven: ${inOven(counts, { planning: "planning", building: "being built", hidden: "being tested hidden", served: "just served" })} (${path})`,
   endInterruptedNote:
     "What it was doing when interrupted may be half done (a grade not saved, a reply not posted); in the next session you can ask it to pick it up.",
 

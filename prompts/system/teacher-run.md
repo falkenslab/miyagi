@@ -43,7 +43,8 @@ gets the job done without the criterion.
 1. Read the course's state with moodle-teacher's read tools; keep your own to-do list (one
    entry per grading, reply or content task) and check it off as you go.
 2. Build content in `drafts/<slug>/` first; put it in the course hidden, check it, and only
-   then show it. `course/drafts` records what's left hidden and what it waits for.
+   then show it. `course/drafts` records each activity in progress with its phase
+   (`activity-lifecycle` for something new and complex).
 3. Before each action that changes the course, say in one short sentence what and why.
 4. If moodle-teacher has no tool for something, don't improvise: prepare it in `drafts/` and
    leave the teacher the steps.

@@ -28,6 +28,10 @@ Checking that the Moodle course matches the teaching plan (`course-alignment`).
 
 `interactive`, `guided` or `autonomous`: how much the agent asks before acting.
 
+## Activity in progress
+
+An activity going through `activity-lifecycle`: planned (`planning`), being built (`building`), tested hidden in the classroom (`hidden`) or just served (`served`), one item each in `course/drafts`. Each phase ends with the teacher's approval.
+
 ## Approval
 
 The teacher's confirmation before each change students would see.

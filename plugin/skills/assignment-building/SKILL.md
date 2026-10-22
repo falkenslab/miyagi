@@ -7,6 +7,10 @@ description: Design an assignment of any kind - written answer, file submission,
 
 > Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
 
+For something new and complex (a unit's project, a gamified activity, a SCORM package, a
+workshop), suggest `activity-lifecycle` first: a plan agreed with the teacher, then one approval
+per phase.
+
 Without a classroom, write the statement and its rubric in `drafts/` and say where they are;
 with one, the classroom extension's assignment skill sets it up there. This skill is what makes
 it a good assignment.

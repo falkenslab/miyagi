@@ -7,6 +7,10 @@ description: Design the classroom's other activities - workshop (peer assessment
 
 > Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
 
+For something new and complex (a unit's project, a gamified activity, a SCORM package, a
+workshop), suggest `activity-lifecycle` first: a plan agreed with the teacher, then one approval
+per phase.
+
 Without a classroom, design it in the unit's plan or in `drafts/` and say where it is; with one,
 the classroom extension's skill for other activities sets it up so it behaves this way. This
 skill is what makes each type work.

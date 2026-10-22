@@ -18,6 +18,7 @@ npm run build
 node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
 node .claude/skills/verify/check-neutral-skills.mjs
+node .claude/skills/verify/check-activity-register.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
 node .claude/skills/verify/check-file-scope.mjs
@@ -42,6 +43,10 @@ update the docs site (`update-docs`; `check-docs.mjs` catches a missing skill) a
 `check-neutral-skills.mjs` fails if a skill or command in `plugin/` names Moodle, a Moodle URL, a
 moodle-mcp tool or a browser action: miyagi's skills say the teaching act, the classroom
 extension's skills say how (ADR-021).
+
+`check-activity-register.mjs` counts the phases of sample `course/drafts` pages (an old one
+without phases counts as hidden), checks the end-of-session line and which paths plan mode
+lets the agent write (only `drafts/<slug>/plan.md`). Change it with the register's format.
 
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT

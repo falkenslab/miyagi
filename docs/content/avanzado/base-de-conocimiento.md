@@ -57,7 +57,7 @@ knowledge/
   progress.md             course/progress: historial de revisiones del progreso de la clase
   course-audit.md         course/course-audit: historial de auditorías del curso
   teaching-plan.md        course/teaching-plan: la programación didáctica (objetivos O1…, criterios CE…, temas, metodología, calificación)
-  drafts.md               course/drafts: lo subido oculto a Moodle que los alumnos aún no ven
+  drafts.md               course/drafts: las actividades en marcha, cada una con su fase (en plan, construyéndose, oculta, servida)
   topics/<tema>.md        topic/<tema>: una página por tema o sección (objetivos, plan, contenido creado, dudas del foro)
   activities/<act>.md     activity/<act>: una página por actividad evaluable (criterios aplicados, rúbrica, preguntas)
 ```
@@ -88,7 +88,7 @@ Algunas reglas que sigue:
 - Nunca renombra, mueve ni borra una página: si queda superada, la marca con `knowledge_supersede` y enlaza a la nueva; si estaba mal, la retira con `knowledge_retire`, después de preguntarte.
 - Las contradicciones no se sobrescriben: anota las dos versiones, cada una con su fuente.
 - `course/progress`, `course/course-audit` y `synthesis/course-alignment` son historiales: añade una entrada con fecha cada vez y nunca reescribe las anteriores. La fecha la toma del reloj del sistema (`current_time`), y los plazos los calcula con `date_math`, nunca de memoria.
-- `course/drafts` no es un historial: solo lista lo que sigue oculto, y quita cada elemento cuando se muestra o lo descartas.
+- `course/drafts` no es un historial: cada actividad cambia de fase en su misma línea, y sale cuando la descartas o cuando una sesión posterior te ha dicho que ya está servida ([Las actividades en marcha](aprobaciones-y-borradores.md#las-actividades-en-marcha)).
 - Cada página de tema y de actividad enlaza a los resúmenes en los que se basa.
 - El contenido de las páginas va en el idioma en que hablas con él; los identificadores, en minúsculas y con guiones.
 

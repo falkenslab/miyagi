@@ -7,6 +7,10 @@ description: Write or edit the learning content of a course - notes as a page or
 
 > Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
 
+For something new and complex (a unit's project, a gamified activity, a SCORM package, a
+workshop), suggest `activity-lifecycle` first: a plan agreed with the teacher, then one approval
+per phase.
+
 Without a classroom, build it in `drafts/` and say where it is; with one, it also goes into the
 classroom, hidden first (`publish-check`).
 
