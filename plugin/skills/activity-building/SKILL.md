@@ -5,6 +5,8 @@ description: Design the classroom's other activities - workshop (peer assessment
 
 # Designing other activities
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Without a classroom, design it in the unit's plan or in `drafts/` and say where it is; with one,
 the classroom extension's skill for other activities sets it up so it behaves this way. This
 skill is what makes each type work.

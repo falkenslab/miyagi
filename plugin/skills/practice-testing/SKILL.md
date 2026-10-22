@@ -6,6 +6,8 @@ requires: [sandbox, run-and-verify]
 
 # Checking a practical activity by running it
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 A practical activity that doesn't work as written wastes every student's afternoon, and a
 submission graded "by reading" gets code that doesn't run marked as correct. Run things instead
 of assuming. This skill is what to check and how to use the result; how to build and run a lab is

@@ -5,6 +5,8 @@ description: Run the course forum as a teacher - decide when to step in and when
 
 # The course forum
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 A forum works when students talk to each other and the teacher steps in where it matters. Two

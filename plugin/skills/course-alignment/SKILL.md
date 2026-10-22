@@ -5,6 +5,8 @@ description: Check that the course in the classroom matches the teaching plan - 
 
 # Aligning the course with the teaching plan
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 The teaching plan says what should happen; the course in the classroom is what students actually get. This

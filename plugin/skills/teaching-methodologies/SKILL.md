@@ -5,6 +5,8 @@ description: Choose and apply a teaching methodology to a unit or activity - pro
 
 # Teaching methodologies
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 What this skill says about the classroom applies to the connected one, if any; without one, keep it in the plan or build it in `drafts/`.
 
 A methodology is a decision about how students learn, not a label to put on an activity. Pick it

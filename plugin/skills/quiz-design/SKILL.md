@@ -5,6 +5,8 @@ description: Design a quiz and write its questions - settings that fit what the 
 
 # Designing a quiz and its questions
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Without a classroom, write the questions in `drafts/` and say where they are; with one, the
 classroom extension's quiz skill builds the quiz, imports the questions and orders them. This
 skill is what the quiz is for and what makes its questions good.

@@ -5,6 +5,8 @@ description: Build one unit (a topic, a section) inside an existing course in th
 
 # Building one unit
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 A unit has to fit the course it lands in: same style and level as the other units, dates that

@@ -5,6 +5,8 @@ description: Get enough context on the classroom's course before doing anything 
 
 # Getting oriented in the course
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 This happens **once**, near the start (it belongs in the knowledge base, not in the current

@@ -5,6 +5,8 @@ description: Write or edit the learning content of a course - notes as a page or
 
 # Writing learning content
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Without a classroom, build it in `drafts/` and say where it is; with one, it also goes into the
 classroom, hidden first (`publish-check`).
 

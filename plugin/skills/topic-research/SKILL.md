@@ -5,6 +5,8 @@ description: Research a subject on the web when the course's material isn't enou
 
 # Researching a topic
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Ingesting (`knowledge-ingest`) works on what the teacher gave you in `sources/`. Researching goes
 out to find what isn't there — and everything found that way is outside the course: it's
 labelled as such, cited, and never treated as the teacher's word.

@@ -5,6 +5,8 @@ description: The last check before anything goes out to students, and the checkl
 
 # Checking before publishing
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Needs a connected classroom; without one, build what you can in `drafts/` and say so.
 
 Whatever skill produced the content (`resource-authoring`, `assignment-building`,

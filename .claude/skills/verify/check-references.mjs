@@ -1,5 +1,6 @@
 // Fails if a skill, command or prompt names a skill or subagent that doesn't exist - the
-// kind of dangling reference a merge or rename leaves behind.
+// kind of dangling reference a merge or rename leaves behind - or a skill lacks the line that
+// restates the reply language.
 // Usage (from the repo root): node .claude/skills/verify/check-references.mjs
 import fs from "node:fs";
 import path from "node:path";
@@ -36,5 +37,10 @@ for (const cmd of fs.readdirSync(path.join(root, "plugin/commands"))) {
     if (!skills.has(name)) { console.log(`plugin/commands/${cmd}: applies missing skill \`${name}\``); problems++; }
   }
 }
-console.log(problems === 0 ? `ok   ${skills.size} skills, every reference resolves` : `\n${problems} dangling reference(s)`);
+// Every skill restates the reply language where the drift starts: right after it's loaded (#26).
+for (const skill of skills) {
+  const text = fs.readFileSync(path.join(root, "plugin/skills", skill, "SKILL.md"), "utf8");
+  if (!/^> Talk to the human in the conversation's language/m.test(text)) { console.log(`plugin/skills/${skill}: no reply-language line under its title`); problems++; }
+}
+console.log(problems === 0 ? `ok   ${skills.size} skills, every reference resolves, each restates the reply language` : `\n${problems} dangling reference(s)`);
 process.exit(problems === 0 ? 0 : 1);

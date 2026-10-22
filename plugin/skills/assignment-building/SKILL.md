@@ -5,6 +5,8 @@ description: Design an assignment of any kind - written answer, file submission,
 
 # Designing an assignment
 
+> Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
+
 Without a classroom, write the statement and its rubric in `drafts/` and say where they are;
 with one, the classroom extension's assignment skill sets it up there. This skill is what makes
 it a good assignment.
