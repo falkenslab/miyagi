@@ -6,7 +6,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 const load = (file) => import(pathToFileURL(path.join(process.cwd(), "dist", file)).href);
-const { countPhases, isActivityPlanFile } = await load("activityRegister.js");
+const { countPhases, isActivityPlanFile, readPhaseCounts } = await load("activityRegister.js");
 const { es } = await load("messages/es.js");
 
 const PAGES = [
@@ -32,6 +32,29 @@ for (const [name, text, expected] of PAGES) {
   }
 }
 
+// A plan written in plan mode, before the page could be edited, counts as planning; a registered one doesn't twice.
+const fs = await import("node:fs");
+const os = await import("node:os");
+const ws = fs.mkdtempSync(path.join(os.tmpdir(), "register-"));
+for (const slug of ["escape-room", "proyecto-web"]) {
+  fs.mkdirSync(path.join(ws, "drafts", slug), { recursive: true });
+  fs.writeFileSync(path.join(ws, "drafts", slug, "plan.md"), "# Plan\n");
+}
+fs.mkdirSync(path.join(ws, "drafts", "sin-plan"), { recursive: true });
+fs.mkdirSync(path.join(ws, "knowledge"));
+fs.writeFileSync(path.join(ws, "knowledge", "drafts.md"), "- `building` Proyecto web — plan: drafts/proyecto-web/plan.md\n");
+const counted = readPhaseCounts(ws);
+if (counted?.planning !== 1 || counted?.building !== 1) {
+  failures++;
+  console.log(`FAIL unregistered plan: ${JSON.stringify(counted)}, expected 1 planning and 1 building`);
+}
+fs.rmSync(path.join(ws, "knowledge", "drafts.md"));
+if (readPhaseCounts(ws)?.planning !== 2) {
+  failures++;
+  console.log("FAIL plans without a register page: expected 2 planning");
+}
+fs.rmSync(ws, { recursive: true, force: true });
+
 const line = es.endInProgress({ planning: 1, building: 1, hidden: 1, served: 0 }, "drafts.md");
 if (!line.startsWith("En el horno: 1 en plan, 1 cocinándose, 1 probándose oculto")) {
   failures++;
@@ -56,7 +79,7 @@ for (const [file, expected] of PLAN_FILES) {
 
 console.log(
   failures === 0
-    ? `ok   ${PAGES.length} register pages counted, end line, ${PLAN_FILES.length} plan-mode paths`
+    ? `ok   ${PAGES.length} register pages counted, unregistered plans, end line, ${PLAN_FILES.length} plan-mode paths`
     : `${failures} activity-register check(s) failed`,
 );
 process.exitCode = failures === 0 ? 0 : 1;

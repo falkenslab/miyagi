@@ -56,7 +56,7 @@ import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
 import { LOGO } from "./theme.js";
 import { COURSE_PAGE_TYPES, tagCoursePages } from "./knowledgeTypes.js";
-import { isActivityPlanFile, readPhaseCounts, registerPath, type PhaseCounts } from "./activityRegister.js";
+import { inOven, isActivityPlanFile, readPhaseCounts, registerPath, type PhaseCounts } from "./activityRegister.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -410,9 +410,9 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
 function inProgressLine(counts: PhaseCounts | undefined): string {
   if (!counts) return "`course/drafts` lists nothing in progress: say nothing about it.";
   return (
-    `\`course/drafts\` lists activities in progress: ${counts.planning} planning, ${counts.building} being built, ` +
-    `${counts.hidden} being tested hidden, ${counts.served} just served. Read it and say in one line how many are in each phase, ` +
-    "naming them; tell the ones just served are out, then take them off the page (activity-lifecycle)."
+    `\`course/drafts\` lists activities in progress: ${inOven(counts, { planning: "planning", building: "being built", hidden: "being tested hidden", served: "just served" })}. ` +
+    "Read it and say in one line how many are in those phases (only those), naming them; tell the ones just served are out, " +
+    "then take them off the page (activity-lifecycle)."
   );
 }
 

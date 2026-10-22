@@ -43,7 +43,11 @@ In plan mode if you're in it (the teacher turns it on with `/plan` or Shift+Tab;
 one line, when you start): there you can only read and write the plan file. Out of it, write
 only the plan anyway until the teacher approves it.
 
-Write `drafts/<slug>/plan.md`:
+Write `drafts/<slug>/plan.md` with `Write` **before** presenting it, in plan mode too: it's the
+one file plan mode lets you write, so the plan survives the session and the register can link
+it. `present_plan` shows that file's content; it doesn't replace it (a real session kept the
+plan only in `present_plan` and wrote it after the approval, `tests/2026-10-22T22-14-ciclo-actividad/`).
+It holds:
 
 - **Objectives** and the criteria it serves (from `course/teaching-plan`, by their codes).
 - **What students do and produce**, step by step, with the time each step takes.
@@ -57,7 +61,9 @@ Write `drafts/<slug>/plan.md`:
 Ask `pedagogy-reviewer` to review it, and address or answer each point of its critique in the
 plan itself. Iterate with the teacher. Then ask for the yes to build: `present_plan` in plan
 mode, otherwise `request_human_approval`, saying the plan phase ends and what building means.
-Add the item as `planning` as soon as the plan file exists.
+Add the item as `planning` as soon as you can edit the knowledge base: plan mode doesn't let you,
+and until then a `plan.md` the page doesn't mention already counts as `planning` at the end of
+the session.
 
 ## 2. Build (`building`)
 

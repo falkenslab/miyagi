@@ -144,7 +144,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   endTranscript: (path) => `  - Acciones del agente y sus resultados: ${path}`,
   endConversation: (path) => `  - La conversación, en texto plano: ${path}`,
   endKnowledge: (path) => `  - Lo que el agente ha aprendido: ${path}`,
-  endInProgress: (counts, path) => `En el horno: ${inOven(counts, { planning: "en plan", building: "cocinándose", hidden: "probándose oculto", served: "servido" })} (${path})`,
+  endInProgress: (counts, path) => `En el horno: ${inOven(counts, { planning: "en plan", building: "cocinándose", hidden: "probándose oculto", served: "recién servido" })} (${path})`,
   endInterruptedNote:
     "Lo que estaba haciendo al interrumpir puede haber quedado a medias (una nota sin guardar, una respuesta sin publicar); en la próxima sesión puedes pedirle que lo retome.",
 
