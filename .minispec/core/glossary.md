@@ -28,6 +28,14 @@ Checking that the Moodle course matches the teaching plan (`course-alignment`).
 
 `interactive`, `guided` or `autonomous`: how much the agent asks before acting.
 
+## Official curriculum (currículo oficial)
+
+The state provision (BOE) and the region's that set what a module or subject teaches and assesses, kept verbatim and dated in `curriculum/` pages (`official-curriculum`), only with the teacher's yes.
+
+## RA, CE, módulo profesional
+
+In FP: a *módulo profesional* is a vocational module of a title; its *resultados de aprendizaje* (RA1, RA2…) are the learning outcomes, each assessed by *criterios de evaluación* (CE1a, CE1b…). Not the same as the plan's own criteria `CE…` when there's no official curriculum.
+
 ## Activity in progress
 
 An activity going through `activity-lifecycle`: planned (`planning`), being built (`building`), tested hidden in the classroom (`hidden`) or just served (`served`), one item each in `course/drafts`. Each phase ends with the teacher's approval.

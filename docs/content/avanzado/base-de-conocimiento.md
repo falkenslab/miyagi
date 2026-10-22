@@ -60,7 +60,11 @@ knowledge/
   drafts.md               course/drafts: las actividades en marcha, cada una con su fase (en plan, construyéndose, oculta, servida)
   topics/<tema>.md        topic/<tema>: una página por tema o sección (objetivos, plan, contenido creado, dudas del foro)
   activities/<act>.md     activity/<act>: una página por actividad evaluable (criterios aplicados, rúbrica, preguntas)
+  curriculum/provisions.md curriculum/provisions: las normas del currículo oficial, con su fecha, enlace, vigencia y día de consulta
+  curriculum/<módulo>.md  curriculum/<módulo>: sus resultados de aprendizaje y criterios, tal cual y con la numeración oficial
 ```
+
+Las páginas `curriculum/` solo existen si le pediste buscar el currículo oficial (`official-curriculum`). Cada una lleva en su cabecera `url`, `date` (la fecha de la norma) y `consulted` (cuándo la consultó), y separa siempre el texto literal de sus comentarios.
 
 En la raíz de `knowledge/` solo van esas siete páginas `course/`, con `type: course` en su cabecera. Una base escrita con una versión anterior de miyagi se abre tal cual: al empezar cada sesión, miyagi añade `type: course` a las que no lo tienen, sin tocar el resto.
 

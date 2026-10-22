@@ -105,10 +105,23 @@ if (names.length > 0) {
   named.slice(0, 15).forEach((l) => console.log(`  ${l}`));
 }
 
+// The official curriculum is quoted and dated: every curriculum/ page says where it comes from
+// and when it was consulted (official-curriculum).
+const undated = pages
+  .filter((f) => rel(f).startsWith("curriculum/"))
+  .filter((f) => {
+    const front = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text.get(f))?.[1] ?? "";
+    return !["url", "date", "consulted"].every((field) => new RegExp(`^${field}:\\s*\\S`, "m").test(front));
+  });
+if (undated.length > 0) {
+  console.log(`curriculum pages without url, date or consulted: ${undated.length}`);
+  undated.forEach((f) => console.log(`  ${rel(f)}`));
+}
+
 // Histories keep dated entries instead of being rewritten.
 for (const history of ["progress.md", "course-audit.md"]) {
   const t = text.get(path.join(kb, history));
   if (t) console.log(`${history}: ${(t.match(/\d{4}-\d{2}-\d{2}/g) ?? []).length} dated entries`);
 }
 
-if (broken.length > 0 || unindexed.length > 0 || named.length > 0 || strayRoot.length > 0 || untyped.length > 0) process.exit(1);
+if (broken.length > 0 || unindexed.length > 0 || named.length > 0 || strayRoot.length > 0 || untyped.length > 0 || undated.length > 0) process.exit(1);

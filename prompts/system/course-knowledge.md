@@ -17,6 +17,9 @@ topic/<slug>                one hub page per topic/unit/block of the course: its
                             recurring doubts from the class
 activity/<slug>             one page per evaluable activity: grading criteria applied, its
                             rubric, questions (the GIFT file itself is in drafts/)
+curriculum/provisions       the official provisions found with the teacher's yes, dated and checked
+                            in force (official-curriculum)
+curriculum/<module>         its learning outcomes and criteria verbatim, with the official numbering
 course/drafts               the register of activities in progress (activity-lifecycle): one list
                             item each, its phase first in backticks (`planning`, `building`,
                             `hidden`, `served`), then its name, links and what it needs next

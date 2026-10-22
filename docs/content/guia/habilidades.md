@@ -122,8 +122,17 @@ Elige y aplica una metodología que encaje con lo que se quiere aprender, y la m
 
 Te ayuda a escribir o revisar la programación didáctica del curso (contexto, objetivos, contenidos y temas, metodología, evaluación y calificación, temporalización, atención a la diversidad, recursos) a partir de tu material y tus decisiones. Te pregunta lo que solo tú puedes decidir, como las horas, el calendario o los pesos, y marca como propuesta lo que no hayas decidido. Queda en sus apuntes, enlazada con cada tema. No se publica en Moodle salvo que se lo pidas.
 
+No busca normativa por su cuenta: en el chat te ofrece una vez buscar el currículo oficial, y solo lo busca si le dices que sí. Si lo tiene, la programación usa sus resultados de aprendizaje y criterios con su numeración oficial (RA1, CE1a…), copiados tal cual, y pondera la nota por resultado de aprendizaje.
+
 - **Pídeselo así:** *«Escribe la programación a partir del borrador del departamento que te dejé en sources.»*
 - **Atajo:** `/miyagi:teaching-plan`
+
+### 📜 `official-curriculum` · Buscar el currículo oficial
+
+Busca el currículo oficial de tu módulo o materia: el real decreto del BOE y la orden o el decreto de tu comunidad autónoma (BOC, BOJA, DOGC, BOCM, DOGV…), primero la versión consolidada, y comprueba que siga en vigor. Guarda los originales en `sources/curriculum/` y, en sus apuntes, cada norma con su fecha, su enlace y el día en que la consultó, y los resultados de aprendizaje y criterios de evaluación **tal cual**, con su numeración oficial. Nunca inventa ni completa un criterio, ni mezcla comunidades; si no lo encuentra, te lo dice. Solo busca si se lo pides o le dices que sí.
+
+- **Pídeselo así:** *«Busca el currículo oficial de Bases de Datos de DAM en Canarias para este curso.»*
+- **Atajo:** `/miyagi:curriculum`
 
 ### 🎯 `course-alignment` · Comprobar que el curso sigue la programación
 

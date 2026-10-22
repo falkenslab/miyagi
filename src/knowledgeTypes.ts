@@ -50,6 +50,25 @@ export const COURSE_PAGE_TYPES: PageType[] = [
 - <Recurring doubts of the class and the answer given, never who asked.>`,
   },
   {
+    type: "curriculum",
+    dir: "curriculum",
+    indexSection: "Curriculum",
+    description:
+      "The official curriculum, found with the teacher's yes (official-curriculum): curriculum/provisions (each provision: type and number, date, gazette, URL, in force and how it was checked, date consulted, state or regional) " +
+      "and curriculum/<module> (its learning outcomes and criteria verbatim with the official numbering RA1, CE1a…, or competences, criteria and basic knowledge; hours; basic contents). " +
+      "Verbatim text marked and kept apart from summary. Fields: url (the provision), date (its date), consulted (from current_time).",
+    template: `<Which provision(s) this page quotes, and for which stage, title or subject, region and school year.>
+
+## <Learning outcome or block, with its official number>
+> <Verbatim text, as the gazette says it.>
+
+Source: <provision, article or annex> - [Provisions](curriculum/provisions)
+
+## Notes
+- <Your summary or comments, never mixed with the quoted text.>`,
+    indexFields: ["consulted"],
+  },
+  {
     type: "activity",
     dir: "activities",
     indexSection: "Activities",
