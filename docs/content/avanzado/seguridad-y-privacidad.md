@@ -44,11 +44,11 @@ Trabaja con tu cuenta, a través de las herramientas fijas de moodle-teacher, as
 
 - Sus instrucciones le prohíben borrar lo que no haya creado él, cambiar matrículas o grupos, tocar la configuración de la plataforma y salir de tu curso.
 - Algunas herramientas de moodle-teacher están bloqueadas en todas las sesiones, en cualquier modo, porque nunca son trabajo del asistente: matricular o dar de baja, cambiar roles, crear grupos o cambiar quién está en ellos, mandar mensajes privados, reiniciar el curso y copiarlo a otro curso o sitio.
-- En `guided`, ninguna herramienta de moodle-teacher que cambie algo se ejecuta sin tu aprobación: un [gancho del programa](aprobaciones-y-borradores.md) lo hace cumplir. Borrar, quitar, reiniciar o restaurar te lo pregunta siempre otra vez.
+- En `guided`, ninguna herramienta de moodle-teacher que cambie algo se ejecuta sin tu aprobación: un [gancho del programa](aprobaciones-y-borradores.md) lo hace cumplir. Borrar, quitar o reiniciar te lo pregunta siempre moodle-teacher, en cada llamada, aunque ya lo hayas aprobado.
 - Lo que moodle-teacher no sabe hacer, no lo intenta por otro camino: te lo dice, lo prepara en `drafts/` y te da los pasos.
 - Todo lo nuevo se sube oculto y se prueba antes de mostrarlo.
 
-El modo `autonomous` quita las aprobaciones: úsalo solo en cursos de prueba.
+El modo `autonomous` quita las aprobaciones (salvo borrar, que en ese modo nunca se hace): úsalo solo en cursos de prueba.
 
 ## Los datos de tus alumnos
 

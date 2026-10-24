@@ -165,9 +165,10 @@ function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSess
     // And docker-lab's tools on the computer's whole Docker: only its labs, under their policy (#45).
     disallowedTools: [...NEVER_MOODLE_TOOLS.map((tool) => `mcp__moodle__${tool}`), ...NEVER_DOCKER_TOOL_NAMES],
     // The approval before an extension's tool that changes something is the kit's guided gate
-    // (ADR-021): a deletion always asks (moodle-mcp's destructiveHint), and an approved
-    // request_human_approval covers the batch until the teacher's next message. Autonomous
-    // publishes by design, so it lets them run.
+    // (ADR-021): moodle-teacher's read-only tools (its manifest) never ask, a deletion is asked by
+    // moodle-mcp itself on every call (its serverConfirmTools), and an approved request_human_approval
+    // covers the rest of the batch until the teacher's next message. Autonomous publishes by design,
+    // so it lets them run; the server's question about a deletion is declined there, so nothing is deleted.
     extensionGate: { autonomous: "allow" },
     // Plan mode (the first phase of activity-lifecycle, #17): the plan of an activity is its
     // drafts/<slug>/plan.md, the only file written while the teacher reviews it; the drafts
