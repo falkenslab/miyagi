@@ -6,8 +6,9 @@ import path from "node:path";
  * (`knowledge/drafts.md`), one list item per activity, its phase first in backticks
  * (`activity-lifecycle`, #17). Pages from before the phases listed only drafts hidden in the
  * classroom, so an item without a phase counts as `hidden`. A plan written in plan mode, where the
- * knowledge base can't be edited, isn't in the page yet: a `drafts/<slug>/plan.md` the page doesn't
- * mention counts as `planning`.
+ * knowledge base can't be edited, isn't in the page yet: a `drafts/<slug>/` holding only its
+ * `plan.md` (nothing built yet) that the page doesn't mention counts as `planning`. A built or
+ * served activity keeps its plan next to what was built, and once off the page it isn't counted.
  */
 
 export const PHASES = ["planning", "building", "hidden", "served"] as const;
@@ -33,11 +34,12 @@ export function registerPath(workspaceDir: string): string {
   return path.join(workspaceDir, "knowledge", "drafts.md");
 }
 
-/** The slugs of `drafts/<slug>/plan.md` files. */
+/** The slugs of `drafts/<slug>/` folders holding only a `plan.md`. */
 function plannedSlugs(draftsDir: string): string[] {
   try {
     return readdirSync(draftsDir, { withFileTypes: true })
       .filter((entry) => entry.isDirectory() && existsSync(path.join(draftsDir, entry.name, "plan.md")))
+      .filter((entry) => readdirSync(path.join(draftsDir, entry.name)).length === 1)
       .map((entry) => entry.name);
   } catch {
     return [];

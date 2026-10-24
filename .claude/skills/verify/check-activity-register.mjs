@@ -41,6 +41,10 @@ for (const slug of ["escape-room", "proyecto-web"]) {
   fs.writeFileSync(path.join(ws, "drafts", slug, "plan.md"), "# Plan\n");
 }
 fs.mkdirSync(path.join(ws, "drafts", "sin-plan"), { recursive: true });
+// Served and off the page: its plan stays next to what was built, and isn't a plan in progress.
+fs.mkdirSync(path.join(ws, "drafts", "servida"), { recursive: true });
+fs.writeFileSync(path.join(ws, "drafts", "servida", "plan.md"), "# Plan\n");
+fs.writeFileSync(path.join(ws, "drafts", "servida", "leccion.md"), "# Lección\n");
 fs.mkdirSync(path.join(ws, "knowledge"));
 fs.writeFileSync(path.join(ws, "knowledge", "drafts.md"), "- `building` Proyecto web — plan: drafts/proyecto-web/plan.md\n");
 const counted = readPhaseCounts(ws);
