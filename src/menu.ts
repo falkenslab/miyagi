@@ -78,10 +78,10 @@ function classroomOf(answers: WizardAnswers, label: string, description: string)
 }
 
 /** Installs or extends moodle-teacher for the classroom; a failure leaves the workspace as it is and says how to retry. */
-export async function connectClassroom(workspaceDir: string, url: string): Promise<void> {
+export async function connectClassroom(workspaceDir: string, url: string, courseId: string): Promise<void> {
   console.log(ui.dim(t().connectingMoodleTeacher));
   try {
-    await connectMoodleTeacher(workspaceDir, url);
+    await connectMoodleTeacher(workspaceDir, url, courseId);
     console.log(ui.success(t().moodleTeacherConnected));
   } catch (error) {
     console.log(ui.warn(`${error instanceof Error ? error.message : String(error)} ${t().moodleTeacherRetry}`));
@@ -147,7 +147,7 @@ export function promptInitWorkspace(workspaceDir?: string): Promise<{ dir: strin
     const { id } = await registerWorkspace(dir, label, "subject");
 
     console.log(ui.success(t().workspaceCreated(dir)));
-    if (config.classroom) await connectClassroom(dir, config.classroom.url);
+    if (config.classroom) await connectClassroom(dir, config.classroom.url, config.classroom.courseId);
     return { dir, id, config };
   });
 }
@@ -167,7 +167,7 @@ export function promptConnectClassroom(workspaceDir: string, config: WorkspaceCo
     const updated: WorkspaceConfig = { ...rest, classroom: classroomOf(answers, label ?? path.basename(path.resolve(workspaceDir)), description ?? "") };
     await writeWorkspaceConfig(workspaceDir, updated);
     console.log(ui.success(t().workspaceCreated(workspaceDir)));
-    await connectClassroom(workspaceDir, updated.classroom!.url);
+    await connectClassroom(workspaceDir, updated.classroom!.url, updated.classroom!.courseId);
     return updated;
   });
 }
@@ -191,7 +191,7 @@ export async function promptMigrateClassroom(workspaceDir: string, config: Works
   }
   try {
     console.log(ui.dim(t().connectingMoodleTeacher));
-    await connectMoodleTeacher(workspaceDir, classroom.url);
+    await connectMoodleTeacher(workspaceDir, classroom.url, classroom.courseId);
   } catch (error) {
     console.log(ui.warn(`${error instanceof Error ? error.message : String(error)} ${t().moodleTeacherRetry}`));
     return config;

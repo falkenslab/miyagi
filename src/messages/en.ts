@@ -83,6 +83,8 @@ export interface Messages {
   connectingMoodleTeacher: string;
   moodleTeacherConnected: string;
   moodleTeacherRetry: string;
+  /** The course couldn't be added to moodle-teacher's `courses` (#54): the session goes on. */
+  moodleCourseNotAdded: (reason: string) => string;
   moodleTeacherInstallFailed: string;
   migrateClassroomIntro: string;
   migrateClassroomQuestion: string;
@@ -250,6 +252,7 @@ See README.md for details.`,
   connectingMoodleTeacher: "Connecting the classroom through moodle-teacher…",
   moodleTeacherConnected: "Classroom connected: moodle-teacher is installed with your site. The first time it needs Moodle, a window opens for you to sign in.",
   moodleTeacherRetry: "The subject is saved: try again with \"miyagi init -w <name>\", or \"miyagi extension add moodle-teacher\".",
+  moodleCourseNotAdded: (reason) => `Couldn't limit moodle-teacher to this subject's course (${reason}); the session goes on, and miyagi still stays inside it.`,
   moodleTeacherInstallFailed: "Couldn't install or set up moodle-teacher.",
   migrateClassroomIntro: "miyagi now works in Moodle only through the moodle-teacher extension: fixed tools instead of clicking around, and you sign in in its own window instead of a saved password. This subject's classroom still uses the old way, which is gone.",
   migrateClassroomQuestion: "Move this classroom to moodle-teacher now? (its saved username and password are removed from config.json; if not, this session works without the classroom)",

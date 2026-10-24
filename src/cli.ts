@@ -36,7 +36,7 @@ async function initCommand(args: string[]): Promise<void> {
     if (existing.classroom?.connector === "moodle-teacher") {
       // Connected through moodle-teacher: connect it again (installs it, adds the site if missing), then explore.
       config = existing;
-      await connectClassroom(workspaceDir, existing.classroom.url);
+      await connectClassroom(workspaceDir, existing.classroom.url, existing.classroom.courseId);
     } else if (existing.classroom) {
       throw new Error(t().alreadyWorkspace(located));
     } else {

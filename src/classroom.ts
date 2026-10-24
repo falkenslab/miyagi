@@ -22,6 +22,11 @@ export function siteName(url: string): string {
   }
 }
 
+/** A course's address, as moodle-teacher's `courses` option lists it. */
+export function courseUrl(url: string, courseId: string): string {
+  return `${url.replace(/\/+$/, "")}/course/view.php?id=${courseId}`;
+}
+
 /** The installed moodle-teacher that sessions of this workspace would run (the project's wins), if any. */
 async function installedMoodleTeacher(workspaceDir: string): Promise<InstalledExtension | undefined> {
   return (await listInstalled(extensionDirsFor(workspaceDir))).find((ext) => ext.name === MOODLE_TEACHER && !ext.shadowed);
@@ -62,11 +67,11 @@ async function extensionCommand(workspaceDir: string | undefined, args: string[]
  * Its other options keep their defaults: `access: write` (it changes the course, after the
  * teacher's approval) and `student_data: pseudonymize` (students reach the model as aliases).
  */
-export async function connectMoodleTeacher(workspaceDir: string, url: string): Promise<void> {
+export async function connectMoodleTeacher(workspaceDir: string, url: string, courseId: string): Promise<void> {
   const site = `${siteName(url)}=${url}`;
   const installed = await installedMoodleTeacher(workspaceDir);
   if (!installed) {
-    await extensionCommand(undefined, ["add", MOODLE_TEACHER, "--set", `sites=${site}`, "--yes"]);
+    await extensionCommand(undefined, ["add", MOODLE_TEACHER, "--set", `sites=${site}`, "--set", `courses=${courseUrl(url, courseId)}`, "--yes"]);
     return;
   }
   const sites = (await extensionOptionStates(installed)).find((state) => state.key === "sites")?.value;
@@ -74,5 +79,22 @@ export async function connectMoodleTeacher(workspaceDir: string, url: string): P
   if (!list.some((entry) => entry.slice(entry.indexOf("=") + 1) === url)) {
     await extensionCommand(workspaceDir, ["config", MOODLE_TEACHER, `sites=${[...list, site].join(",")}`, `--${installed.scope}`]);
   }
+  await ensureMoodleCourse(workspaceDir, url, courseId);
   if (installed.lock.enabled === false) await extensionCommand(workspaceDir, ["enable", MOODLE_TEACHER, `--${installed.scope}`]);
+}
+
+/**
+ * Adds this subject's course to moodle-teacher's `courses` option, keeping the other subjects':
+ * moodle-mcp then refuses any course of the teacher's account that isn't one of them (#54). The
+ * option is the extension's, shared by every subject, so it can't narrow a session to its own
+ * course: the prompts still do. Nothing to do when it's already there or moodle-teacher isn't installed.
+ */
+export async function ensureMoodleCourse(workspaceDir: string, url: string, courseId: string): Promise<void> {
+  const installed = await installedMoodleTeacher(workspaceDir);
+  if (!installed) return;
+  const value = (await extensionOptionStates(installed)).find((state) => state.key === "courses")?.value;
+  const list = (Array.isArray(value) ? value.map(String) : typeof value === "string" ? value.split(",") : []).map((entry) => entry.trim()).filter(Boolean);
+  const course = courseUrl(url, courseId);
+  if (list.includes(course)) return;
+  await extensionCommand(workspaceDir, ["config", MOODLE_TEACHER, `courses=${[...list, course].join(",")}`, `--${installed.scope}`]);
 }

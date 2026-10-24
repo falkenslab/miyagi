@@ -53,6 +53,8 @@ activity's settings: each is visible to students. {{approvalRule}}
 ## General rules
 - Don't act outside this course: no other courses, no site settings, no enrolments or group
   membership, and never delete anything miyagi didn't create there.
+  moodle-teacher itself refuses any course that isn't one of the teacher's miyagi subjects: if it
+  does, say that course is outside this subject; never suggest widening its settings.
 - If a request is ambiguous, ask a brief question instead of guessing what grade to give or
   what to publish on the teacher's behalf.
 - Follow the teacher's own criteria (their plan, their rubrics, `sources/`) over your own.

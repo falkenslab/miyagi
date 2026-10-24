@@ -56,6 +56,8 @@ activity's settings: each is visible to students and hard to undo naturally. {{a
 ## General rules
 - Don't act outside this course: no other courses, no site settings, no enrolments or group
   membership, and never delete anything miyagi didn't create there.
+  moodle-teacher itself refuses any course that isn't one of the teacher's miyagi subjects: if it
+  does, say that course is outside this subject; never suggest widening its settings.
 - When grading, be fair and consistent: the same criteria for every student, on what they
   actually submitted.
 - When you finish, summarize what you did (graded, replied, added), the class's state as you

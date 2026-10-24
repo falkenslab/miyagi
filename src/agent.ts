@@ -45,7 +45,7 @@ import {
   resolveLanguage,
 } from "./globalConfig.js";
 import { promptInitWorkspace, promptMigrateClassroom, promptMode, promptPickWorkspace } from "./menu.js";
-import { moodleTeacherActive } from "./classroom.js";
+import { ensureMoodleCourse, moodleTeacherActive } from "./classroom.js";
 import { labsFor, NEVER_DOCKER_TOOL_NAMES } from "./practiceLabs.js";
 import { listWorkspaces, locateWorkspace, registerWorkspace, workspaceIds } from "./workspaces.js";
 import { buildSystemPrompt } from "./systemPrompt.js";
@@ -270,6 +270,12 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   const active = !pending && workspace.classroom ? await moodleTeacherActive(workspaceDir) : false;
   if (workspace.classroom && !pending && !active) console.log(ui.warn(t().moodleTeacherMissing));
   const classroom = active ? workspace.classroom : undefined;
+  // moodle-teacher reaches only the subjects' courses (#54): a subject connected before that adds its own here.
+  if (classroom) {
+    await ensureMoodleCourse(workspaceDir, classroom.url, classroom.courseId).catch((error: unknown) =>
+      console.log(ui.warn(t().moodleCourseNotAdded(error instanceof Error ? error.message : String(error)))),
+    );
+  }
   if (kind === "explore" && !classroom) {
     console.log(ui.warn(t().exploreNeedsClassroom(workspaceDir)));
     return;

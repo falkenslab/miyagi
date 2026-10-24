@@ -123,6 +123,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   connectingMoodleTeacher: "Connexion de la classe avec moodle-teacher…",
   moodleTeacherConnected: "Classe connectée : moodle-teacher est installée avec votre site. La première fois qu'il aura besoin de Moodle, une fenêtre s'ouvrira pour vous connecter.",
   moodleTeacherRetry: "La matière est enregistrée : réessayez avec \"miyagi init -w <nom>\" ou \"miyagi extension add moodle-teacher\".",
+  moodleCourseNotAdded: (reason) => `Impossible de limiter moodle-teacher au cours de cette matière (${reason}) ; la session continue, et miyagi n'en sort pas pour autant.`,
   moodleTeacherInstallFailed: "Impossible d'installer ou de configurer moodle-teacher.",
   migrateClassroomIntro: "miyagi travaille maintenant dans Moodle uniquement avec l'extension moodle-teacher : des outils fixes au lieu de cliquer partout, et vous vous connectez dans sa propre fenêtre au lieu d'un mot de passe enregistré. La classe de cette matière utilise encore l'ancien système, qui n'existe plus.",
   migrateClassroomQuestion: "Passer maintenant cette classe à moodle-teacher ? (l'identifiant et le mot de passe enregistrés sont retirés du config.json ; sinon, cette session travaille sans la classe)",
