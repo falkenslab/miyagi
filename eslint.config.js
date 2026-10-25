@@ -4,7 +4,7 @@ import globals from "globals";
 
 export default tseslint.config(
   // The docs site (docs/) is a Docusaurus app with its own toolchain.
-  { ignores: ["dist/**", "docs/**"] },
+  { ignores: ["dist/**", "docs/**", "gui/**", "desktop/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   { languageOptions: { globals: globals.node } },

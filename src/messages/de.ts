@@ -34,6 +34,9 @@ Befehle:
       Installiert und verwaltet Erweiterungen aus dem offiziellen Repository von Falken's Lab
       oder einem eigenen: für alle Fächer (~/.miyagi/extensions) oder, mit --project, nur für dieses.
       "miyagi extension" allein erklärt jeden Unterbefehl.
+  web [--dir <Pfad>] [--port <n>]
+      Der Chat eines Fachs in Ihrem Browser, nur auf diesem Computer. Zeigt die Adresse
+      mit ihrem Schlüssel: im Browser öffnen und nicht weitergeben. Strg+C beendet ihn.
   workspaces [forget <Name>]
       Listet Ihre Fächer mit ihrem Ordner; forget entfernt eines aus der Liste (sein
       Ordner bleibt).
@@ -123,6 +126,8 @@ Mehr in README.md.`,
   connectingMoodleTeacher: "Kurs wird über moodle-teacher verbunden…",
   moodleTeacherConnected: "Kurs verbunden: moodle-teacher ist mit Ihrer Website installiert. Wenn es zum ersten Mal Moodle braucht, öffnet sich ein Fenster zur Anmeldung.",
   moodleTeacherRetry: "Das Fach ist gespeichert: versuchen Sie es erneut mit \"miyagi init -w <Name>\" oder \"miyagi extension add moodle-teacher\".",
+  webListening: (label) => `miyagi ist im Browser für ${label} geöffnet. Öffnen Sie diese Adresse:`,
+  webKeepPrivate: "Wer diese Adresse hat, kann miyagi mit Ihrem Konto nutzen: nicht weitergeben. Strg+C beendet ihn.",
   moodleCourseNotAdded: (reason) => `moodle-teacher konnte nicht auf den Kurs dieses Fachs beschränkt werden (${reason}); die Sitzung läuft weiter, und miyagi bleibt trotzdem darin.`,
   moodleTeacherInstallFailed: "moodle-teacher konnte nicht installiert oder eingerichtet werden.",
   migrateClassroomIntro: "miyagi arbeitet in Moodle jetzt nur noch mit der Erweiterung moodle-teacher: feste Werkzeuge statt Herumklicken, und Sie melden sich in deren eigenem Fenster an statt mit einem gespeicherten Passwort. Der Kurs dieses Fachs nutzt noch den alten Weg, den es nicht mehr gibt.",

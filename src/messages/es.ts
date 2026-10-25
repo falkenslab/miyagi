@@ -34,6 +34,9 @@ Comandos:
       Instala y gestiona extensiones, del repositorio oficial de Falken's Lab o de uno que
       añadas: para todas las asignaturas (~/.miyagi/extensions) o, con --project, solo para esta.
       "miyagi extension" a secas explica cada subcomando.
+  web [--dir <ruta>] [--port <n>]
+      El chat de una asignatura en tu navegador, solo en este ordenador. Muestra la
+      dirección, con su llave: ábrela en tu navegador y no la compartas. Ctrl+C lo cierra.
   workspaces [forget <nombre>]
       Lista tus asignaturas con su carpeta; forget quita una de la lista (su carpeta
       se queda).
@@ -124,6 +127,8 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   connectingMoodleTeacher: "Conectando el aula con moodle-teacher…",
   moodleTeacherConnected: "Aula conectada: moodle-teacher está instalada con tu sitio. La primera vez que necesite entrar en Moodle se abrirá una ventana para que inicies sesión.",
   moodleTeacherRetry: "La asignatura está guardada: vuelve a intentarlo con \"miyagi init -w <nombre>\" o \"miyagi extension add moodle-teacher\".",
+  webListening: (label) => `miyagi está abierto en el navegador para ${label}. Abre esta dirección:`,
+  webKeepPrivate: "Quien tenga esta dirección puede usar miyagi con tu cuenta: no la compartas. Ctrl+C lo cierra.",
   moodleCourseNotAdded: (reason) => `No se ha podido limitar moodle-teacher al curso de esta asignatura (${reason}); la sesión sigue, y miyagi no sale de él igualmente.`,
   moodleTeacherInstallFailed: "No se pudo instalar o configurar moodle-teacher.",
   migrateClassroomIntro: "miyagi trabaja ahora en Moodle solo con la extensión moodle-teacher: herramientas fijas en lugar de ir haciendo clic, y entras con tu sesión en su propia ventana en lugar de con una contraseña guardada. El aula de esta asignatura usa todavía el sistema anterior, que ya no existe.",

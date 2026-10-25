@@ -20,10 +20,11 @@
   },
   "scripts": {
     "start": "tsx src/cli.ts",
-    "build": "tsc",
+    "build": "tsc && npm run build:gui",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "build:gui": "npm --prefix gui install --no-audit --no-fund --silent && npm --prefix gui run build"
   },
   "dependencies": {
     "@falkenslab/agent-kit": "0.30.1",

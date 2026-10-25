@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { isExitPromptError, runExtensionCommand, ui } from "@falkenslab/agent-kit";
 import { runSession } from "./agent.js";
+import { startHost } from "./host/server.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
 import { CATALOG_TOPICS, extensionDirsFor, OFFICIAL_MARKETPLACE } from "./extensions.js";
 import { globalConfigPath, migrateLegacyGlobalConfig, resolveLanguage } from "./globalConfig.js";
@@ -79,6 +80,24 @@ async function commandsCommand(args: string[]): Promise<void> {
 }
 
 /** `miyagi workspaces`: the registered ones; `forget <name>` drops one from the list, never its folder. */
+/**
+ * `miyagi web` (gui-host, #46): the chat of a subject in the browser, on this computer only.
+ * Prints the URL with its token, which is the key to it, and runs until Ctrl+C.
+ */
+async function webCommand(args: string[]): Promise<void> {
+  // The subject named, or the last one opened; without any, the page shows the list.
+  const workspaceDir = await locateWorkspace(args);
+  const portFlag = args.indexOf("--port");
+  const port = portFlag !== -1 ? Number(args[portFlag + 1]) : undefined;
+  const host = await startHost(workspaceDir, { port: Number.isInteger(port) ? port : undefined });
+  const label = workspaceDir ? workspaceLabel(workspaceDir, await readWorkspaceConfig(workspaceDir)) : "miyagi";
+  console.log(ui.success(t().webListening(label)));
+  console.log(host.url);
+  console.log(ui.dim(t().webKeepPrivate));
+  await new Promise<void>((resolve) => process.once("SIGINT", () => resolve()));
+  await host.close();
+}
+
 async function workspacesCommand(args: string[]): Promise<void> {
   if (args[0] === "forget") {
     if (!args[1]) throw new Error(t().forgetUsage);
@@ -162,6 +181,8 @@ async function main(): Promise<void> {
       return commandsCommand(rest);
     case "workspaces":
       return workspacesCommand(rest);
+    case "web":
+      return webCommand(rest);
     case "extension":
       return extensionCommand(process.argv.slice(2));
     case undefined:

@@ -22,6 +22,7 @@ node .claude/skills/verify/check-activity-register.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
 node .claude/skills/verify/check-file-scope.mjs
+node .claude/skills/verify/check-host.mjs
 node .claude/skills/update-docs/check-docs.mjs
 node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
 ```
@@ -49,6 +50,8 @@ the teacher's sources (ADR-025).
 `check-activity-register.mjs` counts the phases of sample `course/drafts` pages (an old one
 without phases counts as hidden), checks the end-of-session line and which paths plan mode
 lets the agent write (only `drafts/<slug>/plan.md`). Change it with the register's format.
+
+`check-host.mjs` starts the GUI's host (`src/host/`) with a temporary home, so with no Claude key nor subject and no call to Claude: 403 without the token, `info` then `state` on the events, a subject created and opened from the page, one that isn't registered refused, a bad key refused, nothing served outside the page.
 
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT

@@ -19,6 +19,7 @@ description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, 
 | `miyagi ingest <archivos…>` | Incorpora solo esos documentos. |
 | `miyagi skills` | Lista sus habilidades, incluidas las tuyas (marcadas `[propia]`). |
 | `miyagi commands` | Lista los atajos del chat, incluidos los tuyos. |
+| `miyagi web` | El chat de miyagi en tu navegador, solo en tu ordenador. Muestra una dirección con su llave: ábrela y no la compartas (ver [miyagi en el navegador](../avanzado/navegador.md)). |
 | `miyagi workspaces` | Lista tus asignaturas, con el nombre para `-w` y su carpeta. Marca las que ya no encuentra. |
 | `miyagi workspaces forget <nombre>` | Quita una asignatura de la lista. Su carpeta no se toca. |
 | `miyagi extension …` | Instala, configura, activa o quita [extensiones](../avanzado/extensiones.md): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |

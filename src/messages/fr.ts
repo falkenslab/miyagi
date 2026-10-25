@@ -34,6 +34,9 @@ Commandes :
       Installe et gère des extensions, du dépôt officiel de Falken's Lab ou d'un dépôt que
       vous ajoutez : pour toutes les matières (~/.miyagi/extensions) ou, avec --project, pour celle-ci.
       "miyagi extension" seul explique chaque sous-commande.
+  web [--dir <chemin>] [--port <n>]
+      Le chat d'une matière dans votre navigateur, sur cet ordinateur seulement. Affiche
+      l'adresse, avec sa clé : ouvrez-la dans votre navigateur et ne la partagez pas.
   workspaces [forget <nom>]
       Liste vos matières avec leur dossier ; forget en retire une de la liste (son
       dossier reste).
@@ -123,6 +126,8 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   connectingMoodleTeacher: "Connexion de la classe avec moodle-teacher…",
   moodleTeacherConnected: "Classe connectée : moodle-teacher est installée avec votre site. La première fois qu'il aura besoin de Moodle, une fenêtre s'ouvrira pour vous connecter.",
   moodleTeacherRetry: "La matière est enregistrée : réessayez avec \"miyagi init -w <nom>\" ou \"miyagi extension add moodle-teacher\".",
+  webListening: (label) => `miyagi est ouvert dans le navigateur pour ${label}. Ouvrez cette adresse :`,
+  webKeepPrivate: "Qui a cette adresse peut utiliser miyagi avec votre compte : ne la partagez pas. Ctrl+C le ferme.",
   moodleCourseNotAdded: (reason) => `Impossible de limiter moodle-teacher au cours de cette matière (${reason}) ; la session continue, et miyagi n'en sort pas pour autant.`,
   moodleTeacherInstallFailed: "Impossible d'installer ou de configurer moodle-teacher.",
   migrateClassroomIntro: "miyagi travaille maintenant dans Moodle uniquement avec l'extension moodle-teacher : des outils fixes au lieu de cliquer partout, et vous vous connectez dans sa propre fenêtre au lieu d'un mot de passe enregistré. La classe de cette matière utilise encore l'ancien système, qui n'existe plus.",

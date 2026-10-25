@@ -125,6 +125,7 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 | Clave | Qué es | Por defecto |
 | --- | --- | --- |
 | `claudeCodeOAuthToken` | Tu acceso a Claude. miyagi lo guarda aquí la primera vez que lo creas y no te lo vuelve a pedir. | Te ofrece crearlo al arrancar. |
+| `anthropicApiKey` | Una clave de API de Claude, si la pegaste en la [página de miyagi](navegador.md) en lugar de un token. | Ninguno |
 | `defaultLanguage` | El idioma para los cursos que no fijan `agent.language`. | Ninguno: te sigue en el idioma en que le escribas. |
 | `autoCompactEnabled` | Si la conversación llena el contexto del modelo, la resume automáticamente para poder seguir. Pon `false` para desactivarlo. | `true` |
 

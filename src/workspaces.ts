@@ -2,7 +2,7 @@ import { mkdir, readFile, rename, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { t } from "./messages/index.js";
-import { workspaceExists, type WorkspaceKind } from "./workspace.js";
+import { createWorkspace, workspaceExists, type AgentPersona, type WorkspaceConfig, type WorkspaceKind } from "./workspace.js";
 
 /**
  * The workspaces the teacher has, by name (ADR-023): new ones live in `~/.miyagi/workspaces/<slug>/`,
@@ -135,6 +135,26 @@ export async function newWorkspaceDir(name: string): Promise<string> {
     const used = registered.some((ws) => sameDir(ws.dir, dir));
     if (!used && !(await stat(dir).then(() => true, () => false))) return dir;
   }
+}
+
+/**
+ * A new subject without a classroom, in miyagi's home, registered: what `init` makes from its
+ * answers and the GUI from its form (gui-workspaces, #49). A classroom is connected afterwards.
+ */
+export async function createSubject(answers: { label: string; description?: string; language?: string; persona?: AgentPersona }): Promise<{ dir: string; id: string }> {
+  const label = answers.label.trim();
+  const description = answers.description?.trim();
+  const language = answers.language?.trim();
+  const config: WorkspaceConfig = {
+    kind: "subject",
+    label,
+    ...(description ? { description } : {}),
+    agent: { role: "teacher", ...(answers.persona ? { persona: answers.persona } : {}), ...(language ? { language } : {}) },
+  };
+  const dir = await newWorkspaceDir(label);
+  await createWorkspace(dir, config);
+  const { id } = await registerWorkspace(dir, label, "subject");
+  return { dir, id };
 }
 
 /** The flags that name a workspace; every other argument is the command's own. */

@@ -83,6 +83,9 @@ export interface Messages {
   connectingMoodleTeacher: string;
   moodleTeacherConnected: string;
   moodleTeacherRetry: string;
+  /** `miyagi web` (gui-host). */
+  webListening: (label: string) => string;
+  webKeepPrivate: string;
   /** The course couldn't be added to moodle-teacher's `courses` (#54): the session goes on. */
   moodleCourseNotAdded: (reason: string) => string;
   moodleTeacherInstallFailed: string;
@@ -164,6 +167,9 @@ Commands:
       Installs and manages extensions, from Falken's Lab's official repository or one you
       add: for every subject (~/.miyagi/extensions) or, with --project, only this one.
       "miyagi extension" alone explains each subcommand.
+  web [--dir <path>] [--port <n>]
+      The chat of a subject in your browser, on this computer only. Prints the address,
+      with its key: open it in your browser, and don't share it. Ctrl+C closes it.
   workspaces [forget <name>]
       Lists your subjects with their folder; forget drops one from the list (its folder
       stays).
@@ -252,6 +258,8 @@ See README.md for details.`,
   connectingMoodleTeacher: "Connecting the classroom through moodle-teacher…",
   moodleTeacherConnected: "Classroom connected: moodle-teacher is installed with your site. The first time it needs Moodle, a window opens for you to sign in.",
   moodleTeacherRetry: "The subject is saved: try again with \"miyagi init -w <name>\", or \"miyagi extension add moodle-teacher\".",
+  webListening: (label) => `miyagi is open in the browser for ${label}. Open this address:`,
+  webKeepPrivate: "Whoever has this address can use miyagi with your account: don't share it. Ctrl+C closes it.",
   moodleCourseNotAdded: (reason) => `Couldn't limit moodle-teacher to this subject's course (${reason}); the session goes on, and miyagi still stays inside it.`,
   moodleTeacherInstallFailed: "Couldn't install or set up moodle-teacher.",
   migrateClassroomIntro: "miyagi now works in Moodle only through the moodle-teacher extension: fixed tools instead of clicking around, and you sign in in its own window instead of a saved password. This subject's classroom still uses the old way, which is gone.",

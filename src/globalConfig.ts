@@ -3,7 +3,7 @@ import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { parseEnv } from "node:util";
-import { ensureClaudeAuth } from "@falkenslab/agent-kit";
+import { ensureClaudeAuth, resolveClaudeAuth } from "@falkenslab/agent-kit";
 
 /**
  * ~/.miyagi/config.json — the only config not tied to a workspace: the Claude token
@@ -11,6 +11,8 @@ import { ensureClaudeAuth } from "@falkenslab/agent-kit";
  */
 export interface GlobalConfig {
   claudeCodeOAuthToken?: string;
+  /** An API key pasted in the GUI instead of an OAuth token (gui-host). */
+  anthropicApiKey?: string;
   /** SDK autocompact when the context fills up. On unless set to false here. */
   autoCompactEnabled?: boolean;
   /** Fallback for workspaces with no `agent.language` of their own. */
@@ -121,6 +123,28 @@ export async function ensureClaudeAuthPersisted(): Promise<void> {
   if (generated) await writeGlobalConfig({ ...config, claudeCodeOAuthToken: generated });
 }
 
+
+/**
+ * The Claude key a person pasted in the GUI (gui-host, #46), where there's no terminal for
+ * "claude setup-token": an OAuth token (`sk-ant-oat…`) or an API key (`sk-ant-api…`), set for
+ * this process and saved for the next. Returns false for anything else.
+ */
+export async function saveClaudeKey(pasted: string): Promise<boolean> {
+  const value = pasted.trim();
+  const variable = value.startsWith("sk-ant-oat") ? "CLAUDE_CODE_OAUTH_TOKEN" : value.startsWith("sk-ant-api") ? "ANTHROPIC_API_KEY" : undefined;
+  if (!variable || /\s/.test(value)) return false;
+  process.env[variable] = value;
+  const config = await readGlobalConfig();
+  await writeGlobalConfig(variable === "CLAUDE_CODE_OAUTH_TOKEN" ? { ...config, claudeCodeOAuthToken: value } : { ...config, anthropicApiKey: value });
+  return true;
+}
+
+/** Whether there's a Claude key to open a session with, without asking: the environment, the workspace's .env, or the one saved. */
+export async function claudeAuthAvailable(): Promise<boolean> {
+  const config = await readGlobalConfig();
+  if (config.anthropicApiKey && !process.env.ANTHROPIC_API_KEY) process.env.ANTHROPIC_API_KEY = config.anthropicApiKey;
+  return resolveClaudeAuth({ claudeCodeOAuthToken: config.claudeCodeOAuthToken });
+}
 
 /** The workspace's `agent.language`, then `defaultLanguage`, then undefined (mirror the human). */
 export async function resolveLanguage(workspaceValue: string | undefined): Promise<string | undefined> {
