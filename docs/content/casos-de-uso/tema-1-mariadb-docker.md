@@ -14,7 +14,7 @@ Con la programación cerrada, toca construir el curso en Moodle. Empezamos por e
 
 Antes de escribir una línea de los apuntes, miyagi comprueba la práctica en un **laboratorio de docker-lab** (la extensión que instalamos al [preparar el aula](preparar-el-aula.md)). Dentro del laboratorio levanta un `mariadb:11` de verdad, se conecta, crea la base de datos y el usuario, para, arranca y borra el servidor, y comprueba que los datos sobreviven gracias al volumen.
 
-<Shot src="/img/casos/10-practice-runner.webp" alt="El chat mientras delega en practice-runner: lee la programación y la página del tema y ejecuta en Docker la conexión con el usuario tienda_app, docker stop, docker rm y la limpieza del contenedor.">Cada paso que luego leerán los alumnos, ejecutado en Docker.</Shot>
+<Shot src="/img/casos/10-laboratorio.webp" title="PowerShell — miyagi chat" alt="El chat tras repetir la práctica en un laboratorio de docker-lab: la comprobación del laboratorio hecha y el resumen de los pasos (conexión como root, crear la base de datos tienda y el usuario tienda_app, entrar como tienda_app) con los errores que verá un alumno si intenta salirse de su base de datos.">Cada paso que luego leerán los alumnos, ejecutado en un laboratorio.</Shot>
 
 Lo que saca de esa comprobación no se queda en «funciona»: trae lo que un alumno se encontrará de verdad. Por ejemplo, que la primera vez MariaDB tarda entre 6 y 14 segundos en estar listo, que el cliente se llama `mariadb` y no `mysql`, o que en los registros aparece un aviso sobre `io_uring` que no es un error. Todo eso acaba en los apuntes.
 
