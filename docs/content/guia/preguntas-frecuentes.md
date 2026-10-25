@@ -84,7 +84,7 @@ Sí. `miyagi chat --continue` abre la última, y `/resume` dentro del chat te de
 
 ### Venía usando teacher-agent
 
-Es el mismo proyecto con otro nombre desde la versión 0.10. Instala miyagi como se explica en [Instalar](instalar.md); tu configuración (incluido el acceso a Claude) y tus carpetas de curso sirven tal cual. El comando `teacher-agent` sigue funcionando un tiempo, con un aviso. Cuando quieras, quita el paquete antiguo:
+Es el mismo proyecto con otro nombre desde la versión 0.10. Instala miyagi como se explica en [Instalar](instalar.md); tu configuración (incluido el acceso a Claude) y tus carpetas de curso sirven tal cual. El comando `teacher-agent` ya no recibe versiones nuevas: quita el paquete antiguo:
 
 ```bash
 npm uninstall -g teacher-agent

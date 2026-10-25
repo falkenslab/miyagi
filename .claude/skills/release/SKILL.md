@@ -15,12 +15,7 @@ npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miy
 ```
 
 so a release without a `miyagi.tgz` asset (that exact name) breaks installation for
-everyone the moment it becomes "latest". The project was called teacher-agent until v0.9.0,
-and older instructions say `…/releases/latest/download/teacher-agent.tgz`: until v1.0.0, every
-release also carries a `teacher-agent.tgz` bridge (`compat/`), a package still called
-teacher-agent whose dependency is this release's `miyagi.tgz` and whose `teacher-agent`
-command runs it (with a notice). It must be a separate package: `miyagi` can't declare the
-`teacher-agent` command itself, npm refuses to install it over the old package (EEXIST).
+everyone the moment it becomes "latest".
 
 ## 1. Preconditions
 
@@ -59,18 +54,11 @@ Tags are lightweight. Never move or delete a published tag, never force-push.
 ```
 npm pack --pack-destination <scratchpad>          # prepack builds dist/ first
 mv <scratchpad>/miyagi-X.Y.Z.tgz <scratchpad>/miyagi.tgz
-# the bridge for the old install command, until v1.0.0, pointing at this release's miyagi.tgz
-node .claude/skills/release/compat/pack-teacher-agent.mjs X.Y.Z https://github.com/falkenslab/miyagi/releases/download/vX.Y.Z/miyagi.tgz <scratchpad>
 ```
 
 It must be tens of kB, with no `node_modules/` inside (`tar -tzf` it). A package in the
 hundreds of MB means dependencies got bundled — among them the Claude SDK's Windows-only
 `claude.exe` — and it won't install on Mac or Linux: don't publish it.
-
-To test the bridge before the release exists, build it once with `file:<scratchpad>/miyagi.tgz`
-instead of the URL: install the previous release's `teacher-agent.tgz` and then the bridge into
-the same throwaway prefix, and `teacher-agent --version` must print this version with the
-rename notice. Rebuild it with the URL before uploading.
 
 Install it into a throwaway prefix, never the user's global npm, and run `--version` from
 there (`<scratchpad>/g/miyagi.cmd` on Windows):
@@ -78,6 +66,31 @@ there (`<scratchpad>/g/miyagi.cmd` on Windows):
 ```
 npm install -g --prefix <scratchpad>/g <scratchpad>/miyagi.tgz
 ```
+
+## 4b. The desktop installer (Windows)
+
+The same miyagi in a window (`desktop/`, ADR-022): every release carries `miyagi-setup.exe`, built
+from this tag, so the app never lags behind the package. On Windows, from a terminal where
+`ELECTRON_RUN_AS_NODE` isn't set (VS Code's sets it: `env -u ELECTRON_RUN_AS_NODE` in Git Bash):
+
+```
+cd desktop
+npm install            # Electron and electron-builder; its postinstall downloads Electron's binary
+npm run build          # builds miyagi and its page, copies dist/ plugin/ prompts/ into desktop/miyagi/, installs its dependencies
+npm run dist           # electron-builder: desktop/dist/miyagi-setup.exe
+```
+
+Before uploading it, check the unpacked app in `desktop/dist/win-unpacked/`:
+- `resources/app.asar.unpacked/node_modules/@anthropic-ai/claude-agent-sdk-win32-x64/claude.exe`
+  exists (outside the asar: another process runs it);
+- `resources/app.asar.unpacked/miyagi/plugin/` and `.../miyagi/prompts/` exist;
+- it starts and shows the page, with a throwaway data folder and a scripted shot:
+  `MIYAGI_DESKTOP_DATA=<scratchpad>/d MIYAGI_DESKTOP_SCRIPT=<steps.json> desktop/dist/win-unpacked/miyagi.exe`
+  (steps as in `main.mjs`: wait for `.side .brand`, `shot`). Look at the image: the sidebar, and
+  the version in its footer is this release's.
+
+A Windows-only artifact: it's ~230 MB and unsigned, so SmartScreen warns on the first run (the
+install page explains it). Never put it in the npm package.
 
 ## 5. GitHub release
 
@@ -87,13 +100,15 @@ workspaces existentes (with what the user must do, if anything), and the agent-k
 uses.
 
 ```
-gh release create vX.Y.Z <scratchpad>/miyagi.tgz <scratchpad>/teacher-agent.tgz --verify-tag --title "miyagi vX.Y.Z" --notes-file <notes>
+gh release create vX.Y.Z <scratchpad>/miyagi.tgz desktop/dist/miyagi-setup.exe --verify-tag --title "miyagi vX.Y.Z" --notes-file <notes>
 ```
 
 Then check the real user path: install from
 `https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz` into
-another throwaway prefix and run `--version`; until v1.0.0, also the old
-`https://github.com/falkenslab/teacher-agent/releases/latest/download/teacher-agent.tgz`.
+another throwaway prefix and run `--version`. And the installer: `https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe`
+answers with the file. The first release that carries it also makes the docs' install page
+(`docs/content/guia/instalar.md`) lead with that link, SmartScreen's warning explained, and the
+npm command for Mac, Linux and whoever prefers the terminal.
 
 Report the version, the release URL and the notes. If a step fails half-way, report exactly
 what is pushed and published and what isn't instead of retrying blindly.
