@@ -49,9 +49,8 @@ Una aplicación de escritorio, para usar miyagi sin terminal:
 
 - **Informes y banco de exámenes.** Informes del curso (resultados por criterio, memoria del módulo) en `.docx` con la plantilla de tu centro, y un banco de preguntas por criterio y nivel que sirve de un curso a otro ([#44](https://github.com/falkenslab/miyagi/issues/44)).
 
-### Más allá de la asignatura
+### La web
 
-- **Espacios de departamento y de oposición.** La memoria y las actas del departamento, o la programación y las unidades para el tribunal de una oposición ([#37](https://github.com/falkenslab/miyagi/issues/37)).
 - **Esta web en inglés** ([#28](https://github.com/falkenslab/miyagi/issues/28)).
 
 ## Lo que miyagi no hará
