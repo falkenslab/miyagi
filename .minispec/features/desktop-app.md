@@ -11,13 +11,13 @@ An Electron app (`desktop/`) with an installer, so a teacher installs miyagi wit
 - Captain Whiskers' `desktop/` is the model: `main.mjs` (134 lines) imports the agent and its host, `startWebChat()`, `BrowserWindow.loadURL(url)`; `scripts/build.mjs`; electron-builder with NSIS; released by hand (no CI), unsigned.
 - The kit already rewrites its paths out of `app.asar` and finds the SDK's native CLI unpacked; the app must still `asarUnpack` the SDK's platform package, the kit's `assets/` and `extensions/`, and its own `plugin/` and `prompts/`.
 - `ELECTRON_RUN_AS_NODE` (set by VS Code's terminal) turns Electron into Node: the main process deletes it.
-- Needs `gui-host` and `gui-chat`; `gui-workspaces` gives it more than one workspace.
+- Built on the host (`src/host/`) and the page (`gui/`), done; it shows whatever they do.
 
 ## Changes
 
 - `desktop/package.json` (Electron 44, electron-builder), `main.mjs`:
   - single instance (a second launch focuses the window);
-  - `startHost()` of `gui-host` on the open subject; window `loadURL` with the token, never shown to the person;
+  - `startHost()` (`src/host/server.ts`) on the open subject; window `loadURL` with the token, never shown to the person;
   - `contextIsolation`, `sandbox`, spellcheck; `setWindowOpenHandler` sends http(s) links to the system browser; `will-navigate` stays in the host's origin;
   - window size and position kept in `~/.miyagi/config.json`; a short menu (DevTools only unpacked); start errors in a dialog.
 - `desktop/scripts/build.mjs`: builds miyagi and `gui/`, copies `dist/`, `plugin/`, `prompts/` into the app, installs the published `@falkenslab/agent-kit` at miyagi's exact version.

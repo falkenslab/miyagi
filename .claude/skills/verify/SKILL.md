@@ -53,6 +53,19 @@ lets the agent write (only `drafts/<slug>/plan.md`). Change it with the register
 
 `check-host.mjs` starts the GUI's host (`src/host/`) with a temporary home, so with no Claude key nor subject and no call to Claude: 403 without the token, `info` then `state` on the events, a subject created and opened from the page, one that isn't registered refused, a bad key refused, nothing served outside the page; a repository added only with its name typed (#50) and a classroom address that isn't one refused; a moved subject missing, located again and forgotten (#49); no material served from outside drafts/ (#51).
 
+When `gui/` or `src/host/` changed, also run the page in Chrome against a real session (not in
+the quick gate: it needs a Claude token and Chrome, and spends a few turns; its home is a
+temporary folder):
+
+```
+node .claude/skills/verify/check-page.mjs <scratchpad>/page-shots
+```
+
+It creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
+and not Claude Code's, approves one tool and refuses another in interactive mode, switches the mode
+and the theme, and takes screenshots at 360, 768 and 1440 px with no horizontal scroll. Look at
+them. Without a token it says `skip` and passes.
+
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT
 and HTML files broken on purpose, and the upload gate's hook itself on moodle-teacher's

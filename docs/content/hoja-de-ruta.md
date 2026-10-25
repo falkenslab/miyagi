@@ -33,7 +33,7 @@ Lo que hace cada habilidad está en [Habilidades](guia/habilidades.md).
 Una aplicación de escritorio, para usar miyagi sin terminal:
 
 - **Instalar miyagi en Windows con doble clic** ([#48](https://github.com/falkenslab/miyagi/issues/48)).
-- **La conversación en una ventana**, con sus paneles de aprobación ([#47](https://github.com/falkenslab/miyagi/issues/47)), sobre un servidor local que también se puede abrir desde el navegador ([#46](https://github.com/falkenslab/miyagi/issues/46)).
+- **La conversación en una ventana**, con sus paneles de aprobación ([#47](https://github.com/falkenslab/miyagi/issues/47)), sobre un servidor local que también se puede abrir desde el navegador ([#46](https://github.com/falkenslab/miyagi/issues/46)). Hecho: llega en la próxima versión.
 - **Tus asignaturas en la aplicación**, por su nombre y sin carpetas ([#49](https://github.com/falkenslab/miyagi/issues/49)). Hecho: llega en la próxima versión.
 - **Ver qué puede hacer miyagi e instalar extensiones** desde la aplicación ([#50](https://github.com/falkenslab/miyagi/issues/50)). Hecho: llega en la próxima versión.
 - **Tu asignatura de un vistazo**: hoy, la programación, los temas, los materiales y las fuentes ([#51](https://github.com/falkenslab/miyagi/issues/51)). Hecho: llega en la próxima versión.
