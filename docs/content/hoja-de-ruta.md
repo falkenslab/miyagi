@@ -22,6 +22,7 @@ Desde la versión 0.11.0:
 - **La vida de una actividad.** Para algo nuevo y complejo, un plan acordado, la construcción, la prueba oculta y servirla, con tu aprobación en cada paso y el recuento de lo que hay en marcha.
 - **Tu normativa, cuando la pides.** Le das la normativa que te aplica, o le pides que la busque en las fuentes oficiales, y la programación y la evaluación la siguen, con los criterios citados tal cual.
 - **Evaluación por criterios y atención a la diversidad.** La matriz de evaluación, cada nota trazada a su criterio, el DUA y las variantes de acceso, refuerzo y ampliación.
+- **Llevar al curso un diseño tuyo**, por ejemplo de Canva: lo exporta en el formato que conviene y lo publica en su tema, oculto y con tu aprobación.
 
 Lo que hace cada habilidad está en [Habilidades](guia/habilidades.md).
 
@@ -42,7 +43,6 @@ Una aplicación de escritorio, para usar miyagi sin terminal:
 - **Materiales escritos una vez.** Cuestionarios, bancos de preguntas y apuntes en archivos tuyos, publicados en cualquier aula con exportadores probados ([#34](https://github.com/falkenslab/miyagi/issues/34)).
 - **Actividades personalizadas.** Variantes equivalentes ambientadas en lo que interesa al grupo, a partir de una encuesta anónima ([#39](https://github.com/falkenslab/miyagi/issues/39)).
 - **Estilos visuales.** Lo que publica miyagi (enunciados, preguntas, páginas) con el estilo que elijas, como extensiones ([#21](https://github.com/falkenslab/miyagi/issues/21)).
-- **Llevar al curso un diseño tuyo**, por ejemplo una ficha de Canva, en el formato que conviene y en su sitio del tema ([#52](https://github.com/falkenslab/miyagi/issues/52)).
 - **Videotutoriales con tu voz**, publicados en YouTube y enlazados en el aula ([#38](https://github.com/falkenslab/miyagi/issues/38)).
 
 ### Evaluación
