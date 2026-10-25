@@ -231,8 +231,8 @@ fieldset { border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; }
 .g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
-.card h3 { margin: 0 0 8px; font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.card h3 .badge { margin-left: auto; }
+.card h3, .card h2.card-title { margin: 0 0 8px; font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.card h3 .badge, .card h2.card-title .badge { margin-left: auto; }
 .card p { margin: 6px 0; color: var(--text-2); }
 .card.center { text-align: center; }
 .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }

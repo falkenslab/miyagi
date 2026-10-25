@@ -47,10 +47,10 @@ function useReload(load: () => Promise<void>, chat: ChatState) {
 function Card({ title, badge, children }: { title: ReactNode; badge?: ReactNode; children: ReactNode }) {
   return (
     <div className="card">
-      <h3>
+      <h2 className="card-title">
         {title}
         {badge}
-      </h3>
+      </h2>
       {children}
     </div>
   );

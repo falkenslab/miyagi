@@ -750,10 +750,10 @@ export function ClassroomView({ chat, info, X, onLink }: { chat: ChatState; info
       {room ? (
         <div className="grid g2">
           <div className="card">
-            <h3>
+            <h2 className="card-title">
               <span aria-hidden="true">🎓</span> Moodle · {hostOf(room.url)}
               <span className={`badge ${room.connected ? "ok" : "warn"}`}>{room.connected ? X.connectedBadge : X.offBadge}</span>
-            </h3>
+            </h2>
             <p>{X.moodleCourse(room.courseId)}</p>
             <p className="muted">{room.connected ? X.classroomConnected(hostOf(room.url), room.courseId) : X.classroomOff(hostOf(room.url), room.courseId)}</p>
             <div className="row">
