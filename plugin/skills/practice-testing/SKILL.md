@@ -17,6 +17,16 @@ one.
 Never present an unchecked practice as tested. If a lab can't start (Docker isn't running, the
 lab breaks the policy), say so and what's missing, instead of reporting it as checked.
 
+## Ask once, then run
+
+In guided mode every lab tool that changes something would ask on its own, one panel per
+command. Ask once instead, with `request_human_approval`, right before you start a lab: which lab
+(its name), what it starts (the image and services, and that it has no internet unless the
+activity needs it), what you will run in it (follow the statement, run the solution and the
+check; or run a submission under an alias), and that you stop it at the end. The approved batch
+covers the lab's calls until the teacher's next message; stopping it is confirmed by the lab's
+own question. A new run in a later turn asks again.
+
 ## Before publishing a hands-on activity
 
 1. Write the lab in its folder in the labs folder, named as your instructions say
@@ -48,5 +58,5 @@ lab breaks the policy), say so and what's missing, instead of reporting it as ch
   and the teacher allowed it, nothing mounted outside the lab, never the Docker socket, limited CPU
   and memory. Don't try to relax the policy for convenience.
 - A student's code is untrusted: only in a lab, never anywhere else.
-- Running something is a check, not a publication: no approval needed to run, only to publish or
-  grade what you learned from it.
+- Running something is a check, not a publication: one approval to run it (above), and the usual
+  ones to publish or grade what you learned from it.
