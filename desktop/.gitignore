@@ -1,0 +1,5 @@
+node_modules/
+dist/
+miyagi/
+# Pins the dependencies the build writes from miyagi's package.json.
+package-lock.json

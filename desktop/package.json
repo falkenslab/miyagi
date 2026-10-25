@@ -1,0 +1,84 @@
+{
+  "name": "miyagi-desktop",
+  "productName": "miyagi",
+  "version": "0.11.0",
+  "private": true,
+  "description": "miyagi as a desktop application: the AI teaching assistant in a window of its own.",
+  "author": "Falken's Lab",
+  "license": "MIT",
+  "type": "module",
+  "main": "main.mjs",
+  "scripts": {
+    "postinstall": "node node_modules/electron/install.js",
+    "build": "node scripts/build.mjs",
+    "icon": "electron scripts/icon.mjs",
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "dev.falkenslab.miyagi",
+    "productName": "miyagi",
+    "copyright": "Falken's Lab",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "files": [
+      "main.mjs",
+      "package.json",
+      "miyagi/**/*",
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/@anthropic-ai/claude-agent-sdk-*/**",
+      "node_modules/@falkenslab/agent-kit/assets/**",
+      "node_modules/@falkenslab/agent-kit/extensions/**",
+      "miyagi/plugin/**",
+      "miyagi/prompts/**"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "miyagi",
+      "uninstallDisplayName": "miyagi",
+      "artifactName": "miyagi-setup.${ext}",
+      "multiLanguageInstaller": true,
+      "installerLanguages": [
+        "es_ES",
+        "en_US",
+        "fr_FR",
+        "de_DE"
+      ],
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "dependencies": {
+    "@falkenslab/agent-kit": "0.30.1",
+    "@mozilla/readability": "^0.6.0",
+    "fflate": "^0.8.3",
+    "linkedom": "^0.18.13",
+    "mammoth": "^1.13.0",
+    "marked": "^18.0.14",
+    "playwright-core": "^1.64.1",
+    "turndown": "^7.2.4",
+    "zod": "^4.6.5"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.0": false
+  }
+}
