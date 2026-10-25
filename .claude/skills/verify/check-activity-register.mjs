@@ -20,6 +20,11 @@ const PAGES = [
     `# Borradores\n\n- [Página del tema 1](http://localhost/mod/page/view.php?id=4): falta revisar en móvil\n* Cuestionario del tema 1 (oculto)\n`,
     { planning: 0, building: 0, hidden: 2, served: 0 },
   ],
+  [
+    "sub-items belong to their activity",
+    `# Borradores\n\n- \`planning\` **Proyecto intermodular**, v2\n  - Diseño: [Proyecto](intermodular-project.md).\n  - Materiales: \`drafts/proyecto/\`\n  - Siguiente paso: aprobación del equipo docente\n- \`building\` Glosario\n`,
+    { planning: 1, building: 1, hidden: 0, served: 0 },
+  ],
   ["empty page", `# Borradores\n\nNada en marcha.\n`, { planning: 0, building: 0, hidden: 0, served: 0 }],
 ];
 

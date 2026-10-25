@@ -15,7 +15,8 @@ export const PHASES = ["planning", "building", "hidden", "served"] as const;
 export type Phase = (typeof PHASES)[number];
 export type PhaseCounts = Record<Phase, number>;
 
-const ITEM = /^\s*[-*] +(.*)$/;
+// Only top-level items: an activity's indented sub-items (its design, materials, next step) are part of it.
+const ITEM = /^[-*] +(.*)$/;
 const PHASE = new RegExp("^`(" + PHASES.join("|") + ")`");
 
 /** How many activities the page lists in each phase. */
