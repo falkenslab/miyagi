@@ -7,11 +7,11 @@ import { runSession } from "./agent.js";
 import { startHost } from "./host/server.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
 import { CATALOG_TOPICS, extensionDirsFor, OFFICIAL_MARKETPLACE } from "./extensions.js";
-import { globalConfigPath, migrateLegacyGlobalConfig, resolveLanguage } from "./globalConfig.js";
+import { chooseLanguageFor, globalConfigPath, migrateLegacyGlobalConfig } from "./globalConfig.js";
 import { connectClassroom, promptConnectClassroom, promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
-import { chooseInterfaceLanguage, t } from "./messages/index.js";
+import { t } from "./messages/index.js";
 import { applyTeacherTheme } from "./theme.js";
-import { interfaceLanguage, readWorkspaceConfig, workspaceExists, workspaceLabel } from "./workspace.js";
+import { readWorkspaceConfig, workspaceExists, workspaceLabel } from "./workspace.js";
 import { findWorkspace, forgetWorkspace, listWorkspaces, locateWorkspace, registerWorkspace, withoutWorkspaceFlags, workspaceIds } from "./workspaces.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -140,25 +140,16 @@ async function extensionCommand(argv: string[]): Promise<void> {
  * same one, so its texts and miyagi's always agree.
  */
 async function chooseLanguage(args: string[]): Promise<void> {
-  let workspaceLanguage: string | undefined;
-  try {
-    const workspaceDir = await locateWorkspace(args);
-    if (workspaceDir && (await workspaceExists(workspaceDir))) workspaceLanguage = (await readWorkspaceConfig(workspaceDir)).agent.language;
-  } catch {
-    // A broken or student config.json, or an unknown -w, is reported by the command itself, in the chosen language.
-  }
-  const warnings = chooseInterfaceLanguage(interfaceLanguage(await resolveLanguage(workspaceLanguage)));
-  for (const warning of warnings) console.error(ui.warn(warning));
+  // An unknown -w is reported by the command itself, in the chosen language.
+  const workspaceDir = await locateWorkspace(args).catch(() => undefined);
+  for (const warning of await chooseLanguageFor(workspaceDir)) console.error(ui.warn(warning));
 }
 
 async function main(): Promise<void> {
   const [first, ...rest] = process.argv.slice(2);
   await chooseLanguage(process.argv.slice(2));
   applyTeacherTheme();
-  // Renamed from teacher-agent in 0.10: the old command still works, and the old global config
-  // (Claude token, defaults) is carried over once.
-  // The old command comes from the teacher-agent bridge package (.claude/skills/release/compat/).
-  if (process.env.MIYAGI_LEGACY_COMMAND === "teacher-agent") console.error(ui.warn(t().renamedCommand));
+  // Renamed from teacher-agent in 0.10: its old global config (Claude token, defaults) is carried over once.
   if (await migrateLegacyGlobalConfig()) console.error(ui.dim(t().globalConfigMigrated(globalConfigPath())));
 
   switch (first) {

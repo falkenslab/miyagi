@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { agentKitVersion, createChatController, getLanguage, type ChatController, type Mode } from "@falkenslab/agent-kit";
 import { prepareSession, VERSION } from "../agent.js";
-import { claudeAuthAvailable, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
+import { chooseLanguageFor, claudeAuthAvailable, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands } from "../catalog.js";
 import { draftsDirFor, sessionsDirFor, sourcesDirFor, workspaceExists } from "../workspace.js";
@@ -56,6 +56,11 @@ function openFolder(dir: string): void {
 const IMAGE_TYPES: Record<string, string> = { ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp" };
 
 export interface HostOptions {
+  /**
+   * Choose the interface language for the subject it opens (the app: nothing chose it before).
+   * `miyagi web` has chosen it already, from its arguments, and leaves it as it is.
+   */
+  chooseLanguage?: boolean;
   /** The port; a free one if not given. */
   port?: number;
   /** The token of the URL; a random one if not given. */
@@ -480,6 +485,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
 
   // The subject named, or the one opened last; none if there's none to open.
   const first = workspaceDir ?? (await listWorkspaces()).find((ws) => !ws.missing)?.dir;
+  if (options.chooseLanguage) await chooseLanguageFor(first);
   if (first) await openSubject(first);
 
   return {

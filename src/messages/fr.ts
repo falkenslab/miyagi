@@ -64,7 +64,6 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   skillsTitle: (dir) => `Compétences disponibles dans ${dir}`,
   commandsTitle: (dir) => `Commandes disponibles dans ${dir} (dans "chat")`,
   unknownCommand: (command) => `Commande inconnue "${command}". Utilisez miyagi --help.`,
-  renamedCommand: "teacher-agent s'appelle désormais miyagi : utilisez la commande miyagi (teacher-agent fonctionnera encore quelque temps).",
   globalConfigMigrated: (file) => `Vos réglages de ~/.teacher-agent ont été copiés dans ${file}.`,
 
   initHeading: (dir) => `\n=== Préparation de la matière dans ${dir} ===`,

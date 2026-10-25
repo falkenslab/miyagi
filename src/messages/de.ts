@@ -64,7 +64,6 @@ Mehr in README.md.`,
   skillsTitle: (dir) => `Verfügbare Fähigkeiten in ${dir}`,
   commandsTitle: (dir) => `Verfügbare Befehle in ${dir} (im "chat")`,
   unknownCommand: (command) => `Unbekannter Befehl "${command}". Nutzen Sie miyagi --help.`,
-  renamedCommand: "teacher-agent heißt jetzt miyagi: Nutzen Sie den Befehl miyagi (teacher-agent funktioniert noch eine Weile).",
   globalConfigMigrated: (file) => `Ihre Einstellungen aus ~/.teacher-agent wurden nach ${file} kopiert.`,
 
   initHeading: (dir) => `\n=== Fach wird eingerichtet in ${dir} ===`,

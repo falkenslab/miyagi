@@ -4,6 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { parseEnv } from "node:util";
 import { ensureClaudeAuth, resolveClaudeAuth } from "@falkenslab/agent-kit";
+import { chooseInterfaceLanguage } from "./messages/index.js";
+import { interfaceLanguage, readWorkspaceConfig, workspaceExists } from "./workspace.js";
 
 /**
  * ~/.miyagi/config.json — the only config not tied to a workspace: the Claude token
@@ -147,6 +149,21 @@ export async function claudeAuthAvailable(): Promise<boolean> {
 }
 
 /** The workspace's `agent.language`, then `defaultLanguage`, then undefined (mirror the human). */
+/**
+ * Chooses miyagi's interface language for a subject (or none): its own language, else the default
+ * one in `~/.miyagi/config.json`, else the computer's. The terminal and the GUI's host both call
+ * it, so the app shows the teacher's language from its very first screen. Returns the warnings.
+ */
+export async function chooseLanguageFor(workspaceDir: string | undefined): Promise<string[]> {
+  let workspaceLanguage: string | undefined;
+  try {
+    if (workspaceDir && (await workspaceExists(workspaceDir))) workspaceLanguage = (await readWorkspaceConfig(workspaceDir)).agent.language;
+  } catch {
+    // A broken or student config.json is reported by whoever opens it, in the chosen language.
+  }
+  return chooseInterfaceLanguage(interfaceLanguage(await resolveLanguage(workspaceLanguage)));
+}
+
 export async function resolveLanguage(workspaceValue: string | undefined): Promise<string | undefined> {
   if (workspaceValue !== undefined) return workspaceValue;
   return (await readGlobalConfig()).defaultLanguage;

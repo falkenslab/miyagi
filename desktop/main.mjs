@@ -48,7 +48,8 @@ async function start() {
   // miyagi, compiled into miyagi/ by `npm run build`: the host and the page it serves.
   const { startHost } = await import("./miyagi/dist/host/server.js");
   // For automated checks only: a subject of their own, instead of the one opened last.
-  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined);
+  // Nothing chose the interface language before: the host does, as the terminal would.
+  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined, { chooseLanguage: true });
   // For automated checks only: where the page is.
   if (process.env.MIYAGI_DESKTOP_URL_FILE) writeFileSync(process.env.MIYAGI_DESKTOP_URL_FILE, host.url);
 
