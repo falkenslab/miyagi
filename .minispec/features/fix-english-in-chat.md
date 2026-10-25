@@ -14,7 +14,7 @@ The system prompt, the skills and most tool results are in English (a project co
 
 - Done (36db3f2): every skill restates the rule under its title, checked by `check-references.mjs`. Three Spanish runs that loaded several skills had no English line (2026-10-22).
 - Not enough: on 2026-10-25 a short Spanish `run` wrote «I'll read the whole document in parts to get the context right.» and «I'll read the rest of Annex II (sessions, calls, recovery)…» right after `Grep` and `Read` results, not after loading a skill (`tests/2026-10-25T17-57-normativa-docente/`). The drift follows any English context, so a line per skill can't cover it.
-- Next: ask agent-kit to restate the reply language in each turn's context, next to the mode notes it already adds, so it's close to every model turn whatever came before; miyagi passes the conversation's language to it.
+- Next: agent-kit restating the reply language next to the turn (falkenslab/agent-kit#85), after tool results too, not only in the system prompt; then the five runs below.
 
 ## Verification
 
