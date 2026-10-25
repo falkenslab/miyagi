@@ -62,10 +62,11 @@ knowledge/
   activities/<act>.md     activity/<act>: una página por actividad evaluable (criterios aplicados, rúbrica, preguntas)
   curriculum/provisions.md curriculum/provisions: las normas del currículo oficial, con su fecha, enlace, vigencia y día de consulta
   curriculum/<módulo>.md  curriculum/<módulo>: sus resultados de aprendizaje y criterios, tal cual y con la numeración oficial
+  regulations/<norma>.md  regulation/<norma>: cualquier otra norma que le diste (evaluación, calendario, diversidad…): lo que obliga, artículo por artículo
   assessment-matrix.md    course/assessment-matrix: cada criterio o RA con sus instrumentos, sus pesos y dónde está en el libro de calificaciones (nunca datos de alumnos)
 ```
 
-Las páginas `curriculum/` solo existen si le pides que la programación siga tu normativa, la que le das en `sources/` o la que le pides buscar. Cada una lleva en su cabecera `url`, `date` (la fecha de la norma) y `consulted` (cuándo la consultó), y separa siempre el texto literal de sus comentarios.
+Las páginas `curriculum/` y `regulation/` solo existen si le das tu normativa en `sources/` o le pides buscarla (habilidad `regulations`). Cada una lleva en su cabecera `url`, `date` (la fecha de la norma) y `consulted` (cuándo la consultó), y separa siempre el texto literal de sus comentarios.
 
 En la raíz de `knowledge/` solo van esas ocho páginas `course/`, con `type: course` en su cabecera. Una base escrita con una versión anterior de miyagi se abre tal cual: al empezar cada sesión, miyagi añade `type: course` a las que no lo tienen, sin tocar el resto.
 

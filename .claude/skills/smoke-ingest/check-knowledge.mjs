@@ -106,15 +106,15 @@ if (names.length > 0) {
 }
 
 // The official curriculum is quoted and dated: every curriculum/ page says where it comes from
-// and when it was consulted (teaching-plan, from the norms the teacher brings).
+// and when it was consulted (regulations, from the norms the teacher brings); so are regulation/ pages.
 const undated = pages
-  .filter((f) => rel(f).startsWith("curriculum/"))
+  .filter((f) => /^(curriculum|regulations)\//.test(rel(f)))
   .filter((f) => {
     const front = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text.get(f))?.[1] ?? "";
     return !["url", "date", "consulted"].every((field) => new RegExp(`^${field}:\\s*\\S`, "m").test(front));
   });
 if (undated.length > 0) {
-  console.log(`curriculum pages without url, date or consulted: ${undated.length}`);
+  console.log(`curriculum or regulation pages without url, date or consulted: ${undated.length}`);
   undated.forEach((f) => console.log(`  ${rel(f)}`));
 }
 

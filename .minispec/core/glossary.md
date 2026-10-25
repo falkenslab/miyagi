@@ -32,6 +32,10 @@ Checking that the Moodle course matches the teaching plan (`course-alignment`).
 
 What a subject or module officially teaches and assesses, as the country's provisions set it, brought by the teacher (or found at their request) and kept verbatim and dated in `curriculum/` pages (ADR-025).
 
+## Regulation page
+
+`regulation/<slug>`: a norm the teacher brought that isn't a curriculum (an evaluation order, the school calendar, instructions), with what it obliges, each item with its article, verbatim for deadlines and conditions (`regulations`).
+
 ## Assessment matrix
 
 `course/assessment-matrix`: each evaluation criterion or learning outcome, the instruments that give evidence of it, their weights and where they live in the gradebook (`criterial-assessment`). About the course, never about students.

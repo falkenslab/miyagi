@@ -59,7 +59,7 @@ agent-kit's knowledge base, reached only through its `knowledge_*` tools over it
 - `course/<slug>` (root files with `type: course`): `orientation`, `course-map`, `moodle-capabilities`, `teaching-plan` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading), `progress` and `course-audit` (dated entries), `drafts` (the activities in progress, by phase), `assessment-matrix` (criteria, instruments, weights; never students). `tagCoursePages()` gives older root pages that type at the start of every session.
 - `synthesis/course-alignment` — dated comparisons of the course with the plan.
 - `topic/<slug>`, `activity/<slug>` — criteria, rubric, questions; a quiz's GIFT file is in `drafts/<slug>/`.
-- `curriculum/<slug>` — the official curriculum, verbatim and dated, from the norms the teacher brings or asks miyagi to find (`teaching-plan`, ADR-025).
+- `curriculum/<slug>` — the official curriculum, verbatim and dated; `regulation/<slug>` — any other norm, what it obliges with its articles (`regulations`, from the norms the teacher brings or asks miyagi to find, ADR-025).
 - The `researcher` and `pedagogy-reviewer` subagents read pages with `knowledge_index`, `knowledge_search` and `knowledge_read`.
 
 File scope (agent-kit's hook, set in `toSessionConfig()`): no file tool reaches `knowledge/`; `Read`/`Glob`/`Grep` read `sources/` (plus `extract_text` for DOCX, PPTX and XLSX), `Write`/`Edit` only `drafts/` (and docker-lab's labs folder when it's on); `config.json` and `.env` denied.

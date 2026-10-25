@@ -17,9 +17,11 @@ topic/<slug>                one hub page per topic/unit/block of the course: its
                             recurring doubts from the class
 activity/<slug>             one page per evaluable activity: grading criteria applied, its
                             rubric, questions (the GIFT file itself is in drafts/)
-curriculum/provisions       the norms the teacher brought or asked you to find, dated and checked
-                            in force (teaching-plan)
+curriculum/provisions       the curriculum's norms the teacher brought or asked you to find, dated
+                            and checked in force (regulations)
 curriculum/<module>         its learning outcomes and criteria verbatim, with the official numbering
+regulation/<slug>           any other norm the teacher brought (evaluation, calendar, diversity…):
+                            what it obliges, each item with its article, verbatim (regulations)
 course/assessment-matrix    each criterion or learning outcome, the instruments that evidence it,
                             their weights, where it lives in the gradebook (criterial-assessment);
                             never about students

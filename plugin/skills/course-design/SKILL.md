@@ -32,6 +32,10 @@ A student shouldn't need knowledge from a later topic to complete an earlier act
 Check the course's current order in the classroom (the classroom extension's read-a-course skill) before proposing changes — some
 sequencing may already be intentional even if it isn't obvious at first glance.
 
+Dates come from the school calendar when the teacher brought it (a `regulation/` page,
+`regulations`): units and deadlines on school days, inside their evaluation period, never on a
+non-school day.
+
 ## Learning objectives
 
 A good objective is observable — it says what the student will be able to *do*, not just

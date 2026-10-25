@@ -122,10 +122,27 @@ Elige y aplica una metodología que encaje con lo que se quiere aprender, y la m
 
 Te ayuda a escribir o revisar la programación didáctica del curso (contexto, objetivos, contenidos y temas, metodología, evaluación y calificación, temporalización, atención a la diversidad, recursos) a partir de tu material y tus decisiones. Te pregunta lo que solo tú puedes decidir, como las horas, el calendario o los pesos, y marca como propuesta lo que no hayas decidido. Queda en sus apuntes, enlazada con cada tema. No se publica en Moodle salvo que se lo pidas.
 
-No busca normativa por su cuenta. Si quieres que la programación siga la tuya (el currículo de tu comunidad, la plantilla de tu centro), déjala en `sources/` o pídele que la busque en las fuentes oficiales. Comprueba que sea la vigente, copia tal cual sus resultados de aprendizaje y criterios, con su numeración oficial, y sigue el formato de documento que pida.
+No busca normativa por su cuenta. Si quieres que la programación siga la tuya (el currículo de tu comunidad, la orden de evaluación, el calendario escolar, la plantilla de tu centro), déjala en `sources/` o pídele que la busque: la lee con la habilidad `regulations`, la cita y la aplica.
 
 - **Pídeselo así:** *«Escribe la programación a partir del borrador del departamento que te dejé en sources.»*
 - **Atajo:** `/miyagi:teaching-plan`
+
+### ⚖️ `regulations` · Tu normativa
+
+Lee las normas que te aplican y que le das en `sources/`, o que le pides buscar en las fuentes oficiales:
+
+- el currículo de tu materia o módulo;
+- la orden de evaluación;
+- las instrucciones de inicio de curso;
+- la de atención a la diversidad;
+- el calendario escolar;
+- la de formación en empresa.
+
+De cada una apunta qué es, quién la dicta, su fecha y si sigue en vigor, y si choca con otra de más rango. Guarda lo que obliga artículo por artículo, y copia tal cual los plazos, porcentajes y condiciones. El currículo va en sus páginas `curriculum/`, con los criterios y su numeración oficial.
+
+Después lo aplica, citando el artículo: la programación tiene lo que pide la norma, la evaluación sigue sus convocatorias y su forma de calificar, y las fechas caen en días lectivos del calendario. Nunca la busca por su cuenta. Si algo depende de una norma que no tiene, te la pide. Si lo que le pides choca con una norma tuya, te lo dice, y decides tú.
+
+- **Pídeselo así:** *«Te he dejado en sources la orden de evaluación de FP: aplícala a la evaluación del módulo.»* o *«Busca la resolución del calendario escolar de este curso y pon fechas a los temas.»*
 
 ### 📐 `criterial-assessment` · Evaluar por criterios
 

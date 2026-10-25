@@ -54,7 +54,7 @@ export const COURSE_PAGE_TYPES: PageType[] = [
     dir: "curriculum",
     indexSection: "Curriculum",
     description:
-      "The official curriculum, from the norms the teacher brings or asks you to find (teaching-plan): curriculum/provisions (each provision: type and number, date, gazette, URL, in force and how it was checked, date consulted) " +
+      "The official curriculum, from the norms the teacher brings or asks you to find (regulations): curriculum/provisions (each provision: type and number, date, gazette, URL, in force and how it was checked, date consulted) " +
       "and curriculum/<module> (its learning outcomes, competences and criteria verbatim, with their official numbering; hours; basic contents). " +
       "Verbatim text marked and kept apart from summary. Fields: url (the provision), date (its date), consulted (from current_time).",
     template: `<Which provision(s) this page quotes, and for which stage, title or subject, region and school year.>
@@ -66,6 +66,25 @@ Source: <provision, article or annex> - [Provisions](curriculum/provisions)
 
 ## Notes
 - <Your summary or comments, never mixed with the quoted text.>`,
+    indexFields: ["consulted"],
+  },
+  {
+    type: "regulation",
+    dir: "regulations",
+    indexSection: "Regulations",
+    description:
+      "One per norm the teacher brought that isn't a curriculum (an evaluation order, start-of-year instructions, the school calendar, work placements; regulations): its rank, issuer, date and whether it's in force, " +
+      "then what it obliges as a list, each item with its article, verbatim for deadlines, percentages, numbers and conditions, apart from your summary. Fields: url, date (the norm's), consulted (from current_time).",
+    template: `<Which norm this is: rank, number, issuer, date; whether it's in force and how you checked.>
+
+## What it obliges
+- <Obligation, with its article: "verbatim text when it's a deadline, a percentage or a condition" (art. N).>
+
+## Summary
+- <Your summary, never mixed with the quoted text.>
+
+## Applies to
+- [Teaching plan](course/teaching-plan) · <the pages that depend on it>`,
     indexFields: ["consulted"],
   },
   {

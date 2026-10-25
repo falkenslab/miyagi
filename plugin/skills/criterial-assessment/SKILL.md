@@ -17,7 +17,7 @@ can't be traced to a criterion doesn't count towards that criterion, however goo
 
 From the most official source there is, in this order:
 
-1. `curriculum/` pages, kept from the norms the teacher brought (`teaching-plan`): the learning
+1. `curriculum/` pages, kept from the norms the teacher brought (`regulations`): the learning
    outcomes, competences and criteria verbatim, with their official numbers.
 2. `course/teaching-plan`: the plan's own criteria, when there's no official curriculum.
 3. What the teacher gives (in `sources/` or in the chat).

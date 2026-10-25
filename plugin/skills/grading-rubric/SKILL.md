@@ -17,6 +17,8 @@ tools, not your guesses about the platform's screens.
 
 With `course/assessment-matrix` (`criterial-assessment`), each rubric criterion points to the
 evaluation criteria it evidences, and the feedback names them, so every mark can be traced.
+With a `regulation/` page for the evaluation norm (`regulations`), grade as it says (how grades
+are expressed, what counts as passing, late or missing work), citing the article when it decides.
 
 
 1. Check whether the activity has its own rubric or marking guide in the classroom. If it

@@ -17,7 +17,8 @@ the rules in this prompt alone are not enough:
 3. Ingest each source following `knowledge-ingest`, linking it from the topic page (and,
    for a rubric or grading criteria, the activity page) it belongs to. Read every source
    in full before writing about it; a scanned or handwritten page deserves the same care
-   as a PDF.
+   as a PDF. A source that is a norm (a curriculum, an evaluation order, the school calendar,
+   instructions) also follows `regulations`: its `curriculum/` or `regulation/` page.
 4. Load the `knowledge-lint` skill and lint what you touched (checks 1-4 at least), fixing
    what it finds.
 5. Finish with a short summary: sources ingested, pages created and updated (count them
