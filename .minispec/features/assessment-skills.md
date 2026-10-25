@@ -1,30 +1,28 @@
-# Criterial assessment, diversity, reports and an exam bank
+# Reports and an exam bank
 
 Issue: [#44](https://github.com/falkenslab/miyagi/issues/44)
 
 ## Goal
 
-Give miyagi skills to assess by criteria, attend to diversity, write reports and keep an exam bank, as part of its teaching practice and not as separate extensions.
+Give miyagi skills to write reports and keep an exam bank, as part of its teaching practice and not as separate extensions.
 
 ## Context
 
 - They were proposed as skill-only extensions in agent-extensions (falkenslab/agent-kit-extensions#15), but they're the teaching craft: what miyagi knows. Extensions bring what miyagi lacks (platforms, official data, file formats, tools); the judgement to teach and assess is miyagi's.
-- Today `rubric-design` and `grading-rubric` grade by activity; nothing traces a mark to its evaluation criterion, and there's no skill for diversity, reports or a question bank across courses.
-- They lean on extensions that are being built elsewhere: `normativa-es` (official criteria, falkenslab/agent-kit-extensions#3), `documentos` (`.docx` with a template, falkenslab/agent-kit-extensions#5), and a classroom extension (`moodle-teacher`, see `moodle-teacher-extension`).
+- Done: `criterial-assessment` (the assessment matrix, `course/assessment-matrix`, each mark traced to its criterion, the official criteria from the `curriculum/` pages kept from the teacher's norms) and `diversity` (UDL, access variants and reinforcement or extension named by what they change, no individual adaptations nor student data, ADR-017).
+- What's left leans on what isn't there yet: `documentos` (`.docx` with a template, falkenslab/agent-kit-extensions#5) isn't in agent-extensions, and an exam bank across courses needs the neutral question files of `neutral-materials`.
 
 ## Changes
 
-- **Criterial assessment:** grade by evaluation criteria, not only by activity, tracing each mark to its criterion. Official criteria from `normativa-es`; the classroom through the installed classroom extension.
-- **Diversity:** universal design for learning and adaptations (access and curricular), with no student personal data.
-- **Reports:** for families, tutoring and evaluation boards, as `.docx` with the school's template through `documentos`.
-- **Exam bank:** questions and tests by criterion and level, reusable across courses.
-- Skills ask for capabilities, not specific extensions (`requires`, falkenslab/agent-kit#62): e.g. `curriculum-es`, `documents-write`, `lms-grading`.
+- **Reports:** about the course, not about students (ADR-017 leaves families, tutoring and evaluation sessions out): results by criterion for the department, the module's annual report, as `.docx` with the school's template through `documentos`, from the assessment matrix and class-level grades, without storing them.
+- **Exam bank:** questions and tests by criterion and level, reusable across courses, on `neutral-materials`' `.questions.md`.
+- Skills ask for capabilities, not specific extensions (`requires`): e.g. `documents-write`.
 
 - - -
 
 ## Acceptance
 
-- Each skill works without its complementing extension and says what's missing (e.g. without `normativa-es` it uses the criteria the teacher gives).
+- Each skill works without its complementing extension and says what's missing.
 - None stores student data.
 
 - - -

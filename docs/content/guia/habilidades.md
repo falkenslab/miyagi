@@ -127,12 +127,29 @@ No busca normativa por su cuenta: en el chat te ofrece una vez buscar el curríc
 - **Pídeselo así:** *«Escribe la programación a partir del borrador del departamento que te dejé en sources.»*
 - **Atajo:** `/miyagi:teaching-plan`
 
-### 📜 `official-curriculum` · Buscar el currículo oficial
+### 📐 `criterial-assessment` · Evaluar por criterios
 
-Busca el currículo oficial de tu módulo o materia: el real decreto del BOE y la orden o el decreto de tu comunidad autónoma (BOC, BOJA, DOGC, BOCM, DOGV…), primero la versión consolidada, y comprueba que siga en vigor. Guarda los originales en `sources/curriculum/` y, en sus apuntes, cada norma con su fecha, su enlace y el día en que la consultó, y los resultados de aprendizaje y criterios de evaluación **tal cual**, con su numeración oficial. Nunca inventa ni completa un criterio, ni mezcla comunidades; si no lo encuentra, te lo dice. Solo busca si se lo pides o le dices que sí.
+Evalúa por criterios de evaluación o resultados de aprendizaje, no solo por actividades. Mantiene la matriz de evaluación del curso:
 
-- **Pídeselo así:** *«Busca el currículo oficial de Bases de Datos de DAM en Canarias para este curso.»*
-- **Atajo:** `/miyagi:curriculum`
+- cada criterio, citado del currículo oficial o de tu programación;
+- qué instrumentos dan evidencia de él;
+- con qué peso;
+- dónde está en el libro de calificaciones.
+
+Al corregir, cada criterio de la rúbrica apunta a los de evaluación y la retroalimentación los nombra. Te dice qué criterios no tienen todavía ninguna evidencia, y cómo va la clase en cada uno, sin guardar datos de alumnos. Montar el libro de calificaciones por criterios te lo pide aprobar antes.
+
+- **Pídeselo así:** *«Haz la matriz de evaluación por RA y dime qué criterios no evalúa ninguna actividad.»*
+
+### 🌈 `diversity` · Atender a la diversidad
+
+Aplica el diseño universal para el aprendizaje (DUA) a cada tema y actividad: más de una forma de motivar, de presentar el contenido y de demostrar lo aprendido. Prepara además variantes de una actividad:
+
+- **de acceso:** más tiempo, otro formato, respuesta oral;
+- **de refuerzo y de ampliación.**
+
+Cada variante se nombra por lo que cambia, nunca por quién la necesita. Quién necesita qué no se guarda en ningún sitio, y a quién se le asigna cada variante lo decides tú. Las adaptaciones curriculares individuales quedan fuera de miyagi: necesitan datos personales del alumno y siguen el procedimiento del centro.
+
+- **Pídeselo así:** *«Prepara una variante con más tiempo y formato accesible del cuestionario del tema 2.»*
 
 ### 🎯 `course-alignment` · Comprobar que el curso sigue la programación
 

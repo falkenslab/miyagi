@@ -34,6 +34,7 @@ Before starting each front, load **both** skills that cover it, miyagi's first
 | write content, a unit | `miyagi:resource-authoring`, `miyagi:unit-building` | `moodle-teacher:course-content` |
 | publish anything | `miyagi:publish-check` | `moodle-teacher:publishing` |
 | see how the class is doing | `miyagi:progress-monitoring` | `moodle-teacher:class-progress` |
+| assess by criteria or learning outcomes, set up the gradebook by them | `miyagi:criterial-assessment` | `moodle-teacher:gradebook` |
 
 miyagi's skill has the teaching judgement (the rubric to apply, when to step into a thread, what
 makes a question good) and the extension's only the mechanics: loading only the extension's

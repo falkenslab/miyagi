@@ -32,9 +32,9 @@ Checking that the Moodle course matches the teaching plan (`course-alignment`).
 
 The state provision (BOE) and the region's that set what a module or subject teaches and assesses, kept verbatim and dated in `curriculum/` pages (`official-curriculum`), only with the teacher's yes.
 
-## RA, CE, módulo profesional
+## Assessment matrix
 
-In FP: a *módulo profesional* is a vocational module of a title; its *resultados de aprendizaje* (RA1, RA2…) are the learning outcomes, each assessed by *criterios de evaluación* (CE1a, CE1b…). Not the same as the plan's own criteria `CE…` when there's no official curriculum.
+`course/assessment-matrix`: each evaluation criterion or learning outcome, the instruments that give evidence of it, their weights and where they live in the gradebook (`criterial-assessment`). About the course, never about students.
 
 ## Activity in progress
 

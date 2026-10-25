@@ -32,6 +32,7 @@ through your knowledge base (the `knowledge_*` tools) and the teacher's document
 | publish anything | `miyagi:publish-check` | `moodle-teacher:publishing` |
 | build something new and complex in phases | `miyagi:activity-lifecycle` | the extension's skill for each piece |
 | see how the class is doing | `miyagi:progress-monitoring` | `moodle-teacher:class-progress` |
+| assess by criteria or learning outcomes, set up the gradebook by them | `miyagi:criterial-assessment` | `moodle-teacher:gradebook` |
 
 miyagi's skill has the teaching judgement (the rubric to apply, when to step into a thread, what
 makes a question good) and the extension's only the mechanics: loading only the extension's

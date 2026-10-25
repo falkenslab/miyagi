@@ -15,6 +15,10 @@ tools, not your guesses about the platform's screens.
 
 ## Before grading
 
+With `course/assessment-matrix` (`criterial-assessment`), each rubric criterion points to the
+evaluation criteria it evidences, and the feedback names them, so every mark can be traced.
+
+
 1. Check whether the activity has its own rubric or marking guide in the classroom. If it
    does, **use it**: mark each criterion there instead of just writing a grade and a separate
    comment.

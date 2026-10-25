@@ -56,7 +56,7 @@ agent-kit's `knowledge` plugin adds 4 skills and 3 commands.
 
 agent-kit's knowledge base, reached only through its `knowledge_*` tools over its file store (agent-kit ADR-024), plus the course layer: the page types in `src/knowledgeTypes.ts` and the rules in `prompts/system/course-knowledge.md`. Pages are `type/slug` ids; the index and backlinks are kept by the kit.
 
-- `course/<slug>` (root files with `type: course`): `orientation`, `course-map`, `moodle-capabilities`, `teaching-plan` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading), `progress` and `course-audit` (dated entries), `drafts` (the activities in progress, by phase). `tagCoursePages()` gives older root pages that type at the start of every session.
+- `course/<slug>` (root files with `type: course`): `orientation`, `course-map`, `moodle-capabilities`, `teaching-plan` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading), `progress` and `course-audit` (dated entries), `drafts` (the activities in progress, by phase), `assessment-matrix` (criteria, instruments, weights; never students). `tagCoursePages()` gives older root pages that type at the start of every session.
 - `synthesis/course-alignment` — dated comparisons of the course with the plan.
 - `topic/<slug>`, `activity/<slug>` — criteria, rubric, questions; a quiz's GIFT file is in `drafts/<slug>/`.
 - The `researcher` and `pedagogy-reviewer` subagents read pages with `knowledge_index`, `knowledge_search` and `knowledge_read`.

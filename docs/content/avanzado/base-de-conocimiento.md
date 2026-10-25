@@ -62,6 +62,7 @@ knowledge/
   activities/<act>.md     activity/<act>: una página por actividad evaluable (criterios aplicados, rúbrica, preguntas)
   curriculum/provisions.md curriculum/provisions: las normas del currículo oficial, con su fecha, enlace, vigencia y día de consulta
   curriculum/<módulo>.md  curriculum/<módulo>: sus resultados de aprendizaje y criterios, tal cual y con la numeración oficial
+  assessment-matrix.md    course/assessment-matrix: cada criterio o RA con sus instrumentos, sus pesos y dónde está en el libro de calificaciones (nunca datos de alumnos)
 ```
 
 Las páginas `curriculum/` solo existen si le pediste buscar el currículo oficial (`official-curriculum`). Cada una lleva en su cabecera `url`, `date` (la fecha de la norma) y `consulted` (cuándo la consultó), y separa siempre el texto literal de sus comentarios.

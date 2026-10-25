@@ -61,7 +61,7 @@ unindexed.slice(0, 15).forEach((f) => console.log(`  ${rel(f)}`));
 
 // Root pages: only the course's own (type course, see src/knowledgeTypes.ts) besides the kit's
 // index, log and overview, and each says its type, or the knowledge_* tools can't see it.
-const COURSE_SLUGS = ["orientation", "course-map", "moodle-capabilities", "teaching-plan", "progress", "course-audit", "drafts"];
+const COURSE_SLUGS = ["orientation", "course-map", "moodle-capabilities", "teaching-plan", "progress", "course-audit", "drafts", "assessment-matrix"];
 const rootPages = pages.filter((f) => !rel(f).includes("/") && !["index.md", "log.md", "overview.md"].includes(rel(f)));
 const strayRoot = rootPages.filter((f) => !COURSE_SLUGS.includes(path.basename(f, ".md")));
 const untyped = rootPages.filter((f) => !/^---\r?\n(?:.*\r?\n)*?type:\s*course\s*\r?\n/.test(text.get(f)));
