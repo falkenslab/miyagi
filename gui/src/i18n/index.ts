@@ -56,6 +56,12 @@ export interface Texts {
   subjectLanguageHelp: string;
   create: string;
   missingSubject: string;
+  locate: string;
+  locateHelp: string;
+  locateSave: string;
+  locateInvalid: string;
+  forget: string;
+  forgetHelp: string;
   opening: string;
 }
 
@@ -119,6 +125,12 @@ const es: Texts = {
   subjectLanguageHelp: "Por ejemplo «español». Si lo dejas vacío, te responde en el idioma en que le escribas.",
   create: "Crear",
   missingSubject: "no se encuentra su carpeta",
+  locate: "Localizar",
+  locateHelp: "La nueva ruta de su carpeta (la que tiene su config.json)",
+  locateSave: "Guardar",
+  locateInvalid: "Ahí no hay ninguna asignatura de miyagi.",
+  forget: "Olvidar",
+  forgetHelp: "Se quita de la lista; su carpeta no se toca.",
   opening: "Abriendo la asignatura…",
 };
 
@@ -182,6 +194,12 @@ const en: Texts = {
   subjectLanguageHelp: "For example \"English\". Left empty, it answers in the language you write in.",
   create: "Create",
   missingSubject: "its folder is missing",
+  locate: "Locate",
+  locateHelp: "Its folder's new path (the one with its config.json)",
+  locateSave: "Save",
+  locateInvalid: "There's no miyagi subject there.",
+  forget: "Forget",
+  forgetHelp: "It leaves the list; its folder isn't touched.",
   opening: "Opening the subject…",
 };
 
@@ -245,6 +263,12 @@ const fr: Texts = {
   subjectLanguageHelp: "Par exemple « français ». Vide, il répond dans la langue où vous écrivez.",
   create: "Créer",
   missingSubject: "son dossier est introuvable",
+  locate: "Localiser",
+  locateHelp: "Le nouveau chemin de son dossier (celui qui a son config.json)",
+  locateSave: "Enregistrer",
+  locateInvalid: "Il n'y a pas de matière miyagi ici.",
+  forget: "Oublier",
+  forgetHelp: "Elle quitte la liste ; son dossier n'est pas touché.",
   opening: "Ouverture de la matière…",
 };
 
@@ -308,6 +332,12 @@ const de: Texts = {
   subjectLanguageHelp: "Zum Beispiel „Deutsch“. Leer antwortet es in der Sprache, in der Sie schreiben.",
   create: "Anlegen",
   missingSubject: "sein Ordner fehlt",
+  locate: "Suchen",
+  locateHelp: "Der neue Pfad seines Ordners (der mit seiner config.json)",
+  locateSave: "Speichern",
+  locateInvalid: "Dort ist kein miyagi-Fach.",
+  forget: "Vergessen",
+  forgetHelp: "Es verschwindet aus der Liste; sein Ordner bleibt unberührt.",
   opening: "Fach wird geöffnet…",
 };
 

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { act, useMiyagi } from "./api";
 import { Composer, Todos } from "./components/Composer";
+import { KnowledgeView, MaterialsView, OvenView, PlanView, SourcesView, TodayView, TopicsView, type CourseView } from "./components/Course";
 import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./components/Extensions";
 import { Panel } from "./components/Panel";
 import { Header, Sidebar, type Theme, type View } from "./components/Shell";
@@ -8,6 +9,7 @@ import { SignIn } from "./components/SignIn";
 import { NewSubjectForm, StartScreen } from "./components/Subjects";
 import { Transcript } from "./components/Transcript";
 import { texts } from "./i18n";
+import { courseTexts } from "./i18n/course";
 import { extTexts } from "./i18n/extensions";
 
 const THEME_KEY = "miyagi.theme";
@@ -27,7 +29,8 @@ export function App() {
   const [theme, setThemeState] = useState<Theme>(storedTheme);
   const [toast, setToast] = useState("");
   const [newSubject, setNewSubject] = useState(false);
-  const [view, setView] = useState<View>("chat");
+  const [view, setView] = useState<View>("today");
+  const [kbPage, setKbPage] = useState<string | null>(null);
   const [extTab, setExtTab] = useState<ExtTab>("installed");
   const [sideOpen, setSideOpen] = useState(false);
   const [linking, setLinking] = useState(false);
@@ -35,7 +38,17 @@ export function App() {
   const chat = state?.chat ?? null;
   const T = texts(chat?.language ?? info?.language);
   const X = extTexts(chat?.language ?? info?.language);
-
+  const C = courseTexts(chat?.language ?? info?.language);
+  /** A line to the chat from a view's button: sent as the teacher would type it, and the conversation shown. */
+  const ask = (line: string) => {
+    if (!chat || chat.busy) return;
+    void act("send", { line });
+    setView("chat");
+  };
+  const go = (next: CourseView | "chat", page?: string) => {
+    if (page) setKbPage(page);
+    setView(next);
+  };
 
   const setTheme = (next: Theme) => {
     setThemeState(next);
@@ -78,6 +91,13 @@ export function App() {
   const status = connection === "replaced" ? T.replaced : connection === "lost" ? T.lost : !state ? T.connecting : state.opening ? T.opening : null;
   const shown: View = chat ? view : "chat";
   const titles: Record<View, [string, string?]> = {
+    today: [C.nav.today, new Date().toLocaleDateString(chat?.language ?? info?.language ?? undefined, { weekday: "long", day: "numeric", month: "long" })],
+    plan: [C.nav.plan, C.sub.plan],
+    topics: [C.nav.topics],
+    materials: [C.nav.materials, C.sub.materials],
+    oven: [C.nav.oven, C.sub.oven],
+    knowledge: [C.nav.knowledge, "knowledge/"],
+    sources: [C.nav.sources, C.sub.sources],
     chat: [info?.workspace ?? "miyagi"],
     classroom: [X.navClassroom, X.classroomSubtitle],
     extensions: [X.navExtensions, X.extSubtitle],
@@ -85,7 +105,7 @@ export function App() {
   const [title, subtitle] = titles[shown];
   return (
     <div className="app">
-      <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} onNewSubject={() => setNewSubject(true)} />
+      <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} />
       <section className="main">
         <Header
           title={title}
@@ -119,6 +139,27 @@ export function App() {
               </div>
             </div>
           )}
+          {chat && info && (() => {
+            const common = { chat, info, C, ask, go, onLink: () => setLinking(true), linkTitle: X.linkTitle };
+            switch (shown) {
+              case "today":
+                return <TodayView {...common} />;
+              case "plan":
+                return <PlanView {...common} />;
+              case "topics":
+                return <TopicsView {...common} />;
+              case "materials":
+                return <MaterialsView {...common} />;
+              case "oven":
+                return <OvenView {...common} />;
+              case "knowledge":
+                return <KnowledgeView {...common} page={kbPage} setPage={setKbPage} />;
+              case "sources":
+                return <SourcesView {...common} onNotice={setToast} />;
+              default:
+                return null;
+            }
+          })()}
           {chat && info && shown === "extensions" && <ExtensionsView chat={chat} info={info} X={X} tab={extTab} setTab={setExtTab} onNotice={setToast} onLink={() => setLinking(true)} />}
           {chat && info && shown === "classroom" && <ClassroomView chat={chat} info={info} X={X} onLink={() => setLinking(true)} />}
           {chat && <Panel chat={chat} T={T} />}

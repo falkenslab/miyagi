@@ -60,6 +60,32 @@ export function readPhaseCounts(workspaceDir: string, draftsDir = path.join(work
   return PHASES.some((phase) => counts[phase] > 0) ? counts : undefined;
 }
 
+/** One activity of the register, as the page's "En el horno" shows it: its phase and its line, without the phase's backticks. */
+export interface RegisterItem {
+  phase: Phase;
+  text: string;
+}
+
+/** The register's activities, the unregistered plans among them (as `drafts/<slug>/`), in the page's order. */
+export function readRegister(workspaceDir: string, draftsDir = path.join(workspaceDir, "drafts")): RegisterItem[] {
+  let text = "";
+  try {
+    text = readFileSync(registerPath(workspaceDir), "utf-8");
+  } catch {
+    // no page yet
+  }
+  const items: RegisterItem[] = [];
+  for (const line of text.split(/\r?\n/)) {
+    const item = ITEM.exec(line);
+    if (!item) continue;
+    const body = item[1]!.trim();
+    const phase = PHASE.exec(body);
+    items.push({ phase: (phase?.[1] as Phase | undefined) ?? "hidden", text: phase ? body.slice(phase[0].length).replace(/^[\s:·—-]+/, "") : body });
+  }
+  for (const slug of plannedSlugs(draftsDir).filter((slug) => !text.includes(`drafts/${slug}/`))) items.push({ phase: "planning", text: `drafts/${slug}/plan.md` });
+  return items;
+}
+
 /** "1 en plan, 2 cocinándose": the phases with something in them, in order, with each language's names. */
 export function inOven(counts: PhaseCounts, names: Record<Phase, string>): string {
   return PHASES.filter((phase) => counts[phase] > 0).map((phase) => `${counts[phase]} ${names[phase]}`).join(", ");

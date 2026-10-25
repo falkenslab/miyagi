@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { act } from "../api";
 import type { Texts } from "../i18n";
+import type { CourseTexts } from "../i18n/course";
 import type { ExtTexts } from "../i18n/extensions";
 import type { ChatState, Info, Mode } from "../types";
 import { Logo } from "./Logo";
@@ -11,7 +12,7 @@ import { SubjectList, useSubjects } from "./Subjects";
 // quick actions and capabilities). Only views that exist are listed.
 
 export type Theme = "system" | "light" | "dark";
-export type View = "chat" | "classroom" | "extensions";
+export type View = "today" | "chat" | "plan" | "topics" | "materials" | "oven" | "classroom" | "knowledge" | "sources" | "extensions";
 
 /** A button with a popover, closed by Escape or a click outside. */
 function Menu({ label, title, children, className = "", popClass = "" }: { label: ReactNode; title: string; className?: string; popClass?: string; children: (close: () => void) => ReactNode }) {
@@ -78,7 +79,7 @@ function SubjectSwitcher({ info, busy, T, X, onNew }: { info: Info; busy: boolea
       >
         {(close) => (
           <Loader onOpen={reload}>
-            {subjects && <SubjectList subjects={subjects.filter((subject) => subject.name !== info.workspace)} T={T} onOpen={close} />}
+            {subjects && <SubjectList subjects={subjects.filter((subject) => subject.name !== info.workspace)} T={T} onOpen={close} onChanged={() => void reload()} />}
             <button
               type="button"
               disabled={busy}
@@ -185,6 +186,7 @@ export function Sidebar({
   setTheme,
   T,
   X,
+  C,
   onNewSubject,
 }: {
   info: Info | null;
@@ -197,6 +199,7 @@ export function Sidebar({
   setTheme: (theme: Theme) => void;
   T: Texts;
   X: ExtTexts;
+  C: CourseTexts;
   onNewSubject: () => void;
 }) {
   const go = (next: View) => {
@@ -228,9 +231,18 @@ export function Sidebar({
         <nav className="nav">
           {chat && (
             <>
+              {item("today", "☀️", C.nav.today)}
               {item("chat", "💬", X.navChat, chat.busy ? <span className="spinner" aria-hidden="true" /> : undefined)}
+              <h6>{C.sec.subject}</h6>
+              {item("plan", "🗺️", C.nav.plan)}
+              {item("topics", "🧱", C.nav.topics)}
+              {item("materials", "📦", C.nav.materials)}
+              {item("oven", "🔥", C.nav.oven)}
               <h6>{X.secClassroom}</h6>
               {item("classroom", "🎓", X.navClassroom, <span className={`dot ${room?.connected ? "ok" : room ? "warn" : ""}`} aria-hidden="true" />)}
+              <h6>{C.sec.memory}</h6>
+              {item("knowledge", "📚", C.nav.knowledge)}
+              {item("sources", "🗂️", C.nav.sources)}
               <h6>{X.secMiyagi}</h6>
               {item("extensions", "🧩", X.navExtensions)}
               <Conversations chat={chat} T={T} X={X} onOpen={() => go("chat")} />

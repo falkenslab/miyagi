@@ -24,7 +24,7 @@ http://127.0.0.1:52341/?token=…
 
 ## Qué ves
 
-A la izquierda, la **barra lateral**: tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), la **Conversación**, **Tu aula**, las **Extensiones**, tus conversaciones anteriores (para retomar una o empezar otra) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha se abre con el botón ☰.
+A la izquierda, la **barra lateral**: tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), **Hoy**, la **Conversación**, las vistas de la asignatura y de su memoria, **Tu aula**, las **Extensiones**, tus conversaciones anteriores (para retomar una o empezar otra) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha se abre con el botón ☰.
 
 Arriba, en cada vista: su título, el **modo** (también con `Mayús+Tab`), las **Acciones** (lo que pides a menudo, como preparar el próximo tema o, con el aula, corregir lo pendiente; miyagi lo recibe como si lo escribieras) y las **Capacidades**.
 
@@ -35,6 +35,18 @@ En la conversación:
 - **Archivos para las fuentes**: con el clip, o arrastrándolos a la barra, van a `sources/` de la asignatura.
 
 La primera vez, si miyagi no tiene tu clave de Claude, la página te la pide: pega tu token (empieza por `sk-ant-oat`, lo sacas con `claude setup-token` en una terminal) o una clave de API (`sk-ant-api`). Se guarda en `~/.miyagi/config.json`, como en la terminal.
+
+## Tu asignatura, de un vistazo
+
+Estas vistas solo enseñan lo que miyagi sabe y tiene preparado: no cambian nada por su cuenta. Sus botones mandan una petición a la conversación, como si la escribieras tú, y miyagi trabaja allí con las mismas aprobaciones de siempre.
+
+- **Hoy**, lo primero que ves: lo que miyagi te dijo al saludar, cuántas páginas tiene su memoria, las fuentes que faltan por incorporar, lo que hay en el horno y en `drafts/`, sugerencias según cómo está la asignatura (incorporar tus documentos, escribir la programación, vincular el aula, corregir…) y lo último que anotó.
+- **Programación**: tu programación didáctica tal como está en su memoria, con **Revisar con miyagi** (y **Comprobar el aula** si la tienes vinculada). Sin programación todavía, un botón para escribirla con él.
+- **Temas y actividades**: cada tema con sus actividades; un clic lleva a su página.
+- **Materiales**: lo que miyagi prepara en `drafts/` antes de publicarlo, con una vista previa (los HTML se ven sin ejecutar nada de su código) y, con el aula vinculada, **Publicar…**.
+- **En el horno**: las actividades que van por fases (en plan, cocinándose, probándose oculta, servida), con su siguiente paso.
+- **Base de conocimiento**: sus páginas por secciones, con buscador y los enlaces entre ellas; **Revisar la base** le pide que la compruebe.
+- **Fuentes**: tus documentos, con si ya están incorporados, han cambiado o son nuevos. Arrastra aquí los nuevos y pulsa **Pedir a miyagi que los incorpore**.
 
 ## Tu aula
 

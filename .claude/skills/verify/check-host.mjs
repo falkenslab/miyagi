@@ -7,7 +7,7 @@
 // be removed, and a classroom address that isn't one connects nothing.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-host.mjs
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -79,6 +79,24 @@ check("…registered and open", listed.length === 1 && listed[0].name === "Compr
 const afterCreate = await firstEvents(1);
 check("…and named in info", afterCreate[0]?.data?.workspace === "Comprobación del host");
 check("no chat without a key", (await post("send", { line: "hola" })).error === "no chat");
+// A subject whose folder was moved (gui-workspaces #49): missing, located again, forgotten.
+const second = await post("create", { label: "Asignatura movida" });
+const movedFrom = ((await post("workspaces")).workspaces ?? []).find((ws) => ws.name === "Asignatura movida")?.dir;
+await post("open", { id: listed[0].id });
+const movedTo = `${movedFrom}-nueva`;
+renameSync(movedFrom, movedTo);
+const missing = ((await post("workspaces")).workspaces ?? []).find((ws) => ws.name === "Asignatura movida");
+check("a moved subject shows as missing", !second.error && missing?.missing === true);
+check("…can't be located in a folder that isn't a subject", (await post("locate", { id: missing?.id, dir: os.homedir() })).error === "not a subject");
+check("…is located again in its new folder", !(await post("locate", { id: missing?.id, dir: movedTo })).error && ((await post("workspaces")).workspaces ?? []).find((ws) => ws.id === missing?.id)?.missing === false);
+check("…and forgotten, its folder kept", !(await post("forget", { id: missing?.id })).error && !((await post("workspaces")).workspaces ?? []).some((ws) => ws.id === missing?.id) && existsSync(movedTo));
+check("the open subject can't be forgotten", (await post("forget", { id: listed[0].id })).error === "open");
+
+// A material to preview only from drafts/ (gui-course-views #51): never a path out of it.
+for (const bad of ["../config.json", "..%2Fconfig.json", "x/../../config.json", "/etc/passwd", "C:/Windows/win.ini"]) {
+  check(`drafts/ only: ${bad}`, (await fetch(`${base}/api/drafts/file?path=${bad}&token=${token}`)).status === 403);
+}
+check("a material without the token", (await fetch(`${base}/api/drafts/file?path=x.html`)).status === 403);
 check("a classroom that isn't a course's address connects nothing", (await post("classroom", { url: "not a url" })).error === "invalid");
 
 // A repository in a folder: added only with its name typed, and forgotten again.
@@ -100,4 +118,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log("ok   host: token, events, subjects, sign-in refusal, page served, repositories and classroom refusals");
+console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals");

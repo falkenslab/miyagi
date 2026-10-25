@@ -1,3 +1,4 @@
+import { spawn } from "node:child_process";
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
@@ -8,8 +9,9 @@ import { prepareSession, VERSION } from "../agent.js";
 import { claudeAuthAvailable, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands } from "../catalog.js";
-import { sessionsDirFor } from "../workspace.js";
-import { createSubject, listWorkspaces } from "../workspaces.js";
+import { draftsDirFor, sessionsDirFor, sourcesDirFor, workspaceExists } from "../workspace.js";
+import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
+import { draftsList, inside, knowledgeIndex, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, sourcesList, today, topics } from "./course.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
 /**
@@ -19,7 +21,8 @@ import { addRepository, capabilities, catalog, connectClassroom, inspect, market
  * answers; the chat's state reaches the page as server-sent events, and what the person does
  * comes back as POSTs. The page can switch to another registered subject or create one
  * (gui-workspaces, #49), see what miyagi can do, manage its extensions and connect a classroom
- * (gui-extensions, #50). No dependencies: node:http and the built page in dist/gui/. Every rule
+ * (gui-extensions, #50), and read the course: its plan, topics, materials, sources and knowledge
+ * base (gui-course-views, #51). No dependencies: node:http and the built page in dist/gui/. Every rule
  * stays in the agent (modes, approvals, file scope, gates): the page draws the state and sends actions.
  */
 
@@ -42,6 +45,12 @@ const TYPES: Record<string, string> = {
 
 /** The kit's own chat commands the page offers besides miyagi's catalog. */
 const KIT_COMMANDS = ["resume", "plan", "extensions"];
+
+/** Opens a folder in this computer's file explorer (the host runs where the person is: 127.0.0.1). */
+function openFolder(dir: string): void {
+  const [command, args] = process.platform === "win32" ? ["explorer.exe", [dir]] : process.platform === "darwin" ? ["open", [dir]] : ["xdg-open", [dir]];
+  spawn(command, args, { detached: true, stdio: "ignore" }).on("error", () => undefined).unref();
+}
 
 /** A logo's types: an image, nothing a browser would run. */
 const IMAGE_TYPES: Record<string, string> = { ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp" };
@@ -219,6 +228,32 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         await openSubject(dir);
         return {};
       }
+      // A subject whose folder was moved: forgotten (its folder stays), or pointed at its new folder.
+      case "forget": {
+        const listed = (await listWorkspaces()).find((ws) => ws.id === String(data.id));
+        if (!listed) return { error: "unknown subject" };
+        if (current && listed.dir === current.dir) return { error: "open" };
+        await forgetWorkspace(listed.id);
+        return {};
+      }
+      case "locate": {
+        const listed = (await listWorkspaces()).find((ws) => ws.id === String(data.id));
+        if (!listed) return { error: "unknown subject" };
+        const dir = path.resolve(String(data.dir ?? "").trim().replace(/^"|"$/g, ""));
+        if (!String(data.dir ?? "").trim() || !(await workspaceExists(dir))) return { error: "not a subject" };
+        await registerWorkspace(dir, listed.name, listed.kind);
+        return {};
+      }
+      // The subject's own folders, in the computer's file explorer: only these three.
+      case "open-folder": {
+        if (!current) return { error: "no subject" };
+        const which = String(data.which);
+        const dir = which === "sources" ? sourcesDirFor(current.dir) : which === "drafts" ? draftsDirFor(current.dir) : which === "subject" ? current.dir : undefined;
+        if (!dir) return { error: "unknown folder" };
+        await mkdir(dir, { recursive: true });
+        openFolder(dir);
+        return {};
+      }
       case "classroom": {
         // Connecting a classroom changes the session's prompts and gates: it opens again with it.
         const subject = current;
@@ -238,7 +273,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return await removeRepository(String(data.name ?? ""));
     }
     const chat = current?.chat;
-    if (!chat) return { error: "no chat" };
+    if (!chat || !current) return { error: "no chat" };
+    const subjectDir = current.dir;
     const busy = () => chat.getState().busy;
     switch (action) {
       case "send":
@@ -287,6 +323,23 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return {};
       case "capabilities":
         return await capabilities(chat);
+      // The course views: read only; what changes something goes through the chat.
+      case "today":
+        return await today(chat, subjectDir);
+      case "kb-index":
+        return await knowledgeIndex(chat);
+      case "kb-page":
+        return await knowledgePage(chat, String(data.id ?? ""));
+      case "kb-search":
+        return await knowledgeSearch(chat, String(data.query ?? ""));
+      case "sources":
+        return await sourcesList(chat, subjectDir);
+      case "drafts":
+        return await draftsList(subjectDir);
+      case "oven":
+        return oven(subjectDir);
+      case "topics":
+        return await topics(chat);
       case "catalog":
         return { entries: await catalog(chat, String(data.words ?? "")) };
       case "install":
@@ -391,6 +444,20 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
           const type = file ? IMAGE_TYPES[path.extname(file).toLowerCase()] : undefined;
           if (!file || !type) return void response.writeHead(404).end();
           response.writeHead(200, { "content-type": type, "cache-control": "max-age=300", "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'", "x-content-type-options": "nosniff" });
+          return void response.end(await readFile(file));
+        }
+        // A material in drafts/, to preview: only inside drafts/, shown, never run (a sandbox with no scripts).
+        if (request.method === "GET" && url.pathname === "/api/drafts/file") {
+          const file = current ? await inside(draftsDirFor(current.dir), url.searchParams.get("path") ?? "") : undefined;
+          const type = file ? PREVIEW_TYPES[path.extname(file).toLowerCase()] : undefined;
+          if (!file || !type || !(await stat(file)).isFile()) return void response.writeHead(file ? 415 : 403).end();
+          response.writeHead(200, {
+            "content-type": type,
+            "cache-control": "no-store",
+            "x-content-type-options": "nosniff",
+            "content-disposition": "inline",
+            ...(type.startsWith("application/pdf") ? {} : { "content-security-policy": "sandbox; default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; media-src 'self'" }),
+          });
           return void response.end(await readFile(file));
         }
         if (request.method === "POST" && url.pathname === "/api/upload") return json(response, 200, await addSource(request, url));
