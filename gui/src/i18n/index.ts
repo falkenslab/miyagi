@@ -63,6 +63,17 @@ export interface Texts {
   forget: string;
   forgetHelp: string;
   opening: string;
+  chooseFolder: string;
+  folderLabel: string;
+  folderHelp: string;
+  folderNotEmpty: string;
+  folderIsSubject: string;
+  openExisting: string;
+  openExistingHelp: string;
+  openButton: string;
+  persona: string;
+  personas: { none: string; formal: string; warm: string; motivating: string };
+  linkAfter: string;
 }
 
 const es: Texts = {
@@ -132,6 +143,17 @@ const es: Texts = {
   forget: "Olvidar",
   forgetHelp: "Se quita de la lista; su carpeta no se toca.",
   opening: "Abriendo la asignatura…",
+  chooseFolder: "Elegir carpeta",
+  folderLabel: "Carpeta de la asignatura (opcional)",
+  folderHelp: "Una carpeta vacía o nueva, por ejemplo en tu nube. Si la dejas vacía, va a la carpeta de miyagi.",
+  folderNotEmpty: "Esa carpeta no está vacía: elige otra, o una nueva.",
+  folderIsSubject: "Esa carpeta ya es una asignatura: ábrela con «Abrir una carpeta».",
+  openExisting: "Abrir una carpeta",
+  openExistingHelp: "La carpeta de una asignatura de miyagi que no está en tu lista (la que tiene su config.json), por ejemplo copiada de un compañero",
+  openButton: "Abrir",
+  persona: "Tono de voz de miyagi (foros, retroalimentación, avisos)",
+  personas: { none: "Sin preferencia (tono neutro)", formal: "Formal", warm: "Cercano", motivating: "Cercano y motivador" },
+  linkAfter: "Vincular ya un aula de Moodle",
 };
 
 const en: Texts = {
@@ -201,6 +223,17 @@ const en: Texts = {
   forget: "Forget",
   forgetHelp: "It leaves the list; its folder isn't touched.",
   opening: "Opening the subject…",
+  chooseFolder: "Choose a folder",
+  folderLabel: "The subject's folder (optional)",
+  folderHelp: "An empty or new folder, for example in your cloud. Left empty, it goes to miyagi's folder.",
+  folderNotEmpty: "That folder isn't empty: choose another one, or a new one.",
+  folderIsSubject: "That folder is a subject already: open it with \"Open a folder\".",
+  openExisting: "Open a folder",
+  openExistingHelp: "The folder of a miyagi subject that isn't in your list (the one with its config.json), for example copied from a colleague",
+  openButton: "Open",
+  persona: "miyagi's tone of voice (forums, feedback, announcements)",
+  personas: { none: "No preference (neutral tone)", formal: "Formal", warm: "Warm", motivating: "Warm and motivating" },
+  linkAfter: "Link a Moodle classroom now",
 };
 
 const fr: Texts = {
@@ -270,6 +303,17 @@ const fr: Texts = {
   forget: "Oublier",
   forgetHelp: "Elle quitte la liste ; son dossier n'est pas touché.",
   opening: "Ouverture de la matière…",
+  chooseFolder: "Choisir un dossier",
+  folderLabel: "Dossier de la matière (facultatif)",
+  folderHelp: "Un dossier vide ou nouveau, par exemple dans ton cloud. Laissé vide, il va dans le dossier de miyagi.",
+  folderNotEmpty: "Ce dossier n'est pas vide : choisis-en un autre, ou un nouveau.",
+  folderIsSubject: "Ce dossier est déjà une matière : ouvre-le avec « Ouvrir un dossier ».",
+  openExisting: "Ouvrir un dossier",
+  openExistingHelp: "Le dossier d'une matière miyagi absente de ta liste (celui qui a son config.json), par exemple copié d'un collègue",
+  openButton: "Ouvrir",
+  persona: "Ton de miyagi (forums, retours, annonces)",
+  personas: { none: "Pas de préférence (ton neutre)", formal: "Formel", warm: "Chaleureux", motivating: "Chaleureux et motivant" },
+  linkAfter: "Lier une classe Moodle maintenant",
 };
 
 const de: Texts = {
@@ -339,6 +383,17 @@ const de: Texts = {
   forget: "Vergessen",
   forgetHelp: "Es verschwindet aus der Liste; sein Ordner bleibt unberührt.",
   opening: "Fach wird geöffnet…",
+  chooseFolder: "Ordner wählen",
+  folderLabel: "Ordner des Fachs (optional)",
+  folderHelp: "Ein leerer oder neuer Ordner, zum Beispiel in deiner Cloud. Leer gelassen, kommt es in den Ordner von miyagi.",
+  folderNotEmpty: "Dieser Ordner ist nicht leer: Wähle einen anderen oder einen neuen.",
+  folderIsSubject: "Dieser Ordner ist schon ein Fach: Öffne ihn mit „Ordner öffnen“.",
+  openExisting: "Ordner öffnen",
+  openExistingHelp: "Der Ordner eines miyagi-Fachs, das nicht in deiner Liste ist (der mit seiner config.json), zum Beispiel von einer Kollegin kopiert",
+  openButton: "Öffnen",
+  persona: "Tonfall von miyagi (Foren, Rückmeldungen, Ankündigungen)",
+  personas: { none: "Keine Vorliebe (neutraler Ton)", formal: "Förmlich", warm: "Herzlich", motivating: "Herzlich und motivierend" },
+  linkAfter: "Gleich einen Moodle-Kursraum verknüpfen",
 };
 
 const ALL: Record<string, Texts> = { es, en, fr, de };

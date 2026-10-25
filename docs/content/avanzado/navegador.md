@@ -26,6 +26,14 @@ http://127.0.0.1:52341/?token=…
 
 A la izquierda, la **barra lateral**: tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), **Hoy**, la **Conversación**, las vistas de la asignatura y de su memoria, **Tu aula**, las **Extensiones**, tus conversaciones anteriores (para retomar una o empezar otra) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha se abre con el botón ☰.
 
+Desde el selector de asignaturas (o la pantalla de inicio, si no tienes ninguna):
+
+- **Nueva asignatura** te hace las preguntas de `miyagi init`: nombre, descripción, idioma, tono, y si quieres vincular ya un aula. Va a la carpeta de miyagi, salvo que pulses **Elegir carpeta** y le des una vacía o nueva (por ejemplo, en tu nube).
+- **Abrir una carpeta** añade a tu lista una asignatura que ya tienes en el disco, por ejemplo copiada de un compañero.
+- Una asignatura cuya carpeta se movió aparece como no encontrada: **Localizar** la apunta a su carpeta nueva y **Olvidar** la quita de la lista sin tocar su carpeta.
+
+Son las mismas asignaturas que ves en la terminal con `miyagi workspaces`.
+
 Arriba, en cada vista: su título, el **modo** (también con `Mayús+Tab`), las **Acciones** (lo que pides a menudo, como preparar el próximo tema o, con el aula, corregir lo pendiente; miyagi lo recibe como si lo escribieras) y las **Capacidades**.
 
 En la conversación:

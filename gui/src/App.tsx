@@ -6,7 +6,7 @@ import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./compon
 import { Panel } from "./components/Panel";
 import { Header, Sidebar, type Theme, type View } from "./components/Shell";
 import { SignIn } from "./components/SignIn";
-import { NewSubjectForm, StartScreen } from "./components/Subjects";
+import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
 import { Transcript } from "./components/Transcript";
 import { texts } from "./i18n";
 import { courseTexts } from "./i18n/course";
@@ -29,6 +29,7 @@ export function App() {
   const [theme, setThemeState] = useState<Theme>(storedTheme);
   const [toast, setToast] = useState("");
   const [newSubject, setNewSubject] = useState(false);
+  const [openExisting, setOpenExisting] = useState(false);
   const [view, setView] = useState<View>("today");
   const [kbPage, setKbPage] = useState<string | null>(null);
   const [extTab, setExtTab] = useState<ExtTab>("installed");
@@ -105,7 +106,7 @@ export function App() {
   const [title, subtitle] = titles[shown];
   return (
     <div className="app">
-      <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} />
+      <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
         <Header
           title={title}
@@ -129,7 +130,7 @@ export function App() {
         )}
         <main className="view">
           {state && !state.signedIn && <SignIn T={T} />}
-          {state?.signedIn && info && info.workspace === null && !state.opening && <StartScreen T={T} />}
+          {state?.signedIn && info && info.workspace === null && !state.opening && <StartScreen T={T} onLink={() => setLinking(true)} />}
           {chat && shown === "chat" && (
             <div className="chat">
               <Transcript chat={chat} workspace={info?.workspace ?? ""} T={T} />
@@ -174,10 +175,17 @@ export function App() {
           onNotice={setToast}
         />
       )}
+      {openExisting && (
+        <div className="scrim">
+          <div className="dialog" role="dialog" aria-modal="true" aria-label={T.openExisting}>
+            <OpenExisting T={T} onCancel={() => setOpenExisting(false)} />
+          </div>
+        </div>
+      )}
       {newSubject && (
         <div className="scrim">
           <div className="dialog" role="dialog" aria-modal="true" aria-label={T.newSubject}>
-            <NewSubjectForm T={T} onCancel={() => setNewSubject(false)} />
+            <NewSubjectForm T={T} onCancel={() => setNewSubject(false)} onLink={() => setLinking(true)} />
           </div>
         </div>
       )}

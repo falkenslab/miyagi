@@ -9,7 +9,7 @@ import { prepareSession, VERSION } from "../agent.js";
 import { chooseLanguageFor, claudeAuthAvailable, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands } from "../catalog.js";
-import { draftsDirFor, sessionsDirFor, sourcesDirFor, workspaceExists } from "../workspace.js";
+import { draftsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
 import { draftsList, inside, knowledgeIndex, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, sourcesList, today, topics } from "./course.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
@@ -229,7 +229,22 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         if (current?.chat?.getState().busy) return { error: "busy" };
         const label = String(data.label ?? "").trim();
         if (!label) return { error: "name required" };
-        const { dir } = await createSubject({ label, description: String(data.description ?? ""), language: String(data.language ?? "") });
+        // A folder of the teacher's, if they chose one: empty or new (createSubject checks it).
+        const folder = String(data.dir ?? "").trim().replace(/^"|"$/g, "");
+        const persona = ["formal", "warm", "motivating"].find((value) => value === data.persona) as AgentPersona | undefined;
+        const created = await createSubject({ label, description: String(data.description ?? ""), language: String(data.language ?? ""), persona, dir: folder || undefined }).catch((error: unknown) => ({ error: String((error as Error)?.message ?? error) }));
+        if ("error" in created) return created;
+        await openSubject(created.dir);
+        return {};
+      }
+      // A subject already on the disk that the list doesn't know (copied from a colleague, another
+      // computer): only a folder with a miyagi subject in it, registered and opened.
+      case "add-existing": {
+        if (current?.chat?.getState().busy) return { error: "busy" };
+        const dir = path.resolve(String(data.dir ?? "").trim().replace(/^"|"$/g, ""));
+        if (!String(data.dir ?? "").trim() || !(await workspaceExists(dir))) return { error: "not a subject" };
+        const config = await readWorkspaceConfig(dir);
+        await registerWorkspace(dir, workspaceLabel(dir, config), config.kind ?? "subject");
         await openSubject(dir);
         return {};
       }

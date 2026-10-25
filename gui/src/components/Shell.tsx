@@ -55,7 +55,7 @@ function Loader({ onOpen, children }: { onOpen: () => void | Promise<void>; chil
 }
 
 /** The subject open, as the sidebar's button: the others to switch to, and a new one. */
-function SubjectSwitcher({ info, busy, T, X, onNew }: { info: Info; busy: boolean; T: Texts; X: ExtTexts; onNew: () => void }) {
+function SubjectSwitcher({ info, busy, T, X, onNew, onOpenExisting }: { info: Info; busy: boolean; T: Texts; X: ExtTexts; onNew: () => void; onOpenExisting: () => void }) {
   const { subjects, reload } = useSubjects();
   if (!info.workspace) return null;
   return (
@@ -90,6 +90,17 @@ function SubjectSwitcher({ info, busy, T, X, onNew }: { info: Info; busy: boolea
             >
               <span aria-hidden="true">＋</span>
               <span>{T.newSubject}</span>
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => {
+                onOpenExisting();
+                close();
+              }}
+            >
+              <span aria-hidden="true">📂</span>
+              <span>{T.openExisting}</span>
             </button>
           </Loader>
         )}
@@ -188,6 +199,7 @@ export function Sidebar({
   X,
   C,
   onNewSubject,
+  onOpenExisting,
 }: {
   info: Info | null;
   chat: ChatState | null;
@@ -201,6 +213,7 @@ export function Sidebar({
   X: ExtTexts;
   C: CourseTexts;
   onNewSubject: () => void;
+  onOpenExisting: () => void;
 }) {
   const go = (next: View) => {
     setView(next);
@@ -227,7 +240,7 @@ export function Sidebar({
             <small>{X.tagline}</small>
           </div>
         </div>
-        {info && <SubjectSwitcher info={info} busy={Boolean(chat?.busy)} T={T} X={X} onNew={onNewSubject} />}
+        {info && <SubjectSwitcher info={info} busy={Boolean(chat?.busy)} T={T} X={X} onNew={onNewSubject} onOpenExisting={onOpenExisting} />}
         <nav className="nav">
           {chat && (
             <>

@@ -91,6 +91,16 @@ check("…can't be located in a folder that isn't a subject", (await post("locat
 check("…is located again in its new folder", !(await post("locate", { id: missing?.id, dir: movedTo })).error && ((await post("workspaces")).workspaces ?? []).find((ws) => ws.id === missing?.id)?.missing === false);
 check("…and forgotten, its folder kept", !(await post("forget", { id: missing?.id })).error && !((await post("workspaces")).workspaces ?? []).some((ws) => ws.id === missing?.id) && existsSync(movedTo));
 check("the open subject can't be forgotten", (await post("forget", { id: listed[0].id })).error === "open");
+check("a folder that isn't a subject can't be opened", (await post("add-existing", { dir: os.homedir() })).error === "not a subject");
+check("a subject on the disk, not in the list, is opened and listed", !(await post("add-existing", { dir: movedTo })).error && ((await post("workspaces")).workspaces ?? []).some((ws) => ws.dir === movedTo && !ws.missing));
+// A new subject in a folder of the teacher's: empty or new only.
+const chosenDir = path.join(os.homedir(), "nube", "Bases de datos");
+check("a subject created in a chosen folder", !(await post("create", { label: "En mi carpeta", dir: chosenDir })).error && existsSync(path.join(chosenDir, "config.json")));
+check("…not in a folder with things in it", (await post("create", { label: "Otra", dir: path.dirname(chosenDir) })).error === "folder not empty");
+check("…nor over a subject", (await post("create", { label: "Otra", dir: chosenDir })).error === "already a subject");
+// The terminal finds the subjects the page created: one registry for both.
+const terminal = spawnSync(process.execPath, [path.join(process.cwd(), "dist", "cli.js"), "workspaces", "--language=en"], { encoding: "utf8", env: process.env }).stdout;
+check("`miyagi workspaces` lists the subjects made in the page", terminal.includes("Comprobación del host") && terminal.includes("En mi carpeta") && terminal.includes("-w en-mi-carpeta"));
 
 // A material to preview only from drafts/ (gui-course-views #51): never a path out of it.
 for (const bad of ["../config.json", "..%2Fconfig.json", "x/../../config.json", "/etc/passwd", "C:/Windows/win.ini"]) {

@@ -18,18 +18,25 @@ export function useSubjects(): { subjects: Subject[] | null; reload: () => Promi
 }
 
 /** A new subject: its name, and what `init` would ask besides (no classroom yet: that comes later). */
-export function NewSubjectForm({ T, onCancel }: { T: Texts; onCancel?: () => void }) {
+/** A new subject, with what `init` asks: its name, description, language, tone, folder, and whether to link a classroom now. */
+export function NewSubjectForm({ T, onCancel, onLink }: { T: Texts; onCancel?: () => void; onLink?: () => void }) {
   const [label, setLabel] = useState("");
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("");
+  const [folder, setFolder] = useState<string | null>(null);
+  const [persona, setPersona] = useState("");
+  const [link, setLink] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const create = async () => {
     setSaving(true);
-    const result = await act("create", { label, description, language });
+    const result = await act("create", { label, description, language, persona, dir: folder ?? "" });
     setSaving(false);
-    if (result.error) setError(result.error);
-    else onCancel?.();
+    if (result.error) setError(result.error === "folder not empty" ? T.folderNotEmpty : result.error === "already a subject" ? T.folderIsSubject : result.error);
+    else {
+      onCancel?.();
+      if (link) onLink?.();
+    }
   };
   return (
     <form
@@ -53,6 +60,36 @@ export function NewSubjectForm({ T, onCancel }: { T: Texts; onCancel?: () => voi
         <input className="field" value={language} onChange={(event) => setLanguage(event.target.value)} />
       </label>
       <small className="muted">{T.subjectLanguageHelp}</small>
+      <label className="lb">
+        {T.persona}
+        <select className="field" value={persona} onChange={(event) => setPersona(event.target.value)}>
+          <option value="">{T.personas.none}</option>
+          <option value="formal">{T.personas.formal}</option>
+          <option value="warm">{T.personas.warm}</option>
+          <option value="motivating">{T.personas.motivating}</option>
+        </select>
+      </label>
+      {onLink && (
+        <label className="check">
+          <input type="checkbox" checked={link} onChange={(event) => setLink(event.target.checked)} />
+          <span>{T.linkAfter}</span>
+        </label>
+      )}
+      {folder === null ? (
+        <p>
+          <button type="button" className="linkish small" onClick={() => setFolder("")}>
+            📁 {T.chooseFolder}
+          </button>
+        </p>
+      ) : (
+        <>
+          <label className="lb">
+            {T.folderLabel}
+            <input className="field" value={folder} onChange={(event) => setFolder(event.target.value)} spellCheck={false} />
+          </label>
+          <small className="muted">{T.folderHelp}</small>
+        </>
+      )}
       {error && <p className="why">{error}</p>}
       <div className="acts">
         {onCancel && (
@@ -142,9 +179,40 @@ export function SubjectList({ subjects, current, T, onOpen, onChanged }: { subje
 }
 
 /** No subject open: the ones there are, and a new one. */
-export function StartScreen({ T }: { T: Texts }) {
+/** A subject already on the disk that isn't in the list: its folder, registered and opened. */
+export function OpenExisting({ T, onCancel }: { T: Texts; onCancel: () => void }) {
+  const [dir, setDir] = useState("");
+  const [error, setError] = useState("");
+  return (
+    <form
+      className="new-subject"
+      onSubmit={(event) => {
+        event.preventDefault();
+        void act("add-existing", { dir }).then((result) => (result.error ? setError(T.locateInvalid) : onCancel()));
+      }}
+    >
+      <h3>{T.openExisting}</h3>
+      <label className="lb">
+        {T.openExistingHelp}
+        <input className="field" value={dir} onChange={(event) => setDir(event.target.value)} autoFocus spellCheck={false} />
+      </label>
+      {error && <p className="why">{error}</p>}
+      <div className="acts">
+        <button type="button" className="btn" onClick={onCancel}>
+          {T.cancel}
+        </button>
+        <button type="submit" className="btn primary" disabled={!dir.trim()}>
+          {T.openButton}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export function StartScreen({ T, onLink }: { T: Texts; onLink?: () => void }) {
   const { subjects, reload } = useSubjects();
   const [creating, setCreating] = useState(false);
+  const [opening, setOpening] = useState(false);
   if (!subjects) return null;
   const none = subjects.length === 0;
   return (
@@ -152,8 +220,17 @@ export function StartScreen({ T }: { T: Texts }) {
       <div className="card">
         <Logo size={64} />
         {none && <p className="muted">{T.noSubjects}</p>}
-        {none || creating ? (
-          <NewSubjectForm T={T} onCancel={none ? undefined : () => setCreating(false)} />
+        {opening ? (
+          <OpenExisting T={T} onCancel={() => setOpening(false)} />
+        ) : none || creating ? (
+          <>
+            <NewSubjectForm T={T} onCancel={none ? undefined : () => setCreating(false)} onLink={onLink} />
+            {none && (
+              <button type="button" className="btn ghost" onClick={() => setOpening(true)}>
+                📂 {T.openExisting}
+              </button>
+            )}
+          </>
         ) : (
           <>
             <h2>{T.startTitle}</h2>
@@ -161,6 +238,9 @@ export function StartScreen({ T }: { T: Texts }) {
             <SubjectList subjects={subjects} T={T} onChanged={() => void reload()} />
             <button type="button" className="btn" onClick={() => setCreating(true)}>
               ＋ {T.newSubject}
+            </button>
+            <button type="button" className="btn ghost" onClick={() => setOpening(true)}>
+              📂 {T.openExisting}
             </button>
           </>
         )}
