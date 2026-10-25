@@ -61,7 +61,7 @@ import { inOven, isActivityPlanFile, readPhaseCounts, registerPath, type PhaseCo
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** The installed version, for the chat header (package.json sits next to src/ and dist/). */
-const VERSION = (JSON.parse(readFileSync(path.join(__dirname, "..", "package.json"), "utf-8")) as { version: string }).version;
+export const VERSION = (JSON.parse(readFileSync(path.join(__dirname, "..", "package.json"), "utf-8")) as { version: string }).version;
 const loadPrompt = createPromptLoader(path.join(__dirname, "..", "prompts"));
 
 /** "explore" is a bounded task (sign in, a few read tools, one page written): it doesn't need
@@ -236,6 +236,76 @@ function sessionHeading(kind: SessionKind, mode: Mode): string {
   return t().headingMode(mode, kind === "chat");
 }
 
+/**
+ * What a session of `kind` needs in this workspace, prepared once for the terminal and for the
+ * GUI's host (gui-host, #46): the workspace, its classroom if moodle-teacher reaches it, the mode,
+ * the session config and the opener for a run folder. Warnings go through `say`. Returns
+ * `created` when the setup wizard just made the workspace, `stop` when the session can't run.
+ */
+export async function prepareSession(
+  kind: SessionKind,
+  workspaceDir: string,
+  { modeFlag, canPrompt, say }: { modeFlag?: Mode; canPrompt: boolean; say: (line: string) => void },
+) {
+  const workspace = await resolveWorkspace(workspaceDir, canPrompt);
+  if ("created" in workspace) return { created: workspace.created };
+  const label = workspaceLabel(workspaceDir, workspace);
+  await registerWorkspace(workspaceDir, label, workspace.kind ?? "subject");
+  // The classroom is moodle-teacher's (ADR-021): it needs moving there if it's from before, and
+  // the extension installed and on. Otherwise the session works without it, and says how to fix it.
+  const pending = workspace.classroom && workspace.classroom.connector !== "moodle-teacher";
+  if (pending) say(t().classroomNeedsMoving);
+  const active = !pending && workspace.classroom ? await moodleTeacherActive(workspaceDir) : false;
+  if (workspace.classroom && !pending && !active) say(t().moodleTeacherMissing);
+  const classroom = active ? workspace.classroom : undefined;
+  // moodle-teacher reaches only the subjects' courses (#54): a subject connected before that adds its own here.
+  if (classroom) {
+    await ensureMoodleCourse(workspaceDir, classroom.url, classroom.courseId).catch((error: unknown) =>
+      say(t().moodleCourseNotAdded(error instanceof Error ? error.message : String(error))),
+    );
+  }
+  if (kind === "explore" && !classroom) {
+    say(t().exploreNeedsClassroom(workspaceDir));
+    return { stop: true as const };
+  }
+  const mode = await resolveMode(kind, modeFlag);
+
+  const config = toSessionConfig(workspaceDir, workspace, {
+    mode,
+    kind,
+    // "explore" only writes moodle-capabilities.md: a pending rebuild waits for a real session.
+    migrationPending: kind === "explore" ? false : await prepareKnowledgeBase(workspaceDir),
+    language: await resolveLanguage(workspace.agent.language),
+    instructions: await readInstructions(workspaceDir),
+    labs: await labsFor(workspaceDir, label),
+  });
+  if (!classroom) config.hasMoodle = false;
+
+  await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
+  await tagCoursePages(knowledgeDirFor(workspaceDir)); // root pages from before the knowledge_* tools
+  const autoCompactEnabled = await isAutoCompactEnabled();
+  const skills = await sessionSkills(workspaceDir);
+
+  /** The session's options for a run folder: its tools and hooks, the publish and upload gates. */
+  async function openSession(runDir: string, run?: RunFolder) {
+    // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
+    const opened = await buildSessionOptions(config, runDir, buildSpec(kind, skills), { autoCompactEnabled, run });
+    const { options } = opened;
+    if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
+    // GIFT checked before it's imported. Without a classroom nothing publishes.
+    if (classroom && kind !== "ingest") installUploadGate(options);
+    return opened;
+  }
+
+  /** The chat's first message to the model: a greeting from what the knowledge base already holds. */
+  const chatOpening = () =>
+    loadPrompt(classroom ? "messages/chat-opening-teacher.md" : "messages/chat-opening-teacher-standalone.md", {
+      inProgress: inProgressLine(readPhaseCounts(workspaceDir)),
+    });
+
+  return { workspace, label, classroom, mode, config, openSession, chatOpening };
+}
+
 /** Entry point for the "run", "chat", "ingest" and "explore" subcommands — `args` excludes the subcommand itself. */
 export async function runSession(kind: SessionKind, args: string[]): Promise<void> {
   const modeFlag = kind === "run" ? parseMode(args) : undefined;
@@ -255,59 +325,15 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   await ensureClaudeAuthPersisted();
 
   const canPrompt = Boolean(process.stdin.isTTY) && (kind === "run" || kind === "chat") && modeFlag !== "autonomous";
-  const workspace = await resolveWorkspace(workspaceDir, canPrompt);
+  const prepared = await prepareSession(kind, workspaceDir, { modeFlag, canPrompt, say: (line) => console.log(ui.warn(line)) });
   // Just configured: stop here, so the session starts clean (the full-screen chat) from its
   // own command instead of right after the setup wizard's prompts.
-  if ("created" in workspace) {
-    console.log(ui.dim(t().setupSaved(`miyagi ${kind} -w ${workspace.created}`)));
+  if ("created" in prepared) {
+    console.log(ui.dim(t().setupSaved(`miyagi ${kind} -w ${prepared.created}`)));
     return;
   }
-  await registerWorkspace(workspaceDir, workspaceLabel(workspaceDir, workspace), workspace.kind ?? "subject");
-  // The classroom is moodle-teacher's (ADR-021): it needs moving there if it's from before, and
-  // the extension installed and on. Otherwise the session works without it, and says how to fix it.
-  const pending = workspace.classroom && workspace.classroom.connector !== "moodle-teacher";
-  if (pending) console.log(ui.warn(t().classroomNeedsMoving));
-  const active = !pending && workspace.classroom ? await moodleTeacherActive(workspaceDir) : false;
-  if (workspace.classroom && !pending && !active) console.log(ui.warn(t().moodleTeacherMissing));
-  const classroom = active ? workspace.classroom : undefined;
-  // moodle-teacher reaches only the subjects' courses (#54): a subject connected before that adds its own here.
-  if (classroom) {
-    await ensureMoodleCourse(workspaceDir, classroom.url, classroom.courseId).catch((error: unknown) =>
-      console.log(ui.warn(t().moodleCourseNotAdded(error instanceof Error ? error.message : String(error)))),
-    );
-  }
-  if (kind === "explore" && !classroom) {
-    console.log(ui.warn(t().exploreNeedsClassroom(workspaceDir)));
-    return;
-  }
-  const mode = await resolveMode(kind, modeFlag);
-
-  const config = toSessionConfig(workspaceDir, workspace, {
-    mode,
-    kind,
-    // "explore" only writes moodle-capabilities.md: a pending rebuild waits for a real session.
-    migrationPending: kind === "explore" ? false : await prepareKnowledgeBase(workspaceDir),
-    language: await resolveLanguage(workspace.agent.language),
-    instructions: await readInstructions(workspaceDir),
-    labs: await labsFor(workspaceDir, workspaceLabel(workspaceDir, workspace)),
-  });
-  if (!classroom) config.hasMoodle = false;
-
-  await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
-  await tagCoursePages(knowledgeDirFor(workspaceDir)); // root pages from before the knowledge_* tools
-  const autoCompactEnabled = await isAutoCompactEnabled();
-  const skills = await sessionSkills(workspaceDir);
-
-  /** The session's options for a run folder: its tools and hooks, the publish and upload gates. */
-  async function openSession(runDir: string, run?: RunFolder) {
-    // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
-    const opened = await buildSessionOptions(config, runDir, buildSpec(kind, skills), { autoCompactEnabled, run });
-    const { options } = opened;
-    if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
-    // GIFT checked before it's imported. Without a classroom nothing publishes.
-    if (classroom && kind !== "ingest") installUploadGate(options);
-    return opened;
-  }
+  if ("stop" in prepared) return;
+  const { workspace, classroom, mode, config, openSession } = prepared;
 
   // The Ink chat shows these in its own header (full screen would wipe anything printed
   // before it); the readline chat, like the one-shot kinds, gets them printed.
@@ -356,9 +382,7 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
         agentLabel: ui.agent("miyagi>"),
         formatAction: friendlyToolLabel,
         toolPhrase,
-        initialPrompt: loadPrompt(classroom ? "messages/chat-opening-teacher.md" : "messages/chat-opening-teacher-standalone.md", {
-          inProgress: inProgressLine(readPhaseCounts(workspaceDir)),
-        }),
+        initialPrompt: prepared.chatOpening(),
         historyPath: path.join(sessionsDirFor(workspaceDir), "history.jsonl"),
       },
     );
