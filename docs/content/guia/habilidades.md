@@ -92,6 +92,19 @@ Cada actividad en marcha queda apuntada con su fase en la página `course/drafts
 
 - **Pídeselo así:** *«Prepara un escape room de SQL para el tema 3, con el proceso completo.»* Si escribes `/plan` antes, el plan lo escribe en modo plan, sin poder tocar nada más.
 
+### 🖼️ `designed-material` · Llevar al curso un diseño tuyo
+
+Lleva al curso un material que diseñaste tú (una ficha, un póster, una infografía, unas diapositivas):
+
+- lo exporta en el formato que conviene a su uso: PDF para imprimir o rellenar, imagen para verla en una página, PDF para leer unas diapositivas;
+- guarda el archivo en `drafts/`, porque el enlace de exportación caduca;
+- lo publica en el tema que le digas y en el sitio que le toca, como el recurso adecuado y con una línea que dice a los alumnos para qué es;
+- antes, comprueba que se lee bien en el móvil y que no lleva datos de ningún alumno.
+
+Lo sube oculto y con tu aprobación, como todo lo nuevo. Solo aparece si tienes instaladas una extensión de diseño (como canva) y la del aula (moodle-teacher). Si la de diseño te pide iniciar sesión, miyagi te dirá cómo (`/extensions sign-in canva`).
+
+- **Pídeselo así:** *«Sube al tema 3 la ficha de bucles que hice en Canva.»*
+
 ### 🐳 `practice-testing` · Probar las prácticas en Docker
 
 Comprueba una práctica **ejecutándola de verdad** en un laboratorio de Docker: sigue el enunciado como lo haría un alumno antes de publicarlo, o ejecuta la entrega de un estudiante al corregirla y usa el resultado como prueba. Es para cursos de informática (Docker, Linux, programación, bases de datos) y solo aparece si tienes instalada la extensión docker-lab (ver [Prácticas en Docker](../avanzado/practicas-docker.md)).
