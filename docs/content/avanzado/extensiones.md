@@ -46,7 +46,9 @@ Todas aceptan `--dir <carpeta>` para trabajar sobre esa asignatura.
 
 `miyagi extension` a secas explica cada una. Dentro del chat, `/extensions` muestra con qué extensiones está trabajando, y activar o desactivar una desde ahí abre de nuevo la sesión sin perder la conversación.
 
-Una extensión instalada o cambiada se nota en la siguiente sesión, no en la que ya está abierta. `miyagi skills` lista sus habilidades con el nombre de la extensión entre corchetes.
+En la [aplicación y en el navegador](navegador.md#extensiones) todo esto está en **Extensiones**, sin escribir órdenes, y lo que instalas desde ahí se pone en marcha en la conversación abierta.
+
+En la terminal, una extensión instalada o cambiada se nota en la siguiente sesión, no en la que ya está abierta. `miyagi skills` lista sus habilidades con el nombre de la extensión entre corchetes.
 
 ## Lo que una extensión no puede saltarse
 

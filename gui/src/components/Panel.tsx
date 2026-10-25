@@ -5,17 +5,20 @@ import { Markdown } from "../markdown";
 import type { ApprovalPrompt, ChatPanel, ChatState, FormField } from "../types";
 
 /** A modal dialog: focus moved in and kept there, Escape for `onEscape`. */
-function Dialog({ title, onEscape, children }: { title: string; onEscape?: () => void; children: ReactNode }) {
+export function Dialog({ title, onEscape, children, className = "" }: { title: string; onEscape?: () => void; children: ReactNode; className?: string }) {
   const box = useRef<HTMLDivElement>(null);
+  // The latest onEscape, so the state's updates don't move the focus back to the start.
+  const escape = useRef(onEscape);
+  escape.current = onEscape;
   useEffect(() => {
     const el = box.current;
     if (!el) return;
     const focusables = () => Array.from(el.querySelectorAll<HTMLElement>("button, input, textarea, select, [tabindex]:not([tabindex='-1'])")).filter((f) => !f.hasAttribute("disabled"));
     (el.querySelector<HTMLElement>("[data-autofocus]") ?? focusables()[0])?.focus();
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && onEscape) {
+      if (event.key === "Escape" && escape.current) {
         event.preventDefault();
-        onEscape();
+        escape.current();
       } else if (event.key === "Tab") {
         const all = focusables();
         if (!all.length) return;
@@ -32,10 +35,10 @@ function Dialog({ title, onEscape, children }: { title: string; onEscape?: () =>
     };
     el.addEventListener("keydown", onKey);
     return () => el.removeEventListener("keydown", onKey);
-  }, [onEscape]);
+  }, [title]);
   return (
     <div className="scrim">
-      <div className="dialog" role="dialog" aria-modal="true" aria-label={title} ref={box}>
+      <div className={`dialog ${className}`} role="dialog" aria-modal="true" aria-label={title} ref={box}>
         <h3>{title}</h3>
         {children}
       </div>

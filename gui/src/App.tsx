@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { act, useMiyagi } from "./api";
 import { Composer, Todos } from "./components/Composer";
+import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./components/Extensions";
 import { Panel } from "./components/Panel";
+import { Header, Sidebar, type Theme, type View } from "./components/Shell";
 import { SignIn } from "./components/SignIn";
 import { NewSubjectForm, StartScreen } from "./components/Subjects";
-import { TopBar, type Theme } from "./components/TopBar";
 import { Transcript } from "./components/Transcript";
 import { texts } from "./i18n";
+import { extTexts } from "./i18n/extensions";
 
 const THEME_KEY = "miyagi.theme";
 
@@ -25,8 +27,15 @@ export function App() {
   const [theme, setThemeState] = useState<Theme>(storedTheme);
   const [toast, setToast] = useState("");
   const [newSubject, setNewSubject] = useState(false);
+  const [view, setView] = useState<View>("chat");
+  const [extTab, setExtTab] = useState<ExtTab>("installed");
+  const [sideOpen, setSideOpen] = useState(false);
+  const [linking, setLinking] = useState(false);
+  const closeLink = useCallback(() => setLinking(false), []);
   const chat = state?.chat ?? null;
   const T = texts(chat?.language ?? info?.language);
+  const X = extTexts(chat?.language ?? info?.language);
+
 
   const setTheme = (next: Theme) => {
     setThemeState(next);
@@ -61,30 +70,69 @@ export function App() {
     const timer = setTimeout(() => setToast(""), 3200);
     return () => clearTimeout(timer);
   }, [toast]);
+  // An approval or a question needs the person where the conversation is.
+  useEffect(() => {
+    if (chat?.panel || chat?.choice) setView("chat");
+  }, [chat?.panel, chat?.choice]);
 
   const status = connection === "replaced" ? T.replaced : connection === "lost" ? T.lost : !state ? T.connecting : state.opening ? T.opening : null;
+  const shown: View = chat ? view : "chat";
+  const titles: Record<View, [string, string?]> = {
+    chat: [info?.workspace ?? "miyagi"],
+    classroom: [X.navClassroom, X.classroomSubtitle],
+    extensions: [X.navExtensions, X.extSubtitle],
+  };
+  const [title, subtitle] = titles[shown];
   return (
     <div className="app">
-      <TopBar chat={chat} workspace={info?.workspace ?? null} theme={theme} setTheme={setTheme} T={T} onNewSubject={() => setNewSubject(true)} />
-      {status && (
-        <div className="banner" role="status">
-          {status}
-        </div>
-      )}
-      <main className="chat">
-        {state && !state.signedIn && <SignIn T={T} />}
-        {state?.signedIn && info && info.workspace === null && !state.opening && <StartScreen T={T} />}
-        {chat && (
-          <>
-            <Transcript chat={chat} workspace={info?.workspace ?? ""} T={T} />
-            <div className="dock">
-              <Todos chat={chat} />
-              <Composer chat={chat} T={T} onNotice={setToast} />
-            </div>
-            <Panel chat={chat} T={T} />
-          </>
+      <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} onNewSubject={() => setNewSubject(true)} />
+      <section className="main">
+        <Header
+          title={title}
+          subtitle={subtitle}
+          chat={chat}
+          info={info}
+          T={T}
+          X={X}
+          onMenu={() => setSideOpen(true)}
+          onCapabilities={() => {
+            setExtTab("capabilities");
+            setView("extensions");
+          }}
+          onLink={() => setLinking(true)}
+          onSent={() => setView("chat")}
+        />
+        {status && (
+          <div className="banner" role="status">
+            {status}
+          </div>
         )}
-      </main>
+        <main className="view">
+          {state && !state.signedIn && <SignIn T={T} />}
+          {state?.signedIn && info && info.workspace === null && !state.opening && <StartScreen T={T} />}
+          {chat && shown === "chat" && (
+            <div className="chat">
+              <Transcript chat={chat} workspace={info?.workspace ?? ""} T={T} />
+              <div className="dock">
+                <Todos chat={chat} />
+                <Composer chat={chat} T={T} onNotice={setToast} />
+              </div>
+            </div>
+          )}
+          {chat && info && shown === "extensions" && <ExtensionsView chat={chat} info={info} X={X} tab={extTab} setTab={setExtTab} onNotice={setToast} onLink={() => setLinking(true)} />}
+          {chat && info && shown === "classroom" && <ClassroomView chat={chat} info={info} X={X} onLink={() => setLinking(true)} />}
+          {chat && <Panel chat={chat} T={T} />}
+        </main>
+      </section>
+      {linking && info && (
+        <LinkWizard
+          info={info}
+          busy={Boolean(chat?.busy)}
+          X={X}
+          onClose={closeLink}
+          onNotice={setToast}
+        />
+      )}
       {newSubject && (
         <div className="scrim">
           <div className="dialog" role="dialog" aria-modal="true" aria-label={T.newSubject}>

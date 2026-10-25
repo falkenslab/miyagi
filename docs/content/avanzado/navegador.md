@@ -24,12 +24,36 @@ http://127.0.0.1:52341/?token=…
 
 ## Qué ves
 
+A la izquierda, la **barra lateral**: tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), la **Conversación**, **Tu aula**, las **Extensiones**, tus conversaciones anteriores (para retomar una o empezar otra) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha se abre con el botón ☰.
+
+Arriba, en cada vista: su título, el **modo** (también con `Mayús+Tab`), las **Acciones** (lo que pides a menudo, como preparar el próximo tema o, con el aula, corregir lo pendiente; miyagi lo recibe como si lo escribieras) y las **Capacidades**.
+
+En la conversación:
+
 - **El chat**: lo que miyagi escribe, con sus acciones plegadas en una línea (ábrela para ver cada una), las tareas del turno flotando encima y la barra para escribir. `Intro` envía, `Mayús+Intro` salta de línea, `Esc` para a miyagi mientras trabaja, `/` abre los atajos y `↑`/`↓` recorren lo que ya escribiste.
-- **Las aprobaciones y las preguntas** de miyagi, en una ventana que no se cierra hasta que respondes, igual que en la terminal.
+- **Las aprobaciones y las preguntas** de miyagi, en una ventana que no se cierra hasta que respondes, igual que en la terminal. Si estabas en otra vista, la página vuelve a la conversación.
 - **Archivos para las fuentes**: con el clip, o arrastrándolos a la barra, van a `sources/` de la asignatura.
-- **Arriba**: tu asignatura (para cambiar a otra o crear una nueva), las conversaciones (para retomar una o empezar otra), el modo (también con `Mayús+Tab`) y el tema claro, oscuro o el del sistema.
 
 La primera vez, si miyagi no tiene tu clave de Claude, la página te la pide: pega tu token (empieza por `sk-ant-oat`, lo sacas con `claude setup-token` en una terminal) o una clave de API (`sk-ant-api`). Se guarda en `~/.miyagi/config.json`, como en la terminal.
+
+## Tu aula
+
+**Tu aula** enseña el curso de Moodle de la asignatura y si miyagi llega a él. Sin aula, **Vincular un aula** lo hace en tres pasos:
+
+1. Pegas la dirección de tu curso (la que ves en el navegador, con `course/view.php?id=…`).
+2. miyagi te dice lo que va a hacer: instalar la extensión del aula (moodle-teacher) la primera vez y darle tu campus y este curso, de modo que solo pueda entrar en tus cursos vinculados.
+3. Queda vinculada, y la conversación empieza de nuevo ya con el aula.
+
+Tu contraseña no pasa por miyagi: la primera vez que entre en el curso se abre una ventana de tu campus para que inicies sesión tú, como siempre.
+
+## Extensiones
+
+**Extensiones** tiene cuatro pestañas:
+
+- **Instaladas**: una tarjeta por extensión, con su interruptor para encenderla o apagarla, si está al día (y el botón para actualizarla si no) y **Qué declara**: sus servidores remotos, si los tiene, qué necesita en tu ordenador, qué capacidades aporta, sus opciones y el botón para quitarla (te pregunta si borra también sus datos). Las opciones secretas, como un token, no se muestran nunca: solo si están guardadas.
+- **Catálogo**: las extensiones pensadas para miyagi, con su logo, qué hacen y qué necesitan. **Añadir** te enseña antes lo que declara; una de un repositorio que no es el oficial lleva la marca «sin revisar» y te avisa antes de instalarse. Lo que instalas se pone en marcha en la conversación abierta.
+- **Repositorios**: el oficial, que no se puede quitar, y los que añadas tú. Para añadir uno, miyagi lo revisa, te avisa de que su código se ejecuta en tu ordenador y te pide que escribas su nombre.
+- **Capacidades** (también con el botón de arriba): una tabla con lo que miyagi puede hacer y gracias a qué, lo que tu ordenador no le deja (por ejemplo, sin Docker) y lo que le falta, con un botón para añadir la extensión que se lo daría.
 
 ## Qué la protege
 

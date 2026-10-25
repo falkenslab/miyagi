@@ -33,7 +33,7 @@ Te hará unas preguntas, una detrás de otra:
 - **Tono de voz.** Cómo hablará a tus estudiantes en el foro, en la retroalimentación y en los avisos: sin preferencia (neutro), formal, cercano, o cercano y motivador.
 - **Idioma.** El idioma en el que prefieres hablar con él, por ejemplo `español`. También decide el de sus menús y avisos si es español, inglés, francés o alemán. En blanco, te responde en el idioma en que le escribas.
 - **¿Crear `instructions.md`?** Un archivo donde escribir las instrucciones que quieres que tenga siempre en cuenta, como «puntúa sobre 10». Puedes crearlo después a mano.
-- **¿Conectar un aula Moodle ahora?** Por defecto, no: miyagi te ayuda igual con la programación, los temas y los materiales. Puedes conectarla cuando quieras con `miyagi init -w <nombre>`. Si dices que sí, te pide:
+- **¿Conectar un aula Moodle ahora?** Por defecto, no: miyagi te ayuda igual con la programación, los temas y los materiales. Puedes conectarla cuando quieras con `miyagi init -w <nombre>`, o en la aplicación desde **Tu aula** ([Tu aula](../avanzado/navegador.md#tu-aula)). Si dices que sí, te pide:
   - **URL de Moodle.** Lo más fácil: abre tu curso en el navegador y copia la dirección completa, algo como `https://moodle.micentro.es/course/view.php?id=42`. De ahí saca él solo la dirección de tu Moodle y el número del curso.
   - **ID del curso.** Solo si la dirección que pegaste no lo llevaba: el número tras `id=`.
 

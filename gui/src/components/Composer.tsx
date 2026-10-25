@@ -64,7 +64,9 @@ export function Composer({ chat, T, onNotice }: { chat: ChatState; T: Texts; onN
         setMenuAt((at) => (at + (event.key === "ArrowDown" ? 1 : commands.length - 1)) % commands.length);
         return;
       }
-      if (event.key === "Tab" || (event.key === "Enter" && !event.shiftKey)) {
+      // A command typed in full goes out with Enter, as any line; otherwise Enter completes it.
+      const typed = commands.some((command) => `/${command.name}`.toLowerCase() === text.trim().toLowerCase());
+      if (event.key === "Tab" || (event.key === "Enter" && !event.shiftKey && !typed)) {
         event.preventDefault();
         const command = commands[Math.min(menuAt, commands.length - 1)];
         setText(`/${command.name} `);

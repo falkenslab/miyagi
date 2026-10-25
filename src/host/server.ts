@@ -7,8 +7,10 @@ import { agentKitVersion, createChatController, getLanguage, type ChatController
 import { prepareSession, VERSION } from "../agent.js";
 import { claudeAuthAvailable, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
+import { listCommands } from "../catalog.js";
 import { sessionsDirFor } from "../workspace.js";
 import { createSubject, listWorkspaces } from "../workspaces.js";
+import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
 /**
  * miyagi's local web host (ADR-022, gui-host #46): the chat of one subject at a time, run by
@@ -16,7 +18,8 @@ import { createSubject, listWorkspaces } from "../workspaces.js";
  * state and actions. On 127.0.0.1 only, with a random token in the URL without which nothing
  * answers; the chat's state reaches the page as server-sent events, and what the person does
  * comes back as POSTs. The page can switch to another registered subject or create one
- * (gui-workspaces, #49). No dependencies: node:http and the built page in dist/gui/. Every rule
+ * (gui-workspaces, #49), see what miyagi can do, manage its extensions and connect a classroom
+ * (gui-extensions, #50). No dependencies: node:http and the built page in dist/gui/. Every rule
  * stays in the agent (modes, approvals, file scope, gates): the page draws the state and sends actions.
  */
 
@@ -36,6 +39,12 @@ const TYPES: Record<string, string> = {
   ".woff2": "font/woff2",
   ".json": "application/json",
 };
+
+/** The kit's own chat commands the page offers besides miyagi's catalog. */
+const KIT_COMMANDS = ["resume", "plan", "extensions"];
+
+/** A logo's types: an image, nothing a browser would run. */
+const IMAGE_TYPES: Record<string, string> = { ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp" };
 
 export interface HostOptions {
   /** The port; a free one if not given. */
@@ -59,6 +68,8 @@ interface OpenSubject {
   opening: Promise<void> | null;
   /** What preparing it would have printed in a terminal: told in the chat once it opens. */
   notices: string[];
+  /** The commands the page offers: miyagi's catalog (as `miyagi commands` lists it) and the kit's, for the extensions running now. */
+  commands: { active: string; names: Set<string> } | null;
 }
 
 /**
@@ -79,7 +90,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const notices: string[] = [];
     const prepared = await prepareSession("chat", dir, { canPrompt: false, say: (line) => notices.push(line) });
     if (!prepared.openSession || !prepared.label) throw new Error(`${dir} is not a miyagi subject`);
-    const subject: OpenSubject = { dir, label: prepared.label, prepared, chat: null, opening: null, notices };
+    const subject: OpenSubject = { dir, label: prepared.label, prepared, chat: null, opening: null, notices, commands: null };
     current = subject;
     send("info", info());
     if (signedIn) await openChat(subject);
@@ -124,8 +135,40 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       send("state", snapshot());
     }, 50);
   }
-  const snapshot = () => ({ signedIn, chat: current?.chat?.getState() ?? null, opening: Boolean(current && !current.chat) });
-  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null });
+    /** The chat's state for the page: its extensions without paths or option values. */
+  /**
+   * The chat's state for the page: its extensions without paths or option values, and only
+   * miyagi's commands. The SDK also lists Claude Code's own (/agents, /batch, its bundled skills),
+   * which are for whoever develops with it, not for a teacher.
+   */
+  function chatState() {
+    const subject = current;
+    const state = subject?.chat?.getState();
+    if (!subject || !state) return null;
+    const active = (state.extensions?.active ?? []).join(",");
+    if (subject.commands?.active !== active) {
+      subject.commands = { active, names: subject.commands?.names ?? new Set(KIT_COMMANDS) };
+      void listCommands(subject.dir).then((entries) => {
+        if (subject.commands?.active !== active) return;
+        subject.commands = { active, names: new Set([...KIT_COMMANDS, ...entries.map((entry) => entry.name.replace(/^\//, ""))]) };
+        schedule();
+      });
+    }
+    const names = subject.commands.names;
+    const commandDetails = state.commandDetails.filter((command) => names.has(command.name));
+    // A resumed conversation brings back what the teacher never wrote: the greeting miyagi sends
+    // itself to open it, and the SDK's mark for an interrupted turn.
+    const opening = subject.prepared.chatOpening?.().trim();
+    const transcript = state.transcript.filter((entry) => entry.kind !== "user" || (entry.text.trim() !== opening && !/^\[Request interrupted/.test(entry.text)));
+    return { ...state, transcript, commandDetails, commands: commandDetails.map((command) => command.name), extensions: pageExtensions(state.extensions) };
+  }
+  const snapshot = () => ({ signedIn, chat: chatState(), opening: Boolean(current && !current.chat) });
+  /** The subject's classroom: where, and whether moodle-teacher reaches it now. */
+  const classroom = () => {
+    const room = current?.prepared.workspace?.classroom;
+    return room ? { url: room.url, courseId: room.courseId, connected: Boolean(current?.prepared.classroom) } : null;
+  };
+  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom() });
   function send(event: string, data: unknown): void {
     client?.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
   }
@@ -176,6 +219,23 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         await openSubject(dir);
         return {};
       }
+      case "classroom": {
+        // Connecting a classroom changes the session's prompts and gates: it opens again with it.
+        const subject = current;
+        if (!subject) return { error: "no subject" };
+        if (subject.chat?.getState().busy) return { error: "busy" };
+        const result = await connectClassroom(subject.dir, String(data.url ?? ""), String(data.courseId ?? ""));
+        if (!result.error) await openSubject(subject.dir);
+        return result;
+      }
+      case "marketplaces":
+        return { marketplaces: await marketplaces() };
+      case "inspect-marketplace":
+        return await inspect(String(data.source ?? ""));
+      case "add-marketplace":
+        return await addRepository(String(data.source ?? ""), String(data.typed ?? ""));
+      case "remove-marketplace":
+        return await removeRepository(String(data.name ?? ""));
     }
     const chat = current?.chat;
     if (!chat) return { error: "no chat" };
@@ -198,8 +258,21 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       case "choose":
         chat.choose(data.value === null || data.value === undefined ? null : String(data.value));
         return {};
-      case "runs":
-        return { runs: await chat.listRuns(), current: chat.getState().run?.dir ?? null };
+      case "runs": {
+        // The sidebar's list: the kit's labels without their number and mark, and without the
+        // greeting miyagi sends itself to open a conversation, which isn't the teacher's words.
+        const opening = current?.prepared.chatOpening?.().slice(0, 40);
+        const runs = (await chat.listRuns()).map((run) => {
+          let label = run.label
+            .replace(/^\d+\.\s*/, "")
+            .replace(/\s+\([^)]*\)(?=\s·|$)/, "")
+            .replace(/ · \[Request interrupted.*$/, "");
+          const cut = label.indexOf(" · ");
+          if (opening && cut !== -1 && opening.startsWith(label.slice(cut + 3).replace(/…$/, "").slice(0, 20))) label = label.slice(0, cut);
+          return { ...run, label };
+        });
+        return { runs, current: chat.getState().run?.dir ?? null };
+      }
       case "resume":
         if (busy()) return { error: "busy" };
         await chat.resume(data.dir ? String(data.dir) : undefined);
@@ -211,6 +284,38 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       case "extension":
         if (busy()) return { error: "busy" };
         await chat.setExtension(String(data.name), Boolean(data.enabled));
+        return {};
+      case "capabilities":
+        return await capabilities(chat);
+      case "catalog":
+        return { entries: await catalog(chat, String(data.words ?? "")) };
+      case "install":
+        return await chat.installExtension(String(data.spec), { confirmed: Boolean(data.confirmed) });
+      case "update":
+        return { updated: await chat.updateExtension(data.name ? String(data.name) : undefined) };
+      case "remove":
+        if (busy()) return { error: "busy" };
+        await chat.removeExtension(String(data.name), { deleteData: Boolean(data.deleteData) });
+        return {};
+      case "options":
+        // The kit never gives a sensitive option's value: only whether it's set.
+        return { options: await chat.extensionOptions(String(data.name)) };
+      case "set-options":
+        if (busy()) return { error: "busy" };
+        // null clears a value (JSON has no undefined); a sensitive one left empty isn't sent at all.
+        await chat.setExtensionOptions(
+          String(data.name),
+          Object.fromEntries(Object.entries((data.values ?? {}) as Record<string, unknown>).map(([key, value]) => [key, value === null ? undefined : String(value)])),
+        );
+        return {};
+      case "reload":
+        // What was just installed or updated, now, keeping the conversation.
+        if (busy()) return { error: "busy" };
+        await chat.reopen();
+        return {};
+      case "trust":
+        if (busy()) return { error: "busy" };
+        await chat.trustWorkspace();
         return {};
       default:
         return { error: `unknown action ${action}` };
@@ -279,6 +384,14 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
           send("state", snapshot());
           request.on("close", () => client === response && (client = null));
           return;
+        }
+        // A catalog entry's logo, from the repository's copy: the page's <img>, nothing else.
+        if (request.method === "GET" && url.pathname === "/api/extension-image") {
+          const file = await current?.chat?.extensionImage(url.searchParams.get("spec") ?? "", "logo").catch(() => undefined);
+          const type = file ? IMAGE_TYPES[path.extname(file).toLowerCase()] : undefined;
+          if (!file || !type) return void response.writeHead(404).end();
+          response.writeHead(200, { "content-type": type, "cache-control": "max-age=300", "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'", "x-content-type-options": "nosniff" });
+          return void response.end(await readFile(file));
         }
         if (request.method === "POST" && url.pathname === "/api/upload") return json(response, 200, await addSource(request, url));
         if (request.method === "POST" && url.pathname.startsWith("/api/")) {

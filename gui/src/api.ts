@@ -44,3 +44,8 @@ export function useMiyagi(): { info: Info | null; state: HostState | null; conne
   }, []);
   return { info, state, connection };
 }
+
+/** A catalog entry's logo, served by the host from the repository's copy. */
+export function logoUrl(spec: string): string {
+  return `api/extension-image?spec=${encodeURIComponent(spec)}&token=${encodeURIComponent(token)}`;
+}

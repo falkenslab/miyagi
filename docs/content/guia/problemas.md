@@ -24,7 +24,7 @@ description: "Consejos para sacarle partido a miyagi y qué hacer cuando algo no
 | Espera a que inicies sesión en Moodle | Entra tú en la ventana del navegador que ha abierto la extensión moodle-teacher. Solo pasa la primera vez o cuando la sesión caduca. |
 | La exploración del Moodle falló al conectar el aula | La asignatura ya está configurada. Comprueba que iniciaste sesión en la ventana y repite con `miyagi explore`. |
 | Te pregunta «¿Pasar ahora esta aula a moodle-teacher?» | El aula se conectó con el sistema anterior, que ya no existe. Di que sí: instala moodle-teacher y borra de `config.json` el usuario y la contraseña guardados. Si dices que no, esa sesión trabaja sin el aula (solo planes y borradores). |
-| Avisa de que trabaja sin el aula | La extensión moodle-teacher no está instalada o está desactivada. Vuelve a conectar el aula con `miyagi init -w <nombre>`, o actívala (ver [Extensiones](../avanzado/extensiones.md)). |
+| Avisa de que trabaja sin el aula | La extensión moodle-teacher no está instalada o está desactivada. Vuelve a conectar el aula con `miyagi init -w <nombre>` (o en la aplicación, en Tu aula), o actívala (ver [Extensiones](../avanzado/extensiones.md)). |
 | Los menús salen en otro idioma | Añade `--language=es` (o `en`, `fr`, `de`), o pon el idioma en `config.json` (ver [Configuración](../avanzado/configuracion.md)). |
 | Está haciendo algo que no quería | Pulsa `Esc` (en `run`, `Ctrl+C`) y dile qué hacer en su lugar. |
 | Recuerda algo mal | Díselo en el chat o edita la página de `knowledge`. |

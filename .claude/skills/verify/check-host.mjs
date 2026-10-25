@@ -2,10 +2,12 @@
 // runs in a child process whose home is a temporary folder, so there's no Claude key and no
 // subject. Without the token, 403; with it, the events send `info` then `state`; a subject is
 // created and opened from the page; a folder that isn't a registered subject can't be opened; a
-// pasted key that isn't one is refused; the page is served and nothing outside it is.
+// pasted key that isn't one is refused; the page is served and nothing outside it is. The
+// extensions view (#50): a repository is added only with its name typed, the official one can't
+// be removed, and a classroom address that isn't one connects nothing.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-host.mjs
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -77,6 +79,18 @@ check("…registered and open", listed.length === 1 && listed[0].name === "Compr
 const afterCreate = await firstEvents(1);
 check("…and named in info", afterCreate[0]?.data?.workspace === "Comprobación del host");
 check("no chat without a key", (await post("send", { line: "hola" })).error === "no chat");
+check("a classroom that isn't a course's address connects nothing", (await post("classroom", { url: "not a url" })).error === "invalid");
+
+// A repository in a folder: added only with its name typed, and forgotten again.
+const market = path.join(os.homedir(), "market");
+mkdirSync(path.join(market, ".claude-plugin"), { recursive: true });
+writeFileSync(path.join(market, ".claude-plugin", "marketplace.json"), JSON.stringify({ name: "dept", owner: { name: "Dept" }, plugins: [] }));
+check("a repository is read before it's added", (await post("inspect-marketplace", { source: market })).name === "dept");
+check("…not added without its name typed", (await post("add-marketplace", { source: market, typed: "dep" })).error === "name mismatch");
+check("…so it isn't there", !((await post("marketplaces")).marketplaces ?? []).some((m) => m.name === "dept"));
+check("…added with it", (await post("add-marketplace", { source: market, typed: "dept" })).name === "dept");
+check("…and forgotten", !(await post("remove-marketplace", { name: "dept" })).error && !((await post("marketplaces")).marketplaces ?? []).length);
+
 // Nothing secret reaches the page: not the URL's token, not a key.
 const stream = JSON.stringify([...events, ...afterCreate, listed]);
 check("no token nor key in what the page receives", !stream.includes(token) && !/sk-ant-/.test(stream));
@@ -86,4 +100,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log("ok   host: token, events, subjects, sign-in refusal and page served");
+console.log("ok   host: token, events, subjects, sign-in refusal, page served, repositories and classroom refusals");

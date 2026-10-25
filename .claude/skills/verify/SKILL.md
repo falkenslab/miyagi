@@ -51,7 +51,7 @@ the teacher's sources (ADR-025).
 without phases counts as hidden), checks the end-of-session line and which paths plan mode
 lets the agent write (only `drafts/<slug>/plan.md`). Change it with the register's format.
 
-`check-host.mjs` starts the GUI's host (`src/host/`) with a temporary home, so with no Claude key nor subject and no call to Claude: 403 without the token, `info` then `state` on the events, a subject created and opened from the page, one that isn't registered refused, a bad key refused, nothing served outside the page.
+`check-host.mjs` starts the GUI's host (`src/host/`) with a temporary home, so with no Claude key nor subject and no call to Claude: 403 without the token, `info` then `state` on the events, a subject created and opened from the page, one that isn't registered refused, a bad key refused, nothing served outside the page; a repository added only with its name typed (#50) and a classroom address that isn't one refused.
 
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT
