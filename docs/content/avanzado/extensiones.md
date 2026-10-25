@@ -15,6 +15,14 @@ Las extensiones las gestiona agent-kit, la base sobre la que está hecho miyagi.
 - **El repositorio oficial**, [`falkenslab/agent-extensions`](https://github.com/falkenslab/agent-extensions), lo publica Falken's Lab. miyagi ya lo conoce, y lo que instalas de ahí no te pide confirmación. El catálogo te enseña solo las extensiones pensadas para miyagi.
 - **Otros repositorios** los puedes añadir tú, pero antes miyagi te avisa: su código se ejecuta en tu ordenador con tus permisos, y no es de Falken's Lab. Tienes que escribir su nombre para confirmarlo, y al instalar algo de ahí te vuelve a preguntar. No hay catálogo de la comunidad.
 
+## Las que van con miyagi
+
+Del repositorio oficial, pensadas para miyagi:
+
+- **moodle-teacher**: tu aula de Moodle, con tu sesión y los alumnos con seudónimo. miyagi la instala al conectar el aula (ver [Configuración](configuracion.md)).
+- **docker-lab**: probar las prácticas en laboratorios de Docker (ver [Prácticas en Docker](practicas-docker.md)).
+- **moodle-ui-kit**: un estilo visual para lo que publica en Moodle.
+
 ## Para todas tus asignaturas o solo para una
 
 - **Para todas** (lo normal): se instala en `~/.miyagi/extensions/`.

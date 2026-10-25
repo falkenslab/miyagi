@@ -122,7 +122,7 @@ Elige y aplica una metodología que encaje con lo que se quiere aprender, y la m
 
 Te ayuda a escribir o revisar la programación didáctica del curso (contexto, objetivos, contenidos y temas, metodología, evaluación y calificación, temporalización, atención a la diversidad, recursos) a partir de tu material y tus decisiones. Te pregunta lo que solo tú puedes decidir, como las horas, el calendario o los pesos, y marca como propuesta lo que no hayas decidido. Queda en sus apuntes, enlazada con cada tema. No se publica en Moodle salvo que se lo pidas.
 
-No busca normativa por su cuenta: en el chat te ofrece una vez buscar el currículo oficial, y solo lo busca si le dices que sí. Si lo tiene, la programación usa sus resultados de aprendizaje y criterios con su numeración oficial (RA1, CE1a…), copiados tal cual, y pondera la nota por resultado de aprendizaje.
+No busca normativa por su cuenta. Si quieres que la programación siga la tuya (el currículo de tu comunidad, la plantilla de tu centro), déjala en `sources/` o pídele que la busque en las fuentes oficiales. Comprueba que sea la vigente, copia tal cual sus resultados de aprendizaje y criterios, con su numeración oficial, y sigue el formato de documento que pida.
 
 - **Pídeselo así:** *«Escribe la programación a partir del borrador del departamento que te dejé en sources.»*
 - **Atajo:** `/miyagi:teaching-plan`

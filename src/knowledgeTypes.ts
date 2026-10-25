@@ -54,8 +54,8 @@ export const COURSE_PAGE_TYPES: PageType[] = [
     dir: "curriculum",
     indexSection: "Curriculum",
     description:
-      "The official curriculum, found with the teacher's yes (official-curriculum): curriculum/provisions (each provision: type and number, date, gazette, URL, in force and how it was checked, date consulted, state or regional) " +
-      "and curriculum/<module> (its learning outcomes and criteria verbatim with the official numbering RA1, CE1a…, or competences, criteria and basic knowledge; hours; basic contents). " +
+      "The official curriculum, from the norms the teacher brings or asks you to find (teaching-plan): curriculum/provisions (each provision: type and number, date, gazette, URL, in force and how it was checked, date consulted) " +
+      "and curriculum/<module> (its learning outcomes, competences and criteria verbatim, with their official numbering; hours; basic contents). " +
       "Verbatim text marked and kept apart from summary. Fields: url (the provision), date (its date), consulted (from current_time).",
     template: `<Which provision(s) this page quotes, and for which stage, title or subject, region and school year.>
 

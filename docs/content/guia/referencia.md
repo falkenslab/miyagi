@@ -52,7 +52,6 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, s
 | `/miyagi:build-unit <descripción>` | Construye un tema dentro del curso, encajado en su programación, su calendario y su estilo. |
 | `/miyagi:build-course <descripción>` | Construye un curso completo: planifica, crea cada sección y lo revisa como lo vería un alumno. |
 | `/miyagi:teaching-plan` | Escribe o revisa tu programación didáctica a partir de tu material y tus decisiones. |
-| `/miyagi:curriculum` | Busca el currículo oficial de tu módulo o materia (BOE y boletín de tu comunidad) y lo guarda citado y fechado. |
 | `/miyagi:align` | Comprueba si el aula está acorde con tu programación y corrige lo que no. |
 | `/miyagi:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
 | `/miyagi:research <tema>` | Investiga un tema en internet y guarda lo que encuentra con sus fuentes. |

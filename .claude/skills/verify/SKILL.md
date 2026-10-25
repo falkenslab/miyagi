@@ -41,8 +41,10 @@ doesn't exist — what a merge or a rename leaves behind. After renaming or merg
 update the docs site (`update-docs`; `check-docs.mjs` catches a missing skill) and `.minispec/core/architecture.md`, which it doesn't read.
 
 `check-neutral-skills.mjs` fails if a skill or command in `plugin/` names Moodle, a Moodle URL, a
-moodle-mcp tool or a browser action: miyagi's skills say the teaching act, the classroom
-extension's skills say how (ADR-021).
+moodle-mcp tool, a browser action or a country's education framework (the BOE, the LOMLOE, a
+learning situation, FP codes like `RA1` or `CE1a`): miyagi's skills say the teaching act, the
+classroom extension says how it's done on its platform (ADR-021), and a country's law comes from
+the teacher's sources (ADR-025).
 
 `check-activity-register.mjs` counts the phases of sample `course/drafts` pages (an old one
 without phases counts as hidden), checks the end-of-session line and which paths plan mode

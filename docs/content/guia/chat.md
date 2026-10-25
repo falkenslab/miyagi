@@ -86,7 +86,6 @@ Son instrucciones listas para usar. Escríbelos en el chat, con lo que necesites
 | `/miyagi:build-unit <descripción>` | Construir un tema dentro del curso |
 | `/miyagi:build-course <descripción>` | Construir un curso completo |
 | `/miyagi:teaching-plan` | Escribir o revisar la programación didáctica |
-| `/miyagi:curriculum` | Buscar el currículo oficial y guardarlo citado |
 | `/miyagi:align` | Comprobar que el aula sigue la programación y corregir lo que no |
 | `/miyagi:audit` | Auditar el aula y proponer mejoras por prioridad |
 | `/miyagi:research <tema>` | Investigar un tema en internet y guardar lo encontrado con sus fuentes |

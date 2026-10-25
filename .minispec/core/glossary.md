@@ -30,7 +30,7 @@ Checking that the Moodle course matches the teaching plan (`course-alignment`).
 
 ## Official curriculum (currículo oficial)
 
-The state provision (BOE) and the region's that set what a module or subject teaches and assesses, kept verbatim and dated in `curriculum/` pages (`official-curriculum`), only with the teacher's yes.
+What a subject or module officially teaches and assesses, as the country's provisions set it, brought by the teacher (or found at their request) and kept verbatim and dated in `curriculum/` pages (ADR-025).
 
 ## Assessment matrix
 

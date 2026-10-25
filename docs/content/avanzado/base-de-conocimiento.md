@@ -65,9 +65,9 @@ knowledge/
   assessment-matrix.md    course/assessment-matrix: cada criterio o RA con sus instrumentos, sus pesos y dónde está en el libro de calificaciones (nunca datos de alumnos)
 ```
 
-Las páginas `curriculum/` solo existen si le pediste buscar el currículo oficial (`official-curriculum`). Cada una lleva en su cabecera `url`, `date` (la fecha de la norma) y `consulted` (cuándo la consultó), y separa siempre el texto literal de sus comentarios.
+Las páginas `curriculum/` solo existen si le pides que la programación siga tu normativa, la que le das en `sources/` o la que le pides buscar. Cada una lleva en su cabecera `url`, `date` (la fecha de la norma) y `consulted` (cuándo la consultó), y separa siempre el texto literal de sus comentarios.
 
-En la raíz de `knowledge/` solo van esas siete páginas `course/`, con `type: course` en su cabecera. Una base escrita con una versión anterior de miyagi se abre tal cual: al empezar cada sesión, miyagi añade `type: course` a las que no lo tienen, sin tocar el resto.
+En la raíz de `knowledge/` solo van esas ocho páginas `course/`, con `type: course` en su cabecera. Una base escrita con una versión anterior de miyagi se abre tal cual: al empezar cada sesión, miyagi añade `type: course` a las que no lo tienen, sin tocar el resto.
 
 ## Sus herramientas
 

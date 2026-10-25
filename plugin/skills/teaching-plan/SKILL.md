@@ -12,9 +12,16 @@ What this skill says about the classroom applies to the connected one, if any; w
 The teaching plan is the teacher's document: what the course is for, how it's organised, how
 students learn and how they're assessed. You help write it, well structured and coherent; the
 decisions are the teacher's. It's generic — not tied to any particular law or regulation — unless
-the teacher gives you one (in `sources/`) or agrees to follow the official curriculum. A course description that names a qualification or a level (a vocational title, a school year) says who the students are, not that the plan must quote its official curriculum: don't go looking for one on your own. In a chat, offer it once ("¿Quieres que busque el currículo oficial?"), and use `official-curriculum` only if the teacher says yes; in `run`, write your own objectives and criteria and note in the plan's context, as a proposal, that it can be aligned with it.
+the teacher gives you the norms that apply to them (in `sources/`) or asks you to follow them. A course description that names a qualification or a level (a vocational title, a school year) says who the students are, not that the plan must quote its official curriculum: don't go looking for one on your own. In `run`, write your own objectives and criteria and note in the plan's context, as a proposal, that it can be aligned with the official curriculum.
 
-With `curriculum/` pages in the knowledge base, the plan follows them: objectives and criteria with their official numbering (RA1, CE1a…), quoted from those pages and never reworded, and grading weighted by learning outcome.
+When the teacher asks for it:
+
+- Read the norms they gave you. If they ask you to find them, look only in official sources (the official gazettes, the education authority's sites; `topic-research`), and keep each original in `sources/` (`download_to_sources`), never a school's copy, a blog or a summary.
+- Check it's the version in force for their region and school year (the consolidated text first, and what later replaced or changed it), and say what you couldn't confirm.
+- Keep what they set **verbatim**, with its official numbering, in `curriculum/` pages (`knowledge_create`, type `curriculum`): the provisions, each with its URL, date and the date you consulted it (`current_time`), and one page per subject or module with its outcomes, competences, criteria, contents and hours, each block citing the article or annex it comes from. Never reword, complete or invent a criterion, nor mix regions or titles.
+- If the norms ask for a particular document (a format for units, a project shared by several modules), follow the structure they set, quoting them.
+
+With `curriculum/` pages in the knowledge base, the plan follows them: objectives and criteria with their official numbering, quoted from those pages and never reworded, and grading weighted as the curriculum's outcomes are.
 
 There is only one plan per course: when `course-building` or `unit-building` need a plan and there
 isn't one, they draft this one (every decision the teacher didn't take marked as a proposal)

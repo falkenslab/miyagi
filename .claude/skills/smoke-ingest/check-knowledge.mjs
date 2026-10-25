@@ -106,7 +106,7 @@ if (names.length > 0) {
 }
 
 // The official curriculum is quoted and dated: every curriculum/ page says where it comes from
-// and when it was consulted (official-curriculum).
+// and when it was consulted (teaching-plan, from the norms the teacher brings).
 const undated = pages
   .filter((f) => rel(f).startsWith("curriculum/"))
   .filter((f) => {
