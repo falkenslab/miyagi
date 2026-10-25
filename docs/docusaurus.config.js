@@ -86,6 +86,7 @@ const config = {
             items: [
               { label: "GitHub", href: repo },
               { label: "Última versión", href: `${repo}/releases/latest` },
+              { label: "Hoja de ruta", to: "/hoja-de-ruta/" },
               { label: "Informes de pruebas", href: `${repo}/blob/main/tests/README.md` },
               { label: "Licencia MIT", href: `${repo}/blob/main/LICENSE` },
             ],

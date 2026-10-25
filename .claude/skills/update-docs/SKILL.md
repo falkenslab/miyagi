@@ -47,6 +47,8 @@ When in doubt, `grep -rn "<name of the thing>" docs/content docs/src` finds ever
 - Remove what is no longer true rather than adding a caveat next to it.
 - A renamed page or anchor breaks links: the build fails on broken links, keep it that way.
 
+The roadmap (`content/hoja-de-ruta.md`) is the only page about what doesn't exist yet: when a feature ships, move its entry to **Disponible**, without the issue link and with a link to the page that describes it; when a feature note is created or dropped, add or remove its entry.
+
 ## 4. Screenshots
 
 The use-case tutorial (`docs/content/casos-de-uso/`) shows real screenshots of the chat and

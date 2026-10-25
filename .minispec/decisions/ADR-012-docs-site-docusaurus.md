@@ -11,6 +11,7 @@ One HTML page per language had no room for what users kept needing: the full gui
 ## Consequences
 
 - A build step and a second `node_modules` (`docs/`), outside the npm package; the deploy only publishes if the build passes, and the build fails on broken links and anchors.
+- The site describes only what exists, but for one page: the roadmap (`hoja-de-ruta.md`) is the only one about what doesn't exist yet, and says so at the top; only its entries marked available exist.
 - Spanish only for now: the English page of `site/` is gone until Docusaurus i18n is set up.
 - The docs can drift from the code: `update-docs` runs before every commit that changes what a user sees and before every release (`commit` and `release` call it), and `check-docs.mjs` fails when a skill, command, subcommand or config key is undocumented.
 - The tutorial's screenshots are real (moodle-sandbox and the chat driven in a pseudo-terminal): a change to what they show means retaking them, never editing them.
