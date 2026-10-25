@@ -17,7 +17,7 @@ In the app, a teacher creates, opens and switches between their workspaces by na
 
 - The host: `GET /api/workspaces` (the registry, missing ones marked) and `POST /api/workspace` to switch: closes the controller and opens one on the other workspace, each keeping its conversations in its own `sessions/`.
 - Start screen when nothing is open: recent workspaces, "Nueva asignatura", "Abrir una carpeta".
-- "Nueva asignatura" as a form with `init`'s questions and defaults, through the same code; its folder is the default unless the teacher opens "Elegir carpeta"; connecting a classroom at the end leads to `gui-extensions`.
+- "Nueva asignatura" as a form with `init`'s questions and defaults, through the same code; its folder is the default unless the teacher opens "Elegir carpeta"; connecting a classroom at the end leads to the "Vincular un aula" wizard (Tu aula).
 - "Abrir la carpeta" (sources, drafts) and drag and drop into `sources/`, so the hidden folder never matters.
 - A missing workspace can be located again or forgotten; nothing is ever deleted from the app.
 - The app opens the last workspace; the switcher and the window title show its name and kind word.
