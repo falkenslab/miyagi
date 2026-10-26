@@ -1,97 +1,167 @@
-/* miyagi's identity on top of Docusaurus' Infima: the hinomaru palette (src/theme.ts) — sumi
-   ink, washi paper and the sun's red — and the Atkinson Hyperlegible fonts, served from here. */
-
-/* The @font-face rules are in static/fonts/fonts.css (see docusaurus.config.js). */
-
+/*
+ * Falken's Lab's look (the falkenslab-site-style skill, from agent-extensions' site): its tokens mapped
+ * onto Infima, Inter and JetBrains Mono (static/fonts/fonts.css, inline in the head), the coral accent.
+ * miyagi keeps its own mark (src/components/Logo.js, --logo-*); below the family's rules, miyagi's own
+ * pieces: the screenshots' windows, the teacher's requests, touch targets and contrast fixes.
+ */
 :root {
-  --pizarra: #18181b;      /* sumi: dark sections, the terminal */
-  --pizarra-2: #26262b;
-  --tiza: #f3f3f0;         /* washi: text on sumi */
-  --papel: #f7f7f4;        /* page background */
-  --tinta: #18181b;
-  --tinta-suave: #52525b;
-  --borla: #e0564a;        /* the sun, light enough to read on sumi */
-  --borla-texto: #bc002d;  /* the sun on paper: links, accents */
-  --sol: #bc002d;          /* the sun as a fill */
-  --linea: #dcdcd6;
+  --fl-accent: #e5483a;
+  --fl-accent-hover: #c93b2e;
+  --fl-accent-ink: #ffffff;
+  --fl-accent-soft: rgba(229, 72, 58, 0.08);
+  --fl-glow: rgba(229, 72, 58, 0.1);
+  --fl-line: #e7e9ee;
+  --fl-line-2: #d9dde5;
+  --fl-panel: #ffffff;
+  --fl-bg-2: #f7f8fa;
+  --fl-text-2: #4b5260;
+  --fl-dim: #747b8a;
+  --fl-chip: #f1f3f6;
+  --fl-code: #f4f5f8;
+  --fl-button-2: #eceef2;
+  --fl-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px rgba(16, 24, 40, 0.06);
+  --fl-shadow-lift: 0 2px 4px rgba(16, 24, 40, 0.05), 0 16px 40px rgba(16, 24, 40, 0.1);
 
-  --logo-hair: #7c8088; --logo-band: #18181b; --logo-sun: #bc002d; --logo-skin: #a86b3d; --logo-beard: #5c6068;
+  /* miyagi's mark, on a light page. */
+  --logo-hair: #7c8088; --logo-band: #1c1e21; --logo-sun: #bc002d; --logo-skin: #a86b3d; --logo-beard: #5c6068;
 
-  --font: "Atkinson Hyperlegible Next", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
-
-  --ifm-font-family-base: var(--font);
-  --ifm-heading-font-family: var(--font);
-  --ifm-font-family-monospace: var(--mono);
-  --ifm-font-size-base: 106%;
-  --ifm-line-height-base: 1.65;
+  --ifm-color-primary: #e5483a;
+  --ifm-color-primary-dark: #dd3526;
+  --ifm-color-primary-darker: #d33224;
+  --ifm-color-primary-darkest: #ad291e;
+  --ifm-color-primary-light: #e85c50;
+  --ifm-color-primary-lighter: #ea665b;
+  --ifm-color-primary-lightest: #ef857c;
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #ffffff;
+  --ifm-font-color-base: #1c1e21;
+  --ifm-font-family-base: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ifm-heading-font-family: var(--ifm-font-family-base);
+  --ifm-font-family-monospace: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  --ifm-line-height-base: 1.6;
   --ifm-heading-font-weight: 800;
-  --ifm-background-color: var(--papel);
-  --ifm-background-surface-color: var(--papel);
-  --ifm-font-color-base: var(--tinta);
-  --ifm-color-emphasis-300: var(--linea);
-  --ifm-toc-border-color: var(--linea);
-  --ifm-hr-border-color: var(--linea);
-  --ifm-navbar-background-color: color-mix(in srgb, var(--papel) 92%, transparent);
+  --ifm-code-font-size: 90%;
+  --ifm-code-background: var(--fl-code);
+  --ifm-code-border-radius: 6px;
+  --ifm-global-radius: 10px;
+  --ifm-card-border-radius: 16px;
+  --ifm-navbar-height: 60px;
   --ifm-navbar-shadow: none;
-  --ifm-code-font-size: 92%;
-  --ifm-color-primary: #bc002d;
-  --ifm-color-primary-dark: #a90029;
-  --ifm-color-primary-darker: #a00026;
-  --ifm-color-primary-darkest: #84001f;
-  --ifm-color-primary-light: #cf0032;
-  --ifm-color-primary-lighter: #d90034;
-  --ifm-color-primary-lightest: #f8003c;
-  --ifm-footer-background-color: var(--pizarra);
-  --docusaurus-highlighted-code-line-bg: rgba(188, 0, 45, 0.1);
+  --ifm-color-emphasis-300: var(--fl-line);
+  --ifm-toc-border-color: var(--fl-line);
+  --ifm-hr-background-color: var(--fl-line);
+  --ifm-footer-background-color: var(--ifm-background-color);
+  --docusaurus-highlighted-code-line-bg: rgba(229, 72, 58, 0.1);
 }
 
 [data-theme="dark"] {
-  --ifm-background-color: #121214;
-  --ifm-background-surface-color: #18181b;
-  --ifm-font-color-base: var(--tiza);
-  --ifm-color-emphasis-300: #2e2e33;
-  --ifm-toc-border-color: #2e2e33;
-  --ifm-hr-border-color: #2e2e33;
-  --ifm-navbar-background-color: color-mix(in srgb, #121214 92%, transparent);
-  --ifm-footer-background-color: #0c0c0e;
-  --ifm-color-primary: #e0564a;
-  --ifm-color-primary-dark: #dc4234;
-  --ifm-color-primary-darker: #d93a2b;
-  --ifm-color-primary-darkest: #b82d20;
-  --ifm-color-primary-light: #e46a60;
-  --ifm-color-primary-lighter: #e6746b;
-  --ifm-color-primary-lightest: #ec958e;
-  --logo-hair: #b9bcc2; --logo-band: #f3f3f0; --logo-sun: #e0303f; --logo-skin: #e2b48a; --logo-beard: #cfd1d6;
-  --docusaurus-highlighted-code-line-bg: rgba(224, 86, 74, 0.15);
+  --fl-accent: #ff6b57;
+  --fl-accent-hover: #ff8574;
+  --fl-accent-ink: #1a0b08;
+  --fl-accent-soft: rgba(255, 107, 87, 0.12);
+  --fl-glow: rgba(255, 107, 87, 0.12);
+  --fl-line: #232836;
+  --fl-line-2: #2e3445;
+  --fl-panel: #141821;
+  --fl-bg-2: #10131a;
+  --fl-text-2: #b3bac7;
+  --fl-dim: #8b93a3;
+  --fl-chip: #1b202b;
+  --fl-code: #181c26;
+  --fl-button-2: #1e2430;
+  --fl-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --fl-shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 16px 40px rgba(0, 0, 0, 0.5);
+
+  --logo-hair: #b9bcc2; --logo-band: #eceff4; --logo-sun: #ff4b55; --logo-skin: #e2b48a; --logo-beard: #cfd1d6;
+
+  --ifm-color-primary: #ff6b57;
+  --ifm-color-primary-dark: #ff5139;
+  --ifm-color-primary-darker: #ff442a;
+  --ifm-color-primary-darkest: #fb1d00;
+  --ifm-color-primary-light: #ff8575;
+  --ifm-color-primary-lighter: #ff9284;
+  --ifm-color-primary-lightest: #ffb9b0;
+  --ifm-background-color: #0b0d12;
+  --ifm-background-surface-color: #141821;
+  --ifm-font-color-base: #eceff4;
+  --docusaurus-highlighted-code-line-bg: rgba(255, 107, 87, 0.14);
 }
 
-.navbar { border-bottom: 1px solid var(--ifm-toc-border-color); }
-/* The blur makes the navbar a containing block for fixed children: with the mobile menu open
-   the sidebar would be clipped to the navbar's height, so it only applies while it's closed. */
-.navbar:not(.navbar-sidebar--show) { backdrop-filter: blur(8px); }
-.navbar-sidebar { background-color: var(--ifm-background-color); }
-.navbar__title { font-weight: 800; }
-.navbar__link, .menu__link, .footer__link-item { min-height: 44px; display: inline-flex; align-items: center; }
-.menu__link { display: flex; }
+body { -webkit-font-smoothing: antialiased; }
 
+/* The top bar: translucent over the page, a line under it, the brand in the mono face. */
+.navbar {
+  background: color-mix(in srgb, var(--ifm-background-color) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--fl-line);
+}
+/* A backdrop-filter makes the navbar the containing block of its fixed children: the phone menu would
+   be clipped to the bar's height. Off while that menu is open. */
+.navbar.navbar-sidebar--show { backdrop-filter: none; }
+.navbar-sidebar { background-color: var(--ifm-background-color); }
+.navbar__title { font-family: var(--ifm-font-family-monospace); font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+.navbar__brand { flex-shrink: 0; }
+.navbar__link { font-weight: 500; white-space: nowrap; }
+.navbar__item { padding: 0 10px; }
+@media (max-width: 1400px) { .navbar__item { padding: 0 7px; } .navbar__link { font-size: 14.5px; } }
+@media (min-width: 997px) and (max-width: 1200px) {
+  .navbar__items--right .dropdown > .navbar__link:has(> svg) { font-size: 0; }
+}
+/* Docusaurus marks every doc link of the current sidebar active; the sidebar already says where you are. */
+.navbar__items:not(.navbar__items--right) > .navbar__link--active { color: var(--ifm-navbar-link-color); }
+.navbar__items:not(.navbar__items--right) > .navbar__link--active:hover { color: var(--ifm-navbar-link-hover-color); }
+
+/* The GitHub link as its icon (navbar item className "header-github-link"). */
+.header-github-link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; }
+.header-github-link::before {
+  content: ""; width: 22px; height: 22px; background-color: var(--ifm-navbar-link-color);
+  mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.header-github-link:hover::before { background-color: var(--fl-accent); }
+
+/* Headings: tight and heavy, as the pages' hero titles. */
+h1, h2, h3 { letter-spacing: -0.03em; text-wrap: balance; }
+.markdown h1:first-child { font-weight: 900; letter-spacing: -0.045em; font-size: clamp(2rem, 1.6rem + 1.6vw, 2.8rem); }
+.markdown > p, .markdown li { max-width: 72ch; }
+
+/* Buttons: the accent, flat, 8px corners, bold. */
+.button { border-radius: 8px; font-weight: 700; }
+.button--primary { --ifm-button-background-color: var(--fl-accent); --ifm-button-border-color: var(--fl-accent); }
+.button--primary:hover { --ifm-button-background-color: var(--fl-accent-hover); --ifm-button-border-color: var(--fl-accent-hover); }
+
+/* Cards and admonitions: panels with a hairline and a soft shadow. */
+.card, .alert { border: 1px solid var(--fl-line); box-shadow: var(--fl-shadow); }
+.card:hover { box-shadow: var(--fl-shadow-lift); }
+.alert { border-left-width: 3px; }
+.alert--info { border-left-color: var(--fl-accent); }
+
+/* Tables: hairlines, a quiet header. */
+.markdown table { border-collapse: separate; border-spacing: 0; border: 1px solid var(--fl-line); border-radius: 12px; overflow: hidden; }
+.markdown table thead tr { background: var(--fl-bg-2); }
+.markdown table th, .markdown table td { border: 0; border-top: 1px solid var(--fl-line); }
+.markdown table thead th { border-top: 0; }
+
+/* Inline code: a chip with a hairline. */
+.markdown code:not(pre code) { border: 1px solid var(--fl-line); padding: 0.1em 0.35em; }
+
+/* Tabs: underlined in the accent, as the pages' install card. */
+.tabs__item--active { border-bottom-color: var(--fl-accent); color: var(--fl-accent); }
+
+/* Links: underlined in the text, in the accent. */
 a { text-underline-offset: 0.18em; }
 .markdown a { text-decoration: underline; text-decoration-thickness: 0.08em; }
 .markdown a:hover { text-decoration-thickness: 0.14em; }
-/* Code inside a link sits on the code's darker grey: the link's coral falls to 3.4:1 there. */
-[data-theme="dark"] .markdown a code { color: var(--ifm-color-primary-lightest); }
-/* Same for the sidebar's current page, on its highlighted background (4.0:1 with the coral). */
-[data-theme="dark"] .menu__link--active { color: var(--ifm-color-primary-lightest); }
-:focus-visible { outline: 3px solid var(--borla); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--fl-accent); outline-offset: 3px; border-radius: 4px; }
 
-.markdown h1 { font-size: clamp(2rem, 1.6rem + 1.6vw, 2.8rem); letter-spacing: -0.01em; }
-.markdown h2 { letter-spacing: -0.01em; }
-.markdown > p, .markdown li { max-width: 72ch; }
+/* The footer: the signature alone, quiet, on a hairline. */
+.footer { background: var(--ifm-background-color); border-top: 1px solid var(--fl-line); padding: 2rem 1rem; }
+.footer__copyright { color: var(--fl-dim); font-size: 14px; }
+
+/* ---------- miyagi's own pieces ---------- */
 
 /* A real screenshot, framed as a window: the terminal or a Moodle page (src/components/Shot.js). */
 .shot { margin: 1.5rem 0 2rem; }
-.shot-window { border-radius: 12px; overflow: hidden; background: #0c0c0c; box-shadow: 0 0 0 1px #0000001f, 0 18px 40px -14px #00000055, 0 6px 14px -8px #00000040; }
-[data-theme="dark"] .shot-window { box-shadow: 0 0 0 1px #ffffff1f, 0 18px 40px -14px #000000aa; }
+.shot-window { border-radius: 12px; overflow: hidden; background: #0c0c0c; border: 1px solid var(--fl-line); box-shadow: var(--fl-shadow-lift); }
 .shot-bar { position: relative; display: flex; align-items: center; height: 2rem; background: linear-gradient(#2c2c2e, #232325); border-bottom: 1px solid #000; }
 .shot-bar.browser { background: linear-gradient(#ececec, #e2e2e2); border-bottom-color: #c8c8c8; }
 .shot-dots { display: flex; gap: 0.45rem; padding-left: 0.8rem; }
@@ -102,20 +172,19 @@ a { text-underline-offset: 0.18em; }
 .shot-bar.browser .shot-title { color: #555; }
 .shot-window a { display: block; }
 .shot-window img { display: block; width: 100%; height: auto; }
-.shot figcaption { font-size: 0.92rem; color: var(--ifm-color-emphasis-700); margin-top: 0.7rem; max-width: 72ch; }
+.shot figcaption { font-size: 0.92rem; color: var(--fl-text-2); margin-top: 0.7rem; max-width: 72ch; }
 
-/* What the teacher types in the chat, as a quote with the sun's mark. */
-.pide { border-left: 4px solid var(--ifm-color-primary); background: color-mix(in srgb, var(--ifm-color-primary) 7%, transparent); padding: 0.8rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0 1.5rem; font-family: var(--mono); font-size: 0.95rem; }
-.pide::before { content: "Tú › "; font-weight: 700; color: var(--ifm-color-primary); }
+/* What the teacher types in the chat: the message box of an AI app (falkenslab-site-style 3b). */
+.pide { position: relative; background: var(--fl-panel); border: 1px solid var(--fl-line); border-radius: 16px; box-shadow: var(--fl-shadow); padding: 0.9rem 3.4rem 0.9rem 1rem; margin: 1rem 0 1.5rem; white-space: pre-wrap; font-size: 0.98rem; }
+.pide::after { content: "↑"; position: absolute; right: 0.75rem; bottom: 0.7rem; width: 32px; height: 32px; border-radius: 9px; background: var(--fl-accent); color: var(--fl-accent-ink); display: grid; place-items: center; font-weight: 800; }
 
-/* The active breadcrumb: the sun's red on its tinted pill falls short of 4.5:1 in dark. */
-[data-theme="dark"] .breadcrumbs__item--active .breadcrumbs__link { color: var(--tiza); }
-
-/* Footer links on the dark footer: the sun's red falls short of 4.5:1 on it. */
-.footer--dark .footer__link-item { color: #e4e4e7; }
-.footer--dark .footer__link-item:hover { color: #f3a39b; }
+/* Contrast: code inside a link sits on the code's grey; the sidebar's current page on its tint. */
+[data-theme="dark"] .markdown a code, [data-theme="dark"] .menu__link--active { color: var(--ifm-color-primary-lightest); }
+[data-theme="dark"] .breadcrumbs__item--active .breadcrumbs__link { color: var(--ifm-font-color-base); }
 
 /* 44 px touch targets for Docusaurus' own controls. */
+.navbar__link, .menu__link { min-height: 44px; display: inline-flex; align-items: center; }
+.menu__link { display: flex; }
 .navbar__brand, .navbar__toggle, .navbar-sidebar__close, .navbar-sidebar__back,
 .navbar .clean-btn, .theme-doc-toc-mobile > button { min-height: 44px; min-width: 44px; }
 .navbar-sidebar__close, .navbar .clean-btn:not(.navbar__toggle) { display: inline-flex; align-items: center; justify-content: center; }

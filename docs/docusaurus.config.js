@@ -40,9 +40,11 @@ const config = {
     localeConfigs: { es: { label: "Español", htmlLang: "es" }, en: { label: "English", htmlLang: "en" } },
   },
 
-  // The fonts as static files, their @font-face rules inline in the head (no extra stylesheet to
-  // wait for) and font-display: optional, since the LCP of most pages is text.
+  // The fonts as static files, preloaded, their @font-face rules inline in the head (no extra
+  // stylesheet to wait for) and font-display: optional, since the LCP of most pages is text.
   headTags: [
+    { tagName: "link", attributes: { rel: "preload", as: "font", type: "font/woff2", crossorigin: "anonymous", href: "/miyagi/fonts/inter-latin.woff2" } },
+    { tagName: "link", attributes: { rel: "preload", as: "font", type: "font/woff2", crossorigin: "anonymous", href: "/miyagi/fonts/jetbrains-mono-latin.woff2" } },
     { tagName: "style", attributes: {}, innerHTML: fs.readFileSync(new URL("./static/fonts/fonts.css", import.meta.url), "utf8").replace(/url\("\.\//g, 'url("/miyagi/fonts/') },
   ],
 
@@ -78,46 +80,17 @@ const config = {
       colorMode: { respectPrefersColorScheme: true },
       navbar: {
         title: "miyagi",
+        logo: { alt: "", src: "img/miyagi-light.svg", srcDark: "img/miyagi-dark.svg", width: 28, height: 30 },
         items: [
           { type: "docSidebar", sidebarId: "guia", label: "Guía", position: "left" },
           { type: "docSidebar", sidebarId: "casos", label: "Casos de uso", position: "left" },
           { type: "docSidebar", sidebarId: "avanzado", label: "Avanzado", position: "left" },
           { type: "localeDropdown", position: "right" },
-          { href: repo, label: "GitHub", position: "right" },
+          { href: repo, position: "right", className: "header-github-link", "aria-label": "GitHub" },
         ],
       },
-      footer: {
-        style: "dark",
-        links: [
-          {
-            title: "Empezar",
-            items: [
-              { label: "Instalar", to: "/guia/instalar/" },
-              { label: "Primeros pasos", to: "/guia/primeros-pasos/" },
-              { label: "Preguntas frecuentes", to: "/guia/preguntas-frecuentes/" },
-            ],
-          },
-          {
-            title: "Aprender",
-            items: [
-              { label: "Aula de Introducción a SQL", to: "/casos-de-uso/" },
-              { label: "Habilidades", to: "/guia/habilidades/" },
-              { label: "Avanzado", to: "/avanzado/" },
-            ],
-          },
-          {
-            title: "Proyecto",
-            items: [
-              { label: "GitHub", href: repo },
-              { label: "Última versión", href: `${repo}/releases/latest` },
-              { label: "Hoja de ruta", to: "/hoja-de-ruta/" },
-              { label: "Informes de pruebas", href: `${repo}/blob/main/tests/README.md` },
-              { label: "Licencia MIT", href: `${repo}/blob/main/LICENSE` },
-            ],
-          },
-        ],
-        copyright: "miyagi, de falkenslab. Gratis y de código abierto.",
-      },
+      // Only the signature (falkenslab-docs): the sections are in the navbar and the sidebars.
+      footer: { style: "light", copyright: "Made with 💖 by Falken's Lab Team" },
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.vsDark,
