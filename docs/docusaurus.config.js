@@ -26,6 +26,9 @@ const config = {
     { tagName: "style", attributes: {}, innerHTML: fs.readFileSync(new URL("./static/fonts/fonts.css", import.meta.url), "utf8").replace(/url\("\.\//g, 'url("/miyagi/fonts/') },
   ],
 
+  // The bundle starts once the page has loaded, not during its first paint (#27).
+  plugins: ["./plugins/deferred-hydration.js"],
+
   presets: [
     [
       "classic",

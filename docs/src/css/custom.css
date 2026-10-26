@@ -78,6 +78,10 @@
 a { text-underline-offset: 0.18em; }
 .markdown a { text-decoration: underline; text-decoration-thickness: 0.08em; }
 .markdown a:hover { text-decoration-thickness: 0.14em; }
+/* Code inside a link sits on the code's darker grey: the link's coral falls to 3.4:1 there. */
+[data-theme="dark"] .markdown a code { color: var(--ifm-color-primary-lightest); }
+/* Same for the sidebar's current page, on its highlighted background (4.0:1 with the coral). */
+[data-theme="dark"] .menu__link--active { color: var(--ifm-color-primary-lightest); }
 :focus-visible { outline: 3px solid var(--borla); outline-offset: 3px; border-radius: 4px; }
 
 .markdown h1 { font-size: clamp(2rem, 1.6rem + 1.6vw, 2.8rem); letter-spacing: -0.01em; }
