@@ -49,7 +49,15 @@ revise it with its critique before building.
 
 ## 3. Build it
 
-In the unit's section (or a new one, placed where the calendar says), each item hidden first (`publish-check`):
+Its materials go in `materials/<unit>/` (`materials-format`): notes, assignments and their
+rubrics, quizzes and their banks, and a `unit.md` with them in the order students meet them and
+what opens each one (viewed, submitted, passed); their dates relative to the group's start,
+resolved per group with `materials_resolve` from `materials/course.md`. Validate the unit, then
+publish it in the unit's section (or a new one, placed where the calendar says), each item hidden
+first (`publish-check`), in its order and with its restrictions; `record_publication` each one.
+Restrictions on viewing or completing need the course's completion tracking: check it before
+the first approval, and when it's off, ask the teacher then (turn it on, or publish without them)
+rather than promising restrictions you can't set:
 
 1. Section name and summary: what the student will learn and do, the dates, the order to follow.
 2. Resources (`resource-authoring`): the unit's actual content, at the course's level.

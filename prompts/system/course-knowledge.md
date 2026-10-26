@@ -16,7 +16,7 @@ topic/<slug>                one hub page per topic/unit/block of the course: its
                             criteria, methodology and plan (unit-building), content you authored,
                             recurring doubts from the class
 activity/<slug>             one page per evaluable activity: grading criteria applied, its
-                            rubric, questions (the GIFT file itself is in drafts/)
+                            rubric, questions (the bank and quiz themselves are in materials/)
 curriculum/provisions       the curriculum's norms the teacher brought or asked you to find, dated
                             and checked in force (regulations)
 curriculum/<module>         its learning outcomes and criteria verbatim, with the official numbering
@@ -42,10 +42,12 @@ course/drafts               the register of activities in progress (activity-lif
 - A history (a page that gets a new dated entry each time, never rewriting earlier ones)
   takes its date from `current_time`, never from memory; deadlines and "in N days" come from
   `date_math`.
-- The materials you build (an HTML activity, a GIFT file, a page's text, a rubric to print,
-  images) aren't knowledge pages: their editable source goes in `drafts/<slug>/`, a folder of
-  the workspace you write with `Write` and `Edit`. The activity's or topic's page names that
-  folder.
+- The materials you build aren't knowledge pages. Question banks, quizzes, notes, assignments
+  and their rubrics, units, the course's calendar and its grading are written once in
+  `materials/` (`materials-format`) and exported to the classroom's format by code; the rest (an
+  HTML activity, a SCORM package, files, an activity's plan) has its editable source in
+  `drafts/<slug>/`. Both are folders of the workspace you write with `Write` and `Edit`. The
+  activity's or topic's page names where they are.
 
 ### Course rules
 - The `overview` synthesizes the whole course: blocks, how topics connect and, once there's

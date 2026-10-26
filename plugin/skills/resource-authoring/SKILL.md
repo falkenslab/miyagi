@@ -11,8 +11,9 @@ For something new and complex (a unit's project, a gamified activity, a SCORM pa
 workshop), suggest `activity-lifecycle` first: a plan agreed with the teacher, then one approval
 per phase.
 
-Without a classroom, build it in `drafts/` and say where it is; with one, it also goes into the
-classroom, hidden first (`publish-check`).
+Notes are written once in `materials/` (`materials-format`) and exported to the classroom's HTML
+by code. Without a classroom, say where they are; with one, they also go into the classroom,
+hidden first (`publish-check`).
 
 Activities make students practise; resources are where they learn what they'll practise. Notes
 that list what "will be covered" instead of explaining it leave the activity with nothing behind
@@ -53,13 +54,20 @@ it. Activities are `assignment-building`, `quiz-design` and `activity-building`.
 - **Descriptive names**: "Apuntes del Tema 2: Dockerfile y construcción de imágenes", not
   "Tema 2" or "Página 1".
 
-## As HTML
+## In materials/, as Markdown
 
-Write the content as HTML (headings, lists, `<pre><code>` for code and commands) in
-`drafts/<slug>/`, and hand that HTML to the classroom as it is: the classroom extension's
-course-content skill says what the classroom keeps and how images and files go with it. Flattened
-into plain paragraphs, code blocks, lists and headings are lost and commands can no longer be
-copied. After saving, read it back and check the structure is still there.
+Write a page's or a book's notes in `materials/<unit>/<slug>.notes.md` (`as: page` or
+`as: book`, one chapter per `##`), in plain Markdown: headings from `##`, code in fenced blocks,
+images next to the file with what they show as their alternative text, links whose text says
+where they go. `materials_validate` and `materials_export`: the export writes accessible HTML
+(headings under the classroom's title, code with its indentation, tables with headers) and
+checks it, never by hand. Hand that HTML to the classroom as it is, a fragment for the page's or
+chapter's content: the classroom extension's course-content skill says what the classroom keeps
+and how images go with it. After saving, read it back and check the structure is still there,
+and `record_publication` it.
+
+Other resources (a file, a folder, a link, a section's summary) aren't notes: build them in
+`drafts/<slug>/` as before.
 
 ## Editing existing content
 
@@ -69,5 +77,7 @@ teacher's text into your own style when a correction would do.
 ## Publishing
 
 Run `publish-check` (writing, accessibility, how it looks as a student) and save it with its
-approval, one resource per approval. Record in the topic's page (`topic/<slug>`) what you wrote
-and where (its link), so a later session doesn't duplicate or contradict it.
+approval, one resource per approval. Record in the topic's page (`topic/<slug>`) what you wrote,
+its file in `materials/` and where it went (its link), so a later session doesn't duplicate or
+contradict it. Editing published notes is editing their `.notes.md` and publishing again:
+`publication_status` says which were edited after they were published.

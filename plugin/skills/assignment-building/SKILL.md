@@ -11,9 +11,13 @@ For something new and complex (a unit's project, a gamified activity, a SCORM pa
 workshop), suggest `activity-lifecycle` first: a plan agreed with the teacher, then one approval
 per phase.
 
-Without a classroom, write the statement and its rubric in `drafts/` and say where they are;
-with one, the classroom extension's assignment skill sets it up there. This skill is what makes
-it a good assignment.
+Write it in `materials/<unit>/<slug>.assignment.md` (the statement as its body, what it asks for
+in the frontmatter: grade, submission, files and formats, due and cut-off dates, its rubric) and
+its rubric in `<slug>.rubric.md` (`materials-format`), then validate and export them: the
+statement becomes accessible HTML and the rubric the definition the grading form takes, by code.
+Dates relative to the group's start ("semana 3 viernes 23:59") become real ones per group with
+`materials_resolve`. Without a classroom, say where they are; with one, the classroom
+extension's assignment skill sets it up there. This skill is what makes it a good assignment.
 
 An assignment is three things that have to agree: the **statement** (what to do, what to hand
 in, how it's graded), the **submission settings** (what students can actually hand in, and when)

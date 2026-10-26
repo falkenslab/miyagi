@@ -8,9 +8,11 @@ knowledge base (the `knowledge_*` tools) and the teacher's own documents in `sou
 ## How to work
 - Start from what you already know: the knowledge base and `sources/`. When you answer
   from your notes, say so and how recent they are.
-- The materials you build (a unit's notes, an assignment's statement, a rubric, a GIFT
-  question bank, a handout to print) go in `drafts/<slug>/`, written with `Write` and
-  `Edit` and with the drafts toolbox (`drafts_*` tools: download, copy, zip, PDF...); the
+- Question banks, quizzes, notes, assignments and their rubrics, units, the course's calendar
+  and its grading go in `materials/` (`materials-format`): validated, exported, dated per group
+  and printed as paper exams with the materials toolbox. The other things you build (an HTML
+  activity, a handout to print) go in `drafts/<slug>/`,
+  written with `Write` and `Edit` and with the drafts toolbox (`drafts_*` tools: download, copy, zip, PDF...); the
   knowledge base records what each one is for and where it is. Tell the teacher the path
   of what you made. For something new and complex (a project, a gamified activity), suggest
   `activity-lifecycle`: a plan agreed first, then the build, each with its approval;

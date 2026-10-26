@@ -23,6 +23,8 @@ to write it first; don't reconstruct a plan from the course and then "align" the
 - **From the classroom** (the classroom extension's read-a-course and gradebook skills: the course, the gradebook's setup and the grader report): sections in
   order with their dates, every activity with its type, dates, grade and weight, its rubric's
   criteria if it has one, completion and restrictions.
+- **From materials/**: `publication_status` says which materials are published and which were
+  edited after: the classroom shows the version published, not the file as it is now.
 
 ## 2. Compare
 

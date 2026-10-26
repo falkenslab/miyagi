@@ -50,6 +50,8 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, s
 | `/miyagi:forum` | Revisa el foro y decide si hace falta que intervenga el profesor. |
 | `/miyagi:progress` | Revisa cómo va la clase y quién se está quedando atrás. |
 | `/miyagi:quiz <tema>` | Crea un cuestionario sobre ese tema (o le añade preguntas), con las preguntas importadas de golpe. |
+| `/miyagi:exam <cuestionario>` | Imprime un cuestionario como examen en papel: versiones A, B… con su hoja de respuestas. |
+| `/miyagi:publish <material o tema>` | Publica en el aula lo que hay en `materials/`: un banco, un cuestionario, unos apuntes, una tarea con su rúbrica o un tema entero, oculto primero y con tus aprobaciones. |
 | `/miyagi:build-unit <descripción>` | Construye un tema dentro del curso, encajado en su programación, su calendario y su estilo. |
 | `/miyagi:build-course <descripción>` | Construye un curso completo: planifica, crea cada sección y lo revisa como lo vería un alumno. |
 | `/miyagi:teaching-plan` | Escribe o revisa tu programación didáctica a partir de tu material y tus decisiones. |

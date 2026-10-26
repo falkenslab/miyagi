@@ -83,6 +83,8 @@ Son instrucciones listas para usar. Escríbelos en el chat, con lo que necesites
 | `/miyagi:forum` | Revisar el foro y decidir si hace falta que intervenga el profesor |
 | `/miyagi:progress` | Ver cómo va la clase y quién se queda atrás |
 | `/miyagi:quiz <tema>` | Crear un cuestionario sobre ese tema, o añadirle preguntas |
+| `/miyagi:exam <cuestionario>` | Imprimir un cuestionario como examen en papel, en varias versiones |
+| `/miyagi:publish <material o tema>` | Publicar en el aula materiales o un tema entero de `materials/` |
 | `/miyagi:build-unit <descripción>` | Construir un tema dentro del curso |
 | `/miyagi:build-course <descripción>` | Construir un curso completo |
 | `/miyagi:teaching-plan` | Escribir o revisar la programación didáctica |

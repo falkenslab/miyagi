@@ -22,12 +22,13 @@ miyagi (CLI)
  └─ sesión (agent-kit + Claude Agent SDK)
      ├─ instrucciones de sistema (prompts/system/*.md + instructions.md)
      ├─ habilidades y atajos (plugin/, el plugin de conocimiento de agent-kit, .claude/ del curso, extensiones)
-     ├─ herramientas de archivos: escriben solo en drafts/ (y en los laboratorios de docker-lab, si está activada; sources/ solo lectura)
+     ├─ herramientas de archivos: escriben solo en drafts/ y materials/ (y en los laboratorios de docker-lab, si está activada; sources/ solo lectura)
      ├─ herramientas knowledge_* de agent-kit: lo único que llega a knowledge/
      ├─ herramientas de fuentes de agent-kit: list_sources, extract_text, save_to_sources…
      ├─ extensión moodle-teacher (moodle-mcp) ──> tu Moodle, con tu sesión
      ├─ extensión docker-lab (docker-mcp, opcional) ──> laboratorios de Docker, solo eso
      ├─ caja de herramientas de drafts/ (descargar, comprimir, PDF…)
+     ├─ caja de herramientas de materials/ (comprobar, exportar, exámenes en papel, registro)
      ├─ ganchos: aprobación antes de publicar, revisión del GIFT antes de importarlo
      └─ ayudantes: researcher, pedagogy-reviewer
 ```
@@ -72,6 +73,7 @@ mi-curso/
   .claude/commands/  opcional: tus atajos propios
   sources/           tus documentos originales (solo lectura para el asistente)
   knowledge/         su base de conocimiento del curso
+  materials/         tus preguntas y cuestionarios, escritos una vez
   drafts/            lo que construye para Moodle, editable
   sessions/          una carpeta por sesión: registro, transcripción y conversación
 ```

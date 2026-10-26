@@ -1,15 +1,16 @@
 ---
 name: quiz-design
-description: Design a quiz and write its questions - settings that fit what the quiz is for, plausible distractors, varied cognitive levels, unambiguous wording, useful feedback, GIFT drafted in drafts/ - or review an existing quiz for trivial, repetitive, or poorly worded questions. Use whenever a quiz or its questions are created, changed or reviewed.
+description: Design a quiz and write its questions - settings that fit what the quiz is for, plausible distractors, varied cognitive levels, unambiguous wording, useful feedback, written as a bank in materials/ - or review an existing quiz for trivial, repetitive, or poorly worded questions. Use whenever a quiz or its questions are created, changed or reviewed.
 ---
 
 # Designing a quiz and its questions
 
 > Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
 
-Without a classroom, write the questions in `drafts/` and say where they are; with one, the
-classroom extension's quiz skill builds the quiz, imports the questions and orders them. This
-skill is what the quiz is for and what makes its questions good.
+The questions are written once in `materials/`, as a bank and a quiz (`materials-format`), and
+exported by code. Without a classroom, say where they are; with one, the classroom extension's
+quiz skill builds the quiz, imports the exported questions and orders them. This skill is what
+the quiz is for and what makes its questions good.
 
 ## What the quiz is for decides its settings
 
@@ -51,55 +52,22 @@ require applying a concept to a new situation, comparing two ideas, or spotting 
 worked example, matched to what the topic and the course's level actually call for. Check
 `course/moodle-capabilities` for the question types this classroom has before choosing one.
 
-## Several questions: GIFT in drafts/
+## Writing them: a bank in materials/
 
-Write them in `drafts/<quiz-slug>/<quiz-slug>.gift`, outside the knowledge base:
-
-```
-// Multiple choice, with feedback per option after #
-::T1-01 Capital::What is the capital of France? {
-=Paris
-~London#London is the capital of the United Kingdom
-~Berlin#Berlin is the capital of Germany
-}
-
-// True/false
-::T1-02 For loop::A "for" loop in Python always needs to know the number of iterations in advance. {FALSE}
-
-// Short answer
-::T1-03 Keyword::Which Python keyword defines a function? {=def}
-
-// Numerical, with tolerance
-::T1-04 Root::What's the square root of 49? {#7:0}
-
-// Code: [html], <pre>, and &nbsp; for every level of indentation
-::T1-05 Trace::[html]<p>What does this print?</p><pre>for i in range(2)\:
-&nbsp;&nbsp;&nbsp;&nbsp;print(i)</pre> {
-=0 and 1
-~1 and 2
-}
-```
-
-- A blank line ends a question, so questions are separated by one and never contain one.
-- Escape `~ = # { } :` with a backslash wherever they are meant literally, in the text and in
-  the answers (`n \= 3`, `C\#`).
-- The importer trims every line: code indented with spaces or tabs loses its indentation (and a
-  Python program its meaning), so write code as `[html]` at the start of the text, inside
-  `<pre>`, with `&nbsp;` for every space of indentation.
-- Each question has exactly one right answer (`=`, or `{TRUE}`/`{FALSE}`).
-
-The GIFT is checked with code before it's imported: a file with errors (unbalanced braces, an
-unescaped `=` inside an answer, a multiple choice with no right answer or with several, a
-malformed numerical answer, a repeated name, indentation that will be lost) is refused with the
-list of lines. Fix it in `drafts/` and import it again; don't work around the check. The check
-catches format mistakes, not wrong content.
+Write them in `materials/<unit>/<slug>.questions.md` and the quiz that takes them in
+`<slug>.quiz.md`, in the format of `materials-format`: the text and its code as plain
+Markdown, the right options checked, each wrong option's feedback under it, the purpose and
+settings in the quiz's frontmatter. Then `materials_validate` and `materials_export`: the
+export writes the classroom's format (escapes, code with its indentation, one right answer) and
+checks it; never write GIFT by hand. Its checks catch format mistakes, not wrong content.
 
 ## Approving the questions
 
 The import is its own approval, separate from creating the quiz, and its summary lists every
 question: stem, type, right answer, and the distractors briefly. "6 GIFT questions about X"
-isn't reviewable; the list is. After importing, read back a question or two: if one came out
-wrong (escapes, lost code), fix that question. Never delete questions to re-import them:
+isn't reviewable; the list is. What the export leaves out (points the import doesn't keep) is
+added to that approval by code. After importing, read back a question or two, and
+`record_publication` the bank and the quiz. Never delete questions to re-import them:
 deleting needs its own approval, naming what goes, and the teacher may prefer the fix by hand.
 
 ## Changing an existing quiz
@@ -111,6 +79,8 @@ Look at its attempts first.
   language) is worth fixing.
 - **With attempts**: don't change what a question asks or which answer is right: students were
   graded against the old one. Add new questions or propose the change to the teacher.
+
+`publication_status` says whether its bank was edited after it was published.
 
 ## Reviewing an existing quiz
 
@@ -131,4 +101,4 @@ A question should map back to an objective of the unit (the teaching plan's crit
 Run `publish-check` on the quiz (questions in order, feedback where expected, what students see
 after as intended). Record in `activity/<quiz-slug>` (one page per quiz, even when it repeats
 another quiz's settings) the settings, the questions (types, how many, the criteria followed)
-and the quiz's link, with a link to its GIFT file in `drafts/`.
+and the quiz's link, with the paths of its bank and quiz in `materials/`.

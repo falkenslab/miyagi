@@ -40,7 +40,7 @@ Una aplicación de escritorio, para usar miyagi sin terminal:
 
 ### Materiales y actividades
 
-- **Materiales escritos una vez.** Cuestionarios, bancos de preguntas y apuntes en archivos tuyos, publicados en cualquier aula con exportadores probados ([#34](https://github.com/falkenslab/miyagi/issues/34)).
+- **Materiales escritos una vez.** Cuestionarios, bancos de preguntas, apuntes, tareas con su rúbrica y temas en archivos tuyos, con fechas por grupo, publicados en el aula con exportadores probados ([#34](https://github.com/falkenslab/miyagi/issues/34); ver [Materiales](avanzado/materiales.md)). Hecho: llega en la próxima versión.
 - **Actividades personalizadas.** Variantes equivalentes ambientadas en lo que interesa al grupo, a partir de una encuesta anónima ([#39](https://github.com/falkenslab/miyagi/issues/39)).
 - **Estilos visuales.** Lo que publica miyagi (enunciados, preguntas, páginas) con el estilo que elijas, como extensiones ([#21](https://github.com/falkenslab/miyagi/issues/21)).
 - **Videotutoriales con tu voz**, publicados en YouTube y enlazados en el aula ([#38](https://github.com/falkenslab/miyagi/issues/38)).

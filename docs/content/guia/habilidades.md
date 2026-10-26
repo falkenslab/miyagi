@@ -73,10 +73,17 @@ Construye una rúbrica o guía de corrección desde cero cuando una actividad no
 
 ### ❓ `quiz-design` · Escribir y montar cuestionarios
 
-Escribe preguntas de cuestionario bien hechas: distractores creíbles, niveles variados (recordar, aplicar, analizar), enunciados sin ambigüedades y retroalimentación útil en cada opción. También revisa un cuestionario existente en busca de preguntas triviales, repetidas o mal redactadas. Y decide cómo configurarlo según para qué sirva (un repaso no se configura igual que un examen), redacta las preguntas en formato GIFT para importarlas de golpe, te pide aprobar la importación con la lista de todas las preguntas y cambia los cuestionarios que ya tienen intentos con cuidado de no perjudicar a nadie.
+Escribe preguntas de cuestionario bien hechas: distractores creíbles, niveles variados (recordar, aplicar, analizar), enunciados sin ambigüedades y retroalimentación útil en cada opción. También revisa un cuestionario existente en busca de preguntas triviales, repetidas o mal redactadas. Y decide cómo configurarlo según para qué sirva (un repaso no se configura igual que un examen), escribe las preguntas en un banco de `materials/` que puedes leer y editar, las exporta con código para importarlas de golpe, te pide aprobar la importación con la lista de todas las preguntas y cambia los cuestionarios que ya tienen intentos con cuidado de no perjudicar a nadie.
 
 - **Pídeselo así:** *«Crea un cuestionario de repaso de 12 preguntas sobre JOIN, sin límite de intentos.»*
 - **Atajo:** `/miyagi:quiz <tema>`: escribe las preguntas, crea el cuestionario si aún no existe, las importa (con tu aprobación) y comprueba su orden y la puntuación total.
+
+### 🗂️ `materials-format` · Tus materiales, escritos una vez
+
+Escribe en `materials/` las preguntas y los cuestionarios, los apuntes, las tareas con sus rúbricas, los temas, el calendario del curso y cómo se califica, como texto que puedes leer y editar, y los publica en el aula con código: los comprueba (una respuesta correcta, opciones suficientes, criterios que están en tu programación), los exporta al formato del aula sin escapes ni código roto, te dice en la aprobación lo que el formato deja fuera y anota qué está publicado y qué has cambiado desde entonces. Pone fechas reales a cada grupo a partir de «semana 3 viernes» (saltando los festivos), convierte tus bancos GIFT e imprime los cuestionarios como exámenes en papel en varias versiones. El formato, en [Tus materiales](../avanzado/materiales.md).
+
+- **Pídeselo así:** *«Convierte el banco GIFT que te dejé en sources en preguntas que pueda editar.»* o *«Imprime el examen del tema 2 en dos versiones.»*
+- **Atajos:** `/miyagi:exam <cuestionario>`, `/miyagi:publish <material o tema>`
 
 ### 🎲 `activity-building` · Otras actividades de Moodle
 

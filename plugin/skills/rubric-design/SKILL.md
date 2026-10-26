@@ -8,7 +8,7 @@ description: Build a rubric or grading guide from scratch - observable criteria 
 > Talk to the human in the conversation's language, not in this skill's English: every short line between tool calls too. What you publish follows the course's language.
 
 What this skill says about the classroom applies to the connected one, if any; without one, keep
-the rubric in the plan or build it in `drafts/`.
+the rubric in the plan or write it in `materials/` (`<slug>.rubric.md`, `materials-format`).
 
 `grading-rubric` covers grading with criteria that already exist (the activity's own rubric in
 the classroom, something left in `sources/`, or one already noted in the activity's knowledge
@@ -41,11 +41,15 @@ up to the activity's maximum grade.
 
 ## Where it goes
 
-Set it up in the classroom itself whenever the activity supports it (assignments do), so it's on
-the grading form: the classroom extension's assignment skill says how. Defining it is a
+Write it in `materials/<unit>/<slug>.rubric.md` (`materials-format`): one `##` per criterion, its
+levels as `- <score>: <what it looks like>`; the validation checks the levels and that the best
+ones add up to the activity's grade. Its export is the definition the grading form takes, and a
+table to print. Set it up in the classroom itself whenever the activity supports it (assignments
+do), so it's on the grading form: the classroom extension's assignment skill says how. Defining it is a
 publication (students see the rubric on the activity): ask for approval with the criteria and
-levels in the summary. Also keep a copy in the activity's page, `activity/<slug>`, so
-`grading-rubric` and later sessions can read it without opening the classroom.
+levels in the summary; then `record_publication` it, because grading follows the version
+published. Name its file in the activity's page, `activity/<slug>`, so `grading-rubric` and later
+sessions can read it without opening the classroom.
 
 A rubric on the grading form is the norm for anything graded by hand; a criteria table in the
 statement is useful for students but doesn't replace it. Only where no rubric can be attached

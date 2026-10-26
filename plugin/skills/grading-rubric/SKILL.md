@@ -23,7 +23,9 @@ are expressed, what counts as passing, late or missing work), citing the article
 
 1. Check whether the activity has its own rubric or marking guide in the classroom. If it
    does, **use it**: mark each criterion there instead of just writing a grade and a separate
-   comment.
+   comment. When it comes from `materials/`, `publication_status` on its `.rubric.md`: students
+   are graded by the version published; if the file was edited after, tell the teacher before
+   grading (publish the new one first, or grade with the old one).
 2. If there's none, check `sources/` for a rubric, grading criteria, or a model solution the
    teacher has left. If it exists, it's the primary reference, above your own judgment.
 3. If there's neither, use `rubric-design` to build one from the activity's prompt and the

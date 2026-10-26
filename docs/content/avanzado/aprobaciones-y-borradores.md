@@ -38,7 +38,7 @@ Que el asistente pida permiso no depende solo de que se acuerde. En una sesión 
 
 Todo recurso nuevo (una página, un archivo, un cuestionario, un H5P, una tarea, un tema entero) se prueba en Moodle antes de que lo vean los alumnos ([ADR-009](https://github.com/falkenslab/miyagi/blob/main/.minispec/decisions/ADR-009-hidden-drafts.md)):
 
-1. **Lo construye en `drafts/<slug>/`**: el código fuente editable (el HTML, el archivo GIFT, el texto de la página, sus imágenes).
+1. **Lo construye en `drafts/<slug>/`**: el código fuente editable (el HTML, el texto de la página, sus imágenes). Las preguntas y los cuestionarios los escribe en `materials/` y los exporta a `drafts/materials/` con código ([Tus materiales](materiales.md)).
 2. **Lo pone oculto en el aula**, desde el primer guardado (o oculta la sección si es un tema nuevo). El resumen de la aprobación dice que va **oculto, para probarlo**. No avisa a los alumnos del cambio. Cómo se hace en Moodle lo trae la habilidad de publicación de moodle-teacher.
 3. **Lo prueba como profesor**: lee lo que ha guardado el aula y comprueba que funciona como lo usaría un alumno: el cuestionario, el H5P, cada enlace y cada parte interactiva, y la página en un ancho estrecho. Lo que sus herramientas no pueden probar, te pide que lo pruebes tú, con su enlace. Si algo falla, lo corrige en `drafts/` y lo reemplaza (con otra aprobación).
 4. **Lo apunta en la página `course/drafts`** (`knowledge/drafts.md`): una línea por borrador, que empieza por su fase (`hidden`), con su enlace y lo que falta.

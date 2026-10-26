@@ -20,11 +20,11 @@ Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no p
 
 Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto del asistente como de sus ayudantes:
 
-- **Leer y listar** (`Read`, `Glob`): solo `sources/`, `drafts/` (y la carpeta de laboratorios de docker-lab, si la tienes activada), las habilidades de miyagi y la carpeta de la conversación en curso. Nada más de tu ordenador: ni la carpeta del curso fuera de esas, ni `Documentos`, ni tus otros cursos o proyectos.
-- **Escribir y editar** (`Write`, `Edit`): solo dentro de `drafts/` (y de la carpeta de laboratorios de docker-lab, si la tienes activada: miyagi escribe ahí los archivos de cada laboratorio; ver [Prácticas en Docker](practicas-docker.md)).
+- **Leer y listar** (`Read`, `Glob`): solo `sources/`, `drafts/`, `materials/` (y la carpeta de laboratorios de docker-lab, si la tienes activada), las habilidades de miyagi y la carpeta de la conversación en curso. Nada más de tu ordenador: ni la carpeta del curso fuera de esas, ni `Documentos`, ni tus otros cursos o proyectos.
+- **Escribir y editar** (`Write`, `Edit`): solo dentro de `drafts/` y `materials/` (y de la carpeta de laboratorios de docker-lab, si la tienes activada: miyagi escribe ahí los archivos de cada laboratorio; ver [Prácticas en Docker](practicas-docker.md)).
 - **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado durante la sesión), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
-- **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/` y, con docker-lab activada, su carpeta de laboratorios.
+- **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/`, `materials/` y, con docker-lab activada, su carpeta de laboratorios.
 - **`config.json` y `.env` del curso, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
 - **Otras credenciales en sitios conocidos**, prohibidas además, por si acaso: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS y los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas).
 

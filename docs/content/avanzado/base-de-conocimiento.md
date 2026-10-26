@@ -12,7 +12,8 @@ miyagi recuerda tu curso entre sesiones porque mantiene una **base de conocimien
 
 - **`sources/`: los originales.** Tu material (programación, apuntes, rúbricas, soluciones, criterios) y los documentos que el asistente añade con las herramientas de fuentes de agent-kit (ver [Las fuentes](#las-fuentes)). Para sus herramientas de archivos es de **solo lectura**: no puede cambiar ni borrar nada ahí.
 - **`knowledge/`: sus páginas.** Lo que ha aprendido de tus documentos y de su trabajo. Solo llega a ella con las herramientas `knowledge_*`: las de archivos (`Read`, `Write`, `Edit`, `Grep`, `Glob`) no pueden leerla, escribirla ni buscar en ella.
-- **`drafts/`: lo que construye para Moodle.** El código fuente editable de cada recurso (el HTML de una actividad, el archivo GIFT de un cuestionario, el texto de una página, sus imágenes), una carpeta por recurso. No son apuntes, así que no van en `knowledge/`; la página de la actividad o del tema enlaza a ellos. Ver [Aprobaciones y borradores](aprobaciones-y-borradores.md).
+- **`materials/`: tus materiales.** Los bancos de preguntas y los cuestionarios, como texto que puedes leer y editar, de los que se genera lo que importa el aula ([Tus materiales](materiales.md)).
+- **`drafts/`: lo que construye para Moodle.** El código fuente editable de cada recurso (el HTML de una actividad, el texto de una página, sus imágenes) y lo que se exporta de `materials/`, una carpeta por recurso. No son apuntes, así que no van en `knowledge/`; la página de la actividad o del tema enlaza a ellos. Ver [Aprobaciones y borradores](aprobaciones-y-borradores.md).
 
 ## Qué hace `miyagi ingest`
 

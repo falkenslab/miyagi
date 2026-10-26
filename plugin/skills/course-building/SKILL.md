@@ -41,6 +41,11 @@ commands, current practice), ask `pedagogy-reviewer` to review the plan and revi
 
 ## 3. Build it, unit by unit
 
+Before the first unit, `materials/course.md` (each group's start, the holidays, the evaluations)
+and `materials/grading.md` (the categories and weights the plan says, adding up to 100 %), in
+`materials-format`: the dates of every unit and the gradebook come from them.
+
+
 1. **Welcome section**: its summary, a course guide (`resource-authoring`: objectives, calendar,
    evaluation, what to install, where to ask) and a forum for doubts (`activity-building`).
 2. **Each unit, in order**, with `unit-building` — which writes the unit's part of the plan in its

@@ -21,8 +21,9 @@ Anything new you build for the course (a page, a file such as an HTML activity o
 an H5P, an assignment, a whole unit) is tested in the classroom before students can see it,
 whatever its type:
 
-1. **Build it in `drafts/<slug>/`**: the editable source (the HTML, the GIFT file, the page's
-   text, its images). Never in the knowledge base; the activity's or topic's page names it. Beyond
+1. **Build it** from `materials/` (notes, assignments, rubrics, quizzes and their questions,
+   exported to `drafts/materials/` by code: `materials-format`) or, for what isn't one of those (an
+   HTML activity, a SCORM package), in `drafts/<slug>/`. Never in the knowledge base; the activity's or topic's page names it. Beyond
    writing text files, the drafts toolbox (`drafts_*` tools) downloads files and whole pages,
    copies and moves binaries, zips and unzips (a SCORM package: the classroom extension's SCORM
    skill), prints HTML or Markdown to PDF and tells a file's real type: use it, never a shell.
