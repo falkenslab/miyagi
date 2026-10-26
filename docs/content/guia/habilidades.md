@@ -195,6 +195,19 @@ Escribe informes sobre el curso, nunca sobre un alumno: los resultados por crite
 
 - **Pídeselo así:** *«Prepara los resultados por criterio de la primera evaluación para la reunión de departamento.»*
 
+### 🎯 `personalised-activities` · Actividades en lo que le interesa al grupo
+
+Ambienta una actividad en lo que le gusta a tu grupo (su deporte, su música, sus juegos) sin cambiar lo que se aprende ni cómo se evalúa. Primero, una encuesta anónima y voluntaria de intereses: no pregunta quién es nadie ni nada delicado (salud, creencias, origen, familia…), y de sus resultados solo guarda lo que han elegido tres o más, nunca respuestas sueltas. Después, de dos a cuatro variantes de una tarea o un cuestionario en esos contextos, además de la neutra: cambia solo el contexto, y miyagi comprueba que la nota, la rúbrica, los criterios y las preguntas sean los mismos. Cada alumno elige su contexto; nadie recibe uno asignado por su nombre. Antes de la primera encuesta, consulta con tu centro si hay que informar a las familias: abajo tienes un texto de ejemplo.
+
+- **Pídeselo así:** *«Haz una encuesta de intereses para el grupo A y, con lo que salga, prepara la tarea 2 en tres contextos.»*
+
+<details>
+<summary>Texto de ejemplo para informar a las familias</summary>
+
+> En la asignatura de [asignatura], el profesorado pasará a la clase una breve encuesta anónima y voluntaria sobre temas que les interesan (deportes, música, videojuegos…), para ambientar algunos ejercicios en ellos. No se pide ningún dato personal, no se puede saber quién respondió qué y solo se usan los totales del grupo. Los ejercicios son los mismos para todo el alumnado; solo cambia el ejemplo, y cada estudiante elige el que prefiere. Si tienen cualquier duda, pueden contactar con [profesor o profesora] en [contacto].
+
+</details>
+
 ### 🌈 `diversity` · Atender a la diversidad
 
 Aplica el diseño universal para el aprendizaje (DUA) a cada tema y actividad: más de una forma de motivar, de presentar el contenido y de demostrar lo aprendido. Prepara además variantes de una actividad:

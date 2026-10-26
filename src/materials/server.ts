@@ -16,6 +16,8 @@ import { materialHash } from "./hash.js";
 import { QUESTION_LEVELS, type Material, type Question, type ValidationResult } from "./model.js";
 import { readPublications, recordPublication, stateOf } from "./publications.js";
 import { serializeBank } from "./serialize.js";
+import { aggregateSurvey, MIN_ANSWERS } from "./survey.js";
+import { compareAssignments, compareQuizzes } from "./variants.js";
 import { inMaterials, listMaterials, loadMaterial, resolveQuiz, shownPath, unknownCriteria } from "./store.js";
 
 /**
@@ -78,6 +80,28 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
       const rubric = await rubricOf(loaded.file, loaded.material.rubric);
       if (!rubric) findings.errors.push({ line: 1, message: `the rubric ${loaded.material.rubric} doesn't exist or doesn't validate` });
       else if (rubric.total !== loaded.material.grade) findings.warnings.push({ line: 1, message: `the rubric adds up to ${rubric.total} and the grade is ${loaded.material.grade}: the classroom scales one to the other; say it in the statement if students see the rubric's points` });
+    }
+    // An activity's variants (#39): each next to it, valid, and changing nothing but the context.
+    const base = loaded.material;
+    if ((base?.kind === "assignment" || base?.kind === "quiz") && base.variants) {
+      for (const variant of base.variants) {
+        const other = await loadMaterial(materialsDir, shownPath(materialsDir, path.join(path.dirname(loaded.file), variant))).catch(() => undefined);
+        if (!other?.material || other.material.kind !== base.kind) {
+          findings.errors.push({ line: 1, message: `the variant ${variant} isn't next to it` });
+          continue;
+        }
+        if (other.findings.errors.length) {
+          findings.errors.push({ line: 1, message: `the variant ${variant} has errors: validate it` });
+          continue;
+        }
+        let differences: string[] = [];
+        if (base.kind === "assignment" && other.material.kind === "assignment") differences = compareAssignments(base, other.material);
+        if (base.kind === "quiz" && other.material.kind === "quiz") {
+          const resolved = await resolveQuiz(materialsDir, other.file, other.material);
+          differences = compareQuizzes(base, questions, other.material, resolved.picks.flatMap((pick) => pick.questions));
+        }
+        if (differences.length) findings.errors.push({ line: 1, message: `the variant ${variant} changes more than the context: ${differences.join("; ")}` });
+      }
     }
     // A unit's materials, each next to it and valid.
     if (loaded.material?.kind === "unit") {
@@ -209,7 +233,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
           const lines = [];
           for (const file of files) {
             const { material, findings } = await check(file);
-            const size = material?.kind === "questions" ? `${material.questions.length} questions` : material?.kind === "quiz" ? `${material.questions.length} parts` : material?.kind === "notes" ? (material.as === "book" ? `book, ${material.chapters.length} chapters` : "page") : material?.kind === "rubric" ? `${material.criteria.length} criteria, ${material.total} points` : material?.kind === "assignment" ? `grade ${material.grade}` : material?.kind === "grading" ? `${material.categories.length} categories` : material?.kind === "unit" ? `${material.steps.length} materials` : material?.kind === "course" ? `${material.groups.length} groups` : "";
+            const size = material?.kind === "questions" ? `${material.questions.length} questions` : material?.kind === "quiz" ? `${material.questions.length} parts` : material?.kind === "notes" ? (material.as === "book" ? `book, ${material.chapters.length} chapters` : "page") : material?.kind === "rubric" ? `${material.criteria.length} criteria, ${material.total} points` : material?.kind === "assignment" ? `grade ${material.grade}` : material?.kind === "grading" ? `${material.categories.length} categories` : material?.kind === "unit" ? `${material.steps.length} materials` : material?.kind === "course" ? `${material.groups.length} groups` : material?.kind === "survey" ? `${material.questions.length} questions, anonymous` : "";
             const state = material ? stateOf(publications, file, materialHash(material)) : undefined;
             lines.push(`${file}  [${material?.kind ?? "?"}] ${material?.title ?? ""}  ${size}  ${findings.errors.length ? `${findings.errors.length} errors` : "valid"}  ${state?.state ?? ""}${state?.last ? ` (${state.last.where})` : ""}`);
           }
@@ -322,6 +346,16 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
                 dates.length ? `Dates per group:\n${dates.map((line) => `- ${line}`).join("\n")}` : "",
                 "After it's published, record_publication with this path and each material's.",
               ].filter(Boolean).join("\n");
+            }
+            if (material.kind === "survey") {
+              return [
+                `Survey "${material.title}" (hash ${hash}), anonymous: for the classroom's survey activity, set so that no names are recorded and students don't see the results.`,
+                `Its description, the first thing students read: ${material.purpose}`,
+                ...material.questions.map((question, index) => `${index + 1}. ${question.name}: ${question.type === "text" ? "a text answer" : `${question.type === "single" ? "one" : "any"} of ${question.options.map((option) => `"${option}"`).join(", ")}`}, not required${question.text ? `. Text: ${question.text.replace(/\s+/g, " ")}` : ""}`),
+                "Every question optional. Publish it hidden, check as a student that it says it's anonymous, show it with its approval, and record_publication with this path.",
+                "The first time a survey goes to this classroom, remind the teacher to check with the school whether families must be told (the guide has a model text).",
+                "Its results are read only in aggregate, and go through survey_aggregate before anything is written down.",
+              ].join("\n");
             }
             if (material.kind === "course") return `The course's calendar: ${material.groups.map((group) => `group ${group.id} from ${group.start}`).join(", ")}; ${material.holidays.length} holidays; nothing to export: materials_resolve uses it.`;
             if (material.kind !== "quiz") throw new Error(`${a.path} can't be exported`);
@@ -446,6 +480,38 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
               ...rows,
               missing.length ? `No question yet for: ${missing.join(", ")}.` : "",
               "A question counts once per criterion it names. Compare with the plan's criteria (the curriculum pages, the assessment matrix) to see the gaps.",
+            ].filter(Boolean).join("\n");
+          }),
+      ),
+
+      tool(
+        "survey_aggregate",
+        `What may be kept of an interests survey's results (#39), for the group's interests/<group> page: each option with ${MIN_ANSWERS} answers or more, the rest together only when they add up to that, free text only as how many wrote something, and nothing at all under ${MIN_ANSWERS} responses. Pass the counts as the classroom reports them, never who answered.`,
+        {
+          responses: z.number().int().min(0).describe("How many answered the survey"),
+          group: z.string().optional().describe("The group it was for, an id of materials/course.md"),
+          results: z
+            .array(
+              z.object({
+                text: z.string().describe("The question"),
+                options: z.array(z.object({ text: z.string(), count: z.number().int().min(0) })).optional().describe("A choice question's options and how many chose each"),
+                textAnswers: z.number().int().min(0).optional().describe("A text question: how many wrote something"),
+              }),
+            )
+            .describe("Each question's counts"),
+        },
+        (a) =>
+          guarded(async () => {
+            const course = await calendar();
+            if (a.group && course && !course.groups.some((group) => group.id === a.group)) throw new Error(`no group "${a.group}" in materials/course.md`);
+            const { kept, left } = aggregateSurvey(a.responses, a.results);
+            if (!kept.length) return `${a.responses} responses: under ${MIN_ANSWERS}, nothing of it can be kept (each answer would point at someone). Tell the teacher; write nothing down.`;
+            return [
+              `What may go in interests/${a.group ?? "<group>"} (knowledge_create, type interests), with the date from current_time and the school year:`,
+              `- ${a.responses} responses`,
+              ...kept,
+              left ? `(${left} options left out: fewer than ${MIN_ANSWERS} answers each.)` : "",
+              "Nothing else from the results: no individual answer, no quote, no small count.",
             ].filter(Boolean).join("\n");
           }),
       ),

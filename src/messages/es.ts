@@ -199,6 +199,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
       resolve: (p) => `Calculando las fechas de ${p}`,
       style: "Mirando el estilo de los materiales",
       coverage: "Contando las preguntas del banco por criterio y nivel",
+      aggregate: "Quedándose solo con los totales de la encuesta",
     },
   },
 };

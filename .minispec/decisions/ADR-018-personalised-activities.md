@@ -11,7 +11,7 @@ Contexts students care about help motivation, but profiling students would break
 ## Consequences
 
 - The survey validator requires the purpose/anonymity header and refuses sensitive or identifying questions; `student-impact-review` checks it too.
-- Only `knowledge/groups/<group>/interests.md` is kept: date, number of answers, themes with counts of 3 or more; it expires with the school year.
+- Only the `interests/<group>` page is kept (the group a `materials/course.md` id): date, school year, number of answers, themes with counts of 3 or more, through `survey_aggregate`; it expires with the school year.
 - Variant equivalence is checked by code (structure) and by `pedagogy-reviewer` (difficulty).
 - Special educational needs only when the teacher states them, as material, without names.
 - The guide recommends checking with the school whether families must be told before a survey, with a model text; miyagi gives no legal advice.

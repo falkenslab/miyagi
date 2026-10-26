@@ -109,6 +109,21 @@ Source: <provision, article or annex> - [Provisions](curriculum/provisions)
 ## Files
 - <Statement, GIFT, solution: drafts/<slug>/...>`,
   },
+  {
+    type: "interests",
+    dir: "interests",
+    indexSection: "Interests",
+    description:
+      "What a group of students cares about, from an anonymous interests survey (personalised-activities): one per group of materials/course.md, its slug the group's id. Only what survey_aggregate lets keep (categories of 3 or more, themes of free text without quoting), never who answered nor anything about one student. Fields: date (from current_time), year (the school year).",
+    template: `<Which survey, for which group and school year, and how many answered.>
+
+## Interests
+- <Theme: how many chose it (3 or more).>
+
+## Used in
+- <The activities whose variants are set in these themes: [Activity](activity/<slug>).>`,
+    indexFields: ["date", "year"],
+  },
 ];
 
 /**

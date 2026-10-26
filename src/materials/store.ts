@@ -8,6 +8,7 @@ import { parseGrading } from "./grading.js";
 import { parseNotes } from "./notes.js";
 import { parseRubric } from "./rubric.js";
 import { parseUnit } from "./unit.js";
+import { parseSurvey } from "./survey.js";
 import { parseQuiz } from "./quiz.js";
 import { drawn } from "./exam.js";
 
@@ -20,7 +21,7 @@ const seedOf = (text: string) => [...text].reduce((hash, char) => (Math.imul(has
  * teacher's plan has). Every path stays inside the folder.
  */
 
-export const MATERIAL_SUFFIXES = [".questions.md", ".quiz.md", ".notes.md", ".assignment.md", ".rubric.md", "grading.md", "course.md", "unit.md"] as const;
+export const MATERIAL_SUFFIXES = [".questions.md", ".quiz.md", ".notes.md", ".assignment.md", ".rubric.md", "grading.md", "course.md", "unit.md", ".survey.md"] as const;
 
 /** A path inside materials/, never out of it: the material's absolute path. */
 export function inMaterials(materialsDir: string, relative: string): string {
@@ -41,6 +42,7 @@ export function kindOf(file: string): Material["kind"] | undefined {
   if (path.basename(file) === "grading.md") return "grading";
   if (path.basename(file) === "course.md") return "course";
   if (path.basename(file) === "unit.md") return "unit";
+  if (file.endsWith(".survey.md")) return "survey";
   return undefined;
 }
 
@@ -54,6 +56,7 @@ export function parseMaterial(file: string, source: string): Parsed<Material> {
   if (kind === "grading") return parseGrading(source);
   if (kind === "course") return parseCourse(source);
   if (kind === "unit") return parseUnit(source);
+  if (kind === "survey") return parseSurvey(source);
   return { findings: { errors: [finding(1, `${path.basename(file)} isn't a material miyagi knows (${MATERIAL_SUFFIXES.join(", ")})`)], warnings: [] } };
 }
 

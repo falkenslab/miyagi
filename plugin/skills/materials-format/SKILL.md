@@ -1,6 +1,6 @@
 ---
 name: materials-format
-description: Write a subject's materials once in materials/ - question banks (.questions.md), quizzes (.quiz.md), notes (.notes.md), assignments (.assignment.md) and rubrics (.rubric.md), units (unit.md), the course's calendar (course.md) and grading (grading.md) as Markdown the teacher can read and edit - and publish them through the materials toolbox, which validates them and exports them to the classroom's import format by code, says what the format leaves out, prints paper exams and records each publication. Use whenever questions, a quiz or a paper exam are written, changed, imported from a GIFT file, or published.
+description: Write a subject's materials once in materials/ - question banks (.questions.md), quizzes (.quiz.md), notes (.notes.md), assignments (.assignment.md) and rubrics (.rubric.md), units (unit.md), the course's calendar (course.md), grading (grading.md) and interests surveys (.survey.md) as Markdown the teacher can read and edit - and publish them through the materials toolbox, which validates them and exports them to the classroom's import format by code, says what the format leaves out, prints paper exams and records each publication. Use whenever questions, a quiz or a paper exam are written, changed, imported from a GIFT file, or published.
 ---
 
 # Materials, written once
@@ -123,6 +123,16 @@ total: 10                    # the best levels add up to it
 - 2: Lo explica de forma incompleta
 - 0: No lo explica, o es incorrecto
 ```
+
+## An interests survey and an activity's variants
+
+`materials/surveys/<slug>.survey.md` (`personalised-activities`): `title`, `purpose`,
+`anonymous: true` and its `group`, then a `## name` per question with `type: single | multiple |
+text` and its options as a list. The validation refuses one that isn't anonymous or that asks
+anything identifying or sensitive. Its results go through `survey_aggregate`.
+
+An assignment or a quiz lists its variants in other contexts with `variants: [<file>, …]` (two to
+four, next to it); the validation refuses a variant that changes more than the context.
 
 ## A unit, the course's calendar, the grading
 

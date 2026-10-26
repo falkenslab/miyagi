@@ -1,5 +1,6 @@
 import { splitFrontmatter, stringList } from "./frontmatter.js";
 import { finding, type Finding, type Parsed } from "./model.js";
+import { variantsOf } from "./variants.js";
 
 /**
  * An assignment, `<slug>.assignment.md` (ADR-015): its statement for students as the body, and
@@ -37,6 +38,8 @@ export interface Assignment {
   group: boolean;
   criteria: string[];
   statement: string;
+  /** Its variants in other contexts (#39): this file is the neutral one. */
+  variants?: string[];
 }
 
 const SUBMISSIONS = ["file", "text", "both"] as const;
@@ -71,6 +74,7 @@ export function parseAssignment(source: string): Parsed<Assignment> {
   const rubric = typeof data.rubric === "string" && data.rubric.trim() ? data.rubric.trim() : undefined;
   if (rubric && !rubric.endsWith(".rubric.md")) errors.push(finding(1, `"rubric" names a .rubric.md file`));
   if (!rubric) warnings.push(finding(1, "no rubric: how it's graded is only in the statement (rubric-design)"));
+  const variants = variantsOf(data, ".assignment.md", errors);
   return {
     material: {
       kind: "assignment",
@@ -85,6 +89,7 @@ export function parseAssignment(source: string): Parsed<Assignment> {
       group: data.group === true,
       criteria: stringList(data.criteria),
       statement: body.trim(),
+      ...(variants ? { variants } : {}),
     },
     findings: { errors, warnings },
   };

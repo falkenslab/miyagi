@@ -138,6 +138,12 @@ Con `/miyagi:publish` publicas un material o un tema entero: lo comprueba, lo ex
 - **Imprime exámenes en papel**: versiones A, B… con las preguntas y las opciones en otro orden, cada una con su hoja de respuestas, en `drafts/exams/`. Guarda la semilla, así que puede volver a imprimir exactamente las mismas. Pídeselo con `/miyagi:exam` o con tus palabras.
 - **Convierte tus bancos GIFT** (los que dejes en `sources/` o los que ya hizo en `drafts/`) en archivos `.questions.md`, para que los edites a partir de entonces.
 
+## Una encuesta de intereses y las variantes de una actividad
+
+Una encuesta va en `materials/surveys/<nombre>.survey.md`: su título, para qué es (`purpose`, lo primero que leen los alumnos), `anonymous: true`, su grupo de `course.md` y unas pocas preguntas con `## nombre`, `type: single`, `multiple` o `text` y sus opciones como lista. Si no es anónima o pregunta algo que identifica a un alumno o algo delicado, no pasa la validación.
+
+Una tarea o un cuestionario lista sus variantes con `variants: [tarea-2.musica.assignment.md, tarea-2.deporte.assignment.md]`, de dos a cuatro, cada una en su archivo junto a la neutra. La validación compara cada variante con la neutra y no deja pasar ninguna que cambie algo más que el contexto: la nota, la rúbrica, los criterios, la entrega, las fechas o, en un cuestionario, el tipo, los puntos, los criterios o el nivel de cada pregunta.
+
 ## El estilo de lo que publicas
 
 Lo que exporta es HTML accesible que toma el tema de tu aula. Si quieres otro aspecto (una cabecera con el título, el enunciado en un recuadro, el código con un rótulo para copiarlo, la retroalimentación en un marco de color), instala una extensión de estilo, como `moodle-ui-kit`, y pídele que la use: «usa el estilo moodle-ui-kit». Queda guardado en `appearance` (ver [Configuración](configuracion.md)), y «vuelve al estilo de mi aula» lo deshace.

@@ -198,6 +198,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
       resolve: (p) => `Calcule les dates de ${p}`,
       style: "Regarde le style des supports",
       coverage: "Compte les questions de la banque par critère et niveau",
+      aggregate: "Ne garde que les totaux du sondage",
     },
   },
 };

@@ -4,6 +4,7 @@ import type { CourseCalendar } from "./course.js";
 import type { Grading } from "./grading.js";
 import type { Notes } from "./notes.js";
 import type { Rubric } from "./rubric.js";
+import type { Survey } from "./survey.js";
 import type { Unit } from "./unit.js";
 
 /**
@@ -85,9 +86,11 @@ export interface Quiz {
   questions: QuizPick[];
   /** What students read before starting, as Markdown. */
   description: string;
+  /** Its variants in other contexts (#39): this file is the neutral one. */
+  variants?: string[];
 }
 
-export type Material = Bank | Quiz | Notes | Assignment | Rubric | Grading | CourseCalendar | Unit;
+export type Material = Bank | Quiz | Notes | Assignment | Rubric | Grading | CourseCalendar | Unit | Survey;
 
 /** A parse's result: the material (when it could be read at all) and what's wrong with it. */
 export interface Parsed<T> {

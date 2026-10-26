@@ -157,6 +157,7 @@ export interface Messages {
       resolve: (path: string) => string;
       style: string;
       coverage: string;
+      aggregate: string;
     };
   };
 }
@@ -356,6 +357,7 @@ See README.md for details.`,
       resolve: (p) => `Working out the dates of ${p}`,
       style: "Looking at the materials' style",
       coverage: "Counting the bank's questions by criterion and level",
+      aggregate: "Keeping only the survey's totals",
     },
   },
 };

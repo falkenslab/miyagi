@@ -1,4 +1,5 @@
 import { splitFrontmatter, stringList } from "./frontmatter.js";
+import { variantsOf } from "./variants.js";
 import { finding, QUESTION_LEVELS, type Finding, type Parsed, type QuestionLevel, type Quiz, type QuizPick } from "./model.js";
 
 /**
@@ -54,6 +55,7 @@ export function parseQuiz(source: string): Parsed<Quiz> {
     if ((criteria.length || level) && Array.isArray(pick)) warnings.push(finding(1, `questions[${index + 1}]: questions picked by name aren't filtered by criteria or level`));
     questions.push({ bank, pick, ...(criteria.length ? { criteria } : {}), ...(level && QUESTION_LEVELS.includes(level as QuestionLevel) ? { level: level as QuestionLevel } : {}) });
   });
+  const variants = variantsOf(data, ".quiz.md", errors);
   if (!body.trim()) warnings.push(finding(1, "no description: students start without knowing what it covers, how long it takes or how it counts"));
-  return { material: { kind: "quiz", title, purpose: (PURPOSES.includes(purpose as Quiz["purpose"]) ? purpose : "practice") as Quiz["purpose"], settings, questions, description: body.trim() }, findings: { errors, warnings } };
+  return { material: { kind: "quiz", title, purpose: (PURPOSES.includes(purpose as Quiz["purpose"]) ? purpose : "practice") as Quiz["purpose"], settings, questions, description: body.trim(), ...(variants ? { variants } : {}) }, findings: { errors, warnings } };
 }
