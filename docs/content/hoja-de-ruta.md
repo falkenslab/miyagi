@@ -52,6 +52,7 @@ Una aplicación de escritorio, para usar miyagi sin terminal:
 ### La web
 
 - **Esta web en inglés** ([#28](https://github.com/falkenslab/miyagi/issues/28)), en `/en/`: la guía, lo avanzado y la portada; el aula de SQL sigue en español. Hecho: llega con la próxima publicación de la web.
+- **Las ilustraciones y las guías, para el terminal y la aplicación.** Todas las capturas, comandos y peticiones con el estilo de Falken's Lab, y guías con casos de uso tanto del terminal como de la aplicación de escritorio o del navegador ([#57](https://github.com/falkenslab/miyagi/issues/57)).
 
 ## Lo que miyagi no hará
 

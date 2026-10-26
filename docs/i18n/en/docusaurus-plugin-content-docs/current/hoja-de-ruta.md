@@ -52,6 +52,7 @@ A desktop app, to use miyagi without a terminal:
 ### The website {#la-web}
 
 - **This website in English** ([#28](https://github.com/falkenslab/miyagi/issues/28)), under `/en/`: the guide, the advanced pages and the landing; the SQL classroom stays in Spanish. Done: it arrives with the site's next publication.
+- **Illustrations and guides, for the terminal and the app.** Every screenshot, command and request in Falken's Lab's style, and guides with use cases for both the terminal and the desktop or browser app ([#57](https://github.com/falkenslab/miyagi/issues/57)).
 
 ## What miyagi won't do {#lo-que-miyagi-no-hará}
 
