@@ -9,6 +9,19 @@ import s from "./index.module.css";
 
 const INSTALL = "npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz";
 
+// The closing headline cycles through these: each is a chore miyagi really takes on.
+const MOTTOS = ["Abrir foro, cerrar dudas", "Dar tarea, poner nota", "Crear rúbrica, aplicar rúbrica", "Subir tema, montar cuestionario", "Revisar curso, arreglar fechas"];
+
+function Motto() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const id = setInterval(() => setI((n) => (n + 1) % MOTTOS.length), 3200);
+    return () => clearInterval(id);
+  }, []);
+  return <span key={i} className={s.motto}>{MOTTOS[i]}</span>;
+}
+
 const SCENES = [
   {
     id: "corregir",
@@ -430,7 +443,7 @@ export default function Home() {
 
         <section className={s.closing} aria-labelledby="final-t">
           <div className={s.wrap}>
-            <h2 id="final-t">Dar cera, pulir cera: eso, para miyagi</h2>
+            <h2 id="final-t"><Motto />: eso, para miyagi</h2>
             <p>Tú te quedas con lo que importa, que es enseñar.</p>
             <div className={s.actions}>
               <Link className={`${s.button} ${s.primary}`} to="/guia/instalar/">Instalar miyagi</Link>
