@@ -44,7 +44,7 @@ miyagi no te la pide ni la guarda. La primera vez que necesita entrar en Moodle,
 
 ### ¿Qué pasa con los datos de mis alumnos?
 
-Lee lo que tú verías en Moodle para hacer su trabajo, pero tus alumnos le llegan con un alias («Alumno 3»), nunca con su nombre. En sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Más detalle en [Seguridad y privacidad](../avanzado/seguridad-y-privacidad.md).
+Lee lo que tú verías en Moodle para hacer su trabajo, pero tus alumnos le llegan con un alias («A-7KQ2XM»), nunca con su nombre. En sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Más detalle en [Seguridad y privacidad](../avanzado/seguridad-y-privacidad.md).
 
 ### ¿Ejecuta programas en mi ordenador?
 

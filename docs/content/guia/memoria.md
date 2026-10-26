@@ -58,7 +58,7 @@ Para consultarlos desde el chat sin abrir Moodle, usa `/knowledge:query` con tu 
 
 ## Lo que no guarda
 
-- **No guarda fichas de estudiantes concretos.** En sus apuntes del progreso y del foro solo hay tendencias de la clase (cuántos se están quedando atrás y por qué), nunca un registro con nombres. Además, tus alumnos le llegan con un alias («Alumno 3»), no con su nombre.
+- **No guarda fichas de estudiantes concretos.** En sus apuntes del progreso y del foro solo hay tendencias de la clase (cuántos se están quedando atrás y por qué), nunca un registro con nombres. Además, tus alumnos le llegan con un alias («A-7KQ2XM»), no con su nombre.
 - **No guarda tu contraseña.** Ni siquiera la conoce: inicias sesión tú en la ventana que abre la extensión moodle-teacher, y es ella la que guarda la sesión.
 
 ## Cada curso, su memoria
