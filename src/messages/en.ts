@@ -20,7 +20,6 @@ export interface Messages {
   skillsTitle: (dir: string) => string;
   commandsTitle: (dir: string) => string;
   unknownCommand: (command: string) => string;
-  globalConfigMigrated: (file: string) => string;
 
   // menu.ts: the setup wizard and the other questions
   initHeading: (dir: string) => string;
@@ -223,7 +222,6 @@ See README.md for details.`,
   skillsTitle: (dir) => `Skills available in ${dir}`,
   commandsTitle: (dir) => `Commands available in ${dir} (inside "chat")`,
   unknownCommand: (command) => `Unknown command "${command}". Use miyagi --help.`,
-  globalConfigMigrated: (file) => `Your settings from ~/.teacher-agent were copied to ${file}.`,
 
   initHeading: (dir) => `\n=== Setting up a subject in ${dir} ===`,
   initHeadingNew: "\n=== New subject ===",

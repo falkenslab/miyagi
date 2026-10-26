@@ -60,8 +60,8 @@ for (const [kind, modes] of Object.entries(MODES)) {
       const problems = [];
       const left = prompt.match(/\{\{[^}]+\}\}/g);
       if (left) problems.push(`unsubstituted: ${[...new Set(left)].join(", ")}`);
-      if (/\bstudent-agent\b|moodle-agent|teacher-agent|context\/|knowledge\/README\.md|save_to_knowledge/.test(prompt)) {
-        problems.push("mentions a student-agent/moodle-agent/teacher-agent leftover");
+      if (/\bstudent-agent\b|moodle-agent|context\/|knowledge\/README\.md|save_to_knowledge/.test(prompt)) {
+        problems.push("mentions a student-agent/moodle-agent leftover");
       }
       const file = prompt.match(KNOWLEDGE_FILES);
       if (file) problems.push(`sends the agent to a knowledge file (${file[0]}) instead of the knowledge_* tools`);

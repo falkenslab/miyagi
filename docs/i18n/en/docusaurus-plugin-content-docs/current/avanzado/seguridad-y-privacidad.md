@@ -14,7 +14,7 @@ The assistant reads content you don't control: Moodle pages, student submissions
 - The Moodle session belongs to the [moodle-teacher](extensiones.md) extension: the first time it's needed, it opens a browser window for you to sign in yourself, and keeps the session in its own browser profile until it expires. miyagi and the model never see your password.
 - An old-style classroom that still has `username` and `password` in `config.json` loses them when it's moved to moodle-teacher (see [Configuration](configuracion.md#aulas-de-antes)). Meanwhile, the assistant **can't read** that file: it's on its tools' list of forbidden paths.
 
-Your Claude token isn't within its reach either: its file tools can't read the course's `.env` (where a token of its own can go), nor `~/.miyagi/config.json` (where miyagi keeps it), nor its old copy `~/.teacher-agent/config.json`, nor `~/.claude/.credentials.json` (the Claude SDK's credentials).
+Your Claude token isn't within its reach either: its file tools can't read the course's `.env` (where a token of its own can go), nor `~/.miyagi/config.json` (where miyagi keeps it), nor `~/.claude/.credentials.json` (the Claude SDK's credentials).
 
 ## Which files it can touch {#qué-archivos-puede-tocar}
 
@@ -25,7 +25,7 @@ An agent-kit filter checks every use of the file tools, by the assistant and by 
 - **`sources/`**: read only for `Read`, `Glob` and `Grep`. What goes in is added by agent-kit's source tools: `save_to_sources` (a file downloaded during the session), `download_to_sources` (a web address) and `request_file` (a file you give it); and what goes out, `retire_source`, which asks for your approval and moves it aside to `sources/.agent-kit/retired/` without deleting it ([The knowledge base](base-de-conocimiento.md#las-fuentes)).
 - **`knowledge/`**: no file tool reaches it, not even to read. Only the `knowledge_*` tools, which don't delete or rename pages; retiring one (`knowledge_retire`) asks for your approval.
 - **Searching the content** (`Grep`): only in `sources/`, `drafts/`, `materials/` and, with docker-lab enabled, its labs folder.
-- **The course's `config.json` and `.env`, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` and `~/.claude/.credentials.json`**: forbidden, neither read nor write. `verify` checks it on every change (`check-file-scope.mjs`).
+- **The course's `config.json` and `.env`, `~/.miyagi/config.json` and `~/.claude/.credentials.json`**: forbidden, neither read nor write. `verify` checks it on every change (`check-file-scope.mjs`).
 - **Other credentials in well-known places**, forbidden as well, just in case: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, the macOS keychain and the Chrome, Edge and Firefox profiles (cookies and saved passwords).
 
 Your skills, shortcuts and `instructions.md` are outside the folders it can write to: the assistant uses them, but can't change them.

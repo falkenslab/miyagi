@@ -130,7 +130,7 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 | `defaultLanguage` | El idioma para los cursos que no fijan `agent.language`. | Ninguno: te sigue en el idioma en que le escribas. |
 | `autoCompactEnabled` | Si la conversación llena el contexto del modelo, la resume automáticamente para poder seguir. Pon `false` para desactivarlo. | `true` |
 
-El token es tan delicado como una contraseña: en Mac y Linux, miyagi deja el archivo legible solo para tu usuario. Si venías de teacher-agent, la primera vez copia `~/.teacher-agent/config.json` aquí (el antiguo se queda donde estaba).
+El token es tan delicado como una contraseña: en Mac y Linux, miyagi deja el archivo legible solo para tu usuario.
 
 ## La lista de asignaturas: `~/.miyagi/workspaces.json`
 

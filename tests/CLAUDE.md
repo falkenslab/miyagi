@@ -1,6 +1,6 @@
 # CLAUDE.md — tests/
 
-This folder is the record of every end-to-end test of teacher-agent against a real Moodle (usually moodle-sandbox). It is not a unit-test suite: nothing here runs in CI. Each report is the evidence that a behavior worked, and the source of the lessons that went into the agent.
+This folder is the record of every end-to-end test of miyagi against a real Moodle (usually moodle-sandbox). It is not a unit-test suite: nothing here runs in CI. Each report is the evidence that a behavior worked, and the source of the lessons that went into the agent.
 
 ## Layout
 

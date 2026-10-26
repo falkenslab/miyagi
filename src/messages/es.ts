@@ -65,7 +65,6 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   skillsTitle: (dir) => `Habilidades disponibles en ${dir}`,
   commandsTitle: (dir) => `Comandos disponibles en ${dir} (dentro de "chat")`,
   unknownCommand: (command) => `Comando desconocido "${command}". Usa miyagi --help.`,
-  globalConfigMigrated: (file) => `Tu configuración de ~/.teacher-agent se ha copiado a ${file}.`,
 
   initHeading: (dir) => `\n=== Preparando la asignatura en ${dir} ===`,
   initHeadingNew: "\n=== Nueva asignatura ===",

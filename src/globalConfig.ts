@@ -1,4 +1,3 @@
-import { existsSync } from "node:fs";
 import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -25,19 +24,14 @@ export function globalConfigPath(): string {
   return path.join(os.homedir(), ".miyagi", "config.json");
 }
 
-/** Where it lived while the project was called teacher-agent (before 0.10). */
-function legacyGlobalConfigPath(): string {
-  return path.join(os.homedir(), ".teacher-agent", "config.json");
-}
-
 /**
  * Files outside the workspace that hold a secret the model must never read (ADR-004): the
- * global config and its legacy copy (`claudeCodeOAuthToken`), and the Claude Agent SDK's own
+ * global config (`claudeCodeOAuthToken`) and the Claude Agent SDK's own
  * credentials. Denied to the file tools in every session, existing or not. Only these files:
  * `~/.miyagi/` and `~/.claude/` also hold things the agent may need to read.
  */
 export function secretFilePaths(): string[] {
-  return [globalConfigPath(), legacyGlobalConfigPath(), path.join(os.homedir(), ".claude", ".credentials.json")];
+  return [globalConfigPath(), path.join(os.homedir(), ".claude", ".credentials.json")];
 }
 
 /**
@@ -69,20 +63,6 @@ export function sensitivePaths(): string[] {
     ...["google-chrome", "chromium", "microsoft-edge"].map((p) => path.join(home, ".config", p)),
     path.join(home, ".mozilla"),
   ];
-}
-
-/**
- * Copies ~/.teacher-agent/config.json to ~/.miyagi/config.json the first time, so an upgraded
- * install keeps its Claude token and defaults. Returns whether it copied. The old file stays.
- */
-export async function migrateLegacyGlobalConfig(): Promise<boolean> {
-  if (existsSync(globalConfigPath()) || !existsSync(legacyGlobalConfigPath())) return false;
-  try {
-    await writeGlobalConfig(JSON.parse(await readFile(legacyGlobalConfigPath(), "utf-8")) as GlobalConfig);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 export async function readGlobalConfig(): Promise<GlobalConfig> {

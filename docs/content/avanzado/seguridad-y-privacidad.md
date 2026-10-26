@@ -14,7 +14,7 @@ El asistente lee contenido que no controlas: páginas de Moodle, entregas de alu
 - La sesión en Moodle es de la extensión [moodle-teacher](extensiones.md): la primera vez que hace falta, abre una ventana del navegador para que inicies sesión tú, y guarda la sesión en su propio perfil del navegador hasta que caduque. miyagi y el modelo nunca ven tu contraseña.
 - Un aula de antes que aún tenga `username` y `password` en `config.json` los pierde al pasarla a moodle-teacher (ver [Configuración](configuracion.md#aulas-de-antes)). Mientras tanto, el asistente **no puede leer** ese archivo: está en la lista de rutas prohibidas de sus herramientas.
 
-Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no pueden leer el `.env` del curso (donde puede ir un token propio), ni `~/.miyagi/config.json` (donde lo guarda miyagi), ni su copia antigua `~/.teacher-agent/config.json`, ni `~/.claude/.credentials.json` (las credenciales del SDK de Claude).
+Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no pueden leer el `.env` del curso (donde puede ir un token propio), ni `~/.miyagi/config.json` (donde lo guarda miyagi), ni `~/.claude/.credentials.json` (las credenciales del SDK de Claude).
 
 ## Qué archivos puede tocar
 
@@ -25,7 +25,7 @@ Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto de
 - **`sources/`**: solo lectura para `Read`, `Glob` y `Grep`. Lo que entra ahí lo añaden las herramientas de fuentes de agent-kit: `save_to_sources` (un archivo descargado durante la sesión), `download_to_sources` (una dirección web) y `request_file` (un archivo que tú le das); y lo que sale, `retire_source`, que te pide aprobación y lo aparta a `sources/.agent-kit/retired/` sin borrarlo ([La base de conocimiento](base-de-conocimiento.md#las-fuentes)).
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
 - **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/`, `materials/` y, con docker-lab activada, su carpeta de laboratorios.
-- **`config.json` y `.env` del curso, `~/.miyagi/config.json`, `~/.teacher-agent/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
+- **`config.json` y `.env` del curso, `~/.miyagi/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
 - **Otras credenciales en sitios conocidos**, prohibidas además, por si acaso: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS y los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas).
 
 Tus habilidades, atajos e `instructions.md` quedan fuera de las carpetas en las que puede escribir: el asistente los usa, pero no puede cambiarlos.

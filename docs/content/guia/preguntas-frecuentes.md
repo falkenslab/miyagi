@@ -82,14 +82,6 @@ Sí. `miyagi chat --continue` abre la última, y `/resume` dentro del chat te de
 
 ## Si venías de otra versión
 
-### Venía usando teacher-agent
-
-Es el mismo proyecto con otro nombre desde la versión 0.10. Instala miyagi como se explica en [Instalar](instalar.md); tu configuración (incluido el acceso a Claude) y tus carpetas de curso sirven tal cual. El comando `teacher-agent` ya no recibe versiones nuevas: quita el paquete antiguo:
-
-```bash
-npm uninstall -g teacher-agent
-```
-
 ### Venía usando moodle-agent
 
 Tu carpeta de aula de profesor sirve tal cual: ejecuta `miyagi chat` dentro de ella y el asistente reorganizará sus apuntes al formato nuevo la primera vez.

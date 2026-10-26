@@ -130,7 +130,7 @@ A file in your home folder (on Windows, `C:\Users\<your-user>\.miyagi\config.jso
 | `defaultLanguage` | The language for the courses that don't set `agent.language`. | None: it follows you in the language you write to it in. |
 | `autoCompactEnabled` | If the conversation fills the model's context, it summarizes it automatically so it can go on. Set `false` to turn it off. | `true` |
 
-The token is as sensitive as a password: on Mac and Linux, miyagi leaves the file readable only by your user. If you came from teacher-agent, the first time it copies `~/.teacher-agent/config.json` here (the old one stays where it was).
+The token is as sensitive as a password: on Mac and Linux, miyagi leaves the file readable only by your user.
 
 ## The list of subjects: `~/.miyagi/workspaces.json` {#la-lista-de-asignaturas-miyagiworkspacesjson}
 

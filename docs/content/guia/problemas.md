@@ -31,7 +31,6 @@ description: "Consejos para sacarle partido a miyagi y qué hacer cuando algo no
 | No lee un documento de `sources` | Comprueba el formato. Los de OpenDocument (`.odt`) no los lee bien: expórtalos a PDF o DOCX. Los vídeos tampoco los puede transcribir. |
 | Dice que no puede probar una práctica | Falta la extensión docker-lab (o está desactivada) o falta Docker. Ver [Prácticas en Docker](../avanzado/practicas-docker.md). |
 | Al cerrar dice «En el horno: …» | Son las actividades que tiene a medias: en plan, construyéndose o subidas ocultas para probarlas, que tus alumnos aún no ven. Están en `knowledge/drafts.md`: pídele en el chat que siga con ellas, que las muestre o que las descarte. |
-| Venía de teacher-agent | Es el mismo con otro nombre: instala miyagi; tu configuración y tus cursos sirven tal cual. |
 | Venía de moodle-agent | Abre `miyagi chat` en la carpeta del aula: reorganiza sus apuntes solo. |
 
 Si el problema sigue, puedes contarlo en [GitHub](https://github.com/falkenslab/miyagi/issues).

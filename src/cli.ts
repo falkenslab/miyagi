@@ -7,7 +7,7 @@ import { runSession } from "./agent.js";
 import { startHost } from "./host/server.js";
 import { listCommands, listSkills, type CatalogEntry } from "./catalog.js";
 import { CATALOG_TOPICS, extensionDirsFor, OFFICIAL_MARKETPLACE } from "./extensions.js";
-import { chooseLanguageFor, globalConfigPath, migrateLegacyGlobalConfig } from "./globalConfig.js";
+import { chooseLanguageFor, globalConfigPath } from "./globalConfig.js";
 import { connectClassroom, promptConnectClassroom, promptExploreNow, promptInitWorkspace, promptRunKind } from "./menu.js";
 import { t } from "./messages/index.js";
 import { applyTeacherTheme } from "./theme.js";
@@ -149,8 +149,6 @@ async function main(): Promise<void> {
   const [first, ...rest] = process.argv.slice(2);
   await chooseLanguage(process.argv.slice(2));
   applyTeacherTheme();
-  // Renamed from teacher-agent in 0.10: its old global config (Claude token, defaults) is carried over once.
-  if (await migrateLegacyGlobalConfig()) console.error(ui.dim(t().globalConfigMigrated(globalConfigPath())));
 
   switch (first) {
     case "-h":

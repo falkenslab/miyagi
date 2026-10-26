@@ -82,14 +82,6 @@ Yes. `miyagi chat --continue` opens the last one, and `/resume` inside the chat 
 
 ## If you came from another version {#si-venías-de-otra-versión}
 
-### I was using teacher-agent {#venía-usando-teacher-agent}
-
-It's the same project under another name since version 0.10. Install miyagi as explained in [Install](instalar.md); your configuration (including access to Claude) and your course folders work as they are. The `teacher-agent` command no longer gets new versions: remove the old package:
-
-```bash
-npm uninstall -g teacher-agent
-```
-
 ### I was using moodle-agent {#venía-usando-moodle-agent}
 
 Your teacher classroom folder works as it is: run `miyagi chat` inside it and the assistant will reorganise its notes into the new format the first time.

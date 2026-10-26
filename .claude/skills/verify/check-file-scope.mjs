@@ -31,7 +31,6 @@ const scope = {
 const home = os.homedir();
 const denied = [
   path.join(home, ".miyagi", "config.json"),
-  path.join(home, ".teacher-agent", "config.json"),
   path.join(home, ".claude", ".credentials.json"),
   path.join(ws, "config.json"),
   path.join(ws, ".env"),
