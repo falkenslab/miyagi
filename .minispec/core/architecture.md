@@ -19,6 +19,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 - `src/agent.ts` — `runSession()` and the `AgentSpec`: disallowed tools, the extension gate, plan mode (`drafts/<slug>/plan.md`), approval texts, `buildSubagents()`. A chat's session is opened per run folder.
 - `src/activityRegister.ts` — the register of activities in progress (`course/drafts`, activity-lifecycle): counts its items by phase (`planning`, `building`, `hidden`, `served`; an item without one is `hidden`) for the end of the session and the chat's greeting, and says which file plan mode may write.
 - `src/drafts/` — the drafts toolbox, in-process MCP server `drafts` in run/chat: list, mkdir, copy, move, delete, download, fetch_site, unzip, zip, pdf, info. Every path resolved inside drafts/ (`paths.ts`: no "..", absolute paths or links out), http(s) URLs only, size limits from `agent.draftsLimits`, zip-slip and zip-bomb checks, nothing executed; the site fetch and the PDF use @playwright/mcp's playwright-core with the system Chrome, headless.
+- `src/materials/` — the neutral materials (ADR-015): `.questions.md` and `.quiz.md` parsed with marked's tokenizer and `yaml`, validated (findings with lines), hashed, exported to GIFT (checked with `validateGift`) and imported from it, paper exams with a stored seed, the publication record `materials/.publications.json`; in-process MCP server `materials` in run/chat; `gate.ts` appends an export's losses to the next `request_human_approval` (`updatedInput`). Unit tests in `test/` (`npm test`, on `dist/`).
 - `src/uploadGate.ts` + `src/validators/` — the upload gate: before moodle-teacher's `import_questions`, its GIFT is checked with code (syntax, answers, numbers, names, lost indentation); errors deny the import with the lines, warnings reach the model. Every mode.
 - The publish gate (ADR-008) is agent-kit's guided gate for extensions' tools (`extensionGate` in the spec, ADR-021): a moodle-teacher tool that isn't read-only asks the teacher unless `request_human_approval` was just approved; deleting is asked by moodle-mcp itself on every call (`serverConfirmTools`), and declined in autonomous.
 - `src/menu.ts` — the `init` wizard, run-kind and mode prompts.
@@ -45,7 +46,7 @@ Session kinds: `run` (one-shot mission, or `--task`), `chat` (agent-kit's Ink ch
 
 One home per concern, and none names the platform (`check-neutral-skills.mjs`): how to do each thing in Moodle is moodle-teacher's `moodle-teacher:*` skills (ADR-021).
 
-- Building — `course-building` → `unit-building` → `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`, `rubric-design`, `practice-testing`.
+- Building — `course-building` → `unit-building` → `resource-authoring`, `assignment-building`, `activity-building`, `quiz-design`, `rubric-design`, `practice-testing`; `materials-format` for what's written in `materials/`.
 - Pedagogy — `course-design`, `teaching-methodologies`, `teaching-plan`, `course-alignment`.
 - Running the course — `grading-rubric`, `forum`, `progress-monitoring`, `course-auditor`, `course-orientation`.
 - `topic-research`, and `publish-check`: the one pre-publication check and the approval rules the other skills point to.
@@ -58,11 +59,11 @@ agent-kit's knowledge base, reached only through its `knowledge_*` tools over it
 
 - `course/<slug>` (root files with `type: course`): `orientation`, `course-map`, `moodle-capabilities`, `teaching-plan` (the course's only plan: objectives `O…`, criteria `CE…`, units, grading), `progress` and `course-audit` (dated entries), `drafts` (the activities in progress, by phase), `assessment-matrix` (criteria, instruments, weights; never students). `tagCoursePages()` gives older root pages that type at the start of every session.
 - `synthesis/course-alignment` — dated comparisons of the course with the plan.
-- `topic/<slug>`, `activity/<slug>` — criteria, rubric, questions; a quiz's GIFT file is in `drafts/<slug>/`.
+- `topic/<slug>`, `activity/<slug>` — criteria, rubric, questions; a quiz's bank and quiz are in `materials/`, their export in `drafts/materials/`.
 - `curriculum/<slug>` — the official curriculum, verbatim and dated; `regulation/<slug>` — any other norm, what it obliges with its articles (`regulations`, from the norms the teacher brings or asks miyagi to find, ADR-025).
 - The `researcher` and `pedagogy-reviewer` subagents read pages with `knowledge_index`, `knowledge_search` and `knowledge_read`.
 
-File scope (agent-kit's hook, set in `toSessionConfig()`): no file tool reaches `knowledge/`; `Read`/`Glob`/`Grep` read `sources/` (plus `extract_text` for DOCX, PPTX and XLSX), `Write`/`Edit` only `drafts/` (and docker-lab's labs folder when it's on); `config.json` and `.env` denied.
+File scope (agent-kit's hook, set in `toSessionConfig()`): no file tool reaches `knowledge/`; `Read`/`Glob`/`Grep` read `sources/` (plus `extract_text` for DOCX, PPTX and XLSX), `Write`/`Edit` only `drafts/` and `materials/` (and docker-lab's labs folder when it's on); `config.json` and `.env` denied.
 
 ## Legacy migration
 

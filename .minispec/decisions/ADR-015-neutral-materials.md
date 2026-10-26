@@ -2,7 +2,7 @@
 
 ## Decision
 
-A subject's materials (question banks and quizzes, notes, assignments and rubrics, units, surveys) are written once in `materials/`, as Markdown the teacher can read and edit, and published to each classroom through its connector's **exporter**: deterministic, tested code, not the model. Every export states its losses, and the publish gate adds them to the approval question itself. A code-owned publication record (`knowledge/aulas/<id>/publications.json`) keeps where each material went and the hash of the version published.
+A subject's materials (question banks and quizzes, notes, assignments and rubrics, units, surveys) are written once in `materials/`, as Markdown the teacher can read and edit, and published to each classroom through its connector's **exporter**: deterministic, tested code, not the model. Every export states its losses, and the publish gate adds them to the approval question itself. A code-owned publication record (`materials/.publications.json`: a subject has one classroom, ADR-021) keeps where each material went and the hash of the version published.
 
 ## Motivation
 

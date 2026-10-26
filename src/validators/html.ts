@@ -8,16 +8,17 @@ import type { ValidationResult } from "./gift.js";
  * tests/2026-09-28T15-41-draft-testing; a reference to a file that isn't uploaded with it is
  * a broken image or script. `file` is the HTML file's path, to resolve local references.
  */
-export function validateHtml(source: string, file: string): ValidationResult {
+export function validateHtml(source: string, file: string, options: { fragment?: boolean } = {}): ValidationResult {
   const errors: ValidationResult["errors"] = [];
   const warnings: ValidationResult["warnings"] = [];
   const lineOf = (index: number) => source.slice(0, index).split("\n").length;
 
-  if (!/<meta[^>]+name\s*=\s*["']?viewport/i.test(source)) {
+  // A fragment (a page's content, a book's chapter) lives inside the classroom's own page: no <head> of its own.
+  if (!options.fragment && !/<meta[^>]+name\s*=\s*["']?viewport/i.test(source)) {
     errors.push({ line: 1, message: 'no <meta name="viewport" content="width=device-width, initial-scale=1">: on a phone the page shows zoomed out and unreadable' });
   }
   const html = /<html\b[^>]*>/i.exec(source);
-  if (!html || !/\slang\s*=/i.test(html[0])) {
+  if (!options.fragment && (!html || !/\slang\s*=/i.test(html[0]))) {
     warnings.push({ line: html ? lineOf(html.index) : 1, message: 'no lang on <html> (e.g. <html lang="es">): screen readers read it in the wrong language' });
   }
 

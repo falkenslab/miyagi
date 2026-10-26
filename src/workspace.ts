@@ -74,6 +74,8 @@ export interface WorkspaceSessionConfig extends BaseSessionConfig {
   labs?: { dir: string; prefix: string };
   /** The drafts toolbox's folder and limits. */
   draftsDir: string;
+  /** The subject's materials (ADR-015): the materials toolbox's folder. */
+  materialsDir: string;
   draftsLimits: DraftsLimits;
   /** Orthogonal to `mode` (see agent-kit's own agentSpec.ts doc comment on `Mode`) — set
    * by `agent.ts` from the CLI subcommand, decides which base prompt buildSystemPrompt()
@@ -99,6 +101,11 @@ export function sourcesDirFor(workspaceDir: string): string {
 /** The editable source of every resource the agent builds for Moodle (HTML, GIFT, text,
  * images), one folder per resource: the teacher's material, not notes, so outside the
  * knowledge base. Uploaded hidden to be tested in Moodle before students see it. */
+/** The subject's materials, written once and exported to the classroom by code (ADR-015): the teacher's, writable, not ignored. */
+export function materialsDirFor(workspaceDir: string): string {
+  return path.join(workspaceDir, "materials");
+}
+
 export function draftsDirFor(workspaceDir: string): string {
   return path.join(workspaceDir, "drafts");
 }
@@ -181,6 +188,7 @@ export async function createWorkspace(workspaceDir: string, config: WorkspaceCon
   await mkdir(knowledgeDirFor(workspaceDir), { recursive: true });
   await mkdir(sourcesDirFor(workspaceDir), { recursive: true });
   await mkdir(draftsDirFor(workspaceDir), { recursive: true });
+  await mkdir(materialsDirFor(workspaceDir), { recursive: true });
   await writeWorkspaceConfig(workspaceDir, config);
 
   const gitignorePath = path.join(workspaceDir, ".gitignore");
@@ -251,7 +259,7 @@ export function toSessionConfig(
     extensionDirs: extensionDirsFor(workspaceDir),
     officialMarketplace: OFFICIAL_MARKETPLACE,
     catalogTopics: CATALOG_TOPICS,
-    extraWritableDirs: [draftsDirFor(workspaceDir), ...(options.labs ? [options.labs.dir] : [])],
+    extraWritableDirs: [draftsDirFor(workspaceDir), materialsDirFor(workspaceDir), ...(options.labs ? [options.labs.dir] : [])],
     // The password lives in config.json and the Claude token may live in .env, in the global
     // config or in the SDK's credentials (ADR-004); other credentials in well-known places.
     deniedPaths: [workspaceConfigPath(workspaceDir), path.join(workspaceDir, ".env"), ...secretFilePaths(), ...sensitivePaths()],
@@ -262,6 +270,7 @@ export function toSessionConfig(
     agentPersona: workspace.agent.persona,
     labs: options.labs,
     draftsDir: draftsDirFor(workspaceDir),
+    materialsDir: materialsDirFor(workspaceDir),
     draftsLimits: { ...DEFAULT_DRAFTS_LIMITS, ...workspace.agent.draftsLimits },
     knownLanguage: options.language,
     language: interfaceLanguage(options.language),

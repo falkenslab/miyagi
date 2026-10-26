@@ -20,6 +20,7 @@ import {
 } from "@falkenslab/agent-kit";
 import {
   draftsDirFor,
+  materialsDirFor,
   ensureWorkspaceDefaults,
   isMigrationPending,
   knowledgeDirFor,
@@ -52,6 +53,8 @@ import { buildSystemPrompt } from "./systemPrompt.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
 import { installUploadGate } from "./uploadGate.js";
 import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
+import { installMaterialsGate } from "./materials/gate.js";
+import { createMaterialsServer, MATERIALS_SERVER, type PendingLosses } from "./materials/server.js";
 import { sessionSkills } from "./catalog.js";
 import { t } from "./messages/index.js";
 import { LOGO } from "./theme.js";
@@ -121,7 +124,7 @@ function positionalArgs(args: string[]): string[] {
  * Subagents: see buildSubagents() below. miyagi has no browser: the classroom is moodle-teacher's
  * (ADR-021).
  */
-function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSessionConfig> {
+function buildSpec(kind: SessionKind, skills: string[], pending: PendingLosses): AgentSpec<WorkspaceSessionConfig> {
   return {
     skills,
     extensions: [
@@ -135,6 +138,8 @@ function buildSpec(kind: SessionKind, skills: string[]): AgentSpec<WorkspaceSess
       // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a
       // shell; with or without a classroom.
       ...(kind === "run" || kind === "chat" ? { [DRAFTS_SERVER]: createDraftsServer(config.draftsDir, config.draftsLimits) } : {}),
+      // The materials toolbox (ADR-015): validate, export to the classroom's formats, the publication record.
+      ...(kind === "run" || kind === "chat" ? { [MATERIALS_SERVER]: createMaterialsServer({ materialsDir: config.materialsDir, draftsDir: config.draftsDir, sourcesDir: config.sourcesDir, knowledgeDir: config.knowledgeDir }, pending) } : {}),
     }),
     pluginRoots: () => [path.join(__dirname, "..", "plugin")],
     // In run/chat: two helpers without a shell (researcher: public web; pedagogy-reviewer:
@@ -282,6 +287,7 @@ export async function prepareSession(
   if (!classroom) config.hasMoodle = false;
 
   await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
+  await mkdir(materialsDirFor(workspaceDir), { recursive: true }); // and from before materials/
   await tagCoursePages(knowledgeDirFor(workspaceDir)); // root pages from before the knowledge_* tools
   const autoCompactEnabled = await isAutoCompactEnabled();
   const skills = await sessionSkills(workspaceDir);
@@ -289,11 +295,14 @@ export async function prepareSession(
   /** The session's options for a run folder: its tools and hooks, the publish and upload gates. */
   async function openSession(runDir: string, run?: RunFolder) {
     // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
-    const opened = await buildSessionOptions(config, runDir, buildSpec(kind, skills), { autoCompactEnabled, run });
+    // What an export leaves out, until the next approval shows it (ADR-015).
+    const pending: PendingLosses = { losses: [] };
+    const opened = await buildSessionOptions(config, runDir, buildSpec(kind, skills, pending), { autoCompactEnabled, run });
     const { options } = opened;
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
     // GIFT checked before it's imported. Without a classroom nothing publishes.
     if (classroom && kind !== "ingest") installUploadGate(options);
+    if (kind === "run" || kind === "chat") installMaterialsGate(options, pending);
     return opened;
   }
 

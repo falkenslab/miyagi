@@ -91,6 +91,19 @@ export interface Messages {
   migrateClassroomIntro: string;
   migrateClassroomQuestion: string;
   migratedClassroom: string;
+
+  // materials/ (ADR-015): a paper exam's labels, and what an export leaves out
+  examName: string;
+  examVersion: string;
+  examKey: string;
+  examPoints: (n: number) => string;
+  examTrueFalse: [string, string];
+  exportLosses: string;
+  lossPoints: (questions: string) => string;
+  rubricCriterion: string;
+  rubricLevels: string;
+  sheetStudent: string;
+  sheetFinal: string;
   moodleTeacherMissing: string;
   classroomNeedsMoving: string;
   exploreNeedsClassroom: (dir: string) => string;
@@ -130,6 +143,16 @@ export interface Messages {
       zip: (to: string) => string;
       pdf: (to: string) => string;
       info: (path: string) => string;
+    };
+    materials: {
+      list: string;
+      validate: (path: string) => string;
+      export: (path: string) => string;
+      import: (from: string, to: string) => string;
+      exam: (path: string) => string;
+      record: (path: string) => string;
+      status: string;
+      resolve: (path: string) => string;
     };
   };
 }
@@ -263,6 +286,17 @@ See README.md for details.`,
   migrateClassroomIntro: "miyagi now works in Moodle only through the moodle-teacher extension: fixed tools instead of clicking around, and you sign in in its own window instead of a saved password. This subject's classroom still uses the old way, which is gone.",
   migrateClassroomQuestion: "Move this classroom to moodle-teacher now? (its saved username and password are removed from config.json; if not, this session works without the classroom)",
   migratedClassroom: "Classroom moved to moodle-teacher.",
+  examName: "Name",
+  examVersion: "Version",
+  examKey: "Answer key",
+  examPoints: (n) => (n === 1 ? "1 point" : `${n} points`),
+  examTrueFalse: ["True", "False"],
+  exportLosses: "What the classroom's format leaves out (decide before approving):",
+  lossPoints: (questions) => `the import gives every question 1 point: the quiz must set the marks of ${questions}`,
+  rubricCriterion: "Criterion",
+  rubricLevels: "Levels",
+  sheetStudent: "Student",
+  sheetFinal: "Final grade",
   moodleTeacherMissing: "This subject's classroom works through moodle-teacher, which isn't installed or is off: this session works without the classroom. \"miyagi extension add moodle-teacher\" (or \"enable\") fixes it.",
   classroomNeedsMoving: "This subject's classroom is from before moodle-teacher, and miyagi no longer has a browser of its own: this session works without the classroom. Open it in a chat to move it, or run \"miyagi init -w <name>\".",
   exploreNeedsClassroom: (dir) => `${dir} has no classroom connected: there's no Moodle to explore. Connect one with "miyagi init --dir ${dir}".`,
@@ -305,6 +339,16 @@ See README.md for details.`,
       zip: (to) => `Building the archive ${to}`,
       pdf: (to) => `Printing ${to}`,
       info: (p) => `Checking the file ${p}`,
+    },
+    materials: {
+      list: "Looking at the materials",
+      validate: (p) => `Checking ${p}`,
+      export: (p) => `Exporting ${p} to the classroom's format`,
+      import: (from, to) => `Importing ${from} as ${to}`,
+      exam: (p) => `Printing the exam of ${p}`,
+      record: (p) => `Noting that ${p} is published`,
+      status: "Looking at what's published",
+      resolve: (p) => `Working out the dates of ${p}`,
     },
   },
 };

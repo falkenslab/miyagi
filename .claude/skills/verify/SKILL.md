@@ -15,6 +15,7 @@ Run from the repo root, in this order, stopping at the first failure and reporti
 npm run typecheck
 npm run lint
 npm run build
+npm test
 node .claude/skills/verify/check-prompts.mjs
 node .claude/skills/verify/check-references.mjs
 node .claude/skills/verify/check-neutral-skills.mjs
