@@ -36,8 +36,6 @@
 .hero::before { content: ""; position: absolute; inset: 0 0 auto; height: 620px; background: radial-gradient(55% 70% at 50% 0%, var(--fl-glow), transparent 72%); pointer-events: none; }
 .hero .wrap { position: relative; display: grid; justify-items: center; gap: 0; }
 .hero .wrap > div { min-width: 0; width: 100%; }
-.heroBrand { display: inline-flex; align-items: center; gap: 12px; margin: 0 0 28px !important; font: 700 22px var(--ifm-font-family-monospace); letter-spacing: -0.01em; }
-.heroBrand svg { width: 44px; height: auto; }
 .kicker { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fl-accent); padding-bottom: 6px; border-bottom: 2px solid var(--fl-accent); margin: 0 0 22px !important; }
 .hero h1 { margin: 0 auto; max-width: 16ch; font-size: clamp(40px, 7vw, 72px); line-height: 1.02; font-weight: 900; letter-spacing: -0.045em; }
 .brandWord { color: var(--fl-accent); }
@@ -62,10 +60,12 @@
   font: 400 14.5px/1.6 var(--ifm-font-family-monospace);
   box-shadow: var(--fl-shadow-lift);
   overflow-wrap: anywhere;
-  --logo-hair: #b9bcc2; --logo-band: #eceff4; --logo-sun: #ff4b55; --logo-skin: #e2b48a; --logo-beard: #cfd1d6;
 }
 .bar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; color: var(--term-dim); font-size: 13px; }
-.bar svg { width: 22px; height: auto; }
+.dots { display: inline-flex; gap: 7px; margin-right: 6px; }
+.dots i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.dots i:nth-child(2) { background: #febc2e; }
+.dots i:nth-child(3) { background: #28c840; }
 .scene { list-style: none; display: grid; gap: 9px; min-height: 19.5rem; align-content: start; }
 .tYou { background: #ffffff10; border-radius: 8px; padding: 6px 10px; }
 .tYou b { color: var(--term-accent); font-weight: 700; }

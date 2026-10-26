@@ -190,3 +190,5 @@ a { text-underline-offset: 0.18em; }
 .navbar-sidebar__close, .navbar .clean-btn:not(.navbar__toggle) { display: inline-flex; align-items: center; justify-content: center; }
 @media (max-width: 996px) { .navbar__toggle { display: inline-flex; align-items: center; justify-content: center; } }
 .navbar-sidebar__back { display: flex; align-items: center; }
+/* The theme toggle's box is 32px tall: its 44px button would hang below the other items. */
+.navbar__items--right > [class*="colorModeToggle"] { display: flex; align-items: center; height: 44px; margin-left: 4px; }

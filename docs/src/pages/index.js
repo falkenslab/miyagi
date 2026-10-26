@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
-import Logo from "@site/src/components/Logo";
 import s from "./index.module.css";
 
 const INSTALL = "npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz";
@@ -146,7 +145,7 @@ function Terminal() {
   return (
     <div className={s.demo}>
       <div className={s.terminal} ref={ref}>
-        <div className={s.bar} aria-hidden="true"><Logo width={26} height={28} />miyagi</div>
+        <div className={s.bar} aria-hidden="true"><span className={s.dots}><i /><i /><i /></span>miyagi</div>
         <ol className={`${s.scene} ${reduced ? "" : s.animated}`} aria-label={`Ejemplo: ${current.label.toLowerCase()}`}>
           <li className={lineClass(0, s.tYou)}>
             <b>tú&gt;</b> <span className={typed !== null ? s.typing : ""}>{typed ?? current.you}</span>
@@ -246,7 +245,6 @@ export default function Home() {
       <main className={s.landing}>
         <section className={s.hero} aria-labelledby="titulo">
           <div className={s.wrap}>
-            <p className={s.heroBrand}><Logo />miyagi</p>
             <div>
               <p className={s.kicker}>Asistente de IA para docentes</p>
               <h1 id="titulo">Tú enseñas, y <span className={s.brandWord}>miyagi</span> se ocupa del resto.</h1>
