@@ -192,11 +192,9 @@
 .closing .wrap { position: relative; }
 .closing h2 { max-width: 22ch; margin-inline: auto; font-size: clamp(30px, 5vw, 48px); font-weight: 900; letter-spacing: -0.045em; }
 .closing p { color: var(--fl-text-2); font-size: clamp(17px, 2vw, 20px); margin-inline: auto; }
-.motto { display: inline-block; animation: motto-in 0.45s ease-out; color: var(--fl-accent); }
-@keyframes motto-in { from { opacity: 0; transform: translateY(0.25em); } to { opacity: 1; transform: none; } }
+.motto { color: var(--fl-accent); }
 
 @media (prefers-reduced-motion: reduce) {
-  .motto { animation: none; }
   .card, .landing a.button { transition: none; }
   .card:hover, .landing a.button:hover { transform: none; }
 }
