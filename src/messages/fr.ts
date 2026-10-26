@@ -143,6 +143,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   rubricLevels: "Niveaux",
   sheetStudent: "Élève",
   sheetFinal: "Note finale",
+  styleLabels: { copy: "Sélectionner et copier", statement: "Énoncé", question: "Question", feedback: "Rétroaction", code: "Code" },
   moodleTeacherMissing: "La classe de cette matière passe par moodle-teacher, qui n'est pas installée ou est désactivée : cette session travaille sans la classe. \"miyagi extension add moodle-teacher\" (ou \"enable\") le corrige.",
   classroomNeedsMoving: "La classe de cette matière date d'avant moodle-teacher, et miyagi n'a plus de navigateur à lui : cette session travaille sans la classe. Ouvrez-la dans un chat pour la passer, ou lancez \"miyagi init -w <nom>\".",
   exploreNeedsClassroom: (dir) => `${dir} n'a aucune classe connectée : il n'y a pas de Moodle à explorer. Connectez-en une avec "miyagi init --dir ${dir}".`,
@@ -195,6 +196,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
       record: (p) => `Note que ${p} est publié`,
       status: "Regarde ce qui est publié",
       resolve: (p) => `Calcule les dates de ${p}`,
+      style: "Regarde le style des supports",
     },
   },
 };

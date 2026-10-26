@@ -104,6 +104,8 @@ export interface Messages {
   rubricLevels: string;
   sheetStudent: string;
   sheetFinal: string;
+  /** The labels a style's templates ask for ({{label:copy}}…), in the teacher's language. */
+  styleLabels: Record<"copy" | "statement" | "question" | "feedback" | "code", string>;
   moodleTeacherMissing: string;
   classroomNeedsMoving: string;
   exploreNeedsClassroom: (dir: string) => string;
@@ -153,6 +155,7 @@ export interface Messages {
       record: (path: string) => string;
       status: string;
       resolve: (path: string) => string;
+      style: string;
     };
   };
 }
@@ -297,6 +300,7 @@ See README.md for details.`,
   rubricLevels: "Levels",
   sheetStudent: "Student",
   sheetFinal: "Final grade",
+  styleLabels: { copy: "Select and copy", statement: "Statement", question: "Question", feedback: "Feedback", code: "Code" },
   moodleTeacherMissing: "This subject's classroom works through moodle-teacher, which isn't installed or is off: this session works without the classroom. \"miyagi extension add moodle-teacher\" (or \"enable\") fixes it.",
   classroomNeedsMoving: "This subject's classroom is from before moodle-teacher, and miyagi no longer has a browser of its own: this session works without the classroom. Open it in a chat to move it, or run \"miyagi init -w <name>\".",
   exploreNeedsClassroom: (dir) => `${dir} has no classroom connected: there's no Moodle to explore. Connect one with "miyagi init --dir ${dir}".`,
@@ -349,6 +353,7 @@ See README.md for details.`,
       record: (p) => `Noting that ${p} is published`,
       status: "Looking at what's published",
       resolve: (p) => `Working out the dates of ${p}`,
+      style: "Looking at the materials' style",
     },
   },
 };

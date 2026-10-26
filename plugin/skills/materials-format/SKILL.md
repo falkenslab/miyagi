@@ -146,6 +146,8 @@ total: 10                    # the best levels add up to it
    can't say without changing a question (an `ordering` question, options whose grades don't
    split) is refused: ask the teacher, don't change the question yourself. What it leaves out
    without changing one (points) is shown in the next approval, added by code: don't repeat it.
+   With a style chosen (`appearance`, `materials_style`), the export dresses pages, statements,
+   questions, feedback and code in its templates, and says what it fixed in them.
 4. With a classroom, its extension's quiz skill imports the exported GIFT and builds the quiz,
    with the approval listing every question (`quiz-design`). Without one, say where the
    material and its export are.

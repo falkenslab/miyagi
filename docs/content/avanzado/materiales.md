@@ -136,4 +136,10 @@ Con `/miyagi:publish` publicas un material o un tema entero: lo comprueba, lo ex
 - **Imprime exámenes en papel**: versiones A, B… con las preguntas y las opciones en otro orden, cada una con su hoja de respuestas, en `drafts/exams/`. Guarda la semilla, así que puede volver a imprimir exactamente las mismas. Pídeselo con `/miyagi:exam` o con tus palabras.
 - **Convierte tus bancos GIFT** (los que dejes en `sources/` o los que ya hizo en `drafts/`) en archivos `.questions.md`, para que los edites a partir de entonces.
 
+## El estilo de lo que publicas
+
+Lo que exporta es HTML accesible que toma el tema de tu aula. Si quieres otro aspecto (una cabecera con el título, el enunciado en un recuadro, el código con un rótulo para copiarlo, la retroalimentación en un marco de color), instala una extensión de estilo, como `moodle-ui-kit`, y pídele que la use: «usa el estilo moodle-ui-kit». Queda guardado en `appearance` (ver [Configuración](configuracion.md)), y «vuelve al estilo de mi aula» lo deshace.
+
+Un estilo es una carpeta `style/` con una plantilla HTML por tipo (`page`, `assignment`, `code`, `question` y `feedback`) y marcadores como `{{title}}`, `{{body}}` o `{{code}}`, que rellena el exportador. Puedes hacer el tuyo. Venga de donde venga, miyagi lo hace accesible al rellenarlo: convierte en encabezados los párrafos en negrita que hacen de título, oculta los emojis al lector de pantalla y quita la fuente y el fondo propios y los colores que no contrastan. Si arregla algo, te lo dice. Después de publicar comprueba que el aula ha conservado los estilos: si los quita, te lo cuenta y publica sin estilo.
+
 El código está en [`src/materials/`](https://github.com/falkenslab/miyagi/tree/main/src/materials) y tiene sus pruebas en [`test/`](https://github.com/falkenslab/miyagi/tree/main/test).

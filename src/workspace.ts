@@ -52,6 +52,8 @@ export interface WorkspaceConfig {
     language?: string;
     /** Limits of the drafts toolbox (download and unzip sizes); each falls back to its default. */
     draftsLimits?: Partial<DraftsLimits>;
+    /** The style of what the materials toolbox exports (#21): "course" (the classroom's theme, the default) or an installed style extension's name. */
+    appearance?: string;
   };
 }
 

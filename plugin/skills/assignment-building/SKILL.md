@@ -57,7 +57,8 @@ not just a topic to write about. Complete enough that a student needs nothing el
    policy if there is one.
 5. **Dates**: due date and, if different, the cut-off date after which nothing is accepted.
 
-Write it in the course's style (look at two or three existing assignments first).
+Write it in the course's style (look at two or three existing assignments first); its look, when
+the subject has a style chosen, comes from the export (`appearance`).
 
 ## 3. Settings that match it
 

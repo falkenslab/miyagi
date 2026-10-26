@@ -8,7 +8,9 @@ import { drawn, paperExam } from "./exam.js";
 import { exportGift, importGift, type Loss } from "./gift.js";
 import { resolveDate, type CourseCalendar } from "./course.js";
 import { gradingSheet } from "./grading.js";
-import { accessibleHtml, checkExported, localImages } from "./notes.js";
+import { accessibleHtml, checkExported, escapeHtml, localImages, plainCode } from "./notes.js";
+import { COURSE_APPEARANCE, fill, loadStyle, styleExtensions, type Style, type StyleKind } from "./style.js";
+import { readWorkspaceConfig, writeWorkspaceConfig } from "../workspace.js";
 import { rubricDefinition, rubricTable, type Rubric } from "./rubric.js";
 import { materialHash } from "./hash.js";
 import type { Material, Question, ValidationResult } from "./model.js";
@@ -50,10 +52,12 @@ export interface MaterialsDirs {
   draftsDir: string;
   sourcesDir: string;
   knowledgeDir: string;
+  /** The subject's folder: its config.json says the style, its extensions provide it. */
+  workspaceDir: string;
 }
 
 export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosses) {
-  const { materialsDir, draftsDir, sourcesDir, knowledgeDir } = dirs;
+  const { materialsDir, draftsDir, sourcesDir, knowledgeDir, workspaceDir } = dirs;
   const exportsDir = path.join(draftsDir, "materials");
   const pathArg = z.string().describe('The material, relative to materials/ (e.g. "tema-1/variables.questions.md")');
 
@@ -140,15 +144,55 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
     return undefined;
   }
 
-  /** A page's or chapter's HTML, written and checked, with the images it shows copied next to it. */
-  async function writeHtml(file: string, markdown: string, top: number, sourceDir: string): Promise<string[]> {
+  /** The style chosen for the exports (config.json `agent.appearance`, #21), or none: the course's theme. */
+  async function chosenStyle(): Promise<{ style?: Style; note?: string }> {
+    const name = (await readWorkspaceConfig(workspaceDir).catch(() => undefined))?.agent.appearance;
+    if (!name || name === COURSE_APPEARANCE) return {};
+    const dir = (await styleExtensions(workspaceDir)).get(name);
+    if (!dir) return { note: `The style "${name}" chosen for this subject isn't installed or is off: exported without a style. Tell the teacher (materials_style lists the styles there are).` };
+    return { style: await loadStyle(name, dir) };
+  }
+
+  /** The style's templates as the exporters take them; plain where it has none. */
+  function styling(style: Style | undefined) {
+    const labels = Object.fromEntries(Object.entries(t().styleLabels).map(([key, value]) => [`label:${key}`, value]));
+    const template = (kind: StyleKind) => style?.templates[kind];
+    const code = template("code");
+    const question = template("question");
+    const feedback = template("feedback");
+    return {
+      labels,
+      code: code ? (escaped: string, language: string) => fill(code, { ...labels, code: escaped, language }) : plainCode,
+      gift: {
+        ...(question ? { question: (html: string) => fill(question, { ...labels, body: html }) } : {}),
+        ...(feedback ? { feedback: (html: string) => fill(feedback, { ...labels, body: html }) } : {}),
+        ...(code ? { code: (escaped: string, language: string) => fill(code, { ...labels, code: escaped, language }) } : {}),
+      },
+    };
+  }
+
+  /** What to tell about the style an export used: its name, what was fixed in it, and the check after saving. */
+  function styleLines(chosen: { style?: Style; note?: string }): string[] {
+    if (chosen.note) return [chosen.note];
+    if (!chosen.style) return [];
+    return [
+      `Style "${chosen.style.name}" applied (${Object.keys(chosen.style.templates).join(", ") || "no templates: plain"}).`,
+      chosen.style.warnings.length ? `Its templates weren't accessible as they are; fixed in the export (tell the teacher, whose style it is):\n${chosen.style.warnings.map((warning) => `  - ${warning}`).join("\n")}` : "",
+      "After saving it in the classroom, read it back: if the classroom removed the inline styles, tell the teacher (only its administrator allows them) and export again with materials_style set to course.",
+    ].filter(Boolean);
+  }
+
+  /** A page's or chapter's HTML, written and checked, with the images it shows copied next to it; in its style's template when it has one. */
+  async function writeHtml(file: string, markdown: string, top: number, sourceDir: string, wrap?: { kind?: "page" | "assignment"; title: string; style?: Style }): Promise<string[]> {
     await mkdir(path.dirname(file), { recursive: true });
     for (const image of localImages(markdown)) {
       const target = path.join(path.dirname(file), image);
       await mkdir(path.dirname(target), { recursive: true });
       await copyFile(path.join(sourceDir, image), target);
     }
-    const html = accessibleHtml(markdown, top);
+    const { labels, code } = styling(wrap?.style);
+    const template = wrap?.kind ? wrap.style?.templates[wrap.kind] : undefined;
+    const html = template ? fill(template, { ...labels, title: escapeHtml(wrap!.title), body: accessibleHtml(markdown, template.bodyTop, code) }) : accessibleHtml(markdown, top, code);
     await writeFile(file, html);
     return checkExported(html, file).map((problem) => `${shownPath(draftsDir, file)}: ${problem.message}`);
   }
@@ -190,10 +234,11 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
           guarded(async () => {
             const { material, findings } = await check(a.path);
             if (!material || findings.errors.length) throw new Error(`${a.path} doesn't validate:\n${report(findings)}`);
+            const chosen = await chosenStyle();
             const out = path.join(exportsDir, slugOf(a.path));
             const hash = materialHash(material);
             if (material.kind === "questions") {
-              const result = exportGift(material);
+              const result = exportGift(material, undefined, styling(chosen.style).gift);
               if (result.errors.length) throw new Error(`can't be exported as it is (the teacher decides how to change it):\n${result.errors.map((f) => `  - line ${f.line}: ${f.message}`).join("\n")}`);
               await mkdir(path.dirname(out), { recursive: true });
               await writeFile(`${out}.gift`, result.gift);
@@ -202,6 +247,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
                 `Exported ${material.questions.length} questions to drafts/${shownPath(draftsDir, `${out}.gift`)}, category "${material.category}" (hash ${hash}).`,
                 result.losses.length ? `Left out by the format (the approval will show it): ${result.losses.map((loss) => `${loss.code} (${loss.questions.join(", ")})`).join("; ")}.` : "Nothing left out.",
                 `After it's imported, record it: record_publication with this path.`,
+                ...styleLines(chosen),
               ].join("\n");
             }
             if (material.kind === "notes") {
@@ -209,16 +255,16 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
               const problems: string[] = [];
               const written: string[] = [];
               if (material.as === "page") {
-                problems.push(...(await writeHtml(`${out}.html`, material.markdown, 2, sourceDir)));
+                problems.push(...(await writeHtml(`${out}.html`, material.markdown, 2, sourceDir, { kind: "page", title: material.title, style: chosen.style })));
                 written.push(`drafts/${shownPath(draftsDir, `${out}.html`)}`);
               } else {
                 if (material.markdown) {
-                  problems.push(...(await writeHtml(path.join(out, "00-intro.html"), material.markdown, 3, sourceDir)));
+                  problems.push(...(await writeHtml(path.join(out, "00-intro.html"), material.markdown, 3, sourceDir, { title: material.title, style: chosen.style })));
                   written.push(`drafts/${shownPath(draftsDir, path.join(out, "00-intro.html"))} (the book's introduction)`);
                 }
                 for (const [index, chapter] of material.chapters.entries()) {
                   const file = path.join(out, `${String(index + 1).padStart(2, "0")}.html`);
-                  problems.push(...(await writeHtml(file, chapter.markdown, 3, sourceDir)));
+                  problems.push(...(await writeHtml(file, chapter.markdown, 3, sourceDir, { title: chapter.title, style: chosen.style })));
                   written.push(`drafts/${shownPath(draftsDir, file)}: chapter "${chapter.title}"`);
                 }
               }
@@ -228,6 +274,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
                 ...written.map((line) => `- ${line}`),
                 localImages(material.markdown + material.chapters.map((chapter) => chapter.markdown).join("\n")).length ? "Its images are next to the HTML: upload them with it and keep their names." : "",
                 "After it's published, record_publication with this path.",
+                ...styleLines(chosen),
               ].filter(Boolean).join("\n");
             }
             if (material.kind === "rubric") {
@@ -242,7 +289,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
               ].join("\n");
             }
             if (material.kind === "assignment") {
-              const problems = await writeHtml(`${out}.html`, material.statement, 2, path.dirname(inMaterials(materialsDir, a.path)));
+              const problems = await writeHtml(`${out}.html`, material.statement, 2, path.dirname(inMaterials(materialsDir, a.path)), { kind: "assignment", title: material.title, style: chosen.style });
               if (problems.length) throw new Error(`the exported statement has problems:\n${problems.map((line) => `  - ${line}`).join("\n")}`);
               const rubric = material.rubric ? await rubricOf(inMaterials(materialsDir, a.path), material.rubric) : undefined;
               return [
@@ -252,6 +299,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
                 material.due && !/^\d{4}/.test(material.due) ? "Its dates are relative to a group's start: resolve them with materials_resolve before setting them." : "",
                 rubric ? `Rubric: ${material.rubric} (${rubric.total}): export it and set it as its grading method.` : "No rubric.",
                 "After it's published, record_publication with this path.",
+                ...styleLines(chosen),
               ].filter(Boolean).join("\n");
             }
             if (material.kind === "grading") {
@@ -283,7 +331,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
             const lines = [`Quiz "${material.title}" (${material.purpose}), hash ${hash}.`];
             const slots: string[] = [];
             for (const pick of picks) {
-              const result = exportGift(pick.bank, pick.random ? pick.bank.questions : pick.questions);
+              const result = exportGift(pick.bank, pick.random ? pick.bank.questions : pick.questions, styling(chosen.style).gift);
               if (result.errors.length) throw new Error(`${pick.bankFile} can't be exported as it is:\n${result.errors.map((f) => `  - line ${f.line}: ${f.message}`).join("\n")}`);
               const file = path.join(out, `${path.basename(pick.bankFile, ".questions.md")}.gift`);
               await writeFile(file, result.gift);
@@ -296,6 +344,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
             lines.push(`Slots, in order: ${slots.join("; ")}.`);
             lines.push(`Description for students:\n${material.description || "(none)"}`);
             lines.push(`Import the GIFT files, build the quiz with these slots and marks, then record_publication with this path.`);
+            lines.push(...styleLines(chosen));
             return lines.join("\n");
           }),
       ),
@@ -357,6 +406,29 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
             await writeFile(path.join(out, "key.html"), exam.key);
             await writeFile(path.join(out, "exam.json"), `${JSON.stringify({ quiz: a.path, seed, versions: exam.versions.length, questions: questions.length }, null, 2)}\n`);
             return `Printed ${exam.versions.length} versions of ${questions.length} questions in drafts/${shownPath(draftsDir, out)}/ (${exam.versions.map((version) => `${version.letter}.html`).join(", ")}, key.html), seed ${seed}.`;
+          }),
+      ),
+
+      tool(
+        "materials_style",
+        `The visual style of what the exports write (pages, statements, questions, feedback, code), for this subject. Without "style": the style in use and the styles installed (extensions with a style). With it: "${COURSE_APPEARANCE}" (no style of miyagi's, the classroom's theme: the default) or an installed style's name; only when the teacher asks for it.`,
+        { style: z.string().optional().describe(`"${COURSE_APPEARANCE}" or an installed style's name`) },
+        (a) =>
+          guarded(async () => {
+            const config = await readWorkspaceConfig(workspaceDir);
+            const styles = await styleExtensions(workspaceDir);
+            const current = config.agent.appearance ?? COURSE_APPEARANCE;
+            if (a.style === undefined) {
+              return [`In use: ${current}${current !== COURSE_APPEARANCE && !styles.has(current) ? " (not installed or off: exports go without a style)" : ""}.`, `Installed styles: ${[...styles.keys()].join(", ") || "none (a style is an extension: see the appearance skill)"}.`].join("\n");
+            }
+            if (a.style !== COURSE_APPEARANCE && !styles.has(a.style)) throw new Error(`no style "${a.style}" installed and on; installed: ${[...styles.keys()].join(", ") || "none"}`);
+            config.agent.appearance = a.style;
+            await writeWorkspaceConfig(workspaceDir, config);
+            const style = a.style === COURSE_APPEARANCE ? undefined : await loadStyle(a.style, styles.get(a.style)!);
+            return [
+              `The subject's style is now ${a.style}: the next exports use it; what's published already doesn't change until it's exported and published again.`,
+              ...(style?.warnings.length ? [`Its templates aren't accessible as they are; the exports fix them (tell the teacher):\n${style.warnings.map((warning) => `  - ${warning}`).join("\n")}`] : []),
+            ].join("\n");
           }),
       ),
 

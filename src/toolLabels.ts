@@ -47,6 +47,8 @@ function describeMaterials(shortName: string, input: Record<string, unknown>): s
       return m.status;
     case "materials_resolve":
       return m.resolve(text(input.path));
+    case "materials_style":
+      return m.style;
     default:
       return undefined;
   }
@@ -80,6 +82,7 @@ const PHRASE_KEYS: Record<string, ToolPhraseKey> = {
   record_publication: "files",
   publication_status: "files",
   materials_resolve: "files",
+  materials_style: "files",
 };
 
 /** `toolPhrase` for agent-kit's folded tool groups ("revisó 3 archivos"); other tools keep the kit's. */

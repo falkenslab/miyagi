@@ -85,6 +85,7 @@ Para conectar un aula más tarde, vuelve a ejecutar `miyagi init -w <nombre>`: t
 | `persona` | El tono con los alumnos (foro, retroalimentación, avisos): `"formal"`, `"warm"` (cercano) o `"motivating"` (cercano y motivador). | Tono neutro. |
 | `language` | Texto libre con tu idioma preferido para hablar con él, por ejemplo `"español"` o `"English"`. Si es español, inglés, francés o alemán, también fija el idioma de los menús. | El `defaultLanguage` global; si tampoco está, te responde en el idioma en que le escribas y los menús siguen el del sistema. |
 | `draftsLimits` | Límites de la caja de herramientas de `drafts/` (ver abajo). | Los valores por defecto. |
+| `appearance` | El estilo visual de lo que exporta desde `materials/`: `"course"` (el tema de tu aula) o el nombre de una extensión de estilo instalada, como `"moodle-ui-kit"`. Lo cambia el asistente cuando se lo pides. Ver [Tus materiales](materiales.md#el-estilo-de-lo-que-publicas). | `"course"`. |
 
 ### `draftsLimits`
 

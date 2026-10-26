@@ -85,6 +85,12 @@ Escribe en `materials/` las preguntas y los cuestionarios, los apuntes, las tare
 - **Pídeselo así:** *«Convierte el banco GIFT que te dejé en sources en preguntas que pueda editar.»* o *«Imprime el examen del tema 2 en dos versiones.»*
 - **Atajos:** `/miyagi:exam <cuestionario>`, `/miyagi:publish <material o tema>`
 
+### 🎨 `appearance` · El aspecto de lo que publica
+
+Viste lo que exporta desde `materials/` (páginas, enunciados, preguntas, retroalimentación y código) con un estilo instalado como extensión, como `moodle-ui-kit`, o lo deja con el tema de tu aula, que es lo normal. Sea cual sea la plantilla, el resultado es accesible: encabezados en orden, emojis que el lector de pantalla no lee, sin fuente ni fondo propios y con colores que contrastan; si tuvo que arreglar algo de la plantilla, te lo dice. También te ayuda a hacer tu propio estilo.
+
+- **Pídeselo así:** *«Usa el estilo moodle-ui-kit para lo que publiques.»* o *«Vuelve al estilo de mi aula.»*
+
 ### 🎲 `activity-building` · Otras actividades de Moodle
 
 Diseña y monta el resto de actividades para que funcionen como deben: talleres de coevaluación, lecciones con itinerarios, glosarios, wikis, bases de datos, consultas, encuestas, foros evaluables y H5P. Y también las piezas que conectan las actividades: condiciones de finalización, restricciones de acceso, insignias y grupos.

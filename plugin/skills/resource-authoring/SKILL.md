@@ -22,7 +22,8 @@ it. Activities are `assignment-building`, `quiz-design` and `activity-building`.
 ## Before writing
 
 - **The course's style**: look at two or three existing resources (names, tone, level of detail,
-  how code or formulas are shown) and match it.
+  how code or formulas are shown) and match it. Its visual style, when the subject has one chosen,
+  is the export's (`appearance`): don't add colours or boxes by hand.
 - **The source of truth**: the teacher's material in `sources/` and the knowledge base's concept
   pages come first; anything that may have changed (a tool's version, a command's syntax, a
   statistic) is checked with `topic-research` before it's written.

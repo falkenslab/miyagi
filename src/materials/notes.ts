@@ -104,8 +104,14 @@ export function parseNotes(source: string, file?: string): Parsed<Notes> {
   return { material: { kind: "notes", title, as: as === "book" ? "book" : "page", markdown: as === "book" ? intro.trim() : body.trim(), chapters }, findings: { errors, warnings } };
 }
 
+/** A code block's HTML from its escaped text and its language: a style's (style.ts) or the plain one. */
+export type CodeBlock = (escaped: string, language: string) => string;
+
+export const escapeHtml = (text: string) => text.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]!);
+export const plainCode: CodeBlock = (escaped, language) => `<pre${language ? ` data-language="${language}"` : ""}><code>${escaped}</code></pre>\n`;
+
 /** Markdown to accessible HTML: headings shifted to start at `top`, code without classes, tables with column headers. */
-export function accessibleHtml(markdown: string, top: number): string {
+export function accessibleHtml(markdown: string, top: number, code: CodeBlock = plainCode): string {
   const tokens = marked.lexer(markdown);
   const depths = tokens.filter((token) => token.type === "heading").map((token) => (token as Tokens.Heading).depth);
   const shift = depths.length ? top - Math.min(...depths) : 0;
@@ -114,7 +120,7 @@ export function accessibleHtml(markdown: string, top: number): string {
     const level = Math.min(6, Math.max(top, depth + shift));
     return `<h${level}>${this.parser.parseInline(inner)}</h${level}>\n`;
   };
-  renderer.code = ({ text, lang }) => `<pre${lang ? ` data-language="${lang.replace(/[^\w-]/g, "")}"` : ""}><code>${text.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]!)}</code></pre>\n`;
+  renderer.code = ({ text, lang }) => code(escapeHtml(text), (lang ?? "").replace(/[^\w-]/g, ""));
   const html = marked.parser(tokens, { renderer });
   return html.replace(/<th>/g, '<th scope="col">').replace(/<th align="(\w+)">/g, '<th scope="col" style="text-align:$1">');
 }

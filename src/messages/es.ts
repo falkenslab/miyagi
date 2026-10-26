@@ -144,6 +144,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   rubricLevels: "Niveles",
   sheetStudent: "Alumno",
   sheetFinal: "Nota final",
+  styleLabels: { copy: "Selecciona y copia", statement: "Enunciado", question: "Pregunta", feedback: "Retroalimentación", code: "Código" },
   moodleTeacherMissing: "El aula de esta asignatura funciona con moodle-teacher, que no está instalada o está desactivada: esta sesión trabaja sin el aula. Lo arregla \"miyagi extension add moodle-teacher\" (o \"enable\").",
   classroomNeedsMoving: "El aula de esta asignatura es de antes de moodle-teacher, y miyagi ya no tiene navegador propio: esta sesión trabaja sin el aula. Ábrela en un chat para pasarla, o ejecuta \"miyagi init -w <nombre>\".",
   exploreNeedsClassroom: (dir) => `${dir} no tiene ningún aula conectada: no hay Moodle que explorar. Conéctala con "miyagi init --dir ${dir}".`,
@@ -196,6 +197,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
       record: (p) => `Anotando que ${p} está publicado`,
       status: "Mirando qué está publicado",
       resolve: (p) => `Calculando las fechas de ${p}`,
+      style: "Mirando el estilo de los materiales",
     },
   },
 };

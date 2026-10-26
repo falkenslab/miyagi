@@ -139,7 +139,7 @@ function buildSpec(kind: SessionKind, skills: string[], pending: PendingLosses):
       // shell; with or without a classroom.
       ...(kind === "run" || kind === "chat" ? { [DRAFTS_SERVER]: createDraftsServer(config.draftsDir, config.draftsLimits) } : {}),
       // The materials toolbox (ADR-015): validate, export to the classroom's formats, the publication record.
-      ...(kind === "run" || kind === "chat" ? { [MATERIALS_SERVER]: createMaterialsServer({ materialsDir: config.materialsDir, draftsDir: config.draftsDir, sourcesDir: config.sourcesDir, knowledgeDir: config.knowledgeDir }, pending) } : {}),
+      ...(kind === "run" || kind === "chat" ? { [MATERIALS_SERVER]: createMaterialsServer({ materialsDir: config.materialsDir, draftsDir: config.draftsDir, sourcesDir: config.sourcesDir, knowledgeDir: config.knowledgeDir, workspaceDir: config.projectDir }, pending) } : {}),
     }),
     pluginRoots: () => [path.join(__dirname, "..", "plugin")],
     // In run/chat: two helpers without a shell (researcher: public web; pedagogy-reviewer:

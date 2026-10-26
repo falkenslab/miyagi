@@ -2,6 +2,7 @@ import { marked } from "marked";
 import TurndownService from "turndown";
 import { validateGift } from "../validators/gift.js";
 import { finding, type Answer, type Bank, type Finding, type Question } from "./model.js";
+import { accessibleHtml, type CodeBlock } from "./notes.js";
 
 /**
  * Questions to GIFT and back (ADR-015): the format a classroom's question bank imports. The
@@ -24,6 +25,13 @@ export interface GiftExport {
   losses: Loss[];
   /** Questions it can't export as they are: the teacher's call (change or leave out). */
   errors: Finding[];
+}
+
+/** A style's templates for questions (style.ts): a question's text, a feedback, a code block. */
+export interface GiftStyle {
+  question?: (html: string) => string;
+  feedback?: (html: string) => string;
+  code?: CodeBlock;
 }
 
 /** The fractions Moodle accepts for an option's grade, in percent. */
@@ -53,7 +61,11 @@ function giftHtml(html: string): string {
 }
 
 /** A question's text: plain when it is, `[html]` when Markdown carries more than words. */
-function text(markdown: string): { gift: string; html: boolean } {
+function text(markdown: string, style: GiftStyle): { gift: string; html: boolean } {
+  if (style.question || style.code) {
+    const html = accessibleHtml(markdown, 4, style.code);
+    return { gift: `[html]${escape(giftHtml(style.question ? style.question(html) : html))}`, html: true };
+  }
   if (!needsHtml(markdown)) return { gift: escape(markdown.replace(/\s*\n\s*/g, " ").trim()), html: false };
   return { gift: `[html]${escape(giftHtml(marked.parse(markdown, { async: false }) as string))}`, html: true };
 }
@@ -65,8 +77,14 @@ function inline(markdown: string, html: boolean): string {
   return escape(flat.replace(/`([^`]*)`/g, "$1").replace(/\*\*([^*]+)\*\*/g, "$1"));
 }
 
-const feedbackOf = (answer: Answer, html: boolean) => (answer.feedback ? `#${inline(answer.feedback, html)}` : "");
-const generalOf = (question: Question, html: boolean) => (question.feedback ? `\n####${inline(question.feedback, html)}` : "");
+/** A feedback: inline, or in its style's template. */
+function feedback(markdown: string, html: boolean, style: GiftStyle): string {
+  if (!html || !style.feedback) return inline(markdown, html);
+  return escape(giftHtml(style.feedback(accessibleHtml(markdown, 5, style.code))));
+}
+
+const feedbackOf = (answer: Answer, html: boolean, style: GiftStyle) => (answer.feedback ? `#${feedback(answer.feedback, html, style)}` : "");
+const generalOf = (question: Question, html: boolean, style: GiftStyle) => (question.feedback ? `\n####${feedback(question.feedback, html, style)}` : "");
 
 function fraction(count: number, sign: 1 | -1): string | null {
   const value = 100 / count;
@@ -74,12 +92,12 @@ function fraction(count: number, sign: 1 | -1): string | null {
   return allowed === undefined ? null : `%${sign < 0 ? "-" : ""}${allowed}%`;
 }
 
-function exportQuestion(question: Question, errors: Finding[]): string | null {
-  const { gift: body, html } = text(question.text);
+function exportQuestion(question: Question, errors: Finding[], style: GiftStyle): string | null {
+  const { gift: body, html } = text(question.text, style);
   const head = `::${escape(question.name)}::${body}`;
   switch (question.type) {
     case "single":
-      return `${head} {\n${question.answers.map((answer) => `${answer.correct ? "=" : "~"}${inline(answer.text, html)}${feedbackOf(answer, html)}`).join("\n")}${generalOf(question, html)}\n}`;
+      return `${head} {\n${question.answers.map((answer) => `${answer.correct ? "=" : "~"}${inline(answer.text, html)}${feedbackOf(answer, html, style)}`).join("\n")}${generalOf(question, html, style)}\n}`;
     case "multiple": {
       const right = question.answers.filter((answer) => answer.correct).length;
       const wrong = question.answers.length - right;
@@ -89,28 +107,28 @@ function exportQuestion(question: Question, errors: Finding[]): string | null {
         errors.push(finding(question.line, `"${question.name}": ${!plus ? right : wrong} ${!plus ? "right" : "wrong"} options don't split into a grade the classroom accepts (100/${!plus ? right : wrong}); add or remove an option`));
         return null;
       }
-      return `${head} {\n${question.answers.map((answer) => `~${answer.correct ? plus : minus}${inline(answer.text, html)}${feedbackOf(answer, html)}`).join("\n")}${generalOf(question, html)}\n}`;
+      return `${head} {\n${question.answers.map((answer) => `~${answer.correct ? plus : minus}${inline(answer.text, html)}${feedbackOf(answer, html, style)}`).join("\n")}${generalOf(question, html, style)}\n}`;
     }
     case "truefalse":
-      return `${head} {${question.truth ? "TRUE" : "FALSE"}${generalOf(question, html)}}`;
+      return `${head} {${question.truth ? "TRUE" : "FALSE"}${generalOf(question, html, style)}}`;
     case "short":
-      return `${head} {\n${question.answers.map((answer) => `=${inline(answer.text, html)}${feedbackOf(answer, html)}`).join("\n")}${generalOf(question, html)}\n}`;
+      return `${head} {\n${question.answers.map((answer) => `=${inline(answer.text, html)}${feedbackOf(answer, html, style)}`).join("\n")}${generalOf(question, html, style)}\n}`;
     case "numeric":
-      return `${head} {#${question.value}${question.tolerance ? `:${question.tolerance}` : ""}${generalOf(question, html)}}`;
+      return `${head} {#${question.value}${question.tolerance ? `:${question.tolerance}` : ""}${generalOf(question, html, style)}}`;
     case "matching":
-      return `${head} {\n${(question.pairs ?? []).map((pair) => `=${inline(pair.left, html)} -> ${inline(pair.right, false).replace(/->/g, "-\\>")}`).join("\n")}${generalOf(question, html)}\n}`;
+      return `${head} {\n${(question.pairs ?? []).map((pair) => `=${inline(pair.left, html)} -> ${inline(pair.right, false).replace(/->/g, "-\\>")}`).join("\n")}${generalOf(question, html, style)}\n}`;
     case "ordering":
       errors.push(finding(question.line, `"${question.name}": an ordering question can't go as GIFT; make it a matching question (each item with its position) or leave it out`));
       return null;
     case "essay":
-      return `${head} {${generalOf(question, html)}}`;
+      return `${head} {${generalOf(question, html, style)}}`;
   }
 }
 
 /** A bank (or some of its questions) as GIFT, in its category. */
-export function exportGift(bank: Bank, questions: Question[] = bank.questions): GiftExport {
+export function exportGift(bank: Bank, questions: Question[] = bank.questions, style: GiftStyle = {}): GiftExport {
   const errors: Finding[] = [];
-  const blocks = questions.map((question) => exportQuestion(question, errors)).filter((block): block is string => block !== null);
+  const blocks = questions.map((question) => exportQuestion(question, errors, style)).filter((block): block is string => block !== null);
   const gift = `// ${bank.title} — exported by miyagi from materials/; edit the .questions.md, not this file.\n$CATEGORY: $course$/top/${bank.category}\n\n${blocks.join("\n\n")}\n`;
   // The exporter's own output is checked like any GIFT: a finding here is a bug of the exporter.
   for (const problem of validateGift(gift).errors) errors.push(finding(0, `the exported GIFT is invalid at its line ${problem.line}: ${problem.message}`));
