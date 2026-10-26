@@ -31,6 +31,6 @@ Todo queda en la carpeta `knowledge/`, en archivos de texto que puedes abrir con
 
 <Shot src="/img/casos/04-knowledge.webp" title="PowerShell — knowledge/" alt="El listado de la carpeta knowledge: index.md, log.md, moodle-capabilities.md, overview.md, teaching-plan.md, una página de actividad para la práctica final, dos resúmenes de fuentes y una página por cada uno de los cuatro temas.">La memoria tras la ingesta: un índice, un registro de cambios, la programación, una página por tema y la de la práctica final.</Shot>
 
-Si quieres saber qué guarda cada archivo y cómo funciona la ingesta por dentro, está en [La base de conocimiento](../avanzado/base-de-conocimiento.md).
+Si quieres saber qué guarda cada archivo y cómo funciona la ingesta por dentro, está en [La base de conocimiento](/avanzado/base-de-conocimiento/).
 
 Siguiente paso: [la programación didáctica](programacion.md).

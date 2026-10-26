@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "miyagi",
+    "description": "The title in the navbar"
+  },
+  "item.label.Guía": {
+    "message": "Guide",
+    "description": "Navbar item with label Guía"
+  },
+  "item.label.Casos de uso": {
+    "message": "Use cases",
+    "description": "Navbar item with label Casos de uso"
+  },
+  "item.label.Avanzado": {
+    "message": "Advanced",
+    "description": "Navbar item with label Avanzado"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

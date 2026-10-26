@@ -29,7 +29,7 @@ Todas las capturas son reales. Se hicieron contra un Moodle de pruebas ([moodle-
 
 ## Qué necesitas para seguirlo
 
-- miyagi instalado ([Instalar](../guia/instalar.md)).
+- miyagi instalado ([Instalar](/guia/instalar/)).
 - Un curso de Moodle en el que seas profesor. Para practicar, mejor uno de pruebas.
 - Para el Tema 1 y la prueba de prácticas, [Docker Desktop](https://www.docker.com/products/docker-desktop/). Es opcional: sin Docker, miyagi monta igual el curso, pero no puede ejecutar las prácticas para comprobarlas.
 

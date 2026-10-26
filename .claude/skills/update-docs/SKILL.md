@@ -35,11 +35,13 @@ Ignore changes that no reader can see: refactors with the same behaviour, `tests
 | Messages and prompts the teacher sees in the chat (`src/messages/`, `prompts/messages/`) | screenshots in `casos-de-uso/` (see step 4) |
 | A new agent-kit release with visible changes (chat keys, panels, `/resume`) | `guia/chat.md`, `avanzado/sesiones-y-modos.md` |
 
-When in doubt, `grep -rn "<name of the thing>" docs/content docs/src` finds every mention.
+When in doubt, `grep -rn "<name of the thing>" docs/content docs/src docs/i18n` finds every mention.
+
+**Every page in both languages.** The site is in Spanish (`docs/content/`, `docs/src/pages/index.js`) and English (`docs/i18n/en/docusaurus-plugin-content-docs/current/`, the same paths, and the landing's copy in `docs/i18n/en/docusaurus-plugin-content-pages/index.js`). A change to a Guía or Avanzado page, the roadmap, the tutorial's intro or the landing is made to its English version too, in the same commit; a new page gets its English version (`check-docs.mjs` fails without it). The rest of the SQL tutorial is Spanish only: links from it to other pages are absolute (`/avanzado/<page>/`), so each language's build sends them to its own version. English headings keep the Spanish anchor as an explicit id (`## Your materials {#tus-materiales}`): links with `#anchors` work in both. Navbar and footer labels are in `docs/i18n/en/docusaurus-theme-classic/`, and the social image is `docs/static/img/og-en.png`.
 
 ## 3. Update the pages
 
-- Same rules as the rest of the site: Spanish for teachers, plain words in Guía and Casos de
+- Same rules as the rest of the site: Spanish for teachers (and the same in English), plain words in Guía and Casos de
   uso, precise (paths, keys, defaults) in Avanzado. Say nothing the product doesn't back:
   every claim must trace to code, a prompt, a skill, a command or a report in `tests/`.
 - The `markdown-writing` rules: one line per paragraph and list item, no `---` between
@@ -64,8 +66,8 @@ by hand to make it match.
 ## 5. Check
 
 ```
-node .claude/skills/update-docs/check-docs.mjs     # every skill, command, CLI subcommand and config key is documented
-(cd docs && npm ci && npm run build)               # no broken links or anchors
+node .claude/skills/update-docs/check-docs.mjs     # every skill, command, CLI subcommand and config key is documented, in both languages
+(cd docs && npm ci && npm run build)               # both locales; no broken links or anchors in either
 ```
 
 `check-docs.mjs` fails with the list of what is missing and where it should be. The build

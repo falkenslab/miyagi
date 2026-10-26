@@ -55,6 +55,6 @@ El curso va de MariaDB en Docker y queremos que miyagi compruebe las prácticas 
 miyagi extension add docker-lab --set mode=lab
 ```
 
-Lo tienes explicado en [Prácticas en Docker](../avanzado/practicas-docker.md).
+Lo tienes explicado en [Prácticas en Docker](/avanzado/practicas-docker/).
 
 Siguiente paso: [darle tu material](tu-material.md).

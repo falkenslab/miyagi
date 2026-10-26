@@ -33,7 +33,7 @@ Todo el SQL que publiques en este curso sigue estas convenciones, sin excepcione
 ...
 ```
 
-La línea `description` es la que decide **cuándo** la usa: dice qué hace y en qué situaciones. El archivo completo, con el ejemplo de referencia y qué hacer al corregir, está en [Habilidades propias](../avanzado/habilidades-propias.md).
+La línea `description` es la que decide **cuándo** la usa: dice qué hace y en qué situaciones. El archivo completo, con el ejemplo de referencia y qué hacer al corregir, está en [Habilidades propias](/avanzado/habilidades-propias/).
 
 ## Comprobar que la ve
 
@@ -62,11 +62,11 @@ Lee los apuntes y la solución de la práctica final para no repetir sus ejemplo
 <Shot src="/img/casos/51-skill-resumen.webp" alt="El resumen: los tres ejemplos de menos a más (INNER JOIN de dos tablas, el filtro de un LEFT JOIN en el ON o en el WHERE, tres tablas con COUNT DISTINCT), todo ejecutado en Docker sin errores, siguiendo el estilo SQL del curso, y la pregunta de si la clase es la del martes 10 de noviembre, que es cuando toca JOIN según el calendario.">Y una pregunta sensata: según el calendario, el JOIN toca el martes 10 de noviembre, no este martes.</Shot>
 
 :::tip Lo que una habilidad puede y no puede hacer
-Una habilidad le enseña **cómo** hacer algo con lo que ya tiene. No le da herramientas nuevas ni le salta las aprobaciones. Lo que vale para todo el curso, en todas las tareas («puntúa sobre 10»), va mejor en `instructions.md`: lo explica [Atajos e instrucciones](../avanzado/atajos-e-instrucciones.md).
+Una habilidad le enseña **cómo** hacer algo con lo que ya tiene. No le da herramientas nuevas ni le salta las aprobaciones. Lo que vale para todo el curso, en todas las tareas («puntúa sobre 10»), va mejor en `instructions.md`: lo explica [Atajos e instrucciones](/avanzado/atajos-e-instrucciones/).
 :::
 
 ## Y hasta aquí
 
 Desde un curso vacío hasta un aula de Introducción a SQL completa: programación, cuatro temas con apuntes, prácticas probadas en Docker, entregables con rúbrica, cuestionarios, una práctica final corregida, un foro atendido, un seguimiento, una auditoría y una guía del curso. Cada cosa que vieron los alumnos pasó antes por un panel de aprobación.
 
-Para hacerlo en tu curso, empieza por [Instalar](../guia/instalar.md) y [Primeros pasos](../guia/primeros-pasos.md).
+Para hacerlo en tu curso, empieza por [Instalar](/guia/instalar/) y [Primeros pasos](/guia/primeros-pasos/).
