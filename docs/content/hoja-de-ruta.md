@@ -47,7 +47,7 @@ Una aplicación de escritorio, para usar miyagi sin terminal:
 
 ### Evaluación
 
-- **Informes y banco de exámenes.** Informes del curso (resultados por criterio, memoria del módulo) en `.docx` con la plantilla de tu centro, y un banco de preguntas por criterio y nivel que sirve de un curso a otro ([#44](https://github.com/falkenslab/miyagi/issues/44)).
+- **Informes y banco de exámenes.** Informes del curso (resultados por criterio, memoria del módulo), y un banco de preguntas por criterio y nivel que sirve de un curso a otro ([#44](https://github.com/falkenslab/miyagi/issues/44)). Hecho: llega en la próxima versión. El `.docx` con la plantilla de tu centro espera a una extensión de documentos; mientras, el informe sale como documento y PDF.
 
 ### La web
 

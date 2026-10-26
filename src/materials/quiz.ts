@@ -1,5 +1,5 @@
 import { splitFrontmatter, stringList } from "./frontmatter.js";
-import { finding, type Finding, type Parsed, type Quiz, type QuizPick } from "./model.js";
+import { finding, QUESTION_LEVELS, type Finding, type Parsed, type QuestionLevel, type Quiz, type QuizPick } from "./model.js";
 
 /**
  * A quiz, `<slug>.quiz.md` (ADR-015): what it's for and what goes in it, in the frontmatter;
@@ -14,6 +14,8 @@ import { finding, type Finding, type Parsed, type Quiz, type QuizPick } from "./
  *     questions:
  *       - bank: tema-1.questions.md
  *         pick: all                # all, a number drawn at random, or names: [T1-01, T1-03]
+ *         criteria: [1.1]          # optional, with all or a number: only these criteria
+ *         level: basic             # optional: basic, intermediate or advanced
  *     ---
  *     Diez preguntas para repasar antes del examen…
  */
@@ -46,7 +48,11 @@ export function parseQuiz(source: string): Parsed<Quiz> {
     else if (typeof part.pick === "string" && /^\d+$/.test(part.pick.trim())) pick = Number(part.pick.trim());
     else if (part.pick !== undefined && String(part.pick).trim() !== "all") pick = stringList(part.pick);
     if (typeof pick === "number" && pick < 1) errors.push(finding(1, `questions[${index + 1}]: "pick" draws at least one question`));
-    questions.push({ bank, pick });
+    const criteria = part.criteria === undefined ? [] : stringList(part.criteria);
+    const level = part.level === undefined ? undefined : String(part.level).trim().toLowerCase();
+    if (level !== undefined && !QUESTION_LEVELS.includes(level as QuestionLevel)) errors.push(finding(1, `questions[${index + 1}]: unknown level "${level}" (${QUESTION_LEVELS.join(", ")})`));
+    if ((criteria.length || level) && Array.isArray(pick)) warnings.push(finding(1, `questions[${index + 1}]: questions picked by name aren't filtered by criteria or level`));
+    questions.push({ bank, pick, ...(criteria.length ? { criteria } : {}), ...(level && QUESTION_LEVELS.includes(level as QuestionLevel) ? { level: level as QuestionLevel } : {}) });
   });
   if (!body.trim()) warnings.push(finding(1, "no description: students start without knowing what it covers, how long it takes or how it counts"));
   return { material: { kind: "quiz", title, purpose: (PURPOSES.includes(purpose as Quiz["purpose"]) ? purpose : "practice") as Quiz["purpose"], settings, questions, description: body.trim() }, findings: { errors, warnings } };

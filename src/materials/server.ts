@@ -13,7 +13,7 @@ import { COURSE_APPEARANCE, fill, loadStyle, styleExtensions, type Style, type S
 import { readWorkspaceConfig, writeWorkspaceConfig } from "../workspace.js";
 import { rubricDefinition, rubricTable, type Rubric } from "./rubric.js";
 import { materialHash } from "./hash.js";
-import type { Material, Question, ValidationResult } from "./model.js";
+import { QUESTION_LEVELS, type Material, type Question, type ValidationResult } from "./model.js";
 import { readPublications, recordPublication, stateOf } from "./publications.js";
 import { serializeBank } from "./serialize.js";
 import { inMaterials, listMaterials, loadMaterial, resolveQuiz, shownPath, unknownCriteria } from "./store.js";
@@ -406,6 +406,47 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
             await writeFile(path.join(out, "key.html"), exam.key);
             await writeFile(path.join(out, "exam.json"), `${JSON.stringify({ quiz: a.path, seed, versions: exam.versions.length, questions: questions.length }, null, 2)}\n`);
             return `Printed ${exam.versions.length} versions of ${questions.length} questions in drafts/${shownPath(draftsDir, out)}/ (${exam.versions.map((version) => `${version.letter}.html`).join(", ")}, key.html), seed ${seed}.`;
+          }),
+      ),
+
+      tool(
+        "materials_coverage",
+        "The exam bank at a glance: how many questions every bank in materials/ has per criterion and level (basic, intermediate, advanced, or not said), and which criteria the teacher's plan has with none. To see what's missing before writing more or building an exam.",
+        { criteria: z.array(z.string()).optional().describe("Only these criteria; default: every one the banks or the plan name") },
+        (a) =>
+          guarded(async () => {
+            const counts = new Map<string, Map<string, number>>();
+            const banks: string[] = [];
+            for (const file of (await listMaterials(materialsDir)).filter((one) => one.endsWith(".questions.md"))) {
+              const loaded = await loadMaterial(materialsDir, file).catch(() => undefined);
+              if (loaded?.material?.kind !== "questions") continue;
+              banks.push(file);
+              for (const question of loaded.material.questions) {
+                for (const criterion of question.criteria.length ? question.criteria : ["(no criterion)"]) {
+                  const levels = counts.get(criterion) ?? new Map<string, number>();
+                  const level = question.level ?? "not said";
+                  levels.set(level, (levels.get(level) ?? 0) + 1);
+                  counts.set(criterion, levels);
+                }
+              }
+            }
+            if (!banks.length) return "No question banks in materials/ yet.";
+            const wanted = a.criteria?.length ? a.criteria : [...counts.keys()].sort();
+            const columns = [...QUESTION_LEVELS, "not said"];
+            const rows = wanted.map((criterion) => {
+              const levels = counts.get(criterion);
+              const cells = columns.map((level) => levels?.get(level) ?? 0);
+              return `| ${criterion} | ${cells.join(" | ")} | ${cells.reduce((sum, n) => sum + n, 0)} |`;
+            });
+            const missing = a.criteria?.length ? a.criteria.filter((criterion) => !counts.has(criterion)) : [];
+            return [
+              `${banks.length} banks: ${banks.join(", ")}.`,
+              `| Criterion | ${columns.join(" | ")} | Total |`,
+              `| --- | ${columns.map(() => "---").join(" | ")} | --- |`,
+              ...rows,
+              missing.length ? `No question yet for: ${missing.join(", ")}.` : "",
+              "A question counts once per criterion it names. Compare with the plan's criteria (the curriculum pages, the assessment matrix) to see the gaps.",
+            ].filter(Boolean).join("\n");
           }),
       ),
 

@@ -47,7 +47,7 @@ for i in range(2):
 ````
 
 - Cada pregunta empieza con `##` y su nombre, que no se repite.
-- La línea `type: … · points: …` es opcional: si no está, el tipo se deduce de las respuestas.
+- La línea `type: … · points: …` es opcional: si no está, el tipo se deduce de las respuestas. También puede llevar `criteria: 1.1` (los criterios de los que da evidencia) y `level: basic` (`basic`, `intermediate` o `advanced`), para usar los bancos como banco de exámenes.
 - El enunciado es texto normal; el código va en un bloque, con su sangría, tal cual.
 - Las respuestas son la última lista: `- [x]` las correctas, `- [ ]` las demás. Debajo de cada opción, con sangría y `>`, por qué es incorrecta. Al final, también con `>`, la explicación general.
 - Tipos: una respuesta (`single`), varias (`multiple`), verdadero o falso (`answer: true`), respuesta corta (`- def`), numérica (`answer: 3.5 · tolerance: 0.1`), emparejar (`- int -> 3`), ordenar (lista numerada, solo en papel) y redacción (sin lista).
@@ -69,6 +69,8 @@ questions:
 ---
 Diez preguntas para repasar las variables antes del examen.
 ```
+
+Cada banco del cuestionario puede filtrarse con `criteria: [1.1]` y `level: basic`: toma solo esas preguntas, todas o un número de ellas. Un número con filtro se sortea al exportar y sale igual para todos los alumnos; para un sorteo distinto por alumno, esas preguntas van en su propio banco.
 
 ## Unos apuntes
 

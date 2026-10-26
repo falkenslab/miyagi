@@ -183,6 +183,18 @@ Al corregir, cada criterio de la rúbrica apunta a los de evaluación y la retro
 
 - **Pídeselo así:** *«Haz la matriz de evaluación por RA y dime qué criterios no evalúa ninguna actividad.»*
 
+### 🏦 `exam-bank` · Un banco de exámenes por criterio y nivel
+
+Organiza tus preguntas de `materials/` como un banco que sirve de un curso a otro: cada pregunta con los criterios de los que da evidencia y su nivel (básico, intermedio o avanzado). Te dice cuántas preguntas hay de cada criterio y nivel, y qué criterios de tu programación no tienen ninguna, para escribir lo que falta. Un cuestionario o un examen puede tomar del banco por criterio y nivel, por ejemplo «tres básicas del criterio 1.1 y una avanzada del 1.2». En [Tus materiales](../avanzado/materiales.md) tienes cómo se escribe.
+
+- **Pídeselo así:** *«¿Qué criterios tienen pocas preguntas en el banco?»* o *«Hazme un examen con tres preguntas básicas del 1.1 y una avanzada del 1.2.»*
+
+### 📊 `course-reports` · Informes del curso
+
+Escribe informes sobre el curso, nunca sobre un alumno: los resultados por criterio para el departamento y la memoria anual del módulo (lo programado frente a lo dado, los resultados por criterio, qué funcionó y qué cambiarías). Los saca de la matriz de evaluación y de las notas del aula leídas en el momento, solo como totales (cuántos alcanzan cada criterio, la media); no guarda notas ni nombres. Si tu centro tiene un modelo, sigue sus apartados. Lo deja como documento y PDF en `drafts/`; para un `.docx` con la plantilla del centro hace falta una extensión de documentos, y te lo dice si no la tienes. Tú lo revisas antes de enviarlo.
+
+- **Pídeselo así:** *«Prepara los resultados por criterio de la primera evaluación para la reunión de departamento.»*
+
 ### 🌈 `diversity` · Atender a la diversidad
 
 Aplica el diseño universal para el aprendizaje (DUA) a cada tema y actividad: más de una forma de motivar, de presentar el contenido y de demostrar lo aprendido. Prepara además variantes de una actividad:

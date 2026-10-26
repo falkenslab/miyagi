@@ -37,7 +37,8 @@ type: single · points: 1 · criteria: 1.1, 1.2
 
 - `## name`: one question; its name is its position and what it asks (`T1-01 …`), unique.
 - The metadata line is optional; `type` is inferred when it's missing. Keys: `type`, `points`
-  (default 1), `criteria`, `answer`, `tolerance`.
+  (default 1), `criteria`, `level` (`basic`, `intermediate`, `advanced`: `exam-bank`), `answer`,
+  `tolerance`.
 - The text is any Markdown: code goes in a fenced block with its indentation, as it is: the
   exporter keeps it. No HTML, no escapes.
 - The answers are the last list, after the text:
@@ -69,6 +70,7 @@ settings:                         # the teacher's intent; the classroom's quiz s
 questions:
   - bank: variables.questions.md  # relative to the quiz's folder
     pick: all                     # all, a number drawn at random, or [T1-01, T1-03]
+    # criteria: [1.1], level: basic   (optional, with all or a number: only those; `exam-bank`)
 ---
 Diez preguntas para repasar las variables antes del examen. Sin límite de intentos.
 ```

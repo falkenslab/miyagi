@@ -156,6 +156,7 @@ export interface Messages {
       status: string;
       resolve: (path: string) => string;
       style: string;
+      coverage: string;
     };
   };
 }
@@ -354,6 +355,7 @@ See README.md for details.`,
       status: "Looking at what's published",
       resolve: (p) => `Working out the dates of ${p}`,
       style: "Looking at the materials' style",
+      coverage: "Counting the bank's questions by criterion and level",
     },
   },
 };

@@ -9,6 +9,10 @@ import { parseNotes } from "./notes.js";
 import { parseRubric } from "./rubric.js";
 import { parseUnit } from "./unit.js";
 import { parseQuiz } from "./quiz.js";
+import { drawn } from "./exam.js";
+
+/** A number from a text, to seed a draw that comes out the same each time. */
+const seedOf = (text: string) => [...text].reduce((hash, char) => (Math.imul(hash, 31) + char.charCodeAt(0)) >>> 0, 7);
 
 /**
  * Reading `materials/`: a material by its path, what a quiz takes from its banks, and the
@@ -98,10 +102,19 @@ export async function resolveQuiz(materialsDir: string, quizFile: string, quiz: 
     }
     if (loaded.findings.errors.length) errors.push(finding(1, `the bank ${pick.bank} has errors: validate it first`));
     const bank = loaded.material;
-    if (pick.pick === "all") picks.push({ bankFile: shownPath(materialsDir, loaded.file), bank, questions: bank.questions });
+    // An exam bank's filter: only its questions of these criteria and this level.
+    const filtered = Boolean(pick.criteria?.length || pick.level) && !Array.isArray(pick.pick);
+    const pool = filtered ? bank.questions.filter((question) => (!pick.criteria?.length || question.criteria.some((one) => pick.criteria!.includes(one))) && (!pick.level || question.level === pick.level)) : bank.questions;
+    const which = [pick.criteria?.length ? `criteria ${pick.criteria.join(", ")}` : "", pick.level ? `level ${pick.level}` : ""].filter(Boolean).join(", ");
+    if (filtered && !pool.length) errors.push(finding(1, `${pick.bank} has no question of ${which}`));
+    if (pick.pick === "all") picks.push({ bankFile: shownPath(materialsDir, loaded.file), bank, questions: pool });
     else if (typeof pick.pick === "number") {
-      if (pick.pick > bank.questions.length) errors.push(finding(1, `${pick.bank} has ${bank.questions.length} questions; the quiz draws ${pick.pick}`));
-      picks.push({ bankFile: shownPath(materialsDir, loaded.file), bank, questions: bank.questions, random: pick.pick });
+      if (pick.pick > pool.length) errors.push(finding(1, `${pick.bank} has ${pool.length} questions${filtered ? ` of ${which}` : ""}; the quiz draws ${pick.pick}`));
+      if (filtered) {
+        // The classroom draws at random from a whole category: a filtered draw is made here, the same for everyone.
+        picks.push({ bankFile: shownPath(materialsDir, loaded.file), bank, questions: drawn(pool, pick.pick, seedOf(`${quiz.title} ${pick.bank} ${which}`)) });
+        warnings.push(finding(1, `${pick.bank}: ${pick.pick} of its ${pool.length} questions of ${which} drawn now, the same for every student; for a different draw per student, put them in a bank of their own`));
+      } else picks.push({ bankFile: shownPath(materialsDir, loaded.file), bank, questions: bank.questions, random: pick.pick });
     } else {
       const chosen: Question[] = [];
       for (const name of pick.pick) {

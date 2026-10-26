@@ -18,6 +18,9 @@ export type { Finding, ValidationResult };
 export const QUESTION_TYPES = ["single", "multiple", "truefalse", "short", "numeric", "matching", "ordering", "essay"] as const;
 export type QuestionType = (typeof QUESTION_TYPES)[number];
 
+export const QUESTION_LEVELS = ["basic", "intermediate", "advanced"] as const;
+export type QuestionLevel = (typeof QUESTION_LEVELS)[number];
+
 /** One answer of a question: an option (single, multiple), an accepted text (short). */
 export interface Answer {
   text: string;
@@ -47,6 +50,8 @@ export interface Question {
   order?: string[];
   /** Shown after answering, whatever the answer. */
   feedback?: string;
+  /** How hard it is, for an exam bank by criterion and level; unset when not said. */
+  level?: QuestionLevel;
   /** Where its heading is in the file (1-based). */
   line: number;
 }
@@ -65,6 +70,9 @@ export interface QuizPick {
   bank: string;
   /** "all", a number drawn at random, or the names chosen. */
   pick: "all" | number | string[];
+  /** Only the bank's questions with one of these criteria and this level (an exam bank's filter). */
+  criteria?: string[];
+  level?: QuestionLevel;
 }
 
 /** A quiz: `<slug>.quiz.md`, what it's for and what goes in it; its settings are intent, not a platform's fields. */

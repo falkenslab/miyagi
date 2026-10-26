@@ -272,3 +272,37 @@ test("a unit: steps in order, conditions on what comes before", () => {
   assert.match(all, /isn't before it/);
   assert.match(all, /only a graded activity is passed/);
 });
+
+const { resolveQuiz } = await load("store");
+
+test("an exam bank: levels, and a quiz that picks by criterion and level", async () => {
+  const { mkdtempSync, writeFileSync: write, rmSync } = await import("node:fs");
+  const os = await import("node:os");
+  const bankSource = [
+    "---", "title: Banco T1", "criteria: [1.1]", "---",
+    "## A", "level: basic", "", "¿Uno?", "", "- [x] sí", "- [ ] no", "  > porque no", "",
+    "## B", "criteria: 1.2 · level: advanced", "", "¿Dos?", "", "- [x] sí", "- [ ] no", "  > porque no", "",
+    "## C", "level: basic", "", "¿Tres?", "", "- [x] sí", "- [ ] no", "  > porque no", "",
+    "## D", "level: dificil", "", "¿Cuatro?", "", "- [x] sí", "- [ ] no", "  > porque no", "",
+  ].join("\n");
+  const parsed = parseQuestions(bankSource);
+  assert.deepEqual(parsed.material.questions.map((q) => q.level), ["basic", "advanced", "basic", undefined]);
+  assert.match(parsed.findings.errors.map((f) => f.message).join(), /unknown level "dificil"/);
+  assert.match(serializeBank(parsed.material), /type: single · level: advanced|criteria: 1\.2 · level: advanced/);
+
+  const dir = mkdtempSync(path.join(os.tmpdir(), "bank-"));
+  try {
+    write(path.join(dir, "t1.questions.md"), bankSource.replace("level: dificil", "level: intermediate"));
+    const quiz = parseQuiz("---\ntitle: Examen\npurpose: exam\nquestions:\n  - bank: t1.questions.md\n    pick: all\n    level: basic\n  - bank: t1.questions.md\n    pick: 1\n    criteria: [1.2]\n---\nExamen.\n");
+    assert.deepEqual(quiz.findings.errors, []);
+    const { picks, findings } = await resolveQuiz(dir, path.join(dir, "examen.quiz.md"), quiz.material);
+    assert.deepEqual(findings.errors, []);
+    assert.deepEqual(picks.map((pick) => pick.questions.map((q) => q.name)), [["A", "C"], ["B"]]);
+    assert.equal(picks[1].random, undefined);
+    assert.match(findings.warnings.map((f) => f.message).join(), /drawn now, the same for every student/);
+    const empty = parseQuiz("---\ntitle: X\nquestions:\n  - bank: t1.questions.md\n    pick: 2\n    criteria: [9.9]\n---\nX.\n");
+    assert.match((await resolveQuiz(dir, path.join(dir, "x.quiz.md"), empty.material)).findings.errors.map((f) => f.message).join(), /no question of criteria 9\.9/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

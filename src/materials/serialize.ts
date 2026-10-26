@@ -29,6 +29,7 @@ function metaOf(question: Question, defaultCriteria: string[]): string {
   const parts = [`type: ${question.type}`];
   if (question.points !== 1) parts.push(`points: ${question.points}`);
   if (question.criteria.length && question.criteria.join(",") !== defaultCriteria.join(",")) parts.push(`criteria: ${question.criteria.join(", ")}`);
+  if (question.level) parts.push(`level: ${question.level}`);
   if (question.type === "truefalse") parts.push(`answer: ${question.truth ? "true" : "false"}`);
   if (question.type === "numeric") {
     parts.push(`answer: ${question.value}`);

@@ -197,6 +197,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
       status: "Regarde ce qui est publié",
       resolve: (p) => `Calcule les dates de ${p}`,
       style: "Regarde le style des supports",
+      coverage: "Compte les questions de la banque par critère et niveau",
     },
   },
 };

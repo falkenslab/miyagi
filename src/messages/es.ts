@@ -198,6 +198,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
       status: "Mirando qué está publicado",
       resolve: (p) => `Calculando las fechas de ${p}`,
       style: "Mirando el estilo de los materiales",
+      coverage: "Contando las preguntas del banco por criterio y nivel",
     },
   },
 };

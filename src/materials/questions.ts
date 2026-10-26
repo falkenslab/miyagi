@@ -1,13 +1,13 @@
 import { marked, type Token, type Tokens } from "marked";
 import { splitFrontmatter, stringList } from "./frontmatter.js";
-import { finding, QUESTION_TYPES, type Answer, type Bank, type Finding, type Parsed, type Question, type QuestionType } from "./model.js";
+import { finding, QUESTION_LEVELS, QUESTION_TYPES, type Answer, type Bank, type Finding, type Parsed, type Question, type QuestionLevel, type QuestionType } from "./model.js";
 
 /**
  * A question bank, `<slug>.questions.md` (ADR-015): a frontmatter (title, category, default
  * criteria) and one `## name` section per question:
  *
  *     ## T1-01 Qué guarda una variable
- *     type: single · points: 1 · criteria: CE1a
+ *     type: single · points: 1 · criteria: 1.1 · level: basic
  *
  *     ¿Qué guarda una variable?            ← the text: any Markdown, code blocks too
  *
@@ -23,7 +23,7 @@ import { finding, QUESTION_TYPES, type Answer, type Bank, type Finding, type Par
  * tokenizer, so code blocks and lists are what Markdown says they are.
  */
 
-const META_KEYS = ["type", "points", "criteria", "answer", "tolerance"] as const;
+const META_KEYS = ["type", "points", "criteria", "level", "answer", "tolerance"] as const;
 const META_LINE = new RegExp(`^(${META_KEYS.join("|")})\\s*:`, "i");
 
 /** The line (1-based) each token starts at, from their raw text. */
@@ -64,7 +64,7 @@ function inferType(list: Tokens.List | undefined, meta: Record<string, string>):
   return list.items.filter((item) => item.checked).length > 1 ? "multiple" : "single";
 }
 
-function parseQuestion(name: string, line: number, section: { token: Token; line: number }[], defaults: { criteria: string[] }, findings: Finding[]): Question {
+function parseQuestion(name: string, line: number, section: { token: Token; line: number }[], defaults: { criteria: string[]; level?: string }, findings: Finding[]): Question {
   const tokens = section.filter(({ token }) => token.type !== "space");
   let meta: Record<string, string> = {};
   if (tokens[0]?.token.type === "paragraph") {
@@ -93,6 +93,11 @@ function parseQuestion(name: string, line: number, section: { token: Token; line
   const points = meta.points === undefined ? 1 : Number(meta.points.replace(",", "."));
   if (!(points > 0)) findings.push(finding(line, `"${name}": points must be a number above 0, not "${meta.points}"`));
   const question: Question = { name, type, text, points: points > 0 ? points : 1, criteria: meta.criteria ? stringList(meta.criteria) : defaults.criteria, answers: [], line, ...(feedback ? { feedback } : {}) };
+  const level = (meta.level ?? defaults.level)?.trim().toLowerCase();
+  if (level !== undefined) {
+    if (QUESTION_LEVELS.includes(level as QuestionLevel)) question.level = level as QuestionLevel;
+    else findings.push(finding(line, `"${name}": unknown level "${level}" (${QUESTION_LEVELS.join(", ")})`));
+  }
   if (!text) findings.push(finding(line, `"${name}": it has no text`));
   // A checklist inside the text is answers in the wrong place: they go after it, last.
   const misplaced = textTokens.find(({ token }) => token.type === "list" && (token as Tokens.List).items.some((item) => item.task));
@@ -164,7 +169,7 @@ export function parseQuestions(source: string): Parsed<Bank> {
   if (error) errors.push(finding(1, `the frontmatter isn't valid YAML: ${error}`));
   const title = typeof data.title === "string" && data.title.trim() ? data.title.trim() : "";
   if (!title) errors.push(finding(1, `the frontmatter needs a "title"`));
-  const defaults = { criteria: stringList(data.criteria) };
+  const defaults = { criteria: stringList(data.criteria), ...(typeof data.level === "string" ? { level: data.level } : {}) };
 
   const tokens = withLines(marked.lexer(body), bodyLine);
   const questions: Question[] = [];

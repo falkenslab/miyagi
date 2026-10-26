@@ -197,6 +197,7 @@ Mehr in README.md.`,
       status: "Sieht nach, was veröffentlicht ist",
       resolve: (p) => `Berechnet die Termine von ${p}`,
       style: "Sieht sich den Stil der Materialien an",
+      coverage: "Zählt die Fragen der Fragensammlung nach Kriterium und Niveau",
     },
   },
 };
