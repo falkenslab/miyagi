@@ -23,10 +23,11 @@ Every illustration on the docs site in Falken's Lab's style, complete guides wit
   - Commands in `<Terminal>` (copy button, `$` prompt), example requests in `<Prompt>` (send button), from the skill's templates into `src/components/` and `src/theme/MDXComponents`.
   - Screenshots retaken and framed in the family's style: the terminal ones with `falkenslab-terminal-screenshots`; the app's and Moodle's in a browser window frame added to the skill (bar, traffic lights, address, both themes). The SQL tutorial re-photographed against moodle-sandbox, with the same steps.
   - The landing's terminal animation and its screenshot in the same frames.
-- **Guides**, Guía and Casos de uso, each in two tracks, terminal and app:
-  - Installing (the npm package, the app's installer), first steps (`miyagi init` / creating a subject in the app), the chat, approvals, `run` / the app's views (Today, teaching plan, units, materials, the oven, extensions).
-  - Use cases with both: one session of the SQL classroom told from the app, with its screenshots.
-  - The guide says which to choose and that both share the same subject folder.
+- **Two tracks, terminal and app**, in Guía and Casos de uso, Spanish and English, each with its own screenshots:
+  - **Choosing and starting.** A first page says what each is and that both work on the same subjects (`~/.miyagi`). The app track starts with both ways to open it: the desktop app (its installer, the icon, the window) and `miyagi web` (from a terminal, the local address with its token, a browser tab on this computer only). After that it's one guide: the page is the same (`desktop/main.mjs` loads `src/host/`'s page, `gui/`).
+  - **The terminal's guide:** install, `miyagi init`, the chat (`miyagi chat`, its keys, `/` commands), approvals and modes, `run`, `explore`, `ingest`, extensions (`miyagi extension`).
+  - **The app's guide:** creating or opening a subject, the chat and its panels, modes and actions, each view (Today, teaching plan, units and activities, materials, the oven, your classroom, knowledge base, sources), extensions and capabilities.
+- **Every use case in both tracks, with screenshots of each.** The use cases are the SQL tutorial's steps (preparing the classroom, your material, the teaching plan, units 1–4, grading, the forum, following the class, an own skill) and the requests in `guia/ideas.md`. Each one shows what to ask (in `<Prompt>`), the approval panel, the result in Moodle, and how it looks in the terminal and in the app. Captured against moodle-sandbox with scripts kept with the test report, so they can be retaken.
 - **Landing**: both versions in the hero and in the install section (a tab per version, as the family's install card), with a screenshot of each.
 - `update-docs`: a change to what the app shows updates its guide and screenshots; `check-docs.mjs` checks the app's views are documented.
 - The skills that apply: `falkenslab-site-style` (browser frame, when to use each frame), `falkenslab-terminal-screenshots` if its procedure changes.
@@ -36,7 +37,8 @@ Every illustration on the docs site in Falken's Lab's style, complete guides wit
 ## Acceptance
 
 - No bare command or example request left on the site (`grep` for `bash` blocks and `pide`); every screenshot in a family frame, in both themes.
-- Guía and Casos de uso have both tracks in Spanish and English; a teacher can install and use the app following only the guide.
+- Guía and Casos de uso have both tracks in Spanish and English; a teacher can install and use either following only its guide, the app's starting with the desktop app and with `miyagi web`.
+- Every use case has its screenshots in the terminal and in the app (and in Moodle where it changes something there); a report in `tests/` with the capture scripts.
 - The landing presents the terminal and the app, each with its install path and a screenshot.
 - Lighthouse mobile 90+ and desktop unchanged, both languages build without broken links, no horizontal scroll at 360–1920 px.
 
