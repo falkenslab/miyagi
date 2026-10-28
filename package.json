@@ -28,7 +28,7 @@
     "test": "node --test \"test/*.test.mjs\""
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "0.30.1",
+    "@falkenslab/agent-kit": "0.31.0",
     "@mozilla/readability": "^0.6.0",
     "fflate": "^0.8.3",
     "linkedom": "^0.18.13",
