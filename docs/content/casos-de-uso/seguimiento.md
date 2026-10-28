@@ -10,7 +10,7 @@ description: Cómo va la clase, separando datos de interpretación, y una audito
 
 Con las primeras notas puestas, le preguntamos por la clase con el atajo de seguimiento:
 
-<p className="pide">/miyagi:progress</p>
+<Prompt>{`/miyagi:progress`}</Prompt>
 
 Mira el calificador y el resumen de actividades, y separa lo que son datos de lo que es su interpretación:
 
@@ -25,7 +25,7 @@ Dos detalles importan aquí:
 
 Antes de que empiecen las clases, una revisión completa:
 
-<p className="pide">/miyagi:audit</p>
+<Prompt>{`/miyagi:audit`}</Prompt>
 
 Recorre el curso sin cambiar nada (organización, fechas, evaluación, accesibilidad, pedagogía, con una segunda opinión del revisor pedagógico) y devuelve las recomendaciones por prioridad. Las de prioridad alta, en este caso, no eran evidentes:
 
@@ -43,7 +43,7 @@ La auditoría queda guardada con su fecha en `knowledge/course-audit.md`, así q
 
 Elegimos la más visible para los alumnos:
 
-<p className="pide">Haz el punto 4: una página «Guía del curso» en General con los pesos, el calendario, la política de entregas tardías para todas las tareas y qué hacer si Docker no funciona. Lo demás lo vemos otro día.</p>
+<Prompt>{`Haz el punto 4: una página «Guía del curso» en General con los pesos, el calendario, la política de entregas tardías para todas las tareas y qué hacer si Docker no funciona. Lo demás lo vemos otro día.`}</Prompt>
 
 La crea oculta, la revisa como profesor y en ancho de móvil, y antes de mostrarla avisa de dos cosas que no puede decidir él:
 

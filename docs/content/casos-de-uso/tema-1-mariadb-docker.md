@@ -8,7 +8,7 @@ description: miyagi construye el primer tema (apuntes, práctica guiada, entrega
 
 Con la programación cerrada, toca construir el curso en Moodle. Empezamos por el primer tema en un chat nuevo, con el atajo `/miyagi:build-unit`:
 
-<p className="pide">/miyagi:build-unit Tema 1: MariaDB en Docker, siguiendo la programación. Con unos apuntes que expliquen paso a paso cómo levantar el contenedor, conectarse con el cliente, crear la base de datos tienda y un usuario con permisos solo sobre ella; la práctica guiada, probada en Docker antes de publicarla; el entregable apto/no apto y el cuestionario del tema.</p>
+<Prompt>{`/miyagi:build-unit Tema 1: MariaDB en Docker, siguiendo la programación. Con unos apuntes que expliquen paso a paso cómo levantar el contenedor, conectarse con el cliente, crear la base de datos tienda y un usuario con permisos solo sobre ella; la práctica guiada, probada en Docker antes de publicarla; el entregable apto/no apto y el cuestionario del tema.`}</Prompt>
 
 ## Primero, comprobar que funciona
 
@@ -24,15 +24,13 @@ Después, el **revisor pedagógico** repasa el plan del tema. En este caso seña
 
 Estos son los comandos que acaban en la práctica, comprobados por miyagi en un laboratorio de docker-lab (y también al escribir este tutorial):
 
-```bash
-# Un volumen para los datos y el servidor MariaDB 11
-docker volume create datos-tienda
-docker run -d --name mariadb-tienda -e MARIADB_ROOT_PASSWORD=TuContraseñaSegura -v datos-tienda:/var/lib/mysql -p 3306:3306 mariadb:11
-docker logs mariadb-tienda          # esperar a "ready for connections"
+<Terminal>{`# Un volumen para los datos y el servidor MariaDB 11
+$ docker volume create datos-tienda
+$ docker run -d --name mariadb-tienda -e MARIADB_ROOT_PASSWORD=TuContraseñaSegura -v datos-tienda:/var/lib/mysql -p 3306:3306 mariadb:11
+$ docker logs mariadb-tienda          # esperar a "ready for connections"
 
 # Entrar con el cliente como root
-docker exec -it mariadb-tienda mariadb -u root -p
-```
+$ docker exec -it mariadb-tienda mariadb -u root -p`}</Terminal>
 
 ```sql
 -- La base de datos y un usuario que solo puede usarla a ella
@@ -42,12 +40,10 @@ GRANT ALL PRIVILEGES ON tienda.* TO 'tienda_app'@'%';
 SHOW GRANTS FOR 'tienda_app'@'%';
 ```
 
-```bash
-# Parar, arrancar y recrear el contenedor sin perder los datos
-docker stop mariadb-tienda
-docker start mariadb-tienda
-docker rm -f mariadb-tienda          # el volumen datos-tienda sigue ahí
-```
+<Terminal>{`# Parar, arrancar y recrear el contenedor sin perder los datos
+$ docker stop mariadb-tienda
+$ docker start mariadb-tienda
+$ docker rm -f mariadb-tienda          # el volumen datos-tienda sigue ahí`}</Terminal>
 
 ## Cada cosa, con tu permiso
 
@@ -89,7 +85,7 @@ Revisar como alumno sirve. Al abrir la práctica guiada vimos que los comandos e
 
 Se lo dijimos con nuestras palabras:
 
-<p className="pide">Las fechas me valen. Una cosa: en la Práctica guiada los comandos salen como texto normal dentro del párrafo. Ponlos en bloques de código, uno por paso, para que se puedan copiar.</p>
+<Prompt>{`Las fechas me valen. Una cosa: en la Práctica guiada los comandos salen como texto normal dentro del párrafo. Ponlos en bloques de código, uno por paso, para que se puedan copiar.`}</Prompt>
 
 Rehízo la página, la volvió a revisar y la guardó con nuestro permiso:
 

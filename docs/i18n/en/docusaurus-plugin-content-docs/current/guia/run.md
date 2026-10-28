@@ -12,21 +12,17 @@ The chat is for conversation. If you already know what you want and don't need t
 
 Write the task in quotes:
 
-```bash
-miyagi run --task "Grade Assignment 2"
-miyagi run --task "Check the forum and answer the unanswered questions"
-miyagi run --task "Create a 10-question quiz on unit 3"
-miyagi run --task "Audit the course and find problems"
-miyagi run --task "Build an introduction to HTML5 and CSS3 course for first-year web development"
-```
+<Terminal>{`$ miyagi run --task "Grade Assignment 2"
+$ miyagi run --task "Check the forum and answer the unanswered questions"
+$ miyagi run --task "Create a 10-question quiz on unit 3"
+$ miyagi run --task "Audit the course and find problems"
+$ miyagi run --task "Build an introduction to HTML5 and CSS3 course for first-year web development"`}</Terminal>
 
 It does only that, with the same rules as in the chat. A shortcut works too: `miyagi run --task "/miyagi:build-course Introduction to Docker, 3 units, for vocational training"`.
 
 ## A pass through the whole course {#una-pasada-por-todo-el-curso}
 
-```bash
-miyagi run
-```
+<Terminal>{`$ miyagi run`}</Terminal>
 
 Without `--task`, it goes through the course from start to finish: it grades pending submissions, looks after the forum, reviews or adds content if needed, and ends with a summary of how the class is going.
 
@@ -42,9 +38,7 @@ Before starting, it asks you which mode you want it to work in:
 
 To avoid choosing it every time, pass it in the command:
 
-```bash
-miyagi run --mode guided --task "Grade Assignment 2"
-```
+<Terminal>{`$ miyagi run --mode guided --task "Grade Assignment 2"`}</Terminal>
 
 :::caution[The autonomous mode doesn't ask permission]
 In `autonomous` nobody reviews what it publishes: grades, forum replies, new content. Use it only in a test course or when you fully trust what it's going to do.

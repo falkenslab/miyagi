@@ -10,9 +10,7 @@ Además del chat en la terminal, miyagi tiene una página: la misma conversació
 
 ## Abrirla
 
-```bash
-miyagi web
-```
+<Terminal>{`$ miyagi web`}</Terminal>
 
 miyagi abre la asignatura que usaste por última vez (o la que le digas con `-w <nombre>` o `--dir <ruta>`) y te enseña una dirección como esta:
 

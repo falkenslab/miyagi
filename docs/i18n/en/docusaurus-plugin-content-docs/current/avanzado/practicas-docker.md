@@ -20,9 +20,7 @@ docker-lab is an [extension](extensiones.md) from the official repository ([falk
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) (on Linux, Docker Engine), version 24 or later. If it's missing, docker-lab tells you what to install.
 2. Install the extension in `lab` mode, the recommended one (labs only):
 
-   ```bash
-   miyagi extension add docker-lab --set mode=lab
-   ```
+   <Terminal>{`$ miyagi extension add docker-lab --set mode=lab`}</Terminal>
 
 Like any extension, you can install it for all your subjects or just for one with `--project` (see [Extensions](extensiones.md)). It's available in `chat` and `run`.
 

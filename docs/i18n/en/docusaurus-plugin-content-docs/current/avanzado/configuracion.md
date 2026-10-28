@@ -103,7 +103,7 @@ Each value must be a positive number and one of those three keys: otherwise, miy
 
 Optional. A `.env` file in the course folder with environment variables that miyagi loads at startup, over the ones the system already has. It serves to use, in that course, access to Claude different from the global one:
 
-```bash
+```text title=".env"
 CLAUDE_CODE_OAUTH_TOKEN=tu-token
 ```
 

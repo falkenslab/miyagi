@@ -29,11 +29,11 @@ Each new conversation starts from scratch in the chat, but **not in what it know
 
 An example. One Monday you tell it:
 
-> Grade Assignment 2. Late submissions, 20% off, and give a lot of weight to commenting the code.
+<Prompt>{`Grade Assignment 2. Late submissions, 20% off, and give a lot of weight to commenting the code.`}</Prompt>
 
 It grades and writes down, on that assignment's page, the criteria it applied. Days later, in another conversation, late submissions come in:
 
-> Grade the new submissions for Assignment 2.
+<Prompt>{`Grade the new submissions for Assignment 2.`}</Prompt>
 
 Before starting, it reads in its notes which criteria it applied the first time, so it isn't harsher or softer with some students than with others.
 

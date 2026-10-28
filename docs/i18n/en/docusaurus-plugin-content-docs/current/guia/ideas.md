@@ -14,27 +14,27 @@ Everything at this level is read-only: ideal for building confidence.
 
 **Catching up after a few days away**
 
-> What has happened in the course since Monday? New submissions, forum messages and what's due this week.
+<Prompt>{`What has happened in the course since Monday? New submissions, forum messages and what's due this week.`}</Prompt>
 
 It goes through the course and gives you a summary. It doesn't change anything.
 
 **Finding out what you have pending**
 
-> Which submissions do I have left to grade, from which assignments and since when?
+<Prompt>{`Which submissions do I have left to grade, from which assignments and since when?`}</Prompt>
 
 **Finding something in a large course**
 
-> Where is the unit 4 quiz and what are its settings (attempts, time, when the grade is shown)?
+<Prompt>{`Where is the unit 4 quiz and what are its settings (attempts, time, when the grade is shown)?`}</Prompt>
 
 **Looking up its notes, without opening Moodle**
 
-> /knowledge:query What criterion did we agree on for late submissions?
+<Prompt>{`/knowledge:query What criterion did we agree on for late submissions?`}</Prompt>
 
 It answers from its notes, with links to the pages it got the answer from.
 
 **Seeing what your Moodle supports**
 
-> Can I run a peer-assessment workshop here? And drag-and-drop questions?
+<Prompt>{`Can I run a peer-assessment workshop here? And drag-and-drop questions?`}</Prompt>
 
 It checks what it noted down when exploring your Moodle.
 
@@ -44,35 +44,35 @@ Here it starts acting, and it shows you every publication beforehand.
 
 **Grading an assignment with your rubric**
 
-> Grade the submissions for Assignment 2 with the rubric I left you in sources.
+<Prompt>{`Grade the submissions for Assignment 2 with the rubric I left you in sources.`}</Prompt>
 
 It reads each submission, applies the rubric the same way to everyone and shows you the grade and the feedback before saving it. If you're not happy with one, say `n` and explain why.
 
 **Grading when there's no rubric**
 
-> Grade Assignment 3. I don't have a rubric: propose one before you start.
+<Prompt>{`Grade Assignment 3. I don't have a rubric: propose one before you start.`}</Prompt>
 
 It proposes criteria, waits for your go-ahead, saves them in its notes and applies them. The next time you grade that assignment it will remember them.
 
 **Looking after the forum**
 
-> /miyagi:forum
+<Prompt>{`/miyagi:forum`}</Prompt>
 
 It reviews the recent threads and decides whether it needs to step in: answer an unanswered question, encourage participation or let the students carry on among themselves. Each reply, with your approval. It notes the questions that keep coming up, in the unit they belong to.
 
 **Sending an announcement to the class**
 
-> Post an announcement in Announcements: the Assignment 3 deadline is extended until Friday at 23:59. Warm tone.
+<Prompt>{`Post an announcement in Announcements: the Assignment 3 deadline is extended until Friday at 23:59. Warm tone.`}</Prompt>
 
 **Seeing who's falling behind**
 
-> /miyagi:progress
+<Prompt>{`/miyagi:progress`}</Prompt>
 
 It looks at the progress report and the grades, separates those who are doing well from those who are falling behind and proposes what to do. It notes the class's trend (never personal records), so next time it will tell you whether it has improved.
 
 **Adjusting an activity**
 
-> Extend the unit 2 quiz deadline by a week and allow two attempts instead of one.
+<Prompt>{`Extend the unit 2 quiz deadline by a week and allow two attempts instead of one.`}</Prompt>
 
 ## Level 3 · Creating content {#nivel-3--crear-contenido}
 
@@ -80,31 +80,31 @@ It prepares everything new on your computer, uploads it hidden, tests it in Mood
 
 **A quiz**
 
-> /miyagi:quiz unit 3, SQL queries with JOIN, 12 questions, for review (not graded)
+<Prompt>{`/miyagi:quiz unit 3, SQL queries with JOIN, 12 questions, for review (not graded)`}</Prompt>
 
 It writes the questions (believable distractors, varied levels, feedback for each option), shows them all to you and imports them in one go.
 
 **Notes for a unit**
 
-> Create some notes on normalization (1NF, 2NF, 3NF) for unit 2, with examples of tables from an online shop.
+<Prompt>{`Create some notes on normalization (1NF, 2NF, 3NF) for unit 2, with examples of tables from an online shop.`}</Prompt>
 
 It writes them, reviews them as a student would see them (writing and accessibility) and asks your permission before publishing them.
 
 **An assignment with its rubric**
 
-> Create an assignment for unit 3: design the entity-relationship model of a library. With a 4-criterion rubric, PDF submission, two-week deadline.
+<Prompt>{`Create an assignment for unit 3: design the entity-relationship model of a library. With a 4-criterion rubric, PDF submission, two-week deadline.`}</Prompt>
 
 **A glossary, a Q&A forum or a poll**
 
-> Add to unit 1 a collaborative glossary where the students define the key terms, and a quick poll to find out which database management systems they know.
+<Prompt>{`Add to unit 1 a collaborative glossary where the students define the key terms, and a quick poll to find out which database management systems they know.`}</Prompt>
 
 **Reusing what you already have**
 
-> In sources you have my notes for unit 5 from last year as a PDF. Turn them into an updated Moodle page and add three exercises at the end.
+<Prompt>{`In sources you have my notes for unit 5 from last year as a PDF. Turn them into an updated Moodle page and add three exercises at the end.`}</Prompt>
 
 **A game that counts towards the grade**
 
-> Package the game at this address as SCORM and upload it to Unit 2 so it counts towards the grade.
+<Prompt>{`Package the game at this address as SCORM and upload it to Unit 2 so it counts towards the grade.`}</Prompt>
 
 It downloads the web activity, packages it so Moodle records the grade and whether it was completed, and uploads it hidden so you can test it before showing it.
 
@@ -112,33 +112,33 @@ It downloads the web activity, packages it so Moodle records the grade and wheth
 
 **Auditing the course**
 
-> /miyagi:audit
+<Prompt>{`/miyagi:audit`}</Prompt>
 
 It reviews organization, accessibility, pedagogical coherence, assessment, dates and outdated resources, and gives you recommendations ordered by priority. It keeps each audit with its date, so the next one will tell you what has improved.
 
 **Writing the teaching plan**
 
-> /miyagi:teaching-plan I have the department's draft in sources. 6 hours a week, from September to June.
+<Prompt>{`/miyagi:teaching-plan I have the department's draft in sources. 6 hours a week, from September to June.`}</Prompt>
 
 It writes it from your material, asks you what only you can decide (weights, calendar) and has the pedagogical reviewer check it. It stays in its notes; it isn't published in Moodle unless you ask it to.
 
 **Checking that the classroom follows the teaching plan**
 
-> /miyagi:align
+<Prompt>{`/miyagi:align`}</Prompt>
 
 It looks for criteria that no activity assesses, missing rubrics, weights or dates that don't add up and units not yet built. It proposes each change to you and makes it with your approval.
 
 **Asking for a second pedagogical opinion**
 
-> What do you think of Assignment 4? Ask the pedagogical reviewer to look at it: workload, whether it assesses what the teaching plan says, whether it's accessible.
+<Prompt>{`What do you think of Assignment 4? Ask the pedagogical reviewer to look at it: workload, whether it assesses what the teaching plan says, whether it's accessible.`}</Prompt>
 
 **Changing methodology**
 
-> I want unit 5 to be challenge-based learning. Propose how to reorganize it with what's already there.
+<Prompt>{`I want unit 5 to be challenge-based learning. Propose how to reorganize it with what's already there.`}</Prompt>
 
 **Researching before teaching**
 
-> /miyagi:research what's new in PostgreSQL 17 that's worth covering in class
+<Prompt>{`/miyagi:research what's new in PostgreSQL 17 that's worth covering in class`}</Prompt>
 
 It hands it to its research assistant, cross-checks sources (official ones first) and saves what it found with its links.
 
@@ -146,19 +146,19 @@ It hands it to its research assistant, cross-checks sources (official ones first
 
 **A new unit, fitted into what's already there**
 
-> /miyagi:build-unit Unit 7: NoSQL databases with MongoDB, 3 weeks, with a pair project at the end
+<Prompt>{`/miyagi:build-unit Unit 7: NoSQL databases with MongoDB, 3 weeks, with a pair project at the end`}</Prompt>
 
 It reads the course and its teaching plan, plans the unit, has it reviewed, builds it (notes, activities, quiz, rubrics), looks at it as a student would and tells you what you should review.
 
 **A complete course from scratch** (on an empty course)
 
-> /miyagi:build-course Introduction to HTML5 and CSS3 for first-year web development, 5 units, with a final project of a personal web page
+<Prompt>{`/miyagi:build-course Introduction to HTML5 and CSS3 for first-year web development, 5 units, with a final project of a personal web page`}</Prompt>
 
 It plans first in its notes, then builds section by section with real content and finishes with a review of the whole course. It's the longest task: leave it running and approve as you go.
 
 **Practicals that really work** (computing, with Docker)
 
-> Create a Docker Compose practical with a website and a database, and test it before publishing it.
+<Prompt>{`Create a Docker Compose practical with a website and a database, and test it before publishing it.`}</Prompt>
 
 With the docker-lab extension installed, it follows it step by step in a Docker lab as a student would and fixes whatever fails before publishing it. When grading, it can run the submissions. How to install it: [Docker practicals](../avanzado/practicas-docker.md).
 

@@ -17,10 +17,8 @@ miyagi remembers your course between sessions because it keeps a **knowledge bas
 
 ## What `miyagi ingest` does {#qué-hace-miyagi-ingest}
 
-```bash
-miyagi ingest                                  # todo lo de sources/ que aún no tiene resumen
-miyagi ingest sources/rubrica-tarea-2.pdf      # solo esos archivos
-```
+<Terminal>{`$ miyagi ingest                                  # todo lo de sources/ que aún no tiene resumen
+$ miyagi ingest sources/rubrica-tarea-2.pdf      # solo esos archivos`}</Terminal>
 
 It's a session without Moodle: it only works with files, and since it publishes nothing, it doesn't ask for approvals. Its instructions ([`teacher-ingest.md`](https://github.com/falkenslab/miyagi/blob/main/prompts/system/teacher-ingest.md)) set these steps, in order:
 

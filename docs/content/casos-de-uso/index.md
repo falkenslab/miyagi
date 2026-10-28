@@ -12,7 +12,7 @@ En este tutorial verás a miyagi trabajar de verdad, de principio a fin, en un a
 
 Todas las capturas son reales. Se hicieron contra un Moodle de pruebas ([moodle-sandbox](https://github.com/falkenslab/moodle-sandbox)), con alumnos de prueba que entregan y preguntan en el foro, y con miyagi tal cual lo instalarías tú. Lo que el profesor escribe en el chat aparece así:
 
-<p className="pide">Corrige la práctica final con la rúbrica que te dejé.</p>
+<Prompt>{`Corrige la práctica final con la rúbrica que te dejé.`}</Prompt>
 
 ## Lo que vas a ver
 

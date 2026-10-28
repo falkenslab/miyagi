@@ -8,7 +8,7 @@ description: Los temas de definir y manipular datos, con entregables con rúbric
 
 Con el primer tema montado y revisado, le pedimos los dos siguientes en un solo encargo:
 
-<p className="pide">/miyagi:build-unit Temas 2 y 3, uno detrás de otro, siguiendo la programación: Tema 2 (DDL: CREATE TABLE con claves y restricciones, ALTER, DROP sobre la base de datos tienda) y Tema 3 (DML: INSERT, UPDATE, DELETE y los errores típicos). Cada uno con sus apuntes, ejercicios entregables, cuestionario y las prácticas probadas en Docker.</p>
+<Prompt>{`/miyagi:build-unit Temas 2 y 3, uno detrás de otro, siguiendo la programación: Tema 2 (DDL: CREATE TABLE con claves y restricciones, ALTER, DROP sobre la base de datos tienda) y Tema 3 (DML: INSERT, UPDATE, DELETE y los errores típicos). Cada uno con sus apuntes, ejercicios entregables, cuestionario y las prácticas probadas en Docker.`}</Prompt>
 
 Sigue el mismo método que en el Tema 1: miyagi comprueba la práctica en un laboratorio de docker-lab: ejecuta en MariaDB cada `CREATE TABLE`, cada clave ajena y cada `ALTER TABLE` con datos ya dentro, y cada error que los apuntes van a explicar (por ejemplo, el `ERROR 1452` al insertar un pedido de un cliente que no existe). Después escribe los apuntes, la práctica guiada, los ejercicios con su rúbrica y el cuestionario.
 
@@ -40,7 +40,7 @@ En estos dos temas, miyagi no siguió del todo su propio método. En el Tema 1 s
 
 Lo detectamos al revisar el curso y se lo dijimos tal cual:
 
-<p className="pide">Seguimos. Antes de nada: en los temas 2 y 3 todo quedó visible para los alumnos sin que me pidieras permiso para mostrarlo, y el cuestionario del Tema 3 está visible a medias. Oculta ese cuestionario, termina de añadirle las preguntas en orden, revísalo y pídeme permiso para mostrarlo. Y una cosa más: el Tema 1 llama al contenedor mariadb-tienda y el Tema 2 mi-mariadb; unifícalo con mariadb-tienda.</p>
+<Prompt>{`Seguimos. Antes de nada: en los temas 2 y 3 todo quedó visible para los alumnos sin que me pidieras permiso para mostrarlo, y el cuestionario del Tema 3 está visible a medias. Oculta ese cuestionario, termina de añadirle las preguntas en orden, revísalo y pídeme permiso para mostrarlo. Y una cosa más: el Tema 1 llama al contenedor mariadb-tienda y el Tema 2 mi-mariadb; unifícalo con mariadb-tienda.`}</Prompt>
 
 Ocultó el cuestionario, lo terminó, comprobó las preguntas y pidió permiso, esta vez con todo el detalle:
 

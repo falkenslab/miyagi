@@ -96,9 +96,7 @@ Usage: `/lunes`.
 
 ### Checking that it sees them {#comprobar-que-los-ve}
 
-```bash
-miyagi commands
-```
+<Terminal>{`$ miyagi commands`}</Terminal>
 
 It lists all the shortcuts: the built-in ones, marked `[built-in]`, and yours, marked `[own]`. As with skills, shortcuts are read at startup: if you create them with the chat open, close it and open it again.
 

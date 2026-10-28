@@ -15,7 +15,7 @@ Tres alumnos de prueba han entregado la práctica final, cada uno con un nivel d
 
 En un chat nuevo, con el atajo de corregir:
 
-<p className="pide">/miyagi:grade Corrige la Práctica final «Consultas sobre la tienda» con la rúbrica que te dejé en sources. Ejecuta las entregas en Docker contra los datos de la tienda para comprobar los resultados.</p>
+<Prompt>{`/miyagi:grade Corrige la Práctica final «Consultas sobre la tienda» con la rúbrica que te dejé en sources. Ejecuta las entregas en Docker contra los datos de la tienda para comprobar los resultados.`}</Prompt>
 
 ## Ejecutar antes de juzgar
 

@@ -116,9 +116,7 @@ The tutorial [An Introduction to SQL course](../casos-de-uso/index.md) shows thi
 
 From the terminal, in the course folder:
 
-```bash
-miyagi skills
-```
+<Terminal>{`$ miyagi skills`}</Terminal>
 
 Your skill shows up in the list marked `[own]`, with its description. Then try it in the chat by asking for exactly that task, for example *“write three JOIN examples for the unit 4 notes”*. If the task matches the description, it will load it; if not, adjust the description so it names that situation.
 

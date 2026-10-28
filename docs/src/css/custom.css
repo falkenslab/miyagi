@@ -174,10 +174,6 @@ a { text-underline-offset: 0.18em; }
 .shot-window img { display: block; width: 100%; height: auto; }
 .shot figcaption { font-size: 0.92rem; color: var(--fl-text-2); margin-top: 0.7rem; max-width: 72ch; }
 
-/* What the teacher types in the chat: the message box of an AI app (falkenslab-site-style 3b). */
-.pide { position: relative; background: var(--fl-panel); border: 1px solid var(--fl-line); border-radius: 16px; box-shadow: var(--fl-shadow); padding: 0.9rem 3.4rem 0.9rem 1rem; margin: 1rem 0 1.5rem; white-space: pre-wrap; font-size: 0.98rem; }
-.pide::after { content: "↑"; position: absolute; right: 0.75rem; bottom: 0.7rem; width: 32px; height: 32px; border-radius: 9px; background: var(--fl-accent); color: var(--fl-accent-ink); display: grid; place-items: center; font-weight: 800; }
-
 /* Contrast: code inside a link sits on the code's grey; the sidebar's current page on its tint. */
 [data-theme="dark"] .markdown a code, [data-theme="dark"] .menu__link--active { color: var(--ifm-color-primary-lightest); }
 [data-theme="dark"] .breadcrumbs__item--active .breadcrumbs__link { color: var(--ifm-font-color-base); }

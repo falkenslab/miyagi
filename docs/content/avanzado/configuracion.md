@@ -103,7 +103,7 @@ Cada valor tiene que ser un número positivo y una de esas tres claves: si no, m
 
 Opcional. Un archivo `.env` en la carpeta del curso con variables de entorno que miyagi carga al arrancar, por encima de las que ya tenga el sistema. Sirve para usar en ese curso un acceso a Claude distinto del global:
 
-```bash
+```text title=".env"
 CLAUDE_CODE_OAUTH_TOKEN=tu-token
 ```
 

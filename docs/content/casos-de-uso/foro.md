@@ -13,7 +13,7 @@ En el Foro de dudas que creó con el Tema 4 hay dos hilos de alumnos:
 
 Basta con pedírselo:
 
-<p className="pide">Ahora mira el Foro de dudas.</p>
+<Prompt>{`Ahora mira el Foro de dudas.`}</Prompt>
 
 ## Una sola aprobación, con los textos enteros
 

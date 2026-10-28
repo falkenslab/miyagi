@@ -16,7 +16,7 @@ The tutorial's pages and screenshots are in Spanish, because the course was buil
 
 All the screenshots are real. They were taken against a test Moodle ([moodle-sandbox](https://github.com/falkenslab/moodle-sandbox)), with test students who submit work and ask questions in the forum, and with miyagi exactly as you would install it. What the teacher writes in the chat looks like this:
 
-<p className="pide">Grade the final project with the rubric I left you.</p>
+<Prompt>{`Grade the final project with the rubric I left you.`}</Prompt>
 
 ## What you'll see {#lo-que-vas-a-ver}
 

@@ -8,7 +8,7 @@ description: El tema de consultas con SELECT, un cuestionario, la práctica fina
 
 El último tema es el que más pesa: consultas con `SELECT` y la práctica final, que vale el 50 % de la nota. Se lo pedimos todo de una vez, oculto hasta revisarlo:
 
-<p className="pide">/miyagi:build-unit Tema 4: Consultar con SELECT, siguiendo la programación (filtros, orden, agregados con GROUP BY y HAVING, INNER y LEFT JOIN), con el ejercicio formativo de la semana 5, el cuestionario y la Práctica final «Consultas sobre la tienda»: una tarea con un único archivo consultas.sql y la rúbrica que te dejé en sources, con un script de datos de la tienda para que todos consulten lo mismo. Pruébalo todo en Docker. Y crea en la sección General un «Foro de dudas» para todo el curso. Todo oculto hasta que lo revises y me pidas permiso para mostrarlo.</p>
+<Prompt>{`/miyagi:build-unit Tema 4: Consultar con SELECT, siguiendo la programación (filtros, orden, agregados con GROUP BY y HAVING, INNER y LEFT JOIN), con el ejercicio formativo de la semana 5, el cuestionario y la Práctica final «Consultas sobre la tienda»: una tarea con un único archivo consultas.sql y la rúbrica que te dejé en sources, con un script de datos de la tienda para que todos consulten lo mismo. Pruébalo todo en Docker. Y crea en la sección General un «Foro de dudas» para todo el curso. Todo oculto hasta que lo revises y me pidas permiso para mostrarlo.`}</Prompt>
 
 ## Oculto, probado y con permiso
 
@@ -36,7 +36,7 @@ Al terminar, separa lo que cambió por la revisión pedagógica, las decisiones 
 
 Fíjate en el segundo punto: el enunciado del ejercicio formativo dice que repasarás en clase los fallos más comunes. Es un compromiso a tu nombre, y te lo avisa. Contestamos a los dos pendientes:
 
-<p className="pide">Sí, ajusta los pesos del libro de calificaciones: 20 % los cuatro cuestionarios, 15 % cada bloque de ejercicios (Tema 2 y Tema 3) y 50 % la práctica final; el formativo y el entregable del Tema 1 no cuentan. El número de filas esperado no lo des: que lo comprueben ellos.</p>
+<Prompt>{`Sí, ajusta los pesos del libro de calificaciones: 20 % los cuatro cuestionarios, 15 % cada bloque de ejercicios (Tema 2 y Tema 3) y 50 % la práctica final; el formativo y el entregable del Tema 1 no cuentan. El número de filas esperado no lo des: que lo comprueben ellos.`}</Prompt>
 
 <Shot src="/img/casos/33-pesos.webp" alt="La tabla final de pesos del libro de calificaciones: cuestionarios, ejercicios DDL 15 %, ejercicios DML 15 %, práctica final 50 % y entregable apto/no apto 0 %; el formativo no aparece porque no tiene nota.">Los pesos del calificador, tal como dice la programación.</Shot>
 

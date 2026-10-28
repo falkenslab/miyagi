@@ -96,9 +96,7 @@ Uso: `/lunes`.
 
 ### Comprobar que los ve
 
-```bash
-miyagi commands
-```
+<Terminal>{`$ miyagi commands`}</Terminal>
 
 Lista todos los atajos: los incorporados, marcados `[incorporada]`, y los tuyos, marcados `[propia]`. Igual que las habilidades, los atajos se leen al arrancar: si los creas con el chat abierto, ciérralo y vuelve a abrirlo.
 

@@ -22,17 +22,13 @@ You install it once per computer, on Windows, Mac or Linux. You don't need to kn
    - **Mac**: press `Cmd + Space`, type `Terminal` and open it.
 2. Copy this line, paste it into the terminal and press Enter:
 
-   ```bash
-   npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz
-   ```
+   <Terminal>{`$ npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz`}</Terminal>
 
    It takes a minute or two. It's normal to see a warning or two in yellow (`warn`). On a Mac, if you get a permissions error, put `sudo ` in front of it and type your computer password.
 
 ## Checking that it works {#comprobar-que-funciona}
 
-```bash
-miyagi --version
-```
+<Terminal>{`$ miyagi --version`}</Terminal>
 
 If you see a version number, it's installed. If the terminal says it doesn't know `miyagi`, close it, open it again and try again. If it still doesn't work, check that Node.js is installed with `node --version` (it has to be 20 or higher).
 
@@ -50,17 +46,13 @@ You only do this once per computer: miyagi keeps that access in your home folder
 
 Run the installation line again: it always downloads the latest version.
 
-```bash
-npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz
-```
+<Terminal>{`$ npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz`}</Terminal>
 
 Your courses and your settings stay as they were.
 
 ## Uninstalling it {#desinstalarlo}
 
-```bash
-npm uninstall -g miyagi
-```
+<Terminal>{`$ npm uninstall -g miyagi`}</Terminal>
 
 Your courses' folders aren't deleted: they're yours and stay where you left them.
 

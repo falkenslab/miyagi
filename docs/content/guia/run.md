@@ -12,21 +12,17 @@ El chat es para conversar. Si ya sabes lo que quieres y no necesitas ir hablando
 
 Escribe el encargo entre comillas:
 
-```bash
-miyagi run --task "Corrige la Tarea 2"
-miyagi run --task "Revisa el foro y responde las dudas sin contestar"
-miyagi run --task "Crea un cuestionario de 10 preguntas sobre el tema 3"
-miyagi run --task "Audita el curso y detecta problemas"
-miyagi run --task "Construye un curso de introducción a HTML5 y CSS3 para 1.º de DAW"
-```
+<Terminal>{`$ miyagi run --task "Corrige la Tarea 2"
+$ miyagi run --task "Revisa el foro y responde las dudas sin contestar"
+$ miyagi run --task "Crea un cuestionario de 10 preguntas sobre el tema 3"
+$ miyagi run --task "Audita el curso y detecta problemas"
+$ miyagi run --task "Construye un curso de introducción a HTML5 y CSS3 para 1.º de DAW"`}</Terminal>
 
 Hace solo eso, con las mismas reglas que en el chat. También vale un atajo: `miyagi run --task "/miyagi:build-course Introducción a Docker, 3 temas, para FP"`.
 
 ## Una pasada por todo el curso
 
-```bash
-miyagi run
-```
+<Terminal>{`$ miyagi run`}</Terminal>
 
 Sin `--task`, recorre el curso de principio a fin: corrige las entregas pendientes, atiende el foro, revisa o añade contenido si hace falta y termina con un resumen de cómo va la clase.
 
@@ -42,9 +38,7 @@ Antes de empezar te pregunta en qué modo quieres que trabaje:
 
 Para no tener que elegirlo cada vez, pásalo en la orden:
 
-```bash
-miyagi run --mode guided --task "Corrige la Tarea 2"
-```
+<Terminal>{`$ miyagi run --mode guided --task "Corrige la Tarea 2"`}</Terminal>
 
 :::caution[El modo autonomous no pide permiso]
 En `autonomous` nadie revisa lo que publica: notas, respuestas del foro, contenido nuevo. Úsalo solo en un curso de pruebas o cuando confíes plenamente en lo que va a hacer.

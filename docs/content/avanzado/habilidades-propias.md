@@ -116,9 +116,7 @@ El tutorial [Un curso de Introducción a SQL](../casos-de-uso/index.md) muestra 
 
 Desde la terminal, en la carpeta del curso:
 
-```bash
-miyagi skills
-```
+<Terminal>{`$ miyagi skills`}</Terminal>
 
 Tu habilidad aparece en la lista con la marca `[propia]` y su descripción. Después, pruébala en el chat pidiéndole justo esa tarea, por ejemplo *«escribe tres ejemplos de JOIN para los apuntes del tema 4»*. Si la tarea encaja con la descripción, la cargará; si no, ajusta la descripción para que nombre esa situación.
 

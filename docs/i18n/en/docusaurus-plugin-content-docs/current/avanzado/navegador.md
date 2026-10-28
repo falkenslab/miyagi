@@ -10,9 +10,7 @@ Besides the chat in the terminal, miyagi has a page: the same conversation, with
 
 ## Opening it {#abrirla}
 
-```bash
-miyagi web
-```
+<Terminal>{`$ miyagi web`}</Terminal>
 
 miyagi opens the subject you used last (or the one you give it with `-w <name>` or `--dir <path>`) and shows you an address like this:
 

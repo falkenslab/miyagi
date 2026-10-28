@@ -15,9 +15,7 @@ Para el aula de SQL dejamos dos documentos:
 
 Pueden ser PDF, Word, PowerPoint, Excel, Markdown o incluso fotos de apuntes a mano. Después:
 
-```powershell
-miyagi ingest
-```
+<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi ingest`}</Terminal>
 
 `ingest` no abre Moodle: lee cada documento y lo convierte en páginas de su memoria del curso, enlazadas entre sí.
 

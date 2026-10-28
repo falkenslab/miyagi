@@ -22,9 +22,7 @@ Si prefieres una carpeta tuya, créala con `miyagi init --dir <carpeta>`. Tambi�
 
 ## 2. Preséntale el curso: `miyagi init`
 
-```bash
-miyagi init
-```
+<Terminal>{`$ miyagi init`}</Terminal>
 
 Te hará unas preguntas, una detrás de otra:
 
@@ -60,9 +58,7 @@ Este paso es opcional, pero marca la diferencia. Copia en la carpeta `sources` l
 
 Después, en la terminal:
 
-```bash
-miyagi ingest
-```
+<Terminal>{`$ miyagi ingest`}</Terminal>
 
 Lee tus documentos sin abrir Moodle y los incorpora a sus apuntes: un resumen de cada uno, enlazado con el tema o la actividad a la que pertenece. Al corregir, **tus criterios mandan** sobre los suyos.
 
@@ -70,9 +66,7 @@ Cuando añadas documentos nuevos, vuelve a ejecutarlo: solo procesa los que aún
 
 ## 4. Tu primera conversación
 
-```bash
-miyagi chat
-```
+<Terminal>{`$ miyagi chat`}</Terminal>
 
 El chat ocupa toda la ventana de la terminal. El asistente te saluda con lo que ya sabe del curso, leyendo sus apuntes, sin entrar todavía en Moodle. Si aún no sabe nada, te propone explorar el curso o leer tus documentos. La primera vez que lo que le pidas necesite entrar en Moodle, se abre una ventana del navegador para que inicies sesión tú; después trabaja sin ventana.
 

@@ -8,9 +8,7 @@ description: Completar la programación didáctica en el chat, con una revisión
 
 La ingesta convirtió el temario en la programación del curso (`knowledge/teaching-plan.md`), pero al temario le faltaban cosas: criterios de evaluación, un calendario y atención a la diversidad. Abrimos el chat:
 
-```powershell
-miyagi chat
-```
+<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi chat`}</Terminal>
 
 Al arrancar, lee su memoria y nos resume lo que sabe del curso, incluida la contradicción de la penalización que encontró en el paso anterior.
 
@@ -20,7 +18,7 @@ Al arrancar, lee su memoria y nos resume lo que sabe del curso, incluida la cont
 
 Usamos el atajo de la programación, `/miyagi:teaching-plan`, y le decimos lo que queremos con nuestras palabras:
 
-<p className="pide">/miyagi:teaching-plan Revisa la programación que sacaste de mi temario y complétala con lo que falte: criterios de evaluación, calendario de las 6 semanas (empezamos el lunes 5 de octubre) y atención a la diversidad. La penalización por retraso la aplico yo a mano al calificar.</p>
+<Prompt>{`/miyagi:teaching-plan Revisa la programación que sacaste de mi temario y complétala con lo que falte: criterios de evaluación, calendario de las 6 semanas (empezamos el lunes 5 de octubre) y atención a la diversidad. La penalización por retraso la aplico yo a mano al calificar.`}</Prompt>
 
 Escribe lo que falta y, antes de darlo por bueno, lo manda a un ayudante: el **revisor pedagógico**, un experto en diseño didáctico que lee la programación entera y le devuelve un informe. No puede cambiar nada él mismo.
 
@@ -34,13 +32,13 @@ Cuando termina, resume lo que ha hecho y pregunta lo que no le corresponde decid
 
 Le contestamos en el mismo chat:
 
-<p className="pide">Las sesiones son los martes y jueves, de 1,5 horas cada una. El reparto de las semanas me vale. Para O1, añade al Tema 1 un entregable ligero: una captura de su contenedor funcionando con la base de datos tienda creada.</p>
+<Prompt>{`Las sesiones son los martes y jueves, de 1,5 horas cada una. El reparto de las semanas me vale. Para O1, añade al Tema 1 un entregable ligero: una captura de su contenedor funcionando con la base de datos tienda creada.`}</Prompt>
 
 Lo incorpora y vuelve a preguntar lo único que no puede saber: cuánto pesa ese entregable nuevo.
 
 <Shot src="/img/casos/08-programacion-pregunta.webp" alt="miyagi confirma las sesiones de martes y jueves y el entregable del Tema 1, y pregunta si debe ser apto/no apto o restar peso a otros entregables; también avisa de dos criterios que siguen sin entregable propio.">Una pregunta concreta, con las dos opciones razonables.</Shot>
 
-<p className="pide">Que sea apto/no apto, sin entrar en el 100 %. Lo de CE1.3 y los permisos lo cubrimos en el cuestionario del Tema 1.</p>
+<Prompt>{`Que sea apto/no apto, sin entrar en el 100 %. Lo de CE1.3 y los permisos lo cubrimos en el cuestionario del Tema 1.`}</Prompt>
 
 Con eso la programación queda cerrada. Así quedan, por ejemplo, los criterios de evaluación en `knowledge/teaching-plan.md`:
 

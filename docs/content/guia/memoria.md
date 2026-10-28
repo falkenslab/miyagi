@@ -29,11 +29,11 @@ Cada conversación nueva empieza de cero en el chat, pero **no en lo que sabe de
 
 Un ejemplo. Un lunes le dices:
 
-> Corrige la Tarea 2. Las entregas tarde, un 20 % menos, y valora mucho que comenten el código.
+<Prompt>{`Corrige la Tarea 2. Las entregas tarde, un 20 % menos, y valora mucho que comenten el código.`}</Prompt>
 
 Corrige y apunta en la página de esa tarea los criterios que aplicó. Días después, en otra conversación, llegan entregas tardías:
 
-> Corrige las entregas nuevas de la Tarea 2.
+<Prompt>{`Corrige las entregas nuevas de la Tarea 2.`}</Prompt>
 
 Antes de empezar, lee en sus apuntes qué criterios aplicó la primera vez, para no ser más duro ni más blando con unos que con otros.
 

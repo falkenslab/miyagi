@@ -325,5 +325,13 @@
   "theme.tags.tagsPageTitle": {
     "message": "Tags",
     "description": "The title of the tag list page"
+  },
+  "terminal.copy": {
+    "message": "Copy",
+    "description": "The button that copies a terminal's commands"
+  },
+  "prompt.copy": {
+    "message": "Copy this request",
+    "description": "The send button of an example request, which copies it"
   }
 }

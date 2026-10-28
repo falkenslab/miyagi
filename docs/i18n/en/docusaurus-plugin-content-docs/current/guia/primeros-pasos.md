@@ -22,9 +22,7 @@ If you'd rather use a folder of your own, create it with `miyagi init --dir <fol
 
 ## 2. Introduce the course to it: `miyagi init` {#2-preséntale-el-curso-miyagi-init}
 
-```bash
-miyagi init
-```
+<Terminal>{`$ miyagi init`}</Terminal>
 
 It will ask you a few questions, one after another:
 
@@ -60,9 +58,7 @@ This step is optional, but it makes the difference. Copy into the `sources` fold
 
 Then, in the terminal:
 
-```bash
-miyagi ingest
-```
+<Terminal>{`$ miyagi ingest`}</Terminal>
 
 It reads your documents without opening Moodle and adds them to its notes: a summary of each one, linked to the unit or activity it belongs to. When grading, **your criteria take precedence** over its own.
 
@@ -70,9 +66,7 @@ When you add new documents, run it again: it only processes the ones it didn't h
 
 ## 4. Your first conversation {#4-tu-primera-conversación}
 
-```bash
-miyagi chat
-```
+<Terminal>{`$ miyagi chat`}</Terminal>
 
 The chat fills the whole terminal window. The assistant greets you with what it already knows about the course, from its notes, without going into Moodle yet. If it doesn't know anything yet, it offers to explore the course or read your documents. The first time something you ask for needs to go into Moodle, a browser window opens for you to log in yourself; after that it works without a window.
 

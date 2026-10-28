@@ -14,11 +14,9 @@ Partimos de un curso de Moodle vacío, «Introducción a SQL», en el que tenemo
 
 Cada asignatura tiene su carpeta en tu ordenador. Ahí guarda miyagi la configuración, tus documentos y sus apuntes. Sin más, `miyagi init` la crea en la carpeta de miyagi (`~/.miyagi/workspaces/`) y luego la abres por su nombre con `-w`. Aquí preferimos tenerla a mano, así que abrimos una terminal, creamos la carpeta y se la indicamos con `--dir`:
 
-```powershell
-mkdir cursos\intro-sql
-cd cursos\intro-sql
-miyagi init --dir .
-```
+<Terminal title="PowerShell" prompt="PS>">{`PS> mkdir cursos\\intro-sql
+PS> cd cursos\\intro-sql
+PS> miyagi init --dir .`}</Terminal>
 
 Dentro de esa carpeta, los demás comandos (`miyagi ingest`, `miyagi chat`) usan esa asignatura sin tener que nombrarla.
 
@@ -51,9 +49,7 @@ La exploración solo usa las herramientas de lectura de moodle-teacher. Estas no
 
 El curso va de MariaDB en Docker y queremos que miyagi compruebe las prácticas antes de publicarlas. Para eso instalamos la extensión **docker-lab**, con la que miyagi comprueba cada práctica en un laboratorio de Docker, aislado y sin tocar nada más del ordenador. Necesita Docker Desktop instalado:
 
-```powershell
-miyagi extension add docker-lab --set mode=lab
-```
+<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi extension add docker-lab --set mode=lab`}</Terminal>
 
 Lo tienes explicado en [Prácticas en Docker](/avanzado/practicas-docker/).
 

@@ -37,9 +37,7 @@ La línea `description` es la que decide **cuándo** la usa: dice qué hace y en
 
 ## Comprobar que la ve
 
-```powershell
-miyagi skills
-```
+<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi skills`}</Terminal>
 
 Aparece al final de la lista, marcada como `[propia]`:
 
@@ -49,7 +47,7 @@ Aparece al final de la lista, marcada como `[propia]`:
 
 No hace falta nombrarla. Le pedimos algo donde va a escribir SQL para los alumnos:
 
-<p className="pide">Para la clase del martes, escribe en drafts tres ejemplos de JOIN sobre la tienda, de menos a más, con su explicación, para proyectar en clase. No publiques nada.</p>
+<Prompt>{`Para la clase del martes, escribe en drafts tres ejemplos de JOIN sobre la tienda, de menos a más, con su explicación, para proyectar en clase. No publiques nada.`}</Prompt>
 
 Antes de escribir una línea, la carga por su cuenta:
 
