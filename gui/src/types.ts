@@ -165,6 +165,10 @@ export interface Info {
 
 export interface HostState {
   signedIn: boolean;
+  /** Signing in with a Claude account, under way: the address of Anthropic's page, and whether it failed. */
+  signIn: { url: string | null; failed: boolean } | null;
+  /** A token miyagi had saved was just removed (ADR-026): say why it asks to sign in. */
+  tokenForgotten: boolean;
   chat: ChatState | null;
   /** A subject is opening: its chat isn't ready yet. */
   opening: boolean;

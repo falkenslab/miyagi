@@ -87,6 +87,7 @@ export interface Messages {
   /** The course couldn't be added to moodle-teacher's `courses` (#54): the session goes on. */
   moodleCourseNotAdded: (reason: string) => string;
   moodleTeacherInstallFailed: string;
+  claudeTokenForgotten: string;
   migrateClassroomIntro: string;
   migrateClassroomQuestion: string;
   migratedClassroom: string;
@@ -286,6 +287,7 @@ See README.md for details.`,
   webKeepPrivate: "Whoever has this address can use miyagi with your account: don't share it. Ctrl+C closes it.",
   moodleCourseNotAdded: (reason) => `Couldn't limit moodle-teacher to this subject's course (${reason}); the session goes on, and miyagi still stays inside it.`,
   moodleTeacherInstallFailed: "Couldn't install or set up moodle-teacher.",
+  claudeTokenForgotten: "miyagi no longer keeps your Claude token: Anthropic's terms don't allow it. Sign in once with your Claude account (or use an API key) and Claude Code will keep your session.",
   migrateClassroomIntro: "miyagi now works in Moodle only through the moodle-teacher extension: fixed tools instead of clicking around, and you sign in in its own window instead of a saved password. This subject's classroom still uses the old way, which is gone.",
   migrateClassroomQuestion: "Move this classroom to moodle-teacher now? (its saved username and password are removed from config.json; if not, this session works without the classroom)",
   migratedClassroom: "Classroom moved to moodle-teacher.",

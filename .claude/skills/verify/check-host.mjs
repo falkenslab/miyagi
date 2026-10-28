@@ -2,12 +2,13 @@
 // runs in a child process whose home is a temporary folder, so there's no Claude key and no
 // subject. Without the token, 403; with it, the events send `info` then `state`; a subject is
 // created and opened from the page; a folder that isn't a registered subject can't be opened; a
-// pasted key that isn't one is refused; the page is served and nothing outside it is. The
+// pasted key that isn't an API key is refused, a subscription token among them, and one miyagi
+// had saved is removed on start and said (ADR-026); the page is served and nothing outside it is. The
 // extensions view (#50): a repository is added only with its name typed, the official one can't
 // be removed, and a classroom address that isn't one connects nothing.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-host.mjs
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -15,7 +16,10 @@ import { pathToFileURL } from "node:url";
 if (process.env.CHECK_HOST_CHILD !== "1") {
   const home = mkdtempSync(path.join(os.tmpdir(), "check-host-"));
   const env = { ...process.env, CHECK_HOST_CHILD: "1", HOME: home, USERPROFILE: home };
-  for (const key of ["CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_API_KEY"]) delete env[key];
+  for (const key of ["CLAUDE_CODE_OAUTH_TOKEN", "ANTHROPIC_API_KEY", "CLAUDE_CONFIG_DIR"]) delete env[key];
+  // A token saved by a miyagi before ADR-026: the host must remove it.
+  mkdirSync(path.join(home, ".miyagi"), { recursive: true });
+  writeFileSync(path.join(home, ".miyagi", "config.json"), JSON.stringify({ claudeCodeOAuthToken: "sk-ant-oat01-not-a-real-one", defaultLanguage: "español" }));
   const child = spawnSync(process.execPath, [new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")], { env, encoding: "utf8" });
   process.stdout.write(child.stdout);
   process.stderr.write(child.stderr);
@@ -67,6 +71,10 @@ const events = await firstEvents(2);
 check("events: info then state", events[0]?.event === "info" && events[1]?.event === "state");
 check("info: no subject open", events[0]?.data?.workspace === null);
 check("state: signed out without a key", events[1]?.data?.signedIn === false);
+check("a token saved before is removed, and said", events[1]?.data?.tokenForgotten === true && !readFileSync(path.join(os.homedir(), ".miyagi", "config.json"), "utf8").includes("sk-ant-oat"));
+check("…and the rest of the config kept", readFileSync(path.join(os.homedir(), ".miyagi", "config.json"), "utf8").includes("español"));
+check("a subscription token pasted is refused", (await post("login", { token: "sk-ant-oat01-abcdef" })).error === "invalid");
+check("no code without a sign-in under way", (await post("signin-code", { code: "abc" })).error === "invalid");
 
 check("a key that isn't one is refused", (await post("login", { token: "not-a-key" })).error === "invalid");
 check("no subjects yet", (await post("workspaces")).workspaces?.length === 0);

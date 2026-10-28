@@ -55,6 +55,6 @@ In the terminal, an installed or changed extension takes effect in the next sess
 Wherever it comes from, an extension doesn't change miyagi's rules ([Security and privacy](seguridad-y-privacidad.md)):
 
 - any tool of its own that can change something asks for your approval, like miyagi's;
-- its secrets reach only it, and its programs start without your environment variables (or your Claude token);
+- its secrets reach only it, and its programs start without your environment variables (or your access to Claude);
 - what its tools return is treated as data, never as orders;
 - nothing about a specific student goes into the knowledge base.

@@ -227,6 +227,10 @@ fieldset.plain { border: 0; padding: 0; margin: 0; min-width: 0; }
 .signin .card h2 { margin: 10px 0 6px; font-size: 19px; }
 .signin .card p { color: var(--text-2); margin: 8px 0; }
 .signin .btn { margin-top: 12px; width: 100%; }
+/* Signing in (#58): the wait, the link to Anthropic's page and the code box, left-aligned under the centred title */
+.signin-flow, .signin-key { text-align: left; margin-top: 12px; }
+.signin-flow .acts .btn, .signin-key .btn { width: auto; }
+.signin .linkish { margin-top: 10px; }
 
 .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px; z-index: 40; max-width: calc(100vw - 32px); }
 

@@ -2,17 +2,19 @@ import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { parseEnv } from "node:util";
-import { ensureClaudeAuth, resolveClaudeAuth } from "@falkenslab/agent-kit";
+import { claudeSignedIn, ensureClaudeAuth } from "@falkenslab/agent-kit";
 import { chooseInterfaceLanguage } from "./messages/index.js";
 import { interfaceLanguage, readWorkspaceConfig, workspaceExists } from "./workspace.js";
 
 /**
- * ~/.miyagi/config.json — the only config not tied to a workspace: the Claude token
- * and per-user defaults for workspaces that don't set their own.
+ * ~/.miyagi/config.json — the only config not tied to a workspace: a Claude API key, if the
+ * teacher pasted one, and per-user defaults for workspaces that don't set their own. A Claude
+ * account's session is never here: Claude Code keeps it (ADR-026).
  */
 export interface GlobalConfig {
+  /** A subscription token saved by miyagi before ADR-026: removed on the next start. */
   claudeCodeOAuthToken?: string;
-  /** An API key pasted in the GUI instead of an OAuth token (gui-host). */
+  /** An API key the teacher pasted (`sk-ant-api…`), billed to their Console account. */
   anthropicApiKey?: string;
   /** SDK autocompact when the context fills up. On unless set to false here. */
   autoCompactEnabled?: boolean;
@@ -26,7 +28,7 @@ export function globalConfigPath(): string {
 
 /**
  * Files outside the workspace that hold a secret the model must never read (ADR-004): the
- * global config (`claudeCodeOAuthToken`) and the Claude Agent SDK's own
+ * global config (`anthropicApiKey`) and the Claude Agent SDK's own
  * credentials. Denied to the file tools in every session, existing or not. Only these files:
  * `~/.miyagi/` and `~/.claude/` also hold things the agent may need to read.
  */
@@ -82,8 +84,8 @@ async function writeGlobalConfig(config: GlobalConfig): Promise<void> {
 }
 
 /**
- * Loads `<workspace>/.env`, if any, overriding variables already set — so a workspace's own
- * CLAUDE_CODE_OAUTH_TOKEN wins over the environment and over the global config.
+ * Loads `<workspace>/.env`, if any, overriding variables already set. A subscription token in
+ * it is left out: miyagi never hands one to Claude (ADR-026), the teacher signs in instead.
  */
 export async function loadWorkspaceEnv(workspaceDir: string): Promise<void> {
   let raw: string;
@@ -92,40 +94,58 @@ export async function loadWorkspaceEnv(workspaceDir: string): Promise<void> {
   } catch {
     return;
   }
-  Object.assign(process.env, parseEnv(raw));
+  const values = parseEnv(raw);
+  delete values.CLAUDE_CODE_OAUTH_TOKEN;
+  Object.assign(process.env, values);
 }
 
 /**
- * agent-kit's ensureClaudeAuth() fed with the token saved globally, and persisting the one
- * it generates (via "claude setup-token") so it isn't asked for again next time.
+ * Removes the subscription token miyagi saved before ADR-026 (`claudeCodeOAuthToken`): the
+ * terms don't allow miyagi to keep one. Returns true when there was one, so the caller tells
+ * the teacher, once, to sign in with their Claude account.
  */
-export async function ensureClaudeAuthPersisted(): Promise<void> {
+export async function forgetSavedClaudeToken(): Promise<boolean> {
   const config = await readGlobalConfig();
-  const generated = await ensureClaudeAuth({ claudeCodeOAuthToken: config.claudeCodeOAuthToken });
-  if (generated) await writeGlobalConfig({ ...config, claudeCodeOAuthToken: generated });
-}
-
-
-/**
- * The Claude key a person pasted in the GUI (gui-host, #46), where there's no terminal for
- * "claude setup-token": an OAuth token (`sk-ant-oat…`) or an API key (`sk-ant-api…`), set for
- * this process and saved for the next. Returns false for anything else.
- */
-export async function saveClaudeKey(pasted: string): Promise<boolean> {
-  const value = pasted.trim();
-  const variable = value.startsWith("sk-ant-oat") ? "CLAUDE_CODE_OAUTH_TOKEN" : value.startsWith("sk-ant-api") ? "ANTHROPIC_API_KEY" : undefined;
-  if (!variable || /\s/.test(value)) return false;
-  process.env[variable] = value;
-  const config = await readGlobalConfig();
-  await writeGlobalConfig(variable === "CLAUDE_CODE_OAUTH_TOKEN" ? { ...config, claudeCodeOAuthToken: value } : { ...config, anthropicApiKey: value });
+  if (!config.claudeCodeOAuthToken) return false;
+  delete config.claudeCodeOAuthToken;
+  await writeGlobalConfig(config);
   return true;
 }
 
-/** Whether there's a Claude key to open a session with, without asking: the environment, the workspace's .env, or the one saved. */
-export async function claudeAuthAvailable(): Promise<boolean> {
+/** The API key the teacher pasted, if any, for this process: the SDK reads it from the environment. */
+async function applySavedApiKey(): Promise<void> {
   const config = await readGlobalConfig();
   if (config.anthropicApiKey && !process.env.ANTHROPIC_API_KEY) process.env.ANTHROPIC_API_KEY = config.anthropicApiKey;
-  return resolveClaudeAuth({ claudeCodeOAuthToken: config.claudeCodeOAuthToken });
+}
+
+/**
+ * In a terminal: signed in to Claude, or an API key, before a session. Without either, the
+ * kit's `ensureClaudeAuth()` runs Claude Code's own sign-in (`claude auth login`, Anthropic's
+ * page in the browser); Claude Code keeps the session, miyagi never sees it.
+ */
+export async function ensureClaudeReady(): Promise<void> {
+  await applySavedApiKey();
+  await ensureClaudeAuth();
+}
+
+/**
+ * The API key a teacher pasted in the GUI (`sk-ant-api…`), set for this process and saved for
+ * the next. Anything else is refused, a subscription token (`sk-ant-oat…`) among them: that
+ * one is signed in with, never pasted (ADR-026).
+ */
+export async function saveClaudeKey(pasted: string): Promise<boolean> {
+  const value = pasted.trim();
+  if (!value.startsWith("sk-ant-api") || /\s/.test(value)) return false;
+  process.env.ANTHROPIC_API_KEY = value;
+  const config = await readGlobalConfig();
+  await writeGlobalConfig({ ...config, anthropicApiKey: value });
+  return true;
+}
+
+/** Whether a session can start without asking: signed in to Claude, or an API key (the environment's or the one pasted). */
+export async function claudeAuthAvailable(): Promise<boolean> {
+  await applySavedApiKey();
+  return claudeSignedIn();
 }
 
 /** The workspace's `agent.language`, then `defaultLanguage`, then undefined (mirror the human). */

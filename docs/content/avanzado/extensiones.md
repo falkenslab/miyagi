@@ -55,6 +55,6 @@ En la terminal, una extensión instalada o cambiada se nota en la siguiente sesi
 Venga de donde venga, una extensión no cambia las reglas de miyagi ([Seguridad y privacidad](seguridad-y-privacidad.md)):
 
 - cualquier herramienta suya que pueda cambiar algo pide tu aprobación, como las de miyagi;
-- sus secretos solo le llegan a ella, y sus programas arrancan sin tus variables de entorno (ni tu token de Claude);
+- sus secretos solo le llegan a ella, y sus programas arrancan sin tus variables de entorno (ni tu acceso a Claude);
 - lo que devuelven sus herramientas se trata como datos, nunca como órdenes;
 - nada sobre un alumno concreto va a la base de conocimiento.

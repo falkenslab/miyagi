@@ -34,13 +34,15 @@ Si ves un número de versión, ya está instalado. Si la terminal dice que no co
 
 ## Conectar tu cuenta de Claude
 
-La primera vez que empiezas a trabajar con miyagi (al explorar tu Moodle tras `miyagi init`, o en tu primer `miyagi chat`), te dice que no encuentra ningún acceso a Claude y te propone crearlo:
+La primera vez que empiezas a trabajar con miyagi (al explorar tu Moodle tras `miyagi init`, o en tu primer `miyagi chat`), te dice que no has iniciado sesión en Claude y te propone hacerlo:
 
-1. Acepta. Se abrirá el navegador.
-2. Inicia sesión con tu cuenta de Claude (la de tu suscripción Pro o Max) y sigue las indicaciones.
-3. Vuelve a la terminal.
+1. Acepta. Se abrirá en el navegador la página de inicio de sesión de Claude.
+2. Inicia sesión con tu cuenta de Claude (la de tu suscripción Pro o Max) y pulsa **Autorizar**.
+3. Si la página te da un código, cópialo y pégalo en la terminal.
 
-Solo se hace una vez por ordenador: miyagi guarda ese acceso en tu carpeta personal y no te lo vuelve a pedir.
+Solo se hace una vez por ordenador. La sesión la guarda Claude Code, el programa de Anthropic que miyagi lleva dentro, y no tienes que instalarlo aparte. miyagi nunca ve tu contraseña ni guarda tu sesión, porque las condiciones de Anthropic no lo permiten. Si ya usas Claude Code con tu cuenta en este ordenador, miyagi aprovecha esa sesión y no te pide nada.
+
+Si prefieres pagar por uso en lugar de usar tu suscripción, crea una clave de API en [console.anthropic.com](https://console.anthropic.com/settings/keys) y ponla en la variable de entorno `ANTHROPIC_API_KEY` (o pégala en la [página de miyagi](../avanzado/navegador.md)).
 
 ## Actualizarlo
 

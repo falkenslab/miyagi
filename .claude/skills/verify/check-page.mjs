@@ -2,13 +2,14 @@
 // session: a subject created from the page, a conversation, an approval answered and one refused
 // (interactive mode asks before every tool), the mode and theme switched, the / menu without
 // Claude Code's commands; and screenshots at 360, 768 and 1440 px. Not part of the quick gate: it
-// needs a Claude token (the one in ~/.miyagi/config.json, or CLAUDE_CODE_OAUTH_TOKEN) and Chrome,
-// and spends a few turns. Run it when gui/ or src/host/ change. Its home is a temporary folder, so
-// nothing of yours is touched.
+// needs you signed in to Claude Code (or ANTHROPIC_API_KEY / CLAUDE_CODE_OAUTH_TOKEN in your own
+// environment) and Chrome, and spends a few turns. Run it when gui/ or src/host/ change. Its home
+// is a temporary folder, so nothing of yours is touched; Claude Code's session is read where it
+// keeps it (CLAUDE_CONFIG_DIR at your ~/.claude), never copied (ADR-026).
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-page.mjs <screenshots dir>
 /* global document, window, MutationObserver -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -16,17 +17,14 @@ import { pathToFileURL } from "node:url";
 const shots = path.resolve(process.argv[2] ?? "page-shots");
 if (process.env.CHECK_PAGE_CHILD !== "1") {
   const home = mkdtempSync(path.join(os.tmpdir(), "check-page-"));
-  let token = process.env.CLAUDE_CODE_OAUTH_TOKEN;
-  try {
-    token ??= JSON.parse(readFileSync(path.join(os.homedir(), ".miyagi", "config.json"), "utf8")).claudeCodeOAuthToken;
-  } catch {
-    // no saved token
-  }
-  if (!token) {
-    console.log("skip page: no Claude token (CLAUDE_CODE_OAUTH_TOKEN or ~/.miyagi/config.json)");
+  const claudeConfig = process.env.CLAUDE_CONFIG_DIR ?? path.join(os.homedir(), ".claude");
+  const { claudeSignedIn } = await import(pathToFileURL(path.join(process.cwd(), "node_modules/@falkenslab/agent-kit/dist/index.js")).href);
+  process.env.CLAUDE_CONFIG_DIR = claudeConfig;
+  if (!(await claudeSignedIn())) {
+    console.log("skip page: not signed in to Claude Code (claude auth login) and no API key in the environment");
     process.exit(0);
   }
-  const env = { ...process.env, CHECK_PAGE_CHILD: "1", REAL_HOME: os.homedir(), HOME: home, USERPROFILE: home, CLAUDE_CODE_OAUTH_TOKEN: token };
+  const env = { ...process.env, CHECK_PAGE_CHILD: "1", REAL_HOME: os.homedir(), HOME: home, USERPROFILE: home, CLAUDE_CONFIG_DIR: claudeConfig };
   delete env.ELECTRON_RUN_AS_NODE;
   const child = spawnSync(process.execPath, [new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"), shots], { env, stdio: "inherit" });
   rmSync(home, { recursive: true, force: true });
@@ -42,7 +40,7 @@ const { startHost } = await import(pathToFileURL(path.join(process.cwd(), "dist/
 const { chromium } = await import(pathToFileURL(path.join(process.cwd(), "node_modules/playwright-core/index.mjs")).href);
 const host = await startHost(undefined, { chooseLanguage: true });
 // Chrome needs the real profile folder; the page's data stays in the temporary home.
-const browser = await chromium.launch({ channel: "chrome", headless: true, env: { ...process.env, HOME: process.env.REAL_HOME, USERPROFILE: process.env.REAL_HOME, CLAUDE_CODE_OAUTH_TOKEN: "" } });
+const browser = await chromium.launch({ channel: "chrome", headless: true, env: { ...process.env, HOME: process.env.REAL_HOME, USERPROFILE: process.env.REAL_HOME } });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 page.setDefaultTimeout(60_000);
 const failures = [];

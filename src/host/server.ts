@@ -4,9 +4,9 @@ import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { agentKitVersion, createChatController, getLanguage, type ChatController, type Mode } from "@falkenslab/agent-kit";
+import { agentKitVersion, createChatController, getLanguage, startClaudeSignIn, type ChatController, type ClaudeSignIn, type Mode } from "@falkenslab/agent-kit";
 import { prepareSession, VERSION } from "../agent.js";
-import { chooseLanguageFor, claudeAuthAvailable, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
+import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands } from "../catalog.js";
 import { draftsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
@@ -92,8 +92,33 @@ interface OpenSubject {
  */
 export async function startHost(workspaceDir?: string, options: HostOptions = {}): Promise<Host> {
   const token = options.token ?? randomBytes(18).toString("base64url");
+  // A token saved before ADR-026 goes; the page then says why it asks to sign in.
+  const tokenForgotten = await forgetSavedClaudeToken();
   let signedIn = await claudeAuthAvailable();
   let current: OpenSubject | null = null;
+  /**
+   * Signing in with a Claude account: Claude Code's own sign-in (`claude auth login`), run by
+   * the kit. The page shows its address (the binary opens the browser itself) and a box for the
+   * code Anthropic's page may give; Claude Code keeps the session, miyagi never sees it.
+   */
+  let signIn: { flow: ClaudeSignIn; url: string | null; failed: boolean } | null = null;
+  async function startSignIn(): Promise<{ url: string | null }> {
+    signIn?.flow.cancel();
+    const flow = startClaudeSignIn();
+    const attempt = { flow, url: null as string | null, failed: false };
+    signIn = attempt;
+    schedule();
+    attempt.url = (await flow.url) ?? null;
+    schedule();
+    void flow.done.then(async (ok) => {
+      if (signIn !== attempt) return;
+      signedIn = ok;
+      signIn = ok ? null : { ...attempt, failed: true };
+      if (ok && current) await openChat(current);
+      schedule();
+    });
+    return { url: attempt.url };
+  }
 
   async function openSubject(dir: string): Promise<void> {
     current?.chat?.close();
@@ -183,7 +208,13 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const transcript = state.transcript.filter((entry) => entry.kind !== "user" || (entry.text.trim() !== opening && !/^\[Request interrupted/.test(entry.text)));
     return { ...state, transcript, commandDetails, commands: commandDetails.map((command) => command.name), extensions: pageExtensions(state.extensions) };
   }
-  const snapshot = () => ({ signedIn, chat: chatState(), opening: Boolean(current && !current.chat) });
+  const snapshot = () => ({
+    signedIn,
+    signIn: signIn ? { url: signIn.url, failed: signIn.failed } : null,
+    tokenForgotten,
+    chat: chatState(),
+    opening: Boolean(current && !current.chat),
+  });
   /** The subject's classroom: where, and whether moodle-teacher reaches it now. */
   const classroom = () => {
     const room = current?.prepared.workspace?.classroom;
@@ -216,10 +247,26 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   /** What the person does, by path: the subjects, signing in, then one to one to the chat controller. */
   async function act(action: string, data: Record<string, unknown>): Promise<unknown> {
     switch (action) {
+      // An API key pasted: the only key the page takes (a subscription is signed in with).
       case "login":
         if (!(await saveClaudeKey(String(data.token ?? "")))) return { error: "invalid" };
+        signIn?.flow.cancel();
+        signIn = null;
         signedIn = true;
         if (current) await openChat(current);
+        schedule();
+        return {};
+      case "signin-start":
+        return startSignIn();
+      case "signin-code": {
+        const code = String(data.code ?? "").trim();
+        if (!signIn || !code || /\s/.test(code)) return { error: "invalid" };
+        signIn.flow.sendCode(code);
+        return {};
+      }
+      case "signin-cancel":
+        signIn?.flow.cancel();
+        signIn = null;
         schedule();
         return {};
       case "workspaces":
@@ -516,6 +563,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       clearInterval(heartbeat);
       client?.end();
       current?.chat?.close();
+      signIn?.flow.cancel();
       await new Promise<void>((resolve) => server.close(() => resolve()));
     },
   };

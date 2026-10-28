@@ -167,7 +167,7 @@ export async function ensureWorkspaceDefaults(workspaceDir: string, config: Work
 }
 
 const GITIGNORE_TEMPLATE = `# Generado por "miyagi init" — config.json guarda tu contraseña de Moodle en
-# claro, .env (si lo creas) puede guardar tu CLAUDE_CODE_OAUTH_TOKEN, y sessions/
+# claro, .env (si lo creas) puede guardar tu ANTHROPIC_API_KEY, y sessions/
 # acumula transcripciones y perfiles de navegador pesados. Si versionas este workspace
 # con git, no subas ninguno de los tres.
 config.json

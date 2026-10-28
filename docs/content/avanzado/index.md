@@ -66,7 +66,7 @@ Ninguno puede publicar en Moodle ni tiene terminal. En miyagi no hay terminal en
 ```text
 mi-curso/
   config.json        la conexión con Moodle y las opciones del agente (el asistente no puede leerlo)
-  .env               opcional: un token de Claude propio de este curso (el asistente no puede leerlo)
+  .env               opcional: una clave de API de Claude propia de este curso (el asistente no puede leerlo)
   .gitignore         creado por init: deja fuera config.json, .env y sessions/
   instructions.md    opcional: tus instrucciones, añadidas al final de las suyas
   .claude/skills/    opcional: tus habilidades propias

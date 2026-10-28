@@ -128,6 +128,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   webKeepPrivate: "Qui a cette adresse peut utiliser miyagi avec votre compte : ne la partagez pas. Ctrl+C le ferme.",
   moodleCourseNotAdded: (reason) => `Impossible de limiter moodle-teacher au cours de cette matière (${reason}) ; la session continue, et miyagi n'en sort pas pour autant.`,
   moodleTeacherInstallFailed: "Impossible d'installer ou de configurer moodle-teacher.",
+  claudeTokenForgotten: "miyagi ne garde plus votre jeton Claude : les conditions d'Anthropic ne le permettent pas. Connectez-vous une fois avec votre compte Claude (ou utilisez une clé d'API) et Claude Code gardera votre session.",
   migrateClassroomIntro: "miyagi travaille maintenant dans Moodle uniquement avec l'extension moodle-teacher : des outils fixes au lieu de cliquer partout, et vous vous connectez dans sa propre fenêtre au lieu d'un mot de passe enregistré. La classe de cette matière utilise encore l'ancien système, qui n'existe plus.",
   migrateClassroomQuestion: "Passer maintenant cette classe à moodle-teacher ? (l'identifiant et le mot de passe enregistrés sont retirés du config.json ; sinon, cette session travaille sans la classe)",
   migratedClassroom: "Classe passée à moodle-teacher.",

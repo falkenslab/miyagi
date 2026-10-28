@@ -66,7 +66,7 @@ Neither can publish to Moodle or has a terminal. There's no terminal anywhere in
 ```text
 mi-curso/
   config.json        la conexión con Moodle y las opciones del agente (el asistente no puede leerlo)
-  .env               opcional: un token de Claude propio de este curso (el asistente no puede leerlo)
+  .env               optional: a Claude API key of this course's own (the assistant can't read it)
   .gitignore         creado por init: deja fuera config.json, .env y sessions/
   instructions.md    opcional: tus instrucciones, añadidas al final de las suyas
   .claude/skills/    opcional: tus habilidades propias

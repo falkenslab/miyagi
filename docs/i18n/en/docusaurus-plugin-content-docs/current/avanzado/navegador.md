@@ -40,7 +40,12 @@ In the conversation:
 - **miyagi's approvals and questions**, in a window that doesn't close until you answer, just like in the terminal. If you were in another view, the page goes back to the conversation.
 - **Files for the sources**: with the paper clip, or by dragging them onto the bar, they go to the subject's `sources/`.
 
-The first time, if miyagi doesn't have your Claude key, the page asks you for it: paste your token (it starts with `sk-ant-oat`, you get it with `claude setup-token` in a terminal) or an API key (`sk-ant-api`). It's saved in `~/.miyagi/config.json`, as in the terminal.
+The first time, if you aren't signed in to Claude, the page offers two ways:
+
+- **Sign in with your Claude account.** Anthropic's page opens in your browser. You sign in, authorize and, if it gives you a code, paste it in miyagi's box. Claude Code, which comes inside miyagi, keeps the session; miyagi never sees it.
+- **Use an API key** (`sk-ant-api…`, from [console.anthropic.com](https://console.anthropic.com/settings/keys)), billed per use. It's saved in `~/.miyagi/config.json`.
+
+A subscription token (`sk-ant-oat…`) can no longer be pasted: Anthropic's terms don't let miyagi keep one. If an earlier version had saved it, miyagi removes it and asks you to sign in once.
 
 ## Your subject at a glance {#tu-asignatura-de-un-vistazo}
 

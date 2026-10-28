@@ -40,7 +40,8 @@ import {
   type WorkspaceSessionConfig,
 } from "./workspace.js";
 import {
-  ensureClaudeAuthPersisted,
+  ensureClaudeReady,
+  forgetSavedClaudeToken,
   isAutoCompactEnabled,
   loadWorkspaceEnv,
   resolveLanguage,
@@ -331,7 +332,8 @@ export async function runSession(kind: SessionKind, args: string[]): Promise<voi
   }
 
   await loadWorkspaceEnv(workspaceDir);
-  await ensureClaudeAuthPersisted();
+  if (await forgetSavedClaudeToken()) console.log(ui.warn(t().claudeTokenForgotten));
+  await ensureClaudeReady();
 
   const canPrompt = Boolean(process.stdin.isTTY) && (kind === "run" || kind === "chat") && modeFlag !== "autonomous";
   const prepared = await prepareSession(kind, workspaceDir, { modeFlag, canPrompt, say: (line) => console.log(ui.warn(line)) });

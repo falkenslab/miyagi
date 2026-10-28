@@ -104,12 +104,12 @@ Cada valor tiene que ser un número positivo y una de esas tres claves: si no, m
 Opcional. Un archivo `.env` en la carpeta del curso con variables de entorno que miyagi carga al arrancar, por encima de las que ya tenga el sistema. Sirve para usar en ese curso un acceso a Claude distinto del global:
 
 ```text title=".env"
-CLAUDE_CODE_OAUTH_TOKEN=tu-token
+ANTHROPIC_API_KEY=sk-ant-api…
 ```
 
 Como `config.json`, el asistente no puede leerlo, y el `.gitignore` de `init` lo deja fuera.
 
-También se acepta `ANTHROPIC_API_KEY`: si está definida, se usa en lugar del token, con facturación por uso de la API en vez de tu suscripción.
+Es una clave de API, que se paga por uso en lugar de con tu suscripción. Un `CLAUDE_CODE_OAUTH_TOKEN` en este archivo se ignora: con tu suscripción, [inicias sesión](../guia/instalar.md#conectar-tu-cuenta-de-claude) en lugar de guardar un token.
 
 ## Configuración global: `~/.miyagi/config.json`
 
@@ -117,7 +117,6 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 
 ```json
 {
-  "claudeCodeOAuthToken": "lo-escribe-miyagi",
   "defaultLanguage": "español",
   "autoCompactEnabled": true
 }
@@ -125,12 +124,12 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 
 | Clave | Qué es | Por defecto |
 | --- | --- | --- |
-| `claudeCodeOAuthToken` | Tu acceso a Claude. miyagi lo guarda aquí la primera vez que lo creas y no te lo vuelve a pedir. | Te ofrece crearlo al arrancar. |
-| `anthropicApiKey` | Una clave de API de Claude, si la pegaste en la [página de miyagi](navegador.md) en lugar de un token. | Ninguno |
+| `claudeCodeOAuthToken` | Ya no se usa. Si lo guardó una versión anterior, miyagi lo borra al arrancar: las condiciones de Anthropic no le dejan guardar tu token. Tu sesión de Claude la guarda Claude Code. | Ninguno |
+| `anthropicApiKey` | Una clave de API de Claude (`sk-ant-api…`), si la pegaste en la [página de miyagi](navegador.md). Se paga por uso. | Ninguno |
 | `defaultLanguage` | El idioma para los cursos que no fijan `agent.language`. | Ninguno: te sigue en el idioma en que le escribas. |
 | `autoCompactEnabled` | Si la conversación llena el contexto del modelo, la resume automáticamente para poder seguir. Pon `false` para desactivarlo. | `true` |
 
-El token es tan delicado como una contraseña: en Mac y Linux, miyagi deja el archivo legible solo para tu usuario.
+La clave de API es tan delicada como una contraseña: en Mac y Linux, miyagi deja el archivo legible solo para tu usuario.
 
 ## La lista de asignaturas: `~/.miyagi/workspaces.json`
 

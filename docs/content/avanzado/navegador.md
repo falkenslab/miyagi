@@ -40,7 +40,12 @@ En la conversación:
 - **Las aprobaciones y las preguntas** de miyagi, en una ventana que no se cierra hasta que respondes, igual que en la terminal. Si estabas en otra vista, la página vuelve a la conversación.
 - **Archivos para las fuentes**: con el clip, o arrastrándolos a la barra, van a `sources/` de la asignatura.
 
-La primera vez, si miyagi no tiene tu clave de Claude, la página te la pide: pega tu token (empieza por `sk-ant-oat`, lo sacas con `claude setup-token` en una terminal) o una clave de API (`sk-ant-api`). Se guarda en `~/.miyagi/config.json`, como en la terminal.
+La primera vez, si no has iniciado sesión en Claude, la página te ofrece dos caminos:
+
+- **Iniciar sesión con tu cuenta de Claude.** Se abre en tu navegador la página de Anthropic. Inicias sesión, autorizas y, si te da un código, lo pegas en la casilla de miyagi. La sesión la guarda Claude Code, que va dentro de miyagi; miyagi nunca la ve.
+- **Usar una clave de API** (`sk-ant-api…`, de [console.anthropic.com](https://console.anthropic.com/settings/keys)), que se paga por uso. Se guarda en `~/.miyagi/config.json`.
+
+Un token de suscripción (`sk-ant-oat…`) ya no se puede pegar: las condiciones de Anthropic no dejan que miyagi lo guarde. Si una versión anterior lo había guardado, miyagi lo borra y te pide iniciar sesión una vez.
 
 ## Tu asignatura, de un vistazo
 

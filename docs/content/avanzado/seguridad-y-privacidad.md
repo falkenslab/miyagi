@@ -14,7 +14,7 @@ El asistente lee contenido que no controlas: páginas de Moodle, entregas de alu
 - La sesión en Moodle es de la extensión [moodle-teacher](extensiones.md): la primera vez que hace falta, abre una ventana del navegador para que inicies sesión tú, y guarda la sesión en su propio perfil del navegador hasta que caduque. miyagi y el modelo nunca ven tu contraseña.
 - Un aula de antes que aún tenga `username` y `password` en `config.json` los pierde al pasarla a moodle-teacher (ver [Configuración](configuracion.md#aulas-de-antes)). Mientras tanto, el asistente **no puede leer** ese archivo: está en la lista de rutas prohibidas de sus herramientas.
 
-Tu token de Claude tampoco está a su alcance: sus herramientas de archivos no pueden leer el `.env` del curso (donde puede ir un token propio), ni `~/.miyagi/config.json` (donde lo guarda miyagi), ni `~/.claude/.credentials.json` (las credenciales del SDK de Claude).
+Tu acceso a Claude tampoco está a su alcance: sus herramientas de archivos no pueden leer el `.env` del curso (donde puede ir una clave de API propia), ni `~/.miyagi/config.json` (donde miyagi guarda la clave de API que pegaste), ni `~/.claude/.credentials.json` (donde Claude Code guarda tu sesión).
 
 ## Qué archivos puede tocar
 
@@ -62,4 +62,4 @@ El modo `autonomous` quita las aprobaciones (salvo borrar, que en ese modo nunca
 
 ## Si versionas la carpeta del curso
 
-`miyagi init` crea un `.gitignore` que deja fuera `config.json`, `.env` (el token), y `sessions/` (las transcripciones). Si usas git, no los subas.
+`miyagi init` crea un `.gitignore` que deja fuera `config.json`, `.env` (la clave de API), y `sessions/` (las transcripciones). Si usas git, no los subas.

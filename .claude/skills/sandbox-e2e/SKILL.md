@@ -78,12 +78,11 @@ weighs concepts 6, examples 3, clarity 1, and says a missing submission gets 0 w
 
 ## 6. Run it
 
-A Claude token must be available: `CLAUDE_CODE_OAUTH_TOKEN` in the environment, or the one
-saved in `~/.miyagi/config.json` (or `~/.student-agent/config.json`, passed through the
-environment for the run — never copied into a workspace file). In Git Bash, build that path
-with `path.join(os.homedir(), ".student-agent", "config.json")` inside `node -e`: a literal
-`"/.student-agent/..."` argument gets rewritten to `C:/Program Files/Git/...`, the variable
-ends up empty, and the run stops at agent-kit's interactive token prompt.
+Claude must be reachable without asking (ADR-026): be signed in to Claude Code
+(`claude auth status` from the SDK's binary, or the one miyagi asks for on its first run), or
+have `ANTHROPIC_API_KEY` in your own environment. Never copy a token into a workspace file nor
+into `~/.miyagi/config.json`: miyagi removes it there. A run whose home is a temporary folder
+reads your session with `CLAUDE_CONFIG_DIR` pointing at your real `~/.claude`.
 
 - `explore` first (short, look-and-cancel, nothing created):
   `node dist/cli.js explore --dir <ws> --headless </dev/null > <scratchpad>/explore.log 2>&1`

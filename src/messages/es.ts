@@ -129,6 +129,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   webKeepPrivate: "Quien tenga esta dirección puede usar miyagi con tu cuenta: no la compartas. Ctrl+C lo cierra.",
   moodleCourseNotAdded: (reason) => `No se ha podido limitar moodle-teacher al curso de esta asignatura (${reason}); la sesión sigue, y miyagi no sale de él igualmente.`,
   moodleTeacherInstallFailed: "No se pudo instalar o configurar moodle-teacher.",
+  claudeTokenForgotten: "miyagi ya no guarda tu token de Claude: las condiciones de Anthropic no lo permiten. Inicia sesión una vez con tu cuenta de Claude (o usa una clave de API) y Claude Code guardará tu sesión.",
   migrateClassroomIntro: "miyagi trabaja ahora en Moodle solo con la extensión moodle-teacher: herramientas fijas en lugar de ir haciendo clic, y entras con tu sesión en su propia ventana en lugar de con una contraseña guardada. El aula de esta asignatura usa todavía el sistema anterior, que ya no existe.",
   migrateClassroomQuestion: "¿Pasar ahora esta aula a moodle-teacher? (se borran del config.json el usuario y la contraseña guardados; si no, esta sesión trabaja sin el aula)",
   migratedClassroom: "Aula pasada a moodle-teacher.",

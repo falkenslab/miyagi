@@ -130,7 +130,7 @@ export function App() {
           </div>
         )}
         <main className="view">
-          {state && !state.signedIn && <SignIn T={T} />}
+          {state && !state.signedIn && <SignIn T={T} state={state} />}
           {state?.signedIn && info && info.workspace === null && !state.opening && <StartScreen T={T} onLink={() => setLinking(true)} />}
           {/* A subject opening: its session starts before the conversation can show. */}
           {state?.signedIn && state.opening && !chat && <Waiting block text={T.opening} still={T.stillWorking} />}
