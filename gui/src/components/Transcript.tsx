@@ -3,6 +3,7 @@ import type { Texts } from "../i18n";
 import { Markdown } from "../markdown";
 import type { ChatState, TranscriptCall, TranscriptEntry } from "../types";
 import { Logo } from "./Logo";
+import { Waiting } from "./Waiting";
 
 /** A turn's tool calls, folded into one line with the kit's labels; opened, each call with ✓/✕ and its subagent's steps. */
 function Tools({ calls, running, T }: { calls: TranscriptCall[]; running: boolean; T: Texts }) {
@@ -90,6 +91,8 @@ export function Transcript({ chat, workspace, T }: { chat: ChatState; workspace:
           <div className="welcome">
             <Logo size={72} />
             <h2>{T.welcome(workspace)}</h2>
+            {/* The session starting and the greeting on its way: tens of seconds the first time. */}
+            {chat.busy && <Waiting text={T.starting} still={T.stillWorking} />}
           </div>
         )}
         {chat.transcript.map((entry) => (

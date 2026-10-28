@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { act } from "../api";
+import { act, UNREACHABLE } from "../api";
 import type { Texts } from "../i18n";
 import { Logo } from "./Logo";
+import { Waiting } from "./Waiting";
 
 /** No Claude key yet: the person pastes one (there's no terminal for "claude setup-token" here). */
 export function SignIn({ T }: { T: Texts }) {
@@ -12,7 +13,7 @@ export function SignIn({ T }: { T: Texts }) {
     setSaving(true);
     const result = await act("login", { token: key });
     setSaving(false);
-    if (result.error) setError(T.keyInvalid);
+    if (result.error) setError(result.error === UNREACHABLE ? T.unreachable : T.keyInvalid);
   };
   return (
     <div className="signin">
@@ -37,7 +38,9 @@ export function SignIn({ T }: { T: Texts }) {
           }}
           aria-label={T.signInTitle}
           autoFocus
+          disabled={saving}
         />
+        {saving && <Waiting text={T.checkingKey} still={T.stillWorking} />}
         {error && <p className="why">{error}</p>}
         <button type="button" className="btn primary" disabled={!key.trim() || saving} onClick={() => void save()}>
           {T.keySave}

@@ -4,6 +4,7 @@ import type { CourseTexts } from "../i18n/course";
 import { Markdown } from "../markdown";
 import type { ChatState, Info } from "../types";
 import { Logo } from "./Logo";
+import { Waiting } from "./Waiting";
 
 // The course views (gui-course-views #51), as the mockup draws them: Hoy, the teaching plan, topics
 // and activities, materials, the oven, the knowledge base and the sources. They only read; every
@@ -109,7 +110,7 @@ export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common)
         </button>
       </div>
       {!result ? (
-        <p className="muted">{C.loading}</p>
+        <Waiting text={C.loading} still={C.stillWorking} />
       ) : (
         <>
           <div className="grid g4">
@@ -216,7 +217,7 @@ export function PlanView({ chat, info, C, ask, go }: Common) {
     }, [load]),
     chat,
   );
-  if (!loaded) return <p className="wrap muted">{C.loading}</p>;
+  if (!loaded) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
   if (!result)
     return (
       <div className="wrap">
@@ -263,7 +264,7 @@ interface Topic {
 export function TopicsView({ chat, C, ask, go }: Common) {
   const { result, load } = useHost<{ topics: Topic[] }>("topics");
   useReload(load, chat);
-  if (!result) return <p className="wrap muted">{C.loading}</p>;
+  if (!result) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
   return (
     <div className="wrap">
       {result.topics.length === 0 && <div className="card">{C.noTopics}</div>}
@@ -318,7 +319,7 @@ export function MaterialsView({ chat, info, C, ask }: Common) {
   const { result, load } = useHost<{ files: { path: string; size: number; changed: string }[] }>("drafts");
   useReload(load, chat);
   const [chosen, setChosen] = useState<string | null>(null);
-  if (!result) return <p className="wrap muted">{C.loading}</p>;
+  if (!result) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
   if (!result.files.length)
     return (
       <div className="wrap">
@@ -378,7 +379,7 @@ export function MaterialsView({ chat, info, C, ask }: Common) {
 export function OvenView({ chat, info, C, ask }: Common) {
   const { result, load } = useHost<{ items: Today["oven"] }>("oven");
   useReload(load, chat);
-  if (!result) return <p className="wrap muted">{C.loading}</p>;
+  if (!result) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
   const label = (text: string) => text.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/[*_`]/g, "");
   return (
     <div className="wrap">
@@ -434,7 +435,7 @@ export function KnowledgeView({ chat, C, ask, page, setPage }: Common & { page: 
     top.current?.scrollIntoView({ block: "nearest" });
   }, [page, chat.turns]);
   const search = async () => setHits(query.trim() ? ((await act<{ hits: { id: string; title: string; snippet: string }[] }>("kb-search", { query })).hits ?? []) : null);
-  if (!result) return <p className="wrap muted">{C.loading}</p>;
+  if (!result) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
   if (!result.pages.length)
     return (
       <div className="wrap">
@@ -536,11 +537,14 @@ export function SourcesView({ chat, C, ask, go, onNotice }: Common & { onNotice:
   useReload(load, chat);
   const [over, setOver] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState<string | null>(null);
   const add = async (files: FileList | null) => {
     for (const one of Array.from(files ?? [])) {
+      setUploading(one.name);
       const answer = await upload(one);
       onNotice(answer.error ? `${one.name}: ${answer.error}` : answer.duplicateOf ? `${one.name} ✓ (${answer.duplicateOf})` : `${one.name} → sources/`);
     }
+    setUploading(null);
     await load();
   };
   const pending = result?.sources.filter((source) => source.state !== "ingested").length ?? 0;
@@ -562,7 +566,7 @@ export function SourcesView({ chat, C, ask, go, onNotice }: Common & { onNotice:
       >
         <p>{C.drop}</p>
         <div className="row center-row">
-          <button type="button" className="btn small" disabled={chat.busy} onClick={() => input.current?.click()}>
+          <button type="button" className="btn small" disabled={chat.busy || Boolean(uploading)} onClick={() => input.current?.click()}>
             {C.chooseFiles}
           </button>
           <button type="button" className="btn small" onClick={() => void act("open-folder", { which: "sources" })}>
@@ -577,10 +581,11 @@ export function SourcesView({ chat, C, ask, go, onNotice }: Common & { onNotice:
             </>
           )}
         </div>
+        {uploading && <Waiting text={`${C.uploading} ${uploading}`} still={C.stillWorking} />}
         <input ref={input} type="file" multiple hidden onChange={(event) => void add(event.target.files).then(() => (event.target.value = ""))} />
       </div>
       {!result ? (
-        <p className="muted">{C.loading}</p>
+        <Waiting text={C.loading} still={C.stillWorking} />
       ) : result.sources.length === 0 ? (
         <p className="muted">{C.noSources}</p>
       ) : (

@@ -8,6 +8,7 @@ import { Header, Sidebar, type Theme, type View } from "./components/Shell";
 import { SignIn } from "./components/SignIn";
 import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
 import { Transcript } from "./components/Transcript";
+import { Waiting } from "./components/Waiting";
 import { texts } from "./i18n";
 import { courseTexts } from "./i18n/course";
 import { extTexts } from "./i18n/extensions";
@@ -89,7 +90,7 @@ export function App() {
     if (chat?.panel || chat?.choice) setView("chat");
   }, [chat?.panel, chat?.choice]);
 
-  const status = connection === "replaced" ? T.replaced : connection === "lost" ? T.lost : !state ? T.connecting : state.opening ? T.opening : null;
+  const status = connection === "replaced" ? T.replaced : connection === "lost" ? T.lost : !state ? T.connecting : null;
   const shown: View = chat ? view : "chat";
   const titles: Record<View, [string, string?]> = {
     today: [C.nav.today, new Date().toLocaleDateString(chat?.language ?? info?.language ?? undefined, { weekday: "long", day: "numeric", month: "long" })],
@@ -131,6 +132,8 @@ export function App() {
         <main className="view">
           {state && !state.signedIn && <SignIn T={T} />}
           {state?.signedIn && info && info.workspace === null && !state.opening && <StartScreen T={T} onLink={() => setLinking(true)} />}
+          {/* A subject opening: its session starts before the conversation can show. */}
+          {state?.signedIn && state.opening && !chat && <Waiting block text={T.opening} still={T.stillWorking} />}
           {chat && shown === "chat" && (
             <div className="chat">
               <Transcript chat={chat} workspace={info?.workspace ?? ""} T={T} />

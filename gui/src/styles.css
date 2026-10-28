@@ -146,6 +146,10 @@ th { background: var(--panel-2); }
 .spinner { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--line-2); border-top-color: var(--sun); animation: spin 0.8s linear infinite; display: inline-block; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+/* A wait with its sentence (#59): inline in a form or a dialog; centred when it's the whole view */
+.waiting { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 10px 0; color: var(--text-2); font-size: 14px; min-height: 24px; }
+.waiting .spinner { flex: none; }
+.waiting.block { position: absolute; inset: 0; margin: 0; padding: 16px; font-size: 15px; text-align: center; }
 
 /* Dock: tasks and composer floating over the end of the conversation */
 .dock { position: absolute; left: 0; right: 0; bottom: 0; padding-top: 30px; pointer-events: none; background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--bg) 85%, transparent) 40%, var(--bg) 75%); }
@@ -196,6 +200,8 @@ th { background: var(--panel-2); }
 .lb { display: block; font-size: 14px; color: var(--text-2); margin: 10px 0 4px; font-weight: 600; }
 .check { display: flex; gap: 10px; align-items: center; min-height: 44px; }
 fieldset { border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; }
+/* A fieldset only to lock a form's fields while it's sent: no frame of its own */
+fieldset.plain { border: 0; padding: 0; margin: 0; min-width: 0; }
 .form-field small { display: block; margin-top: 4px; }
 .why { color: var(--sun); font-size: 14px; }
 

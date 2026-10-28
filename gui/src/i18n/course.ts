@@ -9,6 +9,8 @@ export interface CourseTexts {
   sec: { subject: string; memory: string };
   sub: { plan: string; materials: string; oven: string; knowledge: (n: number) => string; sources: string };
   loading: string;
+  stillWorking: string;
+  uploading: string;
   talk: string;
   hello: string;
   kpi: { pages: string; topics: string; activities: string; pending: string; oven: string; drafts: string };
@@ -85,6 +87,8 @@ const es: CourseTexts = {
   sec: { subject: "Asignatura", memory: "Memoria" },
   sub: { plan: "course/teaching-plan", materials: "drafts/ · lo que miyagi prepara antes de publicar", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} páginas`, sources: "sources/ · tus documentos" },
   loading: "Cargando…",
+  stillWorking: "Sigue trabajando, un momento…",
+  uploading: "Subiendo a tus fuentes…",
   talk: "Hablar con miyagi",
   hello: "Esto es lo que sé de tu asignatura ahora mismo.",
   kpi: { pages: "páginas en su memoria", topics: "temas", activities: "actividades", pending: "fuentes por incorporar", oven: "en el horno", drafts: "materiales en drafts/" },
@@ -161,6 +165,8 @@ const en: CourseTexts = {
   sec: { subject: "Subject", memory: "Memory" },
   sub: { plan: "course/teaching-plan", materials: "drafts/ · what miyagi prepares before publishing", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} pages`, sources: "sources/ · your documents" },
   loading: "Loading…",
+  stillWorking: "Still working, one moment…",
+  uploading: "Uploading to your sources…",
   talk: "Talk to miyagi",
   hello: "This is what I know of your subject right now.",
   kpi: { pages: "pages in its memory", topics: "topics", activities: "activities", pending: "sources to take in", oven: "in the oven", drafts: "materials in drafts/" },
@@ -237,6 +243,8 @@ const fr: CourseTexts = {
   sec: { subject: "Matière", memory: "Mémoire" },
   sub: { plan: "course/teaching-plan", materials: "drafts/ · ce que miyagi prépare avant de publier", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} pages`, sources: "sources/ · tes documents" },
   loading: "Chargement…",
+  stillWorking: "Toujours en cours, un instant…",
+  uploading: "Envoi vers vos sources…",
   talk: "Parler à miyagi",
   hello: "Voici ce que je sais de ta matière en ce moment.",
   kpi: { pages: "pages dans sa mémoire", topics: "thèmes", activities: "activités", pending: "sources à intégrer", oven: "au four", drafts: "éléments dans drafts/" },
@@ -313,6 +321,8 @@ const de: CourseTexts = {
   sec: { subject: "Fach", memory: "Gedächtnis" },
   sub: { plan: "course/teaching-plan", materials: "drafts/ · was miyagi vor dem Veröffentlichen vorbereitet", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} Seiten`, sources: "sources/ · deine Dokumente" },
   loading: "Wird geladen…",
+  stillWorking: "Arbeitet noch, einen Moment…",
+  uploading: "Wird zu Ihren Quellen hochgeladen…",
   talk: "Mit miyagi sprechen",
   hello: "Das weiß ich gerade über dein Fach.",
   kpi: { pages: "Seiten im Gedächtnis", topics: "Themen", activities: "Aktivitäten", pending: "Quellen aufzunehmen", oven: "im Ofen", drafts: "Materialien in drafts/" },

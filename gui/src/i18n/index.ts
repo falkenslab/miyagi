@@ -63,6 +63,11 @@ export interface Texts {
   forget: string;
   forgetHelp: string;
   opening: string;
+  stillWorking: string;
+  checkingKey: string;
+  creatingSubject: string;
+  starting: string;
+  unreachable: string;
   chooseFolder: string;
   folderLabel: string;
   folderHelp: string;
@@ -143,6 +148,11 @@ const es: Texts = {
   forget: "Olvidar",
   forgetHelp: "Se quita de la lista; su carpeta no se toca.",
   opening: "Abriendo la asignatura…",
+  stillWorking: "Sigue trabajando, un momento…",
+  checkingKey: "Comprobando tu clave…",
+  creatingSubject: "Creando la asignatura…",
+  starting: "Arrancando miyagi… La primera vez tarda un poco.",
+  unreachable: "No se pudo hablar con miyagi. Comprueba que sigue abierto y vuelve a intentarlo.",
   chooseFolder: "Elegir carpeta",
   folderLabel: "Carpeta de la asignatura (opcional)",
   folderHelp: "Una carpeta vacía o nueva, por ejemplo en tu nube. Si la dejas vacía, va a la carpeta de miyagi.",
@@ -223,6 +233,11 @@ const en: Texts = {
   forget: "Forget",
   forgetHelp: "It leaves the list; its folder isn't touched.",
   opening: "Opening the subject…",
+  stillWorking: "Still working, one moment…",
+  checkingKey: "Checking your key…",
+  creatingSubject: "Creating the subject…",
+  starting: "Starting miyagi… The first time takes a little longer.",
+  unreachable: "Couldn't reach miyagi. Check it's still open and try again.",
   chooseFolder: "Choose a folder",
   folderLabel: "The subject's folder (optional)",
   folderHelp: "An empty or new folder, for example in your cloud. Left empty, it goes to miyagi's folder.",
@@ -303,6 +318,11 @@ const fr: Texts = {
   forget: "Oublier",
   forgetHelp: "Elle quitte la liste ; son dossier n'est pas touché.",
   opening: "Ouverture de la matière…",
+  stillWorking: "Toujours en cours, un instant…",
+  checkingKey: "Vérification de votre clé…",
+  creatingSubject: "Création de la matière…",
+  starting: "Démarrage de miyagi… La première fois, c'est un peu plus long.",
+  unreachable: "Impossible de joindre miyagi. Vérifiez qu'il est toujours ouvert et réessayez.",
   chooseFolder: "Choisir un dossier",
   folderLabel: "Dossier de la matière (facultatif)",
   folderHelp: "Un dossier vide ou nouveau, par exemple dans ton cloud. Laissé vide, il va dans le dossier de miyagi.",
@@ -383,6 +403,11 @@ const de: Texts = {
   forget: "Vergessen",
   forgetHelp: "Es verschwindet aus der Liste; sein Ordner bleibt unberührt.",
   opening: "Fach wird geöffnet…",
+  stillWorking: "Arbeitet noch, einen Moment…",
+  checkingKey: "Ihr Schlüssel wird geprüft…",
+  creatingSubject: "Fach wird angelegt…",
+  starting: "miyagi startet… Beim ersten Mal dauert es etwas länger.",
+  unreachable: "miyagi ist nicht erreichbar. Prüfen Sie, ob es noch geöffnet ist, und versuchen Sie es erneut.",
   chooseFolder: "Ordner wählen",
   folderLabel: "Ordner des Fachs (optional)",
   folderHelp: "Ein leerer oder neuer Ordner, zum Beispiel in deiner Cloud. Leer gelassen, kommt es in den Ordner von miyagi.",

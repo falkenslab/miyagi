@@ -8,18 +8,30 @@ const token = new URLSearchParams(location.search).get("token") ?? "";
 
 /** One action of the person, by name, as the host maps it to the chat controller. */
 export async function act<T = Record<string, unknown>>(action: string, data: Record<string, unknown> = {}): Promise<T & { error?: string }> {
-  const response = await fetch(`api/${action}?token=${encodeURIComponent(token)}`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  return (await response.json()) as T & { error?: string };
+  // The host gone (closed, crashed) is an error like any other, never a wait that doesn't end.
+  try {
+    const response = await fetch(`api/${action}?token=${encodeURIComponent(token)}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return (await response.json()) as T & { error?: string };
+  } catch {
+    return { error: UNREACHABLE } as T & { error?: string };
+  }
 }
+
+/** The `error` of an action the host never answered. */
+export const UNREACHABLE = "unreachable";
 
 /** A file the person adds: into the subject's sources/. */
 export async function upload(file: File): Promise<{ path?: string; duplicateOf?: string; error?: string }> {
-  const response = await fetch(`api/upload?token=${encodeURIComponent(token)}&name=${encodeURIComponent(file.name)}`, { method: "POST", body: file });
-  return (await response.json()) as { path?: string; duplicateOf?: string; error?: string };
+  try {
+    const response = await fetch(`api/upload?token=${encodeURIComponent(token)}&name=${encodeURIComponent(file.name)}`, { method: "POST", body: file });
+    return (await response.json()) as { path?: string; duplicateOf?: string; error?: string };
+  } catch {
+    return { error: UNREACHABLE };
+  }
 }
 
 export type Connection = "connecting" | "open" | "replaced" | "lost";

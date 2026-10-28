@@ -131,9 +131,16 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       if (current !== subject) return controller.close();
       subject.chat = controller;
       controller.subscribe(() => schedule());
-      await controller.start();
-      for (const line of subject.notices.splice(0)) controller.notice(line, "warn");
       schedule();
+      // The greeting is a turn of tens of seconds: the page shows the conversation waiting for it
+      // (#59) instead of the request that opened the subject hanging until it ends.
+      void controller
+        .start()
+        .catch((error: unknown) => controller.notice(String((error as Error)?.message ?? error), "error"))
+        .then(() => {
+          for (const line of subject.notices.splice(0)) controller.notice(line, "warn");
+          schedule();
+        });
     })();
     return subject.opening;
   }

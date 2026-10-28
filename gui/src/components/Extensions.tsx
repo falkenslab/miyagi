@@ -3,6 +3,7 @@ import { act, logoUrl } from "../api";
 import type { ExtTexts } from "../i18n/extensions";
 import type { Capabilities, CatalogEntry, ChatState, ExtensionOptionState, Info, InstalledExtension, Repository } from "../types";
 import { Dialog } from "./Panel";
+import { Waiting } from "./Waiting";
 
 // The extensions view (gui-extensions #50), as the mockup draws it: tabs for what's installed (cards
 // with a switch), the catalog, the repositories and what miyagi can do; an extension's details and
@@ -109,10 +110,11 @@ function InstalledTab({ chat, entries, X, onNotice, onDetails }: { chat: ChatSta
     if (result?.updated.length) await run("reload", {}, X, onNotice);
     setWorking(false);
   };
-  if (!status) return <p className="muted">{X.loading}</p>;
+  if (!status) return <Waiting text={X.loading} still={X.stillWorking} />;
   const disabled = working || chat.busy;
   return (
     <>
+      {working && <Waiting text={X.updating} still={X.stillWorking} />}
       {status.untrusted.length > 0 && (
         <div className="warnbox">
           <b>{X.trustTitle}</b>
@@ -300,7 +302,7 @@ function OptionsForm({ name, busy, X, onNotice, onSaved }: { name: string; busy:
       setValues(Object.fromEntries(result.options.map((state) => [state.key, state.option.sensitive ? "" : shown(state.value)])));
     });
   }, [name, X, onNotice]);
-  if (!states) return <p className="muted">{X.loading}</p>;
+  if (!states) return <Waiting text={X.loading} still={X.stillWorking} />;
   if (!states.length) return <p className="muted">{X.noOptions}</p>;
   const save = async () => {
     const changed: Record<string, string | null> = {};
@@ -421,6 +423,7 @@ function AddDialog({ entry, chat, X, onNotice, onClose, onNeedsOptions }: { entr
         </div>
       )}
       <p className="muted small">{X.installNote}</p>
+      {installing && <Waiting text={X.installing} still={X.stillWorking} />}
       <div className="acts">
         <button type="button" className="btn ghost" onClick={onClose}>
           {X.cancel}
@@ -448,7 +451,7 @@ function CatalogTab({ chat, entries, X, onSearch, onAdd }: { chat: ChatState; en
         <input className="field search-field" type="search" value={words} onChange={(event) => setWords(event.target.value)} placeholder={X.search} aria-label={X.search} />
       </form>
       {!entries ? (
-        <p className="muted">{X.loading}</p>
+        <Waiting text={X.loading} still={X.stillWorking} />
       ) : entries.length === 0 ? (
         <p className="muted">{X.noResults}</p>
       ) : (
@@ -517,7 +520,7 @@ function RepositoriesTab({ X, onNotice, onChanged }: { X: ExtTexts; onNotice: No
     <>
       <div className="card">
         {!repos ? (
-          <p className="muted">{X.loading}</p>
+          <Waiting text={X.loading} still={X.stillWorking} />
         ) : (
           <ul className="list">
             {repos.map((repo) => (
@@ -625,6 +628,7 @@ function AddRepositoryDialog({ X, onNotice, onClose, onAdded }: { X: ExtTexts; o
             <input id="repo-name" className="field" value={typed} onChange={(event) => setTyped(event.target.value)} autoComplete="off" spellCheck={false} />
           </>
         )}
+        {working && <Waiting text={found ? X.adding : X.reviewing} still={X.stillWorking} />}
         <div className="acts">
           <button type="button" className="btn ghost" onClick={onClose}>
             {X.cancel}
@@ -735,7 +739,7 @@ function CapabilitiesTab({ chat, info, entries, X, onNotice, onAdd, onLink }: { 
             })}
           </tbody>
         </table>
-        {!caps && <p className="muted">{X.loading}</p>}
+        {!caps && <Waiting text={X.loading} still={X.stillWorking} />}
       </div>
       <p className="muted">{X.capsNote}</p>
     </>
@@ -858,6 +862,7 @@ export function LinkWizard({ info, busy, X, onClose, onNotice }: { info: Info; b
           <div className="card center">
             <span className="muted">🪟 {X.linkStep2Note}</span>
           </div>
+          {linking && <Waiting text={X.classroomConnecting} still={X.stillWorking} />}
           {error && <p className="why">{error}</p>}
           <div className="acts">
             <button type="button" className="btn ghost" disabled={linking} onClick={() => setStep(1)}>

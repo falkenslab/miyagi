@@ -6,7 +6,7 @@
 // and spends a few turns. Run it when gui/ or src/host/ change. Its home is a temporary folder, so
 // nothing of yours is touched.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-page.mjs <screenshots dir>
-/* global document, window -- the callbacks of page.evaluate and waitForFunction run in the page. */
+/* global document, window, MutationObserver -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import os from "node:os";
@@ -46,7 +46,7 @@ const browser = await chromium.launch({ channel: "chrome", headless: true, env: 
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 page.setDefaultTimeout(60_000);
 const failures = [];
-const check = (what, ok) => ok || failures.push(what);
+const check = (what, ok, detail = "") => ok || failures.push(detail ? `${what} (${detail})` : what);
 page.on("pageerror", (error) => failures.push(`page error: ${error.message}`));
 const shot = async (name) => {
   await page.waitForTimeout(600);
@@ -71,12 +71,25 @@ try {
   // A subject from the start screen, then miyagi's greeting.
   await page.waitForSelector(".new-subject input");
   await page.fill(".new-subject input >> nth=0", "Comprobación de la página");
+  // Every wait from "Crear" to the greeting says what it waits for (#59): the sentences seen, in order.
+  await page.evaluate(() => {
+    window.__waits = [];
+    const seen = () => document.querySelectorAll(".waiting").forEach((el) => {
+      const text = el.textContent.trim();
+      if (text && window.__waits.at(-1) !== text) window.__waits.push(text);
+    });
+    new MutationObserver(seen).observe(document.body, { childList: true, subtree: true, characterData: true });
+  });
   await page.click('.new-subject button[type="submit"]');
   await page.waitForSelector(".side .brand");
   await page.click('.nav a:has-text("Conversación"), .nav a:has-text("Conversation")');
+  if (await page.waitForSelector(".welcome .waiting", { timeout: 20_000 }).catch(() => null)) await page.screenshot({ path: path.join(shots, "starting-1440.png") });
   await page.waitForSelector(".msg.agent", { timeout: 240_000 });
   await idle();
   check("greeting", (await page.locator(".msg.agent").count()) >= 1);
+  const waits = await page.evaluate(() => window.__waits);
+  check("the wait until the greeting says what it waits for", waits.some((text) => /Arrancando miyagi|Starting miyagi/.test(text)), waits.join(" → "));
+  check("no wait left once miyagi greeted", (await page.locator(".waiting").count()) === 0);
   const slash = (await page.fill(".composer textarea", "/"), await page.waitForSelector(".slash"), await page.innerText(".slash"));
   check("the / menu offers miyagi's commands, not Claude Code's", /\/(knowledge|miyagi):|\/extensions/.test(slash) && !/\/(agents|batch|advisor)\b/.test(slash));
   await page.fill(".composer textarea", "");

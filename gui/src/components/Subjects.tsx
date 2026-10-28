@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { act } from "../api";
+import { act, UNREACHABLE } from "../api";
 import type { Texts } from "../i18n";
 import type { Subject } from "../types";
 import { Logo } from "./Logo";
+import { Waiting } from "./Waiting";
 
 /** The subjects in miyagi's registry, newest opened first, and which one is open. */
 export function useSubjects(): { subjects: Subject[] | null; reload: () => Promise<void> } {
@@ -32,7 +33,7 @@ export function NewSubjectForm({ T, onCancel, onLink }: { T: Texts; onCancel?: (
     setSaving(true);
     const result = await act("create", { label, description, language, persona, dir: folder ?? "" });
     setSaving(false);
-    if (result.error) setError(result.error === "folder not empty" ? T.folderNotEmpty : result.error === "already a subject" ? T.folderIsSubject : result.error);
+    if (result.error) setError(result.error === "folder not empty" ? T.folderNotEmpty : result.error === "already a subject" ? T.folderIsSubject : result.error === UNREACHABLE ? T.unreachable : result.error);
     else {
       onCancel?.();
       if (link) onLink?.();
@@ -47,6 +48,7 @@ export function NewSubjectForm({ T, onCancel, onLink }: { T: Texts; onCancel?: (
       }}
     >
       <h3>{T.newSubject}</h3>
+      <fieldset className="plain" disabled={saving} aria-busy={saving}>
       <label className="lb">
         {T.subjectName}
         <input className="field" value={label} onChange={(event) => setLabel(event.target.value)} autoFocus required />
@@ -90,10 +92,12 @@ export function NewSubjectForm({ T, onCancel, onLink }: { T: Texts; onCancel?: (
           <small className="muted">{T.folderHelp}</small>
         </>
       )}
+      </fieldset>
+      {saving && <Waiting text={T.creatingSubject} still={T.stillWorking} />}
       {error && <p className="why">{error}</p>}
       <div className="acts">
         {onCancel && (
-          <button type="button" className="btn" onClick={onCancel}>
+          <button type="button" className="btn" disabled={saving} onClick={onCancel}>
             {T.cancel}
           </button>
         )}
@@ -183,25 +187,32 @@ export function SubjectList({ subjects, current, T, onOpen, onChanged }: { subje
 export function OpenExisting({ T, onCancel }: { T: Texts; onCancel: () => void }) {
   const [dir, setDir] = useState("");
   const [error, setError] = useState("");
+  const [opening, setOpening] = useState(false);
   return (
     <form
       className="new-subject"
       onSubmit={(event) => {
         event.preventDefault();
-        void act("add-existing", { dir }).then((result) => (result.error ? setError(T.locateInvalid) : onCancel()));
+        setOpening(true);
+        void act("add-existing", { dir }).then((result) => {
+          setOpening(false);
+          if (result.error) setError(result.error === UNREACHABLE ? T.unreachable : T.locateInvalid);
+          else onCancel();
+        });
       }}
     >
       <h3>{T.openExisting}</h3>
       <label className="lb">
         {T.openExistingHelp}
-        <input className="field" value={dir} onChange={(event) => setDir(event.target.value)} autoFocus spellCheck={false} />
+        <input className="field" value={dir} onChange={(event) => setDir(event.target.value)} autoFocus spellCheck={false} disabled={opening} />
       </label>
+      {opening && <Waiting text={T.opening} still={T.stillWorking} />}
       {error && <p className="why">{error}</p>}
       <div className="acts">
         <button type="button" className="btn" onClick={onCancel}>
           {T.cancel}
         </button>
-        <button type="submit" className="btn primary" disabled={!dir.trim()}>
+        <button type="submit" className="btn primary" disabled={!dir.trim() || opening}>
           {T.openButton}
         </button>
       </div>

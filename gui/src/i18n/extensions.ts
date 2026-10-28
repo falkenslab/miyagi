@@ -18,6 +18,10 @@ export interface ExtTexts {
   notOffered: string;
   install: string;
   installing: string;
+  stillWorking: string;
+  updating: string;
+  reviewing: string;
+  adding: string;
   // Classroom
   classroomTitle: string;
   classroomConnected: (host: string, course: string) => string;
@@ -161,6 +165,10 @@ const es: ExtTexts = {
   notOffered: "Ninguna extensión del catálogo lo ofrece todavía.",
   install: "Instalar",
   installing: "Instalando…",
+  stillWorking: "Sigue trabajando, un momento…",
+  updating: "Buscando actualizaciones…",
+  reviewing: "Leyendo el repositorio…",
+  adding: "Añadiendo el repositorio…",
   classroomTitle: "Tu aula",
   classroomConnected: (host, course) => `Conectada a ${host}, curso ${course}. miyagi puede corregir entregas, responder en el foro y publicar contenido, siempre con tu aprobación.`,
   classroomOff: (host, course) => `Tu aula (${host}, curso ${course}) no está a su alcance: la extensión del aula falta o está apagada.`,
@@ -295,6 +303,10 @@ const en: ExtTexts = {
   notOffered: "No extension in the catalog offers it yet.",
   install: "Install",
   installing: "Installing…",
+  stillWorking: "Still working, one moment…",
+  updating: "Checking for updates…",
+  reviewing: "Reading the repository…",
+  adding: "Adding the repository…",
   classroomTitle: "Your classroom",
   classroomConnected: (host, course) => `Connected to ${host}, course ${course}. miyagi can grade submissions, answer in the forum and publish content, always with your approval.`,
   classroomOff: (host, course) => `Your classroom (${host}, course ${course}) is out of reach: the classroom extension is missing or turned off.`,
@@ -429,6 +441,10 @@ const fr: ExtTexts = {
   notOffered: "Aucune extension du catalogue ne le propose encore.",
   install: "Installer",
   installing: "Installation…",
+  stillWorking: "Toujours en cours, un instant…",
+  updating: "Recherche de mises à jour…",
+  reviewing: "Lecture du dépôt…",
+  adding: "Ajout du dépôt…",
   classroomTitle: "Ta classe",
   classroomConnected: (host, course) => `Connectée à ${host}, cours ${course}. miyagi peut corriger les devoirs, répondre dans le forum et publier du contenu, toujours avec ton accord.`,
   classroomOff: (host, course) => `Ta classe (${host}, cours ${course}) est hors de portée : l'extension de la classe manque ou est désactivée.`,
@@ -563,6 +579,10 @@ const de: ExtTexts = {
   notOffered: "Noch keine Erweiterung im Katalog bietet das an.",
   install: "Installieren",
   installing: "Wird installiert…",
+  stillWorking: "Arbeitet noch, einen Moment…",
+  updating: "Suche nach Aktualisierungen…",
+  reviewing: "Repository wird gelesen…",
+  adding: "Repository wird hinzugefügt…",
   classroomTitle: "Dein Kursraum",
   classroomConnected: (host, course) => `Verbunden mit ${host}, Kurs ${course}. miyagi kann Abgaben bewerten, im Forum antworten und Inhalte veröffentlichen, immer mit deiner Zustimmung.`,
   classroomOff: (host, course) => `Dein Kursraum (${host}, Kurs ${course}) ist nicht erreichbar: Die Kursraum-Erweiterung fehlt oder ist ausgeschaltet.`,
