@@ -53,7 +53,18 @@ export interface Texts {
   close: string;
   suggestion: string;
   commands: string;
-  welcome: (workspace: string) => string;
+  greeting: (part: "morning" | "afternoon" | "night") => string;
+  recent: string;
+  thisConversation: string;
+  more: string;
+  addFile: string;
+  toSources: string;
+  miyagiCommands: string;
+  modeHelp: string;
+  copy: string;
+  copied: string;
+  toEnd: string;
+  tasks: (done: number, total: number) => string;
   subjects: string;
   startTitle: string;
   startText: string;
@@ -147,7 +158,18 @@ const es: Texts = {
   close: "Cerrar",
   suggestion: "Sugerencia",
   commands: "Atajos",
-  welcome: (workspace) => `Hola. Esta es tu asignatura «${workspace}».`,
+  greeting: (part) => `${part === "morning" ? "Buenos días" : part === "afternoon" ? "Buenas tardes" : "Buenas noches"}. ¿Qué preparamos hoy?`,
+  recent: "Recientes",
+  thisConversation: "Esta conversación",
+  more: "Más",
+  addFile: "Añadir archivo",
+  toSources: "a tus fuentes",
+  miyagiCommands: "Comandos de miyagi",
+  modeHelp: "Cuánto trabaja miyagi sin preguntarte. También con Mayús+Tab.",
+  copy: "Copiar",
+  copied: "Copiado",
+  toEnd: "Ir al final",
+  tasks: (done, total) => `Tareas: ${done} de ${total}`,
   subjects: "Asignaturas",
   startTitle: "Tus asignaturas",
   startText: "Elige una para seguir donde lo dejaste, o crea una nueva.",
@@ -241,7 +263,18 @@ const en: Texts = {
   close: "Close",
   suggestion: "Suggestion",
   commands: "Shortcuts",
-  welcome: (workspace) => `Hi. This is your subject "${workspace}".`,
+  greeting: (part) => `${part === "morning" ? "Good morning" : part === "afternoon" ? "Good afternoon" : "Good evening"}. What shall we prepare today?`,
+  recent: "Recent",
+  thisConversation: "This conversation",
+  more: "More",
+  addFile: "Add a file",
+  toSources: "to your sources",
+  miyagiCommands: "miyagi's commands",
+  modeHelp: "How much miyagi does without asking you. Also with Shift+Tab.",
+  copy: "Copy",
+  copied: "Copied",
+  toEnd: "Go to the end",
+  tasks: (done, total) => `Tasks: ${done} of ${total}`,
   subjects: "Subjects",
   startTitle: "Your subjects",
   startText: "Pick one to carry on where you left off, or create a new one.",
@@ -335,7 +368,18 @@ const fr: Texts = {
   close: "Fermer",
   suggestion: "Suggestion",
   commands: "Raccourcis",
-  welcome: (workspace) => `Bonjour. Voici votre matière « ${workspace} ».`,
+  greeting: (part) => `${part === "night" ? "Bonsoir" : "Bonjour"}. Que préparons-nous aujourd'hui ?`,
+  recent: "Récentes",
+  thisConversation: "Cette conversation",
+  more: "Plus",
+  addFile: "Ajouter un fichier",
+  toSources: "à vos sources",
+  miyagiCommands: "Commandes de miyagi",
+  modeHelp: "Ce que miyagi fait sans vous demander. Aussi avec Maj+Tab.",
+  copy: "Copier",
+  copied: "Copié",
+  toEnd: "Aller à la fin",
+  tasks: (done, total) => `Tâches : ${done} sur ${total}`,
   subjects: "Matières",
   startTitle: "Vos matières",
   startText: "Choisissez-en une pour reprendre là où vous en étiez, ou créez-en une.",
@@ -429,7 +473,18 @@ const de: Texts = {
   close: "Schließen",
   suggestion: "Vorschlag",
   commands: "Kurzbefehle",
-  welcome: (workspace) => `Hallo. Das ist Ihr Fach „${workspace}“.`,
+  greeting: (part) => `${part === "morning" ? "Guten Morgen" : part === "afternoon" ? "Guten Tag" : "Guten Abend"}. Was bereiten wir heute vor?`,
+  recent: "Zuletzt",
+  thisConversation: "Dieses Gespräch",
+  more: "Mehr",
+  addFile: "Datei hinzufügen",
+  toSources: "zu Ihren Quellen",
+  miyagiCommands: "miyagi-Befehle",
+  modeHelp: "Wie viel miyagi tut, ohne Sie zu fragen. Auch mit Umschalt+Tab.",
+  copy: "Kopieren",
+  copied: "Kopiert",
+  toEnd: "Zum Ende",
+  tasks: (done, total) => `Aufgaben: ${done} von ${total}`,
   subjects: "Fächer",
   startTitle: "Ihre Fächer",
   startText: "Wählen Sie eins, um weiterzumachen, oder legen Sie ein neues an.",

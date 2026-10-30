@@ -3,19 +3,24 @@ import { act } from "../api";
 import type { Texts } from "../i18n";
 import type { CourseTexts } from "../i18n/course";
 import type { ExtTexts } from "../i18n/extensions";
-import type { ChatState, Info, Mode } from "../types";
+import type { ChatState, Info } from "../types";
+import { Icon, type IconName } from "./Icons";
 import { Logo } from "./Logo";
 import { SubjectList, useSubjects } from "./Subjects";
 
-// The page's frame, as the mockup draws it: a sidebar (miyagi, the subject, the views, the
-// conversations, the versions and the theme) and each view's header (its title, the mode,
-// quick actions and capabilities). Only views that exist are listed.
+// The page's frame, organised as the Claude app (#60): a sidebar (miyagi, a new conversation, the
+// subject, the views, the recent conversations, the versions and the theme) and each view's header
+// (the menu, its title, a new conversation). The mode, the quick actions and the capabilities are
+// in the composer. Only views that exist are listed.
 
 export type Theme = "system" | "light" | "dark";
 export type View = "today" | "chat" | "plan" | "topics" | "materials" | "oven" | "classroom" | "knowledge" | "sources" | "extensions";
 
-/** A button with a popover, closed by Escape or a click outside. */
-function Menu({ label, title, children, className = "", popClass = "" }: { label: ReactNode; title: string; className?: string; popClass?: string; children: (close: () => void) => ReactNode }) {
+/**
+ * A button with a popover, closed by Escape or a click outside; on a phone (≤760 px) the popover is
+ * a bottom sheet over a scrim (#60), as the stylesheet draws it.
+ */
+export function Menu({ label, title, children, className = "", popClass = "", ariaLabel }: { label: ReactNode; title: string; className?: string; popClass?: string; ariaLabel?: string; children: (close: () => void) => ReactNode }) {
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -35,10 +40,16 @@ function Menu({ label, title, children, className = "", popClass = "" }: { label
   }, [open]);
   return (
     <div className="menu" ref={box}>
-      <button type="button" className={className || "ibtn"} title={title} aria-haspopup="true" aria-expanded={open} onClick={() => setOpen(!open)}>
+      <button type="button" className={className || "ibtn"} title={title} aria-label={ariaLabel} aria-haspopup="true" aria-expanded={open} onClick={() => setOpen(!open)}>
         {label}
       </button>
-      {open && <div className={`pop ${popClass}`}>{children(() => setOpen(false))}</div>}
+      {open && <div className="pop-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
+      {open && (
+        <div className={`pop ${popClass}`}>
+          <span className="grab" aria-hidden="true" />
+          {children(() => setOpen(false))}
+        </div>
+      )}
     </div>
   );
 }
@@ -66,7 +77,7 @@ function SubjectSwitcher({ info, busy, T, X, onNew, onOpenExisting }: { info: In
         popClass="ws-pop"
         label={
           <>
-            <span aria-hidden="true">📘</span>
+            <Icon name="book" />
             <span className="t">
               <b className="subject-name">{info.workspace}</b>
               <span>{info.classroom?.connected ? X.withClassroom : X.withoutClassroom}</span>
@@ -109,8 +120,8 @@ function SubjectSwitcher({ info, busy, T, X, onNew, onOpenExisting }: { info: In
   );
 }
 
-/** The conversations kept in this subject, in the sidebar: resume one, or start a new one. */
-function Conversations({ chat, T, X, onOpen }: { chat: ChatState; T: Texts; X: ExtTexts; onOpen: () => void }) {
+/** The recent conversations of this subject, the current one marked: resume one. */
+function Conversations({ chat, T, onOpen }: { chat: ChatState; T: Texts; onOpen: () => void }) {
   const [runs, setRuns] = useState<{ label: string; dir: string }[] | null>(null);
   const load = useCallback(async () => setRuns((await act<{ runs: { label: string; dir: string }[] }>("runs")).runs ?? []), []);
   // Again when the conversation changes (a new one, one resumed, a turn that names it).
@@ -118,27 +129,13 @@ function Conversations({ chat, T, X, onOpen }: { chat: ChatState; T: Texts; X: E
   useEffect(() => {
     void load();
   }, [load, current, chat.turns]);
+  // The current one, even before it's kept: the way back to it from another view.
+  const shown = runs && current && !runs.some((run) => run.dir === current) ? [{ label: chat.run?.title ?? T.thisConversation, dir: current }, ...runs] : runs;
   return (
-    <>
-      <h6>{X.secConversations}</h6>
-      <a
-        role="button"
-        tabIndex={0}
-        aria-disabled={chat.busy}
-        onClick={() => {
-          if (chat.busy) return;
-          void act("new");
-          onOpen();
-        }}
-        onKeyDown={(event) => event.key === "Enter" && !chat.busy && (void act("new"), onOpen())}
-      >
-        <span className="ico" aria-hidden="true">
-          ＋
-        </span>
-        <span>{T.newConversation}</span>
-      </a>
-      {runs?.length === 0 && <p className="muted pad small">{T.noConversations}</p>}
-      {runs?.slice(0, 12).map((run) => (
+    <div className="recents">
+      <h6>{T.recent}</h6>
+      {shown?.length === 0 && <p className="muted pad small">{T.noConversations}</p>}
+      {shown?.slice(0, 12).map((run) => (
         <a
           key={run.dir}
           role="button"
@@ -150,15 +147,13 @@ function Conversations({ chat, T, X, onOpen }: { chat: ChatState; T: Texts; X: E
             if (!chat.busy && run.dir !== current) void act("resume", { dir: run.dir });
             onOpen();
           }}
-          onKeyDown={(event) => event.key === "Enter" && !chat.busy && (void act("resume", { dir: run.dir }), onOpen())}
+          onKeyDown={(event) => event.key === "Enter" && !chat.busy && (run.dir === current || void act("resume", { dir: run.dir }), onOpen())}
         >
-          <span className="ico" aria-hidden="true">
-            💬
-          </span>
           <span className="ellipsis">{run.label}</span>
+          {run.dir === current && chat.busy && <span className="spinner" aria-hidden="true" />}
         </a>
       ))}
-    </>
+    </div>
   );
 }
 
@@ -184,6 +179,13 @@ function ThemeMenu({ theme, setTheme, T }: { theme: Theme; setTheme: (theme: The
       }
     </Menu>
   );
+}
+
+/** A new conversation, from the sidebar or the header: the conversation shown. */
+function newConversation(chat: ChatState, onOpen: () => void) {
+  if (chat.busy) return;
+  void act("new");
+  onOpen();
 }
 
 export function Sidebar({
@@ -215,6 +217,8 @@ export function Sidebar({
   onNewSubject: () => void;
   onOpenExisting: () => void;
 }) {
+  // On a phone the views other than Today and the classroom fold into one line (#60).
+  const [folded, setFolded] = useState(true);
   const go = (next: View) => {
     setView(next);
     setOpen(false);
@@ -225,6 +229,13 @@ export function Sidebar({
         {icon}
       </span>
       <span>{label}</span>
+      {badge}
+    </a>
+  );
+  const tile = (id: View, icon: IconName, label: string, badge?: ReactNode) => (
+    <a role="button" tabIndex={0} className={`tile${view === id ? " on" : ""}`} aria-current={view === id ? "page" : undefined} onClick={() => go(id)} onKeyDown={(event) => event.key === "Enter" && go(id)}>
+      <Icon name={icon} size={18} />
+      <span className="ellipsis">{label}</span>
       {badge}
     </a>
   );
@@ -240,25 +251,37 @@ export function Sidebar({
             <small>{X.tagline}</small>
           </div>
         </div>
+        {chat && (
+          <button type="button" className="new-conv" disabled={chat.busy} onClick={() => newConversation(chat, () => go("chat"))}>
+            <Icon name="edit" />
+            <span>{T.newConversation}</span>
+          </button>
+        )}
         {info && <SubjectSwitcher info={info} busy={Boolean(chat?.busy)} T={T} X={X} onNew={onNewSubject} onOpenExisting={onOpenExisting} />}
         <nav className="nav">
           {chat && (
             <>
-              {item("today", "☀️", C.nav.today)}
-              {item("chat", "💬", X.navChat, chat.busy ? <span className="spinner" aria-hidden="true" /> : undefined)}
-              <h6>{C.sec.subject}</h6>
-              {item("plan", "🗺️", C.nav.plan)}
-              {item("topics", "🧱", C.nav.topics)}
-              {item("materials", "📦", C.nav.materials)}
-              {item("oven", "🔥", C.nav.oven)}
-              <h6>{X.secClassroom}</h6>
-              {item("classroom", "🎓", X.navClassroom, <span className={`dot ${room?.connected ? "ok" : room ? "warn" : ""}`} aria-hidden="true" />)}
-              <h6>{C.sec.memory}</h6>
-              {item("knowledge", "📚", C.nav.knowledge)}
-              {item("sources", "🗂️", C.nav.sources)}
-              <h6>{X.secMiyagi}</h6>
-              {item("extensions", "🧩", X.navExtensions)}
-              <Conversations chat={chat} T={T} X={X} onOpen={() => go("chat")} />
+              <div className="tiles">
+                {tile("today", "sun", C.nav.today)}
+                {tile("classroom", "classroom", X.navClassroom, <span className={`dot ${room?.connected ? "ok" : room ? "warn" : ""}`} aria-hidden="true" />)}
+              </div>
+              <button type="button" className="fold" aria-expanded={!folded} onClick={() => setFolded(!folded)}>
+                <span className="ellipsis">{[C.sec.subject, C.sec.memory, X.secMiyagi].join(" · ")}</span>
+                <Icon name={folded ? "right" : "down"} size={14} />
+              </button>
+              <div className={`views${folded ? " folded" : ""}`}>
+                <h6>{C.sec.subject}</h6>
+                {item("plan", "🗺️", C.nav.plan)}
+                {item("topics", "🧱", C.nav.topics)}
+                {item("materials", "📦", C.nav.materials)}
+                {item("oven", "🔥", C.nav.oven)}
+                <h6>{C.sec.memory}</h6>
+                {item("knowledge", "📚", C.nav.knowledge)}
+                {item("sources", "🗂️", C.nav.sources)}
+                <h6>{X.secMiyagi}</h6>
+                {item("extensions", "🧩", X.navExtensions)}
+              </div>
+              <Conversations chat={chat} T={T} onOpen={() => go("chat")} />
             </>
           )}
         </nav>
@@ -273,107 +296,20 @@ export function Sidebar({
   );
 }
 
-/** The mode now, and the ones this session can switch to (Shift+Tab does the same). */
-function ModeMenu({ chat, T }: { chat: ChatState; T: Texts }) {
-  if (!chat.mode) return null;
-  const now = chat.mode;
-  return (
-    <Menu
-      title={T.modeTitle}
-      className={`ibtn mode ${now}`}
-      label={
-        <>
-          <span className="sw" aria-hidden="true" />
-          <span className="lbl">{T.modes[now].name}</span>
-        </>
-      }
-    >
-      {(close) =>
-        chat.switchableModes.map((mode: Mode) => (
-          <button
-            key={mode}
-            type="button"
-            aria-current={mode === now}
-            onClick={() => {
-              void act("mode", { mode });
-              close();
-            }}
-          >
-            <span className={`sw ${mode}`} aria-hidden="true" />
-            <span>
-              {T.modes[mode].name}
-              <small>{T.modes[mode].help}</small>
-            </span>
-          </button>
-        ))
-      }
-    </Menu>
-  );
-}
-
-/** Quick actions: what the teacher asks often, sent to the chat as they'd type it. */
-function QuickActions({ chat, info, X, onLink, onSent }: { chat: ChatState; info: Info; X: ExtTexts; onLink: () => void; onSent: () => void }) {
-  const connected = Boolean(info.classroom?.connected);
-  const send = (line: string) => {
-    void act("send", { line });
-    onSent();
-  };
-  const items: [string, string, () => void][] = [
-    ["🧱", X.quick.prepare, () => send(X.quickPrompts.prepare)],
-    ["📚", X.quick.ingest, () => send(X.quickPrompts.ingest)],
-    ...(connected
-      ? ([
-          ["📥", X.quick.grade, () => send(X.quickPrompts.grade)],
-          ["🗨️", X.quick.forum, () => send(X.quickPrompts.forum)],
-        ] as [string, string, () => void][])
-      : ([["🔗", X.linkTitle, onLink]] as [string, string, () => void][])),
-  ];
-  return (
-    <Menu
-      title={X.actions}
-      label={
-        <>
-          <span aria-hidden="true">⚡</span>
-          <span className="lbl">{X.actions}</span>
-        </>
-      }
-    >
-      {(close) =>
-        items.map(([icon, label, run]) => (
-          <button
-            key={label}
-            type="button"
-            disabled={chat.busy}
-            onClick={() => {
-              run();
-              close();
-            }}
-          >
-            <span aria-hidden="true">{icon}</span>
-            <span>{label}</span>
-          </button>
-        ))
-      }
-    </Menu>
-  );
-}
-
-export function Header({ title, subtitle, chat, info, T, X, onMenu, onCapabilities, onLink, onSent }: { title: string; subtitle?: string; chat: ChatState | null; info: Info | null; T: Texts; X: ExtTexts; onMenu: () => void; onCapabilities: () => void; onLink: () => void; onSent: () => void }) {
+/** Each view's header: the menu (on a phone), the title, and a new conversation in the conversation. */
+export function Header({ title, subtitle, chat, chatShown, T, X, onMenu, onOpenChat }: { title: string; subtitle?: string; chat: ChatState | null; chatShown: boolean; T: Texts; X: ExtTexts; onMenu: () => void; onOpenChat: () => void }) {
   return (
     <header className="top">
-      <button type="button" className="ibtn burger" title={X.menu} aria-label={X.menu} onClick={onMenu}>
-        ☰
+      <button type="button" className="ibtn plain burger" title={X.menu} aria-label={X.menu} onClick={onMenu}>
+        <Icon name="menu" />
       </button>
       <h1>
         {title}
         {subtitle && <small>{subtitle}</small>}
       </h1>
-      {chat && <ModeMenu chat={chat} T={T} />}
-      {chat && info && <QuickActions chat={chat} info={info} X={X} onLink={onLink} onSent={onSent} />}
-      {chat && (
-        <button type="button" className="ibtn" title={X.capsTitle} onClick={onCapabilities}>
-          <span aria-hidden="true">🧩</span>
-          <span className="lbl">{X.capsButton}</span>
+      {chat && chatShown && (
+        <button type="button" className="ibtn plain new-chat" title={T.newConversation} aria-label={T.newConversation} disabled={chat.busy} onClick={() => newConversation(chat, onOpenChat)}>
+          <Icon name="edit" />
         </button>
       )}
     </header>

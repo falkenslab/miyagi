@@ -100,7 +100,8 @@ export function App() {
     oven: [C.nav.oven, C.sub.oven],
     knowledge: [C.nav.knowledge, "knowledge/"],
     sources: [C.nav.sources, C.sub.sources],
-    chat: [info?.workspace ?? "miyagi"],
+    // The conversation's title once it has one; before, the subject and whether it has a classroom.
+    chat: chat?.run?.title ? [chat.run.title] : [info?.workspace ?? "miyagi", info?.workspace ? (info.classroom?.connected ? X.withClassroom : X.withoutClassroom) : undefined],
     classroom: [X.navClassroom, X.classroomSubtitle],
     extensions: [X.navExtensions, X.extSubtitle],
   };
@@ -109,21 +110,7 @@ export function App() {
     <div className="app">
       <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
-        <Header
-          title={title}
-          subtitle={subtitle}
-          chat={chat}
-          info={info}
-          T={T}
-          X={X}
-          onMenu={() => setSideOpen(true)}
-          onCapabilities={() => {
-            setExtTab("capabilities");
-            setView("extensions");
-          }}
-          onLink={() => setLinking(true)}
-          onSent={() => setView("chat")}
-        />
+        <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} T={T} X={X} onMenu={() => setSideOpen(true)} onOpenChat={() => setView("chat")} />
         {status && (
           <div className="banner" role="status">
             {status}
@@ -136,10 +123,25 @@ export function App() {
           {state?.signedIn && state.opening && !chat && <Waiting block text={T.opening} still={T.stillWorking} />}
           {chat && shown === "chat" && (
             <div className="chat">
-              <Transcript chat={chat} workspace={info?.workspace ?? ""} T={T} />
+              <Transcript chat={chat} info={info} T={T} X={X} onLink={() => setLinking(true)} />
+              {/* A checkpoint takes the composer's place; the composer stays mounted, so a draft isn't lost. */}
               <div className="dock">
-                <Todos chat={chat} />
-                <Composer chat={chat} T={T} onNotice={setToast} />
+                <Panel chat={chat} T={T} />
+                <div className="writer" hidden={Boolean(chat.panel || chat.choice)}>
+                  <Todos chat={chat} T={T} />
+                  <Composer
+                    chat={chat}
+                    info={info}
+                    T={T}
+                    X={X}
+                    onNotice={setToast}
+                    onCapabilities={() => {
+                      setExtTab("capabilities");
+                      setView("extensions");
+                    }}
+                    onLink={() => setLinking(true)}
+                  />
+                </div>
               </div>
             </div>
           )}
@@ -166,7 +168,6 @@ export function App() {
           })()}
           {chat && info && shown === "extensions" && <ExtensionsView chat={chat} info={info} X={X} tab={extTab} setTab={setExtTab} onNotice={setToast} onLink={() => setLinking(true)} />}
           {chat && info && shown === "classroom" && <ClassroomView chat={chat} info={info} X={X} onLink={() => setLinking(true)} />}
-          {chat && <Panel chat={chat} T={T} />}
         </main>
       </section>
       {linking && info && (

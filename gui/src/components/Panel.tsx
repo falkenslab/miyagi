@@ -4,8 +4,11 @@ import type { Texts } from "../i18n";
 import { Markdown } from "../markdown";
 import type { ApprovalPrompt, ChatPanel, ChatState, FormField } from "../types";
 
-/** A modal dialog: focus moved in and kept there, Escape for `onEscape`. */
-export function Dialog({ title, onEscape, children, className = "" }: { title: string; onEscape?: () => void; children: ReactNode; className?: string }) {
+/**
+ * A modal dialog: focus moved in and kept there, Escape for `onEscape`. `inline` draws it in the
+ * chat's dock in place of the composer, the conversation still readable above it (#60): a checkpoint.
+ */
+export function Dialog({ title, onEscape, children, className = "", inline = false }: { title: string; onEscape?: () => void; children: ReactNode; className?: string; inline?: boolean }) {
   const box = useRef<HTMLDivElement>(null);
   // The latest onEscape, so the state's updates don't move the focus back to the start.
   const escape = useRef(onEscape);
@@ -36,6 +39,14 @@ export function Dialog({ title, onEscape, children, className = "" }: { title: s
     el.addEventListener("keydown", onKey);
     return () => el.removeEventListener("keydown", onKey);
   }, [title]);
+  if (inline)
+    return (
+      <section className={`checkpoint ${className}`} role="dialog" aria-label={title} ref={box}>
+        <span className="grab" aria-hidden="true" />
+        <h3>{title}</h3>
+        {children}
+      </section>
+    );
   return (
     <div className="scrim">
       <div className={`dialog ${className}`} role="dialog" aria-modal="true" aria-label={title} ref={box}>
@@ -195,7 +206,7 @@ function ChoiceBody({ panel, T, answer }: { panel: Extract<ChatPanel, { kind: "c
   );
 }
 
-/** The checkpoint waiting for the person (the state's panel), or a choice in place of the prompt (the state's choice). */
+/** The checkpoint waiting for the person (the state's panel), or a choice in place of the prompt (the state's choice), in the dock. */
 export function Panel({ chat, T }: { chat: ChatState; T: Texts }) {
   const [text, setText] = useState("");
   const panel = chat.panel;
@@ -203,7 +214,7 @@ export function Panel({ chat, T }: { chat: ChatState; T: Texts }) {
   if (chat.choice) {
     const choose = (value: string | null) => void act("choose", { value });
     return (
-      <Dialog title={chat.choice.title} onEscape={() => choose(null)}>
+      <Dialog inline title={chat.choice.title} onEscape={() => choose(null)}>
         <div className="options">
           {chat.choice.options.map((option, index) => (
             <button key={option.value} type="button" className="option" data-autofocus={index === 0 || undefined} onClick={() => choose(option.value)}>
@@ -223,38 +234,38 @@ export function Panel({ chat, T }: { chat: ChatState; T: Texts }) {
   const answer = (value: string) => void act("answer", { panelId: panel.id, answer: value });
   if (panel.kind === "form")
     return (
-      <Dialog title={panel.prompt.title} onEscape={() => answer(JSON.stringify({ action: "cancel" }))}>
+      <Dialog inline title={panel.prompt.title} onEscape={() => answer(JSON.stringify({ action: "cancel" }))}>
         <PromptBody prompt={{ ...panel.prompt, lines: panel.form.message ? [panel.form.message] : panel.prompt.lines }} />
         <FormBody fields={panel.form.fields} T={T} done={(result) => answer(JSON.stringify(result))} />
       </Dialog>
     );
   if (panel.kind === "choice")
     return (
-      <Dialog title={panel.prompt.title}>
+      <Dialog inline title={panel.prompt.title}>
         <PromptBody prompt={panel.prompt} />
         <ChoiceBody panel={panel} T={T} answer={answer} />
       </Dialog>
     );
   if (panel.kind === "decision")
     return (
-      <Dialog title={panel.prompt.title} onEscape={() => answer("n")}>
+      <Dialog inline title={panel.prompt.title} onEscape={() => answer("n")}>
         <PromptBody prompt={panel.prompt} />
-        <div className="acts">
-          <button type="button" className="btn danger" onClick={() => answer("q")}>
-            {T.stopAll}
+        <div className="acts decide">
+          <button type="button" className="btn primary" data-autofocus onClick={() => answer("y")}>
+            {T.approve}
           </button>
           <button type="button" className="btn" onClick={() => answer("n")}>
             {T.reject}
           </button>
-          <button type="button" className="btn primary" data-autofocus onClick={() => answer("y")}>
-            {T.approve}
+          <button type="button" className="btn danger" onClick={() => answer("q")}>
+            {T.stopAll}
           </button>
         </div>
       </Dialog>
     );
   if (panel.kind === "manual")
     return (
-      <Dialog title={panel.prompt.title}>
+      <Dialog inline title={panel.prompt.title}>
         <PromptBody prompt={panel.prompt} />
         <div className="acts">
           <button type="button" className="btn primary" data-autofocus onClick={() => answer("")}>
@@ -264,7 +275,7 @@ export function Panel({ chat, T }: { chat: ChatState; T: Texts }) {
       </Dialog>
     );
   return (
-    <Dialog title={panel.prompt.title}>
+    <Dialog inline title={panel.prompt.title}>
       <PromptBody prompt={panel.prompt} />
       <textarea
         className="field"

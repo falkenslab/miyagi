@@ -22,7 +22,7 @@ Open it in your browser. `Ctrl+C` in the terminal closes it. With `--port <n>` y
 
 ## What you see {#qué-ves}
 
-On the left, the **sidebar**: your subject (to switch to another or create a new one, and whether it has a classroom), **Today**, the **Conversation**, the views of the subject and of its memory, **Your classroom**, the **Extensions**, your earlier conversations (to resume one or start another) and, at the bottom, the versions and the light, dark or system theme. On a narrow screen it opens with the ☰ button.
+On the left, the **sidebar**, laid out like the Claude app's: **New conversation**, your subject (to switch to another or create a new one, and whether it has a classroom), **Today** and **Your classroom**, the views of the subject and of its memory and the **Extensions**, your **Recent** conversations (the open one marked; click one to resume it) and, at the bottom, the versions and the light, dark or system theme. On a narrow screen, like a phone's, it opens with the ☰ button, and the views of the subject, of its memory and of miyagi fold into one line that unfolds them.
 
 From the subject picker (or the start screen, if you have none):
 
@@ -32,13 +32,15 @@ From the subject picker (or the start screen, if you have none):
 
 They're the same subjects you see in the terminal with `miyagi workspaces`.
 
-At the top of each view: its title, the **mode** (also with `Shift+Tab`), the **Actions** (what you ask for often, like preparing the next unit or, with the classroom, grading what's pending; miyagi receives it as if you'd typed it) and the **Capabilities**.
+At the top of each view, its title; in the conversation, the conversation's title and the ✎ button to start a new one.
 
 In the conversation:
 
-- **The chat**: what miyagi writes, with its actions folded into one line (open it to see each one), the turn's tasks floating above and the bar to type in. `Enter` sends, `Shift+Enter` starts a new line, `Esc` stops miyagi while it works, `/` opens the shortcuts and `↑`/`↓` go through what you already typed.
-- **miyagi's approvals and questions**, in a window that doesn't close until you answer, just like in the terminal. If you were in another view, the page goes back to the conversation.
-- **Files for the sources**: with the paper clip, or by dragging them onto the bar, they go to the subject's `sources/`.
+- **A new conversation** greets you and offers what you ask for often: preparing the next unit, taking in your documents (with how many are left) and, with the classroom, grading what's pending and answering the forum's questions; without one, linking it. miyagi receives what you click as if you'd typed it.
+- **The chat**: what you write, on the right; what miyagi answers, full width, with **Copy** and how long it took under it; and its actions folded into one dim line (open it to see each one). If you scroll up to read something earlier, the ↓ button takes you back to the end.
+- **The box to type in**: `Enter` sends, `Shift+Enter` starts a new line, `Esc` stops miyagi while it works (so does the ■ button), `/` opens the shortcuts and `↑`/`↓` go through what you already typed. Under the text, **＋** (add a file to the sources, the **Capabilities**, the usual actions and miyagi's commands) and the **mode** (also with `Shift+Tab`). The turn's tasks fold above it into one line with the one in progress; click it to see the list.
+- **miyagi's approvals and questions** take the place of the box to type in until you answer, just like in the terminal, and the conversation stays in view above them in case you want to reread something. On a phone, as a sheet that slides up from the bottom. If you were in another view, the page goes back to the conversation.
+- **Files for the sources**: from **＋**, or by dragging them onto the box to type in, they go to the subject's `sources/`.
 
 The first time, if you aren't signed in to Claude, the page offers two ways:
 
@@ -76,7 +78,7 @@ Your password doesn't go through miyagi: the first time it enters the course, a 
 - **Installed**: one card per extension, with its switch to turn it on or off, whether it's up to date (and the button to update it if not) and **What it declares**: its remote servers, if it has any, what it needs on your computer, what capabilities it gives, its options and the button to remove it (it asks whether to delete its data too). Secret options, like a token, are never shown: only whether they're saved.
 - **Catalog**: the extensions meant for miyagi, with their logo, what they do and what they need. **Add** first shows you what it declares; one from a repository that isn't the official one carries the “not reviewed” mark and warns you before installing. What you install starts working in the open conversation.
 - **Repositories**: the official one, which can't be removed, and the ones you add. To add one, miyagi reviews it, warns you that its code runs on your computer and asks you to type its name.
-- **Capabilities** (also with the button at the top): a table with what miyagi can do and thanks to what, what your computer doesn't allow it (for example, no Docker) and what it lacks, with a button to add the extension that would give it.
+- **Capabilities** (also from **＋**, in the box to type in): a table with what miyagi can do and thanks to what, what your computer doesn't allow it (for example, no Docker) and what it lacks, with a button to add the extension that would give it.
 
 ## What protects it {#qué-la-protege}
 

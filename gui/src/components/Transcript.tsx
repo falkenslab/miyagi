@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from "react";
+import { act } from "../api";
 import type { Texts } from "../i18n";
+import type { ExtTexts } from "../i18n/extensions";
 import { Markdown } from "../markdown";
-import type { ChatState, TranscriptCall, TranscriptEntry } from "../types";
+import type { ChatState, Info, TranscriptCall, TranscriptEntry } from "../types";
+import { quickActions } from "./Composer";
+import { Icon } from "./Icons";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
 
-/** A turn's tool calls, folded into one line with the kit's labels; opened, each call with ✓/✕ and its subagent's steps. */
+/** A turn's tool calls, one dim line (#60): the last call and how many, or the running one; opened, each call with ✓/✕ and its subagent's steps. */
 function Tools({ calls, running, T }: { calls: TranscriptCall[]; running: boolean; T: Texts }) {
   const [open, setOpen] = useState(false);
   const failed = calls.filter((call) => call.result?.isError).length;
@@ -13,10 +17,10 @@ function Tools({ calls, running, T }: { calls: TranscriptCall[]; running: boolea
   return (
     <div className={`tool${open ? " open" : ""}`}>
       <button type="button" className="tool-head" aria-expanded={open} onClick={() => setOpen(!open)}>
-        <span className="chev" aria-hidden="true">{open ? "▾" : "▸"}</span>
-        <span className="tool-label">{running && last ? last.label : T.calls(calls.length)}</span>
-        {failed > 0 && <span className="badge sun">{failed} {T.toolFailed}</span>}
         {running && <span className="spinner" aria-hidden="true" />}
+        <span className="tool-label">{running && last ? last.label : last ? `${last.label} · ${T.calls(calls.length)}` : T.calls(calls.length)}</span>
+        {failed > 0 && <span className="badge sun">{failed} {T.toolFailed}</span>}
+        <Icon name={open ? "down" : "right"} size={16} />
       </button>
       {open && (
         <ul className="tool-calls">
@@ -40,7 +44,33 @@ function Tools({ calls, running, T }: { calls: TranscriptCall[]; running: boolea
   );
 }
 
-function Entry({ entry, running, T }: { entry: TranscriptEntry; running: boolean; T: Texts }) {
+/** Under a finished reply: Copy (its markdown) and how long the turn took. */
+function TurnEnd({ text, seconds, T }: { text: string; seconds: number; T: Texts }) {
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 1600);
+    return () => clearTimeout(timer);
+  }, [copied]);
+  return (
+    <div className="turn-summary">
+      {text && (
+        <button
+          type="button"
+          className="copy"
+          title={copied ? T.copied : T.copy}
+          aria-label={copied ? T.copied : T.copy}
+          onClick={() => void navigator.clipboard?.writeText(text).then(() => setCopied(true), () => {})}
+        >
+          <Icon name={copied ? "check" : "copy"} size={18} />
+        </button>
+      )}
+      <span>✻ {T.seconds(seconds)}</span>
+    </div>
+  );
+}
+
+function Entry({ entry, running, reply, T }: { entry: TranscriptEntry; running: boolean; reply: string; T: Texts }) {
   switch (entry.kind) {
     case "user":
       return (
@@ -51,9 +81,6 @@ function Entry({ entry, running, T }: { entry: TranscriptEntry; running: boolean
     case "agent":
       return (
         <div className="msg agent">
-          <div className="av" aria-hidden="true">
-            <Logo size={22} />
-          </div>
           <div className="body md">
             <Markdown text={entry.text} />
           </div>
@@ -64,46 +91,91 @@ function Entry({ entry, running, T }: { entry: TranscriptEntry; running: boolean
     case "notice":
       return <div className={`notice ${entry.tone}`}>{entry.text}</div>;
     case "turn-summary":
-      return <div className="turn-summary">✻ {T.seconds(entry.seconds)}</div>;
+      return <TurnEnd text={reply} seconds={entry.seconds} T={T} />;
   }
 }
 
-/** The conversation, scrolled to the end while the person is at the end. */
-export function Transcript({ chat, workspace, T }: { chat: ChatState; workspace: string; T: Texts }) {
+/** What to start with in a conversation the person hasn't written in yet: the quick actions as rows. */
+function Suggestions({ chat, info, X, onLink }: { chat: ChatState; info: Info; X: ExtTexts; onLink: () => void }) {
+  const [pending, setPending] = useState(0);
+  useEffect(() => {
+    void act<{ sources?: { pending: number } }>("today")
+      .then((today) => setPending(today.sources?.pending ?? 0))
+      .catch(() => {});
+  }, []);
+  return (
+    <div className="suggest">
+      {quickActions(info, X, (line) => void act("send", { line }), onLink).map((action) => (
+        <button key={action.key} type="button" disabled={chat.busy && action.key !== "link"} onClick={action.run}>
+          <Icon name={action.icon} />
+          <span className="grow">{action.label}</span>
+          {action.key === "ingest" && pending > 0 && <span className="badge warn">{pending}</span>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** The greeting by the hour, as the person's clock says. */
+function greeting(T: Texts) {
+  const hour = new Date().getHours();
+  return T.greeting(hour < 6 || hour >= 21 ? "night" : hour < 13 ? "morning" : "afternoon");
+}
+
+/** The conversation, scrolled to the end while the person is at the end; ↓ takes them back there. */
+export function Transcript({ chat, info, T, X, onLink }: { chat: ChatState; info: Info | null; T: Texts; X: ExtTexts; onLink: () => void }) {
   const box = useRef<HTMLDivElement>(null);
   const atEnd = useRef(true);
+  const [away, setAway] = useState(false);
   useEffect(() => {
     if (atEnd.current) box.current?.scrollTo({ top: box.current.scrollHeight });
-  }, [chat.transcript, chat.activity]);
+  }, [chat.transcript, chat.activity, chat.panel]);
   const last = chat.transcript[chat.transcript.length - 1];
+  const fresh = !chat.transcript.some((entry) => entry.kind === "user");
+  // Each turn's summary copies the reply right before it.
+  let reply = "";
   return (
-    <div
-      className="msgs"
-      ref={box}
-      onScroll={(event) => {
-        const el = event.currentTarget;
-        atEnd.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
-      }}
-      aria-live="polite"
-    >
-      <div className="col">
-        {chat.transcript.length === 0 && (
-          <div className="welcome">
-            <Logo size={72} />
-            <h2>{T.welcome(workspace)}</h2>
-            {/* The session starting and the greeting on its way: tens of seconds the first time. */}
-            {chat.busy && <Waiting text={T.starting} still={T.stillWorking} />}
-          </div>
-        )}
-        {chat.transcript.map((entry) => (
-          <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} T={T} />
-        ))}
-        {chat.busy && chat.activity && last?.kind !== "tools" && (
-          <div className="activity">
-            <span className="spinner" aria-hidden="true" /> {chat.activity}
-          </div>
-        )}
+    <div className="msgs-wrap">
+      <div
+        className="msgs"
+        ref={box}
+        onScroll={(event) => {
+          const el = event.currentTarget;
+          atEnd.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+          setAway(!atEnd.current);
+        }}
+        aria-live="polite"
+      >
+        <div className="col">
+          {fresh && (
+            <div className="welcome">
+              <Logo size={64} />
+              <h2>{greeting(T)}</h2>
+              {/* The session starting and the greeting on its way: tens of seconds the first time. */}
+              {chat.busy && chat.transcript.length === 0 && <Waiting text={T.starting} still={T.stillWorking} />}
+            </div>
+          )}
+          {chat.transcript.map((entry) => {
+            if (entry.kind === "agent") reply = reply ? `${reply}
+
+${entry.text}` : entry.text;
+            const text = reply;
+            if (entry.kind === "user" || entry.kind === "turn-summary") reply = "";
+            return <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} reply={text} T={T} />;
+          })}
+          {chat.busy && chat.activity && last?.kind !== "tools" && (
+            <div className="activity">
+              <span className="spinner" aria-hidden="true" /> {chat.activity}
+            </div>
+          )}
+          {fresh && !chat.busy && info && <Suggestions chat={chat} info={info} X={X} onLink={onLink} />}
+        </div>
       </div>
+      {away && (
+        <button type="button" className="to-end" aria-label={T.toEnd} title={T.toEnd} onClick={() => box.current?.scrollTo({ top: box.current.scrollHeight, behavior: "smooth" })}>
+          <Icon name="toEnd" size={18} />
+        </button>
+      )}
     </div>
   );
 }

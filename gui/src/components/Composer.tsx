@@ -1,30 +1,114 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { act, upload } from "../api";
 import type { Texts } from "../i18n";
-import type { ChatState } from "../types";
+import type { ExtTexts } from "../i18n/extensions";
+import type { ChatState, Info, Mode } from "../types";
+import { Icon, type IconName } from "./Icons";
+import { Menu } from "./Shell";
 
-/** The floating tasks of the turn (the agent's TodoWrite), above the composer. */
-export function Todos({ chat }: { chat: ChatState }) {
+/** The turn's tasks (the agent's TodoWrite), folded above the composer into the one in progress; opened, the list. */
+export function Todos({ chat, T }: { chat: ChatState; T: Texts }) {
+  const [open, setOpen] = useState(false);
   if (!chat.todos?.length || !chat.todos.some((todo) => todo.status !== "completed")) return null;
+  const done = chat.todos.filter((todo) => todo.status === "completed").length;
+  const now = chat.todos.find((todo) => todo.status === "in_progress") ?? chat.todos.find((todo) => todo.status === "pending");
   return (
     <div className="todos">
-      <div className="box">
-        {chat.todos.map((todo, index) => (
-          <span key={index} className={todo.status === "completed" ? "done" : todo.status === "in_progress" ? "now" : ""}>
-            {todo.status === "in_progress" ? todo.activeForm : todo.content}
-          </span>
-        ))}
-      </div>
+      {open && (
+        <div className="box">
+          {chat.todos.map((todo, index) => (
+            <span key={index} className={todo.status === "completed" ? "done" : todo.status === "in_progress" ? "now" : ""}>
+              {todo.status === "in_progress" ? todo.activeForm : todo.content}
+            </span>
+          ))}
+        </div>
+      )}
+      <button type="button" className="todo-pill" aria-expanded={open} title={T.tasks(done, chat.todos.length)} onClick={() => setOpen(!open)}>
+        <span className="sq" aria-hidden="true" />
+        <b>
+          {done}/{chat.todos.length}
+        </b>
+        <span className="ellipsis">{now ? (now.status === "in_progress" ? now.activeForm : now.content) : ""}</span>
+        <Icon name={open ? "down" : "up"} size={16} />
+      </button>
     </div>
   );
 }
 
+export interface QuickAction {
+  icon: IconName;
+  label: string;
+  run: () => void;
+  key: "prepare" | "grade" | "forum" | "ingest" | "link";
+}
+
+/** What the teacher asks often, sent to the chat as they'd type it; without a classroom, linking one. */
+export function quickActions(info: Info, X: ExtTexts, send: (line: string) => void, onLink: () => void): QuickAction[] {
+  const connected = Boolean(info.classroom?.connected);
+  return [
+    { key: "prepare", icon: "layers", label: X.quick.prepare, run: () => send(X.quickPrompts.prepare) },
+    ...(connected
+      ? ([
+          { key: "grade", icon: "check", label: X.quick.grade, run: () => send(X.quickPrompts.grade) },
+          { key: "forum", icon: "forum", label: X.quick.forum, run: () => send(X.quickPrompts.forum) },
+        ] as QuickAction[])
+      : ([{ key: "link", icon: "link", label: X.linkTitle, run: onLink }] as QuickAction[])),
+    { key: "ingest", icon: "folder", label: X.quick.ingest, run: () => send(X.quickPrompts.ingest) },
+  ];
+}
+
+/** The mode now, as a pill in the composer, and the ones this session can switch to (Shift+Tab does the same). */
+function ModeMenu({ chat, T }: { chat: ChatState; T: Texts }) {
+  if (!chat.mode) return null;
+  const now = chat.mode;
+  return (
+    <Menu
+      title={T.modeTitle}
+      className={`pill mode ${now}`}
+      popClass="up left"
+      label={
+        <>
+          <span className="sw" aria-hidden="true" />
+          <span>{T.modes[now].name}</span>
+          <Icon name="down" size={14} />
+        </>
+      }
+    >
+      {(close) => (
+        <>
+          <h4 className="pop-title">{T.modeTitle}</h4>
+          <p className="pop-help">{T.modeHelp}</p>
+          {chat.switchableModes.map((mode: Mode) => (
+            <button
+              key={mode}
+              type="button"
+              aria-current={mode === now}
+              onClick={() => {
+                void act("mode", { mode });
+                close();
+              }}
+            >
+              <span className={`sw ${mode}`} aria-hidden="true" />
+              <span className="grow">
+                {T.modes[mode].name}
+                <small>{T.modes[mode].help}</small>
+              </span>
+              {mode === now && <Icon name="check" size={18} />}
+            </button>
+          ))}
+        </>
+      )}
+    </Menu>
+  );
+}
+
 /**
- * Where the person writes: Enter sends, Shift+Enter is a new line, Esc stops a running turn,
- * ↑/↓ walk the history when the box is empty, / opens the shortcuts, the clip adds a file to
- * the sources. While a turn runs nothing is sent: the host refuses it.
+ * Where the person writes, as a card (#60): the text, and under it ＋ (a file to the sources,
+ * capabilities, the quick actions, miyagi's commands), the mode and send (stop while a turn runs).
+ * Enter sends, Shift+Enter is a new line, Esc stops a running turn, ↑/↓ walk the history when the
+ * box is empty, / opens the shortcuts. While a turn runs nothing is sent: the host refuses it.
  */
-export function Composer({ chat, T, onNotice }: { chat: ChatState; T: Texts; onNotice: (text: string) => void }) {
+export function Composer({ chat, info, T, X, onNotice, onCapabilities, onLink }: { chat: ChatState; info: Info | null; T: Texts; X: ExtTexts; onNotice: (text: string) => void; onCapabilities: () => void; onLink: () => void }) {
   const [text, setText] = useState("");
   const [historyAt, setHistoryAt] = useState(-1);
   const [menuAt, setMenuAt] = useState(0);
@@ -135,9 +219,6 @@ export function Composer({ chat, T, onNotice }: { chat: ChatState; T: Texts; onN
           void attach(event.dataTransfer.files);
         }}
       >
-        <button type="button" className="clip" aria-label={T.attach} title={T.attach} onClick={() => file.current?.click()}>
-          📎
-        </button>
         <input ref={file} type="file" multiple hidden onChange={(event) => void attach(event.target.files).then(() => (event.target.value = ""))} />
         <textarea
           ref={area}
@@ -151,15 +232,87 @@ export function Composer({ chat, T, onNotice }: { chat: ChatState; T: Texts; onN
           }}
           onKeyDown={onKey}
         />
-        {chat.busy ? (
-          <button type="button" className="send stop" aria-label={T.stop} title={T.stop} onClick={() => void act("interrupt")}>
-            ■
-          </button>
-        ) : (
-          <button type="button" className="send" aria-label={T.send} title={T.send} disabled={!text.trim()} onClick={() => send()}>
-            ↑
-          </button>
-        )}
+        <div className="tools-row">
+          <Menu title={T.more} ariaLabel={T.more} className="round plus" popClass="up left more-pop" label={<Icon name="plus" />}>
+            {(close) => (
+              <>
+                <div className="more-tiles">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      close();
+                      file.current?.click();
+                    }}
+                  >
+                    <Icon name="clip" size={22} />
+                    <span>
+                      <b>{T.addFile}</b>
+                      <small>{T.toSources}</small>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      close();
+                      onCapabilities();
+                    }}
+                  >
+                    <Icon name="grid" size={22} />
+                    <span>
+                      <b>{X.capsButton}</b>
+                      <small>{X.capsTitle}</small>
+                    </span>
+                  </button>
+                </div>
+                {info && (
+                  <>
+                    <h4 className="pop-title small-caps">{X.actions}</h4>
+                    {quickActions(info, X, (line) => void act("send", { line }), onLink).map((action) => (
+                      <button
+                        key={action.key}
+                        type="button"
+                        disabled={chat.busy && action.key !== "link"}
+                        onClick={() => {
+                          close();
+                          action.run();
+                        }}
+                      >
+                        <Icon name={action.icon} />
+                        <span className="grow">{action.label}</span>
+                      </button>
+                    ))}
+                  </>
+                )}
+                <h4 className="pop-title small-caps">{T.commands}</h4>
+                <button
+                  type="button"
+                  onClick={() => {
+                    close();
+                    setText("/");
+                    area.current?.focus();
+                  }}
+                >
+                  <span className="slash-key" aria-hidden="true">
+                    /
+                  </span>
+                  <span className="grow">{T.miyagiCommands}</span>
+                  <Icon name="right" size={16} />
+                </button>
+              </>
+            )}
+          </Menu>
+          <ModeMenu chat={chat} T={T} />
+          <span className="sp" />
+          {chat.busy ? (
+            <button type="button" className="round send stop" aria-label={T.stop} title={T.stop} onClick={() => void act("interrupt")}>
+              <span className="stop-sq" aria-hidden="true" />
+            </button>
+          ) : (
+            <button type="button" className="round send" aria-label={T.send} title={T.send} disabled={!text.trim()} onClick={() => send()}>
+              <Icon name="send" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

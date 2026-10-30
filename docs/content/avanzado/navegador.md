@@ -22,7 +22,7 @@ http://127.0.0.1:52341/?token=…
 
 ## Qué ves
 
-A la izquierda, la **barra lateral**: tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), **Hoy**, la **Conversación**, las vistas de la asignatura y de su memoria, **Tu aula**, las **Extensiones**, tus conversaciones anteriores (para retomar una o empezar otra) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha se abre con el botón ☰.
+A la izquierda, la **barra lateral**, ordenada como la de la app de Claude: **Nueva conversación**, tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), **Hoy** y **Tu aula**, las vistas de la asignatura y de su memoria y las **Extensiones**, tus conversaciones **Recientes** (la abierta, marcada; pulsa una para retomarla) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha, como la de un móvil, se abre con el botón ☰, y las vistas de la asignatura, de su memoria y de miyagi se pliegan en una línea que las despliega.
 
 Desde el selector de asignaturas (o la pantalla de inicio, si no tienes ninguna):
 
@@ -32,13 +32,15 @@ Desde el selector de asignaturas (o la pantalla de inicio, si no tienes ninguna)
 
 Son las mismas asignaturas que ves en la terminal con `miyagi workspaces`.
 
-Arriba, en cada vista: su título, el **modo** (también con `Mayús+Tab`), las **Acciones** (lo que pides a menudo, como preparar el próximo tema o, con el aula, corregir lo pendiente; miyagi lo recibe como si lo escribieras) y las **Capacidades**.
+Arriba, en cada vista, su título; en la conversación, el título de la conversación y el botón ✎ para empezar una nueva.
 
 En la conversación:
 
-- **El chat**: lo que miyagi escribe, con sus acciones plegadas en una línea (ábrela para ver cada una), las tareas del turno flotando encima y la barra para escribir. `Intro` envía, `Mayús+Intro` salta de línea, `Esc` para a miyagi mientras trabaja, `/` abre los atajos y `↑`/`↓` recorren lo que ya escribiste.
-- **Las aprobaciones y las preguntas** de miyagi, en una ventana que no se cierra hasta que respondes, igual que en la terminal. Si estabas en otra vista, la página vuelve a la conversación.
-- **Archivos para las fuentes**: con el clip, o arrastrándolos a la barra, van a `sources/` de la asignatura.
+- **Una conversación nueva** te saluda y te propone lo que pides a menudo: preparar el próximo tema, incorporar tus documentos (con cuántos faltan) y, con el aula, corregir lo pendiente y responder las dudas del foro; sin aula, vincularla. miyagi recibe lo que pulses como si lo escribieras.
+- **El chat**: lo que escribes, a la derecha; lo que responde miyagi, a todo el ancho, con **Copiar** y lo que tardó debajo; y sus acciones plegadas en una línea tenue (ábrela para ver cada una). Si subes a leer algo anterior, el botón ↓ te devuelve al final.
+- **El cuadro para escribir**: `Intro` envía, `Mayús+Intro` salta de línea, `Esc` para a miyagi mientras trabaja (también el botón ■), `/` abre los atajos y `↑`/`↓` recorren lo que ya escribiste. Debajo del texto, **＋** (añadir un archivo a las fuentes, las **Capacidades**, las acciones de siempre y los comandos de miyagi) y el **modo** (también con `Mayús+Tab`). Las tareas del turno se pliegan encima en una línea con la que está en curso; púlsala para ver la lista.
+- **Las aprobaciones y las preguntas** de miyagi ocupan el sitio del cuadro para escribir hasta que respondes, igual que en la terminal, y la conversación sigue a la vista encima por si quieres releer algo. En el móvil, como una hoja que sube desde abajo. Si estabas en otra vista, la página vuelve a la conversación.
+- **Archivos para las fuentes**: desde **＋**, o arrastrándolos al cuadro para escribir, van a `sources/` de la asignatura.
 
 La primera vez, si no has iniciado sesión en Claude, la página te ofrece dos caminos:
 
@@ -76,7 +78,7 @@ Tu contraseña no pasa por miyagi: la primera vez que entre en el curso se abre 
 - **Instaladas**: una tarjeta por extensión, con su interruptor para encenderla o apagarla, si está al día (y el botón para actualizarla si no) y **Qué declara**: sus servidores remotos, si los tiene, qué necesita en tu ordenador, qué capacidades aporta, sus opciones y el botón para quitarla (te pregunta si borra también sus datos). Las opciones secretas, como un token, no se muestran nunca: solo si están guardadas.
 - **Catálogo**: las extensiones pensadas para miyagi, con su logo, qué hacen y qué necesitan. **Añadir** te enseña antes lo que declara; una de un repositorio que no es el oficial lleva la marca «sin revisar» y te avisa antes de instalarse. Lo que instalas se pone en marcha en la conversación abierta.
 - **Repositorios**: el oficial, que no se puede quitar, y los que añadas tú. Para añadir uno, miyagi lo revisa, te avisa de que su código se ejecuta en tu ordenador y te pide que escribas su nombre.
-- **Capacidades** (también con el botón de arriba): una tabla con lo que miyagi puede hacer y gracias a qué, lo que tu ordenador no le deja (por ejemplo, sin Docker) y lo que le falta, con un botón para añadir la extensión que se lo daría.
+- **Capacidades** (también desde **＋**, en el cuadro para escribir): una tabla con lo que miyagi puede hacer y gracias a qué, lo que tu ordenador no le deja (por ejemplo, sin Docker) y lo que le falta, con un botón para añadir la extensión que se lo daría.
 
 ## Qué la protege
 
