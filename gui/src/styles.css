@@ -78,6 +78,8 @@ button { font: inherit; color: inherit; }
 .nav a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; min-height: 40px; border-radius: 8px; color: var(--text-2); text-decoration: none; cursor: pointer; }
 .nav a:hover { background: var(--panel-2); }
 .nav a.on, .nav a.on-conv { background: var(--panel); color: var(--text); box-shadow: inset 3px 0 0 var(--sun); font-weight: 600; }
+/* The open conversation while another view is on screen (#65): marked, not selected */
+.nav a.open-conv { color: var(--text); }
 .nav a[aria-disabled="true"] { opacity: .5; cursor: default; }
 .nav a .ico { width: 18px; text-align: center; flex: 0 0 auto; }
 .nav a .dot, .nav a .spinner { margin-left: auto; }

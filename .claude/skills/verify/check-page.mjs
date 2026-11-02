@@ -93,8 +93,13 @@ try {
   });
   await page.click('.new-subject button[type="submit"]');
   await page.waitForSelector(".side .brand");
+  // In Today, the open conversation is marked but not selected: one item looks selected (#65).
+  await page.waitForSelector(".recents a.open-conv, .recents a.on-conv", { timeout: 60_000 });
+  const marks = await page.evaluate(() => ({ selected: document.querySelectorAll('.nav [aria-current="page"]').length, conv: document.querySelectorAll(".recents .on-conv").length, open: document.querySelectorAll(".recents .open-conv").length }));
+  check("outside the chat, the open conversation isn't highlighted as the view", marks.selected === 1 && marks.conv === 0 && marks.open === 1, JSON.stringify(marks));
   // The current conversation, from the recent ones.
-  await page.click(".recents a.on-conv");
+  await page.click(".recents a.open-conv");
+  check("in the chat, the open conversation is the one highlighted", (await page.locator(".recents .on-conv").count()) === 1 && (await page.locator('.nav [aria-current="page"]').count()) === 1);
   if (await page.waitForSelector(".welcome .waiting", { timeout: 20_000 }).catch(() => null)) await page.screenshot({ path: path.join(shots, "starting-1440.png") });
   await page.waitForSelector(".msg.agent", { timeout: 240_000 });
   await idle();
@@ -125,17 +130,17 @@ try {
   await mode("interactive");
   await send("Lee la página overview de tu base de conocimiento y dime en una línea qué dice.");
   await page.waitForSelector(CHECKPOINT, { timeout: 180_000 });
-  // The checkpoint takes the composer's place; the conversation stays there to read, at every width.
-  for (const [width, height] of [
-    [1440, 900],
-    [390, 844],
-  ]) {
   // The spinner of a working conversation keeps moving when less motion is asked (#61): a fade, no turn.
   const spinning = () => page.evaluate(() => getComputedStyle(document.querySelector(".recents .spinner")).animationName);
   await page.emulateMedia({ reducedMotion: "reduce" });
   const calm = await spinning();
   await page.emulateMedia({ reducedMotion: "no-preference" });
   check("with less motion the spinner fades instead of standing still", calm === "breathe" && (await spinning()) === "spin", calm);
+  // The checkpoint takes the composer's place; the conversation stays there to read, at every width.
+  for (const [width, height] of [
+    [1440, 900],
+    [390, 844],
+  ]) {
     await page.setViewportSize({ width, height });
     await shot(`approval-${width}`);
     const seen = await page.evaluate(() => ({ msgs: document.querySelector(".msgs")?.clientHeight ?? 0, scrim: Boolean(document.querySelector(".scrim")), composer: Boolean(document.querySelector(".composer")?.offsetParent) }));

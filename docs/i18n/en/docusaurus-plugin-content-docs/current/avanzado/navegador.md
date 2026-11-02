@@ -22,7 +22,7 @@ Open it in your browser. `Ctrl+C` in the terminal closes it. With `--port <n>` y
 
 ## What you see {#qué-ves}
 
-On the left, the **sidebar**, laid out like the Claude app's: **New conversation**, your subject (to switch to another or create a new one, and whether it has a classroom), **Today** and **Your classroom**, the views of the subject and of its memory and the **Extensions**, your **Recent** conversations (the open one marked; click one to resume it) and, at the bottom, the versions and the light, dark or system theme. On a narrow screen, like a phone's, it opens with the ☰ button, and the views of the subject, of its memory and of miyagi fold into one line that unfolds them.
+On the left, the **sidebar**, laid out like the Claude app's: **New conversation**, your subject (to switch to another or create a new one, and whether it has a classroom), **Today** and **Your classroom**, the views of the subject and of its memory and the **Extensions**, your **Recent** conversations (the open one highlighted while you're in it, and with a dot when you're in another view; click one to resume it) and, at the bottom, the versions and the light, dark or system theme. On a narrow screen, like a phone's, it opens with the ☰ button, and the views of the subject, of its memory and of miyagi fold into one line that unfolds them.
 
 From the subject picker (or the start screen, if you have none):
 

@@ -22,7 +22,7 @@ http://127.0.0.1:52341/?token=…
 
 ## Qué ves
 
-A la izquierda, la **barra lateral**, ordenada como la de la app de Claude: **Nueva conversación**, tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), **Hoy** y **Tu aula**, las vistas de la asignatura y de su memoria y las **Extensiones**, tus conversaciones **Recientes** (la abierta, marcada; pulsa una para retomarla) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha, como la de un móvil, se abre con el botón ☰, y las vistas de la asignatura, de su memoria y de miyagi se pliegan en una línea que las despliega.
+A la izquierda, la **barra lateral**, ordenada como la de la app de Claude: **Nueva conversación**, tu asignatura (para cambiar a otra o crear una nueva, y si tiene aula), **Hoy** y **Tu aula**, las vistas de la asignatura y de su memoria y las **Extensiones**, tus conversaciones **Recientes** (la abierta, resaltada mientras estás en ella y con un punto cuando estás en otra vista; pulsa una para retomarla) y, abajo, las versiones y el tema claro, oscuro o el del sistema. En una pantalla estrecha, como la de un móvil, se abre con el botón ☰, y las vistas de la asignatura, de su memoria y de miyagi se pliegan en una línea que las despliega.
 
 Desde el selector de asignaturas (o la pantalla de inicio, si no tienes ninguna):
 

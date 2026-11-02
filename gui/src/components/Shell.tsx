@@ -121,7 +121,11 @@ function SubjectSwitcher({ info, busy, T, X, onNew, onOpenExisting }: { info: In
 }
 
 /** The recent conversations of this subject, the current one marked: resume one. */
-function Conversations({ chat, T, onOpen }: { chat: ChatState; T: Texts; onOpen: () => void }) {
+/**
+ * The recent conversations. The open one is highlighted as the view only while the chat is on
+ * screen (`inChat`); in another view it keeps a quiet dot, so one item looks selected (#65).
+ */
+function Conversations({ chat, T, inChat, onOpen }: { chat: ChatState; T: Texts; inChat: boolean; onOpen: () => void }) {
   const [runs, setRuns] = useState<{ label: string; dir: string }[] | null>(null);
   const load = useCallback(async () => setRuns((await act<{ runs: { label: string; dir: string }[] }>("runs")).runs ?? []), []);
   // Again when the conversation changes (a new one, one resumed, a turn that names it).
@@ -140,8 +144,8 @@ function Conversations({ chat, T, onOpen }: { chat: ChatState; T: Texts; onOpen:
           key={run.dir}
           role="button"
           tabIndex={0}
-          className={run.dir === current ? "conv on-conv" : "conv"}
-          aria-current={run.dir === current}
+          className={run.dir !== current ? "conv" : inChat ? "conv on-conv" : "conv open-conv"}
+          aria-current={run.dir === current && inChat ? "page" : undefined}
           title={run.label}
           onClick={() => {
             if (!chat.busy && run.dir !== current) void act("resume", { dir: run.dir });
@@ -150,7 +154,7 @@ function Conversations({ chat, T, onOpen }: { chat: ChatState; T: Texts; onOpen:
           onKeyDown={(event) => event.key === "Enter" && !chat.busy && (run.dir === current || void act("resume", { dir: run.dir }), onOpen())}
         >
           <span className="ellipsis">{run.label}</span>
-          {run.dir === current && chat.busy && <span className="spinner" aria-hidden="true" />}
+          {run.dir === current && (chat.busy ? <span className="spinner" aria-hidden="true" /> : !inChat && <span className="dot sun" aria-hidden="true" />)}
         </a>
       ))}
     </div>
@@ -281,7 +285,7 @@ export function Sidebar({
                 <h6>{X.secMiyagi}</h6>
                 {item("extensions", "🧩", X.navExtensions)}
               </div>
-              <Conversations chat={chat} T={T} onOpen={() => go("chat")} />
+              <Conversations chat={chat} T={T} inChat={view === "chat"} onOpen={() => go("chat")} />
             </>
           )}
         </nav>
