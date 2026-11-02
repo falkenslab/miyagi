@@ -171,6 +171,9 @@ th { background: var(--panel-2); }
 .tool-head:hover { color: var(--text-2); }
 .tool-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tool-head .icon { flex: 0 0 auto; }
+/* What a working subagent is doing, under its call's line (#63) */
+.sub-activity { display: flex; gap: 6px; align-items: center; min-width: 0; margin: -4px 0 4px 18px; color: var(--dim); font-size: 13px; }
+.sub-activity span:not(.ellipsis) { flex: 0 0 auto; white-space: nowrap; }
 .tool-calls { list-style: none; margin: 0 0 6px; padding: 6px 12px 8px; border-left: 2px solid var(--line); }
 .tool-calls li { padding: 3px 0; color: var(--text-2); }
 .tool-calls li.err { color: var(--sun); }

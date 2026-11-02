@@ -172,6 +172,17 @@ try {
   await idle();
   check("a refused tool doesn't break the conversation", !(await page.$(CHECKPOINT)) && (await page.locator(".tool-calls li.err, .tool .badge.sun").count()) >= before);
   await mode("guided");
+  // A subagent at work says what it's doing, for how long and how many actions (#63).
+  await send("Pide al subagente pedagogy-reviewer que lea la página overview de tu base de conocimiento y te diga en una frase qué mejoraría. No hagas nada más.");
+  const sub = await page.waitForSelector(".tool .sub-activity", { timeout: 180_000 }).catch(() => null);
+  const firstSub = sub ? await sub.innerText() : "";
+  // Its first action, with the count: what tells a long research from a stuck one.
+  const acting = await page.waitForFunction(() => /\d+ (acci|action)/.test(document.querySelector(".tool .sub-activity")?.textContent ?? ""), null, { timeout: 120_000 }).then(() => true, () => false);
+  const seenSub = acting ? await page.innerText(".tool .sub-activity") : "";
+  await shot("subagent-1440");
+  await idle();
+  check("a working subagent shows its current action, time and count under its line", /\d+ (s|min)/.test(firstSub) && acting && seenSub !== firstSub, `${firstSub} → ${seenSub}`);
+  check("the subagent's line goes once it's done", (await page.locator(".tool .sub-activity").count()) === 0);
   // ↓ shows once the person scrolls up, and takes them back to the end.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.evaluate(() => document.querySelector(".msgs").scrollTo({ top: 0 }));

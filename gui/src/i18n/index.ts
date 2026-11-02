@@ -49,6 +49,8 @@ export interface Texts {
   working: string;
   seconds: (n: number) => string;
   calls: (n: number) => string;
+  /** A subagent just handed its task, before its first action. */
+  subagentStarting: string;
   toolFailed: string;
   close: string;
   suggestion: string;
@@ -154,6 +156,7 @@ const es: Texts = {
   working: "Trabajando",
   seconds: (n) => `Trabajó ${n} s`,
   calls: (n) => (n === 1 ? "1 acción" : `${n} acciones`),
+  subagentStarting: "Empezando…",
   toolFailed: "falló",
   close: "Cerrar",
   suggestion: "Sugerencia",
@@ -259,6 +262,7 @@ const en: Texts = {
   working: "Working",
   seconds: (n) => `Worked ${n} s`,
   calls: (n) => (n === 1 ? "1 action" : `${n} actions`),
+  subagentStarting: "Starting…",
   toolFailed: "failed",
   close: "Close",
   suggestion: "Suggestion",
@@ -364,6 +368,7 @@ const fr: Texts = {
   working: "Au travail",
   seconds: (n) => `A travaillé ${n} s`,
   calls: (n) => (n === 1 ? "1 action" : `${n} actions`),
+  subagentStarting: "Démarrage…",
   toolFailed: "a échoué",
   close: "Fermer",
   suggestion: "Suggestion",
@@ -469,6 +474,7 @@ const de: Texts = {
   working: "Arbeitet",
   seconds: (n) => `${n} s gearbeitet`,
   calls: (n) => (n === 1 ? "1 Aktion" : `${n} Aktionen`),
+  subagentStarting: "Beginnt…",
   toolFailed: "fehlgeschlagen",
   close: "Schließen",
   suggestion: "Vorschlag",

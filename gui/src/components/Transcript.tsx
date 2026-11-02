@@ -9,11 +9,39 @@ import { Icon } from "./Icons";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
 
-/** A turn's tool calls, one dim line (#60): the last call and how many, or the running one; opened, each call with ✓/✕ and its subagent's steps. */
+/** The SDK's tool that hands a task to a subagent (`Agent`, `Task` before). */
+const SUBAGENT_TOOLS = new Set(["Agent", "Task"]);
+
+/** "35 s", "4 min": the same in the four languages. */
+const lasted = (ms: number) => {
+  const s = Math.max(0, Math.round(ms / 1000));
+  return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min`;
+};
+
+/** How long a subagent call has been running, from when the page first saw it, ticking each second. */
+function useSince(id: string | undefined) {
+  const started = useRef<{ id: string | undefined; at: number }>({ id, at: Date.now() });
+  if (started.current.id !== id) started.current = { id, at: Date.now() };
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    if (!id) return;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [id]);
+  return now - started.current.at;
+}
+
+/**
+ * A turn's tool calls, one dim line (#60): the last call and how many, or the running one; opened,
+ * each call with ✓/✕ and its subagent's steps. While a subagent works, a second line says what it's
+ * doing now, for how long and how many actions it has taken (#63), so a long research doesn't look stuck.
+ */
 function Tools({ calls, running, T }: { calls: TranscriptCall[]; running: boolean; T: Texts }) {
   const [open, setOpen] = useState(false);
   const failed = calls.filter((call) => call.result?.isError).length;
   const last = calls[calls.length - 1];
+  const sub = running && last && !last.result && (SUBAGENT_TOOLS.has(last.toolName) || last.children.length > 0) ? last : undefined;
+  const since = useSince(sub ? (sub.id ?? sub.label) : undefined);
   return (
     <div className={`tool${open ? " open" : ""}`}>
       <button type="button" className="tool-head" aria-expanded={open} onClick={() => setOpen(!open)}>
@@ -22,6 +50,14 @@ function Tools({ calls, running, T }: { calls: TranscriptCall[]; running: boolea
         {failed > 0 && <span className="badge sun">{failed} {T.toolFailed}</span>}
         <Icon name={open ? "down" : "right"} size={16} />
       </button>
+      {sub && (
+        <div className="sub-activity">
+          <span className="ellipsis">{sub.children.at(-1) ?? T.subagentStarting}</span>
+          {/* The clock ticks every second: kept out of what a screen reader announces. */}
+          <span aria-hidden="true">· {lasted(since)}</span>
+          {sub.children.length > 0 && <span>· {T.calls(sub.children.length)}</span>}
+        </div>
+      )}
       {open && (
         <ul className="tool-calls">
           {calls.map((call, index) => (
