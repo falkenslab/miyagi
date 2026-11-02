@@ -9,7 +9,7 @@
 // is a temporary folder, so nothing of yours is touched; Claude Code's session is read where it
 // keeps it (CLAUDE_CONFIG_DIR at your ~/.claude), never copied (ADR-026).
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-page.mjs <screenshots dir>
-/* global document, window, MutationObserver -- the callbacks of page.evaluate and waitForFunction run in the page. */
+/* global document, window, getComputedStyle, MutationObserver -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
 import os from "node:os";
@@ -130,6 +130,12 @@ try {
     [1440, 900],
     [390, 844],
   ]) {
+  // The spinner of a working conversation keeps moving when less motion is asked (#61): a fade, no turn.
+  const spinning = () => page.evaluate(() => getComputedStyle(document.querySelector(".recents .spinner")).animationName);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const calm = await spinning();
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  check("with less motion the spinner fades instead of standing still", calm === "breathe" && (await spinning()) === "spin", calm);
     await page.setViewportSize({ width, height });
     await shot(`approval-${width}`);
     const seen = await page.evaluate(() => ({ msgs: document.querySelector(".msgs")?.clientHeight ?? 0, scrim: Boolean(document.querySelector(".scrim")), composer: Boolean(document.querySelector(".composer")?.offsetParent) }));
