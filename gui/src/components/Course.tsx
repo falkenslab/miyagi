@@ -45,6 +45,12 @@ function useReload(load: () => Promise<void>, chat: ChatState) {
   }, [load, turns, busy]);
 }
 
+/** A page's markdown without its own first heading when it repeats the title shown above it. */
+export function withoutTitle(content: string, title: string): string {
+  const match = /^\s*#\s+(.+?)\s*(?:\r?\n|$)/.exec(content);
+  return match && match[1]!.trim() === title.trim() ? content.slice(match[0].length) : content;
+}
+
 function Card({ title, badge, children }: { title: ReactNode; badge?: ReactNode; children: ReactNode }) {
   return (
     <div className="card">
@@ -245,7 +251,7 @@ export function PlanView({ chat, info, C, ask, go }: Common) {
       </div>
       <div className="card page md">
         <h2>{result.title}</h2>
-        <Markdown text={result.content} onPage={(id) => go("knowledge", id)} />
+        <Markdown text={withoutTitle(result.content, result.title)} onPage={(id) => go("knowledge", id)} />
       </div>
     </div>
   );
@@ -271,7 +277,7 @@ export function TopicsView({ chat, C, ask, go }: Common) {
       <div className="grid g2">
         {result.topics.map((topic) => (
           <Card key={topic.id} title={`🧱 ${topic.title}`} badge={<span className="badge">{C.activities(topic.activities.length)}</span>}>
-            {topic.description && <p>{topic.description}</p>}
+            {topic.description && <Markdown text={topic.description} />}
             {topic.activities.length > 0 && (
               <div className="chips">
                 {topic.activities.map((activity) => (
@@ -409,7 +415,7 @@ export function OvenView({ chat, info, C, ask }: Common) {
               .map((item, index) => (
                 <div key={index} className="it">
                   <span className="md">
-                    <Markdown text={item.text} />
+                    <Markdown text={item.text.replace(/\[([^\]]+)\]\([^)\s]+\.md\)/g, "$1")} />
                   </span>
                   {phase === "hidden" && info.classroom?.connected ? (
                     <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => ask(C.prompts.show(label(item.text)))}>
@@ -516,7 +522,7 @@ export function KnowledgeView({ chat, C, ask, page, setPage }: Common & { page: 
                 {shown.fields.updated && ` · ${day(shown.fields.updated)}`}
                 {shown.fields.file && ` · sources/${shown.fields.file}`}
               </div>
-              <Markdown text={shown.content} onPage={setPage} />
+              <Markdown text={withoutTitle(shown.content, shown.title)} onPage={setPage} />
               {shown.linkedFrom.length > 0 && (
                 <p className="muted small">
                   {C.linkedFrom}:{" "}

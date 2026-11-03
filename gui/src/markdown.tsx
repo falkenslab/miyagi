@@ -57,6 +57,36 @@ function inline(text: string, key: string, onPage?: OnPage): ReactNode[] {
 const BLOCK = /^(```|#{1,6}\s|>\s?|\s*([-*+]|\d+[.)])\s|\|)/;
 const ITEM = /^\s*([-*+]|\d+[.)])\s/;
 
+const indentOf = (line: string) => /^\s*/.exec(line)![0].length;
+
+/**
+ * A list from line `start`, and the line after it: its items, and the items indented under one
+ * as a list of their own inside it (the options of a numbered point stayed numbered with it).
+ */
+function list(lines: string[], start: number, key: string, onPage?: OnPage): [ReactNode, number] {
+  const indent = indentOf(lines[start]);
+  const ordered = /^\s*\d/.test(lines[start]);
+  const items: { at: number; text: string; nested: ReactNode[] }[] = [];
+  let i = start;
+  while (i < lines.length && ITEM.test(lines[i]) && indentOf(lines[i]) >= indent) {
+    if (indentOf(lines[i]) > indent && items.length) {
+      const [nested, next] = list(lines, i, `${key}-${i}`, onPage);
+      items[items.length - 1].nested.push(nested);
+      i = next;
+      continue;
+    }
+    items.push({ at: i, text: lines[i].replace(ITEM, ""), nested: [] });
+    i++;
+  }
+  const lis = items.map((item) => (
+    <li key={`${key}-${item.at}`}>
+      {inline(item.text, `${key}-${item.at}`, onPage)}
+      {item.nested}
+    </li>
+  ));
+  return [ordered ? <ol key={key} start={Number(/\d+/.exec(lines[start])?.[0] ?? 1)}>{lis}</ol> : <ul key={key}>{lis}</ul>, i];
+}
+
 export function Markdown({ text, onPage }: { text: string; onPage?: OnPage }): ReactNode {
   const out: ReactNode[] = [];
   const lines = text.replace(/\r/g, "").split("\n");
@@ -86,10 +116,9 @@ export function Markdown({ text, onPage }: { text: string; onPage?: OnPage }): R
         </blockquote>,
       );
     } else if (ITEM.test(line)) {
-      const ordered = /^\s*\d/.test(line);
-      const items: ReactNode[] = [];
-      for (; i < lines.length && ITEM.test(lines[i]); i++) items.push(<li key={`${key}-${i}`}>{inline(lines[i].replace(ITEM, ""), `${key}-${i}`, onPage)}</li>);
-      out.push(ordered ? <ol key={key} start={Number(/\d+/.exec(line)?.[0] ?? 1)}>{items}</ol> : <ul key={key}>{items}</ul>);
+      const [node, next] = list(lines, i, key, onPage);
+      out.push(node);
+      i = next;
     } else if (/^\|.*\|\s*$/.test(line)) {
       const rows: string[][] = [];
       for (; i < lines.length && /^\|.*\|\s*$/.test(lines[i]); i++) if (!/^\|[\s:|-]+\|\s*$/.test(lines[i])) rows.push(lines[i].trim().slice(1, -1).split("|").map((cell) => cell.trim()));
