@@ -188,7 +188,7 @@ export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common)
                     <span className="grow">
                       <b>{entry.what}</b>
                       <span>
-                        {entry.operation} · {day(entry.date)}
+                        {C.operations[entry.operation] ?? entry.operation} · {day(entry.date)}
                       </span>
                     </span>
                   </li>

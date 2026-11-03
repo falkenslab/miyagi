@@ -17,6 +17,8 @@ export interface CourseTexts {
   suggestions: string;
   recent: string;
   noRecent: string;
+  /** The knowledge log's operations (knowledge_log: ingest, query, lint, update), as the teacher reads them. */
+  operations: Record<string, string>;
   tips: {
     start: [string, string, string];
     ingest: (n: number) => [string, string, string];
@@ -95,6 +97,7 @@ const es: CourseTexts = {
   suggestions: "Sugerencias para hoy",
   recent: "Actividad reciente",
   noRecent: "Todavía no ha anotado nada en su memoria.",
+  operations: { ingest: "documentos incorporados", query: "consulta", lint: "revisión", update: "actualización" },
   tips: {
     start: ["📥 Empezar con tus documentos", "Su memoria está vacía. Deja en Fuentes la programación, los temarios o las rúbricas y los incorpora.", "Ir a Fuentes"],
     ingest: (n) => ["📥 Documentos nuevos", n === 1 ? "Hay 1 documento en Fuentes que aún no ha incorporado a su memoria." : `Hay ${n} documentos en Fuentes que aún no ha incorporado a su memoria.`, "Incorporarlos"],
@@ -173,6 +176,7 @@ const en: CourseTexts = {
   suggestions: "Suggestions for today",
   recent: "Recent activity",
   noRecent: "Nothing noted in its memory yet.",
+  operations: { ingest: "documents taken in", query: "question", lint: "check", update: "update" },
   tips: {
     start: ["📥 Start with your documents", "Its memory is empty. Leave your teaching plan, syllabi or rubrics in Sources and it takes them in.", "Go to Sources"],
     ingest: (n) => ["📥 New documents", n === 1 ? "There is 1 document in Sources not taken into its memory yet." : `There are ${n} documents in Sources not taken into its memory yet.`, "Take them in"],
@@ -251,6 +255,7 @@ const fr: CourseTexts = {
   suggestions: "Suggestions pour aujourd'hui",
   recent: "Activité récente",
   noRecent: "Rien de noté dans sa mémoire pour l'instant.",
+  operations: { ingest: "documents intégrés", query: "question", lint: "révision", update: "mise à jour" },
   tips: {
     start: ["📥 Commencer par tes documents", "Sa mémoire est vide. Dépose dans Sources ta progression, tes programmes ou tes grilles et il les intègre.", "Aller aux Sources"],
     ingest: (n) => ["📥 Nouveaux documents", n === 1 ? "Il y a 1 document dans Sources pas encore intégré à sa mémoire." : `Il y a ${n} documents dans Sources pas encore intégrés à sa mémoire.`, "Les intégrer"],
@@ -329,6 +334,7 @@ const de: CourseTexts = {
   suggestions: "Vorschläge für heute",
   recent: "Letzte Aktivität",
   noRecent: "Noch nichts im Gedächtnis notiert.",
+  operations: { ingest: "Dokumente übernommen", query: "Frage", lint: "Prüfung", update: "Aktualisierung" },
   tips: {
     start: ["📥 Mit deinen Dokumenten beginnen", "Sein Gedächtnis ist leer. Lege Planung, Lehrpläne oder Bewertungsraster in Quellen ab, und es nimmt sie auf.", "Zu den Quellen"],
     ingest: (n) => ["📥 Neue Dokumente", n === 1 ? "In Quellen liegt 1 Dokument, das noch nicht aufgenommen ist." : `In Quellen liegen ${n} Dokumente, die noch nicht aufgenommen sind.`, "Aufnehmen"],
