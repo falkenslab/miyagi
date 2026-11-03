@@ -9,9 +9,9 @@ import { prepareSession, VERSION } from "../agent.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands } from "../catalog.js";
-import { draftsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
+import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
-import { draftsList, inside, knowledgeIndex, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, sourcesList, today, topics } from "./course.js";
+import { draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, sourcesList, today, topics } from "./course.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
 /**
@@ -318,11 +318,11 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         await registerWorkspace(dir, listed.name, listed.kind);
         return {};
       }
-      // The subject's own folders, in the computer's file explorer: only these three.
+      // The subject's own folders, in the computer's file explorer: only these four.
       case "open-folder": {
         if (!current) return { error: "no subject" };
         const which = String(data.which);
-        const dir = which === "sources" ? sourcesDirFor(current.dir) : which === "drafts" ? draftsDirFor(current.dir) : which === "subject" ? current.dir : undefined;
+        const dir = which === "sources" ? sourcesDirFor(current.dir) : which === "drafts" ? draftsDirFor(current.dir) : which === "materials" ? materialsDirFor(current.dir) : which === "subject" ? current.dir : undefined;
         if (!dir) return { error: "unknown folder" };
         await mkdir(dir, { recursive: true });
         openFolder(dir);
@@ -520,9 +520,9 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
           response.writeHead(200, { "content-type": type, "cache-control": "max-age=300", "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'", "x-content-type-options": "nosniff" });
           return void response.end(await readFile(file));
         }
-        // A material in drafts/, to preview: only inside drafts/, shown, never run (a sandbox with no scripts).
+        // A material in materials/ or drafts/, to preview: only inside them, shown, never run (a sandbox with no scripts).
         if (request.method === "GET" && url.pathname === "/api/drafts/file") {
-          const file = current ? await inside(draftsDirFor(current.dir), url.searchParams.get("path") ?? "") : undefined;
+          const file = current ? await preparedFile(current.dir, url.searchParams.get("path") ?? "") : undefined;
           const type = file ? PREVIEW_TYPES[path.extname(file).toLowerCase()] : undefined;
           if (!file || !type || !(await stat(file)).isFile()) return void response.writeHead(file ? 415 : 403).end();
           response.writeHead(200, {

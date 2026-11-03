@@ -115,6 +115,15 @@ for (const bad of ["../config.json", "..%2Fconfig.json", "x/../../config.json", 
   check(`drafts/ only: ${bad}`, (await fetch(`${base}/api/drafts/file?path=${bad}&token=${token}`)).status === 403);
 }
 check("a material without the token", (await fetch(`${base}/api/drafts/file?path=x.html`)).status === 403);
+// …and from materials/ (the banks, quizzes and rubrics, BD suite): its files, never a hidden one nor a way out.
+const subjectDir = ((await post("workspaces")).workspaces ?? []).find((ws) => ws.name === "En mi carpeta")?.dir; // the one created last is open
+mkdirSync(path.join(subjectDir, "materials"), { recursive: true });
+writeFileSync(path.join(subjectDir, "materials", "practicas.rubric.md"), "# Rúbrica");
+writeFileSync(path.join(subjectDir, "materials", ".publications.json"), "{}");
+check("a material in materials/ is previewed", (await fetch(`${base}/api/drafts/file?path=materials/practicas.rubric.md&token=${token}`)).status === 200);
+for (const bad of ["materials/.publications.json", "materials/../config.json", "drafts/../config.json", "config.json", "sources/x.pdf"]) {
+  check(`materials/ and drafts/ only: ${bad}`, (await fetch(`${base}/api/drafts/file?path=${bad}&token=${token}`)).status === 403);
+}
 check("a classroom that isn't a course's address connects nothing", (await post("classroom", { url: "not a url" })).error === "invalid");
 
 // A repository in a folder: added only with its name typed, and forgotten again.

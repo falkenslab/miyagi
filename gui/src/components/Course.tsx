@@ -153,7 +153,7 @@ export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common)
                 {result.drafts}
                 <small>{C.kpi.drafts}</small>
               </div>
-              <p>drafts/</p>
+              <p>materials/ · drafts/</p>
               <button type="button" className="btn small" onClick={() => go("materials")}>
                 {C.nav.materials}
               </button>
@@ -304,11 +304,27 @@ const token = new URLSearchParams(location.search).get("token") ?? "";
 const fileUrl = (file: string) => `api/drafts/file?path=${encodeURIComponent(file)}&token=${encodeURIComponent(token)}`;
 const kb = (bytes: number) => (bytes < 1024 ? `${bytes} B` : bytes < 1048576 ? `${Math.round(bytes / 1024)} KB` : `${(bytes / 1048576).toFixed(1)} MB`);
 
+/** A markdown material (notes, a quiz, a rubric) as the teacher reads it: rendered, without its front matter. */
+function MarkdownPreview({ file }: { file: string }) {
+  const [text, setText] = useState<string | null>(null);
+  useEffect(() => {
+    let live = true;
+    void fetch(fileUrl(file))
+      .then((response) => (response.ok ? response.text() : ""))
+      .then((body) => live && setText(body.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, "")));
+    return () => {
+      live = false;
+    };
+  }, [file]);
+  return <div className="preview md">{text === null ? null : <Markdown text={text} />}</div>;
+}
+
 function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
   if (!file) return <p className="muted">{C.choose}</p>;
   const ext = file.slice(file.lastIndexOf(".")).toLowerCase();
   if ([".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"].includes(ext)) return <img className="preview-img" src={fileUrl(file)} alt={file} />;
-  if ([".html", ".htm", ".pdf", ".md", ".txt", ".gift", ".csv", ".json", ".xml"].includes(ext))
+  if (ext === ".md") return <MarkdownPreview file={file} />;
+  if ([".html", ".htm", ".pdf", ".txt", ".gift", ".csv", ".json", ".xml"].includes(ext))
     // No sandbox attribute for a PDF (the browser's viewer needs it); an HTML one comes with a
     // sandbox policy from the host, so its scripts never run.
     return <iframe className="preview" src={fileUrl(file)} title={file} {...(ext === ".pdf" ? {} : { sandbox: "" })} />;
@@ -330,7 +346,7 @@ export function MaterialsView({ chat, info, C, ask }: Common) {
     <div className="wrap">
       <div className="row head-row">
         <span className="sp" />
-        <button type="button" className="btn small" onClick={() => void act("open-folder", { which: "drafts" })}>
+        <button type="button" className="btn small" onClick={() => void act("open-folder", { which: "materials" })}>
           📂 {C.openFolder}
         </button>
       </div>

@@ -53,10 +53,10 @@ A subscription token (`sk-ant-oat…`) can no longer be pasted: Anthropic's term
 
 These views only show what miyagi knows and has prepared: they don't change anything on their own. Their buttons send a request to the conversation, as if you typed it, and miyagi works there with the same approvals as always.
 
-- **Today**, the first thing you see: what miyagi told you when it greeted you, how many pages its memory has, the sources still to take in, what's in the oven and in `drafts/`, suggestions based on how the subject stands (taking in your documents, writing the teaching plan, linking the classroom, grading…) and the last thing it noted.
+- **Today**, the first thing you see: what miyagi told you when it greeted you, how many pages its memory has, the sources still to take in, what's in the oven, how many materials it has prepared, suggestions based on how the subject stands (taking in your documents, writing the teaching plan, linking the classroom, grading…) and the last thing it noted.
 - **Teaching plan**: your teaching plan as it stands in its memory, with **Review with miyagi** (and **Check the classroom** if you have one linked). With no teaching plan yet, a button to write it with miyagi.
 - **Topics and activities**: each unit with its activities; one click takes you to its page.
-- **Materials**: what miyagi prepares in `drafts/` before publishing it, with a preview (HTML files are shown without running any of their code) and, with the classroom linked, **Publish…**.
+- **Materials**: what miyagi prepares before publishing it, in `materials/` (question banks, quizzes, notes, assignments and rubrics) and in `drafts/` (exports, pages, sites), with a preview (Markdown shown formatted, HTML files without running any of their code) and, with the classroom linked, **Publish…**.
 - **In the oven**: the activities that go through phases (planned, cooking, tested hidden, served), with their next step.
 - **Knowledge base**: its pages by section, with a search box and the links between them; **Check the base** asks it to check it.
 - **Sources**: your documents, with whether they've already been taken in, have changed or are new. Drag new ones here and click **Ask miyagi to take them in**.

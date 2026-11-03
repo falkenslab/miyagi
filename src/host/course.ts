@@ -2,7 +2,7 @@ import { readdir, readFile, realpath, stat } from "node:fs/promises";
 import path from "node:path";
 import type { ChatController, KnowledgeStore } from "@falkenslab/agent-kit";
 import { readRegister } from "../activityRegister.js";
-import { draftsDirFor, knowledgeDirFor, sourcesDirFor } from "../workspace.js";
+import { draftsDirFor, knowledgeDirFor, materialsDirFor, sourcesDirFor } from "../workspace.js";
 
 /**
  * The course views of miyagi's page (gui-course-views #51): Hoy, the teaching plan, the topics,
@@ -85,9 +85,22 @@ export async function sourcesList(chat: ChatController, workspaceDir: string) {
   };
 }
 
-/** What's in drafts/: the files, by folder. */
+/**
+ * What miyagi prepared: the neutral materials in materials/ (question banks, quizzes, rubrics,
+ * ADR-015) and the files in drafts/ (exports, pages, sites), each path with its folder in front
+ * ("materials/…", "drafts/…"), the way the agent names them.
+ */
 export async function draftsList(workspaceDir: string) {
-  return { files: await filesUnder(draftsDirFor(workspaceDir)) };
+  const under = async (dir: string, folder: string) => (await filesUnder(dir)).map((file) => ({ ...file, path: `${folder}/${file.path}` }));
+  return { files: [...(await under(materialsDirFor(workspaceDir), "materials")), ...(await under(draftsDirFor(workspaceDir), "drafts"))] };
+}
+
+/** A prepared file to preview: "materials/…" or "drafts/…" (as draftsList names it), only inside its folder, no hidden file. */
+export async function preparedFile(workspaceDir: string, relative: string): Promise<string | undefined> {
+  const [folder, ...rest] = relative.split("/");
+  const dir = folder === "materials" ? materialsDirFor(workspaceDir) : folder === "drafts" ? draftsDirFor(workspaceDir) : undefined;
+  if (!dir || rest.some((part) => part.startsWith("."))) return undefined;
+  return inside(dir, rest.join("/"));
 }
 
 /** The activities in progress, by phase (the `course/drafts` register). */
@@ -109,7 +122,7 @@ export async function today(chat: ChatController, workspaceDir: string) {
   const store = storeOf(chat);
   const pages = (await store?.list()) ?? [];
   const sources = (await sourcesList(chat, workspaceDir)).sources;
-  const drafts = await filesUnder(draftsDirFor(workspaceDir));
+  const drafts = (await draftsList(workspaceDir)).files;
   return {
     pages: pages.filter((page) => page.status === "active").length,
     topics: pages.filter((page) => page.type === "topic" && page.status === "active").length,
