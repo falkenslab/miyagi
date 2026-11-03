@@ -4,7 +4,7 @@ import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { agentKitVersion, createChatController, getLanguage, startClaudeSignIn, type ChatController, type ClaudeSignIn, type Mode } from "@falkenslab/agent-kit";
+import { agentKitVersion, createChatController, getLanguage, readConversation, startClaudeSignIn, type ChatController, type ClaudeSignIn, type Mode } from "@falkenslab/agent-kit";
 import { prepareSession, VERSION } from "../agent.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
@@ -369,19 +369,30 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         chat.choose(data.value === null || data.value === undefined ? null : String(data.value));
         return {};
       case "runs": {
-        // The sidebar's list: the kit's labels without their number and mark, and without the
-        // greeting miyagi sends itself to open a conversation, which isn't the teacher's words.
+        // The sidebar's list: the kit's date (of the last activity) without its number and mark,
+        // and as the title the teacher's first words in it, which don't change with every
+        // message as the kit's last one does; never the greeting miyagi sends itself to open a
+        // conversation, which isn't the teacher's words.
         const opening = current?.prepared.chatOpening?.().slice(0, 40);
-        const runs = (await chat.listRuns()).map((run) => {
-          let label = run.label
-            .replace(/^\d+\.\s*/, "")
-            .replace(/\s+\([^)]*\)(?=\s·|$)/, "")
-            .replace(/ · \[Request interrupted.*$/, "");
-          const cut = label.indexOf(" · ");
-          if (opening && cut !== -1 && opening.startsWith(label.slice(cut + 3).replace(/…$/, "").slice(0, 20))) label = label.slice(0, cut);
-          return { ...run, label };
-        });
-        return { runs, current: chat.getState().run?.dir ?? null };
+        // A conversation with nothing but that greeting (one is kept each time the subject opens)
+        // isn't listed, unless it's the open one.
+        const currentDir = chat.getState().run?.dir ?? null;
+        const runs = (
+          await Promise.all(
+            (await chat.listRuns()).map(async (run) => {
+              const date = run.label.replace(/^\d+\.\s*/, "").split(" · ")[0].replace(/\s+\([^)]*\)$/, "");
+              const messages = await readConversation(run.dir).catch(() => []);
+              const first = messages
+                .filter((message) => message.role === "user")
+                .map((message) => message.text.replace(/\s+/g, " ").trim())
+                .find((text) => text && !text.startsWith("[Request interrupted") && !(opening && opening.startsWith(text.slice(0, 20))));
+              const onlyGreeting = !first && messages.filter((message) => message.role === "assistant").length <= 1;
+              if (onlyGreeting && run.dir !== currentDir) return null;
+              return { ...run, label: first ? `${date} · ${first.length > 80 ? `${first.slice(0, 79)}…` : first}` : date };
+            }),
+          )
+        ).filter((run) => run !== null);
+        return { runs, current: currentDir };
       }
       case "resume":
         if (busy()) return { error: "busy" };
