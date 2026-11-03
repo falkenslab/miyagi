@@ -53,6 +53,7 @@ import { listWorkspaces, locateWorkspace, registerWorkspace, workspaceIds } from
 import { buildSystemPrompt } from "./systemPrompt.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
 import { installUploadGate } from "./uploadGate.js";
+import { installPdfText } from "./pdfText.js";
 import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
 import { installMaterialsGate } from "./materials/gate.js";
 import { createMaterialsServer, MATERIALS_SERVER, type PendingLosses } from "./materials/server.js";
@@ -152,7 +153,10 @@ function buildSpec(kind: SessionKind, skills: string[], pending: PendingLosses):
       const agents: Record<string, AgentDefinition> = {
         researcher: {
           description: "Researches concrete questions on the public web (official documentation first) and returns sourced findings with dates and confidence. Invoke with the questions and what you need back.",
-          tools: ["WebSearch", "WebFetch", "Read", "Glob", "Grep", ...KNOWLEDGE_READ_TOOLS],
+          // download_to_sources (agent-kit's sources server, "sourceFiles"): a long official text
+          // kept once in sources/ with its markdown, to grep and quote literally, instead of
+          // asking WebFetch the same page again and again (#64).
+          tools: ["WebSearch", "WebFetch", "Read", "Glob", "Grep", "mcp__sourceFiles__download_to_sources", ...KNOWLEDGE_READ_TOOLS],
           prompt: loadPrompt("system/researcher.md"),
           maxTurns: 40,
         },
@@ -304,6 +308,8 @@ export async function prepareSession(
     // GIFT checked before it's imported. Without a classroom nothing publishes.
     if (classroom && kind !== "ingest") installUploadGate(options);
     if (kind === "run" || kind === "chat") installMaterialsGate(options, pending);
+    // A PDF copied into sources/ gets its text as markdown next to it (#64).
+    installPdfText(options, config.sourcesDir);
     return opened;
   }
 

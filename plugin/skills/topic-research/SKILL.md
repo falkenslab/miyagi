@@ -27,7 +27,10 @@ Always look first at what you have: `sources/`, the knowledge base, the course i
    version does Docker 29 expect, and is `version:` still accepted?", not "Docker Compose").
 2. **Delegate to the `researcher` subagent** (Agent tool, `subagent_type: "researcher"`), one call
    per independent question or batch, with what you need back: the answer, the sources, and how
-   sure it is. Several independent questions can go in parallel calls.
+   sure it is. Several independent questions can go in parallel calls. Each call has a budget
+   (about 15 searches and reads) and comes back with what it found and what's still open: when
+   something is missing, tell the teacher what you have and what's left, and ask before sending
+   more researchers after it. Don't send a second round for the same questions on your own.
 3. **Contrast**: prefer primary sources (official documentation, the project's release notes,
    standards, the publisher of a dataset) over blogs; note the date of each source; when two
    disagree, keep both and say which is more authoritative and why.

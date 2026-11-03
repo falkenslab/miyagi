@@ -20,6 +20,8 @@ compliant and isn't.
 - **On request**, if the teacher asks you to find one: only in official sources (the official
   gazettes, the education authority's sites; `topic-research` for the search), and keep each
   original in `sources/` (`download_to_sources`): never a school's copy, a blog or a summary.
+  When the researcher searches for you, ask it to download each norm it finds the same way, and
+  quote the outcomes, criteria and figures from those files, never from a web page's summary.
   The request covers **the norm they named** (and what later amended it), nothing else: being
   asked for the school calendar isn't being asked for the curriculum.
 - **Never on your own.** A course description that names a level or a qualification says who

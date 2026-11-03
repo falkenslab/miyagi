@@ -106,7 +106,7 @@ Some rules it follows:
 | `list_sources` | Lists the originals with their status: new, incorporated, changed since it was incorporated, or missing. |
 | `extract_text` | Reads a Word, PowerPoint or Excel file as Markdown. |
 | `save_to_sources` | Saves to `sources/` a file downloaded from Moodle during the session. |
-| `download_to_sources` | Downloads an original from a web address; a web page is also saved as Markdown, to quote it word for word. |
+| `download_to_sources` | Downloads an original from a web address; a web page or a PDF is also saved as Markdown (the PDF page by page), to search it and quote it word for word. |
 | `request_file` | Asks you for a file in a panel: you type its path (or drag it into the terminal) or press Enter if you don't have it. |
 | `retire_source` | Sets aside an original that was wrong or replaced by another, after asking you. It doesn't delete it: it moves it to `sources/.agent-kit/retired/` and marks its summary. |
 

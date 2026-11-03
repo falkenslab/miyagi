@@ -23,6 +23,7 @@ node .claude/skills/verify/check-activity-register.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
 node .claude/skills/verify/check-file-scope.mjs
+node .claude/skills/verify/check-pdf-text.mjs
 node .claude/skills/verify/check-host.mjs
 node .claude/skills/update-docs/check-docs.mjs
 node dist/cli.js skills --dir . > /dev/null && node dist/cli.js commands --dir . > /dev/null
@@ -79,6 +80,11 @@ add the file there with the rule that fixes it.
 archive, downloads and unzips over the limits, drafts/ itself as a target) and a round trip
 (copy, zip, unzip, info, and a PDF when Chrome is installed; skipped, and said, otherwise).
 A new tool or limit gets its refusal here in the same change.
+
+`check-pdf-text.mjs` writes a two-page PDF by hand and runs the hook that, after a tool adds a PDF to
+`sources/`, writes its text next to it as markdown (a heading per page): the reply parsed, the file
+written and the model told to read it, an existing markdown never overwritten, a PDF without text
+or a broken one reported without breaking the tool.
 
 `check-file-scope.mjs` builds a session's file scope from `dist/` and checks that every file
 holding a secret (the workspace's `config.json` and `.env`, `~/.miyagi/config.json`, its legacy

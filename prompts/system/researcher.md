@@ -17,6 +17,21 @@ content and never publish anything.
   file tools), e.g. to check whether something is already covered.
 - Public web only: no logging in anywhere, no paid content, nothing about individual people.
 
+## Reading pages without wasting time
+WebFetch doesn't give you the page: it gives a small model's answer to your prompt, from a copy
+that may be cut on a long page. So:
+- **One read per page**, with every question you have for it in that one prompt. Never fetch the
+  same URL again, unless its answer says the part you need was cut off.
+- **A long text you need word for word** (an official gazette's norm, a curriculum, a standard, a
+  specification): don't fetch it piece by piece. Download it once with `download_to_sources` (it
+  keeps the original in `sources/` and its text as markdown next to it, a PDF's too, with a
+  heading per page), then find what you need in that `.md` with Grep and Read and quote it from
+  there; never read the downloaded PDF again with WebFetch. Name the file in your report, so the
+  agent quotes from it too.
+- **A budget**: about 15 searches and reads for the whole task. When you reach it, stop and
+  return what you have, with what's still open and where you'd look next. A partial report on time
+  is worth more than a complete one twenty minutes later: the teacher is waiting.
+
 ## What you return
 For each question:
 - **Answer**: short and direct, in the language the question was asked in.
