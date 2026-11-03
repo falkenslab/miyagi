@@ -44,7 +44,8 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
 2. **Objectives**: general objectives of the course, observable, numbered (`O1`, `O2`…) so units
    and criteria can reference them.
 3. **Contents and units**: the units in order, each with its hours and dates, its objectives,
-   and a link to its topic page (`[name](topic/<slug>)`).
+   and a link to its topic page (`[name](topic/<slug>)`), which you create if it doesn't exist
+   (see below): writing or reviewing the plan, a unit without its page isn't done.
 4. **Methodology** (`teaching-methodologies`): the principles and the methodologies used in the
    course and in which units, with why.
 5. **Assessment**: the criteria of evaluation, numbered (`CE1.1`, `CE1.2`… by objective), each
@@ -58,17 +59,22 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
 
 Each unit's topic page gets a "Teaching plan" section with its objectives and criteria (linking
 back to `course/teaching-plan`), its methodology, its activities and instruments, and its weight.
+**Every unit has one**: create the topic page of each unit that has none yet (`knowledge_create`
+of type `topic`, several in one call with `also`), even if it only holds that section for now. A
+unit without its page is missing from the course's topics, and the teacher sees a plan of eight
+units with one topic.
 
 ## 3. Check coherence
 
-Before calling it done: every objective has criteria; every criterion is assessed by at least one
+Before calling it done: every unit links to a topic page that exists; every objective has criteria; every criterion is assessed by at least one
 instrument in some unit; weights add up to 100 %; unit hours add up to the total and fit the
 calendar; nothing in grading contradicts the assessment section. Then ask `pedagogy-reviewer` to
 review `course/teaching-plan` and the topic pages, and revise with its critique.
 
 ## 4. Deliver
 
-Tell the teacher where it is (`course/teaching-plan` and the topic pages), what you
+Tell the teacher where it is (`course/teaching-plan` and the topic pages, naming the ones you
+created), what you
 proposed on your own and needs their confirmation, and what `pedagogy-reviewer` flagged. Offer
 the next step: `course-alignment` to check the course in the classroom against it, or `unit-building` for
 units that don't exist yet.
