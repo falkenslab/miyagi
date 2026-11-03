@@ -245,7 +245,8 @@ export function validateGift(source: string): ValidationResult {
       checkNumerical(trimmedBody, bodyStart, block, errors);
       continue;
     }
-    if (TRUE_FALSE.test(trimmedBody)) continue;
+    // Moodle cuts the general feedback off at the last "####" before reading the answer.
+    if (TRUE_FALSE.test(trimmedBody.replace(/####(?![\s\S]*####)[\s\S]*$/, "").trim())) continue;
     const list = answers(body, bodyStart, block, errors);
     if (list.length === 0) {
       errors.push({ line: lineAt(block, bodyStart), message: 'answer block with no answers: start each one with "=" (right) or "~" (wrong)' });

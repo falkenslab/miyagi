@@ -74,10 +74,12 @@ function parseQuestion(name: string, line: number, section: { token: Token; line
       tokens.shift();
     }
   }
-  // The question's feedback: a quote at the very end; its answers: the last list before it.
+  // The question's feedback: a quote at the very end; its answers: the last list before it, or
+  // its `answer:` (a true/false or a numeric question has no list: without this, its explanation
+  // stayed in the text and the GIFT showed it to students before they answered).
   let feedback: string | undefined;
   const last = tokens[tokens.length - 1];
-  if (last?.token.type === "blockquote" && tokens.some(({ token }) => token.type === "list")) {
+  if (last?.token.type === "blockquote" && (tokens.some(({ token }) => token.type === "list") || meta.answer !== undefined)) {
     feedback = (last.token as Tokens.Blockquote).text.trim();
     tokens.pop();
   }

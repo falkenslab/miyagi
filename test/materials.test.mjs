@@ -306,3 +306,33 @@ test("an exam bank: levels, and a quiz that picks by criterion and level", async
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("a true/false or numeric question's last quote is its feedback, not part of its text", () => {
+  const { material, findings } = parseQuestions(`---
+title: UT3
+category: UT3
+---
+
+## TF
+type: truefalse · answer: false
+
+Una clave primaria puede contener valores nulos.
+
+> Falso: ningún atributo de la clave primaria puede ser nulo.
+
+## N
+answer: 7
+
+¿Cuántos días tiene una semana?
+
+> Siete.
+`);
+  assert.deepEqual(findings.errors, []);
+  const [tf, n] = material.questions;
+  assert.equal(tf.text, "Una clave primaria puede contener valores nulos.");
+  assert.equal(tf.feedback, "Falso: ningún atributo de la clave primaria puede ser nulo.");
+  assert.equal(n.feedback, "Siete.");
+  const { gift, errors } = exportGift(material);
+  assert.deepEqual(errors, []);
+  assert.match(gift, /::TF::Una clave primaria puede contener valores nulos\. \{FALSE\n?####Falso/);
+});
