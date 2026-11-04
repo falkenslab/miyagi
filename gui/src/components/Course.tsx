@@ -19,8 +19,10 @@ interface Common {
   C: CourseTexts;
   /** A line to the chat, as the teacher would type it; the page shows the conversation. */
   ask: (line: string) => void;
-  /** Another view (the knowledge base at a page). */
+  /** Another view (the knowledge base at a page, Materials or Sources at a file). */
   go: (view: CourseView | "chat", page?: string) => void;
+  /** The file Materials or Sources was opened at (from a link in the chat, #66). */
+  item: string | null;
   onLink: () => void;
   linkTitle: string;
 }
@@ -345,10 +347,11 @@ function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
   return <p className="muted">{file}</p>;
 }
 
-export function MaterialsView({ chat, info, C, ask }: Common) {
+export function MaterialsView({ chat, info, C, ask, item }: Common) {
   const { result, load } = useHost<{ files: { path: string; size: number; changed: string }[] }>("drafts");
   useReload(load, chat);
-  const [chosen, setChosen] = useState<string | null>(null);
+  const [chosen, setChosen] = useState<string | null>(item);
+  useEffect(() => setChosen(item), [item]);
   if (!result) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
   if (!result.files.length)
     return (
@@ -562,7 +565,7 @@ interface Source {
   page: string | null;
 }
 
-export function SourcesView({ chat, C, ask, go, onNotice }: Common & { onNotice: (text: string) => void }) {
+export function SourcesView({ chat, C, ask, go, item, onNotice }: Common & { onNotice: (text: string) => void }) {
   const { result, load } = useHost<{ sources: Source[] }>("sources");
   useReload(load, chat);
   const [over, setOver] = useState(false);
@@ -630,7 +633,7 @@ export function SourcesView({ chat, C, ask, go, onNotice }: Common & { onNotice:
             </thead>
             <tbody>
               {result.sources.map((source) => (
-                <tr key={source.path}>
+                <tr key={source.path} className={source.path === item ? "on" : ""} ref={source.path === item ? (row) => row?.scrollIntoView({ block: "center" }) : undefined}>
                   <td>
                     <code>{source.path}</code>
                     <small className="muted block">

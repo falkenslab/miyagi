@@ -185,6 +185,45 @@ export async function topics(chat: ChatController) {
   return { topics: result };
 }
 
+/** Where an item named in the chat opens: a view, and the item in it. */
+export interface ItemPlace {
+  view: "sources" | "materials" | "knowledge" | "plan" | "oven";
+  item?: string;
+}
+
+/**
+ * The subject's items the agent named in the chat (#66), each with the view that opens it: a
+ * file in sources/, materials/ or drafts/, a knowledge page by its id or its file, the plan and
+ * the oven. Only what exists, inside those folders, and no hidden file; the rest isn't returned
+ * and stays text in the chat.
+ */
+export async function resolveItems(chat: ChatController, workspaceDir: string, targets: string[]): Promise<Record<string, ItemPlace>> {
+  const store = storeOf(chat);
+  const dirs = new Map((store?.types() ?? []).map((type) => [type.dir, type.type]));
+  const isFile = async (file: string | undefined) => Boolean(file && (await stat(file).catch(() => undefined))?.isFile());
+  const page = async (id: string): Promise<ItemPlace | undefined> => {
+    if (!(await store?.read(id))) return undefined;
+    return id === "course/teaching-plan" ? { view: "plan" } : id === "course/drafts" ? { view: "oven" } : { view: "knowledge", item: id };
+  };
+  const places: Record<string, ItemPlace> = {};
+  for (const target of [...new Set(targets)].slice(0, 200)) {
+    const clean = target.trim().replace(/^\.\//, "").replace(/[#?].*$/, "");
+    if (!clean || clean.length > 300 || clean.split("/").some((part) => part.startsWith("."))) continue;
+    const [folder, ...rest] = clean.split("/");
+    let place: ItemPlace | undefined;
+    if (folder === "sources" && (await isFile(await inside(sourcesDirFor(workspaceDir), rest.join("/"))))) place = { view: "sources", item: rest.join("/") };
+    else if ((folder === "materials" || folder === "drafts") && (await isFile(await preparedFile(workspaceDir, clean)))) place = { view: "materials", item: clean };
+    else if (folder === "knowledge" && clean.endsWith(".md")) {
+      // A page's file, knowledge/<its type's folder>/<slug>.md, by its id.
+      const slug = rest.at(-1)!.slice(0, -3);
+      const type = dirs.get(rest.slice(0, -1).join("/"));
+      if (type) place = await page(`${type}/${slug}`);
+    } else if (/^[a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(clean)) place = await page(clean);
+    if (place) places[target] = place;
+  }
+  return places;
+}
+
 /** The types a material is previewed as: what a browser shows, and nothing it would run. */
 export const PREVIEW_TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",

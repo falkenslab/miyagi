@@ -3,11 +3,16 @@ import { Fragment, type ReactNode } from "react";
 // A small markdown renderer for the agent's text: paragraphs, headings, lists, quotes, code
 // and tables, with bold, italics, inline code and links. It builds React elements and never
 // injects HTML, so nothing the model writes can run in the page. A knowledge base page's links
-// to other pages (`[Bowline](concept/bowline)`) work only where the view passes `onPage`.
+// to other pages (`[Bowline](concept/bowline)`) work only where the view passes `onPage`; with
+// its `has`, so do the subject's items named in the chat (#66), as links or as inline code
+// (`sources/plan.pdf`): the ones `has` knows open, the rest stay text.
 
-type OnPage = ((id: string) => void) | undefined;
+type OnPage = (((target: string) => void) & { has?: (target: string) => boolean }) | undefined;
 
-const INLINE = /(`[^`]+`)|(\*\*(?:[^*]|\*(?!\*))+?\*\*)|(\[[^\]]+\]\((?:https?:\/\/[^)\s]+|[a-z]+\/[\w-]+)\))|(https?:\/\/[^\s<)]+)|((?:^|(?<=[\s(]))\*[^*\s][^*]*?\*(?!\w))|((?:^|(?<=[\s(]))_[^_\s][^_]*?_(?!\w))/g;
+const PAGE_ID = /^[a-z][a-z0-9-]*\/[\w-]+$/;
+const opens = (onPage: OnPage, target: string) => Boolean(onPage && (onPage.has ? onPage.has(target) : PAGE_ID.test(target)));
+
+const INLINE = /(`[^`]+`)|(\*\*(?:[^*]|\*(?!\*))+?\*\*)|(\[[^\]]+\]\((?:https?:\/\/[^)\s]+|[\w.-]+(?:\/[\w.%-]+)+)\))|(https?:\/\/[^\s<)]+)|((?:^|(?<=[\s(]))\*[^*\s][^*]*?\*(?!\w))|((?:^|(?<=[\s(]))_[^_\s][^_]*?_(?!\w))/g;
 
 function inline(text: string, key: string, onPage?: OnPage): ReactNode[] {
   const out: ReactNode[] = [];
@@ -18,14 +23,25 @@ function inline(text: string, key: string, onPage?: OnPage): ReactNode[] {
     if (at > last) out.push(text.slice(last, at));
     const [whole, code, bold, link, url, star, under] = match;
     const k = `${key}-${n++}`;
-    if (code) out.push(<code key={k}>{code.slice(1, -1)}</code>);
+    if (code) {
+      const target = code.slice(1, -1);
+      out.push(
+        opens(onPage, target) ? (
+          <a key={k} href={`#${target}`} className="page-link" onClick={(event) => (event.preventDefault(), onPage!(target))}>
+            <code>{target}</code>
+          </a>
+        ) : (
+          <code key={k}>{target}</code>
+        ),
+      );
+    }
     else if (bold) out.push(<strong key={k}>{inline(bold.slice(2, -2), k, onPage)}</strong>);
     else if (link) {
       const [, label, href] = /^\[([^\]]+)\]\((.+)\)$/.exec(link) ?? [];
       if (!/^https?:/.test(href)) {
         out.push(
-          onPage ? (
-            <a key={k} href={`#${href}`} className="page-link" onClick={(event) => (event.preventDefault(), onPage(href))}>
+          opens(onPage, href) ? (
+            <a key={k} href={`#${href}`} className="page-link" onClick={(event) => (event.preventDefault(), onPage!(href))}>
               {label}
             </a>
           ) : (

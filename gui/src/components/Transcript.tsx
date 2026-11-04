@@ -4,10 +4,59 @@ import type { Texts } from "../i18n";
 import type { ExtTexts } from "../i18n/extensions";
 import { Markdown } from "../markdown";
 import type { ChatState, Info, TranscriptCall, TranscriptEntry } from "../types";
+import type { CourseView } from "./Course";
 import { quickActions } from "./Composer";
 import { Icon } from "./Icons";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
+
+/** Where the host says a named item opens (`resolve`, #66). */
+interface ItemPlace {
+  view: CourseView;
+  item?: string;
+}
+type Opener = ((target: string) => void) & { has: (target: string) => boolean };
+
+/** What the agent's replies name that may be one of the subject's items: link targets and inline code that look like a path or a page id. */
+function namedTargets(transcript: TranscriptEntry[]): string[] {
+  const found = new Set<string>();
+  for (const entry of transcript) {
+    if (entry.kind !== "agent") continue;
+    for (const match of entry.text.matchAll(/\]\(([^)\s]+)\)|`([^`\s]+\/[^`\s]+)`/g)) {
+      const target = match[1] ?? match[2]!;
+      if (!/^[a-z]+:/i.test(target)) found.add(target);
+    }
+  }
+  return [...found];
+}
+
+/**
+ * The items named in the conversation that exist, asked to the host as they appear (one call for
+ * the new ones), and how to open each. Those that don't exist are asked again after the turn: the
+ * agent may name a file before writing it.
+ */
+function useItemLinks(chat: ChatState, go: (view: CourseView, item?: string) => void): Opener {
+  const [places, setPlaces] = useState<Record<string, ItemPlace>>({});
+  const asked = useRef(new Set<string>());
+  useEffect(() => {
+    if (!chat.busy) asked.current = new Set(Object.keys(places));
+  }, [chat.busy]);
+  useEffect(() => {
+    const fresh = namedTargets(chat.transcript).filter((target) => !asked.current.has(target));
+    if (!fresh.length) return;
+    for (const target of fresh) asked.current.add(target);
+    void act<{ items?: Record<string, ItemPlace> }>("resolve", { targets: fresh })
+      .then((answer) => answer.items && Object.keys(answer.items).length && setPlaces((known) => ({ ...known, ...answer.items })))
+      .catch(() => {});
+  }, [chat.transcript, chat.busy]);
+  return Object.assign(
+    (target: string) => {
+      const place = places[target];
+      if (place) go(place.view, place.item);
+    },
+    { has: (target: string) => target in places },
+  );
+}
 
 /** The SDK's tool that hands a task to a subagent (`Agent`, `Task` before). */
 const SUBAGENT_TOOLS = new Set(["Agent", "Task"]);
@@ -106,7 +155,7 @@ function TurnEnd({ text, seconds, T }: { text: string; seconds: number; T: Texts
   );
 }
 
-function Entry({ entry, running, reply, T }: { entry: TranscriptEntry; running: boolean; reply: string; T: Texts }) {
+function Entry({ entry, running, reply, T, open }: { entry: TranscriptEntry; running: boolean; reply: string; T: Texts; open: Opener }) {
   switch (entry.kind) {
     case "user":
       return (
@@ -118,7 +167,7 @@ function Entry({ entry, running, reply, T }: { entry: TranscriptEntry; running: 
       return (
         <div className="msg agent">
           <div className="body md">
-            <Markdown text={entry.text} />
+            <Markdown text={entry.text} onPage={open} />
           </div>
         </div>
       );
@@ -159,7 +208,8 @@ function greeting(T: Texts) {
 }
 
 /** The conversation, scrolled to the end while the person is at the end; ↓ takes them back there. */
-export function Transcript({ chat, info, T, X, onLink }: { chat: ChatState; info: Info | null; T: Texts; X: ExtTexts; onLink: () => void }) {
+export function Transcript({ chat, info, T, X, onLink, go }: { chat: ChatState; info: Info | null; T: Texts; X: ExtTexts; onLink: () => void; go: (view: CourseView, item?: string) => void }) {
+  const open = useItemLinks(chat, go);
   const box = useRef<HTMLDivElement>(null);
   const atEnd = useRef(true);
   const [away, setAway] = useState(false);
@@ -197,7 +247,7 @@ export function Transcript({ chat, info, T, X, onLink }: { chat: ChatState; info
 ${entry.text}` : entry.text;
             const text = reply;
             if (entry.kind === "user" || entry.kind === "turn-summary") reply = "";
-            return <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} reply={text} T={T} />;
+            return <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} reply={text} T={T} open={open} />;
           })}
           {chat.busy && chat.activity && last?.kind !== "tools" && (
             <div className="activity">

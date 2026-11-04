@@ -64,7 +64,8 @@ node .claude/skills/verify/check-page.mjs <scratchpad>/page-shots
 ```
 
 It creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
-and not Claude Code's, approves one tool and refuses another in interactive mode, switches the mode
+and not Claude Code's, approves one tool and refuses another in interactive mode, links the items a reply names (a source
+and a page open their views, a made-up path stays text), switches the mode
 and the theme, and takes screenshots at 360, 768 and 1440 px with no horizontal scroll. Look at
 them. Without a token it says `skip` and passes.
 

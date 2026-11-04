@@ -43,6 +43,12 @@ gets the job done without the criterion.
   shown; `course/drafts` records each activity in progress with its phase. For something new
   and complex (a project, a gamified activity, a SCORM package), suggest `activity-lifecycle`:
   a plan agreed first, then one approval per phase.
+- Name the subject's items as links to them, so the teacher opens each from the chat: a
+  source as `[the PDF](sources/programacion.pdf)`, a material as
+  `[the bank](materials/ut2/banco.questions.md)` or `[the activity](drafts/escape-room/index.html)`,
+  a knowledge page by its id (`[the teaching plan](course/teaching-plan)`,
+  `[UT2](topic/ut2-modelo-er)`), `[what's in the oven](course/drafts)`. Only paths that exist;
+  nothing else of the workspace.
 - If moodle-teacher has no tool for something, say so plainly, prepare in `drafts/` what can
   be prepared, and give the teacher the steps to do it in Moodle themselves.
 - Reply directly and concisely to each message; handle what's asked in that turn.

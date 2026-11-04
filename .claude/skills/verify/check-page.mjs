@@ -11,7 +11,7 @@
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-page.mjs <screenshots dir>
 /* global document, window, getComputedStyle, MutationObserver -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -183,6 +183,33 @@ try {
   await idle();
   check("a working subagent shows its current action, time and count under its line", /\d+ (s|min)/.test(firstSub) && acting && seenSub !== firstSub, `${firstSub} → ${seenSub}`);
   check("the subagent's line goes once it's done", (await page.locator(".tool .sub-activity").count()) === 0);
+  // What miyagi names of the subject links to its view; what doesn't exist stays text (#66).
+  const subjects = path.join(os.homedir(), ".miyagi", "workspaces");
+  const subject = path.join(subjects, readdirSync(subjects)[0]);
+  mkdirSync(path.join(subject, "sources"), { recursive: true });
+  writeFileSync(path.join(subject, "sources", "temario.txt"), "Tema 1: variables.");
+  mkdirSync(path.join(subject, "knowledge", "topics"), { recursive: true });
+  writeFileSync(path.join(subject, "knowledge", "topics", "tema-1.md"), "---\ntype: topic\ntitle: Tema 1\n---\n\n# Tema 1\n\nVariables.\n");
+  await send("Sin leer nada, responde solo esta línea, tal cual: «Están [el temario](sources/temario.txt), `sources/temario.txt`, [el tema](topic/tema-1) y `sources/no-existe.pdf`».");
+  await idle();
+  const reply = page.locator(".msg.agent").last();
+  // The links come once the host says what exists: a moment after the reply.
+  await reply.locator("a.page-link").first().waitFor({ timeout: 10_000 }).catch(() => {});
+  await shot("links-1440");
+  const linked = await reply.locator("a.page-link").allInnerTexts();
+  check("the items named in the chat are links, and only those that exist", linked.includes("el temario") && linked.includes("sources/temario.txt") && linked.includes("el tema") && !linked.some((text) => text.includes("no-existe")), linked.join(" | "));
+  await reply.locator("a.page-link", { hasText: "el temario" }).click();
+  check("…a source opens Sources at it", await page.waitForSelector(".tbl tr.on code:text('temario.txt')", { timeout: 10_000 }).then(() => true, () => false));
+  // Back to the open conversation, from Recents.
+  await page.click(".recents .open-conv").catch(() => {});
+  await page.waitForSelector(".msg.agent a.page-link", { timeout: 10_000 }).catch(() => {});
+  await shot("links-back-1440");
+  await page.locator(".msg.agent").last().locator("a.page-link", { hasText: /^el tema$/ }).click({ timeout: 10_000 }).catch((error) => console.log("page link:", error.message.split("\n")[0]));
+  await page.waitForTimeout(1500);
+  await shot("links-page-1440");
+  check("…a page opens the knowledge base at it", await page.waitForFunction(() => /Variables/.test(document.querySelector("main .card.page")?.textContent ?? "") && Boolean(document.querySelector(".page.md, .card.page")), null, { timeout: 10_000 }).then(() => true, () => false));
+  await page.click(".recents .open-conv");
+  await page.waitForSelector(".msgs");
   // ↓ shows once the person scrolls up, and takes them back to the end.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.evaluate(() => document.querySelector(".msgs").scrollTo({ top: 0 }));
@@ -231,4 +258,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL page: ${failure}`);
   process.exit(1);
 }
-console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, ↓, modes, themes, 360/390/768/1024/1440 (screenshots in ${shots})`);
+console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, ↓, modes, themes, 360/390/768/1024/1440 (screenshots in ${shots})`);

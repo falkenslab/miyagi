@@ -33,6 +33,7 @@ export function App() {
   const [openExisting, setOpenExisting] = useState(false);
   const [view, setView] = useState<View>("today");
   const [kbPage, setKbPage] = useState<string | null>(null);
+  const [item, setItem] = useState<string | null>(null);
   const [extTab, setExtTab] = useState<ExtTab>("installed");
   const [sideOpen, setSideOpen] = useState(false);
   const [linking, setLinking] = useState(false);
@@ -48,7 +49,9 @@ export function App() {
     setView("chat");
   };
   const go = (next: CourseView | "chat", page?: string) => {
-    if (page) setKbPage(page);
+    if (next === "knowledge") {
+      if (page) setKbPage(page);
+    } else setItem(page ?? null);
     setView(next);
   };
 
@@ -123,7 +126,7 @@ export function App() {
           {state?.signedIn && state.opening && !chat && <Waiting block text={T.opening} still={T.stillWorking} />}
           {chat && shown === "chat" && (
             <div className="chat">
-              <Transcript chat={chat} info={info} T={T} X={X} onLink={() => setLinking(true)} />
+              <Transcript chat={chat} info={info} T={T} X={X} onLink={() => setLinking(true)} go={go} />
               {/* A checkpoint takes the composer's place; the composer stays mounted, so a draft isn't lost. */}
               <div className="dock">
                 <Panel chat={chat} T={T} />
@@ -146,7 +149,7 @@ export function App() {
             </div>
           )}
           {chat && info && (() => {
-            const common = { chat, info, C, ask, go, onLink: () => setLinking(true), linkTitle: X.linkTitle };
+            const common = { chat, info, C, ask, go, item, onLink: () => setLinking(true), linkTitle: X.linkTitle };
             switch (shown) {
               case "today":
                 return <TodayView {...common} />;

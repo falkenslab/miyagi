@@ -11,7 +11,7 @@ import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands } from "../catalog.js";
 import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
-import { draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, sourcesList, today, topics } from "./course.js";
+import { draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
 /**
@@ -425,6 +425,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return oven(subjectDir);
       case "topics":
         return await topics(chat);
+      case "resolve":
+        return { items: await resolveItems(chat, subjectDir, Array.isArray(data.targets) ? data.targets.map(String) : []) };
       case "catalog":
         return { entries: await catalog(chat, String(data.words ?? "")) };
       case "install":

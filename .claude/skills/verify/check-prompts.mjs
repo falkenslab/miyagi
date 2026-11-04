@@ -19,6 +19,7 @@ const course = (c) => c.kind !== "explore";
 const SECTIONS = {
   "teacher chat": { text: "Its classroom is a Moodle course you reach through the moodle-teacher extension", when: (c) => c.kind === "chat" && moodle(c) },
   "teacher run": { text: "running one subject's Moodle course on your own", when: (c) => c.kind === "run" && moodle(c) },
+  "items as links": { text: "Name the subject's items as links to them", when: (c) => c.kind === "chat" },
   "students as aliases": { text: "Students reach you as aliases", when: (c) => (c.kind === "run" || c.kind === "chat") && moodle(c) },
   "no browser": { text: "browser_", when: () => false },
   "teacher ingest": { text: "knowledge base of a teacher managing a Moodle course", when: (c) => c.kind === "ingest" && moodle(c) },
