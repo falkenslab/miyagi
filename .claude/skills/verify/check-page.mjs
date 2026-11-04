@@ -2,7 +2,8 @@
 // real host and a real Claude session: a subject created from the page, a conversation with its
 // suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
-// mode and theme switched, the / menu without Claude Code's commands; and screenshots at 360, 390,
+// mode and theme switched, the / menu without Claude Code's commands, a topic's actions (⋯, right click, Shift+F10,
+// a sheet on a phone) and the catalog in ＋; and screenshots at 360, 390,
 // 768, 1024 and 1440 px in both themes, with no horizontal scroll and 44 px targets. Not part of the quick gate: it
 // needs you signed in to Claude Code (or ANTHROPIC_API_KEY / CLAUDE_CODE_OAUTH_TOKEN in your own
 // environment) and Chrome, and spends a few turns. Run it when gui/ or src/host/ change. Its home
@@ -210,6 +211,57 @@ try {
   check("…a page opens the knowledge base at it", await page.waitForFunction(() => /Variables/.test(document.querySelector("main .card.page")?.textContent ?? "") && Boolean(document.querySelector(".page.md, .card.page")), null, { timeout: 10_000 }).then(() => true, () => false));
   await page.click(".recents .open-conv");
   await page.waitForSelector(".msgs");
+  // Selected text in a reply: research it, questions about it, quote it (#67).
+  await page.evaluate(() => {
+    const body = [...document.querySelectorAll(".msg.agent .body")].at(-1);
+    const range = document.createRange();
+    range.selectNodeContents(body);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    body.dispatchEvent(new window.MouseEvent("mouseup", { bubbles: true }));
+  });
+  check("selected text in the chat gets its menu", await page.waitForSelector(".select-menu", { timeout: 5000 }).then(async () => (await page.locator(".select-menu button").count()) === 3, () => false));
+  await page.evaluate(() => window.getSelection().removeAllRanges());
+  await page.mouse.click(5, 5);
+  // miyagi's commands as actions (#67): a topic's ⋯, its right click and Shift+F10 open the same menu.
+  await page.click(".nav a:has-text('Temas')");
+  const topic = page.locator(".actionable:has-text('Tema 1')").first();
+  await topic.locator(".more-btn").click({ timeout: 15_000 });
+  const offered = await page.locator(".item-pop button[data-command]").evaluateAll((rows) => rows.map((row) => `${row.dataset.command}${row.disabled ? "(off)" : ""}`));
+  await shot("topic-menu-1440");
+  check("a topic's ⋯ offers its actions, the classroom's off without one", ["miyagi:build-unit", "miyagi:quiz", "miyagi:research", "miyagi:align(off)"].every((one) => offered.includes(one)), offered.join(" "));
+  check("…and asking miyagi about it", (await page.locator(".item-pop button:not([data-command])").count()) === 1);
+  await page.keyboard.press("Escape");
+  await topic.click({ button: "right", position: { x: 40, y: 20 } });
+  check("right click opens the same menu where it was", (await page.locator(".item-pop.at-point button[data-command]").count()) === offered.length);
+  await page.keyboard.press("Escape");
+  await topic.locator("button.btn").first().focus();
+  await page.keyboard.press("Shift+F10");
+  check("Shift+F10 opens it from the keyboard", (await page.locator(".item-pop button[data-command]").count()) === offered.length);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await shot("topic-menu-390");
+  const sheet = await page.evaluate(() => {
+    const box = document.querySelector(".item-pop").getBoundingClientRect();
+    const tiny = [...document.querySelectorAll(".item-pop button")].filter((one) => one.getBoundingClientRect().height < 44).length;
+    return { bottom: Math.round(window.innerHeight - box.bottom), width: Math.round(box.width), tiny, scroll: document.documentElement.scrollWidth > window.innerWidth };
+  });
+  check("on a phone the menu is a sheet from the bottom, 44 px rows, no horizontal scroll", sheet.bottom === 0 && sheet.width === 390 && !sheet.tiny && !sheet.scroll, JSON.stringify(sheet));
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // "Make a quiz" sends its command with the topic, shown as the action in the conversation.
+  await page.click(".item-pop button[data-command='miyagi:quiz']");
+  await page.waitForSelector(".msg.user .cmd-chip", { timeout: 20_000 }).catch(() => {});
+  const raw = await page.locator(".msg.user .cmd-raw").last().innerText().catch(() => "");
+  await shot("action-sent-1440");
+  check("an action sends its command with the item, shown by its name", raw === "/miyagi:quiz Tema 1" && /Tema 1/.test(await page.locator(".msg.user .cmd-chip").last().innerText()), raw);
+  await page.click(".composer .send.stop").catch(() => {});
+  await idle();
+  // ＋ is the catalog: grouped, the classroom's actions off without one.
+  await page.click(".composer .plus");
+  const groups = await page.locator(".pop [role=group]").count();
+  const gradeOff = await page.locator(".pop button[data-command='miyagi:grade']").isDisabled();
+  await shot("catalog-1440");
+  check("＋ lists the catalog in groups, grading off without a classroom", groups >= 4 && gradeOff, `${groups} groups`);
+  await page.keyboard.press("Escape");
   // ↓ shows once the person scrolls up, and takes them back to the end.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.evaluate(() => document.querySelector(".msgs").scrollTo({ top: 0 }));
@@ -258,4 +310,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL page: ${failure}`);
   process.exit(1);
 }
-console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, ↓, modes, themes, 360/390/768/1024/1440 (screenshots in ${shots})`);
+console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, 360/390/768/1024/1440 (screenshots in ${shots})`);

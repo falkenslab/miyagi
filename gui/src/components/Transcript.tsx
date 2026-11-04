@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { act } from "../api";
 import type { Texts } from "../i18n";
-import type { ExtTexts } from "../i18n/extensions";
 import { Markdown } from "../markdown";
-import type { ChatState, Info, TranscriptCall, TranscriptEntry } from "../types";
+import type { ChatState, TranscriptCall, TranscriptEntry } from "../types";
 import type { CourseView } from "./Course";
-import { quickActions } from "./Composer";
+import { actionLabel, launched, useActions } from "./Actions";
 import { Icon } from "./Icons";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
@@ -158,11 +157,7 @@ function TurnEnd({ text, seconds, T }: { text: string; seconds: number; T: Texts
 function Entry({ entry, running, reply, T, open }: { entry: TranscriptEntry; running: boolean; reply: string; T: Texts; open: Opener }) {
   switch (entry.kind) {
     case "user":
-      return (
-        <div className="msg user">
-          <div className="body">{entry.text}</div>
-        </div>
-      );
+      return <UserLine text={entry.text} />;
     case "agent":
       return (
         <div className="msg agent">
@@ -180,23 +175,59 @@ function Entry({ entry, running, reply, T, open }: { entry: TranscriptEntry; run
   }
 }
 
-/** What to start with in a conversation the person hasn't written in yet: the quick actions as rows. */
-function Suggestions({ chat, info, X, onLink }: { chat: ChatState; info: Info; X: ExtTexts; onLink: () => void }) {
+/**
+ * What the teacher wrote; an action launched from the page (#67) as its name and its value, with
+ * the command it sent small underneath, so the conversation reads as what they asked for.
+ */
+function UserLine({ text }: { text: string }) {
+  const api = useActions();
+  const found = api && launched(api.actions, text);
+  return (
+    <div className="msg user">
+      {found ? (
+        <div className="body">
+          <span className="cmd-chip">
+            <span aria-hidden="true">{found.action.icon ?? "/"}</span> {actionLabel(found.action, api.lang)}
+            {found.value && <span className="cmd-value"> · {found.value}</span>}
+          </span>
+          <small className="cmd-raw">{text}</small>
+        </div>
+      ) : (
+        <div className="body">{text}</div>
+      )}
+    </div>
+  );
+}
+
+/** What to start with in a conversation the person hasn't written in yet: the catalog's suggested actions as rows (#67). */
+function Suggestions({ chat }: { chat: ChatState }) {
+  const api = useActions();
   const [pending, setPending] = useState(0);
   useEffect(() => {
     void act<{ sources?: { pending: number } }>("today")
       .then((today) => setPending(today.sources?.pending ?? 0))
       .catch(() => {});
   }, []);
+  if (!api) return null;
+  const suggested = api.actions.filter((action) => action.suggest);
+  const usable = suggested.filter((action) => api.connected || !action.needsClassroom);
   return (
     <div className="suggest">
-      {quickActions(info, X, (line) => void act("send", { line }), onLink).map((action) => (
-        <button key={action.key} type="button" disabled={chat.busy && action.key !== "link"} onClick={action.run}>
-          <Icon name={action.icon} />
-          <span className="grow">{action.label}</span>
-          {action.key === "ingest" && pending > 0 && <span className="badge warn">{pending}</span>}
+      {usable.map((action) => (
+        <button key={action.command} type="button" disabled={chat.busy} onClick={() => api.run(action)}>
+          <span className="act-icon" aria-hidden="true">
+            {action.icon}
+          </span>
+          <span className="grow">{actionLabel(action, api.lang)}</span>
+          {action.command === "knowledge:ingest" && pending > 0 && <span className="badge warn">{pending}</span>}
         </button>
       ))}
+      {usable.length < suggested.length && (
+        <button type="button" onClick={api.onLink}>
+          <Icon name="link" />
+          <span className="grow">{api.A.linkClassroom}</span>
+        </button>
+      )}
     </div>
   );
 }
@@ -208,7 +239,7 @@ function greeting(T: Texts) {
 }
 
 /** The conversation, scrolled to the end while the person is at the end; ↓ takes them back there. */
-export function Transcript({ chat, info, T, X, onLink, go }: { chat: ChatState; info: Info | null; T: Texts; X: ExtTexts; onLink: () => void; go: (view: CourseView, item?: string) => void }) {
+export function Transcript({ chat, T, go }: { chat: ChatState; T: Texts; go: (view: CourseView, item?: string) => void }) {
   const open = useItemLinks(chat, go);
   const box = useRef<HTMLDivElement>(null);
   const atEnd = useRef(true);
@@ -232,7 +263,7 @@ export function Transcript({ chat, info, T, X, onLink, go }: { chat: ChatState; 
         }}
         aria-live="polite"
       >
-        <div className="col">
+        <div className="col" data-select-actions>
           {fresh && (
             <div className="welcome">
               <Logo size={64} />
@@ -254,7 +285,7 @@ ${entry.text}` : entry.text;
               <span className="spinner" aria-hidden="true" /> {chat.activity}
             </div>
           )}
-          {fresh && !chat.busy && info && <Suggestions chat={chat} info={info} X={X} onLink={onLink} />}
+          {fresh && !chat.busy && <Suggestions chat={chat} />}
         </div>
       </div>
       {away && (

@@ -2,8 +2,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { act, upload } from "../api";
 import type { Texts } from "../i18n";
 import type { ExtTexts } from "../i18n/extensions";
-import type { ChatState, Info, Mode } from "../types";
-import { Icon, type IconName } from "./Icons";
+import type { ChatState, Mode } from "../types";
+import { ActionList, useActions } from "./Actions";
+import { Icon } from "./Icons";
 import { Menu } from "./Shell";
 
 /** The turn's tasks (the agent's TodoWrite), folded above the composer into the one in progress; opened, the list. */
@@ -33,28 +34,6 @@ export function Todos({ chat, T }: { chat: ChatState; T: Texts }) {
       </button>
     </div>
   );
-}
-
-export interface QuickAction {
-  icon: IconName;
-  label: string;
-  run: () => void;
-  key: "prepare" | "grade" | "forum" | "ingest" | "link";
-}
-
-/** What the teacher asks often, sent to the chat as they'd type it; without a classroom, linking one. */
-export function quickActions(info: Info, X: ExtTexts, send: (line: string) => void, onLink: () => void): QuickAction[] {
-  const connected = Boolean(info.classroom?.connected);
-  return [
-    { key: "prepare", icon: "layers", label: X.quick.prepare, run: () => send(X.quickPrompts.prepare) },
-    ...(connected
-      ? ([
-          { key: "grade", icon: "check", label: X.quick.grade, run: () => send(X.quickPrompts.grade) },
-          { key: "forum", icon: "forum", label: X.quick.forum, run: () => send(X.quickPrompts.forum) },
-        ] as QuickAction[])
-      : ([{ key: "link", icon: "link", label: X.linkTitle, run: onLink }] as QuickAction[])),
-    { key: "ingest", icon: "folder", label: X.quick.ingest, run: () => send(X.quickPrompts.ingest) },
-  ];
 }
 
 /** The mode now, as a pill in the composer, and the ones this session can switch to (Shift+Tab does the same). */
@@ -104,12 +83,14 @@ function ModeMenu({ chat, T }: { chat: ChatState; T: Texts }) {
 
 /**
  * Where the person writes, as a card (#60): the text, and under it ＋ (a file to the sources,
- * capabilities, the quick actions, miyagi's commands), the mode and send (stop while a turn runs).
+ * capabilities, the catalog of miyagi's actions, #67), the mode and send (stop while a turn runs).
+ * A `draft` (an item's "Ask miyagi about this", a quote) is left in the box to finish.
  * Enter sends, Shift+Enter is a new line, Esc stops a running turn, ↑/↓ walk the history when the
  * box is empty, / opens the shortcuts. While a turn runs nothing is sent: the host refuses it.
  */
-export function Composer({ chat, info, T, X, onNotice, onCapabilities, onLink }: { chat: ChatState; info: Info | null; T: Texts; X: ExtTexts; onNotice: (text: string) => void; onCapabilities: () => void; onLink: () => void }) {
+export function Composer({ chat, T, X, onNotice, onCapabilities, draft }: { chat: ChatState; T: Texts; X: ExtTexts; onNotice: (text: string) => void; onCapabilities: () => void; draft: { text: string; at: number } | null }) {
   const [text, setText] = useState("");
+  const actions = useActions();
   const [historyAt, setHistoryAt] = useState(-1);
   const [menuAt, setMenuAt] = useState(0);
   const area = useRef<HTMLTextAreaElement>(null);
@@ -122,6 +103,15 @@ export function Composer({ chat, info, T, X, onNotice, onCapabilities, onLink }:
     el.style.height = "auto";
     el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
   }, [text]);
+  useEffect(() => {
+    if (!draft) return;
+    setText(draft.text);
+    requestAnimationFrame(() => {
+      const el = area.current;
+      el?.focus();
+      el?.setSelectionRange(el.value.length, el.value.length);
+    });
+  }, [draft]);
   // Back to the box when a turn ends or a panel closes.
   useEffect(() => {
     if (!chat.busy && !chat.panel) area.current?.focus();
@@ -264,25 +254,7 @@ export function Composer({ chat, info, T, X, onNotice, onCapabilities, onLink }:
                     </span>
                   </button>
                 </div>
-                {info && (
-                  <>
-                    <h4 className="pop-title small-caps">{X.actions}</h4>
-                    {quickActions(info, X, (line) => void act("send", { line }), onLink).map((action) => (
-                      <button
-                        key={action.key}
-                        type="button"
-                        disabled={chat.busy && action.key !== "link"}
-                        onClick={() => {
-                          close();
-                          action.run();
-                        }}
-                      >
-                        <Icon name={action.icon} />
-                        <span className="grow">{action.label}</span>
-                      </button>
-                    ))}
-                  </>
-                )}
+                {actions && <ActionList list={actions.actions} close={close} grouped />}
                 <h4 className="pop-title small-caps">{T.commands}</h4>
                 <button
                   type="button"

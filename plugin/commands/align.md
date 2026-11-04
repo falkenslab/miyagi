@@ -1,5 +1,10 @@
 ---
 description: Check that the course in the classroom matches the teaching plan and close the gaps
+label: es=Alinear el aula con la programación | en=Align the classroom with the plan | fr=Aligner la classe sur la programmation | de=Kursraum an der Planung ausrichten
+icon: 🎯
+group: plan
+needs-classroom: true
+applies-to: topic, plan
 ---
 
 Apply the `course-alignment` skill right now. $ARGUMENTS

@@ -1,5 +1,9 @@
 ---
 description: Write or review the teaching plan (programación didáctica) of the course, as pages of the knowledge base
+label: es=Programación didáctica | en=Teaching plan | fr=Programmation pédagogique | de=Unterrichtsplanung
+icon: 📋
+group: plan
+applies-to: plan
 ---
 
 Apply the `teaching-plan` skill right now. What the teacher asked: $ARGUMENTS

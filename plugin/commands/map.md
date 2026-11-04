@@ -1,5 +1,9 @@
 ---
 description: Show the course map saved in the knowledge base page course/course-map: where each section and activity is
+label: es=Mapa del curso | en=Course map | fr=Carte du cours | de=Kurskarte
+icon: 🗺️
+group: classroom
+opens: course/course-map
 ---
 
 Read the knowledge base page `course/course-map` with `knowledge_read`.

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { act, upload } from "../api";
 import type { CourseTexts } from "../i18n/course";
 import { Markdown } from "../markdown";
+import { Actionable, GroupActions, useActions, useItemMenu } from "./Actions";
 import type { ChatState, Info } from "../types";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
@@ -167,6 +168,7 @@ export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common)
               </button>
             </Card>
           </div>
+          <GroupActions group="day" />
           <h2 className="sec">{C.suggestions}</h2>
           <div className="grid g3">
             {tips.map(({ tip: [title, text, button], run }) => (
@@ -217,6 +219,7 @@ interface Page {
 
 export function PlanView({ chat, info, C, ask, go }: Common) {
   const { result, load } = useHost<Page>("kb-page", { id: "course/teaching-plan" });
+  const menu = useItemMenu(["plan"], "", C.nav.plan);
   const [loaded, setLoaded] = useState(false);
   useReload(
     useCallback(async () => {
@@ -250,8 +253,9 @@ export function PlanView({ chat, info, C, ask, go }: Common) {
         <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => ask(C.prompts.reviewPlan)}>
           {C.reviewPlan}
         </button>
+        {menu.button}
       </div>
-      <div className="card page md">
+      <div className="card page md" {...menu.bind} data-select-actions>
         <h2>{result.title}</h2>
         <Markdown text={withoutTitle(result.content, result.title)} onPage={(id) => go("knowledge", id)} />
       </div>
@@ -282,7 +286,8 @@ export function TopicsView({ chat, C, ask, go }: Common) {
       {result.topics.length === 0 && <div className="card">{C.noTopics}</div>}
       <div className="grid g2">
         {result.topics.map((topic) => (
-          <Card key={topic.id ?? `unit-${topic.unit}`} title={`🧱 ${topic.unit ? `${topic.unit} · ` : ""}${topic.title}`} badge={topic.id ? <span className="badge">{C.activities(topic.activities.length)}</span> : undefined}>
+          <Actionable key={topic.id ?? `unit-${topic.unit}`} kinds={["topic"]} value={topic.unit ? `${topic.unit} ${topic.title}` : topic.title} className="card-actions">
+          <Card title={`🧱 ${topic.unit ? `${topic.unit} · ` : ""}${topic.title}`} badge={topic.id ? <span className="badge">{C.activities(topic.activities.length)}</span> : undefined}>
             {topic.details && <p className="muted small">{topic.details}</p>}
             {topic.description && <Markdown text={topic.description} />}
             {!topic.id && <p className="muted">{C.noTopicPage}</p>}
@@ -308,6 +313,7 @@ export function TopicsView({ chat, C, ask, go }: Common) {
               )}
             </div>
           </Card>
+          </Actionable>
         ))}
       </div>
     </div>
@@ -347,6 +353,32 @@ function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
   return <p className="muted">{file}</p>;
 }
 
+/** A quiz among the materials (by its name or format), whose menu also offers the paper exam. */
+const isQuiz = (file: string) => /quiz|cuestionario|questionnaire|\.gift$/i.test(file);
+
+function MaterialRow({ file, on, choose, publish, busy, C }: { file: { path: string; size: number; changed: string }; on: boolean; choose: () => void; publish?: () => void; busy: boolean; C: CourseTexts }) {
+  const menu = useItemMenu(isQuiz(file.path) ? ["material", "quiz"] : ["material"], file.path);
+  return (
+    <tr className={on ? "on" : ""} {...menu.bind}>
+      <td>
+        <button type="button" className="linkish" onClick={choose}>
+          {file.path}
+        </button>
+        <small className="muted block">{kb(file.size)}</small>
+      </td>
+      <td className="muted">{day(file.changed)}</td>
+      <td className="acts">
+        {publish && (
+          <button type="button" className="btn small" disabled={busy} onClick={publish}>
+            {C.publish}
+          </button>
+        )}
+        {menu.button}
+      </td>
+    </tr>
+  );
+}
+
 export function MaterialsView({ chat, info, C, ask, item }: Common) {
   const { result, load } = useHost<{ files: { path: string; size: number; changed: string }[] }>("drafts");
   useReload(load, chat);
@@ -379,22 +411,7 @@ export function MaterialsView({ chat, info, C, ask, item }: Common) {
             </thead>
             <tbody>
               {result.files.map((file) => (
-                <tr key={file.path} className={file.path === chosen ? "on" : ""}>
-                  <td>
-                    <button type="button" className="linkish" onClick={() => setChosen(file.path)}>
-                      {file.path}
-                    </button>
-                    <small className="muted block">{kb(file.size)}</small>
-                  </td>
-                  <td className="muted">{day(file.changed)}</td>
-                  <td>
-                    {info.classroom?.connected && (
-                      <button type="button" className="btn small" disabled={chat.busy} onClick={() => ask(C.prompts.publish(file.path))}>
-                        {C.publish}
-                      </button>
-                    )}
-                  </td>
-                </tr>
+                <MaterialRow key={file.path} file={file} on={file.path === chosen} choose={() => setChosen(file.path)} publish={info.classroom?.connected ? () => ask(C.prompts.publish(file.path)) : undefined} busy={chat.busy} C={C} />
               ))}
             </tbody>
           </table>
@@ -410,6 +427,7 @@ export function MaterialsView({ chat, info, C, ask, item }: Common) {
 // ---------- En el horno ----------
 
 export function OvenView({ chat, info, C, ask }: Common) {
+  const compose = useActions()?.compose;
   const { result, load } = useHost<{ items: Today["oven"] }>("oven");
   useReload(load, chat);
   if (!result) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
@@ -424,7 +442,7 @@ export function OvenView({ chat, info, C, ask }: Common) {
             {result.items
               .filter((item) => item.phase === phase)
               .map((item, index) => (
-                <div key={index} className="it">
+                <Actionable key={index} kinds={["oven"]} value={label(item.text)} className="it">
                   <span className="md">
                     <Markdown text={item.text.replace(/\[([^\]]+)\]\([^)\s]+\.md\)/g, "$1")} />
                   </span>
@@ -433,11 +451,11 @@ export function OvenView({ chat, info, C, ask }: Common) {
                       {C.showToStudents}
                     </button>
                   ) : phase !== "served" ? (
-                    <button type="button" className="btn small" disabled={chat.busy} onClick={() => ask(C.prompts.resume(label(item.text)))}>
+                    <button type="button" className="btn small" disabled={chat.busy} onClick={() => compose?.(C.prompts.resume(label(item.text)))}>
                       {C.resume}
                     </button>
                   ) : null}
-                </div>
+                </Actionable>
               ))}
           </div>
         ))}
@@ -522,12 +540,12 @@ export function KnowledgeView({ chat, C, ask, page, setPage }: Common & { page: 
               ))
           )}
         </nav>
-        <article className="card page md">
+        <article className="card page md" data-select-actions>
           {!shown ? (
             <p className="muted">{C.pickPage}</p>
           ) : (
             <>
-              <h2>{shown.title}</h2>
+              <PageTitle page={shown} />
               <div className="meta">
                 {shown.id}
                 {shown.fields.updated && ` · ${day(shown.fields.updated)}`}
@@ -555,6 +573,17 @@ export function KnowledgeView({ chat, C, ask, page, setPage }: Common & { page: 
   );
 }
 
+/** A knowledge page's title, with its ⋯ menu: the actions on a page, with the page as their value. */
+function PageTitle({ page }: { page: Page }) {
+  const menu = useItemMenu(["page"], `${page.title} (${page.id})`, page.title);
+  return (
+    <div className="page-head" {...menu.bind}>
+      <h2>{page.title}</h2>
+      {menu.button}
+    </div>
+  );
+}
+
 // ---------- Fuentes ----------
 
 interface Source {
@@ -563,6 +592,34 @@ interface Source {
   changed: string;
   state: "new" | "changed" | "ingested";
   page: string | null;
+}
+
+function SourceRow({ source, on, go, C }: { source: Source; on: boolean; go: Common["go"]; C: CourseTexts }) {
+  const menu = useItemMenu(["source"], `sources/${source.path}`, source.path);
+  const badge = { new: "sun", changed: "warn", ingested: "ok" } as const;
+  return (
+    <tr className={on ? "on" : ""} ref={on ? (row) => row?.scrollIntoView({ block: "center" }) : undefined} {...menu.bind}>
+      <td>
+        <code>{source.path}</code>
+        <small className="muted block">
+          {kb(source.size)} · {day(source.changed)}
+        </small>
+      </td>
+      <td>
+        <span className={`badge ${badge[source.state]}`}>{C.states[source.state]}</span>
+      </td>
+      <td className="acts">
+        {source.page ? (
+          <a href={`#${source.page}`} className="page-link" onClick={(event) => (event.preventDefault(), go("knowledge", source.page!))}>
+            {source.page}
+          </a>
+        ) : (
+          <span className="muted">—</span>
+        )}
+        {menu.button}
+      </td>
+    </tr>
+  );
 }
 
 export function SourcesView({ chat, C, ask, go, item, onNotice }: Common & { onNotice: (text: string) => void }) {
@@ -581,7 +638,6 @@ export function SourcesView({ chat, C, ask, go, item, onNotice }: Common & { onN
     await load();
   };
   const pending = result?.sources.filter((source) => source.state !== "ingested").length ?? 0;
-  const badge = { new: "sun", changed: "warn", ingested: "ok" } as const;
   return (
     <div className="wrap">
       <div
@@ -633,26 +689,7 @@ export function SourcesView({ chat, C, ask, go, item, onNotice }: Common & { onN
             </thead>
             <tbody>
               {result.sources.map((source) => (
-                <tr key={source.path} className={source.path === item ? "on" : ""} ref={source.path === item ? (row) => row?.scrollIntoView({ block: "center" }) : undefined}>
-                  <td>
-                    <code>{source.path}</code>
-                    <small className="muted block">
-                      {kb(source.size)} · {day(source.changed)}
-                    </small>
-                  </td>
-                  <td>
-                    <span className={`badge ${badge[source.state]}`}>{C.states[source.state]}</span>
-                  </td>
-                  <td>
-                    {source.page ? (
-                      <a href={`#${source.page}`} className="page-link" onClick={(event) => (event.preventDefault(), go("knowledge", source.page!))}>
-                        {source.page}
-                      </a>
-                    ) : (
-                      <span className="muted">—</span>
-                    )}
-                  </td>
-                </tr>
+                <SourceRow key={source.path} source={source} on={source.path === item} go={go} C={C} />
               ))}
             </tbody>
           </table>

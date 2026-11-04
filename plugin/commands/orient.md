@@ -1,5 +1,9 @@
 ---
 description: Get oriented in the course right now (grading policy, deadlines, communication channels)
+label: es=Orientarse en el curso | en=Get oriented in the course | fr=S'orienter dans le cours | de=Im Kurs orientieren
+icon: 🧭
+group: classroom
+needs-classroom: true
 ---
 
 Apply the `course-orientation` skill right now: find the syllabus, welcome page, or

@@ -1,5 +1,10 @@
 ---
 description: Print a quiz as a paper exam - versions A, B... with the questions and options in another order, and their answer keys
+label: es=Examen en papel | en=Paper exam | fr=Examen sur papier | de=Papierprüfung
+icon: 📝
+group: create
+applies-to: quiz
+ask: es=¿De qué cuestionario o tema? | en=Which quiz or topic? | fr=Quel quiz ou quel thème ? | de=Welches Quiz oder Thema?
 ---
 
 Print a paper exam now with the `materials-format` skill: $ARGUMENTS

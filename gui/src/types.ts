@@ -55,6 +55,22 @@ export interface RunFolder {
   title?: string;
 }
 
+/** A command as an action of the page (contextual-actions #67), as the host serves it. */
+export interface PageAction {
+  /** The command without its slash ("miyagi:quiz"). */
+  command: string;
+  description?: string;
+  extension?: string;
+  label?: Record<string, string>;
+  icon?: string;
+  group?: string;
+  needsClassroom?: boolean;
+  appliesTo?: string[];
+  ask?: Record<string, string>;
+  suggest?: boolean;
+  opens?: string;
+}
+
 export interface ChatState {
   transcript: TranscriptEntry[];
   busy: boolean;
@@ -67,6 +83,8 @@ export interface ChatState {
   contextPercent: number | null;
   suggestion: string | null;
   commandDetails: { name: string; description: string; argumentHint: string }[];
+  /** miyagi's commands as actions of the page (#67). */
+  actions: PageAction[];
   language: string;
   history: string[];
   panel: ChatPanel | null;

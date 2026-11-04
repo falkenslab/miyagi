@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { act, useMiyagi } from "./api";
+import { ActionsContext, actionLine, SelectionMenu, type ActionsApi } from "./components/Actions";
 import { Composer, Todos } from "./components/Composer";
 import { KnowledgeView, MaterialsView, OvenView, PlanView, SourcesView, TodayView, TopicsView, type CourseView } from "./components/Course";
 import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./components/Extensions";
@@ -10,6 +11,7 @@ import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects
 import { Transcript } from "./components/Transcript";
 import { Waiting } from "./components/Waiting";
 import { texts } from "./i18n";
+import { actionTexts } from "./i18n/actions";
 import { courseTexts } from "./i18n/course";
 import { extTexts } from "./i18n/extensions";
 
@@ -54,6 +56,24 @@ export function App() {
     } else setItem(page ?? null);
     setView(next);
   };
+  /** A text left in the chat's box to finish (an item's "Ask miyagi about this", a quote), and the conversation shown. */
+  const [draft, setDraft] = useState<{ text: string; at: number } | null>(null);
+  const language = chat?.language ?? info?.language;
+  const actions: ActionsApi | null = chat
+    ? {
+        actions: chat.actions ?? [],
+        lang: (language ?? "en").slice(0, 2).toLowerCase(),
+        A: actionTexts(language),
+        connected: Boolean(info?.classroom?.connected),
+        busy: chat.busy,
+        run: (action, value) => (action.opens ? go("knowledge", action.opens) : ask(actionLine(action, value))),
+        compose: (text) => {
+          setDraft({ text, at: Date.now() });
+          setView("chat");
+        },
+        onLink: () => setLinking(true),
+      }
+    : null;
 
   const setTheme = (next: Theme) => {
     setThemeState(next);
@@ -110,6 +130,7 @@ export function App() {
   };
   const [title, subtitle] = titles[shown];
   return (
+    <ActionsContext.Provider value={actions}>
     <div className="app">
       <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
@@ -126,7 +147,7 @@ export function App() {
           {state?.signedIn && state.opening && !chat && <Waiting block text={T.opening} still={T.stillWorking} />}
           {chat && shown === "chat" && (
             <div className="chat">
-              <Transcript chat={chat} info={info} T={T} X={X} onLink={() => setLinking(true)} go={go} />
+              <Transcript chat={chat} T={T} go={go} />
               {/* A checkpoint takes the composer's place; the composer stays mounted, so a draft isn't lost. */}
               <div className="dock">
                 <Panel chat={chat} T={T} />
@@ -134,7 +155,6 @@ export function App() {
                   <Todos chat={chat} T={T} />
                   <Composer
                     chat={chat}
-                    info={info}
                     T={T}
                     X={X}
                     onNotice={setToast}
@@ -142,7 +162,7 @@ export function App() {
                       setExtTab("capabilities");
                       setView("extensions");
                     }}
-                    onLink={() => setLinking(true)}
+                    draft={draft}
                   />
                 </div>
               </div>
@@ -201,6 +221,8 @@ export function App() {
           {toast}
         </div>
       )}
+      <SelectionMenu />
     </div>
+    </ActionsContext.Provider>
   );
 }

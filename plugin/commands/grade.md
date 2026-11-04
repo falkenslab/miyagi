@@ -1,5 +1,10 @@
 ---
 description: Grade pending submissions right now, with a fair and consistent criterion
+label: es=Corregir lo pendiente | en=Grade what's pending | fr=Corriger ce qui attend | de=Offenes bewerten
+icon: ✅
+group: day
+needs-classroom: true
+suggest: true
 ---
 
 Apply the `grading-rubric` skill right now: find pending submissions (assignments, open-

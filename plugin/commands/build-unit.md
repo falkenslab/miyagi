@@ -1,5 +1,11 @@
 ---
 description: Build one unit inside the current course from a description, fitted to its plan, calendar and style
+label: es=Construir la unidad | en=Build the unit | fr=Construire l'unité | de=Einheit aufbauen
+icon: 🧱
+group: create
+applies-to: topic
+ask: es=¿Qué unidad? | en=Which unit? | fr=Quelle unité ? | de=Welche Einheit?
+suggest: true
 ---
 
 Apply the `unit-building` skill right now for this unit: $ARGUMENTS

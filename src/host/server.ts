@@ -8,7 +8,7 @@ import { agentKitVersion, createChatController, getLanguage, readConversation, s
 import { prepareSession, VERSION } from "../agent.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
-import { listCommands } from "../catalog.js";
+import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
 import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
 import { draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
@@ -45,6 +45,23 @@ const TYPES: Record<string, string> = {
 
 /** The kit's own chat commands the page offers besides miyagi's catalog. */
 const KIT_COMMANDS = ["resume", "plan", "extensions"];
+
+/** A command as an action of the page (#67): its name without the slash, and how to offer it. */
+export interface PageAction extends Partial<ActionMeta> {
+  command: string;
+  description?: string;
+  extension?: string;
+}
+
+/**
+ * The catalog's commands as the page's actions: the ones with metadata as the frontmatter says;
+ * an extension's or the subject's own without it, in the catalog only (contextual-actions #67).
+ */
+export function pageActions(entries: CatalogEntry[]): PageAction[] {
+  return entries
+    .filter((entry) => entry.action || entry.origin !== "builtin")
+    .map((entry) => ({ command: entry.name.replace(/^\//, ""), description: entry.description, extension: entry.extension, ...entry.action }));
+}
 
 /** Opens a folder in this computer's file explorer (the host runs where the person is: 127.0.0.1). */
 function openFolder(dir: string): void {
@@ -83,7 +100,7 @@ interface OpenSubject {
   /** What preparing it would have printed in a terminal: told in the chat once it opens. */
   notices: string[];
   /** The commands the page offers: miyagi's catalog (as `miyagi commands` lists it) and the kit's, for the extensions running now. */
-  commands: { active: string; names: Set<string> } | null;
+  commands: { active: string; names: Set<string>; actions: PageAction[] } | null;
 }
 
 /**
@@ -193,20 +210,20 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     if (!subject || !state) return null;
     const active = (state.extensions?.active ?? []).join(",");
     if (subject.commands?.active !== active) {
-      subject.commands = { active, names: subject.commands?.names ?? new Set(KIT_COMMANDS) };
+      subject.commands = { active, names: subject.commands?.names ?? new Set(KIT_COMMANDS), actions: subject.commands?.actions ?? [] };
       void listCommands(subject.dir).then((entries) => {
         if (subject.commands?.active !== active) return;
-        subject.commands = { active, names: new Set([...KIT_COMMANDS, ...entries.map((entry) => entry.name.replace(/^\//, ""))]) };
+        subject.commands = { active, names: new Set([...KIT_COMMANDS, ...entries.map((entry) => entry.name.replace(/^\//, ""))]), actions: pageActions(entries) };
         schedule();
       });
     }
-    const names = subject.commands.names;
+    const { names, actions } = subject.commands;
     const commandDetails = state.commandDetails.filter((command) => names.has(command.name));
     // A resumed conversation brings back what the teacher never wrote: the greeting miyagi sends
     // itself to open it, and the SDK's mark for an interrupted turn.
     const opening = subject.prepared.chatOpening?.().trim();
     const transcript = state.transcript.filter((entry) => entry.kind !== "user" || (entry.text.trim() !== opening && !/^\[Request interrupted/.test(entry.text)));
-    return { ...state, transcript, commandDetails, commands: commandDetails.map((command) => command.name), extensions: pageExtensions(state.extensions) };
+    return { ...state, transcript, commandDetails, commands: commandDetails.map((command) => command.name), actions, extensions: pageExtensions(state.extensions) };
   }
   const snapshot = () => ({
     signedIn,

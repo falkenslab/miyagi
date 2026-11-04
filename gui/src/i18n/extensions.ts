@@ -93,7 +93,7 @@ export interface ExtTexts {
   forgotten: (name: string) => string;
   cancel: string;
   close: string;
-  // The shell: sidebar, header, quick actions
+  // The shell: sidebar and header
   tagline: string;
   menu: string;
   navChat: string;
@@ -104,9 +104,6 @@ export interface ExtTexts {
   secConversations: string;
   withClassroom: string;
   withoutClassroom: string;
-  actions: string;
-  quick: { prepare: string; grade: string; forum: string; ingest: string };
-  quickPrompts: { prepare: string; grade: string; forum: string; ingest: string };
   capsButton: string;
   capsTitle: string;
   extSubtitle: string;
@@ -245,9 +242,6 @@ const es: ExtTexts = {
   secConversations: "Conversaciones",
   withClassroom: "con aula",
   withoutClassroom: "sin aula",
-  actions: "Acciones",
-  quick: { prepare: "Preparar el próximo tema", grade: "Corregir lo pendiente", forum: "Responder dudas del foro", ingest: "Incorporar mis documentos" },
-  quickPrompts: { prepare: "Prepara el próximo tema.", grade: "Corrige lo que hay pendiente de corregir.", forum: "¿Hay dudas sin responder en el foro?", ingest: "Incorpora los documentos nuevos de sources/ a la base de conocimiento." },
   capsButton: "Capacidades",
   capsTitle: "Lo que puedo hacer aquí",
   extSubtitle: "lo que miyagi puede hacer",
@@ -383,9 +377,6 @@ const en: ExtTexts = {
   secConversations: "Conversations",
   withClassroom: "with a classroom",
   withoutClassroom: "no classroom",
-  actions: "Actions",
-  quick: { prepare: "Prepare the next topic", grade: "Grade what's pending", forum: "Answer forum questions", ingest: "Take in my documents" },
-  quickPrompts: { prepare: "Prepare the next topic.", grade: "Grade what's pending.", forum: "Are there unanswered questions in the forum?", ingest: "Take the new documents in sources/ into the knowledge base." },
   capsButton: "Capabilities",
   capsTitle: "What I can do here",
   extSubtitle: "what miyagi can do",
@@ -521,9 +512,6 @@ const fr: ExtTexts = {
   secConversations: "Conversations",
   withClassroom: "avec classe",
   withoutClassroom: "sans classe",
-  actions: "Actions",
-  quick: { prepare: "Préparer le prochain thème", grade: "Corriger ce qui attend", forum: "Répondre aux questions du forum", ingest: "Intégrer mes documents" },
-  quickPrompts: { prepare: "Prépare le prochain thème.", grade: "Corrige ce qui attend d'être corrigé.", forum: "Y a-t-il des questions sans réponse dans le forum ?", ingest: "Intègre les nouveaux documents de sources/ à la base de connaissances." },
   capsButton: "Capacités",
   capsTitle: "Ce que je peux faire ici",
   extSubtitle: "ce que miyagi peut faire",
@@ -659,9 +647,6 @@ const de: ExtTexts = {
   secConversations: "Gespräche",
   withClassroom: "mit Kursraum",
   withoutClassroom: "ohne Kursraum",
-  actions: "Aktionen",
-  quick: { prepare: "Nächstes Thema vorbereiten", grade: "Offenes bewerten", forum: "Forumsfragen beantworten", ingest: "Meine Dokumente aufnehmen" },
-  quickPrompts: { prepare: "Bereite das nächste Thema vor.", grade: "Bewerte, was noch offen ist.", forum: "Gibt es unbeantwortete Fragen im Forum?", ingest: "Nimm die neuen Dokumente aus sources/ in die Wissensbasis auf." },
   capsButton: "Fähigkeiten",
   capsTitle: "Was ich hier kann",
   extSubtitle: "was miyagi kann",

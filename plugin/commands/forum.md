@@ -1,5 +1,10 @@
 ---
 description: Check the course forum right now and decide whether it needs a teacher post
+label: es=Revisar el foro | en=Check the forum | fr=Vérifier le forum | de=Forum prüfen
+icon: 💬
+group: day
+needs-classroom: true
+suggest: true
 ---
 
 Apply the `forum` skill right now: check the course forum's recent activity

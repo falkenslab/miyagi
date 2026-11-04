@@ -36,9 +36,9 @@ Arriba, en cada vista, su título; en la conversación, el título de la convers
 
 En la conversación:
 
-- **Una conversación nueva** te saluda y te propone lo que pides a menudo: preparar el próximo tema, incorporar tus documentos (con cuántos faltan) y, con el aula, corregir lo pendiente y responder las dudas del foro; sin aula, vincularla. miyagi recibe lo que pulses como si lo escribieras.
-- **El chat**: lo que escribes, a la derecha; lo que responde miyagi, a todo el ancho, con **Copiar** y lo que tardó debajo; y sus acciones plegadas en una línea tenue (ábrela para ver cada una). Cuando le encarga algo a uno de sus ayudantes, como el investigador, debajo ves qué está haciendo el ayudante en cada momento, cuánto lleva y cuántas acciones ha hecho. Si subes a leer algo anterior, el botón ↓ te devuelve al final. Lo que miyagi nombra de tu asignatura (un documento de tus fuentes, un material, una página de su memoria, la programación o lo que hay en el horno) es un enlace que abre su vista en ese elemento; lo que no existe se queda como texto.
-- **El cuadro para escribir**: `Intro` envía, `Mayús+Intro` salta de línea, `Esc` para a miyagi mientras trabaja (también el botón ■), `/` abre los atajos y `↑`/`↓` recorren lo que ya escribiste. Debajo del texto, **＋** (añadir un archivo a las fuentes, las **Capacidades**, las acciones de siempre y los comandos de miyagi) y el **modo** (también con `Mayús+Tab`). Las tareas del turno se pliegan encima en una línea con la que está en curso; púlsala para ver la lista.
+- **Una conversación nueva** te saluda y te propone lo que pides a menudo: construir una unidad, incorporar tus documentos (con cuántos faltan) y, con el aula, corregir lo pendiente y revisar el foro; sin aula, vincularla. miyagi recibe lo que pulses como si lo escribieras.
+- **El chat**: lo que escribes, a la derecha; lo que responde miyagi, a todo el ancho, con **Copiar** y lo que tardó debajo; y sus acciones plegadas en una línea tenue (ábrela para ver cada una). Cuando le encarga algo a uno de sus ayudantes, como el investigador, debajo ves qué está haciendo el ayudante en cada momento, cuánto lleva y cuántas acciones ha hecho. Si subes a leer algo anterior, el botón ↓ te devuelve al final. Lo que miyagi nombra de tu asignatura (un documento de tus fuentes, un material, una página de su memoria, la programación o lo que hay en el horno) es un enlace que abre su vista en ese elemento; lo que no existe se queda como texto. Si seleccionas un trozo de una respuesta, un menú pequeño te ofrece **Investigar esto**, **Preguntas sobre esto** y **Citar en el chat**.
+- **El cuadro para escribir**: `Intro` envía, `Mayús+Intro` salta de línea, `Esc` para a miyagi mientras trabaja (también el botón ■), `/` abre los atajos y `↑`/`↓` recorren lo que ya escribiste. Debajo del texto, **＋** (añadir un archivo a las fuentes, las **Capacidades** y el catálogo de todo lo que miyagi sabe hacer, agrupado en Día a día, Crear, Planificar, Memoria y Tu aula; lo que necesita el aula sale apagado sin ella, y lo que necesita un dato, como «¿Sobre qué tema?», te lo pide en el mismo menú) y el **modo** (también con `Mayús+Tab`). Las tareas del turno se pliegan encima en una línea con la que está en curso; púlsala para ver la lista.
 - **Las aprobaciones y las preguntas** de miyagi ocupan el sitio del cuadro para escribir hasta que respondes, igual que en la terminal, y la conversación sigue a la vista encima por si quieres releer algo. En el móvil, como una hoja que sube desde abajo. Si estabas en otra vista, la página vuelve a la conversación.
 - **Archivos para las fuentes**: desde **＋**, o arrastrándolos al cuadro para escribir, van a `sources/` de la asignatura.
 
@@ -51,13 +51,15 @@ Un token de suscripción (`sk-ant-oat…`) ya no se puede pegar: las condiciones
 
 ## Tu asignatura, de un vistazo
 
-Estas vistas solo enseñan lo que miyagi sabe y tiene preparado: no cambian nada por su cuenta. Sus botones mandan una petición a la conversación, como si la escribieras tú, y miyagi trabaja allí con las mismas aprobaciones de siempre.
+Estas vistas solo enseñan lo que miyagi sabe y tiene preparado: no cambian nada por su cuenta. Sus botones mandan a la conversación el comando de miyagi que corresponde, como si lo escribieras tú, y miyagi trabaja allí con las mismas aprobaciones de siempre. En la conversación lo ves con su nombre (por ejemplo, ❓ Hacer un cuestionario · Tema 2) y, debajo y en pequeño, el comando que se envió.
+
+Cada tema, material, documento de tus fuentes, página de su memoria, actividad del horno y la programación tiene su botón **⋯** con lo que miyagi puede hacer con él: en un tema, construir la unidad, hacer un cuestionario, investigar y alinear el aula; en un cuestionario, el examen en papel; en un material, publicarlo; en una fuente, incorporarla o sacar preguntas de ella. Todos acaban con **Preguntar a miyagi sobre esto**, que te deja el principio de la pregunta escrito en el cuadro. El mismo menú sale con el botón derecho, con `Mayús+F10` o la tecla de menú, y en el móvil manteniendo pulsado, como una hoja que sube desde abajo.
 
 - **Hoy**, lo primero que ves: lo que miyagi te dijo al saludar, cuántas páginas tiene su memoria, las fuentes que faltan por incorporar, lo que hay en el horno, cuántos materiales tiene preparados, sugerencias según cómo está la asignatura (incorporar tus documentos, escribir la programación, vincular el aula, corregir…) y lo último que anotó.
 - **Programación**: tu programación didáctica tal como está en su memoria, con **Revisar con miyagi** (y **Comprobar el aula** si la tienes vinculada). Sin programación todavía, un botón para escribirla con él.
 - **Temas y actividades**: las unidades de la programación, por orden y con sus fechas y horas, y los demás temas de su memoria, cada uno con sus actividades; un clic lleva a su página. Una unidad que aún no tiene página sale igual, con **Prepararlo con miyagi**.
 - **Materiales**: lo que miyagi prepara antes de publicarlo, en `materials/` (bancos de preguntas, cuestionarios, apuntes, tareas y rúbricas) y en `drafts/` (lo exportado, páginas, sitios), con una vista previa (los Markdown se ven ya formateados y los HTML sin ejecutar nada de su código) y, con el aula vinculada, **Publicar…**.
-- **En el horno**: las actividades que van por fases (en plan, cocinándose, probándose oculta, servida), con su siguiente paso.
+- **En el horno**: las actividades que van por fases (en plan, cocinándose, probándose oculta, servida), con su siguiente paso: **Mostrar a los alumnos** lo que está probado y oculto, y **Seguir con ello** te deja escrito en el cuadro cómo retomarla.
 - **Base de conocimiento**: sus páginas por secciones, con buscador y los enlaces entre ellas; **Revisar la base** le pide que la compruebe.
 - **Fuentes**: tus documentos, con si ya están incorporados, han cambiado o son nuevos. Arrastra aquí los nuevos y pulsa **Pedir a miyagi que los incorpore**.
 
@@ -70,6 +72,8 @@ Estas vistas solo enseñan lo que miyagi sabe y tiene preparado: no cambian nada
 3. Queda vinculada, y la conversación empieza de nuevo ya con el aula.
 
 Tu contraseña no pasa por miyagi: la primera vez que entre en el curso se abre una ventana de tu campus para que inicies sesión tú, como siempre.
+
+Con el aula vinculada, la vista ofrece lo que miyagi hace con tu curso: orientarse en él, ver cómo va la clase, revisarlo a fondo y abrir el mapa del curso (este último solo abre su página en la memoria, sin pedirle nada a miyagi).
 
 ## Extensiones
 

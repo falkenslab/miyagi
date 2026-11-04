@@ -1,5 +1,11 @@
 ---
 description: Publish materials from materials/ to the classroom - a bank, a quiz, notes, an assignment with its rubric, or a whole unit - validated, exported by code, hidden first, with their approvals
+label: es=Publicar en el aula | en=Publish to the classroom | fr=Publier dans la classe | de=Im Kursraum veröffentlichen
+icon: 🚀
+group: classroom
+needs-classroom: true
+applies-to: material, quiz, oven
+ask: es=¿Qué material? | en=Which material? | fr=Quel support ? | de=Welches Material?
 ---
 
 Publish now with the `materials-format` skill: $ARGUMENTS

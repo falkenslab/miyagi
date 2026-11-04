@@ -36,9 +36,9 @@ At the top of each view, its title; in the conversation, the conversation's titl
 
 In the conversation:
 
-- **A new conversation** greets you and offers what you ask for often: preparing the next unit, taking in your documents (with how many are left) and, with the classroom, grading what's pending and answering the forum's questions; without one, linking it. miyagi receives what you click as if you'd typed it.
-- **The chat**: what you write, on the right; what miyagi answers, full width, with **Copy** and how long it took under it; and its actions folded into one dim line (open it to see each one). When it hands something to one of its helpers, like the researcher, under it you see what the helper is doing at each moment, for how long and how many actions it has taken. If you scroll up to read something earlier, the ↓ button takes you back to the end. What miyagi names of your subject (a document in your sources, a material, a page of its memory, the teaching plan or what's in the oven) is a link that opens its view at that item; what doesn't exist stays text.
-- **The box to type in**: `Enter` sends, `Shift+Enter` starts a new line, `Esc` stops miyagi while it works (so does the ■ button), `/` opens the shortcuts and `↑`/`↓` go through what you already typed. Under the text, **＋** (add a file to the sources, the **Capabilities**, the usual actions and miyagi's commands) and the **mode** (also with `Shift+Tab`). The turn's tasks fold above it into one line with the one in progress; click it to see the list.
+- **A new conversation** greets you and offers what you ask for often: building a unit, taking in your documents (with how many are left) and, with the classroom, grading what's pending and checking the forum; without one, linking it. miyagi receives what you click as if you'd typed it.
+- **The chat**: what you write, on the right; what miyagi answers, full width, with **Copy** and how long it took under it; and its actions folded into one dim line (open it to see each one). When it hands something to one of its helpers, like the researcher, under it you see what the helper is doing at each moment, for how long and how many actions it has taken. If you scroll up to read something earlier, the ↓ button takes you back to the end. What miyagi names of your subject (a document in your sources, a material, a page of its memory, the teaching plan or what's in the oven) is a link that opens its view at that item; what doesn't exist stays text. If you select part of a reply, a small menu offers **Research this**, **Questions about this** and **Quote in the chat**.
+- **The box to type in**: `Enter` sends, `Shift+Enter` starts a new line, `Esc` stops miyagi while it works (so does the ■ button), `/` opens the shortcuts and `↑`/`↓` go through what you already typed. Under the text, **＋** (add a file to the sources, the **Capabilities** and the catalog of everything miyagi can do, grouped into Day to day, Create, Plan, Memory and Your classroom; what needs the classroom is off without one, and what needs a value, like "On which topic?", asks for it in the same menu) and the **mode** (also with `Shift+Tab`). The turn's tasks fold above it into one line with the one in progress; click it to see the list.
 - **miyagi's approvals and questions** take the place of the box to type in until you answer, just like in the terminal, and the conversation stays in view above them in case you want to reread something. On a phone, as a sheet that slides up from the bottom. If you were in another view, the page goes back to the conversation.
 - **Files for the sources**: from **＋**, or by dragging them onto the box to type in, they go to the subject's `sources/`.
 
@@ -51,13 +51,15 @@ A subscription token (`sk-ant-oat…`) can no longer be pasted: Anthropic's term
 
 ## Your subject at a glance {#tu-asignatura-de-un-vistazo}
 
-These views only show what miyagi knows and has prepared: they don't change anything on their own. Their buttons send a request to the conversation, as if you typed it, and miyagi works there with the same approvals as always.
+These views only show what miyagi knows and has prepared: they don't change anything on their own. Their buttons send miyagi's matching command to the conversation, as if you typed it, and miyagi works there with the same approvals as always. In the conversation you see it by its name (for example, ❓ Make a quiz · Unit 2) and, small underneath, the command that was sent.
+
+Every topic, material, document in your sources, page of its memory, activity in the oven and the teaching plan has its **⋯** button with what miyagi can do with it: on a topic, build the unit, make a quiz, research and align the classroom; on a quiz, the paper exam; on a material, publish it; on a source, take it in or make questions from it. They all end with **Ask miyagi about this**, which leaves the start of the question written in the box. The same menu opens with a right click, `Shift+F10` or the menu key, and on a phone by holding it down, as a sheet that rises from the bottom.
 
 - **Today**, the first thing you see: what miyagi told you when it greeted you, how many pages its memory has, the sources still to take in, what's in the oven, how many materials it has prepared, suggestions based on how the subject stands (taking in your documents, writing the teaching plan, linking the classroom, grading…) and the last thing it noted.
 - **Teaching plan**: your teaching plan as it stands in its memory, with **Review with miyagi** (and **Check the classroom** if you have one linked). With no teaching plan yet, a button to write it with miyagi.
 - **Topics and activities**: the teaching plan's units, in order with their dates and hours, and the other topics in its memory, each with its activities; one click takes you to its page. A unit with no page yet is shown too, with **Prepare it with miyagi**.
 - **Materials**: what miyagi prepares before publishing it, in `materials/` (question banks, quizzes, notes, assignments and rubrics) and in `drafts/` (exports, pages, sites), with a preview (Markdown shown formatted, HTML files without running any of their code) and, with the classroom linked, **Publish…**.
-- **In the oven**: the activities that go through phases (planned, cooking, tested hidden, served), with their next step.
+- **In the oven**: the activities that go through phases (planned, cooking, tested hidden, served), with their next step: **Show to students** what is tested and hidden, and **Go on with it** leaves written in the box how to pick it up.
 - **Knowledge base**: its pages by section, with a search box and the links between them; **Check the base** asks it to check it.
 - **Sources**: your documents, with whether they've already been taken in, have changed or are new. Drag new ones here and click **Ask miyagi to take them in**.
 
@@ -70,6 +72,8 @@ These views only show what miyagi knows and has prepared: they don't change anyt
 3. It's linked, and the conversation starts again, now with the classroom.
 
 Your password doesn't go through miyagi: the first time it enters the course, a window of your campus opens for you to sign in yourself, as usual.
+
+With the classroom linked, the view offers what miyagi does with your course: getting oriented in it, how the class is doing, auditing it and opening the course map (the last one only opens its page in the memory, without asking miyagi anything).
 
 ## Extensions {#extensiones}
 

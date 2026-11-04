@@ -20,7 +20,74 @@ export interface CatalogEntry {
   origin: "builtin" | "custom" | "extension";
   /** The extension it comes from, for `origin: "extension"`. */
   extension?: string;
+  /** How the page offers a command as an action (#67), from its frontmatter. */
+  action?: ActionMeta;
 }
+
+/** Where a command's action goes in the page and what it asks for (contextual-actions #67). */
+export interface ActionMeta {
+  /** Its name per language (`es`, `en`, `fr`, `de`). */
+  label: Record<string, string>;
+  icon?: string;
+  group?: string;
+  needsClassroom?: boolean;
+  /** The items whose menu offers it: topic, material, quiz, source, page, plan, oven, text. */
+  appliesTo: string[];
+  /** The question it asks, per language, when launched without a value. */
+  ask?: Record<string, string>;
+  /** Offered in an empty conversation. */
+  suggest?: boolean;
+  /** A knowledge page the page opens instead of sending the command (no agent turn). */
+  opens?: string;
+}
+
+/** `es=… | en=…` as `{ es: "…", en: "…" }`. */
+function perLanguage(value: string | undefined): Record<string, string> | undefined {
+  if (!value) return undefined;
+  const pairs = value.split("|").map((part) => /^\s*([a-z]{2})=(.*)$/.exec(part)).filter((match) => match !== null);
+  return pairs.length ? Object.fromEntries(pairs.map((match) => [match[1], match[2].trim()])) : undefined;
+}
+
+/** A command's action metadata, or none when its frontmatter has no `label`. */
+function actionMeta(markdown: string): ActionMeta | undefined {
+  const label = perLanguage(frontmatterField(markdown, "label"));
+  if (!label) return undefined;
+  const list = (key: string) => (frontmatterField(markdown, key) ?? "").split(",").map((one) => one.trim()).filter(Boolean);
+  return {
+    label,
+    icon: frontmatterField(markdown, "icon"),
+    group: frontmatterField(markdown, "group"),
+    needsClassroom: frontmatterField(markdown, "needs-classroom") === "true",
+    appliesTo: list("applies-to"),
+    ask: perLanguage(frontmatterField(markdown, "ask")),
+    suggest: frontmatterField(markdown, "suggest") === "true",
+    opens: frontmatterField(markdown, "opens"),
+  };
+}
+
+/** The kit's knowledge commands, whose files aren't miyagi's: their action metadata here. */
+const KIT_ACTIONS: Record<string, ActionMeta> = {
+  ingest: {
+    label: { es: "Incorporar mis documentos", en: "Take in my documents", fr: "Intégrer mes documents", de: "Meine Dokumente aufnehmen" },
+    icon: "📥",
+    group: "memory",
+    appliesTo: ["source"],
+    suggest: true,
+  },
+  lint: {
+    label: { es: "Revisar su memoria", en: "Check its memory", fr: "Vérifier sa mémoire", de: "Gedächtnis prüfen" },
+    icon: "🩺",
+    group: "memory",
+    appliesTo: [],
+  },
+  query: {
+    label: { es: "Consultar su memoria", en: "Ask its memory", fr: "Interroger sa mémoire", de: "Gedächtnis befragen" },
+    icon: "💭",
+    group: "memory",
+    appliesTo: [],
+    ask: { es: "¿Qué quieres saber?", en: "What do you want to know?", fr: "Que veux-tu savoir ?", de: "Was möchtest du wissen?" },
+  },
+};
 
 /** Reads `key:` from a markdown file's leading `---` frontmatter block — single-line values only. */
 function frontmatterField(markdown: string, key: string): string | undefined {
@@ -66,14 +133,16 @@ async function readSkills(skillsDir: string, origin: CatalogEntry["origin"]): Pr
   return entries;
 }
 
-async function readCommands(commandsDir: string, origin: CatalogEntry["origin"], prefix: string): Promise<CatalogEntry[]> {
+async function readCommands(commandsDir: string, origin: CatalogEntry["origin"], prefix: string, actions: Record<string, ActionMeta> = {}): Promise<CatalogEntry[]> {
   const entries: CatalogEntry[] = [];
   for (const fileName of await listMarkdownFiles(commandsDir)) {
     const markdown = await readFile(path.join(commandsDir, fileName), "utf-8");
+    const base = path.basename(fileName, ".md");
     entries.push({
-      name: `/${prefix}${path.basename(fileName, ".md")}`,
+      name: `/${prefix}${base}`,
       description: frontmatterField(markdown, "description"),
       origin,
+      action: actionMeta(markdown) ?? actions[base],
     });
   }
   return entries;
@@ -106,7 +175,7 @@ export async function sessionSkills(workspaceDir: string): Promise<string[]> {
 export async function listCommands(workspaceDir: string): Promise<CatalogEntry[]> {
   return [
     ...(await readCommands(path.join(pluginDir, "commands"), "builtin", `${PLUGIN_NAMESPACE}:`)),
-    ...(await readCommands(path.join(kitKnowledgeDir, "commands"), "builtin", `${KIT_KNOWLEDGE_NAMESPACE}:`)),
+    ...(await readCommands(path.join(kitKnowledgeDir, "commands"), "builtin", `${KIT_KNOWLEDGE_NAMESPACE}:`, KIT_ACTIONS)),
     ...(await readCommands(path.join(workspaceDir, ".claude", "commands"), "custom", "")),
     ...(await extensionEntries(workspaceDir, (ext) => readCommands(path.join(ext.dir, "commands"), "extension", `${ext.manifest!.name}:`), (_ext, c) => c.name)),
   ];

@@ -1,5 +1,9 @@
 ---
 description: Run a full course audit right now (organization, accessibility, pedagogy, evaluation, stale content) with prioritized recommendations
+label: es=Revisar el curso a fondo | en=Audit the course | fr=Auditer le cours | de=Kurs gründlich prüfen
+icon: 🔍
+group: classroom
+needs-classroom: true
 ---
 
 Apply the `course-auditor` skill right now, as a full audit (not the lighter periodic

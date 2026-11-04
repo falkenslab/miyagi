@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { act, logoUrl } from "../api";
 import type { ExtTexts } from "../i18n/extensions";
 import type { Capabilities, CatalogEntry, ChatState, ExtensionOptionState, Info, InstalledExtension, Repository } from "../types";
+import { GroupActions } from "./Actions";
 import { Dialog } from "./Panel";
 import { Waiting } from "./Waiting";
 
@@ -770,6 +771,7 @@ export function ClassroomView({ chat, info, X, onLink }: { chat: ChatState; info
                 </button>
               )}
             </div>
+            {room.connected && <GroupActions group="classroom" />}
           </div>
         </div>
       ) : (

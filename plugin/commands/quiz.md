@@ -1,5 +1,10 @@
 ---
 description: Create a quiz (or add questions to an existing one) for a given topic, with well-written questions imported in bulk
+label: es=Hacer un cuestionario | en=Make a quiz | fr=Créer un quiz | de=Quiz erstellen
+icon: ❓
+group: create
+applies-to: topic, source, page, text
+ask: es=¿Sobre qué tema? | en=On which topic? | fr=Sur quel thème ? | de=Zu welchem Thema?
 ---
 
 Apply the `quiz-design` skill right now for this topic, with the classroom extension's quiz skill to build it: $ARGUMENTS
