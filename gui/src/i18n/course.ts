@@ -46,6 +46,7 @@ export interface CourseTexts {
   reviewPlan: string;
   alignPlan: string;
   noTopics: string;
+  noTopicPage: string;
   viewPage: string;
   prepare: string;
   activities: (n: number) => string;
@@ -125,6 +126,7 @@ const es: CourseTexts = {
   reviewPlan: "Revisar con miyagi",
   alignPlan: "Comprobar el aula",
   noTopics: "Todavía no hay temas en su memoria. Aparecen al incorporar tus documentos o al construir un tema.",
+  noTopicPage: "Está en la programación, pero aún no tiene página en su memoria.",
   viewPage: "Ver su página",
   prepare: "Prepararlo con miyagi",
   activities: (n) => (n === 1 ? "1 actividad" : `${n} actividades`),
@@ -204,6 +206,7 @@ const en: CourseTexts = {
   reviewPlan: "Review with miyagi",
   alignPlan: "Check the classroom",
   noTopics: "No topics in its memory yet. They appear when your documents are taken in or a topic is built.",
+  noTopicPage: "It's in the teaching plan, but has no page in its memory yet.",
   viewPage: "See its page",
   prepare: "Prepare it with miyagi",
   activities: (n) => (n === 1 ? "1 activity" : `${n} activities`),
@@ -283,6 +286,7 @@ const fr: CourseTexts = {
   reviewPlan: "Revoir avec miyagi",
   alignPlan: "Vérifier la classe",
   noTopics: "Pas encore de thèmes dans sa mémoire. Ils apparaissent en intégrant tes documents ou en construisant un thème.",
+  noTopicPage: "Il est dans la progression, mais n'a pas encore de page dans sa mémoire.",
   viewPage: "Voir sa page",
   prepare: "Le préparer avec miyagi",
   activities: (n) => (n === 1 ? "1 activité" : `${n} activités`),
@@ -362,6 +366,7 @@ const de: CourseTexts = {
   reviewPlan: "Mit miyagi durchgehen",
   alignPlan: "Kursraum prüfen",
   noTopics: "Noch keine Themen im Gedächtnis. Sie erscheinen, wenn deine Dokumente aufgenommen oder ein Thema gebaut wird.",
+  noTopicPage: "Es steht in der Planung, hat aber noch keine Seite im Gedächtnis.",
   viewPage: "Seite ansehen",
   prepare: "Mit miyagi vorbereiten",
   activities: (n) => (n === 1 ? "1 Aktivität" : `${n} Aktivitäten`),

@@ -55,7 +55,7 @@ These views only show what miyagi knows and has prepared: they don't change anyt
 
 - **Today**, the first thing you see: what miyagi told you when it greeted you, how many pages its memory has, the sources still to take in, what's in the oven, how many materials it has prepared, suggestions based on how the subject stands (taking in your documents, writing the teaching plan, linking the classroom, grading…) and the last thing it noted.
 - **Teaching plan**: your teaching plan as it stands in its memory, with **Review with miyagi** (and **Check the classroom** if you have one linked). With no teaching plan yet, a button to write it with miyagi.
-- **Topics and activities**: each unit with its activities; one click takes you to its page.
+- **Topics and activities**: the teaching plan's units, in order with their dates and hours, and the other topics in its memory, each with its activities; one click takes you to its page. A unit with no page yet is shown too, with **Prepare it with miyagi**.
 - **Materials**: what miyagi prepares before publishing it, in `materials/` (question banks, quizzes, notes, assignments and rubrics) and in `drafts/` (exports, pages, sites), with a preview (Markdown shown formatted, HTML files without running any of their code) and, with the classroom linked, **Publish…**.
 - **In the oven**: the activities that go through phases (planned, cooking, tested hidden, served), with their next step.
 - **Knowledge base**: its pages by section, with a search box and the links between them; **Check the base** asks it to check it.

@@ -3,6 +3,7 @@ import path from "node:path";
 import type { ChatController, KnowledgeStore } from "@falkenslab/agent-kit";
 import { readRegister } from "../activityRegister.js";
 import { draftsDirFor, knowledgeDirFor, materialsDirFor, sourcesDirFor } from "../workspace.js";
+import { planUnits } from "./planUnits.js";
 
 /**
  * The course views of miyagi's page (gui-course-views #51): Hoy, the teaching plan, the topics,
@@ -125,7 +126,8 @@ export async function today(chat: ChatController, workspaceDir: string) {
   const drafts = (await draftsList(workspaceDir)).files;
   return {
     pages: pages.filter((page) => page.status === "active").length,
-    topics: pages.filter((page) => page.type === "topic" && page.status === "active").length,
+    // The plan's units and the topic pages none of them names, as the topics view lists them.
+    topics: (await topics(chat)).topics.length,
     activities: pages.filter((page) => page.type === "activity" && page.status === "active").length,
     teachingPlan: pages.some((page) => page.id === "course/teaching-plan"),
     sources: { total: sources.length, pending: sources.filter((source) => source.state !== "ingested").length },
@@ -135,24 +137,51 @@ export async function today(chat: ChatController, workspaceDir: string) {
   };
 }
 
-/** The topics, each with the activities its page links to. */
+/** A title compared loosely: lowercase, no accents nor punctuation. */
+const loose = (text: string) =>
+  text
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+/**
+ * The topics, each with the activities its page links to: first the teaching plan's units in its
+ * order, each with its topic page when it has one (linked from the plan's row, or with the same
+ * title) and without one when the agent hasn't made it (#74), then the topic pages no unit names.
+ */
 export async function topics(chat: ChatController) {
   const store = storeOf(chat);
   if (!store) return { topics: [] };
   const pages = (await store.list()).filter((page) => page.status === "active");
   const activities = new Map(pages.filter((page) => page.type === "activity").map((page) => [page.id, page]));
-  const result = [];
-  for (const topic of pages.filter((page) => page.type === "topic")) {
+  const topicPages = pages.filter((page) => page.type === "topic");
+  const card = async (topic: (typeof topicPages)[number]) => {
     const read = await store.read(topic.id);
     const linked = [...new Set([...(read?.content ?? "").matchAll(/\]\((activity\/[\w-]+)\)/g)].map((match) => match[1]!))];
-    result.push({
-      id: topic.id,
+    return {
+      id: topic.id as string | null,
       title: topic.title,
       description: topic.description,
       status: topic.fields.status ?? null,
       activities: linked.filter((id) => activities.has(id)).map((id) => ({ id, title: activities.get(id)!.title })),
-    });
+      unit: null as string | null,
+      details: null as string | null,
+    };
+  };
+  const plan = pages.some((page) => page.id === "course/teaching-plan") ? await store.read("course/teaching-plan") : undefined;
+  const result = [];
+  const used = new Set<string>();
+  for (const unit of planUnits(plan?.content ?? "")) {
+    const topic =
+      topicPages.find((page) => page.id === unit.topic && !used.has(page.id)) ??
+      topicPages.find((page) => !used.has(page.id) && loose(page.title).includes(loose(unit.title)) && loose(unit.title).length > 3);
+    if (topic) used.add(topic.id);
+    const base = topic ? await card(topic) : { id: null, title: unit.title, description: "", status: null, activities: [] };
+    result.push({ ...base, title: unit.title, unit: unit.number, details: unit.details || null });
   }
+  for (const topic of topicPages.filter((page) => !used.has(page.id))) result.push(await card(topic));
   return { topics: result };
 }
 

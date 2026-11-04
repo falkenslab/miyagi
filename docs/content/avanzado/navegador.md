@@ -55,7 +55,7 @@ Estas vistas solo enseñan lo que miyagi sabe y tiene preparado: no cambian nada
 
 - **Hoy**, lo primero que ves: lo que miyagi te dijo al saludar, cuántas páginas tiene su memoria, las fuentes que faltan por incorporar, lo que hay en el horno, cuántos materiales tiene preparados, sugerencias según cómo está la asignatura (incorporar tus documentos, escribir la programación, vincular el aula, corregir…) y lo último que anotó.
 - **Programación**: tu programación didáctica tal como está en su memoria, con **Revisar con miyagi** (y **Comprobar el aula** si la tienes vinculada). Sin programación todavía, un botón para escribirla con él.
-- **Temas y actividades**: cada tema con sus actividades; un clic lleva a su página.
+- **Temas y actividades**: las unidades de la programación, por orden y con sus fechas y horas, y los demás temas de su memoria, cada uno con sus actividades; un clic lleva a su página. Una unidad que aún no tiene página sale igual, con **Prepararlo con miyagi**.
 - **Materiales**: lo que miyagi prepara antes de publicarlo, en `materials/` (bancos de preguntas, cuestionarios, apuntes, tareas y rúbricas) y en `drafts/` (lo exportado, páginas, sitios), con una vista previa (los Markdown se ven ya formateados y los HTML sin ejecutar nada de su código) y, con el aula vinculada, **Publicar…**.
 - **En el horno**: las actividades que van por fases (en plan, cocinándose, probándose oculta, servida), con su siguiente paso.
 - **Base de conocimiento**: sus páginas por secciones, con buscador y los enlaces entre ellas; **Revisar la base** le pide que la compruebe.

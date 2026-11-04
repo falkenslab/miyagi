@@ -260,11 +260,15 @@ export function PlanView({ chat, info, C, ask, go }: Common) {
 // ---------- Temas y actividades ----------
 
 interface Topic {
-  id: string;
+  /** Its page, or null for a unit of the teaching plan that has none yet (#74). */
+  id: string | null;
   title: string;
   description: string;
   status: string | null;
   activities: { id: string; title: string }[];
+  /** The unit's number in the teaching plan, and the rest of its row (dates, hours…). */
+  unit: string | null;
+  details: string | null;
 }
 
 export function TopicsView({ chat, C, ask, go }: Common) {
@@ -276,8 +280,10 @@ export function TopicsView({ chat, C, ask, go }: Common) {
       {result.topics.length === 0 && <div className="card">{C.noTopics}</div>}
       <div className="grid g2">
         {result.topics.map((topic) => (
-          <Card key={topic.id} title={`🧱 ${topic.title}`} badge={<span className="badge">{C.activities(topic.activities.length)}</span>}>
+          <Card key={topic.id ?? `unit-${topic.unit}`} title={`🧱 ${topic.unit ? `${topic.unit} · ` : ""}${topic.title}`} badge={topic.id ? <span className="badge">{C.activities(topic.activities.length)}</span> : undefined}>
+            {topic.details && <p className="muted small">{topic.details}</p>}
             {topic.description && <Markdown text={topic.description} />}
+            {!topic.id && <p className="muted">{C.noTopicPage}</p>}
             {topic.activities.length > 0 && (
               <div className="chips">
                 {topic.activities.map((activity) => (
@@ -288,9 +294,11 @@ export function TopicsView({ chat, C, ask, go }: Common) {
               </div>
             )}
             <div className="row">
-              <button type="button" className="btn small" onClick={() => go("knowledge", topic.id)}>
-                {C.viewPage}
-              </button>
+              {topic.id && (
+                <button type="button" className="btn small" onClick={() => go("knowledge", topic.id!)}>
+                  {C.viewPage}
+                </button>
+              )}
               {topic.activities.length === 0 && (
                 <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => ask(C.prompts.buildUnit(topic.title))}>
                   {C.prepare}

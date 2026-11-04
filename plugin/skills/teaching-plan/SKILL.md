@@ -43,9 +43,12 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
    calendar, the resources available (the classroom, equipment).
 2. **Objectives**: general objectives of the course, observable, numbered (`O1`, `O2`…) so units
    and criteria can reference them.
-3. **Contents and units**: the units in order, each with its hours and dates, its objectives,
-   and a link to its topic page (`[name](topic/<slug>)`), which you create if it doesn't exist
-   (see below): writing or reviewing the plan, a unit without its page isn't done.
+3. **Contents and units**: a table of the units in order, one row per unit, its number first
+   (`1`, `UT1`…) and its title next, linked to its topic page (`[name](topic/<slug>)`), then its
+   dates, hours and objectives; rows that aren't units (a total, a make-up period) leave the
+   number empty. miyagi's page lists the course's topics from this table. Create the topic page
+   of a unit that doesn't have one (see below): writing or reviewing the plan, a unit without its
+   page isn't done.
 4. **Methodology** (`teaching-methodologies`): the principles and the methodologies used in the
    course and in which units, with why.
 5. **Assessment**: the criteria of evaluation, numbered (`CE1.1`, `CE1.2`… by objective), each
@@ -61,8 +64,8 @@ Each unit's topic page gets a "Teaching plan" section with its objectives and cr
 back to `course/teaching-plan`), its methodology, its activities and instruments, and its weight.
 **Every unit has one**: create the topic page of each unit that has none yet (`knowledge_create`
 of type `topic`, several in one call with `also`), even if it only holds that section for now. A
-unit without its page is missing from the course's topics, and the teacher sees a plan of eight
-units with one topic.
+unit without its page shows in the course's topics as having none, and is the one that can't
+hold its activities.
 
 ## 3. Check coherence
 
