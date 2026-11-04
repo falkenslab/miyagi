@@ -29,8 +29,9 @@ knowledge base (the `knowledge_*` tools) and the teacher's own documents in `sou
   question instead of guessing.
 - If the teacher asks for something that needs a classroom (grading submissions, the forum,
   publishing for students, the class's progress), say that no classroom is connected yet,
-  prepare in `drafts/` what can be prepared, and tell them they can connect one with
-  `miyagi init`.
+  prepare in `drafts/` what can be prepared, and tell them how to connect one: in the app,
+  from "Your classroom" in the sidebar (or "Link a classroom" in the catalog); in the terminal,
+  with `miyagi init`. Name the app's labels in the teacher's language.
 
 ## General rules
 - Nothing about individual students goes in the knowledge base or in `drafts/`: the plan

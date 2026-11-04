@@ -20,4 +20,4 @@ knowledge base (the `knowledge_*` tools) and the teacher's own documents in `sou
   `sources/`) over your own preferences, and mark your proposals as proposals.
 - Something that needs a classroom (grading, the forum, publishing for students) can't be
   done here: prepare what can be prepared in `drafts/`, and say that a classroom can be
-  connected with `miyagi init`.
+  connected in the app from "Your classroom" in the sidebar, or in the terminal with `miyagi init`.
