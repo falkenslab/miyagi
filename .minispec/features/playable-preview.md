@@ -19,7 +19,7 @@ An HTML activity miyagi builds (a word search, a crossword, a simulation) can be
   - the activity in an iframe with `sandbox="allow-scripts"` and no `allow-same-origin`, so it runs in an opaque origin: no cookies, storage, token nor access to the page;
   - served by the host with a Content-Security-Policy that blocks the network (`connect-src 'none'`, no external scripts, styles or images; only its own folder under `drafts/`);
   - no forms, popups nor top navigation.
-- **Where**: in Materials, a "Play" toggle next to the still preview, for HTML files; in the chat, the result card of an `html-activity` (`teacher-commands`), at a fixed height with "Open full".
+- **Where**: in Materials, a "Play" toggle next to the still preview, for HTML files; in the chat, a result card when a command with `produces: html-activity` (#68, which doesn't show one yet: its result is only in Materials) leaves an activity in `drafts/`: the activity at a fixed height, "Open full", "Open in Materials" and "Publish" (page, SCORM with a grade, H5P).
 - **SCORM**: an activity that reports a score shows it in the preview (a stub of the SCORM API inside the frame), so the teacher sees what Moodle will record.
 - `check-host.mjs`: the activity's response carries the CSP; a path outside `drafts/` refused. `check-page.mjs`: an activity's script runs in the frame and can't read `parent.location`, the token or the host's API, nor fetch a URL.
 - **Docs**: `avanzado/materiales.md` and `seguridad-y-privacidad.md` (both languages).

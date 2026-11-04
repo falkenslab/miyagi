@@ -59,6 +59,7 @@ With no command at all (just `miyagi`), it asks whether you want `run` or `chat`
 | `/miyagi:audit` | Full audit of the course with prioritised recommendations. |
 | `/miyagi:research <unit>` | Researches a topic online and saves what it finds with its sources. |
 | `/miyagi:map` | Shows where each section and activity of the course is: its number and its link. |
+| `/miyagi:new-command <what it should make>` | Writes with you a command of your own with a form, for this subject or all of them. |
 | `/knowledge:ingest` | Adds whatever is in `sources` and not yet processed to its notes. |
 | `/knowledge:query <question>` | Answers from its course notes. |
 | `/knowledge:lint` | Checks that its notes are complete and well linked. |

@@ -166,6 +166,7 @@ Con la extensión docker-lab instalada, la sigue paso a paso en un laboratorio d
 
 - **Instrucciones fijas para el curso.** Escribe en `instructions.md` lo que debe tener siempre en cuenta: «puntúa sobre 10 con un decimal», «en el foro, respuestas breves».
 - **Atajos propios.** Un archivo de texto con una instrucción que usas a menudo, para lanzarla con `/nombre`.
+- **Tus propios comandos, con formulario.** *«Quiero un comando para hacer sopas de letras con la temática, el número de palabras y las palabras.»* Lo escribe contigo y, desde entonces, sale en el ＋ y en el ⋯ de cada tema.
 - **Habilidades propias.** Enséñale a hacer algo siempre de una manera concreta, por ejemplo cómo corregir tus prácticas.
 
 Todo eso está explicado, con ejemplos, en [Atajos e instrucciones](../avanzado/atajos-e-instrucciones.md) y [Habilidades propias](../avanzado/habilidades-propias.md).

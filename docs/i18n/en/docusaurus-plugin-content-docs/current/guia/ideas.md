@@ -166,6 +166,7 @@ With the docker-lab extension installed, it follows it step by step in a Docker 
 
 - **Standing instructions for the course.** Write in `instructions.md` what it should always keep in mind: “grade out of 10 with one decimal”, “in the forum, short replies”.
 - **Your own shortcuts.** A text file with an instruction you use often, to launch it with `/name`.
+- **Your own commands, with a form.** *"I want a command to make word searches with the topic, the number of words and the words."* It writes it with you and, from then on, it shows in the ＋ and in each topic's ⋯.
 - **Your own skills.** Teach it to always do something in a particular way, for example how to grade your practicals.
 
 All of that is explained, with examples, in [Shortcuts and instructions](../avanzado/atajos-e-instrucciones.md) and [Your own skills](../avanzado/habilidades-propias.md).

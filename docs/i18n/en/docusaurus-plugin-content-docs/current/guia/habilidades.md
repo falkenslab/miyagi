@@ -286,3 +286,10 @@ For some tasks, the assistant relies on specialised helpers that work on their o
 ## Your own skills {#tus-propias-habilidades}
 
 You can teach it new skills for your subject without programming: a text file with the instructions, written as you'd explain them to a student teacher. They appear in `miyagi skills` marked as `[own]`. How to write them, with a complete example: [Your own skills](../avanzado/habilidades-propias.md).
+
+### 🛠️ `command-authoring` · Making your own commands {#️-command-authoring--crear-tus-propios-comandos}
+
+Writes with you a command for what you do again and again with values that change (a word search on a topic, a crossword, flashcards): it asks what it should make and what changes each time, starts from a template if one fits, shows you the form it will have and saves it, for this subject or all of them, only with your yes. From then on it shows in the ＋ and in each topic's ⋯. More in [Shortcuts with a form](../avanzado/atajos-e-instrucciones.md#atajos-con-formulario-pídeselo-a-miyagi).
+
+- **Ask it like this:** *"I want a command to make word searches with the topic, the number of words and the words."*
+- **Shortcut:** `/miyagi:new-command <what it should make>`

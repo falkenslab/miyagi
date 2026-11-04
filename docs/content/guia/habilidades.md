@@ -286,3 +286,10 @@ Para algunas tareas, el asistente se apoya en ayudantes especializados que traba
 ## Tus propias habilidades
 
 Puedes enseñarle habilidades nuevas para tu asignatura sin programar: un archivo de texto con las instrucciones, escritas como se las explicarías a un profesor en prácticas. Aparecen en `miyagi skills` marcadas como `[propia]`. Cómo escribirlas, con un ejemplo completo: [Habilidades propias](../avanzado/habilidades-propias.md).
+
+### 🛠️ `command-authoring` · Crear tus propios comandos
+
+Escribe contigo un comando para lo que haces una y otra vez con datos que cambian (una sopa de letras sobre un tema, un crucigrama, tarjetas de repaso): te pregunta qué debe hacer y qué cambia cada vez, parte de una plantilla si encaja, te enseña el formulario que tendrá y lo guarda, para esta asignatura o para todas, solo con tu visto bueno. Después sale en el ＋ y en el ⋯ de cada tema. Más en [Atajos con formulario](../avanzado/atajos-e-instrucciones.md#atajos-con-formulario-pídeselo-a-miyagi).
+
+- **Pídeselo así:** *«Quiero un comando para hacer sopas de letras con la temática, el número de palabras y las palabras.»*
+- **Atajo:** `/miyagi:new-command <qué debe hacer>`

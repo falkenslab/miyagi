@@ -1,7 +1,7 @@
 ---
 title: Atajos e instrucciones
 sidebar_position: 3
-description: "Atajos propios para el chat en .claude/commands/ y las instrucciones generales del curso en instructions.md, con ejemplos."
+description: "Atajos propios para el chat en .claude/commands/, atajos con formulario que miyagi escribe contigo, y las instrucciones generales del curso en instructions.md, con ejemplos."
 ---
 
 # Atajos e instrucciones
@@ -99,6 +99,27 @@ Uso: `/lunes`.
 <Terminal>{`$ miyagi commands`}</Terminal>
 
 Lista todos los atajos: los incorporados, marcados `[incorporada]`, y los tuyos, marcados `[propia]`. Igual que las habilidades, los atajos se leen al arrancar: si los creas con el chat abierto, ciérralo y vuelve a abrirlo.
+
+## Atajos con formulario: pídeselo a miyagi
+
+Si lo que repites cambia cada vez en unos pocos datos (la temática, cuántas palabras, cuáles, el nivel), no hace falta escribir el archivo a mano: pídele a miyagi que te haga el comando, o pulsa **🛠️ Crear un comando propio** en el ＋ del chat (también `/miyagi:new-command`).
+
+<Prompt>{`Quiero un comando para hacer sopas de letras: la temática, el número de palabras y las palabras.`}</Prompt>
+
+miyagi te pregunta lo que no sepa (en qué elementos debe salir, si es para esta asignatura o para todas), parte de una plantilla si alguna encaja (sopa de letras, crucigrama, relacionar parejas, ordenar pasos, tarjetas de repaso) y te enseña cómo quedará: su nombre y su icono, dónde sale y el formulario, campo a campo. **Solo lo guarda si le das el visto bueno**, y puedes pedirle que lo cambie después de la misma manera.
+
+Desde la siguiente conversación (✎), el comando sale en el catálogo del ＋ y en el menú **⋯** de los elementos a los que se aplica. Al lanzarlo, la página te pide sus datos en un formulario, con el tema ya puesto si lo abriste desde un tema, y comprueba lo obligatorio y los números antes de enviarlo. En la conversación lo ves con su nombre (🔤 Sopa de letras · …) y miyagi lo hace con las mismas aprobaciones de siempre; lo que prepara queda en **Materiales**.
+
+Dónde se guarda:
+
+- **Para esta asignatura**: en `.claude/commands/` de su carpeta, como los atajos de arriba; se usa como `/sopa-de-letras`.
+- **Para todas tus asignaturas**: en `~/.miyagi/own/commands/`; se usa como `/own:sopa-de-letras` y sale en todas ellas.
+
+Un comando con formulario es un atajo con un encabezado más largo: su nombre en cada idioma (`label`), su icono, en qué grupo del catálogo va (`group`), en qué elementos sale (`applies-to`: un tema, una fuente, una página, un material…) y sus `parameters`, cada uno con su nombre, su etiqueta, su tipo (texto, número, una opción de una lista, una lista de palabras, un tema, una fuente o una página), si es obligatorio, su valor por defecto y sus límites. Lo que rellenas llega donde las instrucciones dicen `$ARGUMENTS`, como `topic: UT3 Modelo E-R; count: 10`.
+
+:::info Lo que un comando no puede hacer
+Un comando son instrucciones, nada más: corre con las mismas aprobaciones, los mismos permisos y las mismas comprobaciones que cualquier cosa que le pidas en el chat. Por eso miyagi no guarda uno que intente darse herramientas propias (`allowed-tools`), ejecutar una orden en la consola (una línea con !`…`) o meter un archivo con @ruta.
+:::
 
 ## Material de referencia
 

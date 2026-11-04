@@ -69,6 +69,23 @@ export interface PageAction {
   ask?: Record<string, string>;
   suggest?: boolean;
   opens?: string;
+  /** An own command's values, asked in a form (#68). */
+  parameters?: ActionParameter[];
+  produces?: string;
+}
+
+/** One value an own command asks for (#68). */
+export interface ActionParameter {
+  name: string;
+  /** Per language, or `*` for every language. */
+  label: Record<string, string>;
+  type: "text" | "number" | "choice" | "words" | "topic" | "source" | "page";
+  required: boolean;
+  default?: string | number;
+  min?: number;
+  max?: number;
+  options?: string[];
+  help?: Record<string, string>;
 }
 
 export interface ChatState {

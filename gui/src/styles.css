@@ -488,3 +488,7 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 @media (max-width: 760px) {
   .pop.at-point { left: 0; right: 0; top: auto; bottom: 0; }
 }
+/* An own command's form (#68) */
+.param-form label { display: grid; gap: 4px; }
+.param-form textarea.field { resize: vertical; min-height: 56px; font: inherit; }
+.param-form .field-error { color: var(--sun); font-size: 12.5px; }

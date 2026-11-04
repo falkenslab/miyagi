@@ -1,5 +1,5 @@
 import { mkdir } from "node:fs/promises";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -54,7 +54,9 @@ import { buildSystemPrompt } from "./systemPrompt.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
 import { installUploadGate } from "./uploadGate.js";
 import { installPdfText } from "./pdfText.js";
+import { COMMANDS_SERVER, createCommandsServer, installCommandsGate } from "./commandsServer.js";
 import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
+import { ownPluginDir } from "./ownCommands.js";
 import { installMaterialsGate } from "./materials/gate.js";
 import { createMaterialsServer, MATERIALS_SERVER, type PendingLosses } from "./materials/server.js";
 import { sessionSkills } from "./catalog.js";
@@ -78,7 +80,7 @@ const EXPLORE_MAX_TURNS = 80;
  * the file tools don't reach knowledge/ any more (agent-kit's ADR-024). */
 const KNOWLEDGE_READ_TOOLS = ["mcp__knowledge__knowledge_index", "mcp__knowledge__knowledge_search", "mcp__knowledge__knowledge_read"];
 /** miyagi's own tools that plan mode lets run: they only read. */
-const PLAN_READ_TOOLS = new Set([...KNOWLEDGE_READ_TOOLS, `mcp__${DRAFTS_SERVER}__drafts_list`, `mcp__${DRAFTS_SERVER}__drafts_info`]);
+const PLAN_READ_TOOLS = new Set([...KNOWLEDGE_READ_TOOLS, `mcp__${DRAFTS_SERVER}__drafts_list`, `mcp__${DRAFTS_SERVER}__drafts_info`, ...["commands_list", "commands_read", "commands_check"].map((name) => `mcp__${COMMANDS_SERVER}__${name}`)]);
 
 /** moodle-mcp's tools miyagi never uses (they're the teacher's or the site's, not a teaching assistant's). */
 const NEVER_MOODLE_TOOLS = [
@@ -141,9 +143,12 @@ function buildSpec(kind: SessionKind, skills: string[], pending: PendingLosses):
       // shell; with or without a classroom.
       ...(kind === "run" || kind === "chat" ? { [DRAFTS_SERVER]: createDraftsServer(config.draftsDir, config.draftsLimits) } : {}),
       // The materials toolbox (ADR-015): validate, export to the classroom's formats, the publication record.
+      // The teacher's own commands (#68): written by talking, saved only after their yes.
+      ...(kind === "chat" ? { [COMMANDS_SERVER]: createCommandsServer(config.projectDir) } : {}),
       ...(kind === "run" || kind === "chat" ? { [MATERIALS_SERVER]: createMaterialsServer({ materialsDir: config.materialsDir, draftsDir: config.draftsDir, sourcesDir: config.sourcesDir, knowledgeDir: config.knowledgeDir, workspaceDir: config.projectDir }, pending) } : {}),
     }),
-    pluginRoots: () => [path.join(__dirname, "..", "plugin")],
+    // miyagi's plugin, and the teacher's commands for all their subjects once they saved one (#68).
+    pluginRoots: () => [path.join(__dirname, "..", "plugin"), ...(existsSync(path.join(ownPluginDir(), ".claude-plugin", "plugin.json")) ? [ownPluginDir()] : [])],
     // In run/chat: two helpers without a shell (researcher: public web; pedagogy-reviewer:
     // read-only critique). miyagi has no shell at all: practices run in docker-lab's labs (#45).
     // agent-kit's subagent gates restrict the Agent tool to these registered types, and each
@@ -308,6 +313,7 @@ export async function prepareSession(
     // GIFT checked before it's imported. Without a classroom nothing publishes.
     if (classroom && kind !== "ingest") installUploadGate(options);
     if (kind === "run" || kind === "chat") installMaterialsGate(options, pending);
+    if (kind === "chat") installCommandsGate(options, loadPrompt("tools/human-approval-approved.md"));
     // A PDF copied into sources/ gets its text as markdown next to it (#64).
     installPdfText(options, config.sourcesDir);
     return opened;

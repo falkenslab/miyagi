@@ -208,7 +208,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const subject = current;
     const state = subject?.chat?.getState();
     if (!subject || !state) return null;
-    const active = (state.extensions?.active ?? []).join(",");
+    // A new conversation may know new commands (an own one saved in the last, #68): read them again.
+    const active = `${(state.extensions?.active ?? []).join(",")}|${state.commandDetails.length}`;
     if (subject.commands?.active !== active) {
       subject.commands = { active, names: subject.commands?.names ?? new Set(KIT_COMMANDS), actions: subject.commands?.actions ?? [] };
       void listCommands(subject.dir).then((entries) => {
@@ -217,7 +218,10 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         schedule();
       });
     }
-    const { names, actions } = subject.commands;
+    const { names } = subject.commands;
+    // Only what this conversation can run: an own command saved now, from the next one.
+    const known = new Set(state.commandDetails.map((command) => command.name));
+    const actions = known.size ? subject.commands.actions.filter((action) => known.has(action.command)) : subject.commands.actions;
     const commandDetails = state.commandDetails.filter((command) => names.has(command.name));
     // A resumed conversation brings back what the teacher never wrote: the greeting miyagi sends
     // itself to open it, and the SDK's mark for an interrupted turn.

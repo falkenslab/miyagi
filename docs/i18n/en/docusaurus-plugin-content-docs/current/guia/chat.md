@@ -92,6 +92,7 @@ They're ready-made instructions. Type them in the chat, with whatever you need a
 | `/miyagi:audit` | Audit the classroom and suggest improvements by priority |
 | `/miyagi:research <unit>` | Research a topic online and save what it finds with its sources |
 | `/miyagi:map` | See where each section and activity of the course is: its number and its link |
+| `/miyagi:new-command <what it should make>` | Make a command of your own with a form |
 | `/knowledge:ingest` | Add the new documents in `sources` to its notes |
 | `/knowledge:query <question>` | Answer from its notes, without opening Moodle |
 | `/knowledge:lint` | Check that its notes are complete and well linked |

@@ -17,6 +17,9 @@ export interface ActionTexts {
   cancel: string;
   /** Under a launched action in the conversation, for a screen reader. */
   sent: string;
+  /** An own command's form (#68). */
+  required: string;
+  between: (min?: number, max?: number) => string;
 }
 
 const es: ActionTexts = {
@@ -32,6 +35,8 @@ const es: ActionTexts = {
   send: "Enviar",
   cancel: "Cancelar",
   sent: "Acción enviada",
+  required: "Obligatorio",
+  between: (min, max) => (min !== undefined && max !== undefined ? `Un número entre ${min} y ${max}` : min !== undefined ? `Un número desde ${min}` : max !== undefined ? `Un número hasta ${max}` : "Un número"),
 };
 
 const en: ActionTexts = {
@@ -47,6 +52,8 @@ const en: ActionTexts = {
   send: "Send",
   cancel: "Cancel",
   sent: "Action sent",
+  required: "Required",
+  between: (min, max) => (min !== undefined && max !== undefined ? `A number between ${min} and ${max}` : min !== undefined ? `A number from ${min}` : max !== undefined ? `A number up to ${max}` : "A number"),
 };
 
 const fr: ActionTexts = {
@@ -62,6 +69,8 @@ const fr: ActionTexts = {
   send: "Envoyer",
   cancel: "Annuler",
   sent: "Action envoyée",
+  required: "Obligatoire",
+  between: (min, max) => (min !== undefined && max !== undefined ? `Un nombre entre ${min} et ${max}` : min !== undefined ? `Un nombre à partir de ${min}` : max !== undefined ? `Un nombre jusqu'à ${max}` : "Un nombre"),
 };
 
 const de: ActionTexts = {
@@ -77,6 +86,8 @@ const de: ActionTexts = {
   send: "Senden",
   cancel: "Abbrechen",
   sent: "Aktion gesendet",
+  required: "Pflichtfeld",
+  between: (min, max) => (min !== undefined && max !== undefined ? `Eine Zahl zwischen ${min} und ${max}` : min !== undefined ? `Eine Zahl ab ${min}` : max !== undefined ? `Eine Zahl bis ${max}` : "Eine Zahl"),
 };
 
 const ALL: Record<string, ActionTexts> = { es, en, fr, de };

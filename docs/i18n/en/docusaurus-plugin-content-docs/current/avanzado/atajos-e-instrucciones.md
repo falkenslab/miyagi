@@ -1,7 +1,7 @@
 ---
 title: Shortcuts and instructions
 sidebar_position: 3
-description: "Your own chat shortcuts in .claude/commands/ and the course's general instructions in instructions.md, with examples."
+description: "Your own chat shortcuts in .claude/commands/, shortcuts with a form that miyagi writes with you, and the course's general instructions in instructions.md, with examples."
 ---
 
 # Shortcuts and instructions {#atajos-e-instrucciones}
@@ -99,6 +99,27 @@ Usage: `/lunes`.
 <Terminal>{`$ miyagi commands`}</Terminal>
 
 It lists all the shortcuts: the built-in ones, marked `[built-in]`, and yours, marked `[own]`. As with skills, shortcuts are read at startup: if you create them with the chat open, close it and open it again.
+
+## Shortcuts with a form: ask miyagi {#atajos-con-formulario-pídeselo-a-miyagi}
+
+If what you repeat changes each time in a few values (the topic, how many words, which ones, the level), you don't have to write the file by hand: ask miyagi to make you the command, or click **🛠️ Make my own command** in the chat's ＋ (also `/miyagi:new-command`).
+
+<Prompt>{`I want a command to make word searches: the topic, the number of words and the words.`}</Prompt>
+
+miyagi asks what it doesn't know (on which items it should show up, whether it's for this subject or all of them), starts from a template if one fits (word search, crossword, matching pairs, put in order, flashcards) and shows you how it will look: its name and icon, where it shows up and the form, field by field. **It only saves it if you say yes**, and you can ask it to change it later the same way.
+
+From the next conversation (✎), the command shows in the ＋ catalog and in the **⋯** menu of the items it applies to. When you launch it, the page asks for its values in a form, with the topic already filled in if you opened it from a topic, and checks what's required and the numbers before sending it. In the conversation you see it by its name (🔤 Word search · …) and miyagi does it with the same approvals as always; what it prepares stays in **Materials**.
+
+Where it's saved:
+
+- **For this subject**: in its folder's `.claude/commands/`, like the shortcuts above; it's used as `/word-search`.
+- **For all your subjects**: in `~/.miyagi/own/commands/`; it's used as `/own:word-search` and shows in all of them.
+
+A command with a form is a shortcut with a longer header: its name in each language (`label`), its icon, which group of the catalog it goes in (`group`), on which items it shows up (`applies-to`: a topic, a source, a page, a material…) and its `parameters`, each with its name, its label, its type (text, number, an option from a list, a list of words, a topic, a source or a page), whether it's required, its default value and its limits. What you fill in arrives where the instructions say `$ARGUMENTS`, as `topic: Unit 3 E-R model; count: 10`.
+
+:::info What a command can't do
+A command is instructions, nothing more: it runs with the same approvals, the same permissions and the same checks as anything you ask in the chat. That's why miyagi won't save one that tries to give itself tools (`allowed-tools`), run something in the console (a line with !`…`) or pull a file in with @path.
+:::
 
 ## Reference material {#material-de-referencia}
 

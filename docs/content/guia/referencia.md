@@ -59,6 +59,7 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, s
 | `/miyagi:audit` | Auditoría completa del curso con recomendaciones priorizadas. |
 | `/miyagi:research <tema>` | Investiga un tema en internet y guarda lo que encuentra con sus fuentes. |
 | `/miyagi:map` | Muestra dónde está cada sección y actividad del curso: su número y su enlace. |
+| `/miyagi:new-command <qué debe hacer>` | Escribe contigo un comando propio con formulario, para esta asignatura o para todas. |
 | `/knowledge:ingest` | Incorpora a sus apuntes lo que haya en `sources` sin procesar. |
 | `/knowledge:query <pregunta>` | Responde a partir de sus apuntes del curso. |
 | `/knowledge:lint` | Revisa que sus apuntes estén completos y bien enlazados. |

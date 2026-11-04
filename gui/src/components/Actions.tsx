@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import type { ActionTexts } from "../i18n/actions";
-import type { PageAction } from "../types";
+import type { ActionParameter, PageAction } from "../types";
 
 // miyagi's commands as actions of the page (contextual-actions #67): the catalog in ＋, the ⋯ menu
 // of each item (also its right click, Shift+F10 or the menu key, and a long press on a phone), and
@@ -26,7 +26,7 @@ export const useActions = () => useContext(ActionsContext);
 
 /** An action's name in the page's language; an extension's command without one, from its name. */
 export function actionLabel(action: PageAction, lang: string): string {
-  const own = action.label?.[lang] ?? action.label?.en;
+  const own = action.label?.[lang] ?? action.label?.en ?? action.label?.["*"];
   if (own) return own;
   const base = action.command.slice(action.command.indexOf(":") + 1).replace(/-/g, " ");
   return base.charAt(0).toUpperCase() + base.slice(1);
@@ -47,16 +47,119 @@ export function launched(actions: PageAction[], line: string): { action: PageAct
 
 const GROUPS = ["day", "create", "plan", "memory", "classroom"];
 
+/** A text in the page's language, from `{ es, en, … }` or `{ "*": … }`. */
+const inLanguage = (text: Record<string, string> | undefined, lang: string) => text?.[lang] ?? text?.en ?? text?.["*"] ?? "";
+
+/** The form's values as the command's line: `name: value` pairs, one line (#68). */
+export const argumentsLine = (values: Record<string, string>) =>
+  Object.entries(values)
+    .filter(([, value]) => value.trim())
+    .map(([name, value]) => `${name}: ${oneLine(value)}`)
+    .join("; ");
+
+/** The item a menu was opened on fills the first parameter of its kind (a topic's title for a `topic`). */
+function initialValues(parameters: ActionParameter[], value: string | undefined, kinds: string[]): Record<string, string> {
+  const filled = parameters.find((one) => value && kinds.includes(one.type));
+  return Object.fromEntries(parameters.map((one) => [one.name, one === filled ? value! : one.default !== undefined ? String(one.default) : ""]));
+}
+
+/**
+ * An own command's form (#68): a field per parameter, prefilled from the item and the defaults,
+ * checked before it's sent (required, numbers within their range).
+ */
+function ParameterForm({ action, value, kinds, close, back }: { action: PageAction; value?: string; kinds: string[]; close: () => void; back: () => void }) {
+  const api = useActions()!;
+  const { A, lang } = api;
+  const parameters = action.parameters ?? [];
+  const [values, setValues] = useState(() => initialValues(parameters, value, kinds));
+  const problem = (one: ActionParameter) => {
+    const text = values[one.name]?.trim() ?? "";
+    if (one.required && !text) return A.required;
+    if (one.type === "number" && text) {
+      const number = Number(text);
+      if (!Number.isFinite(number) || (one.min !== undefined && number < one.min) || (one.max !== undefined && number > one.max)) return A.between(one.min, one.max);
+    }
+    return "";
+  };
+  const invalid = parameters.some((one) => problem(one));
+  const set = (name: string, text: string) => setValues((now) => ({ ...now, [name]: text }));
+  return (
+    <form
+      className="ask-form param-form"
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (invalid) return;
+        close();
+        api.run(action, argumentsLine(values));
+      }}
+    >
+      <b>
+        <span aria-hidden="true">{action.icon}</span> {actionLabel(action, lang)}
+      </b>
+      {parameters.map((one, index) => {
+        const id = `param-${action.command}-${one.name}`;
+        const help = inLanguage(one.help, lang);
+        // Required fields say so with their *; a value out of range, as it's typed.
+        const error = Boolean(values[one.name]?.trim()) && problem(one);
+        return (
+          <label key={one.name} htmlFor={id}>
+            <span>
+              {inLanguage(one.label, lang) || one.name}
+              {one.required && <span aria-hidden="true"> *</span>}
+            </span>
+            {one.type === "choice" ? (
+              <select id={id} className="field" value={values[one.name]} onChange={(event) => set(one.name, event.target.value)}>
+                {!one.required && <option value="" />}
+                {one.options?.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : one.type === "words" ? (
+              <textarea id={id} className="field" rows={2} value={values[one.name]} onChange={(event) => set(one.name, event.target.value)} />
+            ) : (
+              <input
+                id={id}
+                className="field"
+                autoFocus={index === 0}
+                type={one.type === "number" ? "number" : "text"}
+                min={one.min}
+                max={one.max}
+                required={one.required}
+                value={values[one.name]}
+                onChange={(event) => set(one.name, event.target.value)}
+              />
+            )}
+            {help && <small className="muted">{help}</small>}
+            {error && <small className="field-error">{error}</small>}
+          </label>
+        );
+      })}
+      <div className="row">
+        <span className="sp" />
+        <button type="button" className="btn small" onClick={back}>
+          {A.cancel}
+        </button>
+        <button type="submit" className="btn small primary" disabled={invalid || api.busy}>
+          {A.send}
+        </button>
+      </div>
+    </form>
+  );
+}
+
 /**
  * Actions as the rows of a popover. One that needs a value and has none asks for it right there;
  * one that needs the classroom without one is disabled and says why. Grouped, in the catalog.
  */
-export function ActionList({ list, value, close, grouped = false }: { list: PageAction[]; value?: string; close: () => void; grouped?: boolean }) {
+export function ActionList({ list, value, kinds = [], close, grouped = false }: { list: PageAction[]; value?: string; kinds?: string[]; close: () => void; grouped?: boolean }) {
   const api = useActions();
   const [asking, setAsking] = useState<PageAction | null>(null);
   const [text, setText] = useState("");
   if (!api) return null;
   const { A, lang } = api;
+  if (asking?.parameters?.length) return <ParameterForm action={asking} value={value} kinds={kinds} close={close} back={() => setAsking(null)} />;
   if (asking)
     return (
       <form
@@ -97,7 +200,7 @@ export function ActionList({ list, value, close, grouped = false }: { list: Page
         disabled={off || (api.busy && !action.opens)}
         title={off ? A.needsClassroom : undefined}
         onClick={() => {
-          if (action.ask && !value && !action.opens) return setAsking(action);
+          if (action.parameters?.length || (action.ask && !value && !action.opens)) return setAsking(action);
           close();
           api.run(action, value);
         }}
@@ -223,7 +326,7 @@ export function useItemMenu(kinds: string[], value: string, name = value) {
         <div ref={pop} className={`pop item-pop${point ? " at-point" : ""}`} style={point} role="menu" aria-label={name}>
           <span className="grab" aria-hidden="true" />
           <h4 className="pop-title small-caps ellipsis">{name}</h4>
-          <ActionList list={list} value={value} close={close} />
+          <ActionList list={list} value={value} kinds={kinds} close={close} />
           <button
             type="button"
             role="menuitem"

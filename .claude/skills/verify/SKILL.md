@@ -63,7 +63,12 @@ temporary folder):
 node .claude/skills/verify/check-page.mjs <scratchpad>/page-shots
 ```
 
-It creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
+When the teacher's own commands change (`src/ownCommands.ts`, `src/commandsServer.ts`, the
+`command-authoring` skill, the form in `gui/`), also `check-own-command.mjs <dir>`, the same way: a
+word-search command asked for by talking, approved and saved for all subjects, then launched from
+a topic's ⋯ with its form, until the word search is in `drafts/`.
+
+`check-page.mjs` creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
 and not Claude Code's, approves one tool and refuses another in interactive mode, links the items a reply names (a source
 and a page open their views, a made-up path stays text), switches the mode
 and the theme, and takes screenshots at 360, 768 and 1440 px with no horizontal scroll. Look at

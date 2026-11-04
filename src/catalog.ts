@@ -3,6 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { knowledgePluginRoot, type InstalledExtension } from "@falkenslab/agent-kit";
 import { enabledExtensions } from "./extensions.js";
+import { splitFrontmatter } from "./materials/frontmatter.js";
+import { commandsDirFor, OWN_PLUGIN, perLanguage, readParameters, type Parameter } from "./ownCommands.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pluginDir = path.join(__dirname, "..", "plugin");
@@ -26,7 +28,7 @@ export interface CatalogEntry {
 
 /** Where a command's action goes in the page and what it asks for (contextual-actions #67). */
 export interface ActionMeta {
-  /** Its name per language (`es`, `en`, `fr`, `de`). */
+  /** Its name per language (`es`, `en`, `fr`, `de`), or `*` for one name in every language. */
   label: Record<string, string>;
   icon?: string;
   group?: string;
@@ -39,29 +41,33 @@ export interface ActionMeta {
   suggest?: boolean;
   /** A knowledge page the page opens instead of sending the command (no agent turn). */
   opens?: string;
-}
-
-/** `es=… | en=…` as `{ es: "…", en: "…" }`. */
-function perLanguage(value: string | undefined): Record<string, string> | undefined {
-  if (!value) return undefined;
-  const pairs = value.split("|").map((part) => /^\s*([a-z]{2})=(.*)$/.exec(part)).filter((match) => match !== null);
-  return pairs.length ? Object.fromEntries(pairs.map((match) => [match[1], match[2].trim()])) : undefined;
+  /** An own command's values, asked in a form (teacher-commands #68). */
+  parameters?: Parameter[];
+  /** What it makes: html-activity, quiz, document, page. */
+  produces?: string;
 }
 
 /** A command's action metadata, or none when its frontmatter has no `label`. */
 function actionMeta(markdown: string): ActionMeta | undefined {
-  const label = perLanguage(frontmatterField(markdown, "label"));
+  // YAML first (parameters are a list); a frontmatter that isn't valid YAML, by its lines.
+  const split = splitFrontmatter(markdown);
+  const data: Record<string, unknown> = split.error ? Object.fromEntries(["label", "icon", "group", "needs-classroom", "applies-to", "ask", "suggest", "opens", "produces"].map((key) => [key, frontmatterField(markdown, key)])) : split.data;
+  const label = perLanguage(data.label);
   if (!label) return undefined;
-  const list = (key: string) => (frontmatterField(markdown, key) ?? "").split(",").map((one) => one.trim()).filter(Boolean);
+  const text = (key: string) => (typeof data[key] === "string" ? (data[key] as string).trim() || undefined : undefined);
+  const yes = (key: string) => data[key] === true || data[key] === "true";
+  const { parameters } = readParameters(data.parameters);
   return {
     label,
-    icon: frontmatterField(markdown, "icon"),
-    group: frontmatterField(markdown, "group"),
-    needsClassroom: frontmatterField(markdown, "needs-classroom") === "true",
-    appliesTo: list("applies-to"),
-    ask: perLanguage(frontmatterField(markdown, "ask")),
-    suggest: frontmatterField(markdown, "suggest") === "true",
-    opens: frontmatterField(markdown, "opens"),
+    icon: text("icon"),
+    group: text("group"),
+    needsClassroom: yes("needs-classroom"),
+    appliesTo: (text("applies-to") ?? "").split(",").map((one) => one.trim()).filter(Boolean),
+    ask: perLanguage(data.ask),
+    suggest: yes("suggest"),
+    opens: text("opens"),
+    ...(parameters.length ? { parameters } : {}),
+    ...(text("produces") ? { produces: text("produces") } : {}),
   };
 }
 
@@ -171,12 +177,14 @@ export async function sessionSkills(workspaceDir: string): Promise<string[]> {
   ];
 }
 
-/** Built-in slash commands plus the workspace's own under `<workspace>/.claude/commands/`. */
+/** Built-in slash commands plus the workspace's own under `<workspace>/.claude/commands/` and the teacher's for all subjects. */
 export async function listCommands(workspaceDir: string): Promise<CatalogEntry[]> {
   return [
     ...(await readCommands(path.join(pluginDir, "commands"), "builtin", `${PLUGIN_NAMESPACE}:`)),
     ...(await readCommands(path.join(kitKnowledgeDir, "commands"), "builtin", `${KIT_KNOWLEDGE_NAMESPACE}:`, KIT_ACTIONS)),
     ...(await readCommands(path.join(workspaceDir, ".claude", "commands"), "custom", "")),
+    // The teacher's commands for all their subjects (#68), as the session loads them: `/own:<name>`.
+    ...(await readCommands(commandsDirFor("all", workspaceDir), "custom", `${OWN_PLUGIN}:`)),
     ...(await extensionEntries(workspaceDir, (ext) => readCommands(path.join(ext.dir, "commands"), "extension", `${ext.manifest!.name}:`), (_ext, c) => c.name)),
   ];
 }
