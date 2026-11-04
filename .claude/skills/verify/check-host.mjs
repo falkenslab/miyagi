@@ -124,6 +124,10 @@ check("a material in materials/ is previewed", (await fetch(`${base}/api/drafts/
 for (const bad of ["materials/.publications.json", "materials/../config.json", "drafts/../config.json", "config.json", "sources/x.pdf"]) {
   check(`materials/ and drafts/ only: ${bad}`, (await fetch(`${base}/api/drafts/file?path=${bad}&token=${token}`)).status === 403);
 }
+// An activity opened in the computer's browser (#69): only an HTML file in materials/ or drafts/ (the way it succeeds opens a browser: not tried here).
+for (const bad of ["materials/practicas.rubric.md", "drafts/../config.json", "../x.html", "sources/x.html", "materials/.hidden.html", "C:/Windows/x.html", "drafts/none/index.html"]) {
+  check(`only an activity is opened: ${bad}`, (await post("open-file", { path: bad })).error === "not an activity");
+}
 check("a classroom that isn't a course's address connects nothing", (await post("classroom", { url: "not a url" })).error === "invalid");
 
 // A repository in a folder: added only with its name typed, and forgotten again.
@@ -145,4 +149,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals");
+console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser");

@@ -83,6 +83,8 @@ export interface CourseTexts {
   noSources: string;
   sentToChat: string;
   openFolder: string;
+  play: string;
+  playNote: string;
 }
 
 const es: CourseTexts = {
@@ -163,6 +165,8 @@ const es: CourseTexts = {
   noSources: "Todavía no hay documentos en sources/.",
   sentToChat: "Enviado a la conversación.",
   openFolder: "Abrir la carpeta",
+  play: "▶ Jugar en el navegador",
+  playNote: "Aquí se ve quieta; en el navegador se puede jugar, fuera de miyagi.",
 };
 
 const en: CourseTexts = {
@@ -243,6 +247,8 @@ const en: CourseTexts = {
   noSources: "No documents in sources/ yet.",
   sentToChat: "Sent to the conversation.",
   openFolder: "Open the folder",
+  play: "▶ Play in the browser",
+  playNote: "Here it stays still; in the browser you can play it, outside miyagi.",
 };
 
 const fr: CourseTexts = {
@@ -323,6 +329,8 @@ const fr: CourseTexts = {
   noSources: "Pas encore de documents dans sources/.",
   sentToChat: "Envoyé à la conversation.",
   openFolder: "Ouvrir le dossier",
+  play: "▶ Jouer dans le navigateur",
+  playNote: "Ici elle reste figée ; dans le navigateur on peut y jouer, hors de miyagi.",
 };
 
 const de: CourseTexts = {
@@ -403,6 +411,8 @@ const de: CourseTexts = {
   noSources: "Noch keine Dokumente in sources/.",
   sentToChat: "An das Gespräch gesendet.",
   openFolder: "Ordner öffnen",
+  play: "▶ Im Browser spielen",
+  playNote: "Hier bleibt sie unbewegt; im Browser lässt sie sich spielen, außerhalb von miyagi.",
 };
 
 const ALL: Record<string, CourseTexts> = { es, en, fr, de };

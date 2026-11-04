@@ -346,9 +346,21 @@ function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
   const ext = file.slice(file.lastIndexOf(".")).toLowerCase();
   if ([".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"].includes(ext)) return <img className="preview-img" src={fileUrl(file)} alt={file} />;
   if (ext === ".md") return <MarkdownPreview file={file} />;
-  if ([".html", ".htm", ".pdf", ".txt", ".gift", ".csv", ".json", ".xml"].includes(ext))
-    // No sandbox attribute for a PDF (the browser's viewer needs it); an HTML one comes with a
-    // sandbox policy from the host, so its scripts never run.
+  if (ext === ".html" || ext === ".htm")
+    // Still here (the host's sandbox policy keeps its scripts off); played in the computer's browser, outside the page (#69).
+    return (
+      <>
+        <div className="row play-row">
+          <button type="button" className="btn small primary" onClick={() => void act("open-file", { path: file })}>
+            {C.play}
+          </button>
+          <span className="muted small">{C.playNote}</span>
+        </div>
+        <iframe className="preview" src={fileUrl(file)} title={file} sandbox="" />
+      </>
+    );
+  if ([".pdf", ".txt", ".gift", ".csv", ".json", ".xml"].includes(ext))
+    // No sandbox attribute for a PDF (the browser's viewer needs it).
     return <iframe className="preview" src={fileUrl(file)} title={file} {...(ext === ".pdf" ? {} : { sandbox: "" })} />;
   return <p className="muted">{file}</p>;
 }

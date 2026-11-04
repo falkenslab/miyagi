@@ -63,9 +63,9 @@ export function pageActions(entries: CatalogEntry[]): PageAction[] {
     .map((entry) => ({ command: entry.name.replace(/^\//, ""), description: entry.description, extension: entry.extension, ...entry.action }));
 }
 
-/** Opens a folder in this computer's file explorer (the host runs where the person is: 127.0.0.1). */
-function openFolder(dir: string): void {
-  const [command, args] = process.platform === "win32" ? ["explorer.exe", [dir]] : process.platform === "darwin" ? ["open", [dir]] : ["xdg-open", [dir]];
+/** Opens a folder in this computer's file explorer, or a file in its default app (the host runs where the person is: 127.0.0.1). */
+function openInSystem(target: string): void {
+  const [command, args] = process.platform === "win32" ? ["explorer.exe", [target]] : process.platform === "darwin" ? ["open", [target]] : ["xdg-open", [target]];
   spawn(command, args, { detached: true, stdio: "ignore" }).on("error", () => undefined).unref();
 }
 
@@ -346,7 +346,15 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         const dir = which === "sources" ? sourcesDirFor(current.dir) : which === "drafts" ? draftsDirFor(current.dir) : which === "materials" ? materialsDirFor(current.dir) : which === "subject" ? current.dir : undefined;
         if (!dir) return { error: "unknown folder" };
         await mkdir(dir, { recursive: true });
-        openFolder(dir);
+        openInSystem(dir);
+        return {};
+      }
+      // An HTML activity, played in the computer's browser as a local file: outside the page, with no token (#69).
+      case "open-file": {
+        if (!current) return { error: "no subject" };
+        const file = await preparedFile(current.dir, String(data.path ?? ""));
+        if (!file || !/\.html?$/i.test(file) || !(await stat(file)).isFile()) return { error: "not an activity" };
+        openInSystem(file);
         return {};
       }
       case "classroom": {

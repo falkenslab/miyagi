@@ -38,6 +38,10 @@ Solo puede delegar en los ayudantes que miyagi declara (`researcher` y `pedagogy
 
 Para ejecutar prácticas está la extensión docker-lab: miyagi solo puede usar sus laboratorios, con la política que docker-mcp impone al arrancar cada uno (sin internet salvo que lo permitas, nada montado fuera del laboratorio, nunca el socket de Docker, límites de CPU y memoria). Sus herramientas sobre todo el Docker del ordenador (contenedores, imágenes, volúmenes, redes, proyectos de Compose, `prune`) están bloqueadas ([Prácticas en Docker](practicas-docker.md)).
 
+## Las actividades HTML
+
+Una actividad que prepara miyagi (una sopa de letras, un crucigrama) lleva código que escribe el modelo. Ese código **nunca se ejecuta dentro de la página de miyagi**, que es la que controla tus conversaciones: la vista previa de Materiales la enseña quieta. Para jugarla, **▶ Jugar en el navegador** la abre como un archivo de tu ordenador en tu navegador de siempre, fuera de miyagi y sin acceso a él; y solo abre archivos HTML de `drafts/` y `materials/`.
+
 ## Lo que hace en Moodle
 
 Trabaja con tu cuenta, a través de las herramientas fijas de moodle-teacher, así que puede hacer lo que esas herramientas permiten hacer con tu cuenta en el curso. Lo que lo frena:

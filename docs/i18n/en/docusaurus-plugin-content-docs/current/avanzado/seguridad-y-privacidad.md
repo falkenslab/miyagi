@@ -38,6 +38,10 @@ It can only delegate to the helpers miyagi declares (`researcher` and `pedagogy-
 
 To run practicals there's the docker-lab extension: miyagi can only use its labs, with the policy docker-mcp enforces when starting each one (no internet unless you allow it, nothing mounted outside the lab, never the Docker socket, CPU and memory limits). Its tools over the computer's whole Docker (containers, images, volumes, networks, Compose projects, `prune`) are blocked ([Practicals in Docker](practicas-docker.md)).
 
+## HTML activities {#las-actividades-html}
+
+An activity miyagi prepares (a word search, a crossword) carries code the model writes. That code **never runs inside miyagi's page**, the one that drives your conversations: Materials' preview shows it still. To play it, **▶ Play in the browser** opens it as a file on your computer in your usual browser, outside miyagi and with no access to it; and it only opens HTML files from `drafts/` and `materials/`.
+
 ## What it does in Moodle {#lo-que-hace-en-moodle}
 
 It works with your account, through moodle-teacher's fixed tools, so it can do whatever those tools allow with your account in the course. What holds it back:
