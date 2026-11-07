@@ -7,6 +7,7 @@ import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./compon
 import { Panel } from "./components/Panel";
 import { Header, Sidebar, type Theme, type View } from "./components/Shell";
 import { SignIn } from "./components/SignIn";
+import { setBusyReason, StatusBar } from "./components/StatusBar";
 import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
 import { Transcript } from "./components/Transcript";
 import { Waiting } from "./components/Waiting";
@@ -44,6 +45,7 @@ export function App() {
   const T = texts(chat?.language ?? info?.language);
   const X = extTexts(chat?.language ?? info?.language);
   const C = courseTexts(chat?.language ?? info?.language);
+  setBusyReason(T.status.why);
   /** A line to the chat from a view's button: sent as the teacher would type it, and the conversation shown. */
   const ask = (line: string) => {
     if (!chat || chat.busy) return;
@@ -192,6 +194,7 @@ export function App() {
           {chat && info && shown === "extensions" && <ExtensionsView chat={chat} info={info} X={X} tab={extTab} setTab={setExtTab} onNotice={setToast} onLink={() => setLinking(true)} />}
           {chat && info && shown === "classroom" && <ClassroomView chat={chat} info={info} X={X} onLink={() => setLinking(true)} />}
         </main>
+        <StatusBar chat={chat} T={T} inChat={shown === "chat"} onOpenChat={() => setView("chat")} />
       </section>
       {linking && info && (
         <LinkWizard

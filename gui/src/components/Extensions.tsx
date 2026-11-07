@@ -5,6 +5,7 @@ import type { Capabilities, CatalogEntry, ChatState, ExtensionOptionState, Info,
 import { GroupActions } from "./Actions";
 import { Dialog } from "./Panel";
 import { Waiting } from "./Waiting";
+import { whileBusy } from "./StatusBar";
 
 // The extensions view (gui-extensions #50), as the mockup draws it: tabs for what's installed (cards
 // with a switch), the catalog, the repositories and what miyagi can do; an extension's details and
@@ -266,7 +267,7 @@ function DetailsDialog({ name, chat, entry, X, onNotice, onClose }: { name: stri
             <button type="button" className="btn ghost" onClick={() => setRemoving(false)}>
               {X.cancel}
             </button>
-            <button type="button" className="btn danger" disabled={chat.busy} onClick={() => void remove()}>
+            <button type="button" className="btn danger" {...whileBusy(chat.busy)} onClick={() => void remove()}>
               {X.remove}
             </button>
           </div>
@@ -276,7 +277,7 @@ function DetailsDialog({ name, chat, entry, X, onNotice, onClose }: { name: stri
           <button type="button" className="btn ghost" onClick={onClose}>
             {X.close}
           </button>
-          <button type="button" className="btn danger" disabled={chat.busy} onClick={() => setRemoving(true)}>
+          <button type="button" className="btn danger" {...whileBusy(chat.busy)} onClick={() => setRemoving(true)}>
             {X.remove}
           </button>
         </div>
@@ -375,7 +376,7 @@ function OptionsForm({ name, busy, X, onNotice, onSaved }: { name: string; busy:
         );
       })}
       <div className="acts">
-        <button type="submit" className="btn primary" disabled={saving || busy}>
+        <button type="submit" className="btn primary" {...whileBusy(busy, saving)}>
           {X.save}
         </button>
       </div>
@@ -429,7 +430,7 @@ function AddDialog({ entry, chat, X, onNotice, onClose, onNeedsOptions }: { entr
         <button type="button" className="btn ghost" onClick={onClose}>
           {X.cancel}
         </button>
-        <button type="button" className={`btn ${entry.official ? "primary" : "danger"}`} disabled={installing || chat.busy} onClick={() => void install()}>
+        <button type="button" className={`btn ${entry.official ? "primary" : "danger"}`} {...whileBusy(chat.busy, installing)} onClick={() => void install()}>
           {installing ? X.installing : entry.official ? X.addButton : X.installAnyway}
         </button>
       </div>
@@ -487,7 +488,7 @@ function CatalogTab({ chat, entries, X, onSearch, onAdd }: { chat: ChatState; en
                 {entry.installed ? (
                   <span className="badge ok">{X.installed}</span>
                 ) : (
-                  <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => onAdd(entry)}>
+                  <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={() => onAdd(entry)}>
                     {entry.name === CLASSROOM_EXTENSION ? X.linkTitle : X.addButton}
                   </button>
                 )}
@@ -684,7 +685,7 @@ function CapabilitiesTab({ chat, info, entries, X, onNotice, onAdd, onLink }: { 
                 {room?.connected ? (
                   <span className="badge ok">{X.yes}</span>
                 ) : (
-                  <button type="button" className="btn small" disabled={chat.busy} onClick={onLink}>
+                  <button type="button" className="btn small" {...whileBusy(chat.busy)} onClick={onLink}>
                     {room ? X.classroomReconnect : X.linkTitle}
                   </button>
                 )}
@@ -730,7 +731,7 @@ function CapabilitiesTab({ chat, info, entries, X, onNotice, onAdd, onLink }: { 
                   <td className="muted">{need.offers.length ? `— (${need.offers.map((candidate) => candidate.name).join(", ")})` : `— (${X.notOffered})`}</td>
                   <td>
                     {entry && (
-                      <button type="button" className="btn small" disabled={chat.busy} onClick={() => onAdd(entry)}>
+                      <button type="button" className="btn small" {...whileBusy(chat.busy)} onClick={() => onAdd(entry)}>
                         {X.addButton}
                       </button>
                     )}
@@ -766,7 +767,7 @@ export function ClassroomView({ chat, info, X, onLink }: { chat: ChatState; info
                 Moodle ↗
               </a>
               {!room.connected && (
-                <button type="button" className="btn small primary" disabled={chat.busy} onClick={onLink}>
+                <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={onLink}>
                   {X.classroomReconnect}
                 </button>
               )}
@@ -778,7 +779,7 @@ export function ClassroomView({ chat, info, X, onLink }: { chat: ChatState; info
         <div className="card">
           <p>{X.classroomNone}</p>
           <div className="row">
-            <button type="button" className="btn primary" disabled={chat.busy} onClick={onLink}>
+            <button type="button" className="btn primary" {...whileBusy(chat.busy)} onClick={onLink}>
               {X.linkButton}
             </button>
           </div>
@@ -870,7 +871,7 @@ export function LinkWizard({ info, busy, X, onClose, onNotice }: { info: Info; b
             <button type="button" className="btn ghost" disabled={linking} onClick={() => setStep(1)}>
               {X.cancel}
             </button>
-            <button type="button" className="btn primary" disabled={linking || busy} onClick={() => void link()} data-autofocus>
+            <button type="button" className="btn primary" {...whileBusy(busy, linking)} onClick={() => void link()} data-autofocus>
               {linking ? X.classroomConnecting : X.link}
             </button>
           </div>

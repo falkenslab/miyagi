@@ -34,6 +34,8 @@ Son las mismas asignaturas que ves en la terminal con `miyagi workspaces`.
 
 Arriba, en cada vista, su título; en la conversación, el título de la conversación y el botón ✎ para empezar una nueva.
 
+Abajo, mientras miyagi o la propia página están haciendo algo, la **barra de estado** lo dice en cualquier vista: al abrir la asignatura, que está leyendo lo que sabe de ella para saludarte; durante un turno, qué está haciendo y cuánto lleva, con **Ir a la conversación**; una aprobación o una pregunta que te espera, resaltada; y lo que hace la página, como instalar una extensión o conectar el aula. Lo que tiene que esperar a que miyagi termine se queda desactivado y, al pasar por encima, te dice por qué; las vistas se pueden seguir mirando mientras tanto.
+
 En la conversación:
 
 - **Una conversación nueva** te saluda y te propone lo que pides a menudo: construir una unidad, incorporar tus documentos (con cuántos faltan) y, con el aula, corregir lo pendiente y revisar el foro; sin aula, vincularla. miyagi recibe lo que pulses como si lo escribieras.

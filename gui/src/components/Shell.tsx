@@ -7,6 +7,7 @@ import type { ChatState, Info } from "../types";
 import { Icon, type IconName } from "./Icons";
 import { Logo } from "./Logo";
 import { SubjectList, useSubjects } from "./Subjects";
+import { whileBusy } from "./StatusBar";
 
 // The page's frame, organised as the Claude app (#60): a sidebar (miyagi, a new conversation, the
 // subject, the views, the recent conversations, the versions and the theme) and each view's header
@@ -93,7 +94,7 @@ function SubjectSwitcher({ info, busy, T, X, onNew, onOpenExisting }: { info: In
             {subjects && <SubjectList subjects={subjects.filter((subject) => subject.name !== info.workspace)} T={T} onOpen={close} onChanged={() => void reload()} />}
             <button
               type="button"
-              disabled={busy}
+              {...whileBusy(busy)}
               onClick={() => {
                 onNew();
                 close();
@@ -104,7 +105,7 @@ function SubjectSwitcher({ info, busy, T, X, onNew, onOpenExisting }: { info: In
             </button>
             <button
               type="button"
-              disabled={busy}
+              {...whileBusy(busy)}
               onClick={() => {
                 onOpenExisting();
                 close();
@@ -256,7 +257,7 @@ export function Sidebar({
           </div>
         </div>
         {chat && (
-          <button type="button" className="new-conv" disabled={chat.busy} onClick={() => newConversation(chat, () => go("chat"))}>
+          <button type="button" className="new-conv" {...whileBusy(chat.busy)} onClick={() => newConversation(chat, () => go("chat"))}>
             <Icon name="edit" />
             <span>{T.newConversation}</span>
           </button>
@@ -312,7 +313,7 @@ export function Header({ title, subtitle, chat, chatShown, T, X, onMenu, onOpenC
         {subtitle && <small>{subtitle}</small>}
       </h1>
       {chat && chatShown && (
-        <button type="button" className="ibtn plain new-chat" title={T.newConversation} aria-label={T.newConversation} disabled={chat.busy} onClick={() => newConversation(chat, onOpenChat)}>
+        <button type="button" className="ibtn plain new-chat" title={T.newConversation} aria-label={T.newConversation} {...whileBusy(chat.busy)} onClick={() => newConversation(chat, onOpenChat)}>
           <Icon name="edit" />
         </button>
       )}

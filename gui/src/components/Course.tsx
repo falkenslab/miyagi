@@ -6,6 +6,7 @@ import { Actionable, GroupActions, useActions, useItemMenu } from "./Actions";
 import type { ChatState, Info } from "../types";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
+import { whileBusy } from "./StatusBar";
 
 // The course views (gui-course-views #51), as the mockup draws them: Hoy, the teaching plan, topics
 // and activities, materials, the oven, the knowledge base and the sources. They only read; every
@@ -40,11 +41,15 @@ function useHost<T>(action: string, data: Record<string, unknown> = {}) {
 }
 
 function useReload(load: () => Promise<void>, chat: ChatState) {
-  // Again when a turn ends: what the agent did shows up.
+  // At once, even while miyagi works (the greeting would leave the view loading, #80); and again
+  // when a turn ends: what the agent did shows up.
   const turns = chat.turns;
   const busy = chat.busy;
+  const loaded = useRef<typeof load | null>(null);
   useEffect(() => {
-    if (!busy) void load();
+    if (busy && loaded.current === load) return;
+    loaded.current = load;
+    void load();
   }, [load, turns, busy]);
 }
 
@@ -96,16 +101,16 @@ export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common)
   useReload(load, chat);
   const connected = Boolean(info.classroom?.connected);
   const greeting = lastReply(chat);
-  const tips: { tip: [string, string, string]; run: () => void }[] = [];
+  const tips: { tip: [string, string, string]; run: () => void; waits?: boolean }[] = [];
   if (result) {
     if (!result.pages && !result.sources.total) tips.push({ tip: C.tips.start, run: () => go("sources") });
-    if (result.sources.pending) tips.push({ tip: C.tips.ingest(result.sources.pending), run: () => ask(C.prompts.ingest) });
-    if (!result.teachingPlan) tips.push({ tip: C.tips.plan, run: () => ask(C.prompts.plan) });
+    if (result.sources.pending) tips.push({ tip: C.tips.ingest(result.sources.pending), run: () => ask(C.prompts.ingest), waits: true });
+    if (!result.teachingPlan) tips.push({ tip: C.tips.plan, run: () => ask(C.prompts.plan), waits: true });
     if (!connected) tips.push({ tip: [C.tips.classroom[0], C.tips.classroom[1], linkTitle], run: onLink });
     else {
-      tips.push({ tip: C.tips.grade, run: () => ask(C.prompts.grade) });
-      tips.push({ tip: C.tips.forum, run: () => ask(C.prompts.forum) });
-      if (result.teachingPlan) tips.push({ tip: C.tips.align, run: () => ask(C.prompts.align) });
+      tips.push({ tip: C.tips.grade, run: () => ask(C.prompts.grade), waits: true });
+      tips.push({ tip: C.tips.forum, run: () => ask(C.prompts.forum), waits: true });
+      if (result.teachingPlan) tips.push({ tip: C.tips.align, run: () => ask(C.prompts.align), waits: true });
     }
   }
   const phases = result ? (["planning", "building", "hidden", "served"] as const).filter((phase) => result.oven.some((item) => item.phase === phase)) : [];
@@ -171,10 +176,10 @@ export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common)
           <GroupActions group="day" />
           <h2 className="sec">{C.suggestions}</h2>
           <div className="grid g3">
-            {tips.map(({ tip: [title, text, button], run }) => (
+            {tips.map(({ tip: [title, text, button], run, waits }) => (
               <Card key={title} title={title}>
                 <p>{text}</p>
-                <button type="button" className="btn small" disabled={chat.busy} onClick={run}>
+                <button type="button" className="btn small" {...whileBusy(Boolean(waits) && chat.busy)} onClick={run}>
                   {button}
                 </button>
               </Card>
@@ -234,7 +239,7 @@ export function PlanView({ chat, info, C, ask, go }: Common) {
       <div className="wrap">
         <div className="card">
           <p>{C.noPlan}</p>
-          <button type="button" className="btn primary" disabled={chat.busy} onClick={() => ask(C.prompts.plan)}>
+          <button type="button" className="btn primary" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.plan)}>
             {C.writePlan}
           </button>
         </div>
@@ -246,11 +251,11 @@ export function PlanView({ chat, info, C, ask, go }: Common) {
         {result.fields.updated && <span className="muted">{day(result.fields.updated)}</span>}
         <span className="sp" />
         {info.classroom?.connected && (
-          <button type="button" className="btn small" disabled={chat.busy} onClick={() => ask(C.prompts.align)}>
+          <button type="button" className="btn small" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.align)}>
             {C.alignPlan}
           </button>
         )}
-        <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => ask(C.prompts.reviewPlan)}>
+        <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.reviewPlan)}>
           {C.reviewPlan}
         </button>
         {menu.button}
@@ -307,7 +312,7 @@ export function TopicsView({ chat, C, ask, go }: Common) {
                 </button>
               )}
               {topic.activities.length === 0 && (
-                <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => ask(C.prompts.buildUnit(topic.title))}>
+                <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.buildUnit(topic.title))}>
                   {C.prepare}
                 </button>
               )}
@@ -381,7 +386,7 @@ function MaterialRow({ file, on, choose, publish, busy, C }: { file: { path: str
       <td className="muted">{day(file.changed)}</td>
       <td className="acts">
         {publish && (
-          <button type="button" className="btn small" disabled={busy} onClick={publish}>
+          <button type="button" className="btn small" {...whileBusy(busy)} onClick={publish}>
             {C.publish}
           </button>
         )}
@@ -459,11 +464,11 @@ export function OvenView({ chat, info, C, ask }: Common) {
                     <Markdown text={item.text.replace(/\[([^\]]+)\]\([^)\s]+\.md\)/g, "$1")} />
                   </span>
                   {phase === "hidden" && info.classroom?.connected ? (
-                    <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => ask(C.prompts.show(label(item.text)))}>
+                    <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.show(label(item.text)))}>
                       {C.showToStudents}
                     </button>
                   ) : phase !== "served" ? (
-                    <button type="button" className="btn small" disabled={chat.busy} onClick={() => compose?.(C.prompts.resume(label(item.text)))}>
+                    <button type="button" className="btn small" {...whileBusy(chat.busy)} onClick={() => compose?.(C.prompts.resume(label(item.text)))}>
                       {C.resume}
                     </button>
                   ) : null}
@@ -518,7 +523,7 @@ export function KnowledgeView({ chat, C, ask, page, setPage }: Common & { page: 
         <input className="field search-field" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={C.searchKb} aria-label={C.searchKb} />
         <span className="sp" />
         <span className={`badge ${result.problems ? "warn" : "ok"}`}>{result.problems ? C.problems(result.problems) : C.noProblems}</span>
-        <button type="button" className="btn small" disabled={chat.busy} onClick={() => ask(C.prompts.lint)}>
+        <button type="button" className="btn small" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.lint)}>
           {C.lint}
         </button>
       </form>
@@ -667,7 +672,7 @@ export function SourcesView({ chat, C, ask, go, item, onNotice }: Common & { onN
       >
         <p>{C.drop}</p>
         <div className="row center-row">
-          <button type="button" className="btn small" disabled={chat.busy || Boolean(uploading)} onClick={() => input.current?.click()}>
+          <button type="button" className="btn small" {...whileBusy(chat.busy, Boolean(uploading))} onClick={() => input.current?.click()}>
             {C.chooseFiles}
           </button>
           <button type="button" className="btn small" onClick={() => void act("open-folder", { which: "sources" })}>
@@ -676,7 +681,7 @@ export function SourcesView({ chat, C, ask, go, item, onNotice }: Common & { onN
           {pending > 0 && (
             <>
               <span className="muted">{C.or}</span>
-              <button type="button" className="btn small primary" disabled={chat.busy} onClick={() => ask(C.prompts.ingest)}>
+              <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.ingest)}>
                 {C.ingestAll}
               </button>
             </>

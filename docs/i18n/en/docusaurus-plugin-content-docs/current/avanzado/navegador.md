@@ -34,6 +34,8 @@ They're the same subjects you see in the terminal with `miyagi workspaces`.
 
 At the top of each view, its title; in the conversation, the conversation's title and the ✎ button to start a new one.
 
+At the bottom, while miyagi or the page itself is doing something, the **status bar** says so in any view: on opening the subject, that it's reading what it knows of it to greet you; during a turn, what it's doing and for how long, with **Go to the conversation**; an approval or a question waiting for you, highlighted; and what the page does, like installing an extension or connecting the classroom. What has to wait until miyagi finishes stays disabled and, when you hover over it, tells you why; you can keep looking at the views meanwhile.
+
 In the conversation:
 
 - **A new conversation** greets you and offers what you ask for often: building a unit, taking in your documents (with how many are left) and, with the classroom, grading what's pending and checking the forum; without one, linking it. miyagi receives what you click as if you'd typed it.

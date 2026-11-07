@@ -131,6 +131,14 @@ button { font: inherit; color: inherit; }
 /* On a desktop popovers stay popovers: no scrim, no grab bar */
 .pop-scrim, .grab { display: none; }
 
+/* The status bar (#80): what miyagi or the host is doing, under every view; collapsed when idle, its live region still there. */
+.status-bar { display: flex; align-items: center; gap: 10px; min-height: 0; max-height: 0; overflow: hidden; padding: 0 14px; font-size: 14px; background: var(--bg-2); border-top: 0 solid var(--line); transition: max-height .15s ease; }
+.status-bar.on { max-height: 64px; min-height: 40px; padding: 6px 14px; border-top-width: 1px; }
+.status-bar.ask { background: var(--sun-soft); }
+.status-bar .status-text { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.status-bar .status-text .grow { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status-bar .status-time { font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .status-bar { transition: none; } }
 .banner { background: var(--warn-soft); color: var(--text); border-bottom: 1px solid var(--warn); padding: 8px 14px; font-size: 14px; }
 
 /* Chat */

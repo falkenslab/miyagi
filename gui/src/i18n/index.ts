@@ -86,6 +86,16 @@ export interface Texts {
   forgetHelp: string;
   opening: string;
   stillWorking: string;
+  /** The status bar (#80): what miyagi or the host is doing, and why a button waits. */
+  status: {
+    greeting: string;
+    thinking: string;
+    approval: string;
+    question: string;
+    goToChat: string;
+    why: string;
+    tasks: Record<string, string>;
+  };
   checkingKey: string;
   creatingSubject: string;
   starting: string;
@@ -192,6 +202,32 @@ const es: Texts = {
   forgetHelp: "Se quita de la lista; su carpeta no se toca.",
   opening: "Abriendo la asignatura…",
   stillWorking: "Sigue trabajando, un momento…",
+  status: {
+    greeting: "Leyendo lo que sé de la asignatura para saludarte",
+    thinking: "miyagi está trabajando",
+    approval: "miyagi espera tu aprobación",
+    question: "miyagi te ha hecho una pregunta",
+    goToChat: "Ir a la conversación",
+    why: "Espera a que miyagi termine lo que está haciendo (lo ves en la barra de abajo)",
+    tasks: {
+      "install": "Instalando la extensión",
+      "update": "Actualizando la extensión",
+      "remove": "Quitando la extensión",
+      "reload": "Recargando las extensiones",
+      "add-marketplace": "Leyendo el repositorio",
+      "inspect-marketplace": "Leyendo el repositorio",
+      "remove-marketplace": "Quitando el repositorio",
+      "classroom": "Conectando el aula",
+      "create": "Creando la asignatura",
+      "open": "Abriendo la asignatura",
+      "add-existing": "Abriendo la asignatura",
+      "locate": "Abriendo la asignatura",
+      "new": "Abriendo una conversación nueva",
+      "resume": "Abriendo la conversación",
+      "upload": "Añadiendo el archivo a las fuentes",
+      "pick-folder": "Eligiendo una carpeta",
+    },
+  },
   checkingKey: "Comprobando tu clave…",
   creatingSubject: "Creando la asignatura…",
   starting: "Arrancando miyagi… La primera vez tarda un poco.",
@@ -298,6 +334,32 @@ const en: Texts = {
   forgetHelp: "It leaves the list; its folder isn't touched.",
   opening: "Opening the subject…",
   stillWorking: "Still working, one moment…",
+  status: {
+    greeting: "Reading what I know of the subject to greet you",
+    thinking: "miyagi is working",
+    approval: "miyagi is waiting for your approval",
+    question: "miyagi has asked you a question",
+    goToChat: "Go to the conversation",
+    why: "Wait until miyagi finishes what it's doing (it's in the bar below)",
+    tasks: {
+      "install": "Installing the extension",
+      "update": "Updating the extension",
+      "remove": "Removing the extension",
+      "reload": "Reloading the extensions",
+      "add-marketplace": "Reading the repository",
+      "inspect-marketplace": "Reading the repository",
+      "remove-marketplace": "Removing the repository",
+      "classroom": "Connecting the classroom",
+      "create": "Creating the subject",
+      "open": "Opening the subject",
+      "add-existing": "Opening the subject",
+      "locate": "Opening the subject",
+      "new": "Opening a new conversation",
+      "resume": "Opening the conversation",
+      "upload": "Adding the file to the sources",
+      "pick-folder": "Choosing a folder",
+    },
+  },
   checkingKey: "Checking your key…",
   creatingSubject: "Creating the subject…",
   starting: "Starting miyagi… The first time takes a little longer.",
@@ -404,6 +466,32 @@ const fr: Texts = {
   forgetHelp: "Elle quitte la liste ; son dossier n'est pas touché.",
   opening: "Ouverture de la matière…",
   stillWorking: "Toujours en cours, un instant…",
+  status: {
+    greeting: "Je lis ce que je sais de la matière pour vous saluer",
+    thinking: "miyagi travaille",
+    approval: "miyagi attend votre approbation",
+    question: "miyagi vous a posé une question",
+    goToChat: "Aller à la conversation",
+    why: "Attendez que miyagi termine ce qu'il fait (c'est dans la barre du bas)",
+    tasks: {
+      "install": "Installation de l'extension",
+      "update": "Mise à jour de l'extension",
+      "remove": "Retrait de l'extension",
+      "reload": "Rechargement des extensions",
+      "add-marketplace": "Lecture du dépôt",
+      "inspect-marketplace": "Lecture du dépôt",
+      "remove-marketplace": "Retrait du dépôt",
+      "classroom": "Connexion de la classe",
+      "create": "Création de la matière",
+      "open": "Ouverture de la matière",
+      "add-existing": "Ouverture de la matière",
+      "locate": "Ouverture de la matière",
+      "new": "Ouverture d'une nouvelle conversation",
+      "resume": "Ouverture de la conversation",
+      "upload": "Ajout du fichier aux sources",
+      "pick-folder": "Choix d'un dossier",
+    },
+  },
   checkingKey: "Vérification de votre clé…",
   creatingSubject: "Création de la matière…",
   starting: "Démarrage de miyagi… La première fois, c'est un peu plus long.",
@@ -510,6 +598,32 @@ const de: Texts = {
   forgetHelp: "Es verschwindet aus der Liste; sein Ordner bleibt unberührt.",
   opening: "Fach wird geöffnet…",
   stillWorking: "Arbeitet noch, einen Moment…",
+  status: {
+    greeting: "Ich lese, was ich über das Fach weiß, um Sie zu begrüßen",
+    thinking: "miyagi arbeitet",
+    approval: "miyagi wartet auf Ihre Freigabe",
+    question: "miyagi hat Ihnen eine Frage gestellt",
+    goToChat: "Zum Gespräch",
+    why: "Warten Sie, bis miyagi fertig ist (unten in der Leiste zu sehen)",
+    tasks: {
+      "install": "Erweiterung wird installiert",
+      "update": "Erweiterung wird aktualisiert",
+      "remove": "Erweiterung wird entfernt",
+      "reload": "Erweiterungen werden neu geladen",
+      "add-marketplace": "Repository wird gelesen",
+      "inspect-marketplace": "Repository wird gelesen",
+      "remove-marketplace": "Repository wird entfernt",
+      "classroom": "Kursraum wird verbunden",
+      "create": "Fach wird angelegt",
+      "open": "Fach wird geöffnet",
+      "add-existing": "Fach wird geöffnet",
+      "locate": "Fach wird geöffnet",
+      "new": "Neues Gespräch wird geöffnet",
+      "resume": "Gespräch wird geöffnet",
+      "upload": "Datei wird zu den Quellen hinzugefügt",
+      "pick-folder": "Ordner wird gewählt",
+    },
+  },
   checkingKey: "Ihr Schlüssel wird geprüft…",
   creatingSubject: "Fach wird angelegt…",
   starting: "miyagi startet… Beim ersten Mal dauert es etwas länger.",

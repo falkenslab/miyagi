@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import type { ActionTexts } from "../i18n/actions";
 import type { ActionParameter, PageAction } from "../types";
+import { whileBusy } from "./StatusBar";
 
 // miyagi's commands as actions of the page (contextual-actions #67): the catalog in ＋, the ⋯ menu
 // of each item (also its right click, Shift+F10 or the menu key, and a long press on a phone), and
@@ -141,7 +142,7 @@ function ParameterForm({ action, value, kinds, close, back }: { action: PageActi
         <button type="button" className="btn small" onClick={back}>
           {A.cancel}
         </button>
-        <button type="submit" className="btn small primary" disabled={invalid || api.busy}>
+        <button type="submit" className="btn small primary" {...whileBusy(api.busy, invalid)}>
           {A.send}
         </button>
       </div>
@@ -183,7 +184,7 @@ export function ActionList({ list, value, kinds = [], close, grouped = false }: 
           <button type="button" className="btn small" onClick={() => setAsking(null)}>
             {A.cancel}
           </button>
-          <button type="submit" className="btn small primary" disabled={!text.trim() || api.busy}>
+          <button type="submit" className="btn small primary" {...whileBusy(api.busy, !text.trim())}>
             {A.send}
           </button>
         </div>
@@ -197,8 +198,8 @@ export function ActionList({ list, value, kinds = [], close, grouped = false }: 
         type="button"
         role="menuitem"
         data-command={action.command}
-        disabled={off || (api.busy && !action.opens)}
-        title={off ? A.needsClassroom : undefined}
+        {...whileBusy(api.busy && !action.opens, off)}
+        {...(off ? { title: A.needsClassroom } : {})}
         onClick={() => {
           if (action.parameters?.length || (action.ask && !value && !action.opens)) return setAsking(action);
           close();
@@ -400,12 +401,12 @@ export function SelectionMenu() {
   return (
     <div ref={box} className="select-menu" role="menu" style={{ left: shown.x, top: shown.y }} onMouseDown={(event) => event.preventDefault()}>
       {research && (
-        <button type="button" role="menuitem" disabled={api.busy} onClick={() => (done(), api.run(research, oneLine(shown.text)))}>
+        <button type="button" role="menuitem" {...whileBusy(api.busy)} onClick={() => (done(), api.run(research, oneLine(shown.text)))}>
           {research.icon} {api.A.researchThis}
         </button>
       )}
       {quiz && (
-        <button type="button" role="menuitem" disabled={api.busy} onClick={() => (done(), api.run(quiz, oneLine(shown.text)))}>
+        <button type="button" role="menuitem" {...whileBusy(api.busy)} onClick={() => (done(), api.run(quiz, oneLine(shown.text)))}>
           {quiz.icon} {api.A.quizThis}
         </button>
       )}
@@ -427,7 +428,7 @@ export function GroupActions({ group }: { group: string }) {
       {list.map((action) => {
         const off = Boolean(action.needsClassroom && !api.connected);
         return (
-          <button key={action.command} type="button" className="btn small" data-command={action.command} disabled={off || (api.busy && !action.opens)} title={off ? api.A.needsClassroom : undefined} onClick={() => api.run(action)}>
+          <button key={action.command} type="button" className="btn small" data-command={action.command} {...whileBusy(api.busy && !action.opens, off)} {...(off ? { title: api.A.needsClassroom } : {})} onClick={() => api.run(action)}>
             <span aria-hidden="true">{action.icon}</span> {actionLabel(action, api.lang)}
           </button>
         );

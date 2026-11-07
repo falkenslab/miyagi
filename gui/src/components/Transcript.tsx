@@ -8,6 +8,7 @@ import { actionLabel, launched, useActions } from "./Actions";
 import { Icon } from "./Icons";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
+import { whileBusy } from "./StatusBar";
 
 /** Where the host says a named item opens (`resolve`, #66). */
 interface ItemPlace {
@@ -214,7 +215,7 @@ function Suggestions({ chat }: { chat: ChatState }) {
   return (
     <div className="suggest">
       {usable.map((action) => (
-        <button key={action.command} type="button" disabled={chat.busy} onClick={() => api.run(action)}>
+        <button key={action.command} type="button" {...whileBusy(chat.busy)} onClick={() => api.run(action)}>
           <span className="act-icon" aria-hidden="true">
             {action.icon}
           </span>
