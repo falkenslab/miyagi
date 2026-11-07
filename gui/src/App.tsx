@@ -7,6 +7,7 @@ import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./compon
 import { Panel } from "./components/Panel";
 import { Header, Sidebar, type Theme, type View } from "./components/Shell";
 import { SignIn } from "./components/SignIn";
+import { setCanPick } from "./components/PathField";
 import { setBusyReason, StatusBar } from "./components/StatusBar";
 import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
 import { Transcript } from "./components/Transcript";
@@ -46,6 +47,7 @@ export function App() {
   const X = extTexts(chat?.language ?? info?.language);
   const C = courseTexts(chat?.language ?? info?.language);
   setBusyReason(T.status.why);
+  setCanPick(Boolean(info?.pickFolder));
   /** A line to the chat from a view's button: sent as the teacher would type it, and the conversation shown. */
   const ask = (line: string) => {
     if (!chat || chat.busy) return;

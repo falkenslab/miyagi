@@ -30,6 +30,8 @@ Desde el selector de asignaturas (o la pantalla de inicio, si no tienes ninguna)
 - **Abrir una carpeta** añade a tu lista una asignatura que ya tienes en el disco, por ejemplo copiada de un compañero.
 - Una asignatura cuya carpeta se movió aparece como no encontrada: **Localizar** la apunta a su carpeta nueva y **Olvidar** la quita de la lista sin tocar su carpeta.
 
+Donde te pide una carpeta (la de una asignatura nueva, **Abrir una carpeta**, **Localizar** o un repositorio de extensiones en tu disco), **📁 Examinar…** abre el diálogo de carpetas de tu sistema: la que elijas rellena el campo, que puedes seguir cambiando.
+
 Son las mismas asignaturas que ves en la terminal con `miyagi workspaces`.
 
 Arriba, en cada vista, su título; en la conversación, el título de la conversación y el botón ✎ para empezar una nueva.

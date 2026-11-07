@@ -12,6 +12,7 @@ import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js"
 import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
 import { draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
+import { systemFolderPicker, type FolderPicker } from "./folderPicker.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
 /**
@@ -82,6 +83,8 @@ export interface HostOptions {
   port?: number;
   /** The token of the URL; a random one if not given. */
   token?: string;
+  /** The folder dialog (#79): the desktop app's own; without it, the system's, opened by the host. */
+  pickFolder?: FolderPicker;
 }
 
 export interface Host {
@@ -113,6 +116,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   const tokenForgotten = await forgetSavedClaudeToken();
   let signedIn = await claudeAuthAvailable();
   let current: OpenSubject | null = null;
+  const pickFolder = options.pickFolder ?? systemFolderPicker();
+  let picking = false;
   /**
    * Signing in with a Claude account: Claude Code's own sign-in (`claude auth login`), run by
    * the kit. The page shows its address (the binary opens the browser itself) and a box for the
@@ -241,7 +246,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const room = current?.prepared.workspace?.classroom;
     return room ? { url: room.url, courseId: room.courseId, connected: Boolean(current?.prepared.classroom) } : null;
   };
-  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom() });
+  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder) });
   function send(event: string, data: unknown): void {
     client?.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
   }
@@ -268,6 +273,18 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   /** What the person does, by path: the subjects, signing in, then one to one to the chat controller. */
   async function act(action: string, data: Record<string, unknown>): Promise<unknown> {
     switch (action) {
+      // A folder chosen in the system's dialog, for a field that asks for one: one dialog at a time.
+      case "pick-folder": {
+        if (!pickFolder) return { error: "no dialog" };
+        if (picking) return { error: "busy" };
+        picking = true;
+        try {
+          const chosen = await pickFolder(String(data.title ?? ""), data.start ? String(data.start) : undefined);
+          return chosen ? { path: chosen } : {};
+        } finally {
+          picking = false;
+        }
+      }
       // An API key pasted: the only key the page takes (a subscription is signed in with).
       case "login":
         if (!(await saveClaudeKey(String(data.token ?? "")))) return { error: "invalid" };

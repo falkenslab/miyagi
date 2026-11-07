@@ -196,6 +196,8 @@ export interface Info {
   workspace: string | null;
   /** The subject's Moodle course, and whether moodle-teacher reaches it now; null without one. */
   classroom: { url: string; courseId: string; connected: boolean } | null;
+  /** Whether the host can open the system's folder dialog (#79). */
+  pickFolder?: boolean;
 }
 
 export interface HostState {

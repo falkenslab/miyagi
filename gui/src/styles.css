@@ -271,6 +271,11 @@ th { background: var(--panel-2); }
 .options { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
 .option { display: flex; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-height: 44px; cursor: pointer; background: var(--panel); text-align: left; }
 .option.checked, .option:hover { border-color: var(--sun); }
+/* A folder field (#79): the path and "Browse…" on one line; the button under it on a phone. */
+.path-field { display: flex; gap: 8px; align-items: center; }
+.path-field .field { flex: 1; min-width: 0; }
+.path-field .btn { margin-top: 6px; white-space: nowrap; min-height: 44px; }
+@media (max-width: 480px) { .path-field { flex-wrap: wrap; } .path-field .btn { width: 100%; } }
 .field { width: 100%; padding: 10px 12px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--bg); color: var(--text); font: inherit; margin-top: 6px; }
 .lb { display: block; font-size: 14px; color: var(--text-2); margin: 10px 0 4px; font-weight: 600; }
 .check { display: flex; gap: 10px; align-items: center; min-height: 44px; }

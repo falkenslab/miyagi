@@ -81,6 +81,7 @@ export interface ExtTexts {
   extensionsCount: (n: number) => string;
   addRepo: string;
   repoSource: string;
+  browse: string;
   repoSourceHelp: string;
   review: string;
   repoBy: (name: string, owner: string) => string;
@@ -220,6 +221,7 @@ const es: ExtTexts = {
   extensionsCount: (n) => (n === 1 ? "1 extensión" : `${n} extensiones`),
   addRepo: "Añadir un repositorio",
   repoSource: "Dónde está",
+  browse: "Examinar…",
   repoSourceHelp: "Una dirección git (https://….git), propietario/repositorio de GitHub o una carpeta.",
   review: "Revisar",
   repoBy: (name, owner) => `«${name}», de ${owner}`,
@@ -355,6 +357,7 @@ const en: ExtTexts = {
   extensionsCount: (n) => (n === 1 ? "1 extension" : `${n} extensions`),
   addRepo: "Add a repository",
   repoSource: "Where it is",
+  browse: "Browse…",
   repoSourceHelp: "A git address (https://….git), a GitHub owner/repository or a folder.",
   review: "Review",
   repoBy: (name, owner) => `"${name}", by ${owner}`,
@@ -490,6 +493,7 @@ const fr: ExtTexts = {
   extensionsCount: (n) => (n === 1 ? "1 extension" : `${n} extensions`),
   addRepo: "Ajouter un dépôt",
   repoSource: "Où il se trouve",
+  browse: "Parcourir…",
   repoSourceHelp: "Une adresse git (https://….git), propriétaire/dépôt GitHub ou un dossier.",
   review: "Examiner",
   repoBy: (name, owner) => `« ${name} », de ${owner}`,
@@ -625,6 +629,7 @@ const de: ExtTexts = {
   extensionsCount: (n) => (n === 1 ? "1 Erweiterung" : `${n} Erweiterungen`),
   addRepo: "Repository hinzufügen",
   repoSource: "Wo es liegt",
+  browse: "Durchsuchen…",
   repoSourceHelp: "Eine Git-Adresse (https://….git), GitHub-Besitzer/Repository oder ein Ordner.",
   review: "Prüfen",
   repoBy: (name, owner) => `„${name}“, von ${owner}`,

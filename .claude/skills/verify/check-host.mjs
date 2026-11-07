@@ -28,7 +28,14 @@ if (process.env.CHECK_HOST_CHILD !== "1") {
 }
 
 const { startHost } = await import(pathToFileURL(path.join(process.cwd(), "dist/host/server.js")).href);
-const host = await startHost(undefined, {});
+// The folder dialog (#79), stubbed: what it was asked, and a pause so a second one finds it open.
+const asked = [];
+const pickFolder = async (title, start) => {
+  asked.push({ title, start });
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  return title === "cancel" ? undefined : path.join(os.homedir(), "elegida");
+};
+const host = await startHost(undefined, { pickFolder });
 const url = new URL(host.url);
 const token = url.searchParams.get("token");
 const base = url.origin;
@@ -78,6 +85,11 @@ check("no code without a sign-in under way", (await post("signin-code", { code: 
 
 check("a key that isn't one is refused", (await post("login", { token: "not-a-key" })).error === "invalid");
 check("no subjects yet", (await post("workspaces")).workspaces?.length === 0);
+check("info says the host has a folder dialog", events[0]?.data?.pickFolder === true);
+const [picked, again] = await Promise.all([post("pick-folder", { title: "Carpeta", start: "C:/inicio" }), post("pick-folder", { title: "otra" })]);
+check("the folder chosen in the dialog comes back, with the dialog's title and start", picked.path === path.join(os.homedir(), "elegida") && asked[0]?.title === "Carpeta" && asked[0]?.start === "C:/inicio");
+check("a second dialog while one is open is refused", again.error === "busy" && asked.length === 1);
+check("a cancelled dialog gives no folder", !("path" in (await post("pick-folder", { title: "cancel" }))));
 check("a subject that isn't registered can't be opened", (await post("open", { id: "../somewhere" })).error === "unknown subject");
 check("a subject without a name can't be created", Boolean((await post("create", { label: "  " })).error));
 const created = await post("create", { label: "Comprobación del host" });
@@ -149,4 +161,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser");
+console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser, the folder dialog");

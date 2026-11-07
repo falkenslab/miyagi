@@ -49,7 +49,13 @@ async function start() {
   const { startHost } = await import("./miyagi/dist/host/server.js");
   // For automated checks only: a subject of their own, instead of the one opened last.
   // Nothing chose the interface language before: the host does, as the terminal would.
-  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined, { chooseLanguage: true });
+  // The folder dialog is Electron's, on top of this window (#79).
+  const pickFolder = async (title, start) => {
+    const options = { title, defaultPath: start, properties: ["openDirectory", "createDirectory"] };
+    const { canceled, filePaths } = await (window ? dialog.showOpenDialog(window, options) : dialog.showOpenDialog(options));
+    return canceled ? undefined : filePaths[0];
+  };
+  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined, { chooseLanguage: true, pickFolder });
   // For automated checks only: where the page is.
   if (process.env.MIYAGI_DESKTOP_URL_FILE) writeFileSync(process.env.MIYAGI_DESKTOP_URL_FILE, host.url);
 

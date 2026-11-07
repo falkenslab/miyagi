@@ -6,6 +6,7 @@ import { GroupActions } from "./Actions";
 import { Dialog } from "./Panel";
 import { Waiting } from "./Waiting";
 import { whileBusy } from "./StatusBar";
+import { PathField } from "./PathField";
 
 // The extensions view (gui-extensions #50), as the mockup draws it: tabs for what's installed (cards
 // with a switch), the catalog, the repositories and what miyagi can do; an extension's details and
@@ -606,15 +607,16 @@ function AddRepositoryDialog({ X, onNotice, onClose, onAdded }: { X: ExtTexts; o
         <label className="lb" htmlFor="repo-source">
           {X.repoSource}
         </label>
-        <input
+        <PathField
           id="repo-source"
-          className="field"
           value={source}
           placeholder="github.com/mi-centro/miyagi-extensiones"
-          onChange={(event) => {
-            setSource(event.target.value);
+          onChange={(next) => {
+            setSource(next);
             setFound(null);
           }}
+          title={X.repoSource}
+          browse={X.browse}
         />
         <small className="muted">{X.repoSourceHelp}</small>
         {found && (

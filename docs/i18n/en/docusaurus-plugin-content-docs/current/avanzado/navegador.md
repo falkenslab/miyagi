@@ -30,6 +30,8 @@ From the subject picker (or the start screen, if you have none):
 - **Open a folder** adds to your list a subject you already have on disk, for example copied from a colleague.
 - A subject whose folder was moved shows up as not found: **Locate** points it to its new folder and **Forget** removes it from the list without touching its folder.
 
+Where it asks for a folder (a new subject's, **Open a folder**, **Locate** or a repository of extensions on your disk), **📁 Browse…** opens your system's folder dialog: the one you choose fills the field, which you can still change.
+
 They're the same subjects you see in the terminal with `miyagi workspaces`.
 
 At the top of each view, its title; in the conversation, the conversation's title and the ✎ button to start a new one.

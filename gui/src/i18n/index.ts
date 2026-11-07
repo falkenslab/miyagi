@@ -102,6 +102,8 @@ export interface Texts {
   unreachable: string;
   chooseFolder: string;
   folderLabel: string;
+  /** The button that opens the system's folder dialog (#79). */
+  browse: string;
   folderHelp: string;
   folderNotEmpty: string;
   folderIsSubject: string;
@@ -234,6 +236,7 @@ const es: Texts = {
   unreachable: "No se pudo hablar con miyagi. Comprueba que sigue abierto y vuelve a intentarlo.",
   chooseFolder: "Elegir carpeta",
   folderLabel: "Carpeta de la asignatura (opcional)",
+  browse: "Examinar…",
   folderHelp: "Una carpeta vacía o nueva, por ejemplo en tu nube. Si la dejas vacía, va a la carpeta de miyagi.",
   folderNotEmpty: "Esa carpeta no está vacía: elige otra, o una nueva.",
   folderIsSubject: "Esa carpeta ya es una asignatura: ábrela con «Abrir una carpeta».",
@@ -366,6 +369,7 @@ const en: Texts = {
   unreachable: "Couldn't reach miyagi. Check it's still open and try again.",
   chooseFolder: "Choose a folder",
   folderLabel: "The subject's folder (optional)",
+  browse: "Browse…",
   folderHelp: "An empty or new folder, for example in your cloud. Left empty, it goes to miyagi's folder.",
   folderNotEmpty: "That folder isn't empty: choose another one, or a new one.",
   folderIsSubject: "That folder is a subject already: open it with \"Open a folder\".",
@@ -498,6 +502,7 @@ const fr: Texts = {
   unreachable: "Impossible de joindre miyagi. Vérifiez qu'il est toujours ouvert et réessayez.",
   chooseFolder: "Choisir un dossier",
   folderLabel: "Dossier de la matière (facultatif)",
+  browse: "Parcourir…",
   folderHelp: "Un dossier vide ou nouveau, par exemple dans ton cloud. Laissé vide, il va dans le dossier de miyagi.",
   folderNotEmpty: "Ce dossier n'est pas vide : choisis-en un autre, ou un nouveau.",
   folderIsSubject: "Ce dossier est déjà une matière : ouvre-le avec « Ouvrir un dossier ».",
@@ -630,6 +635,7 @@ const de: Texts = {
   unreachable: "miyagi ist nicht erreichbar. Prüfen Sie, ob es noch geöffnet ist, und versuchen Sie es erneut.",
   chooseFolder: "Ordner wählen",
   folderLabel: "Ordner des Fachs (optional)",
+  browse: "Durchsuchen…",
   folderHelp: "Ein leerer oder neuer Ordner, zum Beispiel in deiner Cloud. Leer gelassen, kommt es in den Ordner von miyagi.",
   folderNotEmpty: "Dieser Ordner ist nicht leer: Wähle einen anderen oder einen neuen.",
   folderIsSubject: "Dieser Ordner ist schon ein Fach: Öffne ihn mit „Ordner öffnen“.",

@@ -4,6 +4,7 @@ import type { Texts } from "../i18n";
 import type { Subject } from "../types";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
+import { PathField } from "./PathField";
 
 /** The subjects in miyagi's registry, newest opened first, and which one is open. */
 export function useSubjects(): { subjects: Subject[] | null; reload: () => Promise<void> } {
@@ -87,7 +88,7 @@ export function NewSubjectForm({ T, onCancel, onLink }: { T: Texts; onCancel?: (
         <>
           <label className="lb">
             {T.folderLabel}
-            <input className="field" value={folder} onChange={(event) => setFolder(event.target.value)} spellCheck={false} />
+            <PathField value={folder} onChange={setFolder} title={T.folderLabel} browse={T.browse} />
           </label>
           <small className="muted">{T.folderHelp}</small>
         </>
@@ -169,7 +170,7 @@ export function SubjectList({ subjects, current, T, onOpen, onChanged }: { subje
               <label className="lb" htmlFor={`locate-${subject.id}`}>
                 {T.locateHelp}
               </label>
-              <input id={`locate-${subject.id}`} className="field" value={dir} onChange={(event) => setDir(event.target.value)} placeholder={subject.dir} autoFocus />
+              <PathField id={`locate-${subject.id}`} value={dir} onChange={setDir} placeholder={subject.dir} autoFocus title={T.locateHelp} browse={T.browse} />
               {error && <p className="why">{error}</p>}
               <button type="submit" className="btn small primary" disabled={!dir.trim()}>
                 {T.locateSave}
@@ -204,7 +205,7 @@ export function OpenExisting({ T, onCancel }: { T: Texts; onCancel: () => void }
       <h3>{T.openExisting}</h3>
       <label className="lb">
         {T.openExistingHelp}
-        <input className="field" value={dir} onChange={(event) => setDir(event.target.value)} autoFocus spellCheck={false} disabled={opening} />
+        <PathField value={dir} onChange={setDir} autoFocus disabled={opening} title={T.openExisting} browse={T.browse} />
       </label>
       {opening && <Waiting text={T.opening} still={T.stillWorking} />}
       {error && <p className="why">{error}</p>}
