@@ -11,11 +11,14 @@ import { fileURLToPath } from "node:url";
 import { app, BrowserWindow, dialog, Menu, shell } from "electron";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
+// For automated checks only: a home of their own, so ~/.miyagi (the teacher's subjects and key)
+// is out of reach, and Electron's caches in it, set first, so the single-instance lock below is
+// theirs too.
+if (process.env.MIYAGI_DESKTOP_DATA) {
+  process.env.HOME = process.env.USERPROFILE = process.env.MIYAGI_DESKTOP_DATA;
+  app.setPath("userData", process.env.MIYAGI_DESKTOP_DATA);
+}
 const CONFIG = path.join(os.homedir(), ".miyagi", "config.json");
-
-// For automated checks only: Electron's caches somewhere of their own, set first, so the
-// single-instance lock below is theirs too.
-if (process.env.MIYAGI_DESKTOP_DATA) app.setPath("userData", process.env.MIYAGI_DESKTOP_DATA);
 
 // One window: a second launch brings the first to the front.
 if (!app.requestSingleInstanceLock()) {

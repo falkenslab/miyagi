@@ -40,6 +40,13 @@
       "miyagi/plugin/**",
       "miyagi/prompts/**"
     ],
+    "electronLanguages": [
+      "en-US",
+      "es",
+      "es-419",
+      "fr",
+      "de"
+    ],
     "win": {
       "target": [
         "nsis"

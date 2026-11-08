@@ -84,7 +84,8 @@ Before uploading it, check the unpacked app in `desktop/dist/win-unpacked/`:
 - `resources/app.asar.unpacked/node_modules/@anthropic-ai/claude-agent-sdk-win32-x64/claude.exe`
   exists (outside the asar: another process runs it);
 - `resources/app.asar.unpacked/miyagi/plugin/` and `.../miyagi/prompts/` exist;
-- it starts and shows the page, with a throwaway data folder and a scripted shot:
+- `locales/` holds only `en-US`, `es`, `es-419`, `fr` and `de` (`electronLanguages`, about 45 MB less);
+- it starts and shows the page, with a throwaway data folder (also its home, so your `~/.miyagi` is out of reach) and a scripted shot:
   `MIYAGI_DESKTOP_DATA=<scratchpad>/d MIYAGI_DESKTOP_SCRIPT=<steps.json> desktop/dist/win-unpacked/miyagi.exe`
   (steps as in `main.mjs`: wait for `.side .brand`, `shot`). Look at the image: the sidebar, and
   the version in its footer is this release's.
