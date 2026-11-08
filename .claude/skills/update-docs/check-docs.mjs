@@ -1,8 +1,8 @@
 // Fails if the docs site doesn't document something the code offers, in each of its languages
 // (docs/content/ in Spanish, docs/i18n/en/… in English): a skill of plugin/skills/, a command of
 // plugin/commands/, a CLI subcommand of src/cli.ts, a key of the workspace config.json, of the
-// global config or of agent.draftsLimits. Also fails when a Guía or Avanzado page, or the
-// roadmap, has no English version (the SQL tutorial is Spanish only, on purpose). It catches the
+// global config or of agent.draftsLimits. Also fails when a Guía, Casos de uso or Avanzado page, or
+// the roadmap, has no English version. It catches the
 // drift a new or renamed thing leaves behind; what a page *says* about it is the update-docs
 // skill's job.
 // Usage (from the repo root): node .claude/skills/update-docs/check-docs.mjs
@@ -70,7 +70,7 @@ for (const [locale, base] of Object.entries(LOCALES)) {
 
   // Every Guía and Avanzado page, and the roadmap, in each translation too.
   if (locale !== "es") {
-    for (const section of ["guia", "avanzado"]) {
+    for (const section of ["guia", "casos-de-uso", "avanzado"]) {
       for (const file of fs.readdirSync(path.join(root, LOCALES.es, section)).filter((f) => /\.mdx?$/.test(f))) page(path.join(section, file));
     }
     page("hoja-de-ruta.md");

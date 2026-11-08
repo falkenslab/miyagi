@@ -10,8 +10,8 @@ slug: /casos-de-uso/
 
 In this tutorial you'll see miyagi really at work, from start to finish, in a Moodle classroom that starts out empty. It's an **Introduction to SQL** unit for the first year of a vocational course in cross-platform application development (DAM): the students start their own **MariaDB server in a Docker container**, do just enough administration (a database and a user), create tables, insert data and run queries.
 
-:::note The tutorial is in Spanish
-The tutorial's pages and screenshots are in Spanish, because the course was built and photographed in Spanish. The English site links to them as they are.
+:::note The screenshots are in Spanish
+The course was built and photographed in Spanish, so the screenshots, the course's content and the names in it (the `tienda` database, the "Foro de dudas") are in Spanish. The text and what the teacher writes in the chat are translated here.
 :::
 
 All the screenshots are real. They were taken against a test Moodle ([moodle-sandbox](https://github.com/falkenslab/moodle-sandbox)), with test students who submit work and ask questions in the forum, and with miyagi exactly as you would install it. What the teacher writes in the chat looks like this:

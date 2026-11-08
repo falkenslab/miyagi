@@ -303,7 +303,7 @@ export default function Home() {
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="real-t">Watch it work in a real classroom</h2>
-              <p>An “Introduction to SQL” classroom built from scratch with miyagi, step by step and with real screenshots: from the teaching plan to the grading. The tutorial is in Spanish, the language it was built in.</p>
+              <p>An “Introduction to SQL” classroom built from scratch with miyagi, step by step and with real screenshots: from the teaching plan to the grading. Its screenshots are in Spanish, the language it was built in.</p>
             </div>
             <figure className={s.shot}>
               <div className={s.window}>
