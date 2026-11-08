@@ -506,3 +506,20 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 .param-form label { display: grid; gap: 4px; }
 .param-form textarea.field { resize: vertical; min-height: 56px; font: inherit; }
 .param-form .field-error { color: var(--sun); font-size: 12.5px; }
+
+/* The editor of the teacher's own commands (#78). */
+.own-list { display: grid; gap: 8px; }
+.own-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
+.own-row .grow { min-width: 0; }
+.own-row small { display: block; }
+.own-form { display: grid; gap: 12px; }
+.own-form > label, .own-grid label, .own-param > label:not(.check) { display: grid; gap: 4px; align-content: start; }
+.own-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.own-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.own-form legend { padding: 0; margin-bottom: 6px; font-weight: 600; }
+.own-kinds label { display: inline-flex; margin-right: 14px; min-height: 32px; align-items: center; }
+.own-params { display: grid; gap: 8px; }
+.own-param { display: grid; gap: 8px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
+.own-instructions { resize: vertical; font: inherit; }
+.own-form .acts { flex-wrap: wrap; }
+.own-form .dangerbox ul { margin: 6px 0 0; padding-left: 18px; }

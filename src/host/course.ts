@@ -62,6 +62,17 @@ export async function knowledgePage(chat: ChatController, id: string) {
   return page ? { id: page.id, type: page.type, title: page.title, fields: page.fields, content: page.content, linkedFrom: page.linkedFrom } : { error: "no such page" };
 }
 
+/** The concepts a topic links or that link it: the words a form opened on it starts with (#78). */
+export async function topicWords(chat: ChatController, topic: string) {
+  const store = storeOf(chat);
+  const pages = ((await store?.list()) ?? []).filter((page) => page.status === "active");
+  const found = pages.find((page) => page.type === "topic" && (topic === page.title || topic.endsWith(` ${page.title}`)));
+  const read = found && (await store?.read(found.id));
+  if (!read) return { words: [] };
+  const linked = new Set([...read.linkedFrom, ...[...read.content.matchAll(/\]\((concept\/[\w-]+)\)/g)].map((match) => match[1]!)]);
+  return { words: pages.filter((page) => page.type === "concept" && linked.has(page.id)).map((page) => page.title).slice(0, 30) };
+}
+
 export async function knowledgeSearch(chat: ChatController, query: string) {
   return { hits: query.trim() ? ((await storeOf(chat)?.search(query, 20)) ?? []) : [] };
 }

@@ -142,6 +142,28 @@ for (const bad of ["materials/practicas.rubric.md", "drafts/../config.json", "..
 }
 check("a classroom that isn't a course's address connects nothing", (await post("classroom", { url: "not a url" })).error === "invalid");
 
+// The own commands' editor (#78): the same checks as miyagi's commands_save; what the editor doesn't show is kept, a forbidden key isn't.
+const ownFile = path.join(subjectDir, ".claude", "commands", "sopa.md");
+mkdirSync(path.dirname(ownFile), { recursive: true });
+writeFileSync(ownFile, "---\ndescription: Una sopa\nlabel: es=Sopa | en=Word search\nproduces: html-activity\nallowed-tools: Bash\nparameters:\n  - name: count\n    type: number\n    default: 10\n---\n\nHazla: $ARGUMENTS\n");
+const ownListed = (await post("own-commands")).commands ?? [];
+check("the editor lists an own command, with its parameters", ownListed.length === 1 && ownListed[0].command === "sopa" && ownListed[0].draft.parameters[0]?.default === 10 && ownListed[0].draft.label.es === "Sopa");
+const ownDraft = ownListed[0]?.draft;
+const ownSave = (changes, name = "sopa", previous = "sopa", scope = "subject") => post("own-command-save", { scope, name, previous, draft: { ...ownDraft, ...changes } });
+check("no parameters' place in the instructions, refused", (await ownSave({ instructions: "Sin valores" })).errors?.some((error) => error.includes("$ARGUMENTS")));
+check("no label, refused", (await ownSave({ label: { es: " " } })).errors?.some((error) => error.includes("label")));
+check("a shell line, refused", (await ownSave({ instructions: "!`dir` $ARGUMENTS" })).errors?.some((error) => error.includes("shell")));
+check("a name that isn't one, refused", (await ownSave({}, "../fuera")).errors?.length > 0 && !existsSync(path.join(subjectDir, ".claude", "fuera.md")));
+check("a command out of the folder can't be read", (await ownSave({}, "sopa", "../sopa")).errors?.length > 0);
+check("an unknown scope, refused", (await ownSave({}, "sopa", "sopa", "../x")).error === "unknown scope");
+check("…and none of those touched the file", readFileSync(ownFile, "utf8").includes("allowed-tools"));
+check("a good change saved", (await ownSave({ label: { es: "Sopa nueva", en: "Word search" }, parameters: [{ ...ownDraft.parameters[0], default: 12 }] })).errors?.length === 0);
+const ownSaved = readFileSync(ownFile, "utf8");
+check("…with what the editor doesn't show kept, a forbidden key gone", ownSaved.includes("Sopa nueva") && ownSaved.includes("default: 12") && ownSaved.includes("produces: html-activity") && !ownSaved.includes("allowed-tools"));
+check("renamed, the old file goes", (await ownSave({}, "sopa-dos")).errors?.length === 0 && !existsSync(ownFile) && existsSync(path.join(subjectDir, ".claude", "commands", "sopa-dos.md")));
+check("deleted", (await post("own-command-delete", { scope: "subject", name: "sopa-dos" })).errors?.length === 0 && ((await post("own-commands")).commands ?? []).length === 0);
+check("deleting one out of the folder is refused", (await post("own-command-delete", { scope: "subject", name: "../config" })).errors?.length > 0);
+
 // A repository in a folder: added only with its name typed, and forgotten again.
 const market = path.join(os.homedir(), "market");
 mkdirSync(path.join(market, ".claude-plugin"), { recursive: true });

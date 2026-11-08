@@ -110,6 +110,10 @@ miyagi asks what it doesn't know (on which items it should show up, whether it's
 
 From the next conversation (✎), the command shows in the ＋ catalog and in the **⋯** menu of the items it applies to. When you launch it, the page asks for its values in a form, with the topic already filled in if you opened it from a topic, and checks what's required and the numbers before sending it. In the conversation you see it by its name (🔤 Word search · …) and miyagi does it with the same approvals as always; what it prepares stays in **Materials**.
 
+If the form has a word list and you open it from a topic, the list starts with the knowledge base's concepts linked to that topic; you can change it before sending. If the topic has no linked concepts, it stays empty and miyagi chooses the words.
+
+To see or change your commands without talking to miyagi, go to **Extensions → My commands** and press **Edit**: its name, icon, where it shows, what it asks for and its instructions. **Try it** shows you how the form will look, and **Save**, once you confirm, applies the change in the same conversation, with the same checks as when miyagi saves one. **Delete** removes it, also after confirming. New commands are still made by talking to miyagi.
+
 Where it's saved:
 
 - **For this subject**: in its folder's `.claude/commands/`, like the shortcuts above; it's used as `/word-search`.

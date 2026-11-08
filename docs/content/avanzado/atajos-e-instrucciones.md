@@ -110,6 +110,10 @@ miyagi te pregunta lo que no sepa (en qué elementos debe salir, si es para esta
 
 Desde la siguiente conversación (✎), el comando sale en el catálogo del ＋ y en el menú **⋯** de los elementos a los que se aplica. Al lanzarlo, la página te pide sus datos en un formulario, con el tema ya puesto si lo abriste desde un tema, y comprueba lo obligatorio y los números antes de enviarlo. En la conversación lo ves con su nombre (🔤 Sopa de letras · …) y miyagi lo hace con las mismas aprobaciones de siempre; lo que prepara queda en **Materiales**.
 
+Si el formulario tiene una lista de palabras y lo abres desde un tema, la lista empieza con los conceptos de la base de conocimiento enlazados con ese tema; la puedes cambiar antes de enviarlo. Si el tema no tiene conceptos enlazados, se queda vacía y miyagi elige las palabras.
+
+Para ver o cambiar tus comandos sin hablar con miyagi, ve a **Extensiones → Mis comandos** y pulsa **Editar**: su nombre, su icono, dónde sale, los datos que pide y sus instrucciones. **Probar** te enseña cómo quedará el formulario, y **Guardar**, tras confirmarlo, aplica el cambio en la misma conversación, con las mismas comprobaciones que cuando lo guarda miyagi. **Eliminar** lo borra, también tras confirmarlo. Los comandos nuevos se siguen creando hablando con miyagi.
+
 Dónde se guarda:
 
 - **Para esta asignatura**: en `.claude/commands/` de su carpeta, como los atajos de arriba; se usa como `/sopa-de-letras`.

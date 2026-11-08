@@ -1,10 +1,53 @@
 // The extensions view's texts (gui-extensions #50), apart from the chat's: every language has
 // every key, and the type makes a missing one a build error.
 
+/** The editor of the teacher's own commands (#78). */
+export interface OwnTexts {
+  intro: string;
+  none: string;
+  scopeSubject: string;
+  scopeAll: string;
+  edit: string;
+  label: string;
+  icon: string;
+  group: string;
+  name: string;
+  nameHelp: string;
+  description: string;
+  appliesTo: string;
+  kinds: Record<string, string>;
+  parameters: string;
+  paramName: string;
+  paramLabel: string;
+  type: string;
+  types: Record<string, string>;
+  defaultValue: string;
+  min: string;
+  max: string;
+  options: string;
+  required: string;
+  up: (name: string) => string;
+  down: (name: string) => string;
+  removeParameter: string;
+  addParameter: string;
+  instructions: string;
+  instructionsHelp: string;
+  refused: string;
+  try: string;
+  tryTitle: (name: string) => string;
+  save: string;
+  saved: (name: string) => string;
+  confirmSave: (name: string) => string;
+  delete: string;
+  deleted: (name: string) => string;
+  confirmDelete: (name: string) => string;
+}
+
 export interface ExtTexts {
   title: string;
   open: string;
-  tabs: { capabilities: string; installed: string; catalog: string; repositories: string };
+  tabs: { capabilities: string; installed: string; commands: string; catalog: string; repositories: string };
+  own: OwnTexts;
   loading: string;
   busy: string;
   failed: (why: string) => string;
@@ -150,7 +193,47 @@ export interface ExtTexts {
 const es: ExtTexts = {
   title: "Lo que miyagi puede hacer",
   open: "Extensiones",
-  tabs: { capabilities: "Capacidades", installed: "Instaladas", catalog: "Catálogo", repositories: "Repositorios" },
+  tabs: { capabilities: "Capacidades", installed: "Instaladas", commands: "Mis comandos", catalog: "Catálogo", repositories: "Repositorios" },
+  own: {
+    intro: "Los comandos que has creado hablando con miyagi. Para crear uno nuevo, pídeselo en el chat.",
+    none: "Aún no tienes comandos propios.",
+    scopeSubject: "Esta asignatura",
+    scopeAll: "Todas las asignaturas",
+    edit: "Editar",
+    label: "Nombre que ves",
+    icon: "Icono",
+    group: "Grupo del catálogo",
+    name: "Nombre del comando",
+    nameHelp: "En minúsculas y con guiones. Es lo que se escribe en el chat tras la barra.",
+    description: "Para qué sirve",
+    appliesTo: "En qué elementos sale",
+    kinds: { topic: "Temas", material: "Materiales", quiz: "Cuestionarios", source: "Fuentes", page: "Páginas de conocimiento", plan: "La programación", oven: "En el horno", text: "Texto seleccionado" },
+    parameters: "Datos que pide",
+    paramName: "Identificador",
+    paramLabel: "Pregunta del formulario",
+    type: "Tipo",
+    types: { text: "Texto", number: "Número", choice: "Opciones", words: "Lista de palabras", topic: "Tema", source: "Fuente", page: "Página" },
+    defaultValue: "Valor inicial",
+    min: "Mínimo",
+    max: "Máximo",
+    options: "Opciones, separadas por comas",
+    required: "Obligatorio",
+    up: (name) => `Subir ${name}`,
+    down: (name) => `Bajar ${name}`,
+    removeParameter: "Quitar",
+    addParameter: "Añadir un dato",
+    instructions: "Instrucciones para miyagi",
+    instructionsHelp: "Si pide datos, escribe $ARGUMENTS donde deban ir sus valores.",
+    refused: "No se ha guardado:",
+    try: "Probar",
+    tryTitle: (name) => `Probar «${name}»`,
+    save: "Guardar",
+    saved: (name) => `Guardado: ${name}`,
+    confirmSave: (name) => `¿Guardar los cambios en «${name}»? Se aplican ya, en esta conversación.`,
+    delete: "Eliminar",
+    deleted: (name) => `Eliminado: ${name}`,
+    confirmDelete: (name) => `¿Eliminar «${name}»? No se puede deshacer.`,
+  },
   loading: "Cargando…",
   busy: "miyagi está trabajando: espera a que termine.",
   failed: (why) => `No se pudo: ${why}`,
@@ -286,7 +369,47 @@ const es: ExtTexts = {
 const en: ExtTexts = {
   title: "What miyagi can do",
   open: "Extensions",
-  tabs: { capabilities: "Capabilities", installed: "Installed", catalog: "Catalog", repositories: "Repositories" },
+  tabs: { capabilities: "Capabilities", installed: "Installed", commands: "My commands", catalog: "Catalog", repositories: "Repositories" },
+  own: {
+    intro: "The commands you made by talking to miyagi. To make a new one, ask for it in the chat.",
+    none: "You have no commands of your own yet.",
+    scopeSubject: "This subject",
+    scopeAll: "All subjects",
+    edit: "Edit",
+    label: "Name you see",
+    icon: "Icon",
+    group: "Catalog group",
+    name: "Command name",
+    nameHelp: "Lowercase with hyphens. It's what you type in the chat after the slash.",
+    description: "What it's for",
+    appliesTo: "Which items it shows on",
+    kinds: { topic: "Topics", material: "Materials", quiz: "Quizzes", source: "Sources", page: "Knowledge pages", plan: "The teaching plan", oven: "In the oven", text: "Selected text" },
+    parameters: "What it asks for",
+    paramName: "Identifier",
+    paramLabel: "Question on the form",
+    type: "Type",
+    types: { text: "Text", number: "Number", choice: "Options", words: "Word list", topic: "Topic", source: "Source", page: "Page" },
+    defaultValue: "Starting value",
+    min: "Minimum",
+    max: "Maximum",
+    options: "Options, comma-separated",
+    required: "Required",
+    up: (name) => `Move ${name} up`,
+    down: (name) => `Move ${name} down`,
+    removeParameter: "Remove",
+    addParameter: "Add a value",
+    instructions: "Instructions for miyagi",
+    instructionsHelp: "If it asks for values, write $ARGUMENTS where they should go.",
+    refused: "It wasn't saved:",
+    try: "Try it",
+    tryTitle: (name) => `Try "${name}"`,
+    save: "Save",
+    saved: (name) => `Saved: ${name}`,
+    confirmSave: (name) => `Save the changes to "${name}"? They apply now, in this conversation.`,
+    delete: "Delete",
+    deleted: (name) => `Deleted: ${name}`,
+    confirmDelete: (name) => `Delete "${name}"? This can't be undone.`,
+  },
   loading: "Loading…",
   busy: "miyagi is working: wait for it to finish.",
   failed: (why) => `It couldn't be done: ${why}`,
@@ -422,7 +545,47 @@ const en: ExtTexts = {
 const fr: ExtTexts = {
   title: "Ce que miyagi peut faire",
   open: "Extensions",
-  tabs: { capabilities: "Capacités", installed: "Installées", catalog: "Catalogue", repositories: "Dépôts" },
+  tabs: { capabilities: "Capacités", installed: "Installées", commands: "Mes commandes", catalog: "Catalogue", repositories: "Dépôts" },
+  own: {
+    intro: "Les commandes créées en parlant avec miyagi. Pour en créer une nouvelle, demande-la dans le chat.",
+    none: "Tu n'as pas encore de commandes personnelles.",
+    scopeSubject: "Cette matière",
+    scopeAll: "Toutes les matières",
+    edit: "Modifier",
+    label: "Nom affiché",
+    icon: "Icône",
+    group: "Groupe du catalogue",
+    name: "Nom de la commande",
+    nameHelp: "En minuscules avec des tirets. C'est ce qu'on écrit dans le chat après la barre oblique.",
+    description: "À quoi elle sert",
+    appliesTo: "Sur quels éléments elle apparaît",
+    kinds: { topic: "Thèmes", material: "Supports", quiz: "Quiz", source: "Sources", page: "Pages de connaissances", plan: "La programmation", oven: "Au four", text: "Texte sélectionné" },
+    parameters: "Ce qu'elle demande",
+    paramName: "Identifiant",
+    paramLabel: "Question du formulaire",
+    type: "Type",
+    types: { text: "Texte", number: "Nombre", choice: "Options", words: "Liste de mots", topic: "Thème", source: "Source", page: "Page" },
+    defaultValue: "Valeur initiale",
+    min: "Minimum",
+    max: "Maximum",
+    options: "Options, séparées par des virgules",
+    required: "Obligatoire",
+    up: (name) => `Monter ${name}`,
+    down: (name) => `Descendre ${name}`,
+    removeParameter: "Retirer",
+    addParameter: "Ajouter une valeur",
+    instructions: "Instructions pour miyagi",
+    instructionsHelp: "Si elle demande des valeurs, écris $ARGUMENTS là où elles doivent aller.",
+    refused: "Non enregistrée :",
+    try: "Essayer",
+    tryTitle: (name) => `Essayer « ${name} »`,
+    save: "Enregistrer",
+    saved: (name) => `Enregistrée : ${name}`,
+    confirmSave: (name) => `Enregistrer les modifications de « ${name} » ? Elles s'appliquent tout de suite, dans cette conversation.`,
+    delete: "Supprimer",
+    deleted: (name) => `Supprimée : ${name}`,
+    confirmDelete: (name) => `Supprimer « ${name} » ? C'est irréversible.`,
+  },
   loading: "Chargement…",
   busy: "miyagi travaille : attends qu'il ait fini.",
   failed: (why) => `Impossible : ${why}`,
@@ -558,7 +721,47 @@ const fr: ExtTexts = {
 const de: ExtTexts = {
   title: "Was miyagi kann",
   open: "Erweiterungen",
-  tabs: { capabilities: "Fähigkeiten", installed: "Installiert", catalog: "Katalog", repositories: "Repositorys" },
+  tabs: { capabilities: "Fähigkeiten", installed: "Installiert", commands: "Meine Befehle", catalog: "Katalog", repositories: "Repositorys" },
+  own: {
+    intro: "Die Befehle, die du im Gespräch mit miyagi erstellt hast. Für einen neuen frag im Chat danach.",
+    none: "Du hast noch keine eigenen Befehle.",
+    scopeSubject: "Dieses Fach",
+    scopeAll: "Alle Fächer",
+    edit: "Bearbeiten",
+    label: "Angezeigter Name",
+    icon: "Symbol",
+    group: "Katalog-Gruppe",
+    name: "Name des Befehls",
+    nameHelp: "Kleinbuchstaben mit Bindestrichen. Das schreibst du im Chat nach dem Schrägstrich.",
+    description: "Wofür er ist",
+    appliesTo: "Bei welchen Elementen er erscheint",
+    kinds: { topic: "Themen", material: "Materialien", quiz: "Tests", source: "Quellen", page: "Wissensseiten", plan: "Die Unterrichtsplanung", oven: "Im Ofen", text: "Markierter Text" },
+    parameters: "Was er abfragt",
+    paramName: "Kennung",
+    paramLabel: "Frage im Formular",
+    type: "Typ",
+    types: { text: "Text", number: "Zahl", choice: "Optionen", words: "Wortliste", topic: "Thema", source: "Quelle", page: "Seite" },
+    defaultValue: "Startwert",
+    min: "Minimum",
+    max: "Maximum",
+    options: "Optionen, durch Kommas getrennt",
+    required: "Pflichtfeld",
+    up: (name) => `${name} nach oben`,
+    down: (name) => `${name} nach unten`,
+    removeParameter: "Entfernen",
+    addParameter: "Wert hinzufügen",
+    instructions: "Anweisungen für miyagi",
+    instructionsHelp: "Wenn er Werte abfragt, schreibe $ARGUMENTS dorthin, wo sie stehen sollen.",
+    refused: "Nicht gespeichert:",
+    try: "Ausprobieren",
+    tryTitle: (name) => `„${name}“ ausprobieren`,
+    save: "Speichern",
+    saved: (name) => `Gespeichert: ${name}`,
+    confirmSave: (name) => `Änderungen an „${name}“ speichern? Sie gelten sofort, in diesem Gespräch.`,
+    delete: "Löschen",
+    deleted: (name) => `Gelöscht: ${name}`,
+    confirmDelete: (name) => `„${name}“ löschen? Das lässt sich nicht rückgängig machen.`,
+  },
   loading: "Wird geladen…",
   busy: "miyagi arbeitet: warte, bis es fertig ist.",
   failed: (why) => `Das ging nicht: ${why}`,

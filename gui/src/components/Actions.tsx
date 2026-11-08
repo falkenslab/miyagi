@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { act } from "../api";
 import type { ActionTexts } from "../i18n/actions";
 import type { ActionParameter, PageAction } from "../types";
 import { whileBusy } from "./StatusBar";
@@ -49,7 +50,7 @@ export function launched(actions: PageAction[], line: string): { action: PageAct
 const GROUPS = ["day", "create", "plan", "memory", "classroom"];
 
 /** A text in the page's language, from `{ es, en, … }` or `{ "*": … }`. */
-const inLanguage = (text: Record<string, string> | undefined, lang: string) => text?.[lang] ?? text?.en ?? text?.["*"] ?? "";
+export const inLanguage = (text: Record<string, string> | undefined, lang: string) => text?.[lang] ?? text?.en ?? text?.["*"] ?? "";
 
 /** The form's values as the command's line: `name: value` pairs, one line (#68). */
 export const argumentsLine = (values: Record<string, string>) =>
@@ -66,9 +67,10 @@ function initialValues(parameters: ActionParameter[], value: string | undefined,
 
 /**
  * An own command's form (#68): a field per parameter, prefilled from the item and the defaults,
- * checked before it's sent (required, numbers within their range).
+ * checked before it's sent (required, numbers within their range). `unsaved`: the editor's try of
+ * a command with changes not saved yet, which can be seen but not sent (#78).
  */
-function ParameterForm({ action, value, kinds, close, back }: { action: PageAction; value?: string; kinds: string[]; close: () => void; back: () => void }) {
+export function ParameterForm({ action, value, kinds, close, back, unsaved = false }: { action: PageAction; value?: string; kinds: string[]; close: () => void; back: () => void; unsaved?: boolean }) {
   const api = useActions()!;
   const { A, lang } = api;
   const parameters = action.parameters ?? [];
@@ -83,13 +85,28 @@ function ParameterForm({ action, value, kinds, close, back }: { action: PageActi
     return "";
   };
   const invalid = parameters.some((one) => problem(one));
+  // Opened on a topic, a word list starts with its concepts (#78); what's typed meanwhile stays.
+  useEffect(() => {
+    const words = parameters.find((one) => one.type === "words");
+    if (!words || !value || !kinds.includes("topic")) return;
+    let gone = false;
+    act<{ words?: string[] }>("topic-words", { topic: value })
+      .then((result) => {
+        if (!gone && result.words?.length) setValues((now) => (now[words.name]?.trim() ? now : { ...now, [words.name]: result.words!.join(", ") }));
+      })
+      .catch(() => undefined);
+    return () => {
+      gone = true;
+    };
+    // Once, when the form opens.
+  }, []);
   const set = (name: string, text: string) => setValues((now) => ({ ...now, [name]: text }));
   return (
     <form
       className="ask-form param-form"
       onSubmit={(event) => {
         event.preventDefault();
-        if (invalid) return;
+        if (invalid || unsaved) return;
         close();
         api.run(action, argumentsLine(values));
       }}
@@ -137,12 +154,13 @@ function ParameterForm({ action, value, kinds, close, back }: { action: PageActi
           </label>
         );
       })}
+      {unsaved && <small className="muted">{A.saveToSend}</small>}
       <div className="row">
         <span className="sp" />
         <button type="button" className="btn small" onClick={back}>
           {A.cancel}
         </button>
-        <button type="submit" className="btn small primary" {...whileBusy(api.busy, invalid)}>
+        <button type="submit" className="btn small primary" {...whileBusy(api.busy, invalid || unsaved)}>
           {A.send}
         </button>
       </div>

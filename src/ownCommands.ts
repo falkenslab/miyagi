@@ -1,8 +1,9 @@
-import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { splitFrontmatter } from "./materials/frontmatter.js";
+import { stringify } from "yaml";
+import { splitFrontmatter, stringList } from "./materials/frontmatter.js";
 
 /**
  * The teacher's own commands (teacher-commands #68): instructions with the parameters they need,
@@ -169,4 +170,100 @@ export async function saveOwn(workspaceDir: string, scope: CommandScope, name: s
   const file = path.join(dir, `${name}.md`);
   await writeFile(file, markdown.replace(/\r\n/g, "\n"), "utf-8");
   return scope === "all" ? `/${OWN_PLUGIN}:${name}` : `/${name}`;
+}
+
+/** An own command as the page's editor shows it and sends it back (#78). */
+export interface CommandDraft {
+  description: string;
+  label: Record<string, string>;
+  icon?: string;
+  group?: string;
+  appliesTo: string[];
+  parameters: Parameter[];
+  instructions: string;
+}
+
+/** What the editor doesn't show and a save keeps; anything else, `allowed-tools` above all, doesn't survive one. */
+const KEPT_KEYS = ["argument-hint", "needs-classroom", "ask", "suggest", "produces"];
+
+/** `{ es, en }` as `es=… | en=…`, `{ "*": text }` as the text; the empty ones left out. */
+function languagePairs(text: Record<string, string> | undefined): string {
+  const pairs = Object.entries(text ?? {}).filter(([, value]) => String(value).trim());
+  const every = pairs.find(([language]) => language === "*");
+  if (every) return every[1].trim();
+  return pairs.map(([language, value]) => `${language}=${value.trim().replace(/\|/g, "/")}`).join(" | ");
+}
+
+function draftOf(markdown: string): CommandDraft {
+  const { data, body } = splitFrontmatter(markdown);
+  const text = (key: string) => (typeof data[key] === "string" ? data[key] : undefined);
+  return {
+    description: text("description") ?? "",
+    label: perLanguage(data.label) ?? {},
+    icon: text("icon"),
+    group: text("group"),
+    appliesTo: stringList(data["applies-to"]),
+    parameters: readParameters(data.parameters).parameters,
+    instructions: body.trim(),
+  };
+}
+
+/** A draft as the command's file, with what the editor doesn't show taken from the file it replaces. */
+function markdownOf(draft: CommandDraft, previous: string): string {
+  const { data } = splitFrontmatter(previous);
+  const parameters = (draft.parameters ?? []).map((one) => ({
+    name: one.name,
+    label: languagePairs(one.label),
+    type: one.type,
+    ...(one.required ? { required: true } : {}),
+    ...(one.default !== undefined ? { default: one.default } : {}),
+    ...(one.min !== undefined ? { min: one.min } : {}),
+    ...(one.max !== undefined ? { max: one.max } : {}),
+    ...(one.options ? { options: one.options } : {}),
+    ...(languagePairs(one.help) ? { help: languagePairs(one.help) } : {}),
+  }));
+  const frontmatter = {
+    description: String(draft.description ?? "").trim(),
+    label: languagePairs(draft.label),
+    ...(draft.icon?.trim() ? { icon: draft.icon.trim() } : {}),
+    ...(draft.group ? { group: draft.group } : {}),
+    ...(draft.appliesTo?.length ? { "applies-to": draft.appliesTo.join(", ") } : {}),
+    ...Object.fromEntries(KEPT_KEYS.filter((key) => data[key] !== undefined).map((key) => [key, data[key]])),
+    ...(parameters.length ? { parameters } : {}),
+  };
+  return `---\n${stringify(frontmatter, { lineWidth: 0 }).trimEnd()}\n---\n\n${String(draft.instructions ?? "").trim()}\n`;
+}
+
+/** The own commands of both scopes, for the page's editor. */
+export async function ownCommands(workspaceDir: string) {
+  const inScope = async (scope: CommandScope) =>
+    Promise.all(
+      (await markdownFiles(commandsDirFor(scope, workspaceDir))).map(async (file) => {
+        const name = path.basename(file, ".md");
+        return { name, scope, command: scope === "all" ? `${OWN_PLUGIN}:${name}` : name, draft: draftOf(await readFile(path.join(commandsDirFor(scope, workspaceDir), file), "utf-8")) };
+      }),
+    );
+  return [...(await inScope("subject")), ...(await inScope("all"))];
+}
+
+/** Deletes an own command's file. */
+export async function deleteOwn(workspaceDir: string, scope: CommandScope, name: string): Promise<{ errors: string[] }> {
+  if (!/^[a-z0-9-]+$/.test(name)) return { errors: ["not a command name"] };
+  return unlink(path.join(commandsDirFor(scope, workspaceDir), `${name}.md`)).then(
+    () => ({ errors: [] }),
+    () => ({ errors: ["that command no longer exists"] }),
+  );
+}
+
+/** Saves what the editor changed on an existing command, under the same checks as `commands_save`; `previous` is its name before. */
+export async function saveDraft(workspaceDir: string, scope: CommandScope, name: string, draft: CommandDraft, previous: string): Promise<{ errors: string[] }> {
+  const old = await readOwn(workspaceDir, previous, scope).catch(() => undefined);
+  if (old === undefined) return { errors: ["that command no longer exists"] };
+  if (name !== previous && /^[a-z0-9-]+$/.test(name) && (await readOwn(workspaceDir, name, scope).catch(() => undefined)) !== undefined) return { errors: [`there's already a command called "${name}"`] };
+  const markdown = markdownOf(draft, old);
+  const errors = validateCommand(name, markdown);
+  if (errors.length) return { errors };
+  await saveOwn(workspaceDir, scope, name, markdown);
+  if (name !== previous) await deleteOwn(workspaceDir, scope, previous);
+  return { errors: [] };
 }

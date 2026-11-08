@@ -74,6 +74,8 @@ and a page open their views, a made-up path stays text), switches the mode
 and the theme, and takes screenshots at 360, 768 and 1440 px with no horizontal scroll. Look at
 them. Without a token it says `skip` and passes.
 
+When own commands or their editor changed, also `node .claude/skills/verify/check-own-editor.mjs <scratchpad>/own-shots` (same requirements, one turn).
+
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT
 and HTML files broken on purpose, and the upload gate's hook itself on moodle-teacher's

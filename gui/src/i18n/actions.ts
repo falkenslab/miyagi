@@ -20,6 +20,8 @@ export interface ActionTexts {
   /** An own command's form (#68). */
   required: string;
   between: (min?: number, max?: number) => string;
+  /** The editor's try of a command with unsaved changes (#78). */
+  saveToSend: string;
 }
 
 const es: ActionTexts = {
@@ -36,6 +38,7 @@ const es: ActionTexts = {
   cancel: "Cancelar",
   sent: "Acción enviada",
   required: "Obligatorio",
+  saveToSend: "Tienes cambios sin guardar: guárdalos para poder enviarlo.",
   between: (min, max) => (min !== undefined && max !== undefined ? `Un número entre ${min} y ${max}` : min !== undefined ? `Un número desde ${min}` : max !== undefined ? `Un número hasta ${max}` : "Un número"),
 };
 
@@ -53,6 +56,7 @@ const en: ActionTexts = {
   cancel: "Cancel",
   sent: "Action sent",
   required: "Required",
+  saveToSend: "You have unsaved changes: save them to be able to send it.",
   between: (min, max) => (min !== undefined && max !== undefined ? `A number between ${min} and ${max}` : min !== undefined ? `A number from ${min}` : max !== undefined ? `A number up to ${max}` : "A number"),
 };
 
@@ -70,6 +74,7 @@ const fr: ActionTexts = {
   cancel: "Annuler",
   sent: "Action envoyée",
   required: "Obligatoire",
+  saveToSend: "Tu as des modifications non enregistrées : enregistre-les pour pouvoir l'envoyer.",
   between: (min, max) => (min !== undefined && max !== undefined ? `Un nombre entre ${min} et ${max}` : min !== undefined ? `Un nombre à partir de ${min}` : max !== undefined ? `Un nombre jusqu'à ${max}` : "Un nombre"),
 };
 
@@ -87,6 +92,7 @@ const de: ActionTexts = {
   cancel: "Abbrechen",
   sent: "Aktion gesendet",
   required: "Pflichtfeld",
+  saveToSend: "Du hast ungespeicherte Änderungen: Speichere sie, um ihn senden zu können.",
   between: (min, max) => (min !== undefined && max !== undefined ? `Eine Zahl zwischen ${min} und ${max}` : min !== undefined ? `Eine Zahl ab ${min}` : max !== undefined ? `Eine Zahl bis ${max}` : "Eine Zahl"),
 };
 

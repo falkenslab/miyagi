@@ -11,7 +11,8 @@ import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
 import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
-import { draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
+import { deleteOwn, ownCommands, saveDraft, type CommandDraft } from "../ownCommands.js";
+import { topicWords, draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
 import { systemFolderPicker, type FolderPicker } from "./folderPicker.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
@@ -374,6 +375,25 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         openInSystem(file);
         return {};
       }
+      // The teacher's own commands in the page's editor (#78): saved only from their confirmation there.
+      case "own-commands":
+        if (!current) return { error: "no subject" };
+        return { commands: await ownCommands(current.dir) };
+      case "own-command-save":
+      case "own-command-delete": {
+        const subject = current;
+        if (!subject) return { error: "no subject" };
+        if (subject.chat?.getState().busy) return { error: "busy" };
+        if (data.scope !== "subject" && data.scope !== "all") return { error: "unknown scope" };
+        const name = String(data.name ?? "");
+        const result = action === "own-command-save" ? await saveDraft(subject.dir, data.scope, name, data.draft as CommandDraft, String(data.previous ?? name)) : await deleteOwn(subject.dir, data.scope, name);
+        if (result.errors.length) return result;
+        // The catalog and this conversation get the change; the conversation goes on.
+        if (subject.commands) subject.commands.active = "";
+        await subject.chat?.reopen();
+        schedule();
+        return result;
+      }
       case "classroom": {
         // Connecting a classroom changes the session's prompts and gates: it opens again with it.
         const subject = current;
@@ -461,6 +481,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return await knowledgeIndex(chat);
       case "kb-page":
         return await knowledgePage(chat, String(data.id ?? ""));
+      case "topic-words":
+        return await topicWords(chat, String(data.topic ?? ""));
       case "kb-search":
         return await knowledgeSearch(chat, String(data.query ?? ""));
       case "sources":

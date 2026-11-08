@@ -88,6 +88,25 @@ export interface ActionParameter {
   help?: Record<string, string>;
 }
 
+/** An own command as its editor shows it (#78). */
+export interface CommandDraft {
+  description: string;
+  label: Record<string, string>;
+  icon?: string;
+  group?: string;
+  appliesTo: string[];
+  parameters: ActionParameter[];
+  instructions: string;
+}
+
+export interface OwnCommand {
+  name: string;
+  scope: "subject" | "all";
+  /** Without its slash, as the chat knows it ("own:word-search"). */
+  command: string;
+  draft: CommandDraft;
+}
+
 export interface ChatState {
   transcript: TranscriptEntry[];
   busy: boolean;

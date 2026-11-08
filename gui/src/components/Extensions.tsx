@@ -7,20 +7,21 @@ import { Dialog } from "./Panel";
 import { Waiting } from "./Waiting";
 import { whileBusy } from "./StatusBar";
 import { PathField } from "./PathField";
+import { OwnCommandsTab } from "./OwnCommands";
 
 // The extensions view (gui-extensions #50), as the mockup draws it: tabs for what's installed (cards
 // with a switch), the catalog, the repositories and what miyagi can do; an extension's details and
 // installing one in a dialog. The classroom view and its three-step "link a classroom". Every
 // action goes to the host, which goes to the kit; the page keeps nothing of its own.
 
-export type ExtTab = "installed" | "catalog" | "repositories" | "capabilities";
+export type ExtTab = "installed" | "commands" | "catalog" | "repositories" | "capabilities";
 type Notice = (text: string) => void;
 
 /** The extension a classroom goes through: linked with the wizard, not just installed. */
 const CLASSROOM_EXTENSION = "moodle-teacher";
 
 /** An action whose `error` becomes a notice; the result otherwise. */
-async function run<T>(action: string, data: Record<string, unknown>, X: ExtTexts, onNotice: Notice): Promise<(T & { error?: string }) | null> {
+export async function run<T>(action: string, data: Record<string, unknown>, X: ExtTexts, onNotice: Notice): Promise<(T & { error?: string }) | null> {
   try {
     const result = await act<T>(action, data);
     if (result.error) {
@@ -64,7 +65,7 @@ export function ExtensionsView({ chat, info, X, tab, setTab, onNotice, onLink }:
   // The extension whose details are open, and the catalog entry being added.
   const [details, setDetails] = useState<string | null>(null);
   const [adding, setAdding] = useState<CatalogEntry | null>(null);
-  const tabs: ExtTab[] = ["installed", "catalog", "repositories", "capabilities"];
+  const tabs: ExtTab[] = ["installed", "commands", "catalog", "repositories", "capabilities"];
   const add = (entry: CatalogEntry) => (entry.name === CLASSROOM_EXTENSION && !info.classroom ? onLink() : setAdding(entry));
   return (
     <div className="wrap">
@@ -76,6 +77,7 @@ export function ExtensionsView({ chat, info, X, tab, setTab, onNotice, onLink }:
         ))}
       </div>
       {tab === "installed" && <InstalledTab chat={chat} entries={entries} X={X} onNotice={onNotice} onDetails={setDetails} />}
+      {tab === "commands" && <OwnCommandsTab chat={chat} X={X} onNotice={onNotice} />}
       {tab === "catalog" && <CatalogTab chat={chat} entries={entries} X={X} onSearch={load} onAdd={add} />}
       {tab === "repositories" && <RepositoriesTab X={X} onNotice={onNotice} onChanged={() => void load()} />}
       {tab === "capabilities" && <CapabilitiesTab chat={chat} info={info} entries={entries} X={X} onNotice={onNotice} onAdd={add} onLink={onLink} />}
