@@ -12,6 +12,16 @@ This is the only page on the site that talks about what doesn't exist yet. Only 
 
 ## Available {#disponible}
 
+Since version 0.12.0:
+
+- **miyagi in a window.** The Windows app, installed with a double click, with the conversation and its approval panels, your subjects by their name, extensions and your subject at a glance. See [Install](guia/instalar.md).
+- **miyagi in the browser.** The same page, with `miyagi web`. See [miyagi in the browser](avanzado/navegador.md).
+- **Materials written once.** Quizzes, question banks, notes, assignments with their rubric and units in files of your own, with dates per group, published in the classroom with tested exporters. See [Materials](avanzado/materiales.md).
+- **Personalized activities.** Equivalent variants set in what the group is interested in, based on an anonymous survey. See [Skills](guia/habilidades.md).
+- **Visual styles.** What miyagi publishes in the style you choose, as extensions, always accessible. See [Your materials](avanzado/materiales.md#el-estilo-de-lo-que-publicas).
+- **Reports and exam bank.** Course reports and a question bank by criterion and level that carries over from one course to the next. The `.docx` with your school's template is waiting for a documents extension; meanwhile, the report comes out as a document and a PDF.
+- **This website in English**, under `/en/`.
+
 Since version 0.11.0:
 
 - **The classroom, whenever you want.** You can work on a subject without Moodle (teaching plan, units, materials) and connect the classroom later. See [Getting started](guia/primeros-pasos.md).
@@ -28,30 +38,12 @@ What each skill does is in [Skills](guia/habilidades.md).
 
 ## What's coming {#lo-que-viene}
 
-### miyagi in a window {#miyagi-en-una-ventana}
-
-A desktop app, to use miyagi without a terminal:
-
-- **Installing miyagi on Windows with a double click** ([#48](https://github.com/falkenslab/miyagi/issues/48)).
-- **The conversation in a window**, with its approval panels ([#47](https://github.com/falkenslab/miyagi/issues/47)), on top of a local server that can also be opened from the browser ([#46](https://github.com/falkenslab/miyagi/issues/46)). Done: coming in the next release.
-- **Your subjects in the app**, by their name and without folders ([#49](https://github.com/falkenslab/miyagi/issues/49)). Done: coming in the next release.
-- **Seeing what miyagi can do and installing extensions** from the app ([#50](https://github.com/falkenslab/miyagi/issues/50)). Done: coming in the next release.
-- **Your subject at a glance**: today, the teaching plan, the units, the materials and the sources ([#51](https://github.com/falkenslab/miyagi/issues/51)). Done: coming in the next release.
-
 ### Materials and activities {#materiales-y-actividades}
 
-- **Materials written once.** Quizzes, question banks, notes, assignments with their rubric and units in files of your own, with dates per group, published in the classroom with tested exporters ([#34](https://github.com/falkenslab/miyagi/issues/34); see [Materials](avanzado/materiales.md)). Done: coming in the next release.
-- **Personalized activities.** Equivalent variants set in what the group is interested in, based on an anonymous survey ([#39](https://github.com/falkenslab/miyagi/issues/39); see [Skills](guia/habilidades.md)). Done: coming in the next release.
-- **Visual styles.** What miyagi publishes (assignment briefs, questions, pages) in the style you choose, as extensions, always accessible ([#21](https://github.com/falkenslab/miyagi/issues/21); see [Your materials](avanzado/materiales.md#el-estilo-de-lo-que-publicas)). Done: coming in the next release.
 - **Video tutorials in your voice**, published on YouTube and linked in the classroom ([#38](https://github.com/falkenslab/miyagi/issues/38)).
-
-### Assessment {#evaluación}
-
-- **Reports and exam bank.** Course reports (results per criterion, the module's end-of-year report), and a question bank by criterion and level that carries over from one course to the next ([#44](https://github.com/falkenslab/miyagi/issues/44)). Done: coming in the next release. The `.docx` with your school's template is waiting for a documents extension; meanwhile, the report comes out as a document and a PDF.
 
 ### The website {#la-web}
 
-- **This website in English** ([#28](https://github.com/falkenslab/miyagi/issues/28)), under `/en/`: the guide, the advanced pages and the landing; the SQL classroom stays in Spanish. Done: it arrives with the site's next publication.
 - **Illustrations and guides, for the terminal and the app.** Every screenshot, command and request in Falken's Lab's style, and guides with use cases for both the terminal and the desktop or browser app ([#57](https://github.com/falkenslab/miyagi/issues/57)).
 
 ## What miyagi won't do {#lo-que-miyagi-no-hará}

@@ -6,16 +6,25 @@ description: "What you need, how to install miyagi, how to check it, update it a
 
 # Install miyagi {#instalar-miyagi}
 
-You install it once per computer, on Windows, Mac or Linux. You don't need to know how to program: just copy and paste one line.
+You install it once per computer. On Windows an installer is all it takes; on Mac and Linux, or if you prefer the terminal, a single line. You don't need to know how to program.
 
 ## What you need first {#lo-que-necesitas-antes}
 
 1. **A browser** such as Google Chrome or Microsoft Edge. You log in to Moodle in it the first time miyagi needs it.
-2. **Node.js 20 or later.** Download it from [nodejs.org](https://nodejs.org/), choose the **LTS** version and install it with the default options.
+2. **Node.js 20 or later, only if you install from the terminal.** Download it from [nodejs.org](https://nodejs.org/), choose the **LTS** version and install it with the default options.
 3. **A Claude Pro or Max subscription** ([claude.ai](https://claude.ai)). It's what powers the assistant.
 4. **A Moodle course where you are a teacher**, if you want it to work in your classroom. To try it without worry, a test course or a copy of a real one is better.
 
-## Installing it {#instalarlo}
+## The Windows app {#aplicacion-windows}
+
+1. Download [the miyagi installer](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe) (about 225 MB).
+2. Open it. Windows will warn you that it doesn't recognise the app, because the installer isn't signed yet: click **More info** and then **Run anyway**.
+3. Follow the steps. When it finishes miyagi opens, and you'll have a shortcut on the desktop and in the Start menu.
+4. The first time, it asks you to connect your Claude account: you sign in on Anthropic's page or use a key.
+
+## Installing it from the terminal {#instalarlo}
+
+For Mac, Linux and anyone who prefers the terminal on Windows.
 
 1. Open a terminal:
    - **Windows**: press the Windows key, type `PowerShell` and open it.
@@ -50,13 +59,13 @@ Run the installation line again: it always downloads the latest version.
 
 <Terminal>{`$ npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz`}</Terminal>
 
-Your courses and your settings stay as they were.
+Your courses and your settings stay as they were. If you use the Windows app, download the installer again and run it.
 
 ## Uninstalling it {#desinstalarlo}
 
 <Terminal>{`$ npm uninstall -g miyagi`}</Terminal>
 
-Your courses' folders aren't deleted: they're yours and stay where you left them.
+The Windows app is uninstalled from **Settings > Apps**. Either way, your courses' folders aren't deleted: they're yours and stay where you left them.
 
 ## Next step {#siguiente-paso}
 

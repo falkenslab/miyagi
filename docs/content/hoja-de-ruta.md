@@ -12,6 +12,16 @@ Esta página es la única de la web que habla de lo que todavía no existe. Solo
 
 ## Disponible
 
+Desde la versión 0.12.0:
+
+- **miyagi en una ventana.** La aplicación para Windows, que se instala con doble clic, con la conversación y sus paneles de aprobación, tus asignaturas por su nombre, las extensiones y tu asignatura de un vistazo. Ver [Instalar](guia/instalar.md).
+- **miyagi en el navegador.** La misma página, con `miyagi web`. Ver [miyagi en el navegador](avanzado/navegador.md).
+- **Materiales escritos una vez.** Cuestionarios, bancos de preguntas, apuntes, tareas con su rúbrica y temas en archivos tuyos, con fechas por grupo, publicados en el aula con exportadores probados. Ver [Materiales](avanzado/materiales.md).
+- **Actividades personalizadas.** Variantes equivalentes ambientadas en lo que interesa al grupo, a partir de una encuesta anónima. Ver [Habilidades](guia/habilidades.md).
+- **Estilos visuales.** Lo que publica miyagi con el estilo que elijas, como extensiones, siempre accesible. Ver [Tus materiales](avanzado/materiales.md#el-estilo-de-lo-que-publicas).
+- **Informes y banco de exámenes.** Informes del curso y un banco de preguntas por criterio y nivel que sirve de un curso a otro. El `.docx` con la plantilla de tu centro espera a una extensión de documentos; mientras, el informe sale como documento y PDF.
+- **Esta web en inglés**, en `/en/`.
+
 Desde la versión 0.11.0:
 
 - **El aula, cuando tú quieras.** Puedes trabajar una asignatura sin Moodle (programación, temas, materiales) y conectar el aula más tarde. Ver [Primeros pasos](guia/primeros-pasos.md).
@@ -28,30 +38,12 @@ Lo que hace cada habilidad está en [Habilidades](guia/habilidades.md).
 
 ## Lo que viene
 
-### miyagi en una ventana
-
-Una aplicación de escritorio, para usar miyagi sin terminal:
-
-- **Instalar miyagi en Windows con doble clic** ([#48](https://github.com/falkenslab/miyagi/issues/48)).
-- **La conversación en una ventana**, con sus paneles de aprobación ([#47](https://github.com/falkenslab/miyagi/issues/47)), sobre un servidor local que también se puede abrir desde el navegador ([#46](https://github.com/falkenslab/miyagi/issues/46)). Hecho: llega en la próxima versión.
-- **Tus asignaturas en la aplicación**, por su nombre y sin carpetas ([#49](https://github.com/falkenslab/miyagi/issues/49)). Hecho: llega en la próxima versión.
-- **Ver qué puede hacer miyagi e instalar extensiones** desde la aplicación ([#50](https://github.com/falkenslab/miyagi/issues/50)). Hecho: llega en la próxima versión.
-- **Tu asignatura de un vistazo**: hoy, la programación, los temas, los materiales y las fuentes ([#51](https://github.com/falkenslab/miyagi/issues/51)). Hecho: llega en la próxima versión.
-
 ### Materiales y actividades
 
-- **Materiales escritos una vez.** Cuestionarios, bancos de preguntas, apuntes, tareas con su rúbrica y temas en archivos tuyos, con fechas por grupo, publicados en el aula con exportadores probados ([#34](https://github.com/falkenslab/miyagi/issues/34); ver [Materiales](avanzado/materiales.md)). Hecho: llega en la próxima versión.
-- **Actividades personalizadas.** Variantes equivalentes ambientadas en lo que interesa al grupo, a partir de una encuesta anónima ([#39](https://github.com/falkenslab/miyagi/issues/39); ver [Habilidades](guia/habilidades.md)). Hecho: llega en la próxima versión.
-- **Estilos visuales.** Lo que publica miyagi (enunciados, preguntas, páginas) con el estilo que elijas, como extensiones, siempre accesible ([#21](https://github.com/falkenslab/miyagi/issues/21); ver [Tus materiales](avanzado/materiales.md#el-estilo-de-lo-que-publicas)). Hecho: llega en la próxima versión.
 - **Videotutoriales con tu voz**, publicados en YouTube y enlazados en el aula ([#38](https://github.com/falkenslab/miyagi/issues/38)).
-
-### Evaluación
-
-- **Informes y banco de exámenes.** Informes del curso (resultados por criterio, memoria del módulo), y un banco de preguntas por criterio y nivel que sirve de un curso a otro ([#44](https://github.com/falkenslab/miyagi/issues/44)). Hecho: llega en la próxima versión. El `.docx` con la plantilla de tu centro espera a una extensión de documentos; mientras, el informe sale como documento y PDF.
 
 ### La web
 
-- **Esta web en inglés** ([#28](https://github.com/falkenslab/miyagi/issues/28)), en `/en/`: la guía, lo avanzado y la portada; el aula de SQL sigue en español. Hecho: llega con la próxima publicación de la web.
 - **Las ilustraciones y las guías, para el terminal y la aplicación.** Todas las capturas, comandos y peticiones con el estilo de Falken's Lab, y guías con casos de uso tanto del terminal como de la aplicación de escritorio o del navegador ([#57](https://github.com/falkenslab/miyagi/issues/57)).
 
 ## Lo que miyagi no hará

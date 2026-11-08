@@ -26,7 +26,7 @@ Necesitas [Node.js](https://nodejs.org/) 20 o posterior (la versión LTS), una s
 npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz
 ```
 
-Para actualizarlo, repite la misma línea; para desinstalarlo, `npm uninstall -g miyagi`. Los detalles, en [Instalar](https://falkenslab.github.io/miyagi/guia/instalar/).
+Para actualizarlo, repite la misma línea; para desinstalarlo, `npm uninstall -g miyagi`. En Windows también puedes usar la aplicación, sin Node.js ni terminal: descarga [el instalador](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe). Los detalles, en [Instalar](https://falkenslab.github.io/miyagi/guia/instalar/).
 
 ## Primeros pasos
 
