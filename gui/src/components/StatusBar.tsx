@@ -18,7 +18,7 @@ export function whileBusy(busy: boolean, other = false) {
 }
 
 /** Minutes and seconds since `since`, ticking while it's shown. */
-function useElapsed(since: number | null) {
+export function useElapsed(since: number | null) {
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     if (!since) return;

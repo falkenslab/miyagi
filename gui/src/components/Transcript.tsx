@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { act } from "../api";
 import type { Texts } from "../i18n";
 import { Markdown } from "../markdown";
-import { canPreview } from "../sideTabs";
+import { canPreview, turnOfEntry } from "../sideTabs";
 import type { ChatState, TranscriptCall, TranscriptEntry } from "../types";
 import type { CourseView } from "./Course";
 import { actionLabel, launched, useActions } from "./Actions";
@@ -85,49 +85,30 @@ function useSince(id: string | undefined) {
 }
 
 /**
- * A turn's tool calls, one dim line (#60): the last call and how many, or the running one; opened,
- * each call with ✓/✕ and its subagent's steps. While a subagent works, a second line says what it's
+ * A turn's tool calls, one dim line (#60): the last call and how many, or the running one; it opens
+ * the turn's activity in the side panel (#70). While a subagent works, a second line says what it's
  * doing now, for how long and how many actions it has taken (#63), so a long research doesn't look stuck.
  */
-function Tools({ calls, running, T }: { calls: TranscriptCall[]; running: boolean; T: Texts }) {
-  const [open, setOpen] = useState(false);
+function Tools({ calls, running, T, onOpen }: { calls: TranscriptCall[]; running: boolean; T: Texts; onOpen: () => void }) {
   const failed = calls.filter((call) => call.result?.isError).length;
   const last = calls[calls.length - 1];
   const sub = running && last && !last.result && (SUBAGENT_TOOLS.has(last.toolName) || last.children.length > 0) ? last : undefined;
   const since = useSince(sub ? (sub.id ?? sub.label) : undefined);
   return (
-    <div className={`tool${open ? " open" : ""}`}>
-      <button type="button" className="tool-head" aria-expanded={open} onClick={() => setOpen(!open)}>
+    <div className="tool">
+      <button type="button" className="tool-head" onClick={onOpen}>
         {running && <span className="spinner" aria-hidden="true" />}
         <span className="tool-label">{running && last ? last.label : last ? `${last.label} · ${T.calls(calls.length)}` : T.calls(calls.length)}</span>
         {failed > 0 && <span className="badge sun">{failed} {T.toolFailed}</span>}
-        <Icon name={open ? "down" : "right"} size={16} />
+        <Icon name="right" size={16} />
       </button>
       {sub && (
-        <div className="sub-activity">
+        <button type="button" className="sub-activity" onClick={onOpen}>
           <span className="ellipsis">{sub.children.at(-1) ?? T.subagentStarting}</span>
           {/* The clock ticks every second: kept out of what a screen reader announces. */}
           <span aria-hidden="true">· {lasted(since)}</span>
           {sub.children.length > 0 && <span>· {T.calls(sub.children.length)}</span>}
-        </div>
-      )}
-      {open && (
-        <ul className="tool-calls">
-          {calls.map((call, index) => (
-            <li key={call.id ?? index} className={call.result?.isError ? "err" : ""}>
-              <span className="mark" aria-hidden="true">{call.result ? (call.result.isError ? "✕" : "✓") : "…"}</span>
-              <span>{call.label}</span>
-              {call.result?.text && <small>{call.result.text}</small>}
-              {call.children.length > 0 && (
-                <ul>
-                  {call.children.map((child, c) => (
-                    <li key={c}>{child}</li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
+        </button>
       )}
     </div>
   );
@@ -159,7 +140,7 @@ function TurnEnd({ text, seconds, T }: { text: string; seconds: number; T: Texts
   );
 }
 
-function Entry({ entry, running, reply, T, open }: { entry: TranscriptEntry; running: boolean; reply: string; T: Texts; open: Opener }) {
+function Entry({ entry, running, reply, T, open, onActivity }: { entry: TranscriptEntry; running: boolean; reply: string; T: Texts; open: Opener; onActivity: (entry: number) => void }) {
   switch (entry.kind) {
     case "user":
       return <UserLine text={entry.text} />;
@@ -172,7 +153,7 @@ function Entry({ entry, running, reply, T, open }: { entry: TranscriptEntry; run
         </div>
       );
     case "tools":
-      return <Tools calls={entry.calls} running={running} T={T} />;
+      return <Tools calls={entry.calls} running={running} T={T} onOpen={() => onActivity(entry.id)} />;
     case "notice":
       return <div className={`notice ${entry.tone}`}>{entry.text}</div>;
     case "turn-summary":
@@ -243,7 +224,7 @@ function greeting(T: Texts) {
 }
 
 /** The conversation, scrolled to the end while the person is at the end; ↓ takes them back there. */
-export function Transcript({ chat, T, go, beside }: { chat: ChatState; T: Texts; go: (view: CourseView, item?: string) => void; beside: (file: string) => void }) {
+export function Transcript({ chat, T, go, beside, onActivity }: { chat: ChatState; T: Texts; go: (view: CourseView, item?: string) => void; beside: (file: string) => void; onActivity: (turn: number | null) => void }) {
   const open = useItemLinks(chat, go, beside);
   const box = useRef<HTMLDivElement>(null);
   const atEnd = useRef(true);
@@ -287,7 +268,7 @@ export function Transcript({ chat, T, go, beside }: { chat: ChatState; T: Texts;
 ${entry.text}` : entry.text;
             const text = reply;
             if (entry.kind === "user" || entry.kind === "turn-summary") reply = "";
-            return <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} reply={text} T={T} open={open} />;
+            return <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} reply={text} T={T} open={open} onActivity={(id) => onActivity(turnOfEntry(chat.transcript, id))} />;
           })}
           {chat.busy && chat.activity && last?.kind !== "tools" && (
             <div className="activity">

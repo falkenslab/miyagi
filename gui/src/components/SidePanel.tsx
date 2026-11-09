@@ -1,15 +1,21 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { act } from "../api";
 import type { Texts } from "../i18n";
 import type { CourseTexts } from "../i18n/course";
-import { addTab, closeTab, fileTab, NO_TABS, selectTab, type SideTab, type SideTabs } from "../sideTabs";
+import { ACTIVITY_TAB, activityTab, addTab, closeTab, fileTab, NO_TABS, selectTab, shownTurn, turnsOf, type SideTab, type SideTabs } from "../sideTabs";
+import type { ChatState } from "../types";
+import { TaskList } from "./Composer";
 import { Preview } from "./Course";
 import { Icon } from "./Icons";
 import { recalled, remember, SideHandle } from "./Shell";
+import { useElapsed } from "./StatusBar";
 
 // The panel on the right of the conversation (#85): tabs with what the teacher is looking at, a
 // divider to resize it, expand and close. Under about 1100 px it takes the conversation's place,
 // and at 760 px or less the whole screen, as the stylesheet draws it; an approval brings the
-// conversation back (`.asking`), and the panel returns once it's answered.
+// conversation back (`.asking`), and the panel returns once it's answered. Its activity tab (#70)
+// is everything a turn is doing, live; Esc or its ✕ closes it, and each conversation remembers
+// whether it was open for this visit.
 
 const PANEL_WIDTH_KEY = "miyagi.panelWidth";
 const PANEL_WIDTH = 480;
@@ -17,13 +23,32 @@ const PANEL_MIN = 320;
 const PANEL_MAX = 960;
 const clampPanel = (width: number) => Math.round(Math.min(PANEL_MAX, Math.max(PANEL_MIN, width)));
 
+const activityKey = (dir: string) => `miyagi.activity:${dir}`;
+
+function wasActivityOpen(dir: string): boolean {
+  try {
+    return sessionStorage.getItem(activityKey(dir)) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function keepActivityOpen(dir: string, open: boolean) {
+  try {
+    if (open) sessionStorage.setItem(activityKey(dir), "1");
+    else sessionStorage.removeItem(activityKey(dir));
+  } catch {
+    // A page without storage forgets it on reloading.
+  }
+}
+
 function storedPanelWidth(): number {
   const value = Number(recalled(PANEL_WIDTH_KEY));
   return value ? clampPanel(value) : PANEL_WIDTH;
 }
 
-/** The panel's state, in the page: its tabs, whether it's on screen and expanded, and its width. */
-export function useSidePanel() {
+/** The panel's state, in the page: its tabs, whether it's on screen and expanded, and its width. `dir` is the conversation open. */
+export function useSidePanel(dir: string | undefined) {
   const [tabs, setTabs] = useState<SideTabs>(NO_TABS);
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -41,10 +66,23 @@ export function useSidePanel() {
     setOpen(false);
     setExpanded(false);
   };
-  /** Nothing of a subject stays open in another: its files aren't there. */
+  // Another conversation brings back its own activity tab, or none.
+  const seen = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!dir || dir === seen.current) return;
+    seen.current = dir;
+    if (wasActivityOpen(dir)) {
+      setTabs((now) => addTab(now, activityTab(null)));
+      setOpen(true);
+    } else setTabs((now) => closeTab(now, ACTIVITY_TAB));
+  }, [dir]);
+  const activityOpen = open && tabs.list.some((tab) => tab.kind === "activity");
+  useEffect(() => {
+    if (dir) keepActivityOpen(dir, activityOpen);
+  }, [dir, activityOpen]);
+  /** A subject's files don't stay open in another: they aren't there (the activity tab goes with the conversation, above). */
   const reset = useCallback(() => {
-    setTabs(NO_TABS);
-    setOpen(false);
+    setTabs((now) => now.list.reduce((left, tab) => (tab.kind === "file" ? closeTab(left, tab.id) : left), now));
     setExpanded(false);
   }, []);
   return {
@@ -55,6 +93,7 @@ export function useSidePanel() {
     width,
     resize,
     openFile: (file: string) => showTab(fileTab(file)),
+    openActivity: (turn: number | null) => showTab(activityTab(turn)),
     select: (id: string) => setTabs((now) => selectTab(now, id)),
     close: (id: string) => {
       const next = closeTab(tabs, id);
@@ -70,13 +109,90 @@ export function useSidePanel() {
 
 export type SidePanelState = ReturnType<typeof useSidePanel>;
 
-/** What a tab shows. */
-function TabBody({ tab, C }: { tab: SideTab; C: CourseTexts }) {
-  return <Preview file={tab.file} C={C} />;
+/** A turn's activity (#70): each call in order with what it answered, a subagent's actions under it, live and following the end unless scrolled up. */
+function ActivityBody({ turn: chosen, chat, T }: { turn: number | null; chat: ChatState; T: Texts }) {
+  const turns = turnsOf(chat.transcript);
+  const turn = shownTurn(turns, chosen, chat.busy);
+  const latest = turn !== undefined && turn === turns.at(-1);
+  const running = chat.busy && latest;
+  const elapsed = useElapsed(running ? chat.turnStartedAt : null);
+  const box = useRef<HTMLDivElement>(null);
+  const atEnd = useRef(true);
+  const calls = turn?.calls ?? [];
+  const steps = calls.reduce((n, call) => n + 1 + (call.result ? 1 : 0) + call.children.length, 0);
+  useEffect(() => {
+    atEnd.current = true;
+  }, [turn?.id]);
+  useEffect(() => {
+    if (atEnd.current) box.current?.scrollTo({ top: box.current.scrollHeight });
+  }, [turn?.id, steps]);
+  return (
+    <div className="activity-panel">
+      <div className="activity-head">
+        {running && <span className="spinner" aria-hidden="true" />}
+        <span className="muted status-time">{running ? elapsed : turn?.seconds ? `✻ ${T.seconds(turn.seconds)}` : ""}</span>
+        <span className="sp" />
+        {running && (
+          <button type="button" className="btn small tall" onClick={() => void act("interrupt")}>
+            {T.stop}
+          </button>
+        )}
+      </div>
+      {latest && chat.todos?.some((todo) => todo.status !== "completed") && (
+        <div className="todos">
+          <TaskList todos={chat.todos} />
+        </div>
+      )}
+      <div
+        className="activity-list"
+        ref={box}
+        onScroll={(event) => {
+          const el = event.currentTarget;
+          atEnd.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        }}
+      >
+        {calls.length === 0 && <p className="muted">{T.noActions}</p>}
+        <ul className="tool-calls">
+          {calls.map((call, index) => (
+            <li key={call.id ?? index} className={call.result?.isError ? "err" : ""}>
+              <span className="mark" aria-hidden="true">{call.result ? (call.result.isError ? "✕" : "✓") : "…"}</span>
+              <span>{call.label}</span>
+              {call.result?.text && <small>{call.result.text}</small>}
+              {call.children.length > 0 && (
+                <ul>
+                  {call.children.map((child, c) => (
+                    <li key={c}>{child}</li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 }
 
-export function SidePanel({ panel, T, C }: { panel: SidePanelState; T: Texts; C: CourseTexts }) {
+/** What a tab shows. */
+function TabBody({ tab, chat, T, C }: { tab: SideTab; chat: ChatState; T: Texts; C: CourseTexts }) {
+  return tab.kind === "activity" ? <ActivityBody turn={tab.turn} chat={chat} T={T} /> : <Preview file={tab.file} C={C} />;
+}
+
+export function SidePanel({ panel, chat, T, C }: { panel: SidePanelState; chat: ChatState; T: Texts; C: CourseTexts }) {
   const { list, active } = panel.tabs;
+  // Esc closes the activity tab, unless something else on screen answers to it (a menu, a dialog, a field with text).
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented || active !== ACTIVITY_TAB) return;
+      if (document.querySelector(".pop, .scrim, .select-menu")) return;
+      const field = event.target as HTMLElement;
+      if ((field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) && field.value) return;
+      panel.close(ACTIVITY_TAB);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [panel, active]);
+  const titleOf = (tab: SideTab) => (tab.kind === "activity" ? T.activity : tab.title);
   return (
     <aside className="spanel" aria-label={T.sidePanel}>
       <SideHandle left width={panel.width} resize={panel.resize} label={T.resizePanel} min={PANEL_MIN} max={PANEL_MAX} initial={PANEL_WIDTH} />
@@ -87,10 +203,10 @@ export function SidePanel({ panel, T, C }: { panel: SidePanelState; T: Texts; C:
         <div className="spanel-tabs" role="tablist" aria-label={T.sidePanel}>
           {list.map((tab) => (
             <div key={tab.id} className={`spanel-tab${tab.id === active ? " on" : ""}`}>
-              <button type="button" role="tab" aria-selected={tab.id === active} title={tab.file} className="ellipsis" onClick={() => panel.select(tab.id)}>
-                {tab.title}
+              <button type="button" role="tab" aria-selected={tab.id === active} title={tab.kind === "file" ? tab.file : T.activity} className="ellipsis" onClick={() => panel.select(tab.id)}>
+                {titleOf(tab)}
               </button>
-              <button type="button" className="ibtn plain spanel-x" title={T.closeTab(tab.title)} aria-label={T.closeTab(tab.title)} onClick={() => panel.close(tab.id)}>
+              <button type="button" className="ibtn plain spanel-x" title={T.closeTab(titleOf(tab))} aria-label={T.closeTab(titleOf(tab))} onClick={() => panel.close(tab.id)}>
                 <Icon name="x" size={16} />
               </button>
             </div>
@@ -107,7 +223,7 @@ export function SidePanel({ panel, T, C }: { panel: SidePanelState; T: Texts; C:
         {/* Every tab stays mounted, so changing tab doesn't reload a PDF or lose its place. */}
         {list.map((tab) => (
           <div key={tab.id} className="spanel-page" role="tabpanel" hidden={tab.id !== active}>
-            <TabBody tab={tab} C={C} />
+            <TabBody tab={tab} chat={chat} T={T} C={C} />
           </div>
         ))}
       </div>

@@ -1,4 +1,4 @@
-// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85) in Chrome against the
+// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70) in Chrome against the
 // real host and a real Claude session: a subject created from the page, the rail's places and their
 // tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
@@ -71,7 +71,7 @@ const CHECKPOINT = ".dock .checkpoint";
 /** The header's and the composer's buttons smaller than a finger (44 px), by their label. */
 const small = () =>
   page.evaluate(() =>
-    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress, .spanel-bar button, .spanel-tab button, .beside"))
+    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress, .spanel-bar button, .spanel-tab button, .beside, .tool-head, .tool .sub-activity, .activity-head button"))
       .filter((el) => el.offsetParent)
       .map((el) => [el.getAttribute("aria-label") || el.textContent.trim(), el.getBoundingClientRect()])
       .filter(([, box]) => box.width < 44 || box.height < 44)
@@ -171,6 +171,49 @@ const checkFrame = async () => {
   await page.waitForSelector(".recents a.open-conv");
 };
 
+/** The turn's activity (#70), left open by the subagent's turn: live, in every width and theme, Esc to close, and an approval still in the composer's place. */
+const checkActivity = async (actionsGrew) => {
+  check("the subagent's line opens the panel with its actions appearing as they happen", await actionsGrew);
+  await shot("activity-1440");
+  check("…each call with its mark and label", (await page.innerText(".spanel .tool-calls > li .mark")).trim() === "✓" && (await page.locator(".spanel .tool-calls > li").count()) >= 1);
+  check("…and the turn's time", /\d/.test(await page.innerText(".spanel .activity-head")));
+  await checkPanelSizes("activity");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".spanel", { state: "detached", timeout: 5000 }).catch(() => {});
+  check("Esc closes the activity", (await page.locator(".spanel").count()) === 0);
+  // Remembered per conversation for this visit, also over a reload; closed, it stays closed.
+  await page.click(".tool .tool-head >> nth=-1");
+  await page.waitForSelector(".spanel .activity-list");
+  await page.reload();
+  await page.waitForSelector(".recents a.open-conv");
+  check("the activity comes back with its conversation after a reload", await page.waitForSelector(".spanel .activity-list", { timeout: 10_000 }).then(() => true, () => false));
+  await page.click(".recents .open-conv");
+  await page.waitForSelector(".msgs");
+  await page.focus(".composer textarea");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".spanel", { state: "detached", timeout: 5000 }).catch(() => {});
+  check("…closed, it stays closed", (await page.locator(".spanel").count()) === 0);
+  // An older turn's line opens that turn; its ✕ closes it.
+  await page.click(".tool .tool-head >> nth=0");
+  await page.waitForSelector(".spanel .activity-list");
+  check("an older turn's line opens that turn", (await page.locator(".spanel .tool-calls > li").count()) >= 1);
+  await page.click(".spanel-tab .spanel-x");
+  await page.waitForSelector(".spanel", { state: "detached" });
+  // An approval asked while the panel is open stays in the composer's place.
+  await page.click(".tool .tool-head >> nth=-1");
+  await page.waitForSelector(".spanel .activity-list");
+  await mode("interactive");
+  await send("Lee la página overview de tu base de conocimiento y dime en una línea qué dice.");
+  await page.waitForSelector(CHECKPOINT, { timeout: 180_000 });
+  check("an approval asked with the activity open shows in the composer's place", Boolean(await page.$(".spanel .activity-list")) && !(await page.$(".spanel .checkpoint")) && Boolean(await page.$(CHECKPOINT)));
+  await shot("activity-approval-1440");
+  await page.click(`${CHECKPOINT} .acts .btn.danger`);
+  await page.waitForSelector(CHECKPOINT, { state: "detached", timeout: 20_000 }).catch(() => {});
+  await idle();
+  await mode("guided");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".spanel", { state: "detached", timeout: 5000 }).catch(() => {});
+};
 /** The side panel (#85): opened from Materials, the oven and a link in the chat, the conversation going on beside it. */
 const PANEL_OPEN = (name) => `.tbl tr:has-text('${name}') .beside`;
 const tabs = () => page.locator(".spanel-tab").count();
@@ -194,6 +237,37 @@ const dragPanel = async (by) => {
   await page.mouse.move(x + by / 2, y);
   await page.mouse.move(x + by, y);
   await page.mouse.up();
+};
+/** Every width and theme: beside the chat when there's room, in its place under 1100 px, the whole screen at 760 or less. */
+const checkPanelSizes = async (name) => {
+  for (const [theme, nth] of [
+    ["light", 1],
+    ["dark", 2],
+  ]) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.click(".rail-foot .theme-btn");
+    await page.click(`.pop button >> nth=${nth}`);
+    for (const [width, height] of [
+      [1920, 1080],
+      [1440, 900],
+      [1024, 768],
+      [768, 1000],
+      [390, 844],
+      [360, 760],
+    ]) {
+      await page.setViewportSize({ width, height });
+      await shot(`${name}-${theme}-${width}`);
+      const box = await panelRects();
+      const place = width > 1100 ? box.msgs && box.main <= box.panel + 1 : width > 760 ? box.main === null && box.panel !== null : box.main === null && box.panel === 0 && box.panelWidth === width;
+      check(`${name}: its place at ${width} (${theme})`, place, JSON.stringify(box));
+      check(`${name}: no horizontal scroll at ${width} (${theme})`, await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+      const tiny = await small();
+      check(`${name}: 44 px targets at ${width}`, !tiny.length, tiny.join(", "));
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+  }
+  await page.click(".rail-foot .theme-btn");
+  await page.click(".pop button >> nth=0");
 };
 const checkSidePanel = async (subject) => {
   const drafts = path.join(subject, "drafts");
@@ -289,35 +363,7 @@ const checkSidePanel = async (subject) => {
   check("…and once answered the panel is back", (await panelRects()).main === null);
   await page.click(".spanel-expand");
   await mode("guided");
-  // Every width and theme: beside the chat when there's room, in its place under 1100 px, the whole screen at 760 or less.
-  for (const [theme, nth] of [
-    ["light", 1],
-    ["dark", 2],
-  ]) {
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.click(".rail-foot .theme-btn");
-    await page.click(`.pop button >> nth=${nth}`);
-    for (const [width, height] of [
-      [1920, 1080],
-      [1440, 900],
-      [1024, 768],
-      [768, 1000],
-      [390, 844],
-      [360, 760],
-    ]) {
-      await page.setViewportSize({ width, height });
-      await shot(`panel-${theme}-${width}`);
-      const box = await panelRects();
-      const place = width > 1100 ? box.msgs && box.main <= box.panel + 1 : width > 760 ? box.main === null && box.panel !== null : box.main === null && box.panel === 0 && box.panelWidth === width;
-      check(`the panel's place at ${width} (${theme})`, place, JSON.stringify(box));
-      check(`no horizontal scroll at ${width} with the panel (${theme})`, await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
-      const tiny = await small();
-      check(`44 px targets at ${width} with the panel`, !tiny.length, tiny.join(", "));
-    }
-    await page.setViewportSize({ width: 1440, height: 900 });
-  }
-  await page.click(".rail-foot .theme-btn");
-  await page.click(".pop button >> nth=0");
+  await checkPanelSizes("panel");
   // On a phone the way back returns to the conversation; the header offers the panel again.
   await page.setViewportSize({ width: 390, height: 844 });
   await page.click(".spanel-back");
@@ -448,6 +494,11 @@ try {
   await send("Pide al subagente pedagogy-reviewer que lea la página overview de tu base de conocimiento y te diga en una frase qué mejoraría. No hagas nada más.");
   const sub = await page.waitForSelector(".tool .sub-activity", { timeout: 180_000 }).catch(() => null);
   const firstSub = sub ? await sub.innerText() : "";
+  // Its line opens the turn's activity in the panel, where its actions appear as they happen (#70).
+  await page.click(".tool .sub-activity");
+  await page.waitForSelector(".spanel .activity-list");
+  const actionsAtOpen = await page.locator(".spanel .tool-calls ul li").count();
+  const actionsGrew = page.waitForFunction((n) => document.querySelectorAll(".spanel .tool-calls ul li").length > n, actionsAtOpen, { timeout: 120_000 }).then(() => true, () => false);
   // Its first action, with the count: what tells a long research from a stuck one.
   const acting = await page.waitForFunction(() => /\d+ (acci|action)/.test(document.querySelector(".tool .sub-activity")?.textContent ?? ""), null, { timeout: 120_000 }).then(() => true, () => false);
   const seenSub = acting ? await page.innerText(".tool .sub-activity") : "";
@@ -455,6 +506,7 @@ try {
   await idle();
   check("a working subagent shows its current action, time and count under its line", /\d+ (s|min)/.test(firstSub) && acting && seenSub !== firstSub, `${firstSub} → ${seenSub}`);
   check("the subagent's line goes once it's done", (await page.locator(".tool .sub-activity").count()) === 0);
+  await checkActivity(actionsGrew);
   // What miyagi names of the subject links to its view; what doesn't exist stays text (#66).
   const subjects = path.join(os.homedir(), ".miyagi", "workspaces");
   const subject = path.join(subjects, readdirSync(subjects)[0]);
@@ -616,6 +668,15 @@ try {
   const foot = (await page.locator(".side-progress").count()) ? await page.innerText(".side-progress") : "";
   check("the sidebar's foot shows the task and its place", /tema uno/i.test(foot) && /1 de 2/.test(foot), foot);
   await shot("progress-1440");
+  // The turn's activity shows its task list too (#70).
+  await send("Lee la página overview de tu base de conocimiento. No hagas nada más; no toques las tareas.");
+  await idle();
+  await page.click(".tool .tool-head >> nth=-1");
+  await page.waitForSelector(".spanel .activity-list");
+  check("the activity shows the turn's task list", (await page.locator(".spanel .todos .box span").count()) === 2);
+  await shot("activity-tasks-1440");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".spanel", { state: "detached", timeout: 5000 }).catch(() => {});
   await send("Usa TodoWrite para marcar las dos tareas como completadas. No hagas nada más.");
   await idle();
   check("…and goes when none is under way", (await page.locator(".side-progress").count()) === 0);

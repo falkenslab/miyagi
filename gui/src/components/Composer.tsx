@@ -2,10 +2,23 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { act, upload } from "../api";
 import type { Texts } from "../i18n";
 import type { ExtTexts } from "../i18n/extensions";
-import type { ChatState, Mode } from "../types";
+import type { ChatState, Mode, Todo } from "../types";
 import { ActionList, useActions } from "./Actions";
 import { Icon } from "./Icons";
 import { Menu } from "./Shell";
+
+/** The turn's tasks, as above the composer and in the activity panel (#70). */
+export function TaskList({ todos }: { todos: Todo[] }) {
+  return (
+    <div className="box">
+      {todos.map((todo, index) => (
+        <span key={index} className={todo.status === "completed" ? "done" : todo.status === "in_progress" ? "now" : ""}>
+          {todo.status === "in_progress" ? todo.activeForm : todo.content}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 /** The turn's tasks (the agent's TodoWrite), folded above the composer into the one in progress; opened, the list. */
 export function Todos({ chat, T }: { chat: ChatState; T: Texts }) {
@@ -15,15 +28,7 @@ export function Todos({ chat, T }: { chat: ChatState; T: Texts }) {
   const now = chat.todos.find((todo) => todo.status === "in_progress") ?? chat.todos.find((todo) => todo.status === "pending");
   return (
     <div className="todos">
-      {open && (
-        <div className="box">
-          {chat.todos.map((todo, index) => (
-            <span key={index} className={todo.status === "completed" ? "done" : todo.status === "in_progress" ? "now" : ""}>
-              {todo.status === "in_progress" ? todo.activeForm : todo.content}
-            </span>
-          ))}
-        </div>
-      )}
+      {open && <TaskList todos={chat.todos} />}
       <button type="button" className="todo-pill" aria-expanded={open} title={T.tasks(done, chat.todos.length)} onClick={() => setOpen(!open)}>
         <span className="sq" aria-hidden="true" />
         <b>

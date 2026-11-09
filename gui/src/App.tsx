@@ -42,7 +42,7 @@ export function App() {
   const [extTab, setExtTab] = useState<ExtTab>("installed");
   const [sideOpen, setSideOpen] = useState(false);
   const [sideCollapsed, setSideCollapsed] = useSideCollapsed();
-  const side = useSidePanel();
+  const side = useSidePanel(state?.chat?.run?.dir);
   const [linking, setLinking] = useState(false);
   const closeLink = useCallback(() => setLinking(false), []);
   const chat = state?.chat ?? null;
@@ -165,7 +165,7 @@ export function App() {
           {state?.signedIn && state.opening && !chat && <Waiting block text={T.opening} still={T.stillWorking} />}
           {chat && shown === "chat" && (
             <div className="chat">
-              <Transcript chat={chat} T={T} go={go} beside={beside} />
+              <Transcript chat={chat} T={T} go={go} beside={beside} onActivity={side.openActivity} />
               {/* A checkpoint takes the composer's place; the composer stays mounted, so a draft isn't lost. */}
               <div className="dock">
                 <Panel chat={chat} T={T} />
@@ -212,7 +212,7 @@ export function App() {
         </main>
         <StatusBar chat={chat} T={T} inChat={shown === "chat"} onOpenChat={() => setView("chat")} />
       </section>
-      {withPanel && <SidePanel panel={side} T={T} C={C} />}
+      {withPanel && chat && <SidePanel panel={side} chat={chat} T={T} C={C} />}
       {linking && info && (
         <LinkWizard
           info={info}

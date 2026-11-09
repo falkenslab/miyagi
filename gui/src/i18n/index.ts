@@ -53,6 +53,8 @@ export interface Texts {
   showPanel: string;
   backToChat: string;
   closeTab: (title: string) => string;
+  activity: string;
+  noActions: string;
   moreOptions: string;
   versions: string;
   current: string;
@@ -196,6 +198,8 @@ const es: Texts = {
   showPanel: "Mostrar el panel",
   backToChat: "Volver a la conversación",
   closeTab: (title) => `Cerrar ${title}`,
+  activity: "Actividad",
+  noActions: "Aún no hay acciones en este turno.",
   moreOptions: "Más opciones",
   versions: "Versiones",
   current: "actual",
@@ -353,6 +357,8 @@ const en: Texts = {
   showPanel: "Show the panel",
   backToChat: "Back to the conversation",
   closeTab: (title) => `Close ${title}`,
+  activity: "Activity",
+  noActions: "No actions in this turn yet.",
   moreOptions: "More options",
   versions: "Versions",
   current: "current",
@@ -510,6 +516,8 @@ const fr: Texts = {
   showPanel: "Afficher le panneau",
   backToChat: "Revenir à la conversation",
   closeTab: (title) => `Fermer ${title}`,
+  activity: "Activité",
+  noActions: "Aucune action pour l'instant dans ce tour.",
   moreOptions: "Plus d'options",
   versions: "Versions",
   current: "actuelle",
@@ -667,6 +675,8 @@ const de: Texts = {
   showPanel: "Bereich anzeigen",
   backToChat: "Zurück zum Gespräch",
   closeTab: (title) => `Schließen ${title}`,
+  activity: "Aktivität",
+  noActions: "Noch keine Aktionen in diesem Schritt.",
   moreOptions: "Weitere Optionen",
   versions: "Versionen",
   current: "aktuell",

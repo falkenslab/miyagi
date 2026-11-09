@@ -209,12 +209,13 @@ th { background: var(--panel-2); }
 
 /* A turn's tools: one dim line, no frame; opened, the calls under it */
 .tool { margin: 4px 0; font-size: 14px; }
-.tool-head { display: inline-flex; gap: 6px; align-items: center; max-width: 100%; background: none; border: 0; padding: 4px 0; min-height: 36px; cursor: pointer; text-align: left; color: var(--dim); }
+.tool-head { display: inline-flex; gap: 6px; align-items: center; max-width: 100%; background: none; border: 0; padding: 4px 0; min-height: 44px; cursor: pointer; text-align: left; color: var(--dim); }
 .tool-head:hover { color: var(--text-2); }
 .tool-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tool-head .icon { flex: 0 0 auto; }
 /* What a working subagent is doing, under its call's line (#63) */
-.sub-activity { display: flex; gap: 6px; align-items: center; min-width: 0; margin: -4px 0 4px 18px; color: var(--dim); font-size: 13px; }
+.sub-activity { display: flex; gap: 6px; align-items: center; min-width: 0; max-width: calc(100% - 18px); min-height: 44px; margin: -10px 0 0 18px; padding: 0; border: 0; background: none; color: var(--dim); font-size: 13px; text-align: left; cursor: pointer; }
+.sub-activity:hover { color: var(--text-2); }
 .sub-activity span:not(.ellipsis) { flex: 0 0 auto; white-space: nowrap; }
 .tool-calls { list-style: none; margin: 0 0 6px; padding: 6px 12px 8px; border-left: 2px solid var(--line); }
 .tool-calls li { padding: 3px 0; color: var(--text-2); }
@@ -555,6 +556,13 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 .spanel-page .preview { flex: 1; height: auto; min-height: 0; }
 .spanel-page .preview.md { max-height: none; }
 .spanel-page .preview-img { align-self: center; object-fit: contain; max-height: 100%; }
+/* A turn's activity (#70): its head, its tasks and the calls, which scroll */
+.activity-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.activity-head { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; min-height: 44px; }
+.btn.small.tall { min-height: 44px; }
+.activity-panel .todos { flex: 0 0 auto; align-self: stretch; margin: 0 0 8px; padding: 0; }
+.activity-list { flex: 1; min-height: 0; overflow: auto; }
+.activity-list .tool-calls { margin: 0; padding: 4px 4px 12px; border-left: 0; }
 .app.panel-full:not(.asking) { grid-template-columns: auto minmax(0, 1fr); }
 .app.panel-full:not(.asking) > .main { display: none; }
 @media (min-width: 1101px) { .ibtn.spanel-back { display: none; } }
