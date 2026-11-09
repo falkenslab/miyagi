@@ -6,7 +6,8 @@
  * `O1`, `O2`…, isn't taken for it). The title is
  * the cell that links to a topic page, else the column headed as one (título, title…), else the
  * second; the rest of the row is kept as the unit's details. Rows without a number (a total, a
- * make-up period) aren't units.
+ * make-up period) aren't units. A section on the units wins over any other table, and its units
+ * may be bullet points linking to their topics (#90).
  */
 export interface PlanUnit {
   number: string;
@@ -19,6 +20,8 @@ export interface PlanUnit {
 
 const TITLE_HEADER = /t[íi]tulo|title|titre|titel|nombre|name|unidad|unit\b/i;
 const UNIT_HEADER = /^(?:ut|u|ud|unidad|unidades|unit|units|unité|einheit|tema|topic|thème|thema)\b/i;
+const UNITS_HEADING = /^#{1,3}\s+(?:\d+\.?\s*)?(?:temas?|unidades?(?:\s+did[áa]cticas?)?|units?|topics?|th[èe]mes?|unit[ée]s?|themen|einheiten)\s*(?:\[[^\]]*\])?\s*$/i;
+const NUMBERED_TITLE = /^\p{L}{1,10}\.?\s*\d+\s*[.:–—-]\s*/u;
 const TOPIC_LINK = /\]\((?:topics?\/)([a-z0-9]+(?:-[a-z0-9]+)*)(?:\.md)?(?:#[^)]*)?\)/;
 
 const cells = (line: string) =>
@@ -36,8 +39,32 @@ const plain = (cell: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
+/** The lines of the plan's own section on its units, when it has one. */
+function unitsSection(lines: string[]): { start: number; end: number } | undefined {
+  const start = lines.findIndex((line) => UNITS_HEADING.test(line));
+  if (start < 0) return undefined;
+  const level = /^#+/.exec(lines[start]!)![0].length;
+  const next = lines.findIndex((line, index) => index > start && /^#+\s/.test(line) && /^#+/.exec(line)![0].length <= level);
+  return { start, end: next < 0 ? lines.length : next };
+}
+
+/** The units a section lists as bullet points, each linking to its topic page (#90). */
+function listedUnits(lines: string[]): PlanUnit[] {
+  const items = lines.filter((line) => /^\s*[-*]\s/.test(line) && TOPIC_LINK.test(line));
+  return items.map((line, index) => {
+    const link = /\[([^\]]+)\]\([^)]*\)/.exec(line)!;
+    const named = plain(link[1]!);
+    const number = /\d+/.exec(named)?.[0] ?? String(index + 1);
+    const after = plain(line.slice(link.index + link[0].length)).replace(/^[\s,.:;·–—-]+/, "");
+    return { number, title: named.replace(NUMBERED_TITLE, "") || named, topic: `topic/${TOPIC_LINK.exec(line)![1]}`, details: after };
+  });
+}
+
 export function planUnits(markdown: string): PlanUnit[] {
   const lines = markdown.split(/\r?\n/);
+  const section = unitsSection(lines);
+  const listed = section ? listedUnits(lines.slice(section.start, section.end)) : [];
+  if (listed.length >= 2) return listed;
   for (let i = 0; i + 1 < lines.length; i++) {
     if (!lines[i]!.trim().startsWith("|") || !/^\s*\|?\s*:?-{3,}/.test(lines[i + 1]!)) continue;
     const header = cells(lines[i]!).map(plain);
@@ -46,7 +73,7 @@ export function planUnits(markdown: string): PlanUnit[] {
     for (; j < lines.length && lines[j]!.trim().startsWith("|"); j++) rows.push(cells(lines[j]!));
     const units = rows.filter((row) => /^(?:[A-Za-z]{1,3}\.?\s*)?\d+$/.test(plain(row[0] ?? "")));
     const unitTable =
-      units.some((row) => row.some((cell) => TOPIC_LINK.test(cell))) || UNIT_HEADER.test(header[0] ?? "") || header.some((name, index) => index > 0 && TITLE_HEADER.test(name));
+      units.some((row) => row.some((cell) => TOPIC_LINK.test(cell))) || (UNIT_HEADER.test(header[0] ?? "") && (!section || (i > section.start && i < section.end))) || header.some((name, index) => index > 0 && TITLE_HEADER.test(name));
     if (units.length >= 2 && unitTable) {
       const titleColumn = Math.max(1, header.findIndex((name, index) => index > 0 && TITLE_HEADER.test(name)));
       return units.map((row) => {

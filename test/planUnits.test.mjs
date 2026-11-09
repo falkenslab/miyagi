@@ -37,3 +37,39 @@ test("a link as the file path, units numbered UT1, and a plan without a units ta
   assert.deepEqual(units.map((unit) => [unit.number, unit.title, unit.topic]), [["UT1", "Intro", "topic/intro"], ["UT2", "Más", null]]);
   assert.deepEqual(planUnits("# Plan\n\nSin tabla de unidades.\n"), []);
 });
+
+test("units listed as bullet points win over another section's table that starts with a topic", () => {
+  const units = planUnits(`# Programación
+
+## 4. Temas
+
+- [Tema 1. MariaDB en Docker](topics/tema-1-mariadb-docker.md), semana 1: O1.
+- [Tema 2. DDL](topics/tema-2-ddl.md), semanas 2 y 3: O2.
+
+## 8. Atención a la diversidad
+
+| Tema | Refuerzo | Ampliación |
+| --- | --- | --- |
+| T1 | Guía paso a paso | Eliminar el contenedor |
+| T2 | Esquema parcial | Una tabla nueva |
+`);
+  assert.deepEqual(units.map((unit) => [unit.number, unit.title, unit.topic]), [
+    ["1", "MariaDB en Docker", "topic/tema-1-mariadb-docker"],
+    ["2", "DDL", "topic/tema-2-ddl"],
+  ]);
+  assert.equal(units[0].details, "semana 1: O1.");
+});
+
+test("with a section on the units, a table elsewhere isn't taken for them", () => {
+  assert.deepEqual(planUnits(`## Temas
+
+Por definir.
+
+## Diversidad
+
+| Tema | Refuerzo | Ampliación |
+| --- | --- | --- |
+| T1 | A | B |
+| T2 | C | D |
+`), []);
+});
