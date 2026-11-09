@@ -2,6 +2,8 @@
 
 Issue: [#77](https://github.com/falkenslab/miyagi/issues/77)
 
+Blocked on a kit release: moodle-mcp 0.8.0 already returns `_meta.page`, but agent-kit 0.33.0 has no `meta` on `tool-result` nor on `TranscriptCall`. The change is committed in `../agent-kit` (`c14d387`, agent-kit#91), after the `v0.33.0` tag and unreleased.
+
 ## Goal
 
 Under each of miyagi's actions in Moodle, the chat offers "View in the classroom", which opens the very page it touched: beside the chat in the desktop app, in a new tab of the teacher's browser in the web version. The model never sees it.
@@ -21,13 +23,13 @@ Under each of miyagi's actions in Moodle, the chat offers "View in the classroom
 - **The host**: takes `meta.page` from the calls of `mcp__moodle__*` tools and gives it to the page with the call, only if it's on the classroom's own origin. The kit keeps it with the conversation, so a resumed one shows its links.
 - **The page**: "View in the classroom" under each of those steps in the chat, and on the classroom's items where the page knows them (Your classroom, the oven's served activities).
 - **Web version**: it opens in a new tab (`rel="noopener"`), where the teacher is already signed in to Moodle.
-- **Desktop app**: a panel beside the chat, a `WebContentsView` with its own persistent session (`persist:classroom`), no preload, sandboxed, navigation kept to the classroom's origin (anything else goes to the system browser), back, reload, "Open in the browser" and close. The teacher signs in to Moodle there once; it's remembered. It never shares anything with miyagi's page (its token, its host).
+- **Desktop app**: a tab of the integrated browser (`integrated-browser.md`, which this needs), where the teacher signs in to Moodle once.
 - **Docs** (es, en): the browser page and the desktop app's: the link, the panel, signing in once, that it's the teacher's own session and the model doesn't see it.
 
 ## Acceptance
 
-- In the sandbox, after miyagi creates a page and an assignment, each step offers "View in the classroom", which opens that page: in a new tab on the web, in the panel in the desktop app.
-- A URL outside the classroom's origin is never offered; the panel doesn't navigate out of it.
+- In the sandbox, after miyagi creates a page and an assignment, each step offers "View in the classroom", which opens that page: in a new tab on the web, in a tab of the integrated browser in the desktop app.
+- A URL outside the classroom's origin is never offered as this link.
 - The model gets no URL nor picture it didn't already get (what it receives is unchanged).
 - A resumed conversation still shows its links.
 - Checked at 360, 768 and 1440 px, with a test report with screenshots.

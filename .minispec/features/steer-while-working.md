@@ -6,6 +6,8 @@ Issue: [#62](https://github.com/falkenslab/miyagi/issues/62)
 
 While miyagi works on a turn, the teacher can still send it messages (a question, a correction, "skip that, do this"), which it reads as soon as it can, as in Claude Code, without stopping the turn.
 
+Blocked on the kit: https://github.com/falkenslab/agent-kit/issues/92
+
 ## Context
 
 - Today a message can't be sent while a turn runs, blocked three times over:
