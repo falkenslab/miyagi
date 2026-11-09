@@ -12,10 +12,17 @@ Esta página es la única de la web que habla de lo que todavía no existe. Solo
 
 ## Disponible
 
+Desde la versión 0.13.0:
+
+- **Una ventana nueva, en la aplicación y en el navegador.** Una columna de iconos para las vistas, una columna de conversaciones redimensionable con búsqueda, campana y conversaciones fijadas, y el panel lateral con pestañas. Ver [La aplicación de escritorio](guia/escritorio.md).
+- **Navegador integrado y barra de título propia**, solo en la aplicación de escritorio.
+- **Visita guiada y trucos** al abrir una asignatura.
+- **Esta documentación, por versiones:** guías y casos de uso de la aplicación, la versión web y la terminal, con capturas de las tres.
+
 Desde la versión 0.12.0:
 
 - **miyagi en una ventana.** La aplicación para Windows, que se instala con doble clic, con la conversación y sus paneles de aprobación, tus asignaturas por su nombre, las extensiones y tu asignatura de un vistazo. Ver [Instalar](guia/instalar.md).
-- **miyagi en el navegador.** La misma página, con `miyagi web`. Ver [miyagi en el navegador](avanzado/navegador.md).
+- **miyagi en el navegador.** La misma página, con `miyagi web`. Ver [La versión web](guia/web.md).
 - **Materiales escritos una vez.** Cuestionarios, bancos de preguntas, apuntes, tareas con su rúbrica y temas en archivos tuyos, con fechas por grupo, publicados en el aula con exportadores probados. Ver [Materiales](avanzado/materiales.md).
 - **Actividades personalizadas.** Variantes equivalentes ambientadas en lo que interesa al grupo, a partir de una encuesta anónima. Ver [Habilidades](guia/habilidades.md).
 - **Estilos visuales.** Lo que publica miyagi con el estilo que elijas, como extensiones, siempre accesible. Ver [Tus materiales](avanzado/materiales.md#el-estilo-de-lo-que-publicas).
@@ -41,10 +48,6 @@ Lo que hace cada habilidad está en [Habilidades](guia/habilidades.md).
 ### Materiales y actividades
 
 - **Videotutoriales con tu voz**, publicados en YouTube y enlazados en el aula ([#38](https://github.com/falkenslab/miyagi/issues/38)).
-
-### La web
-
-- **Las ilustraciones y las guías, para el terminal y la aplicación.** Todas las capturas, comandos y peticiones con el estilo de Falken's Lab, y guías con casos de uso tanto del terminal como de la aplicación de escritorio o del navegador ([#57](https://github.com/falkenslab/miyagi/issues/57)).
 
 ## Lo que miyagi no hará
 

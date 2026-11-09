@@ -125,9 +125,14 @@ Un archivo en tu carpeta personal (en Windows, `C:\Users\<tu-usuario>\.miyagi\co
 | Clave | Qué es | Por defecto |
 | --- | --- | --- |
 | `claudeCodeOAuthToken` | Ya no se usa. Si lo guardó una versión anterior, miyagi lo borra al arrancar: las condiciones de Anthropic no le dejan guardar tu token. Tu sesión de Claude la guarda Claude Code. | Ninguno |
-| `anthropicApiKey` | Una clave de API de Claude (`sk-ant-api…`), si la pegaste en la [página de miyagi](navegador.md). Se paga por uso. | Ninguno |
+| `anthropicApiKey` | Una clave de API de Claude (`sk-ant-api…`), si la pegaste en la [aplicación de escritorio o en la versión web](navegador.md). Se paga por uso. | Ninguno |
 | `defaultLanguage` | El idioma para los cursos que no fijan `agent.language`. | Ninguno: te sigue en el idioma en que le escribas. |
 | `autoCompactEnabled` | Si la conversación llena el contexto del modelo, la resume automáticamente para poder seguir. Pon `false` para desactivarlo. | `true` |
+| `tourSeen` | La versión de la visita guiada de la página que ya viste o saltaste. Lo escribe la página. | Ninguno: la visita se abre la primera vez. |
+| `showTips` | Si te sale un truco al abrir una asignatura. Lo apaga la casilla **No mostrar trucos al abrir**. | `true` |
+| `tipsNext` | El siguiente truco que se te enseñará. Lo escribe la página. | El primero. |
+
+Las tres últimas son lo único de este archivo que la página puede leer y escribir (nunca la clave de API).
 
 La clave de API es tan delicada como una contraseña: en Mac y Linux, miyagi deja el archivo legible solo para tu usuario.
 

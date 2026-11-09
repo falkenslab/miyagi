@@ -12,10 +12,17 @@ This is the only page on the site that talks about what doesn't exist yet. Only 
 
 ## Available {#disponible}
 
+Since version 0.13.0:
+
+- **A new window, in the app and in the browser.** A column of icons for the views, a resizable column of conversations with search, a bell and pinned conversations, and the side panel with tabs. See [The desktop app](guia/escritorio.md).
+- **Built-in browser and its own title bar**, only in the desktop app.
+- **Guided tour and tips** when opening a subject.
+- **This documentation, by version:** guides and use cases for the app, the web version and the terminal, with screenshots of all three.
+
 Since version 0.12.0:
 
 - **miyagi in a window.** The Windows app, installed with a double click, with the conversation and its approval panels, your subjects by their name, extensions and your subject at a glance. See [Install](guia/instalar.md).
-- **miyagi in the browser.** The same page, with `miyagi web`. See [miyagi in the browser](avanzado/navegador.md).
+- **miyagi in the browser.** The same page, with `miyagi web`. See [The web version](guia/web.md).
 - **Materials written once.** Quizzes, question banks, notes, assignments with their rubric and units in files of your own, with dates per group, published in the classroom with tested exporters. See [Materials](avanzado/materiales.md).
 - **Personalized activities.** Equivalent variants set in what the group is interested in, based on an anonymous survey. See [Skills](guia/habilidades.md).
 - **Visual styles.** What miyagi publishes in the style you choose, as extensions, always accessible. See [Your materials](avanzado/materiales.md#el-estilo-de-lo-que-publicas).
@@ -41,10 +48,6 @@ What each skill does is in [Skills](guia/habilidades.md).
 ### Materials and activities {#materiales-y-actividades}
 
 - **Video tutorials in your voice**, published on YouTube and linked in the classroom ([#38](https://github.com/falkenslab/miyagi/issues/38)).
-
-### The website {#la-web}
-
-- **Illustrations and guides, for the terminal and the app.** Every screenshot, command and request in Falken's Lab's style, and guides with use cases for both the terminal and the desktop or browser app ([#57](https://github.com/falkenslab/miyagi/issues/57)).
 
 ## What miyagi won't do {#lo-que-miyagi-no-hará}
 

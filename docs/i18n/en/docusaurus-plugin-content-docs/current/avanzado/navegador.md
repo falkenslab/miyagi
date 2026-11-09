@@ -1,14 +1,14 @@
 ---
-title: miyagi in the browser
+title: miyagi's page
 sidebar_position: 11
-description: "miyagi web: miyagi's chat in your browser, only on your computer, with a key in the address; what it protects and what it doesn't if you open it from outside."
+description: "Reference for miyagi's page, shared by the desktop app and miyagi web: the window, the side panel, the built-in browser, the views, Your classroom and the extensions; what protects it and what doesn't if you open it from outside."
 ---
 
-# miyagi in the browser {#miyagi-en-el-navegador}
+# miyagi's page {#la-página-de-miyagi}
 
-Besides the chat in the terminal, miyagi has a page: the same conversation, with its approval panels, the earlier conversations, the mode and your subjects, in a browser window. It's the same page the desktop app opens.
+The [desktop app](/guia/escritorio/) and the [web version](/guia/web/) show the same page: the conversation, with its approval panels, the earlier conversations, the mode and your subjects. The app adds its title bar and a built-in browser; both are marked below. This is the detailed reference for what's in it.
 
-## Opening it {#abrirla}
+The web version opens like this:
 
 <Terminal>{`$ miyagi web`}</Terminal>
 
@@ -20,9 +20,15 @@ http://127.0.0.1:52341/?token=…
 
 Open it in your browser. `Ctrl+C` in the terminal closes it. With `--port <n>` you choose the port. With no subject yet, the page lets you create one.
 
-## What you see {#qué-ves}
+## What you see {#que-ves}
 
-On the left, the **sidebar**, laid out like the Claude app's: **New conversation**, your subject (to switch to another or create a new one, and whether it has a classroom), **Today** and **Your classroom**, the views of the subject and of its memory and the **Extensions**, your **Recent** conversations, each with the date of its last activity and your first words in it (the ones with only miyagi's greeting aren't kept in the list; the open one highlighted while you're in it, and with a dot when you're in another view; click one to resume it) and, at the bottom, the versions and the light, dark or system theme. On a narrow screen, like a phone's, it opens with the ☰ button, and the views of the subject, of its memory and of miyagi fold into one line that unfolds them.
+The guide to the window, with its screenshots, is in [The desktop app](/guia/escritorio/). Here are the details.
+
+On the left, a **column of icons**: **Today**, **Subject** (with the tabs Teaching plan, Topics and activities, Materials and In the oven), **Memory** (Knowledge base and Sources), **Your classroom** and **Extensions** (Installed, My commands, Catalog, Repositories and Capabilities). At the bottom, the help button (with the guided tour), the light, dark or system theme, and the version. On a narrow screen, like a phone's, the column opens with the ☰ button.
+
+Next to it, the **conversations column**, which you can widen by dragging its edge or fold with its button: the subject picker (to switch to another or create a new one, and whether it has a classroom), **New conversation**, the search for a word across all of the subject's conversations, the **bell** (what's waiting for you: an approval, a question, sources not taken in yet or activities in the oven), your **pinned** conversations and the **recent** ones, each with the date of its last activity and your first words in it (the ones with only miyagi's greeting aren't kept in the list). The open one is highlighted, and ⋯ pins it. At the foot, if a job is under way, the task in progress and which of how many it is; clicking it takes you to the conversation.
+
+The first time you open a subject, a **guided tour** shows you these parts (it's saved in `tourSeen`, in the [global configuration](configuracion.md)). When you open a subject a **tip** appears too; you turn them off with the checkbox in its window, which is saved in `showTips`, and how far you've got in `tipsNext`.
 
 From the subject picker (or the start screen, if you have none):
 
@@ -34,17 +40,29 @@ Where it asks for a folder (a new subject's, **Open a folder**, **Locate** or a 
 
 They're the same subjects you see in the terminal with `miyagi workspaces`.
 
-At the top of each view, its title; in the conversation, the conversation's title and the ✎ button to start a new one.
+At the top of each view, its title; in the conversation, the conversation's title and the button to start a new one.
 
-At the bottom, while miyagi or the page itself is doing something, the **status bar** says so in any view: on opening the subject, that it's reading what it knows of it to greet you; during a turn, what it's doing and for how long, with **Go to the conversation**; an approval or a question waiting for you, highlighted; and what the page does, like installing an extension or connecting the classroom. What has to wait until miyagi finishes stays disabled and, when you hover over it, tells you why; you can keep looking at the views meanwhile.
+At the bottom, while miyagi or the page itself is doing something, the **status bar** says so in any view: on opening the subject, that it's reading what it knows of it to greet you; during a turn, what it's doing and for how long, with **Go to the conversation**; an approval or a question waiting for you, highlighted; and what the page does, like installing an extension or connecting the classroom. What has to wait until miyagi finishes stays disabled and, when you hover over it, tells you why; you can keep looking at the views meanwhile. If a conversation doesn't get going within five minutes, with nothing to show or ask, it's closed, another one opens and it lets you know.
 
 In the conversation:
 
 - **A new conversation** greets you and offers what you ask for often: building a unit, taking in your documents (with how many are left) and, with the classroom, grading what's pending and checking the forum; without one, linking it. miyagi receives what you click as if you'd typed it.
 - **The chat**: what you write, on the right; what miyagi answers, full width, with **Copy** and how long it took under it; and its actions folded into one dim line (open it to see each one). When it hands something to one of its helpers, like the researcher, under it you see what the helper is doing at each moment, for how long and how many actions it has taken. If you scroll up to read something earlier, the ↓ button takes you back to the end. What miyagi names of your subject (a document in your sources, a material, a page of its memory, the teaching plan or what's in the oven) is a link that opens its view at that item; what doesn't exist stays text. If you select part of a reply, a small menu offers **Research this**, **Questions about this** and **Quote in the chat**.
-- **The box to type in**: `Enter` sends, `Shift+Enter` starts a new line, `Esc` stops miyagi while it works (so does the ■ button), `/` opens the shortcuts and `↑`/`↓` go through what you already typed. Under the text, **＋** (add a file to the sources, the **Capabilities** and the catalog of everything miyagi can do, grouped into Day to day, Create, Plan, Memory and Your classroom; what needs the classroom is off without one, and what needs a value, like "On which topic?", asks for it in the same menu) and the **mode** (also with `Shift+Tab`). The turn's tasks fold above it into one line with the one in progress; click it to see the list.
+- **The box to type in**: `Enter` sends, `Shift+Enter` starts a new line, `Esc` stops miyagi while it works (so does the ■ button), `/` opens the shortcuts and `↑`/`↓` go through what you already typed. Under the text, **＋** (add a file to the sources, the **Capabilities** and the catalog of everything miyagi can do, grouped into Day to day, Create, Plan, Memory and Your classroom; what needs the classroom is off without one, and what needs a value, like "On which topic?", asks for it in the same menu) and the **mode** (also with `Shift+Tab`). While miyagi is working you can't send it new messages. The turn's tasks fold above it into one line with the one in progress; click it to see the list.
 - **miyagi's approvals and questions** take the place of the box to type in until you answer, just like in the terminal, and the conversation stays in view above them in case you want to reread something. On a phone, as a sheet that slides up from the bottom. If you were in another view, the page goes back to the conversation.
 - **Files for the sources**: from **＋**, or by dragging them onto the box to type in, they go to the subject's `sources/`.
+
+### The side panel {#panel-lateral}
+
+The panel on the right shows, in tabs and without leaving the conversation, the **drafts** you open from the conversation and the turn's **activity**. You can widen it, expand it and close it. In the desktop app, it can also open **web pages** with its built-in browser.
+
+### The built-in browser {#navegador-integrado}
+
+Only in the desktop app. The button in the panel's bar opens a tab with a web page, and links in the conversation go there. Those tabs keep their own session (cookies and sign-ins) and **miyagi doesn't see them**: the model receives nothing of what's in them. It's a separate session from that of the browser moodle-teacher works with, so signing in to one doesn't sign you in to the other. The built-in browser's session stays when you close and reopen the app.
+
+### The title bar {#barra-titulo}
+
+Only in the desktop app. It replaces the Windows bar and is part of the page: arrows to move through the views you've visited, the side column's button and the File, Edit, View and Help menus, with their keyboard shortcuts.
 
 The first time, if you aren't signed in to Claude, the page offers two ways:
 
@@ -88,7 +106,7 @@ With the classroom linked, the view offers what miyagi does with your course: ge
 - **Repositories**: the official one, which can't be removed, and the ones you add. To add one, miyagi reviews it, warns you that its code runs on your computer and asks you to type its name.
 - **Capabilities** (also from **＋**, in the box to type in): a table with what miyagi can do and thanks to what, what your computer doesn't allow it (for example, no Docker) and what it lacks, with a button to add the extension that would give it.
 
-## What protects it {#qué-la-protege}
+## What protects the web version {#que-la-protege}
 
 - **Only on your computer.** The page listens on `127.0.0.1`, your own machine's address: nobody on your network can reach it.
 - **With a key.** The `?token=…` part of the address is random and changes every time you open it. Without it, the page doesn't respond. Whoever has the full address can use miyagi with your account: don't share it.

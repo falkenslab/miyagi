@@ -125,9 +125,14 @@ A file in your home folder (on Windows, `C:\Users\<your-user>\.miyagi\config.jso
 | Key | What it is | Default |
 | --- | --- | --- |
 | `claudeCodeOAuthToken` | No longer used. If an earlier version saved it, miyagi removes it on start: Anthropic's terms don't let it keep your token. Claude Code keeps your Claude session. | None |
-| `anthropicApiKey` | A Claude API key (`sk-ant-api…`), if you pasted one on [miyagi's page](navegador.md). Billed per use. | None |
+| `anthropicApiKey` | A Claude API key (`sk-ant-api…`), if you pasted one in the [desktop app or the web version](navegador.md). Billed per use. | None |
 | `defaultLanguage` | The language for the courses that don't set `agent.language`. | None: it follows you in the language you write to it in. |
 | `autoCompactEnabled` | If the conversation fills the model's context, it summarizes it automatically so it can go on. Set `false` to turn it off. | `true` |
+| `tourSeen` | The version of the page's guided tour you've already seen or skipped. The page writes it. | None: the tour opens the first time. |
+| `showTips` | Whether you get a tip when you open a subject. The **Don't show tips on startup** checkbox turns it off. | `true` |
+| `tipsNext` | The next tip you'll be shown. The page writes it. | The first one. |
+
+The last three are the only things in this file the page can read and write (never the API key).
 
 The API key is as sensitive as a password: on Mac and Linux, miyagi leaves the file readable only by your user.
 

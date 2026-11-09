@@ -46,7 +46,7 @@ They all accept `--dir <folder>` to work on that subject.
 
 `miyagi extension` on its own explains each one. Inside the chat, `/extensions` shows which extensions it's working with, and enabling or disabling one from there reopens the session without losing the conversation.
 
-In the [app and in the browser](navegador.md#extensiones) all of this is in **Extensions**, without typing commands, and what you install from there starts working in the open conversation.
+In the [desktop app and in the web version](navegador.md#extensiones) all of this is in **Extensions**, without typing commands, and what you install from there starts working in the open conversation. With docker-lab, miyagi can also write in its labs' folder from that same conversation, without restarting the app.
 
 In the terminal, an installed or changed extension takes effect in the next session, not in the one already open. `miyagi skills` lists its skills with the extension's name in square brackets.
 
