@@ -146,6 +146,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
   sheetFinal: "Nota final",
   styleLabels: { copy: "Selecciona y copia", statement: "Enunciado", question: "Pregunta", feedback: "Retroalimentación", code: "Código" },
   moodleTeacherMissing: "El aula de esta asignatura funciona con moodle-teacher, que no está instalada o está desactivada: esta sesión trabaja sin el aula. Lo arregla \"miyagi extension add moodle-teacher\" (o \"enable\").",
+  startStuck: "Esta conversación no ha conseguido arrancar en 5 minutos, así que se ha cerrado y se ha abierto otra. Si vuelve a pasar, comprueba tu conexión y cierra y abre miyagi.",
   classroomNeedsMoving: "El aula de esta asignatura es de antes de moodle-teacher, y miyagi ya no tiene navegador propio: esta sesión trabaja sin el aula. Ábrela en un chat para pasarla, o ejecuta \"miyagi init -w <nombre>\".",
   exploreNeedsClassroom: (dir) => `${dir} no tiene ningún aula conectada: no hay Moodle que explorar. Conéctala con "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `El aula de ${dir}/config.json necesita "url" y "courseId".`,

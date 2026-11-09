@@ -107,6 +107,7 @@ export interface Messages {
   /** The labels a style's templates ask for ({{label:copy}}…), in the teacher's language. */
   styleLabels: Record<"copy" | "statement" | "question" | "feedback" | "code", string>;
   moodleTeacherMissing: string;
+  startStuck: string;
   classroomNeedsMoving: string;
   exploreNeedsClassroom: (dir: string) => string;
   classroomIncomplete: (dir: string) => string;
@@ -304,6 +305,7 @@ See README.md for details.`,
   sheetFinal: "Final grade",
   styleLabels: { copy: "Select and copy", statement: "Statement", question: "Question", feedback: "Feedback", code: "Code" },
   moodleTeacherMissing: "This subject's classroom works through moodle-teacher, which isn't installed or is off: this session works without the classroom. \"miyagi extension add moodle-teacher\" (or \"enable\") fixes it.",
+  startStuck: "This conversation didn't manage to start after 5 minutes, so it has been closed and a new one opened. If it happens again, check your connection and close and reopen miyagi.",
   classroomNeedsMoving: "This subject's classroom is from before moodle-teacher, and miyagi no longer has a browser of its own: this session works without the classroom. Open it in a chat to move it, or run \"miyagi init -w <name>\".",
   exploreNeedsClassroom: (dir) => `${dir} has no classroom connected: there's no Moodle to explore. Connect one with "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `The classroom in ${dir}/config.json needs both "url" and "courseId".`,

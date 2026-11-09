@@ -145,6 +145,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   sheetFinal: "Note finale",
   styleLabels: { copy: "Sélectionner et copier", statement: "Énoncé", question: "Question", feedback: "Rétroaction", code: "Code" },
   moodleTeacherMissing: "La classe de cette matière passe par moodle-teacher, qui n'est pas installée ou est désactivée : cette session travaille sans la classe. \"miyagi extension add moodle-teacher\" (ou \"enable\") le corrige.",
+  startStuck: "Cette conversation n'a pas réussi à démarrer en 5 minutes : elle a été fermée et une autre a été ouverte. Si cela se reproduit, vérifie ta connexion, puis ferme et rouvre miyagi.",
   classroomNeedsMoving: "La classe de cette matière date d'avant moodle-teacher, et miyagi n'a plus de navigateur à lui : cette session travaille sans la classe. Ouvrez-la dans un chat pour la passer, ou lancez \"miyagi init -w <nom>\".",
   exploreNeedsClassroom: (dir) => `${dir} n'a aucune classe connectée : il n'y a pas de Moodle à explorer. Connectez-en une avec "miyagi init --dir ${dir}".`,
   classroomIncomplete: (dir) => `La classe de ${dir}/config.json a besoin de "url" et de "courseId".`,

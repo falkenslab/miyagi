@@ -6,6 +6,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { agentKitVersion, createChatController, getLanguage, readConversation, startClaudeSignIn, type ChatController, type ClaudeSignIn, type Mode } from "@falkenslab/agent-kit";
 import { prepareSession, VERSION } from "../agent.js";
+import { watchStart } from "./startWatch.js";
+import { t } from "../messages/index.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
@@ -179,6 +181,15 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       if (current !== subject) return controller.close();
       subject.chat = controller;
       controller.subscribe(() => schedule());
+      const stopWatching = watchStart(controller, () => {
+        stopWatching();
+        if (current !== subject || subject.chat !== controller) return;
+        subject.notices.push(t().startStuck);
+        subject.chat = null;
+        subject.opening = null;
+        controller.close();
+        void openChat(subject).catch(() => undefined);
+      });
       schedule();
       // The greeting is a turn of tens of seconds: the page shows the conversation waiting for it
       // (#59) instead of the request that opened the subject hanging until it ends.
