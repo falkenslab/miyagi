@@ -1,12 +1,16 @@
 ---
 title: The course's memory
-sidebar_position: 7
+sidebar_position: 11
 description: "What miyagi remembers about your course, where it keeps it, how to correct it and what it never keeps."
 ---
 
 # The course's memory {#la-memoria-del-curso}
 
-Each new conversation starts from scratch in the chat, but **not in what it knows about the course**: the assistant takes notes in the course's `knowledge` folder, reads them when it starts and keeps adding to them while it works. That's why the more you use it, the better it knows your course.
+Each new conversation starts from scratch, but **not in what it knows about the course**: the assistant takes notes in the course's `knowledge` folder, reads them when it starts and keeps adding to them while it works. That's why the more you use it, the better it knows your course.
+
+In the [desktop app](escritorio.md#vistas) and in the web version you have them in the **Memory** view, with its **Knowledge base** (its notes) and **Sources** (your documents) tabs.
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-base-conocimiento.webp" alt="The Knowledge base view: the list of pages by section and the course map open.">Its notes, in the app.</Shot>
 
 ## What it remembers {#qué-recuerda}
 
@@ -47,14 +51,14 @@ The same with the class: since it keeps each progress review with its date, when
 
 ## You can read and correct them {#puedes-leerlos-y-corregirlos}
 
-They're ordinary text files, in Markdown format. Open them with any editor, or with [Obsidian](https://obsidian.md) to see how they link to each other.
+In the app and on the web you can read them in **Knowledge base**, with its search and the links between them. They're ordinary text files, in Markdown format: you can also open them with any editor, or with [Obsidian](https://obsidian.md) to see how they link to each other.
 
 If it remembers something wrong, you have two options:
 
-- Tell it in the chat: *“The late submission criterion has changed: it's now 10% off.”* It updates the page.
+- Tell it in the conversation: *“The late submission criterion has changed: it's now 10% off.”* It updates the page.
 - Or edit the page in `knowledge` yourself and save it.
 
-To look them up from the chat without opening Moodle, use `/knowledge:query` with your question. To have it check that they're complete and properly linked, `/knowledge:lint`.
+To look them up without opening Moodle, use `/knowledge:query` with your question. To have it check that they're complete and properly linked, `/knowledge:lint`.
 
 ## What it doesn't keep {#lo-que-no-guarda}
 
@@ -65,4 +69,4 @@ To look them up from the chat without opening Moodle, use `/knowledge:query` wit
 
 Each course has its own notes, in its folder. What it learns from one course doesn't carry over to another.
 
-Want to know how it's built inside, what `miyagi ingest` does step by step or which formats it accepts? It's in [The knowledge base](../avanzado/base-de-conocimiento.md).
+Want to know how it's built inside, what ingesting (`miyagi ingest` in the terminal) does step by step or which formats it accepts? It's in [The knowledge base](../avanzado/base-de-conocimiento.md).

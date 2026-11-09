@@ -1,6 +1,6 @@
 ---
 title: Frequently asked questions
-sidebar_position: 9
+sidebar_position: 13
 description: "What people ask most about miyagi: cost, safety, student data, languages, which Moodle it supports and more."
 ---
 
@@ -22,13 +22,13 @@ It works with the Moodle you already use and with your own teacher session, thro
 
 ### Do I need to know how to program? {#tengo-que-saber-programar}
 
-No. You install it by pasting one line into the terminal and then you use it by talking to it. [Install](instalar.md) and [Getting started](primeros-pasos.md) walk you through it.
+No. On Windows you install it with a double click ([The desktop app](escritorio.md)) and then you use it by talking to it. On Mac and Linux you install it by pasting one line into the terminal. [Install](instalar.md) and [Getting started](primeros-pasos.md) walk you through it.
 
 ## Control and safety {#control-y-seguridad}
 
 ### Can it publish something without me noticing? {#puede-publicar-algo-sin-que-me-dé-cuenta}
 
-In the chat, before saving a grade, replying in the forum or publishing content, it asks your permission with a summary of what it's going to publish. If it tries to change something in Moodle without having asked, the program itself stops it and asks you. To delete, remove or restore something it always asks you again. The only way for it to publish without asking is if you deliberately launch it in `autonomous` mode with `miyagi run`.
+In the conversation, before saving a grade, replying in the forum or publishing content, it asks your permission with a summary of what it's going to publish. If it tries to change something in Moodle without having asked, the program itself stops it and asks you. To delete, remove or restore something it always asks you again. The only way for it to publish without asking is if you deliberately launch it in `autonomous` mode with `miyagi run` in the terminal.
 
 ### What if it gets something wrong? {#y-si-se-equivoca}
 
@@ -36,19 +36,19 @@ You see every grade, every reply and every resource before it reaches your stude
 
 ### Can it delete things or leave my course? {#puede-borrar-cosas-o-salirse-de-mi-curso}
 
-It has instructions not to delete anything, not to change enrolments, not to touch Moodle's settings and not to go into other courses. Even so, use the chat or `guided` mode to review everything it publishes.
+It has instructions not to delete anything, not to change enrolments, not to touch Moodle's settings and not to go into other courses. Even so, use **Guided** mode to review everything it publishes.
 
 ### Is my password safe? {#mi-contraseña-está-segura}
 
-miyagi doesn't ask for it or store it. The first time it needs to get into Moodle, the moodle-teacher extension opens a browser window for you to log in yourself, and neither miyagi nor the model sees your password. The extension keeps that session, so it doesn't ask you again until it expires.
+miyagi doesn't ask for it or store it. The first time it needs to get into Moodle, the moodle-teacher extension opens a browser window for you to log in yourself, and neither miyagi nor the model sees your password. The same goes for the desktop app's built-in browser: it doesn't see those tabs or their session. The extension keeps that session, so it doesn't ask you again until it expires.
 
 ### What happens to my students' data? {#qué-pasa-con-los-datos-de-mis-alumnos}
 
-It reads what you would see in Moodle in order to do its work, but your students reach it under an alias (“A-7KQ2XM”), never with their name. In its notes it doesn't keep records about individual students, only class trends. More detail in [Security and privacy](../avanzado/seguridad-y-privacidad.md).
+It reads what you would see in Moodle in order to do its work, but your students reach it under an alias (“A-7KQ2XM”), never with their name. That's why, by default, it can't open the files they submit either: if the submission is a file, it asks you to pass it on under an alias ([we cover it in the tutorial](/casos-de-uso/corregir/)). In its notes it doesn't keep records about individual students, only class trends. More detail in [Security and privacy](/avanzado/seguridad-y-privacidad/).
 
 ### Does it run programs on my computer? {#ejecuta-programas-en-mi-ordenador}
 
-No: miyagi has no terminal. For computing courses you can install the docker-lab extension, and then it runs practicals only inside Docker labs, without internet unless you allow it and without touching anything outside each lab. It's in [Practicals in Docker](../avanzado/practicas-docker.md).
+It doesn't run programs on your computer: the assistant has no terminal. For computing courses you can install the docker-lab extension, and then it runs practicals only inside Docker labs, without internet unless you allow it and without touching anything outside each lab. It's in [Practicals in Docker](/avanzado/practicas-docker/).
 
 ## How it works {#su-forma-de-trabajar}
 
@@ -58,11 +58,11 @@ In the course's `knowledge` folder: text files you can open with any editor (or 
 
 ### How does it test what it creates before students see it? {#cómo-prueba-lo-que-crea-antes-de-que-lo-vean-los-alumnos}
 
-It prepares it in the course's `drafts` folder, uploads it to Moodle **hidden** (with your permission), tests it there as a teacher and asks your permission again to show it. Whatever you leave hidden is noted in `knowledge/drafts.md` and it reminds you when you close the session.
+It prepares it in the course's `drafts` folder, uploads it to Moodle **hidden** (with your permission), tests it there as a teacher and asks your permission again to show it. Whatever you leave hidden stays in the **In the oven** view and in `knowledge/drafts.md`, and the bell reminds you.
 
 ### Can I give it my own instructions? {#puedo-darle-instrucciones-propias}
 
-Yes. Create an `instructions.md` file in the course folder and write there whatever you want it to always keep in mind: “grade out of 10”, “keep it short in the forum”, “spelling counts for 10%”. You can also create your own shortcuts and skills: [Shortcuts and instructions](../avanzado/atajos-e-instrucciones.md).
+Yes. Create an `instructions.md` file in the course folder and write there whatever you want it to always keep in mind: “grade out of 10”, “keep it short in the forum”, “spelling counts for 10%”. You can also create your own shortcuts and skills: [Shortcuts and instructions](/avanzado/atajos-e-instrucciones/).
 
 ### What language does it speak? {#en-qué-idioma-habla}
 
@@ -70,15 +70,27 @@ The one you chose when setting up the course, which is also the language of its 
 
 ### Can it download, compress or make PDFs? {#puede-descargar-comprimir-o-hacer-pdf}
 
-Yes, inside the course's `drafts` folder and with its own tools, without a terminal: it downloads files and complete web pages, copies, compresses and decompresses (for example, for a SCORM package) and converts notes to PDF. For safety there are size limits, which you can change: [Configuration](../avanzado/configuracion.md).
+Yes, inside the course's `drafts` folder and with its own tools, without a terminal: it downloads files and complete web pages, copies, compresses and decompresses (for example, for a SCORM package) and converts notes to PDF. For safety there are size limits, which you can change: [Configuration](/avanzado/configuracion/).
 
 ### Does a browser window open while it works? {#se-abre-una-ventana-del-navegador-mientras-trabaja}
 
-No. It works in Moodle without a window. One only opens for you to log in, the first time or when your session expires.
+No. miyagi works in Moodle without a window. One only opens for you to log in, the first time or when your session expires.
+
+### Does the app work on Mac or Linux? {#la-aplicación-funciona-en-mac-o-en-linux}
+
+No: the desktop app only installs on 64-bit Windows. On Mac and Linux use the [web version](web.md) or the [terminal](terminal.md), with Node.js.
+
+### Why does Windows warn me when I install it? {#por-qué-windows-me-avisa-al-instalarla}
+
+Because the installer isn't signed yet. Click **More info** and **Run anyway**.
 
 ### Can I pick up a conversation from another day? {#puedo-retomar-una-conversación-de-otro-día}
 
-Yes. `miyagi chat --continue` opens the last one, and `/resume` inside the chat lets you choose any earlier one. It's in [The chat](chat.md).
+Yes. In the app and in the web version they're in the conversations column, and **Search conversations** finds them by a word. In the terminal, `miyagi chat --continue` opens the last one, and `/resume` inside the chat lets you choose any earlier one. It's in [The conversation](chat.md).
+
+### Can I write to it while it's working? {#puedo-escribirle-mientras-está-trabajando}
+
+No: you have to wait for it to finish, or stop it (`Esc` or the ■ button) and tell it something else.
 
 ## If you came from another version {#si-venías-de-otra-versión}
 

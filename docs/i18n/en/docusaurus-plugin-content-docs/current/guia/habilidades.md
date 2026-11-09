@@ -1,6 +1,6 @@
 ---
 title: Its skills
-sidebar_position: 6
+sidebar_position: 10
 description: "Everything miyagi knows how to do, grouped by task, with an example of how to ask for it in the chat."
 ---
 
@@ -8,9 +8,9 @@ description: "Everything miyagi knows how to do, grouped by task, with an exampl
 
 A **skill** is know-how the assistant applies on its own when the task calls for it: how to grade fairly, how to write a good multiple-choice question, how to set up a peer-assessment workshop in Moodle… You don't need to call them or know their names. Just ask for the job in your own words, and it picks the ones it needs (often several at once).
 
-Here they all are, grouped by what they do, with an example of how to ask for it in the chat. Some also have a **shortcut** (`/miyagi:...`) that starts it directly.
+Here they all are, grouped by what they do, with an example of how to ask for it in the conversation. Some also have a **shortcut** (`/miyagi:...`) that starts it directly.
 
-To see them from the terminal: `miyagi skills`.
+In the desktop app and in the web version you'll find them in **Extensions**, **Capabilities** tab. To see them from the terminal: `miyagi skills`.
 
 miyagi's skills bring the teaching judgement: what to do and how to do it well. The work inside Moodle is done by the **moodle-teacher** extension, which brings its own skills for each thing: `assignments`, `class-progress`, `copy-and-restore`, `course-check`, `course-content`, `forums`, `gradebook`, `grading`, `other-activities`, `publishing`, `quizzes`, `read-a-course`, `scorm`, `several-sites`, `to-grade` and `week` (their full name starts with `moodle-teacher:`, as in `moodle-teacher:grading`). If something can't be done with it, miyagi tells you, prepares it in `drafts` and gives you the steps to do it yourself.
 

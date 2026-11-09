@@ -1,10 +1,12 @@
 ---
 title: Reference
-sidebar_position: 11
-description: "All of miyagi's commands, their options and the chat shortcuts, at a glance."
+sidebar_position: 15
+description: "All the terminal commands, their options and the chat shortcuts, at a glance."
 ---
 
 # Reference {#referencia}
+
+This page is the reference for the **terminal** and for the shortcuts, which work in all three versions. The [desktop app](escritorio.md) doesn't need commands.
 
 ## Commands {#órdenes}
 
@@ -19,10 +21,10 @@ description: "All of miyagi's commands, their options and the chat shortcuts, at
 | `miyagi ingest <archivos…>` | Adds only those documents. |
 | `miyagi skills` | Lists its skills, including yours (marked `[own]`). |
 | `miyagi commands` | Lists the chat shortcuts, including yours. |
-| `miyagi web` | miyagi's chat in your browser, only on your computer. It shows an address with its key: open it and don't share it (see [miyagi in the browser](../avanzado/navegador.md)). |
+| `miyagi web` | The [web version](web.md): the same page as the app, in your browser and only on your computer. It shows an address with its key: open it and don't share it (see [miyagi in the browser](/avanzado/navegador/)). |
 | `miyagi workspaces` | Lists your subjects, with the name for `-w` and their folder. It marks the ones it can no longer find. |
 | `miyagi workspaces forget <name>` | Removes a subject from the list. Its folder isn't touched. |
-| `miyagi extension …` | Installs, configures, enables or removes [extensions](../avanzado/extensiones.md): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
+| `miyagi extension …` | Installs, configures, enables or removes [extensions](/avanzado/extensiones/): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
 | `miyagi --help` | Shows the help with all commands and options. |
 | `miyagi --version` | Shows the installed version. |
 
@@ -41,7 +43,7 @@ With no command at all (just `miyagi`), it asks whether you want `run` or `chat`
 | `--mode <mode>` | Choose the mode without being asked: `guided`, `interactive` or `autonomous` | `run` |
 | `--task "<task>"` | Do only that job instead of going through the whole course | `run` |
 
-## Chat shortcuts {#atajos-del-chat}
+## Conversation shortcuts {#atajos-de-la-conversación}
 
 | Shortcut | What it does |
 | --- | --- |
@@ -69,4 +71,4 @@ With no command at all (just `miyagi`), it asks whether you want `run` or `chat`
 | `/copy` | Copies its last reply. |
 | `/exit` | Closes the session. |
 
-The chat keys (approve, reject, interrupt, change mode) are in [The chat](chat.md).
+The chat keys (approve, reject, interrupt, change mode) are in [The conversation](chat.md#terminal).

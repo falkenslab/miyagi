@@ -1,6 +1,6 @@
 ---
 title: Sus habilidades
-sidebar_position: 6
+sidebar_position: 10
 description: "Todo lo que miyagi sabe hacer, agrupado por tareas, con un ejemplo de cómo pedírselo en el chat."
 ---
 
@@ -8,9 +8,9 @@ description: "Todo lo que miyagi sabe hacer, agrupado por tareas, con un ejemplo
 
 Una **habilidad** es un conocimiento que el asistente aplica por su cuenta cuando la tarea lo pide: cómo corregir con justicia, cómo escribir una buena pregunta de test, cómo montar un taller de coevaluación en Moodle… No hace falta llamarlas ni saberse sus nombres. Basta con pedirle el trabajo con tus palabras, y él elige las que necesita (a menudo varias a la vez).
 
-Aquí están todas, agrupadas por lo que hacen, con un ejemplo de cómo pedírselo en el chat. Algunas tienen además un **atajo** (`/miyagi:...`) que la pone en marcha directamente.
+Aquí están todas, agrupadas por lo que hacen, con un ejemplo de cómo pedírselo en la conversación. Algunas tienen además un **atajo** (`/miyagi:...`) que la pone en marcha directamente.
 
-Para verlas desde la terminal: `miyagi skills`.
+En la aplicación de escritorio y en la versión web las tienes en **Extensiones**, pestaña **Capacidades**. Para verlas desde la terminal: `miyagi skills`.
 
 Las habilidades de miyagi ponen el criterio docente: qué hacer y cómo hacerlo bien. El trabajo dentro de Moodle lo hace la extensión **moodle-teacher**, que trae sus propias habilidades para cada cosa: `assignments`, `class-progress`, `copy-and-restore`, `course-check`, `course-content`, `forums`, `gradebook`, `grading`, `other-activities`, `publishing`, `quizzes`, `read-a-course`, `scorm`, `several-sites`, `to-grade` y `week` (su nombre completo lleva delante `moodle-teacher:`, como `moodle-teacher:grading`). Si algo no se puede hacer con ella, miyagi te lo dice, lo prepara en `drafts` y te da los pasos para hacerlo tú.
 

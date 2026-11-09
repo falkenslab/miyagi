@@ -1,10 +1,12 @@
 ---
 title: Referencia
-sidebar_position: 11
-description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, de un vistazo."
+sidebar_position: 15
+description: "Todas las órdenes de la terminal, sus opciones y los atajos del chat, de un vistazo."
 ---
 
 # Referencia
+
+Esta página es la referencia de la **terminal** y de los atajos, que valen en las tres versiones. La [aplicación de escritorio](escritorio.md) no necesita órdenes.
 
 ## Órdenes
 
@@ -19,10 +21,10 @@ description: "Todas las órdenes de miyagi, sus opciones y los atajos del chat, 
 | `miyagi ingest <archivos…>` | Incorpora solo esos documentos. |
 | `miyagi skills` | Lista sus habilidades, incluidas las tuyas (marcadas `[propia]`). |
 | `miyagi commands` | Lista los atajos del chat, incluidos los tuyos. |
-| `miyagi web` | El chat de miyagi en tu navegador, solo en tu ordenador. Muestra una dirección con su llave: ábrela y no la compartas (ver [miyagi en el navegador](../avanzado/navegador.md)). |
+| `miyagi web` | La [versión web](web.md): la misma página que la aplicación, en tu navegador y solo en tu ordenador. Muestra una dirección con su llave: ábrela y no la compartas (ver [miyagi en el navegador](/avanzado/navegador/)). |
 | `miyagi workspaces` | Lista tus asignaturas, con el nombre para `-w` y su carpeta. Marca las que ya no encuentra. |
 | `miyagi workspaces forget <nombre>` | Quita una asignatura de la lista. Su carpeta no se toca. |
-| `miyagi extension …` | Instala, configura, activa o quita [extensiones](../avanzado/extensiones.md): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
+| `miyagi extension …` | Instala, configura, activa o quita [extensiones](/avanzado/extensiones/): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
 | `miyagi --help` | Muestra la ayuda con todas las órdenes y opciones. |
 | `miyagi --version` | Muestra la versión instalada. |
 
@@ -41,7 +43,7 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, s
 | `--mode <modo>` | Elegir el modo sin que te lo pregunte: `guided`, `interactive` o `autonomous` | `run` |
 | `--task "<encargo>"` | Hacer solo ese encargo en lugar de recorrer el curso entero | `run` |
 
-## Atajos del chat
+## Atajos de la conversación
 
 | Atajo | Qué hace |
 | --- | --- |
@@ -69,4 +71,4 @@ Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, s
 | `/copy` | Copia su última respuesta. |
 | `/exit` | Cierra la sesión. |
 
-Las teclas del chat (aprobar, rechazar, interrumpir, cambiar de modo) están en [El chat](chat.md).
+Las teclas del chat (aprobar, rechazar, interrumpir, cambiar de modo) están en [La conversación](chat.md#terminal).

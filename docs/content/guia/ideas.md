@@ -1,12 +1,12 @@
 ---
 title: Qué pedirle
-sidebar_position: 5
+sidebar_position: 9
 description: "Ideas de uso, de lo más sencillo a lo más ambicioso, y un ejemplo de cómo encaja miyagi en una semana de clase."
 ---
 
 # Qué pedirle
 
-Cada idea tiene la situación, lo que **le escribes** en el chat y lo que **hace**. Empieza por el nivel 1: no publica nada y te sirve para ver cómo trabaja. Los ejemplos son de un curso de Bases de Datos, pero valen para cualquier asignatura.
+Cada idea tiene la situación, lo que **le escribes** en la conversación y lo que **hace**. Valen igual en la aplicación de escritorio, en la versión web y en la terminal. Empieza por el nivel 1: no publica nada y te sirve para ver cómo trabaja. Los ejemplos son de un curso de Bases de Datos, pero valen para cualquier asignatura.
 
 ## Nivel 1 · Preguntar sin tocar nada
 

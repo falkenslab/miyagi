@@ -1,12 +1,12 @@
 ---
 title: What to ask it
-sidebar_position: 5
+sidebar_position: 9
 description: "Ideas for using it, from the simplest to the most ambitious, and an example of how miyagi fits into a week of class."
 ---
 
 # What to ask it {#qué-pedirle}
 
-Each idea has the situation, what **you write** in the chat and what it **does**. Start with level 1: it doesn't publish anything and lets you see how it works. The examples come from a Databases course, but they work for any subject.
+Each idea has the situation, what **you write** in the conversation and what it **does**. They work the same in the desktop app, in the web version and in the terminal. Start with level 1: it doesn't publish anything and lets you see how it works. The examples come from a Databases course, but they work for any subject.
 
 ## Level 1 · Asking without touching anything {#nivel-1--preguntar-sin-tocar-nada}
 

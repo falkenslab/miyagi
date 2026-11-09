@@ -80,3 +80,8 @@
     transition: none;
   }
 }
+
+/* Touch target: on phones and tablets the send button is 44 px. */
+@media (max-width: 996px) {
+  .send { width: 44px; height: 44px; }
+}

@@ -1,12 +1,14 @@
 ---
-title: Encargos de una sola orden
-sidebar_position: 8
+title: Encargos de una sola orden (terminal)
+sidebar_position: 12
 description: "Cómo encargarle a miyagi una tarea concreta, o una pasada por todo el curso, sin conversar: miyagi run y sus modos."
 ---
 
 # Encargos de una sola orden
 
-El chat es para conversar. Si ya sabes lo que quieres y no necesitas ir hablando, puedes encargárselo de una vez con `miyagi run`, desde la carpeta del curso.
+Esto es solo de la [terminal](terminal.md): en la aplicación de escritorio y en la versión web todo pasa en la conversación.
+
+Si ya sabes lo que quieres y no necesitas ir hablando, puedes encargárselo de una vez con `miyagi run`, desde la carpeta del curso.
 
 ## Una tarea concreta: `--task`
 

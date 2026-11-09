@@ -1,12 +1,16 @@
 ---
 title: La memoria del curso
-sidebar_position: 7
+sidebar_position: 11
 description: "Qué recuerda miyagi de tu curso, dónde lo guarda, cómo corregirlo y qué no guarda nunca."
 ---
 
 # La memoria del curso
 
-Cada conversación nueva empieza de cero en el chat, pero **no en lo que sabe del curso**: el asistente toma apuntes en la carpeta `knowledge` del curso, los lee al empezar y los va ampliando mientras trabaja. Por eso, cuanto más lo usas, mejor conoce tu curso.
+Cada conversación nueva empieza de cero, pero **no en lo que sabe del curso**: el asistente toma apuntes en la carpeta `knowledge` del curso, los lee al empezar y los va ampliando mientras trabaja. Por eso, cuanto más lo usas, mejor conoce tu curso.
+
+En la [aplicación de escritorio](escritorio.md#vistas) y en la versión web los tienes en la vista **Memoria**, con sus pestañas **Base de conocimiento** (sus apuntes) y **Fuentes** (tus documentos).
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-base-conocimiento.webp" alt="La vista Base de conocimiento: la lista de páginas por secciones y el mapa del curso abierto.">Sus apuntes, en la aplicación.</Shot>
 
 ## Qué recuerda
 
@@ -47,14 +51,14 @@ Lo mismo con la clase: como guarda cada revisión del progreso con su fecha, cua
 
 ## Puedes leerlos y corregirlos
 
-Son archivos de texto normales, en formato Markdown. Ábrelos con cualquier editor, o con [Obsidian](https://obsidian.md) para ver cómo se enlazan unos con otros.
+En la aplicación y en la web puedes leerlos en **Base de conocimiento**, con su buscador y los enlaces entre ellas. Son archivos de texto normales, en formato Markdown: ábrelos también con cualquier editor, o con [Obsidian](https://obsidian.md) para ver cómo se enlazan unos con otros.
 
 Si recuerda algo mal, tienes dos opciones:
 
-- Díselo en el chat: *«El criterio de entregas tarde ha cambiado: ahora es un 10 % menos.»* Él actualiza la página.
+- Díselo en la conversación: *«El criterio de entregas tarde ha cambiado: ahora es un 10 % menos.»* Él actualiza la página.
 - O edita tú la página en `knowledge` y guárdala.
 
-Para consultarlos desde el chat sin abrir Moodle, usa `/knowledge:query` con tu pregunta. Para que revise que están completos y bien enlazados, `/knowledge:lint`.
+Para consultarlos sin abrir Moodle, usa `/knowledge:query` con tu pregunta. Para que revise que están completos y bien enlazados, `/knowledge:lint`.
 
 ## Lo que no guarda
 
@@ -65,4 +69,4 @@ Para consultarlos desde el chat sin abrir Moodle, usa `/knowledge:query` con tu 
 
 Cada curso tiene sus propios apuntes, en su carpeta. Lo que aprende de un curso no pasa a otro.
 
-¿Quieres saber cómo se construye por dentro, qué hace `miyagi ingest` paso a paso o qué formatos admite? Está en [La base de conocimiento](../avanzado/base-de-conocimiento.md).
+¿Quieres saber cómo se construye por dentro, qué hace la ingesta (`miyagi ingest` en la terminal) paso a paso o qué formatos admite? Está en [La base de conocimiento](../avanzado/base-de-conocimiento.md).

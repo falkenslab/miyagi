@@ -1,12 +1,14 @@
 ---
-title: Single-command tasks
-sidebar_position: 8
+title: Single-command tasks (terminal)
+sidebar_position: 12
 description: "How to give miyagi a specific task, or a pass through the whole course, without a conversation: miyagi run and its modes."
 ---
 
 # Single-command tasks {#encargos-de-una-sola-orden}
 
-The chat is for conversation. If you already know what you want and don't need to talk it through, you can give it the task in one go with `miyagi run`, from the course's folder.
+This is only for the [terminal](terminal.md): in the desktop app and in the web version everything happens in the conversation.
+
+If you already know what you want and don't need to talk it through, you can give it the task in one go with `miyagi run`, from the course's folder.
 
 ## A specific task: `--task` {#una-tarea-concreta---task}
 
