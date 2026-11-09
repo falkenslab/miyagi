@@ -5,7 +5,7 @@ import { Composer, Todos } from "./components/Composer";
 import { KnowledgeView, MaterialsView, OvenView, PlanView, SourcesView, TodayView, TopicsView, type CourseView } from "./components/Course";
 import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./components/Extensions";
 import { Panel } from "./components/Panel";
-import { Header, Sidebar, type Theme, type View } from "./components/Shell";
+import { Frame, Header, useSideCollapsed, ViewTabs, type Theme, type View } from "./components/Shell";
 import { SignIn } from "./components/SignIn";
 import { setCanPick } from "./components/PathField";
 import { setBusyReason, StatusBar } from "./components/StatusBar";
@@ -40,6 +40,7 @@ export function App() {
   const [item, setItem] = useState<string | null>(null);
   const [extTab, setExtTab] = useState<ExtTab>("installed");
   const [sideOpen, setSideOpen] = useState(false);
+  const [sideCollapsed, setSideCollapsed] = useSideCollapsed();
   const [linking, setLinking] = useState(false);
   const closeLink = useCallback(() => setLinking(false), []);
   const chat = state?.chat ?? null;
@@ -136,9 +137,10 @@ export function App() {
   return (
     <ActionsContext.Provider value={actions}>
     <div className="app">
-      <Sidebar info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
+      <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
-        <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} T={T} X={X} onMenu={() => setSideOpen(true)} onOpenChat={() => setView("chat")} />
+        <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} />
+        <ViewTabs view={shown} setView={setView} C={C} />
         {status && (
           <div className="banner" role="status">
             {status}

@@ -32,7 +32,7 @@ const check = (what, ok, detail = "") => (console.log(`${ok ? "ok  " : "FAIL"} $
 page.on("pageerror", (error) => check(`page error: ${error.message}`, false));
 const shot = async (name) => (await page.waitForTimeout(500), page.screenshot({ path: path.join(shots, `${name}.png`) }));
 const idle = () => page.waitForFunction(() => !document.querySelector(".status-bar.on"), null, { timeout: 180_000 });
-const nav = (text) => page.click(`.nav >> text=${text}`);
+const nav = (place) => page.click(`.rail-item[data-rail="${place}"]`);
 try {
   await page.goto(host.url);
   await page.waitForSelector(".new-subject input");
@@ -53,7 +53,7 @@ try {
   const greeting = (await page.innerText(".main")).includes("Hola");
 
   // The editor: list, invalid, try, save.
-  await nav("Extensiones");
+  await nav("extensions");
   await page.click('.tabs button:has-text("Mis comandos")');
   await page.waitForSelector(".own-row");
   await shot("list");
@@ -94,7 +94,8 @@ try {
   // The same conversation, the catalog changed; a form on a topic with its concepts.
   await page.waitForTimeout(1500);
   await idle();
-  await page.click(".nav >> text=Temas y actividades");
+  await nav("course");
+  await page.click(".view-tabs >> text=Temas y actividades");
   await page.waitForSelector(".actionable .more-btn");
   await page.click(".actionable .more-btn");
   await page.waitForSelector('.item-pop [data-command="sopa"]');

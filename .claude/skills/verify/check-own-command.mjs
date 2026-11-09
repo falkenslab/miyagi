@@ -108,10 +108,11 @@ try {
   check("it's in another subject's catalog too", (await listCommands(other)).some((entry) => entry.name === `/own:${name}`));
 
   // 2. The next conversation knows it: a topic's ⋯, its form with the topic filled in.
-  await page.click(".top .new-chat");
+  await page.click(".side .new-conv");
   await page.waitForSelector(".msg.agent", { timeout: 240_000 });
   await work();
-  await page.click(".nav a:has-text('Temas')");
+  await page.click('.rail-item[data-rail="course"]');
+  await page.click(".view-tabs button:has-text('Temas')");
   const topic = page.locator(".actionable:has-text('Bucles')").first();
   await topic.locator(".more-btn").click({ timeout: 15_000 });
   const own = page.locator(`.item-pop button[data-command='own:${name}']`);

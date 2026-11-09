@@ -87,8 +87,8 @@ Before uploading it, check the unpacked app in `desktop/dist/win-unpacked/`:
 - `locales/` holds only `en-US`, `es`, `es-419`, `fr` and `de` (`electronLanguages`, about 45 MB less);
 - it starts and shows the page, with a throwaway data folder (also its home, so your `~/.miyagi` is out of reach) and a scripted shot:
   `MIYAGI_DESKTOP_DATA=<scratchpad>/d MIYAGI_DESKTOP_SCRIPT=<steps.json> desktop/dist/win-unpacked/miyagi.exe`
-  (steps as in `main.mjs`: wait for `.side .brand`, `shot`). Look at the image: the sidebar, and
-  the version in its footer is this release's.
+  (steps as in `main.mjs`: wait for `.rail .brand`, `shot`). Look at the image: the rail, and
+  the version at its foot is this release's.
 
 A Windows-only artifact: it's ~230 MB and unsigned, so SmartScreen warns on the first run (the
 install page explains it). Never put it in the npm package.

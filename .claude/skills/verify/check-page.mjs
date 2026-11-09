@@ -1,10 +1,10 @@
-// Checks miyagi's page (gui/, gui-chat #47, organised as the Claude app #60) in Chrome against the
-// real host and a real Claude session: a subject created from the page, a conversation with its
-// suggestion rows, an approval answered in the dock (the conversation still readable) and one
+// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83) in Chrome against the
+// real host and a real Claude session: a subject created from the page, the rail's places and their
+// tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
 // mode and theme switched, the / menu without Claude Code's commands, a topic's actions (⋯, right click, Shift+F10,
 // a sheet on a phone) and the catalog in ＋; and screenshots at 360, 390,
-// 768, 1024 and 1440 px in both themes, with no horizontal scroll and 44 px targets. Not part of the quick gate: it
+// 768, 1024, 1440 and 1920 px in both themes, with no horizontal scroll and 44 px targets. Not part of the quick gate: it
 // needs you signed in to Claude Code (or ANTHROPIC_API_KEY / CLAUDE_CODE_OAUTH_TOKEN in your own
 // environment) and Chrome, and spends a few turns. Run it when gui/ or src/host/ change. Its home
 // is a temporary folder, so nothing of yours is touched; Claude Code's session is read where it
@@ -71,12 +71,105 @@ const CHECKPOINT = ".dock .checkpoint";
 /** The header's and the composer's buttons smaller than a finger (44 px), by their label. */
 const small = () =>
   page.evaluate(() =>
-    Array.from(document.querySelectorAll(".top button, .composer .tools-row button"))
+    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse"))
       .filter((el) => el.offsetParent)
       .map((el) => [el.getAttribute("aria-label") || el.textContent.trim(), el.getBoundingClientRect()])
       .filter(([, box]) => box.width < 44 || box.height < 44)
       .map(([label, box]) => `${label} ${Math.round(box.width)}x${Math.round(box.height)}`),
   );
+
+const RAIL = (place) => `.rail-item[data-rail="${place}"]`;
+const sideWidth = () => page.evaluate(() => Math.round(document.querySelector(".side").getBoundingClientRect().width));
+/** Neither the page nor the view next to the sidebar scrolls sideways. */
+const fits = () => page.evaluate(() => {
+  const view = document.querySelector(".view");
+  return document.documentElement.scrollWidth <= window.innerWidth && view.scrollWidth <= view.clientWidth;
+});
+/** Drags the sidebar's edge by `by` pixels. */
+const drag = async (by) => {
+  const box = await page.locator(".side-handle").boundingBox();
+  const x = box.x + box.width / 2;
+  const y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + by / 2, y);
+  await page.mouse.move(x + by, y);
+  await page.mouse.up();
+};
+/** The frame (#83): the rail's places, their tabs, the ⋯, and the sidebar collapsed and resized, kept over a reload. */
+const checkFrame = async () => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.click(".top .more-btn");
+  check("the conversation's ⋯ offers a new conversation", (await page.locator(".top .pop button").count()) === 1);
+  await page.keyboard.press("Escape");
+  for (const [place, tabs] of [
+    ["today", 0],
+    ["course", 4],
+    ["memory", 2],
+    ["classroom", 0],
+    ["extensions", 0],
+  ]) {
+    await page.click(RAIL(place));
+    const here = await page.evaluate((name) => ({ current: document.querySelector(`.rail-item[data-rail="${name}"]`).getAttribute("aria-current"), tabs: document.querySelectorAll(".view-tabs button").length }), place);
+    check(`the rail reaches ${place}`, here.current === "page" && here.tabs === tabs, JSON.stringify(here));
+  }
+  await page.click(RAIL("course"));
+  for (const nth of [0, 1, 2, 3]) {
+    await page.click(`.view-tabs button >> nth=${nth}`);
+    check(`the course's tab ${nth} opens its view`, (await page.getAttribute(`.view-tabs button >> nth=${nth}`, "aria-selected")) === "true" && (await page.locator(".view .wrap, .view .card").count()) > 0);
+  }
+  await page.click(".view-tabs button >> nth=1");
+  await page.click(RAIL("memory"));
+  await page.click(".view-tabs button >> nth=1");
+  await page.click(RAIL("course"));
+  check("a group remembers its last view", (await page.getAttribute(".view-tabs button >> nth=1", "aria-selected")) === "true");
+  await page.click(RAIL("memory"));
+  check("…each its own", (await page.getAttribute(".view-tabs button >> nth=1", "aria-selected")) === "true");
+  await shot("frame-tabs-1440");
+  // Collapsed, and still so after a reload.
+  await page.click(".side-collapse");
+  check("collapsed, the sidebar goes and the header offers it back", !(await page.locator(".side").isVisible()) && (await page.locator(".top .side-open").isVisible()));
+  await page.reload();
+  await page.waitForSelector(".top .side-open");
+  check("the sidebar stays collapsed after a reload", !(await page.locator(".side").isVisible()));
+  await shot("frame-collapsed-1440");
+  await page.click(".top .side-open");
+  await page.waitForSelector(".side-handle");
+  check("expanded, the header's button goes", !(await page.locator(".top .side-open").isVisible()));
+  // Resized with the mouse, within its limits, and kept.
+  await drag(60);
+  check("dragging the edge widens the sidebar", (await sideWidth()) === 332, String(await sideWidth()));
+  await page.reload();
+  await page.waitForSelector(".side-handle");
+  check("the width survives a reload", (await sideWidth()) === 332, String(await sideWidth()));
+  await drag(400);
+  check("…up to its maximum", (await sideWidth()) === 420, String(await sideWidth()));
+  await page.click(RAIL("course"));
+  check("the view next to the widest sidebar doesn't overflow", await fits());
+  await shot("frame-wide-1440");
+  await drag(-400);
+  check("…and down to its minimum", (await sideWidth()) === 220, String(await sideWidth()));
+  // With the keyboard, as a separator; a double click puts it back.
+  await page.focus(".side-handle");
+  await page.keyboard.press("ArrowRight");
+  check("→ widens it", (await sideWidth()) === 236 && (await page.getAttribute(".side-handle", "aria-valuenow")) === "236", String(await sideWidth()));
+  await page.keyboard.press("ArrowLeft");
+  check("← narrows it", (await sideWidth()) === 220, String(await sideWidth()));
+  await page.dblclick(".side-handle");
+  check("a double click returns it to its default", (await sideWidth()) === 272, String(await sideWidth()));
+  // At the narrowest wide layout, the widest sidebar leaves the view its room.
+  await page.evaluate(() => localStorage.setItem("miyagi.sideWidth", "420"));
+  await page.reload();
+  await page.waitForSelector(".side-handle");
+  await page.setViewportSize({ width: 768, height: 1000 });
+  await page.click(RAIL("course"));
+  check("at 768 the view keeps its room next to the widest sidebar", (await fits()) && (await page.evaluate(() => document.querySelector(".main").getBoundingClientRect().width)) >= 360);
+  await shot("frame-wide-768");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.evaluate(() => localStorage.removeItem("miyagi.sideWidth"));
+  await page.reload();
+  await page.waitForSelector(".recents a.open-conv");
+};
 
 try {
   await page.goto(host.url);
@@ -93,14 +186,14 @@ try {
     new MutationObserver(seen).observe(document.body, { childList: true, subtree: true, characterData: true });
   });
   await page.click('.new-subject button[type="submit"]');
-  await page.waitForSelector(".side .brand");
+  await page.waitForSelector(".rail .brand");
   // In Today, the open conversation is marked but not selected: one item looks selected (#65).
   await page.waitForSelector(".recents a.open-conv, .recents a.on-conv", { timeout: 60_000 });
-  const marks = await page.evaluate(() => ({ selected: document.querySelectorAll('.nav [aria-current="page"]').length, conv: document.querySelectorAll(".recents .on-conv").length, open: document.querySelectorAll(".recents .open-conv").length }));
+  const marks = await page.evaluate(() => ({ selected: document.querySelectorAll('.rail [aria-current="page"], .recents [aria-current="page"]').length, conv: document.querySelectorAll(".recents .on-conv").length, open: document.querySelectorAll(".recents .open-conv").length }));
   check("outside the chat, the open conversation isn't highlighted as the view", marks.selected === 1 && marks.conv === 0 && marks.open === 1, JSON.stringify(marks));
   // The current conversation, from the recent ones.
   await page.click(".recents a.open-conv");
-  check("in the chat, the open conversation is the one highlighted", (await page.locator(".recents .on-conv").count()) === 1 && (await page.locator('.nav [aria-current="page"]').count()) === 1);
+  check("in the chat, the open conversation is the one highlighted", (await page.locator(".recents .on-conv").count()) === 1 && (await page.locator('.rail [aria-current="page"], .recents [aria-current="page"]').count()) === 1);
   if (await page.waitForSelector(".welcome .waiting", { timeout: 20_000 }).catch(() => null)) await page.screenshot({ path: path.join(shots, "starting-1440.png") });
   await page.waitForSelector(".msg.agent", { timeout: 240_000 });
   await idle();
@@ -109,6 +202,9 @@ try {
   check("the wait until the greeting says what it waits for", waits.some((text) => /Arrancando miyagi|Starting miyagi/.test(text)), waits.join(" → "));
   check("no wait left once miyagi greeted", (await page.locator(".waiting").count()) === 0);
   check("a new conversation offers the quick actions as rows", (await page.locator(".suggest button").count()) >= 3);
+  await checkFrame();
+  await page.click(".recents a.open-conv");
+  await page.waitForSelector(".suggest button");
   await page.setViewportSize({ width: 390, height: 844 });
   await shot("new-390");
   await page.click(".composer .plus");
@@ -120,6 +216,8 @@ try {
   await page.keyboard.press("Escape");
   await page.click(".top .burger");
   await shot("menu-390");
+  const drawer = await page.evaluate(() => ({ rail: Boolean(document.querySelector(".rail")?.offsetParent), side: Boolean(document.querySelector(".side")?.offsetParent), handle: Boolean(document.querySelector(".side-handle")?.offsetParent), collapse: Boolean(document.querySelector(".side-collapse")?.offsetParent), right: Math.round(document.querySelector(".frame").getBoundingClientRect().right) }));
+  check("at 390 the drawer holds the rail and the sidebar, without the handle or the collapse button", drawer.rail && drawer.side && !drawer.handle && !drawer.collapse && drawer.right <= 390, JSON.stringify(drawer));
   // The scrim to the right of the open menu closes it.
   await page.click(".side-scrim", { position: { x: 370, y: 400 } });
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -130,7 +228,10 @@ try {
   // Interactive mode asks before every tool: approve one, refuse the next.
   await mode("interactive");
   await send("Lee la página overview de tu base de conocimiento y dime en una línea qué dice.");
+  // From another view: the approval brings the conversation forward.
+  if (!(await page.$(CHECKPOINT))) await page.click(RAIL("today"));
   await page.waitForSelector(CHECKPOINT, { timeout: 180_000 });
+  check("an approval brings the conversation forward", Boolean(await page.$(".msgs")));
   // The spinner of a working conversation keeps moving when less motion is asked (#61): a fade, no turn.
   const spinning = () => page.evaluate(() => getComputedStyle(document.querySelector(".recents .spinner")).animationName);
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -224,7 +325,8 @@ try {
   await page.evaluate(() => window.getSelection().removeAllRanges());
   await page.mouse.click(5, 5);
   // miyagi's commands as actions (#67): a topic's ⋯, its right click and Shift+F10 open the same menu.
-  await page.click(".nav a:has-text('Temas')");
+  await page.click(RAIL("course"));
+  await page.click(".view-tabs button:has-text('Temas')");
   const topic = page.locator(".actionable:has-text('Tema 1')").first();
   await topic.locator(".more-btn").click({ timeout: 15_000 });
   const offered = await page.locator(".item-pop button[data-command]").evaluateAll((rows) => rows.map((row) => `${row.dataset.command}${row.disabled ? "(off)" : ""}`));
@@ -280,10 +382,11 @@ try {
     ["dark", 2],
   ]) {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.click(".side-foot .menu .ibtn");
+    await page.click(".rail-foot .theme-btn");
     await page.click(`.pop button >> nth=${nth}`);
     check(`${theme} theme`, (await page.getAttribute("html", "data-theme")) === theme);
     for (const [width, height] of [
+      [1920, 1080],
       [1440, 900],
       [1024, 768],
       [768, 1000],
@@ -298,7 +401,7 @@ try {
     }
   }
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.click(".side-foot .menu .ibtn");
+  await page.click(".rail-foot .theme-btn");
   await page.click(".pop button >> nth=0");
 } catch (error) {
   failures.push(String(error.message ?? error).split("\n")[0]);

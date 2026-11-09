@@ -42,6 +42,11 @@ export interface Texts {
   formMissing: (field: string) => string;
   conversations: string;
   newConversation: string;
+  collapseSidebar: string;
+  expandSidebar: string;
+  resizeSidebar: string;
+  moreOptions: string;
+  versions: string;
   current: string;
   noConversations: string;
   theme: string;
@@ -161,6 +166,11 @@ const es: Texts = {
   formMissing: (field) => `Falta «${field}».`,
   conversations: "Conversaciones",
   newConversation: "Nueva conversación",
+  collapseSidebar: "Ocultar la barra lateral",
+  expandSidebar: "Mostrar la barra lateral",
+  resizeSidebar: "Cambiar el ancho de la barra lateral",
+  moreOptions: "Más opciones",
+  versions: "Versiones",
   current: "actual",
   noConversations: "Aún no hay conversaciones anteriores.",
   theme: "Tema",
@@ -294,6 +304,11 @@ const en: Texts = {
   formMissing: (field) => `"${field}" is missing.`,
   conversations: "Conversations",
   newConversation: "New conversation",
+  collapseSidebar: "Hide the sidebar",
+  expandSidebar: "Show the sidebar",
+  resizeSidebar: "Resize the sidebar",
+  moreOptions: "More options",
+  versions: "Versions",
   current: "current",
   noConversations: "No earlier conversations yet.",
   theme: "Theme",
@@ -427,6 +442,11 @@ const fr: Texts = {
   formMissing: (field) => `« ${field} » manque.`,
   conversations: "Conversations",
   newConversation: "Nouvelle conversation",
+  collapseSidebar: "Masquer la barre latérale",
+  expandSidebar: "Afficher la barre latérale",
+  resizeSidebar: "Redimensionner la barre latérale",
+  moreOptions: "Plus d'options",
+  versions: "Versions",
   current: "actuelle",
   noConversations: "Pas encore de conversations précédentes.",
   theme: "Thème",
@@ -560,6 +580,11 @@ const de: Texts = {
   formMissing: (field) => `„${field}“ fehlt.`,
   conversations: "Unterhaltungen",
   newConversation: "Neue Unterhaltung",
+  collapseSidebar: "Seitenleiste ausblenden",
+  expandSidebar: "Seitenleiste einblenden",
+  resizeSidebar: "Breite der Seitenleiste ändern",
+  moreOptions: "Weitere Optionen",
+  versions: "Versionen",
   current: "aktuell",
   noConversations: "Noch keine früheren Unterhaltungen.",
   theme: "Design",
