@@ -1,5 +1,7 @@
-// The landing page, for teachers with no technical background: what miyagi does, how it keeps
-// the teacher in control, how to install it, and where to see it working (the SQL course).
+// The landing page, for teachers with no technical background: the desktop app first (download
+// for Windows, its capture), what miyagi does, the three versions with a capture of each, how it
+// keeps the teacher in control and how to install it. The English copy is in
+// i18n/en/docusaurus-plugin-content-pages/index.js.
 import React, { useEffect, useRef, useState } from "react";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
@@ -7,36 +9,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import s from "./index.module.css";
 
 const INSTALL = "npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz";
-
-const SCENES = [
-  {
-    id: "corregir",
-    label: "Corregir",
-    you: "Corrige la Tarea 2 con la rúbrica del tema",
-    tools: ["Leyendo tu rúbrica y tus criterios", "Abriendo las entregas de la Tarea 2", "Corrigiendo 3 entregas, criterio a criterio"],
-    agent: "Las tres están corregidas, con el desglose por criterio. Empiezo por la de Lucía: un 7,5.",
-    ask: "Hace falta tu confirmación antes de publicar",
-    what: "Guardar la nota de Lucía (7,5) y su retroalimentación: la consulta funciona, pero no valida la entrada; le explico cómo hacerlo.",
-  },
-  {
-    id: "foro",
-    label: "Foro",
-    you: "¿Hay algo nuevo en el foro?",
-    tools: ["Abriendo el foro de dudas", "Leyendo los temas sin respuesta"],
-    agent: "Hay una duda nueva de Marcos: «¿Qué diferencia hay entre break y continue?». Es la segunda vez que sale: quizá el Tema 3 necesite un ejemplo más.",
-    ask: "Hace falta tu confirmación antes de publicar",
-    what: "Responder a Marcos en el foro: break sale del bucle; continue salta a la siguiente vuelta, con dos ejemplos de código.",
-  },
-  {
-    id: "tema",
-    label: "Crear un tema",
-    you: "Añade un tema 4 sobre seguridad, planteado como un reto por equipos",
-    tools: ["Leyendo tu programación didáctica", "Preparando apuntes, reto, rúbrica y cuestionario", "Subiendo el tema oculto y probándolo como profesor"],
-    agent: "El Tema 4 está listo y oculto: apuntes, el reto por equipos con su rúbrica y un cuestionario de repaso. Lo he probado y todo funciona.",
-    ask: "Hace falta tu confirmación antes de mostrarlo",
-    what: "Hacer visible para los alumnos la sección «Tema 4: Seguridad», con sus cuatro actividades.",
-  },
-];
+const INSTALLER = "https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe";
 
 const TABS = [
   {
@@ -82,91 +55,14 @@ const METHODS = ["Aprendizaje basado en proyectos", "Retos y problemas", "Clase 
 const FAQ = [
   ["¿Cuánto cuesta?", "miyagi es gratuito y de código abierto. Lo que hace funcionar al asistente es tu suscripción de Claude (Pro o Max)."],
   ["¿En qué se diferencia de preguntarle a un chat de IA?", "Un chat te da un texto y el resto lo haces tú en Moodle. miyagi entra en tu curso y hace el trabajo allí: pone la nota con su retroalimentación, responde en el foro, crea la tarea con su rúbrica. Además recuerda tu curso de una sesión a otra y te pide permiso antes de que tus alumnos vean nada."],
-  ["¿Funciona con el Moodle de mi centro?", "Trabaja con el Moodle que ya usas, con la extensión moodle-teacher y tu sesión de profesor: entras tú en Moodle una vez, en su ventana, y no hay que instalar nada en el servidor. Está hecho para Moodle 4 y 5, y se prueba en Moodle 5.2. Al configurarlo, puede mirar (sin cambiar nada) qué tipos de actividad y de pregunta admite tu Moodle."],
-  ["¿Tengo que saber programar?", "No. Se instala pegando una línea en la terminal, y después se usa conversando. La guía te lleva de la mano, y el aula de ejemplo lo enseña paso a paso con capturas reales."],
+  ["¿Funciona con el Moodle de mi centro?", "Trabaja con el Moodle que ya usas, con la extensión moodle-teacher y tu sesión de profesor: entras tú en Moodle una vez, en su ventana, y no hay que instalar nada en el servidor. Está hecho para Moodle 4 y 5, y se prueba en Moodle 5.2."],
+  ["¿En qué sistemas funciona?", "La aplicación de escritorio, la versión principal, solo en Windows de 64 bits. La versión web y la terminal funcionan también en Mac y Linux, con Node.js."],
+  ["¿Tengo que saber programar?", "No. En Windows se instala con un doble clic, y después se usa conversando. La guía te lleva de la mano, y el aula de ejemplo lo enseña paso a paso con capturas reales."],
   ["¿Puede publicar algo sin que me dé cuenta?", "En el chat, antes de guardar una nota, responder en el foro o publicar contenido, te pide permiso con un resumen de lo que va a publicar. Si intenta publicar sin haberlo pedido, lo detiene y te pregunta."],
   ["¿Y si se equivoca?", "Ves cada nota, cada respuesta y cada recurso antes de que llegue a tus alumnos, y puedes decir que no o pedirle que lo cambie. Lo nuevo lo prueba oculto antes de mostrarlo. Si algo no te gusta de cómo trabaja, corrige sus apuntes o escríbeselo en instructions.md."],
   ["¿Qué pasa con los datos de mis alumnos?", "Lee lo que tú verías en Moodle para hacer su trabajo, pero en sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Por defecto, los alumnos le llegan con un alias («A-7KQ2XM»), nunca por su nombre. Tu contraseña de Moodle no la ve: entras tú, en la ventana de la extensión."],
   ["¿Puedo darle mis propias instrucciones?", "Sí. Escribe en un archivo instructions.md de la carpeta del curso lo que quieras que tenga siempre en cuenta: «puntúa sobre 10», «sé breve en el foro», «la ortografía cuenta un 10 %». Y si quieres ir más allá, puedes enseñarle habilidades propias."],
 ];
-
-function useReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches), []);
-  return reduced;
-}
-
-// The terminal plays one example: the request is typed, then each line appears, and it stops at
-// the approval. Without JS or with reduced motion, the example is shown whole.
-function Terminal() {
-  const reduced = useReducedMotion();
-  const [scene, setScene] = useState(SCENES[0].id);
-  const [typed, setTyped] = useState(null);
-  const [shown, setShown] = useState(Infinity);
-  const [started, setStarted] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (reduced || !("IntersectionObserver" in window)) return setStarted(true);
-    setShown(0);
-    const seen = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) {
-        seen.disconnect();
-        setStarted(true);
-      }
-    });
-    seen.observe(ref.current);
-    return () => seen.disconnect();
-  }, [reduced]);
-
-  useEffect(() => {
-    if (!started) return undefined;
-    const current = SCENES.find((x) => x.id === scene);
-    if (reduced) {
-      setTyped(null);
-      setShown(Infinity);
-      return undefined;
-    }
-    const timers = [];
-    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
-    setTyped("");
-    setShown(1);
-    const perChar = 38;
-    for (let i = 1; i <= current.you.length; i++) later(() => setTyped(current.you.slice(0, i)), 300 + i * perChar);
-    const typedAt = 300 + current.you.length * perChar + 350;
-    later(() => setTyped(null), typedAt);
-    const lines = current.tools.length + 2;
-    for (let i = 0; i < lines; i++) later(() => setShown(2 + i), typedAt + i * 650);
-    return () => timers.forEach(clearTimeout);
-  }, [scene, started, reduced]);
-
-  const current = SCENES.find((x) => x.id === scene);
-  const lineClass = (i, base) => `${base} ${i < shown ? s.shown : ""}`;
-  return (
-    <div className={s.demo}>
-      <div className={s.terminal} ref={ref}>
-        <div className={s.bar} aria-hidden="true"><span className={s.dots}><i /><i /><i /></span>miyagi</div>
-        <ol className={`${s.scene} ${reduced ? "" : s.animated}`} aria-label={`Ejemplo: ${current.label.toLowerCase()}`}>
-          <li className={lineClass(0, s.tYou)}>
-            <b>tú&gt;</b> <span className={typed !== null ? s.typing : ""}>{typed ?? current.you}</span>
-          </li>
-          {current.tools.map((tool, i) => <li key={tool} className={lineClass(i + 1, s.tTool)}>{tool}</li>)}
-          <li className={lineClass(current.tools.length + 1, s.tAgent)}>{current.agent}</li>
-          <li className={lineClass(current.tools.length + 2, s.tPanel)}>
-            <strong>{current.ask}</strong>
-            {current.what}
-            <ul className={s.opts}><li className={s.on}>❯ 1. Sí</li><li>&nbsp; 2. No</li><li>&nbsp; 3. Parar</li></ul>
-          </li>
-        </ol>
-      </div>
-      <div className={s.scenes} role="group" aria-label="Ver otro ejemplo">
-        {SCENES.map((x) => (
-          <button key={x.id} type="button" aria-pressed={x.id === scene} onClick={() => setScene(x.id)}>{x.label}</button>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 // What it does: tabs named after the teacher's verbs (ARIA tabs pattern).
 function Tabs() {
@@ -239,23 +135,35 @@ function LatestRelease() {
 }
 
 export default function Home() {
-  const shot = useBaseUrl("/img/casos/40-aprobacion-foro.webp");
+  const heroLight = useBaseUrl("/img/v2/desktop-navegador-moodle.webp");
+  const heroDark = useBaseUrl("/img/v2/desktop-hoy-oscuro.webp");
+  const heroLight480 = useBaseUrl("/img/v2/desktop-navegador-moodle-480.webp");
+  const heroLight820 = useBaseUrl("/img/v2/desktop-navegador-moodle-820.webp");
+  const heroDark480 = useBaseUrl("/img/v2/desktop-hoy-oscuro-480.webp");
+  const heroDark820 = useBaseUrl("/img/v2/desktop-hoy-oscuro-820.webp");
+  const desktopShot = useBaseUrl("/img/v2/desktop-hoy.webp");
+  const webShot = useBaseUrl("/img/v2/web-hoy.webp");
+  const terminalShot = useBaseUrl("/img/v2/terminal-chat.webp");
+  const realShot = useBaseUrl("/img/v2/tutorial-08-foro-resumen.webp");
   return (
-    <Layout title="Tú enseñas, y miyagi se ocupa del resto" description="miyagi trabaja en tu curso de Moodle con tu sesión de profesor: corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, escribe tu programación y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
+    <Layout title="Tú enseñas, y miyagi se ocupa del resto" description="miyagi prepara tu asignatura contigo y trabaja en tu curso de Moodle con tu sesión de profesor: corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.">
       <main className={s.landing}>
         <section className={s.hero} aria-labelledby="titulo">
           <div className={s.wrap}>
             <div>
               <p className={s.kicker}>Asistente de IA para docentes</p>
               <h1 id="titulo">Tú enseñas, y <span className={s.brandWord}>miyagi</span> se ocupa del resto.</h1>
-              <p className={s.lead}>Corrige con tu rúbrica, atiende el foro, monta temas, cuestionarios y juegos, y te dice cómo va la clase. Puedes enseñarle habilidades nuevas para adaptarlo a tu asignatura.</p>
+              <p className={s.lead}>Una aplicación de escritorio que prepara tu asignatura contigo y, si conectas tu curso de Moodle, corrige con tu rúbrica, atiende el foro, monta temas y cuestionarios y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.</p>
               <div className={s.actions}>
-                <Link className={`${s.button} ${s.primary}`} to="/guia/instalar/">Instalar miyagi</Link>
+                <a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a>
                 <Link className={s.button} to="/casos-de-uso/">Verlo en un aula real</Link>
               </div>
-              <p className={s.fine}>Gratis y de código abierto (licencia MIT). Funciona con tu suscripción de Claude.</p>
+              <p className={s.fine}>Windows de 64 bits. <Link to="/guia/instalar/#aplicacion-windows">El instalador aún no está firmado</Link> y Windows te avisará. ¿Mac o Linux? Mira las <a href="#versiones">otras versiones</a>. Gratis y de código abierto (MIT); funciona con tu suscripción de Claude.</p>
             </div>
-            <Terminal />
+            <figure className={s.heroShot}>
+              <img className={s.imgLight} src={heroLight} srcSet={`${heroLight480} 480w, ${heroLight820} 820w, ${heroLight} 1400w`} sizes="(max-width: 1020px) calc(100vw - 40px), 980px" width="1400" height="875" fetchPriority="high" decoding="async" alt="La aplicación de escritorio de miyagi: la columna de iconos, las conversaciones de la asignatura Introducción a SQL, el chat, y al lado el curso de Moodle abierto en el navegador integrado." />
+              <img className={s.imgDark} src={heroDark} srcSet={`${heroDark480} 480w, ${heroDark820} 820w, ${heroDark} 1400w`} sizes="(max-width: 1020px) calc(100vw - 40px), 980px" width="1400" height="875" loading="lazy" decoding="async" alt="La aplicación de escritorio de miyagi en tema oscuro, en la vista Hoy de la asignatura Introducción a SQL: el saludo, cuatro tarjetas de resumen y sugerencias." />
+            </figure>
           </div>
         </section>
 
@@ -292,27 +200,59 @@ export default function Home() {
               <p>Sin instalar nada en el servidor de tu centro: trabaja en tu Moodle con la extensión moodle-teacher y tu sesión de profesor.</p>
             </div>
             <ol className={s.how}>
-              <li><h3>Instálalo</h3><p>Una línea en la terminal, en Windows, Mac o Linux.</p></li>
-              <li><h3>Preséntale tu curso</h3><p><code>miyagi init</code> te pregunta por tu asignatura (el nombre, el tono, el idioma) y, al final, si conectas tu aula de Moodle: basta con la dirección del curso. Entras tú en Moodle una vez, en la ventana de la extensión, y explora tu Moodle, sin tocar nada, para saber qué admite. Si le dejas tu programación, tus rúbricas o tus criterios, los tiene en cuenta.</p></li>
-              <li><h3>Pídeselo y aprueba</h3><p>Conversa con él o déjale recorrer el curso de una vez. Cuando algo vaya a llegar a tus alumnos, te lo enseña y espera tu sí.</p></li>
+              <li><h3>Instálalo</h3><p>En Windows, un doble clic en el instalador. Abre la aplicación y conecta tu cuenta de Claude.</p></li>
+              <li><h3>Preséntale tu curso</h3><p>Crea una asignatura: nombre, tono e idioma, y si quieres la dirección de tu curso de Moodle. Entras tú en Moodle una vez, en su ventana, y miyagi nunca ve tu contraseña. Déjale tu programación, tus rúbricas o tus criterios en Fuentes y los tendrá en cuenta.</p></li>
+              <li><h3>Pídeselo y aprueba</h3><p>Conversa con él con tus palabras. Cuando algo vaya a llegar a tus alumnos, te lo enseña y espera tu sí.</p></li>
             </ol>
           </div>
         </section>
 
-        <section className={s.tinted} aria-labelledby="real-t">
+        <section id="versiones" className={s.tinted} aria-labelledby="versiones-t">
+          <div className={s.wrap}>
+            <div className={s.sectionIntro}>
+              <h2 id="versiones-t">Tres versiones, un mismo asistente</h2>
+              <p>Las mismas asignaturas, la misma memoria del curso y los mismos permisos antes de publicar. Te recomendamos la aplicación de escritorio.</p>
+            </div>
+            <div className={s.versions}>
+              <article className={s.versionMain}>
+                <figure className={s.versionShot}><img src={desktopShot} width="1400" height="875" loading="lazy" decoding="async" alt="La aplicación de escritorio en la vista Hoy: columna de iconos, conversaciones, el saludo de miyagi, tarjetas de resumen y sugerencias." /></figure>
+                <div>
+                  <p className={s.badge}>Recomendada</p>
+                  <h3>Aplicación de escritorio</h3>
+                  <p>Para la mayoría de docentes, en Windows. Se instala con un doble clic, sin terminal ni Node.js. Tiene su propia barra de ventana y un navegador integrado para tener Moodle al lado de la conversación.</p>
+                  <div className={s.actions}>
+                    <a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a>
+                    <Link className={s.button} to="/guia/escritorio/">Ver la guía</Link>
+                  </div>
+                </div>
+              </article>
+              <article className={s.version}>
+                <figure className={s.versionShot}><img src={webShot} width="1400" height="875" loading="lazy" decoding="async" alt="La versión web de miyagi en una pestaña del navegador: la misma página que la aplicación, en la vista Hoy." /></figure>
+                <h3>Versión web</h3>
+                <p>La misma página, en una pestaña de tu navegador, en Windows, Mac o Linux. Se abre con <code>miyagi web</code> y solo funciona en tu ordenador. Necesita Node.js.</p>
+                <p><Link to="/guia/web/">Ver la guía</Link></p>
+              </article>
+              <article className={s.version}>
+                <figure className={s.versionShot}><img src={terminalShot} width="1400" height="1122" loading="lazy" decoding="async" alt="El chat de miyagi en la terminal con una respuesta en forma de tabla y el modo guiado abajo." /></figure>
+                <h3>Terminal</h3>
+                <p>Para quien prefiere el teclado o quiere encargos de una sola orden: <code>miyagi chat</code>, <code>miyagi run</code>, <code>miyagi ingest</code>. Necesita Node.js.</p>
+                <p><Link to="/guia/terminal/">Ver la guía</Link></p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="real-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="real-t">Míralo trabajar en un aula real</h2>
               <p>Un aula de «Introducción a SQL» montada de cero con miyagi, paso a paso y con capturas reales: de la programación a la corrección.</p>
             </div>
             <figure className={s.shot}>
-              <div className={s.window}>
-                <div className={s.windowBar} aria-hidden="true"><span className={s.windowDots}><i /><i /><i /></span><span className={s.windowTitle}>miyagi — Introducción a SQL</span></div>
-                <a href={shot}>
-                  <img src={shot} width="1400" height="1037" loading="lazy" alt="El chat de miyagi pidiendo permiso para publicar dos respuestas en el foro del aula de SQL: una pista para un ERROR 1452 de clave ajena y la corrección de la respuesta equivocada de una compañera sobre WHERE y HAVING, con los textos completos." />
-                </a>
-              </div>
-              <figcaption>Una sesión real del aula de SQL: antes de responder en el foro, enseña los dos mensajes completos y espera tu sí.</figcaption>
+              <a href={realShot}>
+                <img src={realShot} width="1400" height="875" loading="lazy" decoding="async" alt="La aplicación de escritorio tras atender el foro: un resumen de los dos hilos, qué pasaba en cada uno y qué ha hecho miyagi, y una propuesta para la próxima clase." />
+              </a>
+              <figcaption>Una sesión real del aula de SQL: después de responder en el foro, resume cada hilo y relaciona lo que ve con la corrección. Antes, cada mensaje pasó por tu aprobación.</figcaption>
             </figure>
             <div className={s.actions}>
               <Link className={`${s.button} ${s.primary}`} to="/casos-de-uso/">Ver el aula de SQL paso a paso</Link>
@@ -320,7 +260,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="metodo-t">
+        <section className={s.tinted} aria-labelledby="metodo-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="metodo-t">Enseña como tú quieras enseñar</h2>
@@ -330,7 +270,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className={s.tinted} aria-labelledby="memoria-t">
+        <section aria-labelledby="memoria-t">
           <div className={`${s.wrap} ${s.split}`}>
             <div>
               <h2 id="memoria-t">Recuerda tu curso</h2>
@@ -343,7 +283,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="ayudantes-t">
+        <section className={s.tinted} aria-labelledby="ayudantes-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="ayudantes-t">Trabaja con ayudantes</h2>
@@ -357,19 +297,19 @@ export default function Home() {
           </div>
         </section>
 
-        <section className={s.tinted} aria-labelledby="manera-t">
+        <section aria-labelledby="manera-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}><h2 id="manera-t">A tu manera</h2></div>
             <div className={`${s.cards} ${s.four}`}>
               <div className={s.card}><h3>Con tu tono</h3><p>Formal, cercano o motivador: tú eliges cómo habla con tus alumnos en el foro y en la retroalimentación.</p></div>
               <div className={s.card}><h3>En tu idioma</h3><p>Te atiende en español, inglés, francés o alemán. Lo que publica sigue siempre el idioma de tu curso.</p></div>
-              <div className={s.card}><h3>Conversa o delega</h3><p>Un chat que puedes retomar otro día, o una pasada por todo el curso. Pulsa Esc y para lo que esté haciendo.</p></div>
+              <div className={s.card}><h3>Conversa, y retoma</h3><p>Una conversación que puedes retomar otro día, con búsqueda entre todas las anteriores. Pulsa Esc y para lo que esté haciendo.</p></div>
               <div className={s.card}><h3>Hazlo tuyo</h3><p>Instrucciones que siempre respeta («puntúa sobre 10»), <Link to="/avanzado/habilidades-propias/">habilidades</Link> y atajos propios. Todo en archivos de texto, sin programar.</p></div>
             </div>
           </div>
         </section>
 
-        <section id="control" aria-labelledby="control-t">
+        <section id="control" className={s.tinted} aria-labelledby="control-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
               <h2 id="control-t">Con tu visto bueno</h2>
@@ -383,7 +323,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className={s.tinted} aria-labelledby="abierto-t">
+        <section aria-labelledby="abierto-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}><h2 id="abierto-t">Libre, abierto y probado en un Moodle de verdad</h2></div>
             <div className={s.cards}>
@@ -394,29 +334,34 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="instalar" aria-labelledby="instalar-t">
+        <section id="instalar" className={s.tinted} aria-labelledby="instalar-t">
           <div className={s.wrap}>
             <div className={s.sectionIntro}>
-              <h2 id="instalar-t">Instálalo en tres pasos</h2>
-              <p>En Windows, Mac o Linux. No hace falta saber programar.</p>
+              <h2 id="instalar-t">Instálalo</h2>
+              <p>No hace falta saber programar. Necesitas una suscripción de Claude Pro o Max y, para trabajar en tu aula, un curso de Moodle en el que tengas rol de profesor.</p>
             </div>
             <ol className={s.steps}>
-              <li><div><h3>Instala Google Chrome</h3><p>Si no lo tienes ya, desde <a href="https://www.google.com/chrome/">google.com/chrome</a>. miyagi lo usa para pasar materiales a PDF y leer páginas web.</p></div></li>
-              <li><div><h3>Instala Node.js</h3><p>La versión LTS desde <a href="https://nodejs.org/">nodejs.org</a>, con las opciones por defecto.</p></div></li>
               <li>
                 <div>
-                  <h3>Instala miyagi</h3>
-                  <p>Abre una terminal (PowerShell en Windows, Terminal en Mac), pega esta línea y pulsa Intro:</p>
+                  <h3>En Windows: la aplicación de escritorio</h3>
+                  <p>Windows de 64 bits, sin terminal ni Node.js. Descarga el instalador y ábrelo. Como todavía no está firmado, Windows te avisará: pulsa <strong>Más información</strong> y <strong>Ejecutar de todas formas</strong>.</p>
+                  <div className={s.actions}><a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a></div>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <h3>En Mac, Linux o desde la terminal: Node.js y una línea</h3>
+                  <p>Instala <a href="https://nodejs.org/">Node.js</a> (la versión LTS, 20 o posterior). Abre una terminal, pega esta línea y pulsa Intro:</p>
                   <CopyCommand />
-                  <p>Después, escribe <code>miyagi init</code> en la carpeta que quieras usar para tu curso y responde a sus preguntas.</p>
+                  <p>Después, <code>miyagi web</code> abre la versión web y <code>miyagi init</code> prepara tu asignatura en la terminal.</p>
                 </div>
               </li>
             </ol>
-            <p className={s.needs}>Necesitas un curso de Moodle en el que tengas rol de profesor y una suscripción de Claude Pro o Max. La <Link to="/guia/primeros-pasos/">guía de primeros pasos</Link> lo explica todo con ejemplos.</p>
+            <p className={s.needs}>La <Link to="/guia/primeros-pasos/">guía de primeros pasos</Link> lo explica todo con ejemplos, y puedes <Link to="/guia/elegir-version/">comparar las tres versiones</Link>.</p>
           </div>
         </section>
 
-        <section id="preguntas" className={`${s.faq} ${s.tinted}`} aria-labelledby="preguntas-t">
+        <section id="preguntas" className={s.faq} aria-labelledby="preguntas-t">
           <div className={s.wrap}>
             <h2 id="preguntas-t">Preguntas frecuentes</h2>
             {FAQ.map(([q, a]) => (
@@ -431,7 +376,8 @@ export default function Home() {
             <h2 id="final-t"><span className={s.motto}>Lo repetitivo</span>, para miyagi.</h2>
             <p>Tú te quedas con lo que importa, que es enseñar.</p>
             <div className={s.actions}>
-              <Link className={`${s.button} ${s.primary}`} to="/guia/instalar/">Instalar miyagi</Link>
+              <a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a>
+              <Link className={s.button} to="/guia/instalar/">Otras formas de instalarlo</Link>
               <a className={s.button} href="https://github.com/falkenslab/miyagi">Ver el código en GitHub</a>
             </div>
           </div>
