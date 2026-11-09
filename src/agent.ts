@@ -307,6 +307,9 @@ export async function prepareSession(
     // The whole result, not only options and modeControl: the chat needs the extensions, their sign-in and labels.
     // What an export leaves out, until the next approval shows it (ADR-015).
     const pending: PendingLosses = { losses: [] };
+    // docker-lab may have been installed or turned on since the subject was opened (#91).
+    config.labs = await labsFor(workspaceDir, label);
+    config.extraWritableDirs = [draftsDirFor(workspaceDir), materialsDirFor(workspaceDir), ...(config.labs ? [config.labs.dir] : [])];
     const opened = await buildSessionOptions(config, runDir, buildSpec(kind, skills, pending), { autoCompactEnabled, run });
     const { options } = opened;
     if (kind === "explore") options.maxTurns = EXPLORE_MAX_TURNS;
