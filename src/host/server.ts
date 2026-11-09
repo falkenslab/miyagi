@@ -44,6 +44,7 @@ const TYPES: Record<string, string> = {
   ".css": "text/css; charset=utf-8",
   ".svg": "image/svg+xml",
   ".png": "image/png",
+  ".webp": "image/webp",
   ".ico": "image/x-icon",
   ".woff2": "font/woff2",
   ".json": "application/json",
@@ -401,7 +402,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         signIn = null;
         schedule();
         return {};
-      // What the page remembers of the teacher (#81), in ~/.miyagi/config.json so the app and the browser agree.
+      // What the page remembers of the teacher (#81, #82), in ~/.miyagi/config.json so the app and the browser agree.
       case "page-settings":
         return readPageSettings();
       case "page-settings-save":

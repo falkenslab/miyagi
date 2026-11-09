@@ -646,3 +646,15 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 .tour-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; }
 .tour-acts .btn { min-height: 44px; }
 .tour-skip { padding-left: 8px; padding-right: 8px; color: var(--dim); }
+
+/* The startup tips (#82) */
+.dialog.tips { width: min(820px, 100%); }
+.tip-body { display: flex; align-items: flex-start; gap: 16px; }
+.tip-body img { flex: 0 1 56%; min-width: 0; width: 56%; height: auto; border: 1px solid var(--line); border-radius: 10px; }
+.tip-text { flex: 1; min-width: 0; color: var(--text-2); }
+.btn.tip-more { margin-top: 10px; min-height: 44px; }
+.tip-off { display: flex; align-items: center; gap: 8px; margin-top: 14px; min-height: 44px; cursor: pointer; }
+.tip-off input { accent-color: var(--sun); width: 18px; height: 18px; }
+.tip-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
+.tip-acts .btn { min-height: 44px; }
+@media (max-width: 760px) { .tip-body { flex-direction: column; } .tip-body img { flex: none; width: 100%; max-height: 34dvh; object-fit: contain; object-position: top; } }

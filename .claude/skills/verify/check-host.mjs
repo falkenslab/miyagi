@@ -290,7 +290,7 @@ const globalFile = path.join(os.homedir(), ".miyagi", "config.json");
 const kept = readFileSync(globalFile, "utf8");
 writeFileSync(globalFile, JSON.stringify({ ...JSON.parse(kept), anthropicApiKey: "sk-ant-api-not-a-real-one" }));
 const fresh = await post("page-settings");
-check("no tour seen on a fresh home", !fresh.error && fresh.tourSeen === undefined);
+check("no tour seen on a fresh home", !fresh.error && fresh.tourSeen === undefined && fresh.showTips === undefined && fresh.tipsNext === undefined);
 check("…and the page's settings carry no key", !JSON.stringify(fresh).includes("sk-ant"));
 for (const bad of [-1, 1.5, "1", null, true]) check(`a tour version that isn't one is refused: ${bad}`, (await post("page-settings-save", { tourSeen: bad })).error === "invalid");
 check("saving nothing changes nothing", !(await post("page-settings-save", {})).error && (await post("page-settings")).tourSeen === undefined);
@@ -298,11 +298,13 @@ check("the tour seen is saved", !(await post("page-settings-save", { tourSeen: 1
 const savedSettings = JSON.parse(readFileSync(globalFile, "utf8"));
 check("…in ~/.miyagi/config.json, with the rest kept", savedSettings.tourSeen === 1 && savedSettings.anthropicApiKey === "sk-ant-api-not-a-real-one" && savedSettings.defaultLanguage === "español");
 check("…and no other key written by the page", !(await post("page-settings-save", { anthropicApiKey: "x", tourSeen: 2 })).error && JSON.parse(readFileSync(globalFile, "utf8")).anthropicApiKey === "sk-ant-api-not-a-real-one");
+check("the tips' settings are saved too", !(await post("page-settings-save", { showTips: false, tipsNext: 7 })).error && (await post("page-settings")).showTips === false && (await post("page-settings")).tipsNext === 7);
+for (const bad of [{ showTips: "no" }, { tipsNext: -1 }, { tipsNext: 1.5 }]) check(`a tips' value that isn't one is refused: ${JSON.stringify(bad)}`, (await post("page-settings-save", bad)).error === "invalid");
 const afterRestartHost = await startHost(undefined, {});
 const secondUrl = new URL(afterRestartHost.url);
 const secondSeen = await (await fetch(`${secondUrl.origin}/api/page-settings?token=${secondUrl.searchParams.get("token")}`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })).json();
 await afterRestartHost.close();
-check("…kept for the next host (the app and the browser read the same file)", secondSeen.tourSeen === 2);
+check("…kept for the next host (the app and the browser read the same file)", secondSeen.tourSeen === 2 && secondSeen.showTips === false && secondSeen.tipsNext === 7);
 writeFileSync(globalFile, kept);
 
 // Nothing secret reaches the page: not the URL's token, not a key.

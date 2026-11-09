@@ -23,6 +23,7 @@ node .claude/skills/verify/check-activity-register.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
 node .claude/skills/verify/check-file-scope.mjs
+node .claude/skills/verify/check-tips.mjs
 node .claude/skills/verify/check-pdf-text.mjs
 node .claude/skills/verify/check-host.mjs
 node .claude/skills/update-docs/check-docs.mjs
@@ -68,13 +69,15 @@ When the teacher's own commands change (`src/ownCommands.ts`, `src/commandsServe
 word-search command asked for by talking, approved and saved for all subjects, then launched from
 a topic's ⋯ with its form, until the word search is in `drafts/`.
 
-`check-page.mjs` walks the guided tour (#81) on a fresh home, every step at 360, 768 and 1440 px in both themes, creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
+`check-page.mjs` walks the guided tour (#81) and the startup tips (#82) on a fresh home, every step at 360, 768 and 1440 px in both themes, creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
 and not Claude Code's, approves one tool and refuses another in interactive mode, links the items a reply names (a source
 and a page open their views, a made-up path stays text), switches the mode
 and the theme, and takes screenshots at 360, 768 and 1440 px with no horizontal scroll. Look at
 them. Without a token it says `skip` and passes.
 
 When own commands or their editor changed, also `node .claude/skills/verify/check-own-editor.mjs <scratchpad>/own-shots` (same requirements, one turn).
+
+`check-tips.mjs` counts the startup tips of `gui/tips/` (50 in es and en, the same ids in the same order, one to three lines each), checks that every image exists, weighs under 150 kB and is the same in both, and that every docs link goes to a page (and heading) of the docs site in that language. Change it with the tips' format.
 
 `check-validators.mjs` runs the upload validators on `fixtures/validators/`: real GIFT files from
 sandbox tests (the loops quiz whose indentation Moodle lost, before and after its fix), GIFT

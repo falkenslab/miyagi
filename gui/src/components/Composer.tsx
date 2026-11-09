@@ -119,7 +119,8 @@ export function Composer({ chat, T, X, onNotice, onCapabilities, draft }: { chat
   }, [draft]);
   // Back to the box when a turn ends or a panel closes.
   useEffect(() => {
-    if (!chat.busy && !chat.panel) area.current?.focus();
+    // Not over a window that holds the focus: the tips, the guided tour.
+    if (!chat.busy && !chat.panel && !document.querySelector(".scrim, .tour")) area.current?.focus();
   }, [chat.busy, chat.panel]);
 
   const commands = useMemo(() => {

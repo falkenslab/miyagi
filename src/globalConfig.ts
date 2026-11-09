@@ -22,10 +22,14 @@ export interface GlobalConfig {
   defaultLanguage?: string;
   /** The version of the page's guided tour the teacher has seen or skipped (#81). */
   tourSeen?: number;
+  /** Whether the tips open on starting a subject (#82). On unless set to false. */
+  showTips?: boolean;
+  /** The next tip to show: the index in the tips' list (#82). */
+  tipsNext?: number;
 }
 
 /** What the page keeps here, the same in the app and the browser: only these keys reach it, never the key above. */
-export type PageSettings = Pick<GlobalConfig, "tourSeen">;
+export type PageSettings = Pick<GlobalConfig, "tourSeen" | "showTips" | "tipsNext">;
 
 export function globalConfigPath(): string {
   return path.join(os.homedir(), ".miyagi", "config.json");
@@ -176,16 +180,22 @@ export async function resolveLanguage(workspaceValue: string | undefined): Promi
 
 /** What the page remembers of the teacher (#81), without the rest of the file. */
 export async function readPageSettings(): Promise<PageSettings> {
-  const { tourSeen } = await readGlobalConfig();
-  return { tourSeen };
+  const { tourSeen, showTips, tipsNext } = await readGlobalConfig();
+  return { tourSeen, showTips, tipsNext };
 }
 
 /** Saves what the page asks to remember: false for a value that isn't one, and then nothing changes. */
 export async function savePageSettings(changes: Record<string, unknown>): Promise<boolean> {
-  const { tourSeen } = changes;
-  if (tourSeen !== undefined && !(Number.isInteger(tourSeen) && (tourSeen as number) >= 0)) return false;
+  const { tourSeen, showTips, tipsNext } = changes;
+  const isCount = (value: unknown) => value === undefined || (Number.isInteger(value) && (value as number) >= 0);
+  if (!isCount(tourSeen) || !isCount(tipsNext) || !(showTips === undefined || typeof showTips === "boolean")) return false;
   const config = await readGlobalConfig();
-  await writeGlobalConfig({ ...config, ...(tourSeen === undefined ? {} : { tourSeen: tourSeen as number }) });
+  await writeGlobalConfig({
+    ...config,
+    ...(tourSeen === undefined ? {} : { tourSeen: tourSeen as number }),
+    ...(showTips === undefined ? {} : { showTips: showTips as boolean }),
+    ...(tipsNext === undefined ? {} : { tipsNext: tipsNext as number }),
+  });
   return true;
 }
 

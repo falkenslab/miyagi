@@ -3,6 +3,7 @@ import { act } from "../api";
 import type { Texts } from "../i18n";
 import type { CourseTexts } from "../i18n/course";
 import type { ExtTexts } from "../i18n/extensions";
+import type { TipsTexts } from "../i18n/tips";
 import type { TourTexts } from "../i18n/tour";
 import type { ChatState, Info } from "../types";
 import { Icon, type IconName } from "./Icons";
@@ -427,29 +428,42 @@ function newConversation(chat: ChatState, onOpen: () => void) {
   onOpen();
 }
 
-/** The rail's help, next to the theme: where the guided tour is opened again (#81). */
-function HelpMenu({ G, onTour }: { G: TourTexts; onTour: () => void }) {
+/** The rail's help, next to the theme: where the guided tour (#81) and the tips (#82) are opened again. */
+function HelpMenu({ G, H, onTour, onTips }: { G: TourTexts; H: TipsTexts; onTour: () => void; onTips: () => void }) {
   return (
     <Menu title={G.help} ariaLabel={G.help} className="ibtn plain help-btn" popClass="up left" label={<Icon name="help" />}>
       {(close) => (
-        <button
-          type="button"
-          data-help="tour"
-          onClick={() => {
-            onTour();
-            close();
-          }}
-        >
-          <Icon name="compass" />
-          <span>{G.name}</span>
-        </button>
+        <>
+          <button
+            type="button"
+            data-help="tour"
+            onClick={() => {
+              onTour();
+              close();
+            }}
+          >
+            <Icon name="compass" />
+            <span>{G.name}</span>
+          </button>
+          <button
+            type="button"
+            data-help="tips"
+            onClick={() => {
+              onTips();
+              close();
+            }}
+          >
+            <Icon name="bulb" />
+            <span>{H.name}</span>
+          </button>
+        </>
       )}
     </Menu>
   );
 }
 
 /** The narrow column of places: each group opens at the view last left open in it. */
-function Rail({ info, chat, view, go, theme, setTheme, T, X, C, G, touring, onTour }: { info: Info | null; chat: ChatState | null; view: View; go: (view: View) => void; theme: Theme; setTheme: (theme: Theme) => void; T: Texts; X: ExtTexts; C: CourseTexts; G: TourTexts; touring: boolean; onTour: () => void }) {
+function Rail({ info, chat, view, go, theme, setTheme, T, X, C, G, H, touring, onTour, onTips }: { info: Info | null; chat: ChatState | null; view: View; go: (view: View) => void; theme: Theme; setTheme: (theme: Theme) => void; T: Texts; X: ExtTexts; C: CourseTexts; G: TourTexts; H: TipsTexts; touring: boolean; onTour: () => void; onTips: () => void }) {
   const last = useRef<Record<Group, View>>({ course: "plan", memory: "knowledge" });
   // What the tour shows isn't where the teacher left off.
   useEffect(() => {
@@ -481,7 +495,7 @@ function Rail({ info, chat, view, go, theme, setTheme, T, X, C, G, touring, onTo
         )}
       </nav>
       <div className="rail-foot">
-        {chat && <HelpMenu G={G} onTour={onTour} />}
+        {chat && <HelpMenu G={G} H={H} onTour={onTour} onTips={onTips} />}
         <ThemeMenu theme={theme} setTheme={setTheme} T={T} />
         {info && (
           <Menu title={T.versions} ariaLabel={T.versions} className="ibtn plain ver-btn" popClass="up left" label={<span className="rail-ver">{info.version}</span>}>
@@ -548,8 +562,10 @@ export function Frame({
   X,
   C,
   G,
+  H,
   tourStep,
   onTour,
+  onTips,
   onNewSubject,
   onOpenExisting,
 }: {
@@ -567,8 +583,10 @@ export function Frame({
   X: ExtTexts;
   C: CourseTexts;
   G: TourTexts;
+  H: TipsTexts;
   tourStep: { at: number; total: number } | null;
   onTour: () => void;
+  onTips: () => void;
   onNewSubject: () => void;
   onOpenExisting: () => void;
 }) {
@@ -586,7 +604,7 @@ export function Frame({
     <>
       {open && <div className="side-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
       <div className={`frame${open ? " on" : ""}${collapsed ? " collapsed" : ""}`}>
-        <Rail info={info} chat={chat} view={view} go={go} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} touring={Boolean(tourStep)} onTour={onTour} />
+        <Rail info={info} chat={chat} view={view} go={go} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} H={H} touring={Boolean(tourStep)} onTour={onTour} onTips={onTips} />
         {info?.workspace && (
           <aside className="side" aria-label={T.conversations} style={{ "--side-width": `${width}px` } as CSSProperties}>
             <div className="side-top">

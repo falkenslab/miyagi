@@ -1,4 +1,4 @@
-// Checks miyagi's page (gui/, gui-chat #47, the guided tour #81, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70, the desktop browser's bar and panel on a stub #86, the desktop title bar on a stub #87) in Chrome against the
+// Checks miyagi's page (gui/, gui-chat #47, the guided tour #81, the startup tips #82, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70, the desktop browser's bar and panel on a stub #86, the desktop title bar on a stub #87) in Chrome against the
 // real host and a real Claude session: a subject created from the page, the rail's places and their
 // tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
@@ -111,6 +111,84 @@ const tourStep = () => page.evaluate(() => {
   const tiny = [...bubble.querySelectorAll("button")].filter((one) => one.getBoundingClientRect().height < 44).length;
   return { id, hasTarget: Boolean(target), found: Boolean(element), near, ring: Boolean(ring), inWindow, clear, centred, tiny, focused: bubble.contains(document.activeElement), scroll: document.documentElement.scrollWidth > window.innerWidth };
 });
+const tipId = () => page.getAttribute(".tip-body", "data-tip");
+/** The first tip (#82), right after the tour: a window with its image; Esc closes it. */
+const checkFirstTip = async () => {
+  await page.waitForSelector(".dialog.tips", { timeout: 15_000 });
+  check("after the tour a tip shows, never both at once", (await page.locator(".tour").count()) === 0 && (await tipId()) === "01-shift-tab" && (await page.evaluate(() => { const img = document.querySelector(".tip-body img"); return img?.complete && img.naturalWidth > 0; })));
+  await shot("tip-first-1440");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".dialog.tips", { state: "detached" });
+};
+/** The tips (#82) over the next opens: the next one each time, "Don't show" keeps it closed, the menu reopens it; every width and theme. */
+const checkTips = async () => {
+  await page.reload();
+  await page.waitForSelector(".dialog.tips", { timeout: 15_000 });
+  check("the next open shows the next tip", (await tipId()) === "02-slash-menu", await tipId());
+  await page.click(".tip-next");
+  check("Next tip moves on", (await tipId()) === "03-plus-menu", await tipId());
+  await page.click(".tip-prev");
+  check("Previous goes back", (await tipId()) === "02-slash-menu", await tipId());
+  await page.click(".tip-next");
+  await page.evaluate(() => {
+    window.__open = window.open;
+    window.open = (url) => (window.__opened = url);
+  });
+  await page.click(".tip-more");
+  const opened = await page.evaluate(() => {
+    window.open = window.__open;
+    return window.__opened;
+  });
+  check("Learn more opens the tip's docs page", opened === "https://falkenslab.github.io/miyagi/avanzado/navegador", opened);
+  check("the tip's dialog names itself and keeps the focus", await page.evaluate(() => Boolean(document.querySelector('.dialog.tips[role="dialog"][aria-modal="true"]')) && document.querySelector(".dialog.tips").contains(document.activeElement)));
+  // Sizes: the image above and scaled at 360, nothing overflows.
+  for (const scheme of ["light", "dark"]) {
+    await page.emulateMedia({ colorScheme: scheme });
+    for (const [width, height] of [
+      [360, 760],
+      [768, 1000],
+      [1440, 900],
+    ]) {
+      await page.setViewportSize({ width, height });
+      await page.waitForTimeout(350);
+      await page.screenshot({ path: path.join(shots, `tip-${scheme}-${width}.png`) });
+      const fit = await page.evaluate(() => {
+        const dialog = document.querySelector(".dialog.tips").getBoundingClientRect();
+        const img = document.querySelector(".tip-body img")?.getBoundingClientRect();
+        const text = document.querySelector(".tip-text").getBoundingClientRect();
+        const tiny = [...document.querySelectorAll(".tip-acts button, .tip-more")].filter((one) => one.getBoundingClientRect().height < 44).length;
+        return { inWindow: dialog.left >= 0 && dialog.right <= window.innerWidth + 0.5 && dialog.bottom <= window.innerHeight + 0.5, above: img ? img.bottom <= text.top + 1 : null, imgFits: img ? img.right <= dialog.right + 1 : true, tiny, scroll: document.documentElement.scrollWidth > window.innerWidth };
+      });
+      check(`the tips' window fits at ${width} (${scheme})`, fit.inWindow && !fit.scroll && fit.imgFits && !fit.tiny, JSON.stringify(fit));
+      if (width === 360) check("…with the image above the text", fit.above === true, JSON.stringify(fit));
+    }
+  }
+  await page.emulateMedia({ colorScheme: null });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // "Don't show" keeps it closed; the menu reopens it, and unticking brings it back.
+  await page.check(".tip-off input");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".dialog.tips", { state: "detached" });
+  await page.reload();
+  await page.waitForSelector(".recents a.open-conv, .recents a.on-conv");
+  await page.waitForTimeout(1500);
+  check("with Don't show ticked, no tip on the next open", (await page.locator(".dialog.tips").count()) === 0);
+  await page.click(".rail-foot .help-btn");
+  await page.click('.pop [data-help="tips"]');
+  await page.waitForSelector(".dialog.tips");
+  check("the menu reopens the tips even when turned off, the box still ticked", await page.isChecked(".tip-off input"));
+  await shot("tips-from-menu-1440");
+  await page.uncheck(".tip-off input");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".dialog.tips", { state: "detached" });
+  await page.waitForTimeout(300);
+  await page.reload();
+  await page.waitForSelector(".dialog.tips", { timeout: 15_000 });
+  check("turned back on from the menu, the tips open again", true);
+  await page.check(".tip-off input");
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".dialog.tips", { state: "detached" });
+};
 /** The tour (#81) on this fresh home, before anything else on the page: it starts when the subject opens, and Skip closes it for good. */
 const skipTour = async () => {
   await page.waitForSelector(".tour-bubble", { timeout: 120_000 });
@@ -672,6 +750,7 @@ try {
   await page.click('.new-subject button[type="submit"]');
   await page.waitForSelector(".rail .brand");
   await skipTour();
+  await checkFirstTip();
   // In Today, the open conversation is marked but not selected: one item looks selected (#65).
   await page.waitForSelector(".recents a.open-conv, .recents a.on-conv", { timeout: 60_000 });
   const marks = await page.evaluate(() => ({ selected: document.querySelectorAll('.rail [aria-current="page"], .recents [aria-current="page"]').length, conv: document.querySelectorAll(".recents .on-conv").length, open: document.querySelectorAll(".recents .open-conv").length }));
@@ -687,6 +766,7 @@ try {
   check("the wait until the greeting says what it waits for", waits.some((text) => /Arrancando miyagi|Starting miyagi/.test(text)), waits.join(" → "));
   check("no wait left once miyagi greeted", (await page.locator(".waiting").count()) === 0);
   check("a new conversation offers the quick actions as rows", (await page.locator(".suggest button").count()) >= 3);
+  await checkTips();
   await checkTour();
   await page.click(".recents a.open-conv");
   await page.waitForSelector(".suggest button");
@@ -1000,4 +1080,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL page: ${failure}`);
   process.exit(1);
 }
-console.log(`ok   page: the guided tour, subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, the desktop browser's bar and title bar on stubs, 360/390/768/1024/1440 (screenshots in ${shots})`);
+console.log(`ok   page: the guided tour, the startup tips, subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, the desktop browser's bar and title bar on stubs, 360/390/768/1024/1440 (screenshots in ${shots})`);

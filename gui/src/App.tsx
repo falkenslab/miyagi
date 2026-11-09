@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { act, useMiyagi } from "./api";
 import { ActionsContext, actionLine, SelectionMenu, type ActionsApi } from "./components/Actions";
 import { Composer, Todos } from "./components/Composer";
@@ -12,6 +12,7 @@ import { setCanPick } from "./components/PathField";
 import { setBusyReason, StatusBar } from "./components/StatusBar";
 import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
 import { setOpenLink } from "./markdown";
+import { TipsWindow } from "./components/Tips";
 import { TitleBar } from "./components/TitleBar";
 import { Tour, useTour } from "./components/Tour";
 import { Transcript } from "./components/Transcript";
@@ -20,15 +21,20 @@ import { texts } from "./i18n";
 import { actionTexts } from "./i18n/actions";
 import { courseTexts } from "./i18n/course";
 import { extTexts } from "./i18n/extensions";
+import { tipsTexts } from "./i18n/tips";
 import { tourTexts } from "./i18n/tour";
+import { tipIndex } from "./tips";
+import { tipsFor } from "./tipsContent";
 import { TOUR_VERSION } from "./tour";
 import { canBack, canForward, NO_HISTORY, step, visit, type ViewHistory } from "./viewHistory";
 
 const THEME_KEY = "miyagi.theme";
 
-/** What the page remembers of the teacher in ~/.miyagi/config.json (#81). */
+/** What the page remembers of the teacher in ~/.miyagi/config.json (#81, #82). */
 interface PageSettings {
   tourSeen?: number;
+  showTips?: boolean;
+  tipsNext?: number;
 }
 
 /** The theme the person chose before, if the page may remember it; the system's otherwise. */
@@ -64,6 +70,7 @@ export function App() {
   const X = extTexts(chat?.language ?? info?.language);
   const C = courseTexts(chat?.language ?? info?.language);
   const G = tourTexts(chat?.language ?? info?.language);
+  const H = tipsTexts(chat?.language ?? info?.language);
   setBusyReason(T.status.why);
   setCanPick(Boolean(info?.pickFolder));
   // In the desktop app a link in the chat opens a tab of its browser (#86); refused, it says so.
@@ -174,6 +181,43 @@ export function App() {
     if (started) void act<PageSettings>("page-settings").then((saved) => saved.error || setSettings(saved));
   }, [started]);
   const tour = useTour({ info, chat, asking, seen: settings ? (settings.tourSeen ?? 0) : null, onSeen: () => setSettings((now) => ({ ...now, tourSeen: TOUR_VERSION })), view: shown, setView, setDrawer: setSideOpen, collapsed: sideCollapsed, setCollapsed: setSideCollapsed });
+  // The tips (#82): on opening a subject, after the tour, not over an approval; next time, the next one.
+  const [tipAt, setTipAt] = useState<number | null>(null);
+  const tipsTotal = tipsFor(language).tips.length;
+  /** The furthest tip seen: only going beyond it moves what the next open shows. */
+  const tipHead = useRef(0);
+  const saveSettings = (changes: PageSettings) => {
+    setSettings((now) => ({ ...now, ...changes }));
+    void act("page-settings-save", { ...changes });
+  };
+  const showTip = () => {
+    const at = tipIndex(settings?.tipsNext, tipsTotal);
+    tipHead.current = at;
+    setTipAt(at);
+    saveSettings({ tipsNext: (at + 1) % tipsTotal });
+  };
+  const moveTip = (delta: number) => {
+    if (tipAt === null) return;
+    const at = (tipAt + delta + tipsTotal) % tipsTotal;
+    setTipAt(at);
+    if (at === (tipHead.current + 1) % tipsTotal) {
+      tipHead.current = at;
+      saveSettings({ tipsNext: (at + 1) % tipsTotal });
+    }
+  };
+  // Once per subject opened, and never while the tour is due or on.
+  const tipShownFor = useRef<string | null>(null);
+  const tourDue = !settings || (settings.tourSeen ?? 0) < TOUR_VERSION;
+  useEffect(() => {
+    if (!chat || !info?.workspace || asking || tour.step || tourDue || tipAt !== null) return;
+    if (tipShownFor.current === info.workspace) return;
+    tipShownFor.current = info.workspace;
+    if (settings?.showTips !== false) showTip();
+  }, [Boolean(chat), info?.workspace, asking, Boolean(tour.step), tourDue, settings?.showTips]);
+  // An approval or a question comes first: the tip goes, and doesn't come back.
+  useEffect(() => {
+    if (asking) setTipAt(null);
+  }, [asking]);
   // The views the tour shows aren't visits.
   const touring = Boolean(tour.step);
   useEffect(() => {
@@ -188,7 +232,7 @@ export function App() {
     <ActionsContext.Provider value={actions}>
     {info?.frame && <TitleBar info={info} T={T} canGoBack={canBack(history)} canGoForward={canForward(history)} onBack={() => travel(-1)} onForward={() => travel(1)} onSide={() => (matchMedia("(max-width: 760px)").matches ? setSideOpen(true) : setSideCollapsed(!sideCollapsed))} theme={theme} onNotice={setToast} />}
     <div className={`app${info?.frame ? " with-titlebar" : ""}${withPanel ? " with-panel" : ""}${withPanel && side.expanded ? " panel-full" : ""}${asking ? " asking" : ""}`} style={{ "--panel-width": `${side.width}px` } as CSSProperties}>
-      <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} tourStep={tour.step} onTour={tour.start} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
+      <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} H={H} tourStep={tour.step} onTour={tour.start} onTips={showTip} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
         <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} panelTabs={chat ? side.tabs.list.length : 0} canBrowse={Boolean(chat && canBrowse)} panelShown={withPanel} onPanel={side.tabs.list.length ? side.toggle : () => void side.openWeb()} />
         <ViewTabs view={shown} setView={setView} C={C} />
@@ -281,6 +325,7 @@ export function App() {
         </div>
       )}
       <SelectionMenu />
+      {tipAt !== null && !tour.step && <TipsWindow at={tipAt} language={language} showTips={settings?.showTips !== false} H={H} onMove={moveTip} onShowTips={(show) => saveSettings({ showTips: show })} onClose={() => setTipAt(null)} />}
       {tour.step && !asking && <Tour step={tour.step.current} at={tour.step.at} total={tour.step.total} G={G} T={T} onMove={tour.move} onClose={tour.close} />}
     </div>
     </ActionsContext.Provider>
