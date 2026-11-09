@@ -180,7 +180,8 @@ export function App() {
   useEffect(() => {
     if (started) void act<PageSettings>("page-settings").then((saved) => saved.error || setSettings(saved));
   }, [started]);
-  const tour = useTour({ info, chat, asking, seen: settings ? (settings.tourSeen ?? 0) : null, onSeen: () => setSettings((now) => ({ ...now, tourSeen: TOUR_VERSION })), view: shown, setView, setDrawer: setSideOpen, collapsed: sideCollapsed, setCollapsed: setSideCollapsed });
+  // The classroom's wizard, opened on creating the subject (#96), comes first as an approval does.
+  const tour = useTour({ info, chat, asking: asking || linking, seen: settings ? (settings.tourSeen ?? 0) : null, onSeen: () => setSettings((now) => ({ ...now, tourSeen: TOUR_VERSION })), view: shown, setView, setDrawer: setSideOpen, collapsed: sideCollapsed, setCollapsed: setSideCollapsed });
   // The tips (#82): on opening a subject, after the tour, not over an approval; next time, the next one.
   const [tipAt, setTipAt] = useState<number | null>(null);
   const tipsTotal = tipsFor(language).tips.length;
@@ -209,11 +210,11 @@ export function App() {
   const tipShownFor = useRef<string | null>(null);
   const tourDue = !settings || (settings.tourSeen ?? 0) < TOUR_VERSION;
   useEffect(() => {
-    if (!chat || !info?.workspace || asking || tour.step || tourDue || tipAt !== null) return;
+    if (!chat || !info?.workspace || asking || linking || tour.step || tourDue || tipAt !== null) return;
     if (tipShownFor.current === info.workspace) return;
     tipShownFor.current = info.workspace;
     if (settings?.showTips !== false) showTip();
-  }, [Boolean(chat), info?.workspace, asking, Boolean(tour.step), tourDue, settings?.showTips]);
+  }, [Boolean(chat), info?.workspace, asking, linking, Boolean(tour.step), tourDue, settings?.showTips]);
   // An approval or a question comes first: the tip goes, and doesn't come back.
   useEffect(() => {
     if (asking) setTipAt(null);
@@ -326,7 +327,7 @@ export function App() {
       )}
       <SelectionMenu />
       {tipAt !== null && !tour.step && <TipsWindow at={tipAt} language={language} showTips={settings?.showTips !== false} H={H} onMove={moveTip} onShowTips={(show) => saveSettings({ showTips: show })} onClose={() => setTipAt(null)} />}
-      {tour.step && !asking && <Tour step={tour.step.current} at={tour.step.at} total={tour.step.total} G={G} T={T} onMove={tour.move} onClose={tour.close} />}
+      {tour.step && !asking && !linking && <Tour step={tour.step.current} at={tour.step.at} total={tour.step.total} G={G} T={T} onMove={tour.move} onClose={tour.close} />}
     </div>
     </ActionsContext.Provider>
   );

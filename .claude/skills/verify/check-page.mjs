@@ -189,6 +189,16 @@ const checkTips = async () => {
   await page.keyboard.press("Escape");
   await page.waitForSelector(".dialog.tips", { state: "detached" });
 };
+/** «Vincular ya» on creating the subject (#96): the wizard alone, and the tour once it's closed. */
+const checkTourWaitsForWizard = async () => {
+  await page.waitForSelector(".dialog .steps", { timeout: 120_000 });
+  await page.waitForSelector(RAIL("today"), { timeout: 120_000 });
+  await page.waitForTimeout(3000);
+  await shot("wizard-before-tour-1440");
+  check("with the classroom's wizard open neither the tour nor a tip starts", (await page.locator(".tour").count()) === 0 && (await page.locator(".dialog.tips").count()) === 0);
+  await page.click(".dialog .acts .btn.ghost");
+  await page.waitForSelector(".dialog .steps", { state: "detached" });
+};
 /** The tour (#81) on this fresh home, before anything else on the page: it starts when the subject opens, and Skip closes it for good. */
 const skipTour = async () => {
   await page.waitForSelector(".tour-bubble", { timeout: 120_000 });
@@ -747,8 +757,10 @@ try {
     });
     new MutationObserver(seen).observe(document.body, { childList: true, subtree: true, characterData: true });
   });
+  await page.check('.new-subject input[type="checkbox"]');
   await page.click('.new-subject button[type="submit"]');
   await page.waitForSelector(".rail .brand");
+  await checkTourWaitsForWizard();
   await skipTour();
   await checkFirstTip();
   // In Today, the open conversation is marked but not selected: one item looks selected (#65).
