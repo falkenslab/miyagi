@@ -1,0 +1,28 @@
+import { finish } from "../lib.mjs";
+const S = "<run>/sources/";
+export default async ({ page, shot, log }) => {
+  const hecho = page.locator('[role="dialog"] button:has-text("Hecho")');
+  if (await hecho.count()) await hecho.click();
+  await page.waitForTimeout(6000);
+  await page.click('a:has-text("Tu aula")');
+  await page.waitForTimeout(3000);
+  await shot("a09-tu-aula-vinculada");
+  await page.waitForFunction(() => !document.querySelector(".composer .send.stop"), null, { timeout: 600000 });
+  await page.click('.nav a:has-text("Fuentes")');
+  await page.waitForSelector(".drop");
+  await page.setInputFiles("input[type=file]", [S + "temario-introduccion-sql.md", S + "rubrica-practica-consultas.md"]);
+  await page.waitForFunction(() => !document.querySelector(".waiting"), null, { timeout: 60000 });
+  await page.waitForTimeout(1500);
+  await shot("a10-fuentes-subidas");
+  log((await page.locator("main").innerText()).slice(0, 500));
+  await page.click('button:has-text("Pedir a miyagi que los incorpore")');
+  await page.waitForSelector(".composer .send.stop, .dock .checkpoint", { timeout: 60000 });
+  await page.waitForTimeout(40000);
+  await shot("a11-ingesta-trabajando");
+  log(JSON.stringify(await finish(page, log, shot, "a12-ingesta", { maxMin: 30 })));
+  await shot("a12-ingesta-fin");
+  log((await page.locator(".msg.agent").last().innerText()).slice(-1500));
+  await page.click('.nav a:has-text("Base de conocimiento")');
+  await page.waitForTimeout(2500);
+  await shot("a13-base-de-conocimiento");
+};

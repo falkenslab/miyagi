@@ -1,0 +1,27 @@
+export default async ({ page, shot, log }) => {
+  await page.waitForSelector(".new-subject input");
+  await shot("a02-sin-asignaturas");
+  const f = page.locator(".new-subject input.field");
+  await f.nth(0).fill("Introducción a SQL");
+  await f.nth(1).fill("Unidad de Introducción a SQL con MariaDB en Docker, 1.º de DAM");
+  await f.nth(2).fill("español");
+  await page.selectOption(".new-subject select", "warm");
+  await shot("a03-nueva-asignatura");
+  await page.click('.new-subject button[type="submit"]');
+  await page.waitForSelector(".side .brand", { timeout: 60000 });
+  await page.waitForTimeout(1500);
+  await shot("a04-hoy-recien-creada");
+  await page.waitForFunction(() => !document.querySelector(".composer .send.stop") && !document.querySelector(".statusbar .spin"), null, { timeout: 300000 }).catch(() => log("still busy"));
+  await page.waitForTimeout(4000);
+  await page.click('a:has-text("Tu aula")');
+  await page.waitForTimeout(2500);
+  await shot("a05-tu-aula-sin-aula");
+  await page.click('button:has-text("Vincular")');
+  await page.waitForSelector("#link-url");
+  await page.fill("#link-url", "http://localhost:8080/course/view.php?id=353");
+  await shot("a06-vincular-paso1");
+  await page.click('[role="dialog"] button[type="submit"]');
+  await page.waitForTimeout(1500);
+  await shot("a07-vincular-paso2");
+  log(await page.locator('[role="dialog"]').innerText());
+};
