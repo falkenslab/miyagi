@@ -618,7 +618,7 @@ export function Frame({
     <>
       {open && <div className="side-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
       <div className={`frame${open ? " on" : ""}${collapsed ? " collapsed" : ""}`}>
-        <Rail info={info} chat={chat} view={view} go={go} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} H={H} touring={Boolean(tourStep)} onTour={onTour} onTips={onTips} />
+        <Rail info={info} chat={chat} view={view} go={go} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} H={H} touring={Boolean(tourStep)} onTour={onTour} onTips={() => (setOpen(false), onTips())} />
         {info?.workspace && (
           <aside className="side" aria-label={T.conversations} style={{ "--side-width": `${width}px` } as CSSProperties}>
             <div className="side-top">

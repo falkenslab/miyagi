@@ -7,6 +7,8 @@ import type { ApprovalPrompt, ChatPanel, ChatState, FormField } from "../types";
 /**
  * A modal dialog: focus moved in and kept there, Escape for `onEscape`. `inline` draws it in the
  * chat's dock in place of the composer, the conversation still readable above it (#60): a checkpoint.
+ * A modal's keys are heard on the document (#99): the focus can fall to the page (a click on its
+ * text or its scrim, the button that had it gone) and the keys wouldn't reach it from there.
  */
 export function Dialog({ title, onEscape, children, className = "", inline = false }: { title: string; onEscape?: () => void; children: ReactNode; className?: string; inline?: boolean }) {
   const box = useRef<HTMLDivElement>(null);
@@ -17,17 +19,22 @@ export function Dialog({ title, onEscape, children, className = "", inline = fal
     const el = box.current;
     if (!el) return;
     const focusables = () => Array.from(el.querySelectorAll<HTMLElement>("button, input, textarea, select, [tabindex]:not([tabindex='-1'])")).filter((f) => !f.hasAttribute("disabled"));
-    (el.querySelector<HTMLElement>("[data-autofocus]") ?? focusables()[0])?.focus();
+    const focusIn = () => (el.querySelector<HTMLElement>("[data-autofocus]") ?? focusables()[0])?.focus();
+    focusIn();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && escape.current) {
         event.preventDefault();
+        event.stopPropagation();
         escape.current();
       } else if (event.key === "Tab") {
         const all = focusables();
         if (!all.length) return;
         const first = all[0];
         const last = all[all.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
+        if (!el.contains(document.activeElement)) {
+          event.preventDefault();
+          first.focus();
+        } else if (event.shiftKey && document.activeElement === first) {
           event.preventDefault();
           last.focus();
         } else if (!event.shiftKey && document.activeElement === last) {
@@ -36,9 +43,21 @@ export function Dialog({ title, onEscape, children, className = "", inline = fal
         }
       }
     };
-    el.addEventListener("keydown", onKey);
-    return () => el.removeEventListener("keydown", onKey);
-  }, [title]);
+    if (inline) {
+      el.addEventListener("keydown", onKey);
+      return () => el.removeEventListener("keydown", onKey);
+    }
+    // After whatever moved it has finished, as the tour does: back inside, wherever it went.
+    const keep = (event: FocusEvent) => {
+      if (!el.contains(event.target as Node)) requestAnimationFrame(focusIn);
+    };
+    document.addEventListener("keydown", onKey, true);
+    document.addEventListener("focusin", keep);
+    return () => {
+      document.removeEventListener("keydown", onKey, true);
+      document.removeEventListener("focusin", keep);
+    };
+  }, [title, inline]);
   if (inline)
     return (
       <section className={`checkpoint ${className}`} role="dialog" aria-label={title} ref={box}>
@@ -48,8 +67,8 @@ export function Dialog({ title, onEscape, children, className = "", inline = fal
       </section>
     );
   return (
-    <div className="scrim">
-      <div className={`dialog ${className}`} role="dialog" aria-modal="true" aria-label={title} ref={box}>
+    <div className="scrim" onMouseDown={(event) => event.target === event.currentTarget && event.preventDefault()}>
+      <div className={`dialog ${className}`} role="dialog" aria-modal="true" aria-label={title} ref={box} tabIndex={-1}>
         <h3>{title}</h3>
         {children}
       </div>

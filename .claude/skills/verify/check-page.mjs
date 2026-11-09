@@ -117,6 +117,15 @@ const checkFirstTip = async () => {
   await page.waitForSelector(".dialog.tips", { timeout: 15_000 });
   check("after the tour a tip shows, never both at once", (await page.locator(".tour").count()) === 0 && (await tipId()) === "01-shift-tab" && (await page.evaluate(() => { const img = document.querySelector(".tip-body img"); return img?.complete && img.naturalWidth > 0; })));
   await shot("tip-first-1440");
+  // The focus stays in the tip whatever is clicked or focused behind it, so Esc reaches it (#99).
+  const inTip = () => page.waitForFunction(() => document.querySelector(".dialog.tips").contains(document.activeElement), null, { timeout: 2000 }).then(() => true, () => false);
+  const search = await page.locator(".side-search input").boundingBox();
+  await page.mouse.click(search.x + 20, search.y + 10);
+  check("a click where the search field is leaves the focus in the tip", await inTip());
+  await page.evaluate(() => document.querySelector(".side-search input").focus());
+  check("…and the focus sent to it comes back to the tip", await inTip());
+  await page.click(".tip-text");
+  check("…a click on the tip's text keeps it inside", await inTip());
   await page.keyboard.press("Escape");
   await page.waitForSelector(".dialog.tips", { state: "detached" });
 };
@@ -259,6 +268,9 @@ const checkTour = async () => {
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
   check("Tab stays inside the bubble", await page.evaluate(() => document.querySelector(".tour-bubble").contains(document.activeElement)));
+  // The focus sent to the search field comes back to the bubble (#99): the tour hears its keys on the document.
+  await page.evaluate(() => document.querySelector(".side-search input").focus());
+  await page.waitForFunction(() => document.querySelector(".tour-bubble").contains(document.activeElement), null, { timeout: 2000 });
   // Esc skips it, and the last step's button finishes.
   await page.keyboard.press("Escape");
   await page.waitForSelector(".tour", { state: "detached" });
