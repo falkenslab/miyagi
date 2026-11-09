@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { act, upload } from "../api";
 import type { CourseTexts } from "../i18n/course";
+import { greetingOf } from "../greeting";
 import { Markdown } from "../markdown";
 import { canPreview, namedFile } from "../sideTabs";
 import { Actionable, GroupActions, useActions, useItemMenu } from "./Actions";
@@ -93,18 +94,11 @@ interface Today {
   log: { date: string; operation: string; what: string }[];
 }
 
-/** The agent's latest reply, cut to a few lines: what it said of the subject when it greeted. */
-function lastReply(chat: ChatState): string {
-  const reply = [...chat.transcript].reverse().find((entry) => entry.kind === "agent");
-  const text = reply && reply.kind === "agent" ? reply.text : "";
-  return text.length > 700 ? `${text.slice(0, 700).replace(/\s\S*$/, "")}…` : text;
-}
-
 export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common) {
   const { result, load } = useHost<Today>("today");
   useReload(load, chat);
   const connected = Boolean(info.classroom?.connected);
-  const greeting = lastReply(chat);
+  const greeting = greetingOf(chat.transcript);
   const tips: { tip: [string, string, string]; run: () => void; waits?: boolean }[] = [];
   if (result) {
     if (!result.pages && !result.sources.total) tips.push({ tip: C.tips.start, run: () => go("sources") });

@@ -862,6 +862,16 @@ try {
   if (await page.waitForSelector(CHECKPOINT, { timeout: 8000 }).then(() => true, () => false)) await page.click(`${CHECKPOINT} .acts .btn.danger`);
   await idle();
   check("a refused tool doesn't break the conversation", !(await page.$(CHECKPOINT)) && (await page.locator(".tool-calls li.err, .tool .badge.sun").count()) >= before);
+  // The last thing said is the answer to that refusal, not a greeting (#98): Today keeps the greeting.
+  const greeted = (await page.locator(".msg.agent >> nth=0").innerText()).trim();
+  const lastSaid = (await page.locator(".msg.agent >> nth=-1").innerText()).trim();
+  await page.click(RAIL("today"));
+  await page.waitForSelector(".card.hello");
+  const hello = (await page.innerText(".card.hello .grow")).trim();
+  check("after a refused turn, Today shows the greeting and not the reply to it", hello.slice(0, 40) === greeted.slice(0, 40) && (lastSaid.slice(0, 60) === greeted.slice(0, 60) || !hello.includes(lastSaid.slice(0, 60))), hello.slice(0, 80));
+  await shot("today-after-refusal-1440");
+  await page.click(".recents .open-conv");
+  await page.waitForSelector(".composer textarea");
   await mode("guided");
   // A subagent at work says what it's doing, for how long and how many actions (#63).
   await send("Pide al subagente pedagogy-reviewer que lea la página overview de tu base de conocimiento y te diga en una frase qué mejoraría. No hagas nada más.");
