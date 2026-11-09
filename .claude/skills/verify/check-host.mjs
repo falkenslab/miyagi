@@ -7,7 +7,7 @@
 // extensions view (#50): a repository is added only with its name typed, the official one can't
 // be removed, and a classroom address that isn't one connects nothing. The sidebar (#84): the
 // search over the kept conversations, and pinning one, only in its subject and after a restart. The
-// desktop app's browser (#86), on a stub: its actions, the addresses it refuses, and no address in the chat's state. The desktop app's title bar (#87): its roles and colours only.
+// desktop app's browser (#86), on a stub: its actions, the addresses it refuses, and no address in the chat's state. The desktop app's title bar (#87): its roles and colours only. The page's settings (#81): only its own keys, in the global config.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-host.mjs
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
@@ -285,6 +285,26 @@ const browserState = await firstEventsOf(browserBase, browserToken, 3);
 check("the tabs reach the page on their own event, the chat's state knows no address", browserState[2]?.event === "browser" && browserState[2]?.data[0]?.url === "https://moodle.org/es" && !JSON.stringify(browserState[1]).includes("moodle.org"));
 await withBrowser.close();
 
+// What the page remembers of the teacher (#81): only its own keys, in the global config, never a key.
+const globalFile = path.join(os.homedir(), ".miyagi", "config.json");
+const kept = readFileSync(globalFile, "utf8");
+writeFileSync(globalFile, JSON.stringify({ ...JSON.parse(kept), anthropicApiKey: "sk-ant-api-not-a-real-one" }));
+const fresh = await post("page-settings");
+check("no tour seen on a fresh home", !fresh.error && fresh.tourSeen === undefined);
+check("…and the page's settings carry no key", !JSON.stringify(fresh).includes("sk-ant"));
+for (const bad of [-1, 1.5, "1", null, true]) check(`a tour version that isn't one is refused: ${bad}`, (await post("page-settings-save", { tourSeen: bad })).error === "invalid");
+check("saving nothing changes nothing", !(await post("page-settings-save", {})).error && (await post("page-settings")).tourSeen === undefined);
+check("the tour seen is saved", !(await post("page-settings-save", { tourSeen: 1 })).error && (await post("page-settings")).tourSeen === 1);
+const savedSettings = JSON.parse(readFileSync(globalFile, "utf8"));
+check("…in ~/.miyagi/config.json, with the rest kept", savedSettings.tourSeen === 1 && savedSettings.anthropicApiKey === "sk-ant-api-not-a-real-one" && savedSettings.defaultLanguage === "español");
+check("…and no other key written by the page", !(await post("page-settings-save", { anthropicApiKey: "x", tourSeen: 2 })).error && JSON.parse(readFileSync(globalFile, "utf8")).anthropicApiKey === "sk-ant-api-not-a-real-one");
+const afterRestartHost = await startHost(undefined, {});
+const secondUrl = new URL(afterRestartHost.url);
+const secondSeen = await (await fetch(`${secondUrl.origin}/api/page-settings?token=${secondUrl.searchParams.get("token")}`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" })).json();
+await afterRestartHost.close();
+check("…kept for the next host (the app and the browser read the same file)", secondSeen.tourSeen === 2);
+writeFileSync(globalFile, kept);
+
 // Nothing secret reaches the page: not the URL's token, not a key.
 const stream = JSON.stringify([...events, ...afterCreate, listed]);
 check("no token nor key in what the page receives", !stream.includes(token) && !/sk-ant-/.test(stream));
@@ -294,4 +314,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser, the folder dialog, the conversations' search and pins, the desktop browser's actions and refusals");
+console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser, the folder dialog, the conversations' search and pins, the desktop browser's actions and refusals, the page's settings");

@@ -33,19 +33,20 @@ export function useElapsed(since: number | null) {
 /**
  * The status bar (#80): what miyagi or the host is doing, in every view, so the page never looks
  * stuck. In the conversation the transcript says what miyagi does, so there only the host's work.
+ * `showing` is a line of the guided tour (#81), for its step about this bar.
  */
-export function StatusBar({ chat, T, inChat, onOpenChat }: { chat: ChatState | null; T: Texts; inChat: boolean; onOpenChat: () => void }) {
+export function StatusBar({ chat, T, inChat, onOpenChat, showing }: { chat: ChatState | null; T: Texts; inChat: boolean; onOpenChat: () => void; showing?: string }) {
   const running = useRunning();
   const S = T.status;
   const elapsed = useElapsed(chat?.busy ? chat.turnStartedAt : null);
   const waiting = chat?.panel ? S.approval : chat?.choice ? S.question : null;
   // Before the teacher's first message, the turn is miyagi's greeting from its memory.
   const greeting = chat?.busy && !chat.transcript.some((entry) => entry.kind === "user");
-  const line = !inChat && waiting ? waiting : !inChat && chat?.busy ? (greeting ? S.greeting : chat.activity || S.thinking) : running.length ? (S.tasks[running.at(-1)!] ?? S.thinking) : null;
+  const line = showing ?? (!inChat && waiting ? waiting : !inChat && chat?.busy ? (greeting ? S.greeting : chat.activity || S.thinking) : running.length ? (S.tasks[running.at(-1)!] ?? S.thinking) : null);
   return (
     <div className={`status-bar${line ? " on" : ""}${waiting && !inChat ? " ask" : ""}`}>
       <span id="status-line" role="status" aria-live="polite" className="status-text">
-        {line && !waiting && <span className="spinner" aria-hidden="true" />}
+        {line && !waiting && !showing && <span className="spinner" aria-hidden="true" />}
         {line && <span className="grow">{line}</span>}
       </span>
       {line && !inChat && chat?.busy && elapsed && <span className="muted status-time">{elapsed}</span>}

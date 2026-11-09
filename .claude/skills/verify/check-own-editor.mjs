@@ -15,6 +15,9 @@ if (process.env.OWN_CHILD !== "1") {
   const home = mkdtempSync(path.join(os.tmpdir(), "own-editor-"));
   const env = { ...process.env, OWN_CHILD: "1", REAL_HOME: os.homedir(), HOME: home, USERPROFILE: home, CLAUDE_CONFIG_DIR: process.env.CLAUDE_CONFIG_DIR ?? path.join(os.homedir(), ".claude") };
   delete env.ELECTRON_RUN_AS_NODE;
+  // A fresh home would open the guided tour (#81) over the subject: this check is about something else.
+  mkdirSync(path.join(home, ".miyagi"), { recursive: true });
+  writeFileSync(path.join(home, ".miyagi", "config.json"), JSON.stringify({ tourSeen: 999 }));
   const child = spawnSync(process.execPath, [fileURLToPath(import.meta.url), shots], { env, stdio: "inherit" });
   rmSync(home, { recursive: true, force: true });
   process.exit(child.status ?? 1);

@@ -1,4 +1,4 @@
-// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70, the desktop browser's bar and panel on a stub #86, the desktop title bar on a stub #87) in Chrome against the
+// Checks miyagi's page (gui/, gui-chat #47, the guided tour #81, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70, the desktop browser's bar and panel on a stub #86, the desktop title bar on a stub #87) in Chrome against the
 // real host and a real Claude session: a subject created from the page, the rail's places and their
 // tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
@@ -96,6 +96,94 @@ const drag = async (by) => {
   await page.mouse.move(x + by, y);
   await page.mouse.up();
 };
+/** Where the tour's spotlight is, whether its bubble fits and what it points at, for the step on screen. */
+const tourStep = () => page.evaluate(() => {
+  const bubble = document.querySelector(".tour-bubble");
+  const box = bubble.getBoundingClientRect();
+  const ring = document.querySelector(".tour-ring")?.getBoundingClientRect();
+  const id = bubble.dataset.step;
+  const target = { subject: ".ws", newConversation: ".new-conv", searchBell: ".side-tools", conversations: ".recents", progress: ".side-progress", today: '.rail-item[data-rail="today"]', classroom: '.rail-item[data-rail="classroom"]', plan: ".view-tabs", materials: ".view-tabs", memory: ".view-tabs", extensions: '.rail-item[data-rail="extensions"]', composer: ".composer", approvals: ".composer .mode", statusBar: ".status-bar", sidePanel: ".top .panel-btn", browser: ".top .panel-btn", titleBar: ".titlebar", theme: ".rail-foot" }[id];
+  const element = target ? document.querySelector(target)?.getBoundingClientRect() : undefined;
+  const near = element && ring && Math.abs(ring.left - element.left) <= 6 && Math.abs(ring.top - element.top) <= 6 && Math.abs(ring.right - element.right) <= 6 && Math.abs(ring.bottom - element.bottom) <= 6;
+  const inWindow = box.left >= 0 && box.top >= 0 && box.right <= window.innerWidth + 0.5 && box.bottom <= window.innerHeight + 0.5;
+  const clear = !ring || ring.height > 400 || box.right <= ring.left || box.left >= ring.right || box.bottom <= ring.top || box.top >= ring.bottom;
+  const centred = Math.abs((box.left + box.right) / 2 - window.innerWidth / 2) < 2;
+  const tiny = [...bubble.querySelectorAll("button")].filter((one) => one.getBoundingClientRect().height < 44).length;
+  return { id, hasTarget: Boolean(target), found: Boolean(element), near, ring: Boolean(ring), inWindow, clear, centred, tiny, focused: bubble.contains(document.activeElement), scroll: document.documentElement.scrollWidth > window.innerWidth };
+});
+/** The tour (#81) on this fresh home, before anything else on the page: it starts when the subject opens, and Skip closes it for good. */
+const skipTour = async () => {
+  await page.waitForSelector(".tour-bubble", { timeout: 120_000 });
+  check("on a fresh home, the tour starts when the subject is open", true);
+  await shot("tour-start-1440");
+  check("the sidebar's foot shows the tour's step while it's on", /1 de/.test(await page.innerText(".side-progress")));
+  await page.click(".tour-skip");
+  await page.waitForSelector(".tour", { state: "detached" });
+  await page.waitForTimeout(300);
+  check("Skip closes the tour and leaves the view as it was", (await page.locator('.rail-item[data-rail="today"][aria-current="page"]').count()) === 1);
+};
+/** The tour (#81) from the rail's foot: not again on the next open, every step at 360, 768 and 1440 px in both themes, the keys and the end. */
+const checkTour = async () => {
+  await page.reload();
+  await page.waitForSelector(".recents a.open-conv, .recents a.on-conv");
+  await page.waitForTimeout(1500);
+  check("skipped, it doesn't appear on the next open", (await page.locator(".tour").count()) === 0);
+  check("…the sidebar's foot shows no tour", (await page.locator(".side-progress").count()) === 0);
+  await page.click(".rail-foot .help-btn");
+  await shot("tour-menu-1440");
+  await page.click('.pop [data-help="tour"]');
+  await page.waitForSelector(".tour-bubble");
+  check("the rail's foot opens it again, closing its menu", (await page.locator(".pop").count()) === 0);
+  const total = await page.evaluate(() => Number(/de (\d+)/.exec(document.querySelector(".tour-count").textContent)[1]));
+  check("the tour counts its steps", total >= 12, String(total));
+  const widths = [
+    [360, 760],
+    [768, 1000],
+    [1440, 900],
+  ];
+  for (const scheme of ["light", "dark"]) {
+    await page.emulateMedia({ colorScheme: scheme });
+    for (const [width, height] of widths) {
+      await page.setViewportSize({ width, height });
+      for (let n = 1; n <= total; n++) {
+        await page.waitForTimeout(650);
+        const here = await tourStep();
+        await page.screenshot({ path: path.join(shots, `tour-${scheme}-${width}-${String(n).padStart(2, "0")}-${here.id}.png`) });
+        check(`tour step ${here.id} points at its element at ${width} (${scheme})`, here.hasTarget && here.found ? here.near : !here.ring && here.centred, JSON.stringify(here));
+        check(`tour step ${here.id}: the bubble inside the window, clear of the target, 44 px, no scroll, focus inside, at ${width} (${scheme})`, here.inWindow && here.clear && !here.tiny && !here.scroll && here.focused, JSON.stringify(here));
+        if (n < total) await page.click(".tour-next");
+      }
+      // Back to the start for the next width: with the ← key.
+      for (let n = 1; n < total; n++) await page.keyboard.press("ArrowLeft");
+    }
+  }
+  await page.emulateMedia({ colorScheme: null });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.waitForFunction(() => document.querySelector(".tour-bubble")?.dataset.step === "welcome", null, { timeout: 5000 });
+  const count = () => page.evaluate(() => document.querySelector(".tour-bubble").dataset.step);
+  await page.keyboard.press("ArrowRight");
+  await page.waitForFunction(() => document.querySelector(".tour-bubble")?.dataset.step === "subject", null, { timeout: 5000 });
+  check("→ moves forward", (await count()) === "subject");
+  await page.keyboard.press("ArrowLeft");
+  await page.waitForFunction(() => document.querySelector(".tour-bubble")?.dataset.step === "welcome", null, { timeout: 5000 });
+  check("← moves back", (await count()) === "welcome");
+  check("the focus stays in the bubble, with its keys", await page.evaluate(() => document.querySelector(".tour-bubble").contains(document.activeElement)));
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  check("Tab stays inside the bubble", await page.evaluate(() => document.querySelector(".tour-bubble").contains(document.activeElement)));
+  // Esc skips it, and the last step's button finishes.
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".tour", { state: "detached" });
+  check("Esc skips it", (await page.locator(".tour").count()) === 0);
+  await page.click(".rail-foot .help-btn");
+  await page.click('.pop [data-help="tour"]');
+  for (let n = 1; n < total; n++) await page.click(".tour-next");
+  check("the last step says it finishes", (await page.locator(".tour-next").innerText()).length > 0 && (await count()) === "theme");
+  await page.keyboard.press("Enter");
+  await page.waitForSelector(".tour", { state: "detached" });
+  check("Finish closes it", (await page.locator(".tour").count()) === 0);
+};
+
 /** The frame (#83): the rail's places, their tabs, the ⋯, and the sidebar collapsed and resized, kept over a reload. */
 const checkFrame = async () => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -280,6 +368,19 @@ const checkBrowser = async (subject) => {
   await page.waitForSelector(".recents a.open-conv", { timeout: 240_000 });
   await idle();
   await page.waitForSelector(".titlebar");
+  // The tour's steps that only the desktop app has (#81): the browser's button and the title bar.
+  await page.click(".rail-foot .help-btn");
+  await page.click('.pop [data-help="tour"]');
+  await page.waitForSelector(".tour-bubble");
+  for (const wanted of ["browser", "titleBar"]) {
+    while ((await page.getAttribute(".tour-bubble", "data-step")) !== wanted) await page.click(".tour-next");
+    await page.waitForTimeout(650);
+    const here = await tourStep();
+    check(`the app's tour step ${wanted} points at its element`, here.found && here.near && here.inWindow, JSON.stringify(here));
+    await shot(`tour-app-${wanted}-1440`);
+  }
+  await page.keyboard.press("Escape");
+  await page.waitForSelector(".tour", { state: "detached" });
   check("the desktop app has its title bar, at the first view's start", (await page.locator(".tb-back:disabled").count()) === 1 && (await page.locator(".tb-forward:disabled").count()) === 1);
   await page.click(RAIL("course"));
   await page.click(".view-tabs button >> nth=1");
@@ -570,6 +671,7 @@ try {
   });
   await page.click('.new-subject button[type="submit"]');
   await page.waitForSelector(".rail .brand");
+  await skipTour();
   // In Today, the open conversation is marked but not selected: one item looks selected (#65).
   await page.waitForSelector(".recents a.open-conv, .recents a.on-conv", { timeout: 60_000 });
   const marks = await page.evaluate(() => ({ selected: document.querySelectorAll('.rail [aria-current="page"], .recents [aria-current="page"]').length, conv: document.querySelectorAll(".recents .on-conv").length, open: document.querySelectorAll(".recents .open-conv").length }));
@@ -585,6 +687,9 @@ try {
   check("the wait until the greeting says what it waits for", waits.some((text) => /Arrancando miyagi|Starting miyagi/.test(text)), waits.join(" → "));
   check("no wait left once miyagi greeted", (await page.locator(".waiting").count()) === 0);
   check("a new conversation offers the quick actions as rows", (await page.locator(".suggest button").count()) >= 3);
+  await checkTour();
+  await page.click(".recents a.open-conv");
+  await page.waitForSelector(".suggest button");
   await checkFrame();
   await page.click(".recents a.open-conv");
   await page.waitForSelector(".suggest button");
@@ -895,4 +1000,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL page: ${failure}`);
   process.exit(1);
 }
-console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, the desktop browser's bar and title bar on stubs, 360/390/768/1024/1440 (screenshots in ${shots})`);
+console.log(`ok   page: the guided tour, subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, the desktop browser's bar and title bar on stubs, 360/390/768/1024/1440 (screenshots in ${shots})`);

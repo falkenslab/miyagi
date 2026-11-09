@@ -68,7 +68,7 @@ When the teacher's own commands change (`src/ownCommands.ts`, `src/commandsServe
 word-search command asked for by talking, approved and saved for all subjects, then launched from
 a topic's ⋯ with its form, until the word search is in `drafts/`.
 
-`check-page.mjs` creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
+`check-page.mjs` walks the guided tour (#81) on a fresh home, every step at 360, 768 and 1440 px in both themes, creates a subject from the page, gets the greeting, checks the `/` menu offers miyagi's commands
 and not Claude Code's, approves one tool and refuses another in interactive mode, links the items a reply names (a source
 and a page open their views, a made-up path stays text), switches the mode
 and the theme, and takes screenshots at 360, 768 and 1440 px with no horizontal scroll. Look at

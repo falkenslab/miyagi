@@ -3,6 +3,7 @@ import { act } from "../api";
 import type { Texts } from "../i18n";
 import type { CourseTexts } from "../i18n/course";
 import type { ExtTexts } from "../i18n/extensions";
+import type { TourTexts } from "../i18n/tour";
 import type { ChatState, Info } from "../types";
 import { Icon, type IconName } from "./Icons";
 import { Logo } from "./Logo";
@@ -370,10 +371,18 @@ function Conversations({ chat, T, view, go }: { chat: ChatState; T: Texts; view:
 }
 
 /**
- * The sidebar's foot (#84): the task under way and which of how many, taking the teacher to it.
- * Hidden with no task under way; the guided tour's step (#81) goes here once the tour exists.
+ * The sidebar's foot (#84): the task under way and which of how many, taking the teacher to it, or
+ * the guided tour's step (#81) while it's unfinished. Hidden with neither under way.
  */
-function Progress({ chat, T, onOpen }: { chat: ChatState; T: Texts; onOpen: () => void }) {
+function Progress({ chat, T, G, tourStep, onOpen }: { chat: ChatState; T: Texts; G: TourTexts; tourStep: { at: number; total: number } | null; onOpen: () => void }) {
+  if (tourStep)
+    return (
+      <button type="button" className="side-progress" title={G.name} onClick={onOpen}>
+        <span className="sq" aria-hidden="true" />
+        <span className="ellipsis grow">{G.name}</span>
+        <b>{T.taskOf(tourStep.at + 1, tourStep.total)}</b>
+      </button>
+    );
   const todos = chat.todos;
   const now = todos?.find((todo) => todo.status === "in_progress") ?? todos?.find((todo) => todo.status === "pending");
   if (!todos || !now) return null;
@@ -418,13 +427,35 @@ function newConversation(chat: ChatState, onOpen: () => void) {
   onOpen();
 }
 
+/** The rail's help, next to the theme: where the guided tour is opened again (#81). */
+function HelpMenu({ G, onTour }: { G: TourTexts; onTour: () => void }) {
+  return (
+    <Menu title={G.help} ariaLabel={G.help} className="ibtn plain help-btn" popClass="up left" label={<Icon name="help" />}>
+      {(close) => (
+        <button
+          type="button"
+          data-help="tour"
+          onClick={() => {
+            onTour();
+            close();
+          }}
+        >
+          <Icon name="compass" />
+          <span>{G.name}</span>
+        </button>
+      )}
+    </Menu>
+  );
+}
+
 /** The narrow column of places: each group opens at the view last left open in it. */
-function Rail({ info, chat, view, go, theme, setTheme, T, X, C }: { info: Info | null; chat: ChatState | null; view: View; go: (view: View) => void; theme: Theme; setTheme: (theme: Theme) => void; T: Texts; X: ExtTexts; C: CourseTexts }) {
+function Rail({ info, chat, view, go, theme, setTheme, T, X, C, G, touring, onTour }: { info: Info | null; chat: ChatState | null; view: View; go: (view: View) => void; theme: Theme; setTheme: (theme: Theme) => void; T: Texts; X: ExtTexts; C: CourseTexts; G: TourTexts; touring: boolean; onTour: () => void }) {
   const last = useRef<Record<Group, View>>({ course: "plan", memory: "knowledge" });
+  // What the tour shows isn't where the teacher left off.
   useEffect(() => {
     const group = groupOf(view);
-    if (group) last.current[group] = view;
-  }, [view]);
+    if (group && !touring) last.current[group] = view;
+  }, [view, touring]);
   const here = groupOf(view) ?? view;
   const place = (id: View | Group, icon: IconName, label: string, badge?: ReactNode) => (
     <button type="button" className="rail-item" data-rail={id} title={label} aria-label={label} aria-current={here === id ? "page" : undefined} onClick={() => go(id === "course" || id === "memory" ? last.current[id] : id)}>
@@ -450,6 +481,7 @@ function Rail({ info, chat, view, go, theme, setTheme, T, X, C }: { info: Info |
         )}
       </nav>
       <div className="rail-foot">
+        {chat && <HelpMenu G={G} onTour={onTour} />}
         <ThemeMenu theme={theme} setTheme={setTheme} T={T} />
         {info && (
           <Menu title={T.versions} ariaLabel={T.versions} className="ibtn plain ver-btn" popClass="up left" label={<span className="rail-ver">{info.version}</span>}>
@@ -515,6 +547,9 @@ export function Frame({
   T,
   X,
   C,
+  G,
+  tourStep,
+  onTour,
   onNewSubject,
   onOpenExisting,
 }: {
@@ -531,6 +566,9 @@ export function Frame({
   T: Texts;
   X: ExtTexts;
   C: CourseTexts;
+  G: TourTexts;
+  tourStep: { at: number; total: number } | null;
+  onTour: () => void;
   onNewSubject: () => void;
   onOpenExisting: () => void;
 }) {
@@ -548,7 +586,7 @@ export function Frame({
     <>
       {open && <div className="side-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
       <div className={`frame${open ? " on" : ""}${collapsed ? " collapsed" : ""}`}>
-        <Rail info={info} chat={chat} view={view} go={go} theme={theme} setTheme={setTheme} T={T} X={X} C={C} />
+        <Rail info={info} chat={chat} view={view} go={go} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} touring={Boolean(tourStep)} onTour={onTour} />
         {info?.workspace && (
           <aside className="side" aria-label={T.conversations} style={{ "--side-width": `${width}px` } as CSSProperties}>
             <div className="side-top">
@@ -564,7 +602,7 @@ export function Frame({
               </button>
             )}
             {chat ? <Conversations key={info.workspace} chat={chat} T={T} view={view} go={go} /> : <div className="nav" />}
-            {chat && <Progress chat={chat} T={T} onOpen={() => go("chat")} />}
+            {chat && <Progress chat={chat} T={T} G={G} tourStep={tourStep} onOpen={() => go("chat")} />}
             <SideHandle width={width} resize={resize} label={T.resizeSidebar} />
           </aside>
         )}

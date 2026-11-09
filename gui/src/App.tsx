@@ -13,15 +13,23 @@ import { setBusyReason, StatusBar } from "./components/StatusBar";
 import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
 import { setOpenLink } from "./markdown";
 import { TitleBar } from "./components/TitleBar";
+import { Tour, useTour } from "./components/Tour";
 import { Transcript } from "./components/Transcript";
 import { Waiting } from "./components/Waiting";
 import { texts } from "./i18n";
 import { actionTexts } from "./i18n/actions";
 import { courseTexts } from "./i18n/course";
 import { extTexts } from "./i18n/extensions";
+import { tourTexts } from "./i18n/tour";
+import { TOUR_VERSION } from "./tour";
 import { canBack, canForward, NO_HISTORY, step, visit, type ViewHistory } from "./viewHistory";
 
 const THEME_KEY = "miyagi.theme";
+
+/** What the page remembers of the teacher in ~/.miyagi/config.json (#81). */
+interface PageSettings {
+  tourSeen?: number;
+}
 
 /** The theme the person chose before, if the page may remember it; the system's otherwise. */
 function storedTheme(): Theme {
@@ -55,6 +63,7 @@ export function App() {
   const T = texts(chat?.language ?? info?.language);
   const X = extTexts(chat?.language ?? info?.language);
   const C = courseTexts(chat?.language ?? info?.language);
+  const G = tourTexts(chat?.language ?? info?.language);
   setBusyReason(T.status.why);
   setCanPick(Boolean(info?.pickFolder));
   // In the desktop app a link in the chat opens a tab of its browser (#86); refused, it says so.
@@ -160,9 +169,16 @@ export function App() {
   // The views visited, for the title bar's ← and → (#87).
   // Only from a conversation on: before it, the page shows the conversation's place for lack of one.
   const started = Boolean(chat);
+  const [settings, setSettings] = useState<PageSettings | null>(null);
   useEffect(() => {
-    if (started) setHistory((now) => visit(now, shown));
-  }, [started, shown]);
+    if (started) void act<PageSettings>("page-settings").then((saved) => saved.error || setSettings(saved));
+  }, [started]);
+  const tour = useTour({ info, chat, asking, seen: settings ? (settings.tourSeen ?? 0) : null, onSeen: () => setSettings((now) => ({ ...now, tourSeen: TOUR_VERSION })), view: shown, setView, setDrawer: setSideOpen, collapsed: sideCollapsed, setCollapsed: setSideCollapsed });
+  // The views the tour shows aren't visits.
+  const touring = Boolean(tour.step);
+  useEffect(() => {
+    if (started && !touring) setHistory((now) => visit(now, shown));
+  }, [started, shown, touring]);
   const travel = (delta: -1 | 1) => {
     const next = step(history, delta);
     setHistory(next);
@@ -172,7 +188,7 @@ export function App() {
     <ActionsContext.Provider value={actions}>
     {info?.frame && <TitleBar info={info} T={T} canGoBack={canBack(history)} canGoForward={canForward(history)} onBack={() => travel(-1)} onForward={() => travel(1)} onSide={() => (matchMedia("(max-width: 760px)").matches ? setSideOpen(true) : setSideCollapsed(!sideCollapsed))} theme={theme} onNotice={setToast} />}
     <div className={`app${info?.frame ? " with-titlebar" : ""}${withPanel ? " with-panel" : ""}${withPanel && side.expanded ? " panel-full" : ""}${asking ? " asking" : ""}`} style={{ "--panel-width": `${side.width}px` } as CSSProperties}>
-      <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
+      <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} G={G} tourStep={tour.step} onTour={tour.start} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
         <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} panelTabs={chat ? side.tabs.list.length : 0} canBrowse={Boolean(chat && canBrowse)} panelShown={withPanel} onPanel={side.tabs.list.length ? side.toggle : () => void side.openWeb()} />
         <ViewTabs view={shown} setView={setView} C={C} />
@@ -233,7 +249,7 @@ export function App() {
           {chat && info && shown === "extensions" && <ExtensionsView chat={chat} info={info} X={X} tab={extTab} setTab={setExtTab} onNotice={setToast} onLink={() => setLinking(true)} />}
           {chat && info && shown === "classroom" && <ClassroomView chat={chat} info={info} X={X} onLink={() => setLinking(true)} />}
         </main>
-        <StatusBar chat={chat} T={T} inChat={shown === "chat"} onOpenChat={() => setView("chat")} />
+        <StatusBar chat={chat} T={T} inChat={shown === "chat"} onOpenChat={() => setView("chat")} showing={tour.step?.current.id === "statusBar" ? G.statusLine : undefined} />
       </section>
       {withPanel && chat && <SidePanel panel={side} chat={chat} browser={browser} canBrowse={canBrowse} classroom={info?.classroom?.url} T={T} C={C} />}
       {linking && info && (
@@ -265,6 +281,7 @@ export function App() {
         </div>
       )}
       <SelectionMenu />
+      {tour.step && !asking && <Tour step={tour.step.current} at={tour.step.at} total={tour.step.total} G={G} T={T} onMove={tour.move} onClose={tour.close} />}
     </div>
     </ActionsContext.Provider>
   );

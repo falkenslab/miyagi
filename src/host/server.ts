@@ -9,7 +9,7 @@ import { prepareSession, VERSION } from "../agent.js";
 import { watchStart } from "./startWatch.js";
 import { conversationTitle, isOnlyGreeting, readPinned, searchConversations, setPinned } from "./conversations.js";
 import { t } from "../messages/index.js";
-import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, saveClaudeKey } from "../globalConfig.js";
+import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
 import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
@@ -401,6 +401,11 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         signIn = null;
         schedule();
         return {};
+      // What the page remembers of the teacher (#81), in ~/.miyagi/config.json so the app and the browser agree.
+      case "page-settings":
+        return readPageSettings();
+      case "page-settings-save":
+        return (await savePageSettings(data)) ? {} : { error: "invalid" };
       case "workspaces":
         return { workspaces: await listWorkspaces(), current: current?.dir ?? null };
       case "open": {

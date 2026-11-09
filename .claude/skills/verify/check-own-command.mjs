@@ -23,6 +23,9 @@ if (process.env.CHECK_PAGE_CHILD !== "1") {
   }
   const env = { ...process.env, CHECK_PAGE_CHILD: "1", REAL_HOME: os.homedir(), HOME: home, USERPROFILE: home, CLAUDE_CONFIG_DIR: claudeConfig };
   delete env.ELECTRON_RUN_AS_NODE;
+  // A fresh home would open the guided tour (#81) over the subject: this check is about something else.
+  mkdirSync(path.join(home, ".miyagi"), { recursive: true });
+  writeFileSync(path.join(home, ".miyagi", "config.json"), JSON.stringify({ tourSeen: 999 }));
   const child = spawnSync(process.execPath, [new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"), shots], { env, stdio: "inherit" });
   rmSync(home, { recursive: true, force: true });
   process.exit(child.status ?? 1);
