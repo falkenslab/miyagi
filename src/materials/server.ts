@@ -18,7 +18,7 @@ import { readPublications, recordPublication, stateOf } from "./publications.js"
 import { serializeBank } from "./serialize.js";
 import { aggregateSurvey, MIN_ANSWERS } from "./survey.js";
 import { compareAssignments, compareQuizzes } from "./variants.js";
-import { inMaterials, listMaterials, loadMaterial, resolveQuiz, shownPath, unknownCriteria } from "./store.js";
+import { calendarProblem, inMaterials, listMaterials, loadMaterial, resolveQuiz, shownPath, unknownCriteria } from "./store.js";
 
 /**
  * The materials toolbox (ADR-015), the in-process MCP server "materials": validate what the
@@ -134,7 +134,7 @@ export function createMaterialsServer(dirs: MaterialsDirs, pending: PendingLosse
   /** A material's dates for every group (or one): due and cut-off of an assignment, each assignment of a unit. */
   async function datesOf(relative: string, onlyGroup?: string): Promise<string[]> {
     const course = await calendar();
-    if (!course) throw new Error("materials/course.md is missing or invalid: its groups' starts and holidays turn relative dates into real ones (materials-format)");
+    if (!course) throw new Error(await calendarProblem(materialsDir));
     const groups = course.groups.filter((group) => !onlyGroup || group.id === onlyGroup);
     if (!groups.length) throw new Error(`no group "${onlyGroup}" in materials/course.md`);
     const loaded = await loadMaterial(materialsDir, relative);

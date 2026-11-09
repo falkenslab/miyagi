@@ -336,3 +336,13 @@ answer: 7
   assert.deepEqual(errors, []);
   assert.match(gift, /::TF::Una clave primaria puede contener valores nulos\. \{FALSE\n?####Falso/);
 });
+
+test("the calendar's refusal says whether course.md is missing or what's wrong with it", async () => {
+  const { calendarProblem } = await load("store");
+  const { mkdtempSync, writeFileSync } = await import("node:fs");
+  const { tmpdir } = await import("node:os");
+  const dir = mkdtempSync(path.join(tmpdir(), "miyagi-calendar-"));
+  assert.match(await calendarProblem(dir), /is missing/);
+  writeFileSync(path.join(dir, "course.md"), "---\ntitle: Curso\n---\n");
+  assert.match(await calendarProblem(dir), /is invalid \(line \d+: /);
+});

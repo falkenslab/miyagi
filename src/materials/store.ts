@@ -67,6 +67,16 @@ export async function loadMaterial(materialsDir: string, relative: string): Prom
   return { file, ...parseMaterial(file, source) };
 }
 
+/** Why materials/course.md can't turn relative dates into real ones: it's missing, or what's wrong with it (#94). */
+export async function calendarProblem(materialsDir: string): Promise<string> {
+  const need = "its groups' starts and holidays turn relative dates into real ones (materials-format)";
+  const file = await readFile(inMaterials(materialsDir, "course.md"), "utf8").catch(() => undefined);
+  if (file === undefined) return `materials/course.md is missing: ${need}`;
+  const { findings } = await loadMaterial(materialsDir, "course.md");
+  const errors = findings.errors.map((error) => `line ${error.line}: ${error.message}`).join("; ");
+  return `materials/course.md is invalid (${errors || "it isn't a course file"}): ${need}`;
+}
+
 /** Every material in the folder, relative paths, but the hidden files (the publication record). */
 export async function listMaterials(materialsDir: string, prefix = ""): Promise<string[]> {
   const entries = await readdir(path.join(materialsDir, prefix), { withFileTypes: true }).catch(() => []);
