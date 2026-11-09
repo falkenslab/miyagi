@@ -124,8 +124,8 @@ try {
   // 3. Sent from the form, it builds the word search in drafts/.
   await page.click(".param-form button[type=submit]");
   await page.waitForSelector(".msg.user .cmd-chip", { timeout: 20_000 });
-  const raw = await page.locator(".msg.user .cmd-raw").last().innerText();
-  check("the form's values reach the command", raw.startsWith(`/own:${name} topic: Bucles`), raw);
+  const sent = await page.locator(".msg.user").last().innerText();
+  check("the form's values reach the command, shown without the command itself", sent.includes("topic: Bucles") && !sent.includes(`/own:${name}`), sent);
   await work();
   await shot("built");
   const drafts = path.join(subject, "drafts");

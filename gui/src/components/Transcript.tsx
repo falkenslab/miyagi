@@ -177,8 +177,8 @@ function Entry({ entry, running, reply, T, open }: { entry: TranscriptEntry; run
 }
 
 /**
- * What the teacher wrote; an action launched from the page (#67) as its name and its value, with
- * the command it sent small underneath, so the conversation reads as what they asked for.
+ * What the teacher wrote; an action launched from the page (#67) as its name and its value, so the
+ * conversation reads as what they asked for.
  */
 function UserLine({ text }: { text: string }) {
   const api = useActions();
@@ -191,7 +191,6 @@ function UserLine({ text }: { text: string }) {
             <span aria-hidden="true">{found.action.icon ?? "/"}</span> {actionLabel(found.action, api.lang)}
             {found.value && <span className="cmd-value"> · {found.value}</span>}
           </span>
-          <small className="cmd-raw">{text}</small>
         </div>
       ) : (
         <div className="body">{text}</div>

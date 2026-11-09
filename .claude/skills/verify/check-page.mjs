@@ -250,9 +250,9 @@ try {
   // "Make a quiz" sends its command with the topic, shown as the action in the conversation.
   await page.click(".item-pop button[data-command='miyagi:quiz']");
   await page.waitForSelector(".msg.user .cmd-chip", { timeout: 20_000 }).catch(() => {});
-  const raw = await page.locator(".msg.user .cmd-raw").last().innerText().catch(() => "");
+  const sent = await page.locator(".msg.user").last().innerText().catch(() => "");
   await shot("action-sent-1440");
-  check("an action sends its command with the item, shown by its name", raw === "/miyagi:quiz Tema 1" && /Tema 1/.test(await page.locator(".msg.user .cmd-chip").last().innerText()), raw);
+  check("an action sends its command with the item, shown by its name", /Tema 1/.test(sent) && !sent.includes("/miyagi:"), sent);
   await page.click(".composer .send.stop").catch(() => {});
   await idle();
   // ＋ is the catalog: grouped, the classroom's actions off without one.
