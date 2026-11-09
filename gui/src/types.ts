@@ -219,6 +219,10 @@ export interface Info {
   pickFolder?: boolean;
   /** Whether the desktop app offers its web browser (#86). */
   browser?: boolean;
+  /** Whether this is the desktop app, whose title bar the page draws (#87). */
+  frame?: boolean;
+  /** Whether its View menu may open the developer tools (unpacked only). */
+  frameDevTools?: boolean;
 }
 
 /** A tab of the desktop app's browser (#86): the native side's, kept nowhere. */

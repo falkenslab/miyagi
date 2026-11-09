@@ -53,6 +53,29 @@ export interface Texts {
   showPanel: string;
   backToChat: string;
   closeTab: (title: string) => string;
+  menuFile: string;
+  menuEdit: string;
+  menuView: string;
+  menuHelp: string;
+  menuClose: string;
+  menuUndo: string;
+  menuRedo: string;
+  menuCut: string;
+  menuCopy: string;
+  menuPaste: string;
+  menuDelete: string;
+  menuSelectAll: string;
+  menuReload: string;
+  menuResetZoom: string;
+  menuZoomIn: string;
+  menuZoomOut: string;
+  menuFullScreen: string;
+  menuDevTools: string;
+  menuDocs: string;
+  menuAbout: string;
+  tbBack: string;
+  tbForward: string;
+  tbSidebar: string;
   webNewTab: string;
   webNewPage: string;
   webBack: string;
@@ -217,6 +240,29 @@ const es: Texts = {
   showPanel: "Mostrar el panel",
   backToChat: "Volver a la conversación",
   closeTab: (title) => `Cerrar ${title}`,
+  menuFile: "Archivo",
+  menuEdit: "Editar",
+  menuView: "Ver",
+  menuHelp: "Ayuda",
+  menuClose: "Cerrar la ventana",
+  menuUndo: "Deshacer",
+  menuRedo: "Rehacer",
+  menuCut: "Cortar",
+  menuCopy: "Copiar",
+  menuPaste: "Pegar",
+  menuDelete: "Eliminar",
+  menuSelectAll: "Seleccionar todo",
+  menuReload: "Recargar",
+  menuResetZoom: "Tamaño real",
+  menuZoomIn: "Ampliar",
+  menuZoomOut: "Reducir",
+  menuFullScreen: "Pantalla completa",
+  menuDevTools: "Herramientas de desarrollo",
+  menuDocs: "Documentación",
+  menuAbout: "Acerca de miyagi",
+  tbBack: "Vista anterior",
+  tbForward: "Vista siguiente",
+  tbSidebar: "Barra lateral",
   webNewTab: "Nueva pestaña",
   webNewPage: "Pestaña nueva",
   webBack: "Atrás",
@@ -395,6 +441,29 @@ const en: Texts = {
   showPanel: "Show the panel",
   backToChat: "Back to the conversation",
   closeTab: (title) => `Close ${title}`,
+  menuFile: "File",
+  menuEdit: "Edit",
+  menuView: "View",
+  menuHelp: "Help",
+  menuClose: "Close the window",
+  menuUndo: "Undo",
+  menuRedo: "Redo",
+  menuCut: "Cut",
+  menuCopy: "Copy",
+  menuPaste: "Paste",
+  menuDelete: "Delete",
+  menuSelectAll: "Select all",
+  menuReload: "Reload",
+  menuResetZoom: "Actual size",
+  menuZoomIn: "Zoom in",
+  menuZoomOut: "Zoom out",
+  menuFullScreen: "Full screen",
+  menuDevTools: "Developer tools",
+  menuDocs: "Documentation",
+  menuAbout: "About miyagi",
+  tbBack: "Previous view",
+  tbForward: "Next view",
+  tbSidebar: "Sidebar",
   webNewTab: "New tab",
   webNewPage: "New tab",
   webBack: "Back",
@@ -573,6 +642,29 @@ const fr: Texts = {
   showPanel: "Afficher le panneau",
   backToChat: "Revenir à la conversation",
   closeTab: (title) => `Fermer ${title}`,
+  menuFile: "Fichier",
+  menuEdit: "Édition",
+  menuView: "Affichage",
+  menuHelp: "Aide",
+  menuClose: "Fermer la fenêtre",
+  menuUndo: "Annuler",
+  menuRedo: "Rétablir",
+  menuCut: "Couper",
+  menuCopy: "Copier",
+  menuPaste: "Coller",
+  menuDelete: "Supprimer",
+  menuSelectAll: "Tout sélectionner",
+  menuReload: "Actualiser",
+  menuResetZoom: "Taille réelle",
+  menuZoomIn: "Agrandir",
+  menuZoomOut: "Réduire",
+  menuFullScreen: "Plein écran",
+  menuDevTools: "Outils de développement",
+  menuDocs: "Documentation",
+  menuAbout: "À propos de miyagi",
+  tbBack: "Vue précédente",
+  tbForward: "Vue suivante",
+  tbSidebar: "Barre latérale",
   webNewTab: "Nouvel onglet",
   webNewPage: "Nouvel onglet",
   webBack: "Précédent",
@@ -751,6 +843,29 @@ const de: Texts = {
   showPanel: "Bereich anzeigen",
   backToChat: "Zurück zum Gespräch",
   closeTab: (title) => `Schließen ${title}`,
+  menuFile: "Datei",
+  menuEdit: "Bearbeiten",
+  menuView: "Ansicht",
+  menuHelp: "Hilfe",
+  menuClose: "Fenster schließen",
+  menuUndo: "Rückgängig",
+  menuRedo: "Wiederholen",
+  menuCut: "Ausschneiden",
+  menuCopy: "Kopieren",
+  menuPaste: "Einfügen",
+  menuDelete: "Löschen",
+  menuSelectAll: "Alles auswählen",
+  menuReload: "Neu laden",
+  menuResetZoom: "Originalgröße",
+  menuZoomIn: "Vergrößern",
+  menuZoomOut: "Verkleinern",
+  menuFullScreen: "Vollbild",
+  menuDevTools: "Entwicklertools",
+  menuDocs: "Dokumentation",
+  menuAbout: "Über miyagi",
+  tbBack: "Vorherige Ansicht",
+  tbForward: "Nächste Ansicht",
+  tbSidebar: "Seitenleiste",
   webNewTab: "Neuer Tab",
   webNewPage: "Neuer Tab",
   webBack: "Zurück",

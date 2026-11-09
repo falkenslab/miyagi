@@ -1,4 +1,4 @@
-// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70, the desktop browser's bar and panel on a stub #86) in Chrome against the
+// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70, the desktop browser's bar and panel on a stub #86, the desktop title bar on a stub #87) in Chrome against the
 // real host and a real Claude session: a subject created from the page, the rail's places and their
 // tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
@@ -270,16 +270,46 @@ const checkBrowser = async (subject) => {
     zoom: (id, delta) => calls.push(["zoom", id, delta]),
   };
   await host.close();
-  const withBrowser = await startHost(subject, { chooseLanguage: true, browser: fake });
+  const roles = [];
+  const withBrowser = await startHost(subject, { chooseLanguage: true, browser: fake, frame: { devTools: true, role: (name) => roles.push(name), colors: () => undefined } });
   const own = new URL(withBrowser.url);
   const lastBounds = () => calls.filter(([what]) => what === "bounds").at(-1)?.[1];
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(withBrowser.url);
   await page.waitForSelector(".top .panel-btn", { timeout: 240_000 });
   await page.waitForSelector(".recents a.open-conv", { timeout: 240_000 });
+  await idle();
+  await page.waitForSelector(".titlebar");
+  check("the desktop app has its title bar, at the first view's start", (await page.locator(".tb-back:disabled").count()) === 1 && (await page.locator(".tb-forward:disabled").count()) === 1);
+  await page.click(RAIL("course"));
+  await page.click(".view-tabs button >> nth=1");
+  await page.waitForFunction(() => document.querySelector(".tb-back:not(:disabled)"), null, { timeout: 5000 });
+  await page.click(".tb-back");
+  await page.waitForTimeout(150);
+  check("← goes back through the views, → forward", (await page.getAttribute(".view-tabs button >> nth=0", "aria-selected")) === "true" && (await page.locator(".tb-forward:not(:disabled)").count()) === 1);
+  await page.click(".tb-forward");
+  await page.waitForFunction(() => document.querySelector(".tb-forward:disabled"), null, { timeout: 5000 });
+  check("…and → stops at the end", (await page.getAttribute(".view-tabs button >> nth=1", "aria-selected")) === "true");
+  await page.click(".titlebar .tb-menu >> nth=2");
+  await page.click(".titlebar .pop button >> nth=2");
+  await page.waitForTimeout(150);
+  check("a menu entry carries out its role through the host", roles.includes("zoomIn"), roles.join(","));
+  // The menu's initial is in the page's language.
+  await page.keyboard.press(`Alt+${(await page.innerText(".titlebar .tb-menu >> nth=0"))[0].toLowerCase()}`);
+  await page.waitForSelector(".titlebar .pop", { timeout: 3000 });
+  check("Alt and a menu's initial opens it", (await page.locator(".titlebar .pop button").count()) === 1);
+  await page.keyboard.press("Escape");
+  await page.click(".titlebar .tb-menu >> nth=3");
+  check("Help is there", (await page.locator(".titlebar .pop button").count()) === 2);
+  await page.keyboard.press("Escape");
+  await page.click(".tb-side");
+  await page.waitForTimeout(150);
+  check("the sidebar's button collapses it", (await page.locator(".side-open").count()) === 1);
+  await page.click(".tb-side");
+  check("the bar is drawn in the theme, draggable, its buttons not", await page.evaluate(() => getComputedStyle(document.querySelector(".titlebar")).getPropertyValue("-webkit-app-region") === "drag" && getComputedStyle(document.querySelector(".tb-back")).getPropertyValue("-webkit-app-region") === "no-drag"));
   await page.click(".recents a.open-conv");
   await page.waitForSelector(".composer textarea");
-  await idle();
+  await shot("titlebar-1440");
   check("the desktop app's header offers the browser, with no tab open", (await page.locator(".spanel").count()) === 0);
   await page.click(".top .panel-btn");
   await page.waitForSelector(".web-row");
@@ -481,7 +511,7 @@ const checkSidePanel = async (subject) => {
   await page.waitForSelector(".spanel", { state: "detached" });
   await page.click(".top .panel-btn");
   check("the header brings the panel back", (await page.locator(".spanel").count()) === 1 && (await tabs()) === 1);
-  check("in the browser, the panel offers no browser", (await page.locator(".spanel-new, .web-row").count()) === 0);
+  check("in the browser, the panel offers no browser and no title bar", (await page.locator(".spanel-new, .web-row, .titlebar").count()) === 0);
   // Expanded it takes the conversation's column; an approval brings the conversation back at once.
   await mode("interactive");
   await page.click(".spanel-expand");
@@ -865,4 +895,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL page: ${failure}`);
   process.exit(1);
 }
-console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, the desktop browser's bar on a stub, 360/390/768/1024/1440 (screenshots in ${shots})`);
+console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, the desktop browser's bar and title bar on stubs, 360/390/768/1024/1440 (screenshots in ${shots})`);

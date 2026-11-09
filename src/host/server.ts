@@ -92,7 +92,20 @@ export interface HostOptions {
   pickFolder?: FolderPicker;
   /** The desktop app's web browser (#86): without it, the panel offers none. */
   browser?: EmbeddedBrowser;
+  /** The desktop app's window (#87): its title bar is the page's. In the browser, there's none. */
+  frame?: WindowFrame;
 }
+
+/** What the title bar of the desktop app does through the host: the window's menu roles, and the system buttons' colours. */
+export interface WindowFrame {
+  /** Whether the app's developer tools can be opened (unpacked only). */
+  devTools: boolean;
+  role(name: string): void;
+  colors(color: string, symbolColor: string): void;
+}
+
+/** The menu's roles the title bar may ask for, today's menu and no others. */
+const WINDOW_ROLES = new Set(["close", "undo", "redo", "cut", "copy", "paste", "delete", "selectAll", "reload", "resetZoom", "zoomIn", "zoomOut", "togglefullscreen", "toggleDevTools"]);
 
 export interface Host {
   /** The page's URL, token included: for this process and the window it opens, never printed in a log. */
@@ -264,7 +277,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const room = current?.prepared.workspace?.classroom;
     return room ? { url: room.url, courseId: room.courseId, connected: Boolean(current?.prepared.classroom) } : null;
   };
-  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder), browser: Boolean(options.browser) });
+  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder), browser: Boolean(options.browser), frame: Boolean(options.frame), frameDevTools: Boolean(options.frame?.devTools) });
   function send(event: string, data: unknown): void {
     client?.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
   }
@@ -338,6 +351,21 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   /** What the person does, by path: the subjects, signing in, then one to one to the chat controller. */
   async function act(action: string, data: Record<string, unknown>): Promise<unknown> {
     if (action.startsWith("browser-")) return browserAction(action, data);
+    // The desktop app's title bar (#87): the menu's roles and the window buttons' colours, nothing else.
+    if (action === "window-role") {
+      if (!options.frame) return { error: "no frame" };
+      const role = String(data.role);
+      if (!WINDOW_ROLES.has(role) || (role === "toggleDevTools" && !options.frame.devTools)) return { error: "unknown role" };
+      options.frame.role(role);
+      return {};
+    }
+    if (action === "window-colors") {
+      if (!options.frame) return { error: "no frame" };
+      const [color, symbolColor] = [String(data.color), String(data.symbolColor)];
+      if (![color, symbolColor].every((value) => /^#[0-9a-f]{6}$/i.test(value))) return { error: "invalid colour" };
+      options.frame.colors(color, symbolColor);
+      return {};
+    }
     switch (action) {
       // A folder chosen in the system's dialog, for a field that asks for one: one dialog at a time.
       case "pick-folder": {

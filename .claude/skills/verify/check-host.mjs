@@ -7,7 +7,7 @@
 // extensions view (#50): a repository is added only with its name typed, the official one can't
 // be removed, and a classroom address that isn't one connects nothing. The sidebar (#84): the
 // search over the kept conversations, and pinning one, only in its subject and after a restart. The
-// desktop app's browser (#86), on a stub: its actions, the addresses it refuses, and no address in the chat's state.
+// desktop app's browser (#86), on a stub: its actions, the addresses it refuses, and no address in the chat's state. The desktop app's title bar (#87): its roles and colours only.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-host.mjs
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
@@ -218,6 +218,7 @@ check("…and forgotten", !(await post("remove-marketplace", { name: "dept" })).
 
 // The desktop app's browser (#86): only with the option, on a stub of the native side.
 check("no browser without the desktop app", (await post("browser-open", { url: "https://moodle.org/" })).error === "no browser" && !events[0]?.data?.browser);
+check("no title bar without the desktop app", (await post("window-role", { role: "copy" })).error === "no frame" && !events[0]?.data?.frame);
 const browserCalls = [];
 const browserTabs = [];
 const browserListeners = [];
@@ -241,7 +242,9 @@ const fakeBrowser = {
   external: (id) => browserCalls.push(["external", id]),
   zoom: (id, delta) => browserCalls.push(["zoom", id, delta]),
 };
-const withBrowser = await startHost(subjectDir, { browser: fakeBrowser });
+const roles = [];
+const colours = [];
+const withBrowser = await startHost(subjectDir, { browser: fakeBrowser, frame: { devTools: false, role: (name) => roles.push(name), colors: (color, symbol) => colours.push([color, symbol]) } });
 const browserUrl = new URL(withBrowser.url);
 const browserBase = browserUrl.origin;
 const browserToken = browserUrl.searchParams.get("token");
@@ -271,6 +274,11 @@ for (const [action, data, call] of [["browser-select", { id: "1" }, ["select", "
   await browserPost(action, data);
   check(`${action} reaches the native side`, JSON.stringify(browserCalls.at(-1)) === JSON.stringify(call));
 }
+check("the title bar's roles reach the window", !(await browserPost("window-role", { role: "copy" })).error && roles.at(-1) === "copy");
+check("…no role that isn't one of the menu's", (await browserPost("window-role", { role: "quit" })).error === "unknown role" && roles.length === 1);
+check("…and the developer tools only when the app allows them", (await browserPost("window-role", { role: "toggleDevTools" })).error === "unknown role");
+check("the title bar's colours reach the window", !(await browserPost("window-colors", { color: "#18181b", symbolColor: "#f3f3f0" })).error && colours.at(-1)?.[0] === "#18181b");
+check("…and only as colours", (await browserPost("window-colors", { color: "red;x", symbolColor: "#000000" })).error === "invalid colour" && colours.length === 1);
 check("a still comes as an image", (await browserPost("browser-capture", { id: "1" })).image.startsWith("data:image/"));
 check("no other browser action exists", (await browserPost("browser-devtools", { id: "1" })).error?.startsWith("unknown action"));
 const browserState = await firstEventsOf(browserBase, browserToken, 3);

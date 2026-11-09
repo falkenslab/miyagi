@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { app, BrowserWindow, desktopCapturer, dialog, Menu, shell } from "electron";
+import { app, BrowserWindow, desktopCapturer, dialog, Menu, nativeTheme, shell, webContents } from "electron";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 // For automated checks only: a home of their own, so ~/.miyagi (the teacher's subjects and key)
@@ -51,6 +51,30 @@ function saveWindow(bounds) {
   writeFileSync(CONFIG, JSON.stringify({ ...config, desktop: { ...(config.desktop ?? {}), window: bounds } }, null, 2));
 }
 
+/** What the title bar's menus ask for (#87): the native menu's roles, on what has the keyboard. */
+function runRole(role) {
+  const page = window?.webContents;
+  if (!page) return;
+  const focused = webContents.getFocusedWebContents() ?? page;
+  const zoom = (delta) => page.setZoomLevel(page.getZoomLevel() + delta);
+  ({
+    close: () => window.close(),
+    undo: () => focused.undo(),
+    redo: () => focused.redo(),
+    cut: () => focused.cut(),
+    copy: () => focused.copy(),
+    paste: () => focused.paste(),
+    delete: () => focused.delete(),
+    selectAll: () => focused.selectAll(),
+    reload: () => page.reload(),
+    resetZoom: () => page.setZoomLevel(0),
+    zoomIn: () => zoom(0.5),
+    zoomOut: () => zoom(-0.5),
+    togglefullscreen: () => window.setFullScreen(!window.isFullScreen()),
+    toggleDevTools: () => page.toggleDevTools(),
+  })[role]?.();
+}
+
 async function start() {
   // miyagi, compiled into miyagi/ by `npm run build`: the host and the page it serves.
   const { startHost } = await import("./miyagi/dist/host/server.js");
@@ -65,7 +89,12 @@ async function start() {
   // The side panel's web browser (#86), native; the host knows its tabs as it knows the dialog.
   const { createBrowser } = await import("./browser.mjs");
   browser = createBrowser({ getWindow: () => window, ownOrigin: () => new URL(host.url).origin, openExternal });
-  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined, { chooseLanguage: true, pickFolder, browser });
+  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined, {
+    chooseLanguage: true,
+    pickFolder,
+    browser,
+    frame: { devTools: !app.isPackaged, role: runRole, colors: (color, symbolColor) => window?.setTitleBarOverlay({ color, symbolColor }) },
+  });
   // For automated checks only: where the page is.
   if (process.env.MIYAGI_DESKTOP_URL_FILE) writeFileSync(process.env.MIYAGI_DESKTOP_URL_FILE, host.url);
 
@@ -78,10 +107,13 @@ async function start() {
     title: "miyagi",
     icon: path.join(here, "build", "icon.png"),
     backgroundColor: "#f7f7f4",
-    autoHideMenuBar: true,
+    // The title bar is the page's (#87); the system's buttons stay over its right end.
+    titleBarStyle: "hidden",
+    titleBarOverlay: { color: nativeTheme.shouldUseDarkColors ? "#18181b" : "#efefea", symbolColor: nativeTheme.shouldUseDarkColors ? "#f3f3f0" : "#18181b", height: 40 },
     show: false,
     webPreferences: { contextIsolation: true, sandbox: true, nodeIntegration: false, spellcheck: true },
   });
+  window.setMenuBarVisibility(false);
   window.once("ready-to-show", () => window.show());
   // Links open in the person's browser; the window never leaves miyagi's page.
   window.webContents.setWindowOpenHandler(({ url }) => {
@@ -114,7 +146,7 @@ async function windowImage() {
 
 /**
  * For automated checks only: steps run in this window (`{ js }`, `{ until }`, `{ wait }`,
- * `{ shot }`, `{ size }`, `{ tab }` in the browser's selected tab, `{ click: selector }` a real click,
+ * `{ shot }`, `{ size }`, `{ tab }` in the browser's selected tab, `{ click: selector }` a real click (`{ key, keyWith }` a key),
  * `{ ctrl }` with it), then the app quits. What a person sees, captured; `$ENV{NAME}` in a `tab`
  * step takes a value from the environment, so a test's password need not be written in its steps.
  */
@@ -136,6 +168,7 @@ async function runScript(file) {
         window.webContents.sendInputEvent({ ...at, type: "mouseDown" });
         window.webContents.sendInputEvent({ ...at, type: "mouseUp" });
       }
+      if (step.key) window.webContents.sendInputEvent({ type: "keyDown", keyCode: step.key, modifiers: step.keyWith ?? [] });
       if (step.tab) console.log(`tab: ${JSON.stringify(await browser.selectedContents()?.executeJavaScript(filled(step.tab)))}`);
       if (step.js) console.log(`js: ${JSON.stringify(await window.webContents.executeJavaScript(step.js))}`);
       if (step.until) {

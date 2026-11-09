@@ -617,3 +617,19 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 .web-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; color: var(--dim); }
 .web-empty p { margin: 0; max-width: 40ch; }
 @container (max-width: 439px) { .web-wide { display: none; } }
+
+/* The desktop app's title bar (#87), only in it: the page's, with the system's window buttons over its right end. */
+:root { --titlebar: 40px; }
+.app.with-titlebar { height: calc(100% - var(--titlebar)); }
+.titlebar { position: relative; z-index: 25; display: flex; align-items: center; gap: 2px; height: var(--titlebar); padding: 0 8px; padding-right: calc(100vw - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100vw)); background: var(--bg-2); border-bottom: 1px solid var(--line); -webkit-app-region: drag; user-select: none; }
+.titlebar button, .titlebar .pop { -webkit-app-region: no-drag; }
+.tb-btn, .tb-menu { display: inline-flex; align-items: center; justify-content: center; min-height: 32px; padding: 0 8px; border: 0; border-radius: 6px; background: none; color: var(--text-2); font-size: 13px; cursor: pointer; }
+.tb-btn:hover:not(:disabled), .tb-menu:hover { background: var(--panel-2); }
+.tb-btn:disabled { opacity: .4; cursor: default; }
+.tb-sep { width: 1px; height: 18px; margin: 0 6px; background: var(--line); }
+.tb-drag { flex: 1; align-self: stretch; }
+.pop.tb-pop { top: calc(100% + 2px); right: auto; left: 0; min-width: 240px; }
+.pop.tb-pop button { align-items: center; min-height: 36px; padding: 6px 10px; }
+.pop.tb-pop .grow { flex: 1; }
+.tb-rule { border: 0; border-top: 1px solid var(--line); margin: 4px 6px; }
+@media (max-width: 760px) { .pop.tb-pop { top: auto; left: 0; right: 0; } }

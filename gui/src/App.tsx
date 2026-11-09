@@ -12,12 +12,14 @@ import { setCanPick } from "./components/PathField";
 import { setBusyReason, StatusBar } from "./components/StatusBar";
 import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
 import { setOpenLink } from "./markdown";
+import { TitleBar } from "./components/TitleBar";
 import { Transcript } from "./components/Transcript";
 import { Waiting } from "./components/Waiting";
 import { texts } from "./i18n";
 import { actionTexts } from "./i18n/actions";
 import { courseTexts } from "./i18n/course";
 import { extTexts } from "./i18n/extensions";
+import { canBack, canForward, NO_HISTORY, step, visit, type ViewHistory } from "./viewHistory";
 
 const THEME_KEY = "miyagi.theme";
 
@@ -41,6 +43,7 @@ export function App() {
   const [kbPage, setKbPage] = useState<string | null>(null);
   const [item, setItem] = useState<string | null>(null);
   const [extTab, setExtTab] = useState<ExtTab>("installed");
+  const [history, setHistory] = useState<ViewHistory<View>>(NO_HISTORY);
   const [sideOpen, setSideOpen] = useState(false);
   const [sideCollapsed, setSideCollapsed] = useSideCollapsed();
   const side = useSidePanel(state?.chat?.run?.dir, browser);
@@ -154,9 +157,21 @@ export function App() {
   // An approval or a question brings the conversation back at once, whatever the panel covers.
   const asking = Boolean(chat?.panel || chat?.choice);
   const withPanel = Boolean(chat && side.shown);
+  // The views visited, for the title bar's ← and → (#87).
+  // Only from a conversation on: before it, the page shows the conversation's place for lack of one.
+  const started = Boolean(chat);
+  useEffect(() => {
+    if (started) setHistory((now) => visit(now, shown));
+  }, [started, shown]);
+  const travel = (delta: -1 | 1) => {
+    const next = step(history, delta);
+    setHistory(next);
+    setView(next.list[next.at]);
+  };
   return (
     <ActionsContext.Provider value={actions}>
-    <div className={`app${withPanel ? " with-panel" : ""}${withPanel && side.expanded ? " panel-full" : ""}${asking ? " asking" : ""}`} style={{ "--panel-width": `${side.width}px` } as CSSProperties}>
+    {info?.frame && <TitleBar info={info} T={T} canGoBack={canBack(history)} canGoForward={canForward(history)} onBack={() => travel(-1)} onForward={() => travel(1)} onSide={() => (matchMedia("(max-width: 760px)").matches ? setSideOpen(true) : setSideCollapsed(!sideCollapsed))} theme={theme} onNotice={setToast} />}
+    <div className={`app${info?.frame ? " with-titlebar" : ""}${withPanel ? " with-panel" : ""}${withPanel && side.expanded ? " panel-full" : ""}${asking ? " asking" : ""}`} style={{ "--panel-width": `${side.width}px` } as CSSProperties}>
       <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
         <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} panelTabs={chat ? side.tabs.list.length : 0} canBrowse={Boolean(chat && canBrowse)} panelShown={withPanel} onPanel={side.tabs.list.length ? side.toggle : () => void side.openWeb()} />
