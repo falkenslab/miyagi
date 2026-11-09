@@ -62,6 +62,17 @@ export interface Texts {
   commands: string;
   greeting: (part: "morning" | "afternoon" | "night") => string;
   recent: string;
+  pinned: string;
+  pin: string;
+  unpin: string;
+  searchConversations: string;
+  searchEmpty: string;
+  notices: string;
+  noNotices: string;
+  noticesCount: (n: number) => string;
+  noticeSources: (n: number) => string;
+  noticeOven: (n: number) => string;
+  taskOf: (n: number, total: number) => string;
   thisConversation: string;
   more: string;
   addFile: string;
@@ -185,6 +196,17 @@ const es: Texts = {
   commands: "Atajos",
   greeting: (part) => `${part === "morning" ? "Buenos días" : part === "afternoon" ? "Buenas tardes" : "Buenas noches"}. ¿Qué preparamos hoy?`,
   recent: "Recientes",
+  pinned: "Fijadas",
+  pin: "Fijar",
+  unpin: "Quitar de fijadas",
+  searchConversations: "Buscar conversaciones",
+  searchEmpty: "Ninguna conversación lo dice.",
+  notices: "Avisos",
+  noNotices: "No hay nada pendiente.",
+  noticesCount: (n) => (n === 1 ? "1 aviso" : `${n} avisos`),
+  noticeSources: (n) => (n === 1 ? "1 fuente por incorporar" : `${n} fuentes por incorporar`),
+  noticeOven: (n) => (n === 1 ? "1 actividad en el horno" : `${n} actividades en el horno`),
+  taskOf: (n, total) => `${n} de ${total}`,
   thisConversation: "Esta conversación",
   more: "Más",
   addFile: "Añadir archivo",
@@ -323,6 +345,17 @@ const en: Texts = {
   commands: "Shortcuts",
   greeting: (part) => `${part === "morning" ? "Good morning" : part === "afternoon" ? "Good afternoon" : "Good evening"}. What shall we prepare today?`,
   recent: "Recent",
+  pinned: "Pinned",
+  pin: "Pin",
+  unpin: "Unpin",
+  searchConversations: "Search conversations",
+  searchEmpty: "No conversation says that.",
+  notices: "Notices",
+  noNotices: "Nothing is waiting.",
+  noticesCount: (n) => (n === 1 ? "1 notice" : `${n} notices`),
+  noticeSources: (n) => (n === 1 ? "1 source to take in" : `${n} sources to take in`),
+  noticeOven: (n) => (n === 1 ? "1 activity in the oven" : `${n} activities in the oven`),
+  taskOf: (n, total) => `${n} of ${total}`,
   thisConversation: "This conversation",
   more: "More",
   addFile: "Add a file",
@@ -461,6 +494,17 @@ const fr: Texts = {
   commands: "Raccourcis",
   greeting: (part) => `${part === "night" ? "Bonsoir" : "Bonjour"}. Que préparons-nous aujourd'hui ?`,
   recent: "Récentes",
+  pinned: "Épinglées",
+  pin: "Épingler",
+  unpin: "Désépingler",
+  searchConversations: "Chercher une conversation",
+  searchEmpty: "Aucune conversation ne le dit.",
+  notices: "Avis",
+  noNotices: "Rien en attente.",
+  noticesCount: (n) => (n === 1 ? "1 avis" : `${n} avis`),
+  noticeSources: (n) => (n === 1 ? "1 source à intégrer" : `${n} sources à intégrer`),
+  noticeOven: (n) => (n === 1 ? "1 activité au four" : `${n} activités au four`),
+  taskOf: (n, total) => `${n} sur ${total}`,
   thisConversation: "Cette conversation",
   more: "Plus",
   addFile: "Ajouter un fichier",
@@ -599,6 +643,17 @@ const de: Texts = {
   commands: "Kurzbefehle",
   greeting: (part) => `${part === "morning" ? "Guten Morgen" : part === "afternoon" ? "Guten Tag" : "Guten Abend"}. Was bereiten wir heute vor?`,
   recent: "Zuletzt",
+  pinned: "Angeheftet",
+  pin: "Anheften",
+  unpin: "Lösen",
+  searchConversations: "Gespräche suchen",
+  searchEmpty: "Keine Unterhaltung sagt das.",
+  notices: "Hinweise",
+  noNotices: "Nichts wartet.",
+  noticesCount: (n) => (n === 1 ? "1 Hinweis" : `${n} Hinweise`),
+  noticeSources: (n) => (n === 1 ? "1 Quelle aufzunehmen" : `${n} Quellen aufzunehmen`),
+  noticeOven: (n) => (n === 1 ? "1 Aktivität im Ofen" : `${n} Aktivitäten im Ofen`),
+  taskOf: (n, total) => `${n} von ${total}`,
   thisConversation: "Dieses Gespräch",
   more: "Mehr",
   addFile: "Datei hinzufügen",

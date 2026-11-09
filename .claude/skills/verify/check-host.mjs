@@ -5,7 +5,8 @@
 // pasted key that isn't an API key is refused, a subscription token among them, and one miyagi
 // had saved is removed on start and said (ADR-026); the page is served and nothing outside it is. The
 // extensions view (#50): a repository is added only with its name typed, the official one can't
-// be removed, and a classroom address that isn't one connects nothing.
+// be removed, and a classroom address that isn't one connects nothing. The sidebar (#84): the
+// search over the kept conversations, and pinning one, only in its subject and after a restart.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-host.mjs
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
@@ -85,6 +86,8 @@ check("no code without a sign-in under way", (await post("signin-code", { code: 
 
 check("a key that isn't one is refused", (await post("login", { token: "not-a-key" })).error === "invalid");
 check("no subjects yet", (await post("workspaces")).workspaces?.length === 0);
+check("no search without a subject open", (await post("search", { query: "x" })).error === "no subject");
+check("no pin without a subject open", (await post("pin", { dir: "x", pinned: true })).error === "no subject");
 check("info says the host has a folder dialog", events[0]?.data?.pickFolder === true);
 const [picked, again] = await Promise.all([post("pick-folder", { title: "Carpeta", start: "C:/inicio" }), post("pick-folder", { title: "otra" })]);
 check("the folder chosen in the dialog comes back, with the dialog's title and start", picked.path === path.join(os.homedir(), "elegida") && asked[0]?.title === "Carpeta" && asked[0]?.start === "C:/inicio");
@@ -164,6 +167,43 @@ check("renamed, the old file goes", (await ownSave({}, "sopa-dos")).errors?.leng
 check("deleted", (await post("own-command-delete", { scope: "subject", name: "sopa-dos" })).errors?.length === 0 && ((await post("own-commands")).commands ?? []).length === 0);
 check("deleting one out of the folder is refused", (await post("own-command-delete", { scope: "subject", name: "../config" })).errors?.length > 0);
 
+// The sidebar (#84): the search over the kept conversations, and pinning one; neither needs a chat.
+const keepConversation = (subject, name, lines) => {
+  const dir = path.join(subject, "sessions", name);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(path.join(dir, "session.json"), JSON.stringify({ sessionId: name, subagents: {} }));
+  writeFileSync(path.join(dir, "conversation.jsonl"), lines.map(([type, text], index) => JSON.stringify({ type, uuid: `${name}-${index}`, timestamp: new Date(Date.now() - index * 1000).toISOString(), message: { role: type, content: text } })).join("\n"));
+  return dir;
+};
+const oldConversation = keepConversation(subjectDir, "2026-09-09T10-00-00-000Z", [["user", "Prepara la rúbrica de la práctica"], ["assistant", "Hecho, con cuatro criterios."]]);
+keepConversation(subjectDir, "2026-11-01T10-00-00-000Z", [["user", "Otra conversación distinta"], ["assistant", "De acuerdo."]]);
+check("an empty search finds nothing", (await post("search", { query: "   " })).results?.length === 0);
+const hit = (await post("search", { query: "RUBRICA" })).results ?? [];
+check("a word said only in an old conversation finds it, whatever its case and accents", hit.length === 1 && hit[0].dir === oldConversation && hit[0].snippet.includes("rúbrica") && hit[0].title === "Prepara la rúbrica de la práctica" && hit[0].pinned === false);
+check("…a word it says in a reply too", (await post("search", { query: "cuatro criterios" })).results?.[0]?.dir === oldConversation);
+check("…and a word no conversation says, nothing", (await post("search", { query: "zanahoria" })).results?.length === 0);
+const pinsFile = path.join(subjectDir, "sessions", "pinned.json");
+for (const bad of [path.join(subjectDir, "sessions", "no-existe"), subjectDir, os.homedir(), ""]) {
+  check(`only a kept conversation is pinned: ${bad}`, (await post("pin", { dir: bad, pinned: true })).error === "unknown conversation");
+}
+check("…and nothing was written for those", !existsSync(pinsFile));
+check("a kept conversation is pinned", !(await post("pin", { dir: oldConversation, pinned: true })).error && readFileSync(pinsFile, "utf8").includes("2026-09-09T10-00-00-000Z"));
+check("…outside the knowledge base, and shown as pinned", pinsFile.startsWith(path.join(subjectDir, "sessions")) && (await post("search", { query: "rubrica" })).results?.[0]?.pinned === true);
+// Only in its subject: the other one neither finds it nor can pin it.
+const pinnedSubjectId = ((await post("workspaces")).workspaces ?? []).find((ws) => ws.dir === subjectDir)?.id;
+await post("open", { id: listed[0].id });
+check("another subject doesn't find this subject's conversations", (await post("search", { query: "rubrica" })).results?.length === 0);
+check("…nor pins one of them", (await post("pin", { dir: oldConversation, pinned: true })).error === "unknown conversation");
+await post("open", { id: pinnedSubjectId });
+check("back in its subject, it's still pinned", (await post("search", { query: "rubrica" })).results?.[0]?.pinned === true);
+// After restarting the host, which reads the pins from the subject's folder.
+const restarted = await startHost(subjectDir, {});
+const restartedUrl = new URL(restarted.url);
+const afterRestart = await (await fetch(`${restartedUrl.origin}/api/search?token=${restartedUrl.searchParams.get("token")}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ query: "rubrica" }) })).json();
+await restarted.close();
+check("a pinned conversation stays pinned after restarting", afterRestart.results?.[0]?.pinned === true);
+check("…and is unpinned from it", !(await post("pin", { dir: oldConversation, pinned: false })).error && (await post("search", { query: "rubrica" })).results?.[0]?.pinned === false);
+
 // A repository in a folder: added only with its name typed, and forgotten again.
 const market = path.join(os.homedir(), "market");
 mkdirSync(path.join(market, ".claude-plugin"), { recursive: true });
@@ -183,4 +223,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser, the folder dialog");
+console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser, the folder dialog, the conversations' search and pins");

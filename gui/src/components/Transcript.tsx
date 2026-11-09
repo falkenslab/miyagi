@@ -247,6 +247,11 @@ export function Transcript({ chat, T, go }: { chat: ChatState; T: Texts; go: (vi
   useEffect(() => {
     if (atEnd.current) box.current?.scrollTo({ top: box.current.scrollHeight });
   }, [chat.transcript, chat.activity, chat.panel]);
+  // Another conversation (a search result, a pinned one) starts at its end.
+  useEffect(() => {
+    atEnd.current = true;
+    setAway(false);
+  }, [chat.run?.dir]);
   const last = chat.transcript[chat.transcript.length - 1];
   const fresh = !chat.transcript.some((entry) => entry.kind === "user");
   // Each turn's summary copies the reply right before it.

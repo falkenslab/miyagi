@@ -21,6 +21,9 @@ const paths = {
   classroom: "M2 9l10-5 10 5-10 5z M6 11v5c3 2 9 2 12 0v-5",
   panel: "M4 5h16v14H4z M9 5v14",
   book: "M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z M4 19V5",
+  search: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14z M20 20l-4-4",
+  bell: "M6 16v-5a6 6 0 1 1 12 0v5l2 2H4z M10 21a2 2 0 0 0 4 0",
+  pin: "M9 4h6l-1 6 3 4H7l3-4z M12 14v7",
 } as const;
 
 export type IconName = keyof typeof paths;

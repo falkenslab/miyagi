@@ -1,4 +1,4 @@
-// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83) in Chrome against the
+// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84) in Chrome against the
 // real host and a real Claude session: a subject created from the page, the rail's places and their
 // tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
@@ -71,7 +71,7 @@ const CHECKPOINT = ".dock .checkpoint";
 /** The header's and the composer's buttons smaller than a finger (44 px), by their label. */
 const small = () =>
   page.evaluate(() =>
-    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse"))
+    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress"))
       .filter((el) => el.offsetParent)
       .map((el) => [el.getAttribute("aria-label") || el.textContent.trim(), el.getBoundingClientRect()])
       .filter(([, box]) => box.width < 44 || box.height < 44)
@@ -249,6 +249,12 @@ try {
     check(`an approval leaves the conversation readable at ${width}`, seen.msgs >= 200 && !seen.scrim && !seen.composer, JSON.stringify(seen));
   }
   await page.setViewportSize({ width: 1440, height: 900 });
+  // The bell says what waits (#84), and takes the teacher to it.
+  await page.click(".side-tools .bell");
+  check("the bell shows an approval while it waits", (await page.locator('.pop [data-notice="approval"]').count()) === 1 && Number(await page.innerText(".bell-count")) >= 1);
+  await shot("bell-approval-1440");
+  await page.click('.pop [data-notice="approval"]');
+  check("…and goes to where it's answered", Boolean(await page.$(CHECKPOINT)) && !(await page.$(".notice-pop")));
   await page.click(`${CHECKPOINT} .acts .btn.primary`);
   await page.waitForSelector(CHECKPOINT, { state: "detached", timeout: 20_000 }).catch(() => {});
   for (let i = 0; i < 6; i++) {
@@ -259,6 +265,9 @@ try {
   }
   await idle();
   check("an approved turn ends with a reply", (await page.locator(".msg.agent").count()) >= 2);
+  await page.click(".side-tools .bell");
+  check("the bell stops showing the approval once it's answered", (await page.locator('.pop [data-notice="approval"]').count()) === 0);
+  await page.keyboard.press("Escape");
   // Copy puts the reply's markdown on the clipboard.
   await page.click(".turn-summary .copy >> nth=-1");
   const copied = await page.evaluate(() => navigator.clipboard.readText());
@@ -310,6 +319,20 @@ try {
   await page.waitForTimeout(1500);
   await shot("links-page-1440");
   check("…a page opens the knowledge base at it", await page.waitForFunction(() => /Variables/.test(document.querySelector("main .card.page")?.textContent ?? "") && Boolean(document.querySelector(".page.md, .card.page")), null, { timeout: 10_000 }).then(() => true, () => false));
+  await page.click(".recents .open-conv");
+  await page.waitForSelector(".msgs");
+  // The bell's other notices (#84): a source not taken in and an activity in the oven, each to its view.
+  writeFileSync(path.join(subject, "knowledge", "drafts.md"), "# En el horno\n\n- `building` Tarea de normalización\n");
+  await page.click(".side-tools .bell");
+  await page.waitForSelector('.pop [data-notice="oven"]', { timeout: 10_000 });
+  await shot("bell-1440");
+  check("the bell counts the sources not taken in and the oven's activities", (await page.locator('.pop [data-notice="sources"]').count()) === 1 && (await page.innerText(".bell-count")) === "2", await page.innerText(".bell-count"));
+  await page.click('.pop [data-notice="sources"]');
+  check("…the sources' notice opens Sources", (await page.getAttribute(".view-tabs button >> nth=1", "aria-selected")) === "true");
+  await page.click(".side-tools .bell");
+  await page.waitForSelector('.pop [data-notice="oven"]', { timeout: 10_000 });
+  await page.click('.pop [data-notice="oven"]');
+  check("…the oven's notice opens the oven", (await page.getAttribute(".view-tabs button >> nth=3", "aria-selected")) === "true");
   await page.click(".recents .open-conv");
   await page.waitForSelector(".msgs");
   // Selected text in a reply: research it, questions about it, quote it (#67).
@@ -375,6 +398,64 @@ try {
     check("↓ goes back to the end", await page.waitForSelector(".to-end", { state: "detached", timeout: 5000 }).then(() => true, () => false));
   }
   await page.setViewportSize({ width: 1440, height: 900 });
+
+  // The sidebar's tools (#84): a word said only in an old conversation finds it and opens it, the
+  // result and a pinned one wait while miyagi works, a pin survives a reload, the task at the foot.
+  await send("Sin usar herramientas, responde solo esta línea, tal cual: «La palabra clave es zanahoria-pleistoceno».");
+  await idle();
+  check("no progress at the sidebar's foot with no task under way", (await page.locator(".side-progress").count()) === 0);
+  await page.click(".new-conv");
+  await page.waitForSelector(".suggest button", { timeout: 240_000 });
+  await idle();
+  await page.fill(".side-search input", "PLEISTOCENO");
+  await page.waitForSelector(".results .result", { timeout: 10_000 });
+  await shot("search-1440");
+  check("a word said only in an old conversation finds it", (await page.locator(".results .result").count()) === 1 && (await page.innerText(".results .result small")).includes("pleistoceno"), await page.innerText(".results"));
+  await page.fill(".side-search input", "palabraquenadiehadicho");
+  await page.waitForSelector(".results .muted", { timeout: 10_000 });
+  check("a word nobody said finds nothing", (await page.locator(".results .result").count()) === 0);
+  await page.fill(".side-search input", "PLEISTOCENO");
+  await page.waitForSelector(".results .result", { timeout: 10_000 });
+  await page.click(".results .result");
+  check("…and the result opens it", await page.waitForFunction(() => /zanahoria-pleistoceno/.test(document.querySelector(".msgs")?.textContent ?? ""), null, { timeout: 30_000 }).then(() => true, () => false));
+  check("…closing the search", (await page.inputValue(".side-search input")) === "" && (await page.locator(".recents").count()) === 1);
+  await page.waitForSelector(".recents .conv-row:has(a.on-conv) .conv-more");
+  const openRow = page.locator(".recents .conv-row:has(a.on-conv)");
+  await openRow.hover();
+  await openRow.locator(".conv-more").click();
+  await shot("pin-menu-1440");
+  await page.click(".conv-pop button");
+  const pinnedFirst = () => page.waitForFunction(() => /fijadas/i.test(document.querySelector(".recents h6")?.textContent ?? ""), null, { timeout: 30_000 }).then(() => true, () => false);
+  check("a pinned conversation goes to its section", await pinnedFirst());
+  await page.reload();
+  check("…and stays pinned after a reload", await pinnedFirst());
+  await shot("pinned-1440");
+  // A long turn in another conversation: neither the result nor the pinned one interrupts it.
+  await page.click(".new-conv");
+  await page.waitForSelector(".suggest button", { timeout: 30_000 });
+  await send("Sin usar herramientas, cuenta del 1 al 600, un número por línea.");
+  await page.waitForSelector(".composer .send.stop", { timeout: 30_000 });
+  await page.fill(".side-search input", "PLEISTOCENO");
+  await page.waitForSelector(".results .result", { timeout: 10_000 });
+  check("while miyagi works, a result waits, saying why", await page.locator(".results .result").isDisabled() && Boolean(await page.getAttribute(".results .result", "title")));
+  await page.fill(".side-search input", "");
+  const pinnedRow = page.locator(".recents .conv-row:not(:has(a.on-conv))").first();
+  await pinnedRow.locator("a").click();
+  await page.waitForTimeout(1000);
+  check("…and a pinned conversation doesn't interrupt the turn", Boolean(await page.$(".composer .send.stop")) && (await page.locator(".recents a.on-conv .spinner").count()) === 1);
+  await page.click(".composer .send.stop");
+  await idle();
+  check("the pinned section is above the recent ones", (await page.locator(".recents h6").allInnerTexts()).map((text) => text.toLowerCase()).join() === "fijadas,recientes", (await page.locator(".recents h6").allInnerTexts()).join());
+  // The task under way, at the sidebar's foot, and gone when none is.
+  await send("Usa la herramienta TodoWrite (no hagas nada más) para crear exactamente estas dos tareas: «Leer el tema uno» en curso y «Leer el tema dos» pendiente.");
+  await page.waitForSelector(".side-progress", { timeout: 120_000 }).catch(() => {});
+  await idle();
+  const foot = (await page.locator(".side-progress").count()) ? await page.innerText(".side-progress") : "";
+  check("the sidebar's foot shows the task and its place", /tema uno/i.test(foot) && /1 de 2/.test(foot), foot);
+  await shot("progress-1440");
+  await send("Usa TodoWrite para marcar las dos tareas como completadas. No hagas nada más.");
+  await idle();
+  check("…and goes when none is under way", (await page.locator(".side-progress").count()) === 0);
 
   // Both themes, and the screenshots at every width: no horizontal scroll, 44 px targets.
   for (const [theme, nth] of [

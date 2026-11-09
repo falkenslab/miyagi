@@ -69,8 +69,10 @@ function storedSideWidth(): number {
  * A button with a popover, closed by Escape or a click outside; on a phone (≤760 px) the popover is
  * a bottom sheet over a scrim (#60), as the stylesheet draws it.
  */
-export function Menu({ label, title, children, className = "", popClass = "", ariaLabel }: { label: ReactNode; title: string; className?: string; popClass?: string; ariaLabel?: string; children: (close: () => void) => ReactNode }) {
+export function Menu({ label, title, children, className = "", popClass = "", ariaLabel, atButton = false }: { label: ReactNode; title: string; className?: string; popClass?: string; ariaLabel?: string; atButton?: boolean; children: (close: () => void) => ReactNode }) {
   const [open, setOpen] = useState(false);
+  // Under its button, fixed to the window: for a menu in a list that scrolls, which would clip it.
+  const [point, setPoint] = useState<CSSProperties>();
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!open) return;
@@ -89,12 +91,18 @@ export function Menu({ label, title, children, className = "", popClass = "", ar
   }, [open]);
   return (
     <div className="menu" ref={box}>
-      <button type="button" className={className || "ibtn"} title={title} aria-label={ariaLabel} aria-haspopup="true" aria-expanded={open} onClick={() => setOpen(!open)}>
+      <button type="button" className={className || "ibtn"} title={title} aria-label={ariaLabel} aria-haspopup="true" aria-expanded={open} onClick={(event) => {
+          if (atButton) {
+            const box = event.currentTarget.getBoundingClientRect();
+            setPoint({ "--x": `${Math.max(8, box.right - 200)}px`, "--y": `${Math.min(box.bottom + 4, innerHeight - 72)}px` } as CSSProperties);
+          }
+          setOpen(!open);
+        }}>
         {label}
       </button>
       {open && <div className="pop-scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
       {open && (
-        <div className={`pop ${popClass}`}>
+        <div className={`pop ${popClass}${point ? " at-point" : ""}`} style={point}>
           <span className="grab" aria-hidden="true" />
           {children(() => setOpen(false))}
         </div>
@@ -169,14 +177,127 @@ function SubjectSwitcher({ info, busy, T, X, onNew, onOpenExisting }: { info: In
   );
 }
 
-/** The recent conversations of this subject, the current one marked: resume one. */
+interface Run {
+  label: string;
+  dir: string;
+  pinned?: boolean;
+}
+interface Found {
+  dir: string;
+  title?: string;
+  date: string;
+  snippet: string;
+}
+
+/** The bell (#84): what exists and waits for the teacher, only reading, each one taking them where it's dealt with. */
+function Notices({ chat, view, T, go }: { chat: ChatState; view: View; T: Texts; go: (view: View) => void }) {
+  const [waiting, setWaiting] = useState<{ sources: number; oven: number } | null>(null);
+  const load = useCallback(async () => {
+    const today = await act<{ sources?: { pending: number }; oven?: unknown[] }>("today");
+    if (!today.error) setWaiting({ sources: today.sources?.pending ?? 0, oven: today.oven?.length ?? 0 });
+  }, []);
+  // After every turn, and on leaving a view where something may have changed (a source added).
+  useEffect(() => {
+    void load();
+  }, [load, chat.turns, view]);
+  const S = T.status;
+  const notices: { id: string; icon: IconName; text: string; detail?: string; to: View }[] = [];
+  if (chat.panel) notices.push({ id: "approval", icon: "check", text: chat.panel.kind === "decision" || chat.panel.kind === "manual" ? S.approval : S.question, detail: chat.panel.prompt.title, to: "chat" });
+  if (chat.choice) notices.push({ id: "question", icon: "check", text: S.question, detail: chat.choice.title, to: "chat" });
+  if (waiting?.sources) notices.push({ id: "sources", icon: "folder", text: T.noticeSources(waiting.sources), to: "sources" });
+  if (waiting?.oven) notices.push({ id: "oven", icon: "layers", text: T.noticeOven(waiting.oven), to: "oven" });
+  return (
+    <Menu
+      title={T.notices}
+      ariaLabel={notices.length ? `${T.notices}: ${T.noticesCount(notices.length)}` : T.notices}
+      className="ibtn plain bell"
+      popClass="notice-pop"
+      label={
+        <>
+          <Icon name="bell" />
+          {notices.length > 0 && <span className="bell-count">{notices.length}</span>}
+        </>
+      }
+    >
+      {(close) => (
+        <Loader onOpen={load}>
+          {notices.length === 0 && <p className="pop-help">{T.noNotices}</p>}
+          {notices.map((notice) => (
+            <button
+              key={notice.id}
+              type="button"
+              data-notice={notice.id}
+              onClick={() => {
+                go(notice.to);
+                close();
+              }}
+            >
+              <Icon name={notice.icon} />
+              <span className="grow">
+                {notice.text}
+                {notice.detail && <small>{notice.detail}</small>}
+              </span>
+            </button>
+          ))}
+        </Loader>
+      )}
+    </Menu>
+  );
+}
+
+/** One conversation of the list, with its ⋯ to pin it once it's kept. */
+function ConversationRow({ run, kept, chat, T, inChat, onOpen, onChanged }: { run: Run; kept: boolean; chat: ChatState; T: Texts; inChat: boolean; onOpen: () => void; onChanged: () => void }) {
+  const current = chat.run?.dir;
+  return (
+    <div className="conv-row">
+      <a
+        role="button"
+        tabIndex={0}
+        className={run.dir !== current ? "conv" : inChat ? "conv on-conv" : "conv open-conv"}
+        aria-current={run.dir === current && inChat ? "page" : undefined}
+        title={run.label}
+        onClick={() => {
+          if (!chat.busy && run.dir !== current) void act("resume", { dir: run.dir });
+          onOpen();
+        }}
+        onKeyDown={(event) => event.key === "Enter" && !chat.busy && (run.dir === current || void act("resume", { dir: run.dir }), onOpen())}
+      >
+        <span className="ellipsis">{run.label}</span>
+        {run.dir === current && (chat.busy ? <span className="spinner" aria-hidden="true" /> : !inChat && <span className="dot sun" aria-hidden="true" />)}
+      </a>
+      {kept && (
+        <Menu title={T.moreOptions} ariaLabel={T.moreOptions} className="ibtn plain more-btn conv-more" popClass="conv-pop" atButton label={<span aria-hidden="true">⋯</span>}>
+          {(close) => (
+            <button
+              type="button"
+              onClick={() => {
+                void act("pin", { dir: run.dir, pinned: !run.pinned }).then(onChanged);
+                close();
+              }}
+            >
+              <Icon name="pin" />
+              <span>{run.pinned ? T.unpin : T.pin}</span>
+            </button>
+          )}
+        </Menu>
+      )}
+    </div>
+  );
+}
+
 /**
- * The recent conversations. The open one is highlighted as the view only while the chat is on
- * screen (`inChat`); in another view it keeps a quiet dot, so one item looks selected (#65).
+ * The search and the bell, over the conversations: pinned ones first, then the recent ones. The
+ * open one is highlighted as the view only while the chat is on screen (`inChat`); in another view
+ * it keeps a quiet dot, so one item looks selected (#65). With words in the search, its results
+ * take the list's place; one that isn't the open conversation waits while miyagi works.
  */
-function Conversations({ chat, T, inChat, onOpen }: { chat: ChatState; T: Texts; inChat: boolean; onOpen: () => void }) {
-  const [runs, setRuns] = useState<{ label: string; dir: string }[] | null>(null);
-  const load = useCallback(async () => setRuns((await act<{ runs: { label: string; dir: string }[] }>("runs")).runs ?? []), []);
+function Conversations({ chat, T, view, go }: { chat: ChatState; T: Texts; view: View; go: (view: View) => void }) {
+  const [runs, setRuns] = useState<Run[] | null>(null);
+  const load = useCallback(async () => setRuns((await act<{ runs: Run[] }>("runs")).runs ?? []), []);
+  const [query, setQuery] = useState("");
+  const [found, setFound] = useState<Found[] | null>(null);
+  const inChat = view === "chat";
+  const onOpen = () => go("chat");
   // Again when the conversation changes (a new one, one resumed, a turn that names it).
   const current = chat.run?.dir;
   useEffect(() => {
@@ -184,29 +305,85 @@ function Conversations({ chat, T, inChat, onOpen }: { chat: ChatState; T: Texts;
   }, [load, current, chat.turns]);
   // The current one, even before it's kept: the way back to it from another view.
   const shown = runs && current && !runs.some((run) => run.dir === current) ? [{ label: chat.run?.title ?? T.thisConversation, dir: current }, ...runs] : runs;
+  // A moment after the last key: the host reads every conversation of the subject each time.
+  const words = query.trim();
+  useEffect(() => {
+    if (!words) return setFound(null);
+    let gone = false;
+    const timer = setTimeout(() => {
+      void act<{ results?: Found[] }>("search", { query: words }).then((answer) => gone || setFound(answer.results ?? []));
+    }, 250);
+    return () => {
+      gone = true;
+      clearTimeout(timer);
+    };
+  }, [words]);
+  const row = (run: Run) => <ConversationRow key={run.dir} run={run} kept={Boolean(runs?.some((one) => one.dir === run.dir))} chat={chat} T={T} inChat={inChat} onOpen={onOpen} onChanged={() => void load()} />;
+  const pinned = shown?.filter((run) => run.pinned) ?? [];
+  const recent = shown?.filter((run) => !run.pinned);
   return (
-    <div className="recents">
-      <h6>{T.recent}</h6>
-      {shown?.length === 0 && <p className="muted pad small">{T.noConversations}</p>}
-      {shown?.slice(0, 12).map((run) => (
-        <a
-          key={run.dir}
-          role="button"
-          tabIndex={0}
-          className={run.dir !== current ? "conv" : inChat ? "conv on-conv" : "conv open-conv"}
-          aria-current={run.dir === current && inChat ? "page" : undefined}
-          title={run.label}
-          onClick={() => {
-            if (!chat.busy && run.dir !== current) void act("resume", { dir: run.dir });
-            onOpen();
-          }}
-          onKeyDown={(event) => event.key === "Enter" && !chat.busy && (run.dir === current || void act("resume", { dir: run.dir }), onOpen())}
-        >
-          <span className="ellipsis">{run.label}</span>
-          {run.dir === current && (chat.busy ? <span className="spinner" aria-hidden="true" /> : !inChat && <span className="dot sun" aria-hidden="true" />)}
-        </a>
-      ))}
-    </div>
+    <>
+      <div className="side-tools">
+        <label className="side-search">
+          <Icon name="search" size={16} />
+          <input type="search" value={query} placeholder={T.searchConversations} aria-label={T.searchConversations} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => event.key === "Escape" && setQuery("")} />
+        </label>
+        <Notices chat={chat} view={view} T={T} go={go} />
+      </div>
+      <div className="nav">
+        {words ? (
+          <div className="results">
+            {found?.length === 0 && <p className="muted pad small">{T.searchEmpty}</p>}
+            {found?.map((result) => (
+              <button
+                key={result.dir}
+                type="button"
+                className="result"
+                {...whileBusy(chat.busy && result.dir !== current)}
+                onClick={() => {
+                  if (result.dir !== current) void act("resume", { dir: result.dir });
+                  setQuery("");
+                  onOpen();
+                }}
+              >
+                <span className="ellipsis">{result.title ?? new Date(result.date).toLocaleDateString(chat.language)}</span>
+                <small>{result.snippet}</small>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="recents">
+            {pinned.length > 0 && (
+              <>
+                <h6>{T.pinned}</h6>
+                {pinned.map(row)}
+              </>
+            )}
+            {(recent?.length !== 0 || pinned.length === 0) && <h6>{T.recent}</h6>}
+            {recent?.length === 0 && pinned.length === 0 && <p className="muted pad small">{T.noConversations}</p>}
+            {recent?.slice(0, 12).map(row)}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
+/**
+ * The sidebar's foot (#84): the task under way and which of how many, taking the teacher to it.
+ * Hidden with no task under way; the guided tour's step (#81) goes here once the tour exists.
+ */
+function Progress({ chat, T, onOpen }: { chat: ChatState; T: Texts; onOpen: () => void }) {
+  const todos = chat.todos;
+  const now = todos?.find((todo) => todo.status === "in_progress") ?? todos?.find((todo) => todo.status === "pending");
+  if (!todos || !now) return null;
+  const count = T.taskOf(todos.indexOf(now) + 1, todos.length);
+  return (
+    <button type="button" className="side-progress" title={now.content} onClick={onOpen}>
+      <span className="sq" aria-hidden="true" />
+      <span className="ellipsis grow">{now.status === "in_progress" ? now.activeForm : now.content}</span>
+      <b>{count}</b>
+    </button>
   );
 }
 
@@ -382,7 +559,8 @@ export function Frame({
                 <span>{T.newConversation}</span>
               </button>
             )}
-            <div className="nav">{chat && <Conversations chat={chat} T={T} inChat={view === "chat"} onOpen={() => go("chat")} />}</div>
+            {chat ? <Conversations key={info.workspace} chat={chat} T={T} view={view} go={go} /> : <div className="nav" />}
+            {chat && <Progress chat={chat} T={T} onOpen={() => go("chat")} />}
             <SideHandle width={width} resize={resize} label={T.resizeSidebar} />
           </aside>
         )}
