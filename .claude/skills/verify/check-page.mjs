@@ -1105,6 +1105,20 @@ try {
   await page.click('.recents a[title$="Sembrada 1"]');
   await page.waitForFunction(() => [...document.querySelectorAll(".msg.user")].some((one) => one.textContent.includes("Sembrada 1")), null, { timeout: 30_000 });
   check("…and it opens from the list", true);
+  // A conversation opened on a day with other activities in the oven (#100): its opening, kept
+  // as it was, isn't today's and is still not something the teacher wrote.
+  keepConversation(new Date().toISOString().replace(/[:.]/g, "-"), new Date(), [["user", "Greet the teacher from what you already know: 1 activity being built that day."], ["assistant", "Hola, sigo con la actividad."], ["user", "Prepara la rúbrica"], ["assistant", "Hecha."]]);
+  await page.reload();
+  await page.waitForSelector('.recents a[title$="Prepara la rúbrica"]', { timeout: 30_000 });
+  await page.click('.recents a[title$="Prepara la rúbrica"]');
+  await page.waitForFunction(() => [...document.querySelectorAll(".msg.agent")].some((one) => one.textContent.includes("Hecha.")), null, { timeout: 30_000 });
+  const bubbles = await page.locator(".msg.user").allInnerTexts();
+  check("a resumed conversation doesn't show its opening as the teacher's", bubbles.length === 1 && bubbles[0].includes("Prepara la rúbrica"), bubbles.join(" | ").slice(0, 100));
+  await page.click(RAIL("today"));
+  await page.waitForSelector(".card.hello");
+  check("…and Today shows the greeting that opening got", (await page.innerText(".card.hello .grow")).includes("Hola, sigo con la actividad"), await page.innerText(".card.hello .grow"));
+  await page.click(".recents .open-conv");
+  await page.waitForSelector(".composer textarea");
   // Both themes, and the screenshots at every width: no horizontal scroll, 44 px targets.
   for (const [theme, nth] of [
     ["light", 1],

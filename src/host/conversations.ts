@@ -19,6 +19,13 @@ const pinnedFile = (workspaceDir: string) => path.join(sessionsDirFor(workspaceD
 const isTeachers = (text: string, opening: string | undefined) => Boolean(text) && !text.startsWith("[Request interrupted") && !(opening && opening.startsWith(text.slice(0, 20)));
 
 /**
+ * Whether a message is the opening miyagi sends itself (#100). Only its first words: it says what
+ * was in the oven that day and whether a classroom was connected, so one kept in a conversation
+ * needn't match today's.
+ */
+export const isOpening = (text: string, opening: string | undefined) => Boolean(opening) && text.trim().startsWith(opening!.trim().slice(0, 40));
+
+/**
  * A conversation's title: the teacher's first words in it, which don't change with every message
  * as the kit's last one does; never the greeting miyagi sends itself to open a conversation.
  */

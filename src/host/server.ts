@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { agentKitVersion, createChatController, getLanguage, readConversation, startClaudeSignIn, type ChatController, type ClaudeSignIn, type Mode } from "@falkenslab/agent-kit";
 import { prepareSession, VERSION } from "../agent.js";
 import { watchStart } from "./startWatch.js";
-import { conversationTitle, isOnlyGreeting, latestRuns, readPinned, searchConversations, setPinned } from "./conversations.js";
+import { conversationTitle, isOnlyGreeting, isOpening, latestRuns, readPinned, searchConversations, setPinned } from "./conversations.js";
 import { t } from "../messages/index.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
@@ -262,8 +262,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const commandDetails = state.commandDetails.filter((command) => names.has(command.name));
     // A resumed conversation brings back what the teacher never wrote: the greeting miyagi sends
     // itself to open it, and the SDK's mark for an interrupted turn.
-    const opening = subject.prepared.chatOpening?.().trim();
-    const transcript = state.transcript.filter((entry) => entry.kind !== "user" || (entry.text.trim() !== opening && !/^\[Request interrupted/.test(entry.text)));
+    const opening = subject.prepared.chatOpening?.();
+    const transcript = state.transcript.filter((entry) => entry.kind !== "user" || (!isOpening(entry.text, opening) && !/^\[Request interrupted/.test(entry.text)));
     return { ...state, transcript, commandDetails, commands: commandDetails.map((command) => command.name), actions, extensions: pageExtensions(state.extensions) };
   }
   const snapshot = () => ({

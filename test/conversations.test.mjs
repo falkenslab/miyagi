@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import os from "node:os";
 import path from "node:path";
 import { after, test } from "node:test";
-import { conversationTitle, isOnlyGreeting, latestRuns, quoteMatch, readPinned, searchConversations, setPinned } from "../dist/host/conversations.js";
+import { conversationTitle, isOnlyGreeting, isOpening, latestRuns, quoteMatch, readPinned, searchConversations, setPinned } from "../dist/host/conversations.js";
 
 const opening = "Saluda al docente y dile en una frase qué";
 const said = (role, text) => ({ role, text });
@@ -31,6 +31,18 @@ test("a conversation with nothing but the greeting is told apart", () => {
   assert.equal(isOnlyGreeting([said("user", opening), said("assistant", "Hola")], undefined), true);
   assert.equal(isOnlyGreeting([said("user", opening), said("assistant", "Hola"), said("assistant", "Sigo")], undefined), false);
   assert.equal(isOnlyGreeting([said("user", "Hola")], "Hola"), false);
+});
+
+test("the opening miyagi sends itself is told by its first words, whatever the day's line in it says", () => {
+  for (const prompt of ["chat-opening-teacher.md", "chat-opening-teacher-standalone.md"]) {
+    const template = readFileSync(new URL(`../prompts/messages/${prompt}`, import.meta.url), "utf8").trim();
+    const said = (line) => template.replace("{{inProgress}}", line);
+    assert.equal(isOpening(said("1 being built."), said("nothing in progress.")), true, prompt);
+  }
+  assert.equal(isOpening("  Greet the teacher from what you already know, that day", "Greet the teacher from what you already know, today"), true);
+  assert.equal(isOpening("Prepara la rúbrica", "Greet the teacher from what you already know"), false);
+  assert.equal(isOpening("Greet", "Greet the teacher from what you already know"), false);
+  assert.equal(isOpening("Greet the teacher from what you already know", undefined), false);
 });
 
 test("the list gives the latest ones and says whether older ones are left, with the pinned and the open one always in", () => {
