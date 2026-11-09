@@ -16,6 +16,7 @@ import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, 
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
 import { deleteOwn, ownCommands, saveDraft, type CommandDraft } from "../ownCommands.js";
 import { topicWords, draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
+import { webAddress, type BrowserRect, type EmbeddedBrowser } from "./browser.js";
 import { systemFolderPicker, type FolderPicker } from "./folderPicker.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
@@ -89,6 +90,8 @@ export interface HostOptions {
   token?: string;
   /** The folder dialog (#79): the desktop app's own; without it, the system's, opened by the host. */
   pickFolder?: FolderPicker;
+  /** The desktop app's web browser (#86): without it, the panel offers none. */
+  browser?: EmbeddedBrowser;
 }
 
 export interface Host {
@@ -122,6 +125,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   let current: OpenSubject | null = null;
   const pickFolder = options.pickFolder ?? systemFolderPicker();
   let picking = false;
+  /** The address the browser must never reach (#86): set once the server listens, before any page can ask. */
+  let ownOrigin = "";
   /**
    * Signing in with a Claude account: Claude Code's own sign-in (`claude auth login`), run by
    * the kit. The page shows its address (the binary opens the browser itself) and a box for the
@@ -259,7 +264,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const room = current?.prepared.workspace?.classroom;
     return room ? { url: room.url, courseId: room.courseId, connected: Boolean(current?.prepared.classroom) } : null;
   };
-  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder) });
+  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder), browser: Boolean(options.browser) });
   function send(event: string, data: unknown): void {
     client?.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
   }
@@ -283,8 +288,56 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     return Buffer.concat(chunks);
   }
 
+  /** The desktop app's browser (#86): the page's actions on its tabs, each address checked here; none of it near the chat. */
+  async function browserAction(action: string, data: Record<string, unknown>): Promise<unknown> {
+    const browser = options.browser;
+    if (!browser) return { error: "no browser" };
+    const id = String(data.id ?? "");
+    switch (action) {
+      case "browser-open": {
+        if (data.url === undefined || data.url === null) return { id: browser.open() };
+        const address = webAddress(String(data.url), ownOrigin);
+        return "url" in address ? { id: browser.open(address.url) } : address;
+      }
+      case "browser-navigate": {
+        const address = webAddress(String(data.url ?? ""), ownOrigin);
+        if ("url" in address) browser.navigate(id, address.url);
+        return address;
+      }
+      case "browser-close":
+        browser.close(id);
+        return {};
+      case "browser-select":
+        browser.select(data.id === null ? null : id);
+        return {};
+      case "browser-back":
+        browser.back(id);
+        return {};
+      case "browser-forward":
+        browser.forward(id);
+        return {};
+      case "browser-reload":
+        browser.reload(id);
+        return {};
+      case "browser-bounds":
+        browser.bounds((data.rect ?? null) as BrowserRect | null);
+        return {};
+      case "browser-capture":
+        return { image: await browser.capture(id) };
+      case "browser-external":
+        browser.external(id);
+        return {};
+      case "browser-zoom":
+        browser.zoom(id, Number(data.delta) || 0);
+        return {};
+      default:
+        return { error: `unknown action ${action}` };
+    }
+  }
+
   /** What the person does, by path: the subjects, signing in, then one to one to the chat controller. */
   async function act(action: string, data: Record<string, unknown>): Promise<unknown> {
+    if (action.startsWith("browser-")) return browserAction(action, data);
     switch (action) {
       // A folder chosen in the system's dialog, for a field that asks for one: one dialog at a time.
       case "pick-folder": {
@@ -607,6 +660,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
           response.writeHead(200, { "content-type": "text/event-stream", "cache-control": "no-store", connection: "keep-alive" });
           send("info", info());
           send("state", snapshot());
+          if (options.browser) send("browser", options.browser.list());
           request.on("close", () => client === response && (client = null));
           return;
         }
@@ -649,6 +703,12 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   await new Promise<void>((resolve) => server.listen(options.port ?? 0, "127.0.0.1", resolve));
   const address = server.address();
   const port = typeof address === "object" && address ? address.port : options.port;
+  ownOrigin = `http://127.0.0.1:${port}`;
+  // The browser's tabs reach the page on their own event, apart from the chat's state (#86).
+  const stopBrowser = options.browser?.subscribe(
+    () => send("browser", options.browser?.list()),
+    () => send("browser-refused", {}),
+  );
 
   // The subject named, or the one opened last; none if there's none to open.
   const first = workspaceDir ?? (await listWorkspaces()).find((ws) => !ws.missing)?.dir;
@@ -659,6 +719,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     url: `http://127.0.0.1:${port}/?token=${token}`,
     async close() {
       clearInterval(heartbeat);
+      stopBrowser?.();
       client?.end();
       current?.chat?.close();
       signIn?.flow.cancel();

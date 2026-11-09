@@ -6,7 +6,8 @@
 // had saved is removed on start and said (ADR-026); the page is served and nothing outside it is. The
 // extensions view (#50): a repository is added only with its name typed, the official one can't
 // be removed, and a classroom address that isn't one connects nothing. The sidebar (#84): the
-// search over the kept conversations, and pinning one, only in its subject and after a restart.
+// search over the kept conversations, and pinning one, only in its subject and after a restart. The
+// desktop app's browser (#86), on a stub: its actions, the addresses it refuses, and no address in the chat's state.
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-host.mjs
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
@@ -44,7 +45,8 @@ const failures = [];
 const check = (what, ok) => ok || failures.push(what);
 
 /** The first events of the stream: `info` and `state`, parsed. */
-async function firstEvents(count) {
+const firstEvents = (count) => firstEventsOf(base, token, count);
+async function firstEventsOf(base, token, count) {
   const response = await fetch(`${base}/api/events?token=${token}`);
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
@@ -214,6 +216,67 @@ check("…so it isn't there", !((await post("marketplaces")).marketplaces ?? [])
 check("…added with it", (await post("add-marketplace", { source: market, typed: "dept" })).name === "dept");
 check("…and forgotten", !(await post("remove-marketplace", { name: "dept" })).error && !((await post("marketplaces")).marketplaces ?? []).length);
 
+// The desktop app's browser (#86): only with the option, on a stub of the native side.
+check("no browser without the desktop app", (await post("browser-open", { url: "https://moodle.org/" })).error === "no browser" && !events[0]?.data?.browser);
+const browserCalls = [];
+const browserTabs = [];
+const browserListeners = [];
+const fakeBrowser = {
+  list: () => browserTabs,
+  subscribe: (onChange, onRefused) => (browserListeners.push({ onChange, onRefused }), () => undefined),
+  open: (address) => {
+    const id = String(browserTabs.length + 1);
+    browserTabs.push({ id, title: "Página", url: address ?? "", loading: false, canBack: false, canForward: false, failed: false });
+    browserCalls.push(["open", address]);
+    return id;
+  },
+  close: (id) => browserCalls.push(["close", id]),
+  select: (id) => browserCalls.push(["select", id]),
+  navigate: (id, address) => browserCalls.push(["navigate", id, address]),
+  back: (id) => browserCalls.push(["back", id]),
+  forward: (id) => browserCalls.push(["forward", id]),
+  reload: (id) => browserCalls.push(["reload", id]),
+  bounds: (rect) => browserCalls.push(["bounds", rect]),
+  capture: async () => "data:image/png;base64,AAAA",
+  external: (id) => browserCalls.push(["external", id]),
+  zoom: (id, delta) => browserCalls.push(["zoom", id, delta]),
+};
+const withBrowser = await startHost(subjectDir, { browser: fakeBrowser });
+const browserUrl = new URL(withBrowser.url);
+const browserBase = browserUrl.origin;
+const browserToken = browserUrl.searchParams.get("token");
+const browserPost = async (action, data = {}) => (await fetch(`${browserBase}/api/${action}?token=${browserToken}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) })).json();
+const browserEvents = await new Promise((resolve) => {
+  void (async () => {
+    const response = await fetch(`${browserBase}/api/events?token=${browserToken}`);
+    const reader = response.body.getReader();
+    let text = "";
+    while (!text.includes("event: browser\n")) text += new TextDecoder().decode((await reader.read()).value);
+    await reader.cancel();
+    resolve(text);
+  })();
+});
+check("info says the desktop app has a browser", /"browser":true/.test(browserEvents));
+const opened = await browserPost("browser-open", { url: "https://moodle.org/es" });
+check("a page opens a tab", opened.id === "1" && browserCalls.at(-1)[1] === "https://moodle.org/es");
+check("a new tab, with no address", (await browserPost("browser-open", {})).id === "2" && browserCalls.at(-1)[1] === undefined);
+check("an address without a scheme is taken as https", (await browserPost("browser-navigate", { id: "1", url: "campus.example.org/moodle" })).url === "https://campus.example.org/moodle" && browserCalls.at(-1)[2] === "https://campus.example.org/moodle");
+check("…and a local one as http, with its port", (await browserPost("browser-navigate", { id: "1", url: "localhost:8080/login" })).url === "http://localhost:8080/login");
+for (const [bad, why] of [["file:///C:/Windows/win.ini", "refused"], ["FILE:/C:/x", "refused"], ["javascript:alert(1)", "invalid"], ["data:text/html,<b>", "invalid"], ["about:blank", "invalid"], ["hola mundo", "invalid"], ["palabra", "invalid"], ["", "invalid"], [`${browserBase}/?token=${browserToken}`, "refused"], [`http://localhost:${browserUrl.port}/`, "refused"], [`http://[::1]:${browserUrl.port}/`, "refused"], [`http://127.1:${browserUrl.port}/`, "refused"], [`http://0.0.0.0:${browserUrl.port}/`, "refused"], [`http://app.localhost:${browserUrl.port}/`, "refused"]]) {
+  const before = browserCalls.length;
+  check(`typed, refused: ${bad}`, (await browserPost("browser-navigate", { id: "1", url: bad })).error === why && browserCalls.length === before);
+  check(`opened, refused: ${bad}`, (await browserPost("browser-open", { url: bad })).error === why && browserCalls.length === before);
+}
+for (const [action, data, call] of [["browser-select", { id: "1" }, ["select", "1"]], ["browser-select", { id: null }, ["select", null]], ["browser-back", { id: "1" }, ["back", "1"]], ["browser-forward", { id: "1" }, ["forward", "1"]], ["browser-reload", { id: "1" }, ["reload", "1"]], ["browser-bounds", { rect: { x: 1, y: 2, width: 3, height: 4 } }, ["bounds", { x: 1, y: 2, width: 3, height: 4 }]], ["browser-bounds", { rect: null }, ["bounds", null]], ["browser-external", { id: "1" }, ["external", "1"]], ["browser-zoom", { id: "1", delta: -1 }, ["zoom", "1", -1]], ["browser-close", { id: "2" }, ["close", "2"]]]) {
+  await browserPost(action, data);
+  check(`${action} reaches the native side`, JSON.stringify(browserCalls.at(-1)) === JSON.stringify(call));
+}
+check("a still comes as an image", (await browserPost("browser-capture", { id: "1" })).image.startsWith("data:image/"));
+check("no other browser action exists", (await browserPost("browser-devtools", { id: "1" })).error?.startsWith("unknown action"));
+const browserState = await firstEventsOf(browserBase, browserToken, 3);
+check("the tabs reach the page on their own event, the chat's state knows no address", browserState[2]?.event === "browser" && browserState[2]?.data[0]?.url === "https://moodle.org/es" && !JSON.stringify(browserState[1]).includes("moodle.org"));
+await withBrowser.close();
+
 // Nothing secret reaches the page: not the URL's token, not a key.
 const stream = JSON.stringify([...events, ...afterCreate, listed]);
 check("no token nor key in what the page receives", !stream.includes(token) && !/sk-ant-/.test(stream));
@@ -223,4 +286,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL ${failure}`);
   process.exit(1);
 }
-console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser, the folder dialog, the conversations' search and pins");
+console.log("ok   host: token, events, subjects (moved, located, forgotten), sign-in refusal, page served, drafts/ only, repositories and classroom refusals, only an activity opened in the browser, the folder dialog, the conversations' search and pins, the desktop browser's actions and refusals");

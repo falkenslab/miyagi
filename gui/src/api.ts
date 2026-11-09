@@ -1,5 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
-import type { HostState, Info } from "./types";
+import type { BrowserTab, HostState, Info } from "./types";
 
 // The host's API (src/host/server.ts): the token comes in the page's URL and goes with every
 // request; the state arrives as server-sent events, the person's actions go back as POSTs.
@@ -72,15 +72,19 @@ async function send(file: File): Promise<{ path?: string; duplicateOf?: string; 
 export type Connection = "connecting" | "open" | "replaced" | "lost";
 
 /** The host's events: what miyagi is (info) and the chat's state, kept up to date. */
-export function useMiyagi(): { info: Info | null; state: HostState | null; connection: Connection } {
+export function useMiyagi(): { info: Info | null; state: HostState | null; connection: Connection; browser: BrowserTab[]; refused: number } {
   const [info, setInfo] = useState<Info | null>(null);
   const [state, setState] = useState<HostState | null>(null);
   const [connection, setConnection] = useState<Connection>("connecting");
+  const [browser, setBrowser] = useState<BrowserTab[]>([]);
+  const [refused, setRefused] = useState(0);
   useEffect(() => {
     const events = new EventSource(`api/events?token=${encodeURIComponent(token)}`);
     events.addEventListener("open", () => setConnection("open"));
     events.addEventListener("info", (event) => setInfo(JSON.parse((event as MessageEvent).data) as Info));
     events.addEventListener("state", (event) => setState(JSON.parse((event as MessageEvent).data) as HostState));
+    events.addEventListener("browser", (event) => setBrowser(JSON.parse((event as MessageEvent).data) as BrowserTab[]));
+    events.addEventListener("browser-refused", () => setRefused((now) => now + 1));
     // Another tab or window took over: this one stops, and says so.
     events.addEventListener("replaced", () => {
       setConnection("replaced");
@@ -89,7 +93,7 @@ export function useMiyagi(): { info: Info | null; state: HostState | null; conne
     events.addEventListener("error", () => setConnection((now) => (now === "replaced" ? now : "lost")));
     return () => events.close();
   }, []);
-  return { info, state, connection };
+  return { info, state, connection, browser, refused };
 }
 
 /** A catalog entry's logo, served by the host from the repository's copy. */

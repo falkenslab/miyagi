@@ -11,6 +11,7 @@ import { SignIn } from "./components/SignIn";
 import { setCanPick } from "./components/PathField";
 import { setBusyReason, StatusBar } from "./components/StatusBar";
 import { NewSubjectForm, OpenExisting, StartScreen } from "./components/Subjects";
+import { setOpenLink } from "./markdown";
 import { Transcript } from "./components/Transcript";
 import { Waiting } from "./components/Waiting";
 import { texts } from "./i18n";
@@ -31,7 +32,7 @@ function storedTheme(): Theme {
 }
 
 export function App() {
-  const { info, state, connection } = useMiyagi();
+  const { info, state, connection, browser, refused } = useMiyagi();
   const [theme, setThemeState] = useState<Theme>(storedTheme);
   const [toast, setToast] = useState("");
   const [newSubject, setNewSubject] = useState(false);
@@ -42,7 +43,7 @@ export function App() {
   const [extTab, setExtTab] = useState<ExtTab>("installed");
   const [sideOpen, setSideOpen] = useState(false);
   const [sideCollapsed, setSideCollapsed] = useSideCollapsed();
-  const side = useSidePanel(state?.chat?.run?.dir);
+  const side = useSidePanel(state?.chat?.run?.dir, browser);
   const [linking, setLinking] = useState(false);
   const closeLink = useCallback(() => setLinking(false), []);
   const chat = state?.chat ?? null;
@@ -53,6 +54,9 @@ export function App() {
   const C = courseTexts(chat?.language ?? info?.language);
   setBusyReason(T.status.why);
   setCanPick(Boolean(info?.pickFolder));
+  // In the desktop app a link in the chat opens a tab of its browser (#86); refused, it says so.
+  const canBrowse = Boolean(info?.browser);
+  setOpenLink(canBrowse ? (url) => void side.openWeb(url).then((error) => error && setToast(T.webRefused)) : null);
   /** A line to the chat from a view's button: sent as the teacher would type it, and the conversation shown. */
   const ask = (line: string) => {
     if (!chat || chat.busy) return;
@@ -117,6 +121,10 @@ export function App() {
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [chat]);
+  // A page tried to go where the browser doesn't: the disk, or the host's own address.
+  useEffect(() => {
+    if (refused) setToast(T.webRefused);
+  }, [refused]);
   useEffect(() => {
     if (!toast) return;
     const timer = setTimeout(() => setToast(""), 3200);
@@ -151,7 +159,7 @@ export function App() {
     <div className={`app${withPanel ? " with-panel" : ""}${withPanel && side.expanded ? " panel-full" : ""}${asking ? " asking" : ""}`} style={{ "--panel-width": `${side.width}px` } as CSSProperties}>
       <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
-        <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} panelTabs={chat ? side.tabs.list.length : 0} panelShown={withPanel} onPanel={side.toggle} />
+        <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} panelTabs={chat ? side.tabs.list.length : 0} canBrowse={Boolean(chat && canBrowse)} panelShown={withPanel} onPanel={side.tabs.list.length ? side.toggle : () => void side.openWeb()} />
         <ViewTabs view={shown} setView={setView} C={C} />
         {status && (
           <div className="banner" role="status">
@@ -212,7 +220,7 @@ export function App() {
         </main>
         <StatusBar chat={chat} T={T} inChat={shown === "chat"} onOpenChat={() => setView("chat")} />
       </section>
-      {withPanel && chat && <SidePanel panel={side} chat={chat} T={T} C={C} />}
+      {withPanel && chat && <SidePanel panel={side} chat={chat} browser={browser} canBrowse={canBrowse} classroom={info?.classroom?.url} T={T} C={C} />}
       {linking && info && (
         <LinkWizard
           info={info}

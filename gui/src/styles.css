@@ -598,3 +598,22 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 .own-instructions { resize: vertical; font: inherit; }
 .own-form .acts { flex-wrap: wrap; }
 .own-form .dangerbox ul { margin: 6px 0 0; padding-left: 18px; }
+
+/* The side panel's web browser (#86): only in the desktop app. Its page is a native view over .web-page. */
+.spanel { container-type: inline-size; }
+.spanel-tab > button[role="tab"] .web-fav { display: inline-grid; place-items: center; vertical-align: -3px; width: 16px; height: 16px; margin-right: 6px; }
+.spanel-tab > button[role="tab"] img.web-fav { object-fit: contain; }
+.web-bar { flex: 0 0 auto; border-bottom: 1px solid var(--line); background: var(--bg-2); padding: 0 8px; }
+.web-row { display: flex; align-items: center; gap: 2px; min-height: 52px; }
+.web-row > .ibtn, .web-row > .menu { flex: 0 0 auto; }
+.web-row .ibtn:disabled { opacity: .4; cursor: default; }
+.web-address { flex: 1; min-width: 0; display: flex; }
+.web-address .field { flex: 1; width: 100%; min-width: 0; margin: 0; border-radius: 999px; text-align: center; padding: 6px 14px; }
+.web-address .field:focus { text-align: left; }
+.web-refusal { margin: 0 0 8px; color: var(--sun); font-size: 13px; text-align: center; }
+.spanel-page.web { padding: 0; overflow: hidden; }
+.web-page { position: relative; flex: 1; min-height: 0; background: var(--panel); }
+.web-still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
+.web-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; text-align: center; color: var(--dim); }
+.web-empty p { margin: 0; max-width: 40ch; }
+@container (max-width: 439px) { .web-wide { display: none; } }

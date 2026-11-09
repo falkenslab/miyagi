@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import { Fragment, type MouseEvent, type ReactNode } from "react";
 
 // A small markdown renderer for the agent's text: paragraphs, headings, lists, quotes, code
 // and tables, with bold, italics, inline code and links. It builds React elements and never
@@ -6,6 +6,17 @@ import { Fragment, type ReactNode } from "react";
 // to other pages (`[Bowline](concept/bowline)`) work only where the view passes `onPage`; with
 // its `has`, so do the subject's items named in the chat (#66), as links or as inline code
 // (`sources/plan.pdf`): the ones `has` knows open, the rest stay text.
+
+/** Where a link goes instead of a new window: the desktop app's browser (#86), set by the page; Ctrl+click still leaves. */
+let openLink: ((url: string) => void) | null = null;
+export const setOpenLink = (open: typeof openLink) => {
+  openLink = open;
+};
+const followLink = (event: MouseEvent, url: string) => {
+  if (!openLink || event.ctrlKey || event.metaKey || event.shiftKey || event.button) return;
+  event.preventDefault();
+  openLink(url);
+};
 
 type OnPage = (((target: string) => void) & { has?: (target: string) => boolean }) | undefined;
 
@@ -52,13 +63,13 @@ function inline(text: string, key: string, onPage?: OnPage): ReactNode[] {
         continue;
       }
       out.push(
-        <a key={k} href={href} target="_blank" rel="noopener noreferrer">
+        <a key={k} href={href} target="_blank" rel="noopener noreferrer" onClick={(event) => followLink(event, href)}>
           {label}
         </a>,
       );
     } else if (url)
       out.push(
-        <a key={k} href={url} target="_blank" rel="noopener noreferrer">
+        <a key={k} href={url} target="_blank" rel="noopener noreferrer" onClick={(event) => followLink(event, url)}>
           {url}
         </a>,
       );

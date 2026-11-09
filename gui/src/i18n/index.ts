@@ -53,6 +53,25 @@ export interface Texts {
   showPanel: string;
   backToChat: string;
   closeTab: (title: string) => string;
+  webNewTab: string;
+  webNewPage: string;
+  webBack: string;
+  webForward: string;
+  webReload: string;
+  webOpenSystem: string;
+  webCopyLink: string;
+  webMore: string;
+  webAddress: string;
+  webPlaceholder: string;
+  webZoomIn: string;
+  webZoomOut: string;
+  webZoomReset: string;
+  webCloseOthers: string;
+  webInvalid: string;
+  webRefused: string;
+  webFailed: string;
+  webEmpty: string;
+  webClassroom: string;
   activity: string;
   noActions: string;
   moreOptions: string;
@@ -198,6 +217,25 @@ const es: Texts = {
   showPanel: "Mostrar el panel",
   backToChat: "Volver a la conversación",
   closeTab: (title) => `Cerrar ${title}`,
+  webNewTab: "Nueva pestaña",
+  webNewPage: "Pestaña nueva",
+  webBack: "Atrás",
+  webForward: "Adelante",
+  webReload: "Recargar",
+  webOpenSystem: "Abrir en el navegador del sistema",
+  webCopyLink: "Copiar enlace",
+  webMore: "Más opciones de la página",
+  webAddress: "Dirección",
+  webPlaceholder: "Escribe una dirección web",
+  webZoomIn: "Ampliar",
+  webZoomOut: "Reducir",
+  webZoomReset: "Tamaño normal",
+  webCloseOthers: "Cerrar las demás pestañas",
+  webInvalid: "Eso no es una página web. Escribe una dirección http o https.",
+  webRefused: "Esa dirección no se puede abrir aquí.",
+  webFailed: "Esta página no se ha podido cargar.",
+  webEmpty: "Escribe una dirección arriba para abrir una página: inicia sesión una vez y seguirá iniciada la próxima vez. Es tu sesión; miyagi no la ve.",
+  webClassroom: "Abrir mi aula de Moodle",
   activity: "Actividad",
   noActions: "Aún no hay acciones en este turno.",
   moreOptions: "Más opciones",
@@ -357,6 +395,25 @@ const en: Texts = {
   showPanel: "Show the panel",
   backToChat: "Back to the conversation",
   closeTab: (title) => `Close ${title}`,
+  webNewTab: "New tab",
+  webNewPage: "New tab",
+  webBack: "Back",
+  webForward: "Forward",
+  webReload: "Reload",
+  webOpenSystem: "Open in the system browser",
+  webCopyLink: "Copy link",
+  webMore: "More page options",
+  webAddress: "Address",
+  webPlaceholder: "Type a web address",
+  webZoomIn: "Zoom in",
+  webZoomOut: "Zoom out",
+  webZoomReset: "Normal size",
+  webCloseOthers: "Close the other tabs",
+  webInvalid: "That isn't a web page. Type an http or https address.",
+  webRefused: "That address can't be opened here.",
+  webFailed: "This page couldn't be loaded.",
+  webEmpty: "Type an address above to open a page: sign in once and you'll stay signed in next time. It's your session; miyagi doesn't see it.",
+  webClassroom: "Open my Moodle classroom",
   activity: "Activity",
   noActions: "No actions in this turn yet.",
   moreOptions: "More options",
@@ -516,6 +573,25 @@ const fr: Texts = {
   showPanel: "Afficher le panneau",
   backToChat: "Revenir à la conversation",
   closeTab: (title) => `Fermer ${title}`,
+  webNewTab: "Nouvel onglet",
+  webNewPage: "Nouvel onglet",
+  webBack: "Précédent",
+  webForward: "Suivant",
+  webReload: "Actualiser",
+  webOpenSystem: "Ouvrir dans le navigateur du système",
+  webCopyLink: "Copier le lien",
+  webMore: "Plus d'options de la page",
+  webAddress: "Adresse",
+  webPlaceholder: "Saisissez une adresse web",
+  webZoomIn: "Agrandir",
+  webZoomOut: "Réduire",
+  webZoomReset: "Taille normale",
+  webCloseOthers: "Fermer les autres onglets",
+  webInvalid: "Ce n'est pas une page web. Saisissez une adresse http ou https.",
+  webRefused: "Cette adresse ne peut pas être ouverte ici.",
+  webFailed: "Cette page n'a pas pu être chargée.",
+  webEmpty: "Saisissez une adresse ci-dessus pour ouvrir une page : connectez-vous une fois et vous resterez connecté la prochaine fois. C'est votre session ; miyagi ne la voit pas.",
+  webClassroom: "Ouvrir ma classe Moodle",
   activity: "Activité",
   noActions: "Aucune action pour l'instant dans ce tour.",
   moreOptions: "Plus d'options",
@@ -675,6 +751,25 @@ const de: Texts = {
   showPanel: "Bereich anzeigen",
   backToChat: "Zurück zum Gespräch",
   closeTab: (title) => `Schließen ${title}`,
+  webNewTab: "Neuer Tab",
+  webNewPage: "Neuer Tab",
+  webBack: "Zurück",
+  webForward: "Vorwärts",
+  webReload: "Neu laden",
+  webOpenSystem: "Im Systembrowser öffnen",
+  webCopyLink: "Link kopieren",
+  webMore: "Weitere Seitenoptionen",
+  webAddress: "Adresse",
+  webPlaceholder: "Webadresse eingeben",
+  webZoomIn: "Vergrößern",
+  webZoomOut: "Verkleinern",
+  webZoomReset: "Normale Größe",
+  webCloseOthers: "Andere Tabs schließen",
+  webInvalid: "Das ist keine Webseite. Gib eine http- oder https-Adresse ein.",
+  webRefused: "Diese Adresse kann hier nicht geöffnet werden.",
+  webFailed: "Diese Seite konnte nicht geladen werden.",
+  webEmpty: "Gib oben eine Adresse ein, um eine Seite zu öffnen: Einmal angemeldet, bleibst du es auch beim nächsten Mal. Es ist deine Sitzung; miyagi sieht sie nicht.",
+  webClassroom: "Mein Moodle-Kursraum öffnen",
   activity: "Aktivität",
   noActions: "Noch keine Aktionen in diesem Schritt.",
   moreOptions: "Weitere Optionen",

@@ -217,6 +217,21 @@ export interface Info {
   classroom: { url: string; courseId: string; connected: boolean } | null;
   /** Whether the host can open the system's folder dialog (#79). */
   pickFolder?: boolean;
+  /** Whether the desktop app offers its web browser (#86). */
+  browser?: boolean;
+}
+
+/** A tab of the desktop app's browser (#86): the native side's, kept nowhere. */
+export interface BrowserTab {
+  id: string;
+  title: string;
+  url: string;
+  /** A `data:` image. */
+  favicon?: string;
+  loading: boolean;
+  canBack: boolean;
+  canForward: boolean;
+  failed: boolean;
 }
 
 export interface HostState {

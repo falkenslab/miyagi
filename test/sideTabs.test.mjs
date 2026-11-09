@@ -7,7 +7,7 @@ import ts from "../gui/node_modules/typescript/lib/typescript.js";
 
 const source = readFileSync(new URL("../gui/src/sideTabs.ts", import.meta.url), "utf8");
 const { outputText } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 } });
-const { ACTIVITY_TAB, activityTab, addTab, canPreview, closeTab, fileTab, namedFile, NO_TABS, selectTab, shownTurn, turnOfEntry, turnsOf } = await import(`data:text/javascript,${encodeURIComponent(outputText)}`);
+const { ACTIVITY_TAB, activityTab, addTab, canPreview, closeTab, fileTab, namedFile, NO_TABS, selectTab, shownTurn, syncWebTabs, turnOfEntry, turnsOf, webTab } = await import(`data:text/javascript,${encodeURIComponent(outputText)}`);
 
 const pdf = fileTab("drafts/guion.pdf");
 const html = fileTab("drafts/web/pagina.html");
@@ -36,6 +36,22 @@ test("closing a tab leaves the next one on screen, and the last one leaves none"
   const none = closeTab(end, pdf.id);
   assert.deepEqual(none, { list: [], active: null });
   assert.equal(closeTab(none, "nada"), none, "an unknown tab changes nothing");
+});
+
+test("the browser's native tabs: a new one comes forward, a closed one goes, the files stay", () => {
+  const start = addTab(NO_TABS, pdf);
+  const one = syncWebTabs(start, ["1"]);
+  assert.deepEqual(one.list.map((tab) => tab.id), [pdf.id, webTab("1").id]);
+  assert.equal(one.active, webTab("1").id, "the new one on screen");
+  const two = syncWebTabs(selectTab(one, pdf.id), ["1", "2"]);
+  assert.equal(two.active, webTab("2").id);
+  const unchanged = syncWebTabs(two, ["1", "2"]);
+  assert.equal(unchanged.list.length, 3, "the same tabs again add nothing");
+  assert.equal(unchanged.active, webTab("2").id);
+  const closed = syncWebTabs(two, ["1"]);
+  assert.deepEqual(closed.list.map((tab) => tab.id), [pdf.id, webTab("1").id]);
+  assert.equal(closed.active, webTab("1").id, "the one before takes its place");
+  assert.deepEqual(syncWebTabs(closed, []).list.map((tab) => tab.id), [pdf.id], "the file stays");
 });
 
 test("only what the host serves and the page draws opens in the panel", () => {

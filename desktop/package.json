@@ -29,6 +29,7 @@
     },
     "files": [
       "main.mjs",
+      "browser.mjs",
       "package.json",
       "miyagi/**/*",
       "node_modules/**/*"

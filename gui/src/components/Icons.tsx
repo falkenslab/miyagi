@@ -4,6 +4,7 @@ const paths = {
   menu: "M4 7h16M4 12h16M4 17h16",
   edit: "M12 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6 M17.5 3.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z",
   plus: "M12 5v14M5 12h14",
+  minus: "M5 12h14",
   down: "M6 9l6 6 6-6",
   up: "M6 15l6-6 6 6",
   right: "M9 6l6 6-6 6",
@@ -29,6 +30,9 @@ const paths = {
   search: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14z M20 20l-4-4",
   bell: "M6 16v-5a6 6 0 1 1 12 0v5l2 2H4z M10 21a2 2 0 0 0 4 0",
   pin: "M9 4h6l-1 6 3 4H7l3-4z M12 14v7",
+  reload: "M20 11a8 8 0 1 0-2.3 6.3 M20 5v6h-6",
+  external: "M14 4h6v6 M20 4l-9 9 M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5",
+  globe: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M3 12h18 M12 3c3 3 3 15 0 18 M12 3c-3 3-3 15 0 18",
 } as const;
 
 export type IconName = keyof typeof paths;

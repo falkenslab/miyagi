@@ -1,4 +1,4 @@
-// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70) in Chrome against the
+// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85 and the turn's activity in it #70, the desktop browser's bar and panel on a stub #86) in Chrome against the
 // real host and a real Claude session: a subject created from the page, the rail's places and their
 // tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
@@ -71,7 +71,7 @@ const CHECKPOINT = ".dock .checkpoint";
 /** The header's and the composer's buttons smaller than a finger (44 px), by their label. */
 const small = () =>
   page.evaluate(() =>
-    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress, .spanel-bar button, .spanel-tab button, .beside, .tool-head, .tool .sub-activity, .activity-head button"))
+    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress, .spanel-bar button, .spanel-tab button, .web-row button, .beside, .tool-head, .tool .sub-activity, .activity-head button"))
       .filter((el) => el.offsetParent)
       .map((el) => [el.getAttribute("aria-label") || el.textContent.trim(), el.getBoundingClientRect()])
       .filter(([, box]) => box.width < 44 || box.height < 44)
@@ -227,6 +227,151 @@ const servedFrame = () => page.evaluate(async () => {
   const answer = await fetch(frame.getAttribute("src"));
   return { sandbox: frame.getAttribute("sandbox"), status: answer.status, type: answer.headers.get("content-type"), csp: answer.headers.get("content-security-policy") ?? "" };
 });
+/**
+ * The desktop browser's bar and panel (#86) on a stub of the native side, against a host that has one:
+ * the panel offers it, an address is refused or goes, a link in the chat opens a tab (Ctrl+click
+ * leaves), and the view follows the panel and gives way to a still under a menu.
+ */
+const checkBrowser = async (subject) => {
+  const calls = [];
+  const webTabs = [];
+  const listeners = [];
+  const notify = () => listeners.forEach(({ onChange }) => onChange());
+  const fake = {
+    list: () => webTabs,
+    subscribe: (onChange, onRefused) => (listeners.push({ onChange, onRefused }), () => undefined),
+    open: (address) => {
+      const id = String(webTabs.length + 1);
+      webTabs.push({ id, title: address ? "Campus" : "", url: address ?? "", loading: false, canBack: false, canForward: false, failed: false });
+      calls.push(["open", address]);
+      notify();
+      return id;
+    },
+    close: (id) => {
+      webTabs.splice(webTabs.findIndex((tab) => tab.id === id), 1);
+      calls.push(["close", id]);
+      notify();
+    },
+    select: (id) => calls.push(["select", id]),
+    navigate: (id, address) => {
+      Object.assign(webTabs.find((tab) => tab.id === id), { url: address, title: "Página" });
+      calls.push(["navigate", id, address]);
+      notify();
+    },
+    back: (id) => calls.push(["back", id]),
+    forward: (id) => calls.push(["forward", id]),
+    reload: (id) => calls.push(["reload", id]),
+    bounds: (rect) => calls.push(["bounds", rect]),
+    capture: async () => {
+      calls.push(["capture"]);
+      return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+    },
+    external: (id) => calls.push(["external", id]),
+    zoom: (id, delta) => calls.push(["zoom", id, delta]),
+  };
+  await host.close();
+  const withBrowser = await startHost(subject, { chooseLanguage: true, browser: fake });
+  const own = new URL(withBrowser.url);
+  const lastBounds = () => calls.filter(([what]) => what === "bounds").at(-1)?.[1];
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(withBrowser.url);
+  await page.waitForSelector(".top .panel-btn", { timeout: 240_000 });
+  await page.waitForSelector(".recents a.open-conv", { timeout: 240_000 });
+  await page.click(".recents a.open-conv");
+  await page.waitForSelector(".composer textarea");
+  await idle();
+  check("the desktop app's header offers the browser, with no tab open", (await page.locator(".spanel").count()) === 0);
+  await page.click(".top .panel-btn");
+  await page.waitForSelector(".web-row");
+  await page.waitForFunction(() => document.activeElement === document.querySelector(".web-address input"), null, { timeout: 5000 }).catch(() => {});
+  check("a new tab, the address waiting and the page's place empty", (await page.locator(".spanel-tab").count()) === 1 && (await page.evaluate(() => document.activeElement === document.querySelector(".web-address input"))) && (await page.locator(".web-empty").count()) === 1);
+  await shot("browser-new-1440");
+  const typed = async (text) => {
+    await page.fill(".web-address input", text);
+    await page.keyboard.press("Enter");
+    await page.waitForTimeout(250);
+  };
+  for (const [text, message] of [["una palabra", "isn't"], ["file:///C:/Windows/win.ini", "refused"], [`${own.origin}/`, "refused"], ["javascript:alert(1)", "isn't"]]) {
+    await typed(text);
+    const said = (await page.locator(".web-refusal").count()) === 1;
+    check(`refused with a message: ${text}`, said && !calls.some(([what, , address]) => what === "navigate" && address?.includes(text)), message);
+  }
+  await typed("campus.example.org/moodle");
+  await page.waitForFunction(() => document.querySelector(".web-address input")?.value.includes("campus.example.org"), null, { timeout: 5000 }).catch(() => {});
+  check("a page goes, the refusal gone and its address shown", calls.some(([what, , address]) => what === "navigate" && address === "https://campus.example.org/moodle") && (await page.locator(".web-refusal").count()) === 0 && (await page.inputValue(".web-address input")).includes("campus.example.org"));
+  check("back and forward start disabled", (await page.locator(".web-back:disabled").count()) === 1 && (await page.locator(".web-forward:disabled").count()) === 1);
+  await page.waitForFunction(() => document.querySelector(".web-page")?.getBoundingClientRect().width > 0);
+  await page.waitForFunction(() => !document.querySelector(".web-still"), null, { timeout: 5000 });
+  await page.waitForTimeout(400);
+  const placed = await page.evaluate(() => {
+    const box = document.querySelector(".web-page").getBoundingClientRect();
+    return { x: Math.round(box.left), y: Math.round(box.top), width: Math.round(box.width), height: Math.round(box.height) };
+  });
+  check("the view is placed over the panel", JSON.stringify(lastBounds()) === JSON.stringify(placed), JSON.stringify([lastBounds(), placed]));
+  await dragPanel(-180);
+  await page.waitForTimeout(300);
+  check("…and follows its divider", lastBounds()?.width === placed.width + 180, JSON.stringify(lastBounds()));
+  await page.dblclick(".spanel .side-handle");
+  await page.waitForTimeout(300);
+  await page.click(".spanel-expand");
+  await page.waitForTimeout(300);
+  check("…expanding it", lastBounds()?.width > placed.width + 300, JSON.stringify(lastBounds()));
+  await page.click(".spanel-expand");
+  await page.waitForTimeout(300);
+  await page.setViewportSize({ width: 1000, height: 800 });
+  await page.waitForTimeout(300);
+  check("…and the window's size", lastBounds() === null || lastBounds()?.x >= 0, JSON.stringify(lastBounds()));
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.waitForTimeout(400);
+  // The ⋯ opens a menu over the view: it gives way to a still, and comes back when the menu closes.
+  await page.click(".web-more");
+  await page.waitForSelector(".web-still", { timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(200);
+  check("the ⋯ doesn't fall under the view: a still in its place", (await page.locator(".web-still").count()) === 1 && calls.some(([what]) => what === "capture") && lastBounds() === null, JSON.stringify(lastBounds()));
+  await shot("browser-menu-1440");
+  await page.keyboard.press("Escape");
+  await page.waitForFunction(() => !document.querySelector(".web-still"), null, { timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(200);
+  check("…and the view comes back", (await page.locator(".web-still").count()) === 0 && lastBounds() !== null);
+  await page.click(".web-more");
+  await page.click(".pop button >> nth=2");
+  await page.waitForTimeout(200);
+  check("the ⋯ acts on the tab", calls.some(([what, , delta]) => what === "zoom" && delta === 1));
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(200);
+  webTabs[0].canBack = true;
+  notify();
+  await page.waitForSelector(".web-back:not(:disabled)", { timeout: 5000 });
+  await page.click(".web-back");
+  await page.click(".web-reload");
+  await page.click(".web-external");
+  await page.waitForTimeout(200);
+  check("back, reload and the system's browser reach the tab", ["back", "reload", "external"].every((name) => calls.some(([what, id]) => what === name && id === webTabs[0].id)));
+  const narrow = await page.evaluate(() => getComputedStyle(document.querySelector(".web-external")).display);
+  check("at the panel's width the row keeps the system browser's button", narrow !== "none", narrow);
+  await checkPanelSizes("browser");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // A link in the chat opens a tab; Ctrl+click leaves it to the browser, as before.
+  await page.click(".spanel-close").catch(() => {});
+  await send("Sin usar herramientas, responde solo con este enlace en una línea: https://example.org/pagina");
+  await idle();
+  const opensBefore = calls.filter(([what]) => what === "open").length;
+  const link = page.locator('.msg.agent a[href="https://example.org/pagina"]').last();
+  await link.waitFor({ timeout: 15_000 });
+  await link.click();
+  await page.waitForFunction(() => document.querySelectorAll(".spanel-tab").length >= 2, null, { timeout: 5000 }).catch(() => {});
+  check("a link in the chat opens a tab", calls.some(([what, address]) => what === "open" && address === "https://example.org/pagina") && (await page.locator(".spanel-tab").count()) >= 2);
+  const opensAfter = calls.filter(([what]) => what === "open").length;
+  const [popup] = await Promise.all([page.context().waitForEvent("page"), link.click({ modifiers: ["Control"] })]);
+  await popup.close();
+  check("Ctrl+click doesn't open a tab here", calls.filter(([what]) => what === "open").length === opensAfter && opensAfter === opensBefore + 1);
+  check("the chat's state knows no address of the browser", !(await page.evaluate(() => JSON.stringify(window.__lastState ?? ""))).includes("campus.example.org"));
+  await page.click(".spanel-tab .spanel-x >> nth=0");
+  await page.waitForFunction(() => document.querySelectorAll(".spanel-tab").length === 1, null, { timeout: 5000 }).catch(() => {});
+  check("closing a tab reaches the native side", calls.some(([what]) => what === "close") && (await page.locator(".spanel-tab").count()) === 1);
+  await withBrowser.close();
+};
+
 /** Drags the panel's divider by `by` pixels (to the left widens it). */
 const dragPanel = async (by) => {
   const box = await page.locator(".spanel .side-handle").boundingBox();
@@ -336,6 +481,7 @@ const checkSidePanel = async (subject) => {
   await page.waitForSelector(".spanel", { state: "detached" });
   await page.click(".top .panel-btn");
   check("the header brings the panel back", (await page.locator(".spanel").count()) === 1 && (await tabs()) === 1);
+  check("in the browser, the panel offers no browser", (await page.locator(".spanel-new, .web-row").count()) === 0);
   // Expanded it takes the conversation's column; an approval brings the conversation back at once.
   await mode("interactive");
   await page.click(".spanel-expand");
@@ -708,14 +854,15 @@ try {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.click(".rail-foot .theme-btn");
   await page.click(".pop button >> nth=0");
+  await checkBrowser(subject);
 } catch (error) {
   failures.push(String(error.message ?? error).split("\n")[0]);
   await shot("failure").catch(() => {});
 }
 await browser.close();
-await host.close();
+await host.close().catch(() => {});
 if (failures.length) {
   for (const failure of failures) console.log(`FAIL page: ${failure}`);
   process.exit(1);
 }
-console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, 360/390/768/1024/1440 (screenshots in ${shots})`);
+console.log(`ok   page: subject, greeting, suggestions, ＋ and mode sheets, / menu, approval in the dock approved and refused, Copy, links to the items named in the chat, actions on a topic and on selected text, the catalog, ↓, modes, themes, the desktop browser's bar on a stub, 360/390/768/1024/1440 (screenshots in ${shots})`);

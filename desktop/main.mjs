@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { app, BrowserWindow, dialog, Menu, shell } from "electron";
+import { app, BrowserWindow, desktopCapturer, dialog, Menu, shell } from "electron";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 // For automated checks only: a home of their own, so ~/.miyagi (the teacher's subjects and key)
@@ -30,7 +30,11 @@ delete process.env.ELECTRON_RUN_AS_NODE;
 
 let window = null;
 let host = null;
+let browser = null;
 let closedBounds = null;
+
+// For automated checks only: what would leave for the system's browser is said, not done.
+const openExternal = process.env.MIYAGI_DESKTOP_SCRIPT ? async (url) => console.log(`external: ${url}`) : shell.openExternal;
 
 function readConfig() {
   try {
@@ -58,7 +62,10 @@ async function start() {
     const { canceled, filePaths } = await (window ? dialog.showOpenDialog(window, options) : dialog.showOpenDialog(options));
     return canceled ? undefined : filePaths[0];
   };
-  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined, { chooseLanguage: true, pickFolder });
+  // The side panel's web browser (#86), native; the host knows its tabs as it knows the dialog.
+  const { createBrowser } = await import("./browser.mjs");
+  browser = createBrowser({ getWindow: () => window, ownOrigin: () => new URL(host.url).origin, openExternal });
+  host = await startHost(process.env.MIYAGI_DESKTOP_WORKSPACE || undefined, { chooseLanguage: true, pickFolder, browser });
   // For automated checks only: where the page is.
   if (process.env.MIYAGI_DESKTOP_URL_FILE) writeFileSync(process.env.MIYAGI_DESKTOP_URL_FILE, host.url);
 
@@ -78,27 +85,43 @@ async function start() {
   window.once("ready-to-show", () => window.show());
   // Links open in the person's browser; the window never leaves miyagi's page.
   window.webContents.setWindowOpenHandler(({ url }) => {
-    if (/^https?:\/\//.test(url)) void shell.openExternal(url);
+    if (/^https?:\/\//.test(url)) void openExternal(url);
     return { action: "deny" };
   });
   window.webContents.on("will-navigate", (event, url) => {
     if (!url.startsWith(new URL(host.url).origin)) {
       event.preventDefault();
-      if (/^https?:\/\//.test(url)) void shell.openExternal(url);
+      if (/^https?:\/\//.test(url)) void openExternal(url);
     }
   });
   window.on("close", () => (closedBounds = window.getNormalBounds()));
   await window.loadURL(host.url);
-  if (process.env.MIYAGI_DESKTOP_SCRIPT) void runScript(process.env.MIYAGI_DESKTOP_SCRIPT);
+  if (process.env.MIYAGI_DESKTOP_SCRIPT) {
+    process.env.HOSTPORT = new URL(host.url).port;
+    void runScript(process.env.MIYAGI_DESKTOP_SCRIPT);
+  }
+}
+
+/** The window as the screen shows it: a capture of the page alone would leave out the browser's native views. */
+async function windowImage() {
+  const [width, height] = window.getContentSize();
+  // The first capture of a window can be an old frame.
+  await desktopCapturer.getSources({ types: ["window"], thumbnailSize: { width, height } });
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  const sources = await desktopCapturer.getSources({ types: ["window"], thumbnailSize: { width, height } });
+  return sources.find((source) => source.id === window.getMediaSourceId())?.thumbnail ?? window.webContents.capturePage();
 }
 
 /**
  * For automated checks only: steps run in this window (`{ js }`, `{ until }`, `{ wait }`,
- * `{ shot }`, `{ size }`), then the app quits. What a person sees, captured.
+ * `{ shot }`, `{ size }`, `{ tab }` in the browser's selected tab, `{ click: selector }` a real click,
+ * `{ ctrl }` with it), then the app quits. What a person sees, captured; `$ENV{NAME}` in a `tab`
+ * step takes a value from the environment, so a test's password need not be written in its steps.
  */
 async function runScript(file) {
   const { steps } = JSON.parse(readFileSync(file, "utf8"));
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const filled = (js) => js.replace(/\$ENV\{(\w+)\}/g, (_, name) => JSON.stringify(process.env[name] ?? ""));
   for (const step of steps) {
     try {
       if (step.wait) await sleep(step.wait);
@@ -106,6 +129,14 @@ async function runScript(file) {
         window.setContentSize(step.size[0], step.size[1]);
         await sleep(500);
       }
+      if (step.click) {
+        const [x, y] = await window.webContents.executeJavaScript(`(() => { const b = document.querySelector(${JSON.stringify(step.click)}).getBoundingClientRect(); return [Math.round(b.left + b.width / 2), Math.round(b.top + b.height / 2)]; })()`);
+        const at = { x, y, button: "left", clickCount: 1, modifiers: step.ctrl ? ["control"] : [] };
+        window.webContents.sendInputEvent({ ...at, type: "mouseMove" });
+        window.webContents.sendInputEvent({ ...at, type: "mouseDown" });
+        window.webContents.sendInputEvent({ ...at, type: "mouseUp" });
+      }
+      if (step.tab) console.log(`tab: ${JSON.stringify(await browser.selectedContents()?.executeJavaScript(filled(step.tab)))}`);
       if (step.js) console.log(`js: ${JSON.stringify(await window.webContents.executeJavaScript(step.js))}`);
       if (step.until) {
         const deadline = Date.now() + (step.timeout ?? 120000);
@@ -113,7 +144,7 @@ async function runScript(file) {
         console.log(`until ${Date.now() < deadline ? "met" : "TIMED OUT"}`);
       }
       if (step.shot) {
-        writeFileSync(step.shot, (await window.webContents.capturePage()).toPNG());
+        writeFileSync(step.shot, (await windowImage()).toPNG());
         console.log(`shot ${step.shot}`);
       }
     } catch (error) {
@@ -149,6 +180,7 @@ app.whenReady().then(async () => {
 
 app.on("window-all-closed", async () => {
   if (closedBounds) saveWindow(closedBounds);
+  await browser?.closeUp();
   await host?.close();
   app.quit();
 });

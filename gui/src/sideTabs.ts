@@ -4,7 +4,7 @@
 
 import type { TranscriptCall, TranscriptEntry } from "./types";
 
-export type SideTab = { id: string; kind: "file"; title: string; file: string } | { id: string; kind: "activity"; turn: number | null };
+export type SideTab = { id: string; kind: "file"; title: string; file: string } | { id: string; kind: "activity"; turn: number | null } | { id: string; kind: "web"; tab: string };
 
 export interface SideTabs {
   list: SideTab[];
@@ -24,6 +24,9 @@ export const ACTIVITY_TAB = "activity";
 
 export const activityTab = (turn: number | null): SideTab => ({ id: ACTIVITY_TAB, kind: "activity", turn });
 
+/** A tab of the desktop app's browser (#86): the native side holds it, the panel draws it. */
+export const webTab = (tab: string): SideTab => ({ id: `web:${tab}`, kind: "web", tab });
+
 /** A tab opened, or brought forward if it was already open (with what it now shows). */
 export function addTab(tabs: SideTabs, tab: SideTab): SideTabs {
   const known = tabs.list.some((one) => one.id === tab.id);
@@ -38,6 +41,12 @@ export function closeTab(tabs: SideTabs, id: string): SideTabs {
   if (at === -1) return tabs;
   const list = tabs.list.filter((one) => one.id !== id);
   return { list, active: tabs.active === id ? (list[at]?.id ?? list[at - 1]?.id ?? null) : tabs.active };
+}
+
+/** The browser's native tabs in the panel: one closed there goes, one opened there (a link, a pop-up) comes forward. */
+export function syncWebTabs(tabs: SideTabs, open: string[]): SideTabs {
+  const kept = tabs.list.reduce((left, tab) => (tab.kind === "web" && !open.includes(tab.tab) ? closeTab(left, tab.id) : left), tabs);
+  return open.reduce((left, tab) => (left.list.some((one) => one.kind === "web" && one.tab === tab) ? left : addTab(left, webTab(tab))), kept);
 }
 
 /** A prepared file a line of text names (`drafts/x/plan.md`, as the oven's register does), that the panel can show. */
