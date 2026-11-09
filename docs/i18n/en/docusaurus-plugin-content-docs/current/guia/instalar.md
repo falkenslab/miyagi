@@ -17,7 +17,10 @@ You install it once per computer. On Windows an installer is all it takes; on Ma
 
 ## The Windows app {#aplicacion-windows}
 
-1. Download [the miyagi installer](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe) (about 225 MB).
+1. Download the miyagi installer:
+
+   <DownloadWindows />
+
 2. Open it. Windows will warn you that it doesn't recognise the app, because the installer isn't signed yet: click **More info** and then **Run anyway**.
 3. Follow the steps. When it finishes miyagi opens, and you'll have a shortcut on the desktop and in the Start menu.
 4. The first time, it asks you to connect your Claude account: you sign in on Anthropic's page or use a key.

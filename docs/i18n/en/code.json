@@ -333,5 +333,13 @@
   "prompt.copy": {
     "message": "Copy this request",
     "description": "The send button of an example request, which copies it"
+  },
+  "download.windows": {
+    "message": "Download for Windows",
+    "description": "The button that downloads the Windows installer"
+  },
+  "download.windows.note": {
+    "message": "miyagi-setup.exe · 64-bit · about 225 MB",
+    "description": "What the Windows installer is, next to its download button"
   }
 }

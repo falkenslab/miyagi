@@ -1,0 +1,37 @@
+/* The installer's download button, with what it downloads beside it (below it on a phone). */
+.box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 10px 0 var(--ifm-leading);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  max-width: 100%;
+  padding-inline: 20px;
+  font-size: 1.0625rem;
+  white-space: normal;
+}
+
+/* Twice, to win over the underline the site gives every link in a page. */
+.button.button,
+.button.button:hover {
+  text-decoration: none;
+}
+
+.icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
+.note {
+  color: var(--fl-text-2);
+  font-size: 0.875rem;
+}
