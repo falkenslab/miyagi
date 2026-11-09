@@ -184,6 +184,9 @@ interface Run {
   dir: string;
   pinned?: boolean;
 }
+/** How many of the recent conversations the sidebar asks for, and how many more each "see more" (#97). */
+const RECENT_PAGE = 12;
+
 interface Found {
   dir: string;
   title?: string;
@@ -295,7 +298,13 @@ function ConversationRow({ run, kept, chat, T, inChat, onOpen, onChanged }: { ru
  */
 function Conversations({ chat, T, view, go }: { chat: ChatState; T: Texts; view: View; go: (view: View) => void }) {
   const [runs, setRuns] = useState<Run[] | null>(null);
-  const load = useCallback(async () => setRuns((await act<{ runs: Run[] }>("runs")).runs ?? []), []);
+  const [limit, setLimit] = useState(RECENT_PAGE);
+  const [more, setMore] = useState(false);
+  const load = useCallback(async () => {
+    const answer = await act<{ runs: Run[]; more?: boolean }>("runs", { limit });
+    setRuns(answer.runs ?? []);
+    setMore(Boolean(answer.more));
+  }, [limit]);
   const [query, setQuery] = useState("");
   const [found, setFound] = useState<Found[] | null>(null);
   const inChat = view === "chat";
@@ -363,7 +372,12 @@ function Conversations({ chat, T, view, go }: { chat: ChatState; T: Texts; view:
             )}
             {(recent?.length !== 0 || pinned.length === 0) && <h6>{T.recent}</h6>}
             {recent?.length === 0 && pinned.length === 0 && <p className="muted pad small">{T.noConversations}</p>}
-            {recent?.slice(0, 12).map(row)}
+            {recent?.map(row)}
+            {more && (
+              <button type="button" className="recents-more" onClick={() => setLimit(limit + RECENT_PAGE)}>
+                {T.seeMore}
+              </button>
+            )}
           </div>
         )}
       </div>

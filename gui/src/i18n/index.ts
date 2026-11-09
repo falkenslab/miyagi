@@ -114,6 +114,7 @@ export interface Texts {
   commands: string;
   greeting: (part: "morning" | "afternoon" | "night") => string;
   recent: string;
+  seeMore: string;
   pinned: string;
   pin: string;
   unpin: string;
@@ -300,6 +301,7 @@ const es: Texts = {
   commands: "Atajos",
   greeting: (part) => `${part === "morning" ? "Buenos días" : part === "afternoon" ? "Buenas tardes" : "Buenas noches"}. ¿Qué preparamos hoy?`,
   recent: "Recientes",
+  seeMore: "Ver más",
   pinned: "Fijadas",
   pin: "Fijar",
   unpin: "Quitar de fijadas",
@@ -501,6 +503,7 @@ const en: Texts = {
   commands: "Shortcuts",
   greeting: (part) => `${part === "morning" ? "Good morning" : part === "afternoon" ? "Good afternoon" : "Good evening"}. What shall we prepare today?`,
   recent: "Recent",
+  seeMore: "See more",
   pinned: "Pinned",
   pin: "Pin",
   unpin: "Unpin",
@@ -702,6 +705,7 @@ const fr: Texts = {
   commands: "Raccourcis",
   greeting: (part) => `${part === "night" ? "Bonsoir" : "Bonjour"}. Que préparons-nous aujourd'hui ?`,
   recent: "Récentes",
+  seeMore: "Voir plus",
   pinned: "Épinglées",
   pin: "Épingler",
   unpin: "Désépingler",
@@ -903,6 +907,7 @@ const de: Texts = {
   commands: "Kurzbefehle",
   greeting: (part) => `${part === "morning" ? "Guten Morgen" : part === "afternoon" ? "Guten Tag" : "Guten Abend"}. Was bereiten wir heute vor?`,
   recent: "Zuletzt",
+  seeMore: "Mehr anzeigen",
   pinned: "Angeheftet",
   pin: "Anheften",
   unpin: "Lösen",

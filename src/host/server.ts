@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 import { agentKitVersion, createChatController, getLanguage, readConversation, startClaudeSignIn, type ChatController, type ClaudeSignIn, type Mode } from "@falkenslab/agent-kit";
 import { prepareSession, VERSION } from "../agent.js";
 import { watchStart } from "./startWatch.js";
-import { conversationTitle, isOnlyGreeting, readPinned, searchConversations, setPinned } from "./conversations.js";
+import { conversationTitle, isOnlyGreeting, latestRuns, readPinned, searchConversations, setPinned } from "./conversations.js";
 import { t } from "../messages/index.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
@@ -562,7 +562,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
             }),
           )
         ).filter((run) => run !== null);
-        return { runs, current: currentDir };
+        return { ...latestRuns(runs, Math.max(1, Number(data.limit) || 12), currentDir), current: currentDir };
       }
       case "resume":
         if (busy()) return { error: "busy" };

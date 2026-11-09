@@ -32,6 +32,16 @@ export function conversationTitle(messages: ConversationMessage[], opening: stri
 /** A conversation with nothing but that greeting (one is kept each time the subject opens). */
 export const isOnlyGreeting = (messages: ConversationMessage[], title: string | undefined) => !title && messages.filter((message) => message.role === "assistant").length <= 1;
 
+/**
+ * The part of the sidebar's list it asked for (#97): the `limit` latest ones, and the pinned and
+ * the open one wherever they fall, which the sidebar always shows; and whether older ones are left.
+ */
+export function latestRuns<Listed extends { dir: string; pinned: boolean }>(runs: Listed[], limit: number, currentDir: string | null) {
+  let left = limit;
+  const shown = runs.filter((run) => run.pinned || left-- > 0 || run.dir === currentDir);
+  return { runs: shown, more: shown.length < runs.length };
+}
+
 /** Lowercase and without accents: a teacher looking for "rubrica" means "rúbrica". */
 const fold = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 

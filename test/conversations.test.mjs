@@ -5,7 +5,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import os from "node:os";
 import path from "node:path";
 import { after, test } from "node:test";
-import { conversationTitle, isOnlyGreeting, quoteMatch, readPinned, searchConversations, setPinned } from "../dist/host/conversations.js";
+import { conversationTitle, isOnlyGreeting, latestRuns, quoteMatch, readPinned, searchConversations, setPinned } from "../dist/host/conversations.js";
 
 const opening = "Saluda al docente y dile en una frase qué";
 const said = (role, text) => ({ role, text });
@@ -31,6 +31,15 @@ test("a conversation with nothing but the greeting is told apart", () => {
   assert.equal(isOnlyGreeting([said("user", opening), said("assistant", "Hola")], undefined), true);
   assert.equal(isOnlyGreeting([said("user", opening), said("assistant", "Hola"), said("assistant", "Sigo")], undefined), false);
   assert.equal(isOnlyGreeting([said("user", "Hola")], "Hola"), false);
+});
+
+test("the list gives the latest ones and says whether older ones are left, with the pinned and the open one always in", () => {
+  const runs = ["a", "b", "c", "d", "e"].map((dir) => ({ dir, pinned: dir === "e" }));
+  assert.deepEqual(latestRuns(runs, 2, null), { runs: [runs[0], runs[1], runs[4]], more: true });
+  assert.deepEqual(latestRuns(runs, 2, "d"), { runs: [runs[0], runs[1], runs[3], runs[4]], more: true });
+  assert.deepEqual(latestRuns(runs, 2, "a"), { runs: [runs[0], runs[1], runs[4]], more: true }, "the open one, among the latest, takes its place");
+  assert.deepEqual(latestRuns(runs, 4, null), { runs, more: false });
+  assert.deepEqual(latestRuns([], 12, null), { runs: [], more: false });
 });
 
 test("a match is found whatever the case and the accents, and quoted as it was written", () => {

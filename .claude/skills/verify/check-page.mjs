@@ -71,7 +71,7 @@ const CHECKPOINT = ".dock .checkpoint";
 /** The header's and the composer's buttons smaller than a finger (44 px), by their label. */
 const small = () =>
   page.evaluate(() =>
-    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress, .spanel-bar button, .spanel-tab button, .web-row button, .beside, .tool-head, .tool .sub-activity, .activity-head button"))
+    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress, .spanel-bar button, .spanel-tab button, .web-row button, .beside, .tool-head, .tool .sub-activity, .activity-head button, .recents-more"))
       .filter((el) => el.offsetParent)
       .map((el) => [el.getAttribute("aria-label") || el.textContent.trim(), el.getBoundingClientRect()])
       .filter(([, box]) => box.width < 44 || box.height < 44)
@@ -1054,6 +1054,35 @@ try {
   await idle();
   check("…and goes when none is under way", (await page.locator(".side-progress").count()) === 0);
 
+  // More conversations than the list shows (#97): the oldest is reached with "see more".
+  const keepConversation = (name, when, lines) => {
+    const dir = path.join(subject, "sessions", name);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(path.join(dir, "session.json"), JSON.stringify({ sessionId: `11111111-2222-4333-8444-${String(when.getTime()).padStart(12, "0").slice(-12)}`, subagents: {} }));
+    writeFileSync(path.join(dir, "conversation.jsonl"), lines.map(([type, text], index) => JSON.stringify({ type, uuid: `${name}-${index}`, timestamp: new Date(when.getTime() + index * 1000).toISOString(), message: { role: type, content: text } })).join("\n"));
+  };
+  for (let n = 1; n <= 30; n++) keepConversation(`2026-01-${String(n).padStart(2, "0")}T10-00-00-000Z`, new Date(Date.UTC(2026, 0, n, 10)), [["user", `Sembrada ${n}`], ["assistant", `De acuerdo, ${n}.`]]);
+  await page.reload();
+  await page.waitForSelector(".recents .recents-more", { timeout: 30_000 });
+  const listed = () => page.locator(".recents .conv-row").count();
+  const recentRows = () => page.locator(".recents h6:last-of-type ~ .conv-row").count();
+  check("the list starts with the latest twelve", (await recentRows()) === 12, String(await recentRows()));
+  check("…without the oldest", (await page.locator('.recents a[title$="Sembrada 1"]').count()) === 0);
+  await shot("recents-more-1440");
+  check("…and See more is a 44 px target", (await page.locator(".recents-more").boundingBox()).height >= 44);
+  const before12 = await listed();
+  await page.click(".recents-more");
+  await page.waitForFunction((n) => document.querySelectorAll(".recents .conv-row").length > n, before12, { timeout: 10_000 });
+  check("See more adds older ones", (await listed()) > before12, String(await listed()));
+  while (await page.locator(".recents-more").count()) {
+    const now = await listed();
+    await page.click(".recents-more");
+    await page.waitForFunction((n) => document.querySelectorAll(".recents .conv-row").length > n, now, { timeout: 10_000 });
+  }
+  check("…down to the oldest, and the button goes", (await page.locator('.recents a[title$="Sembrada 1"]').count()) === 1);
+  await page.click('.recents a[title$="Sembrada 1"]');
+  await page.waitForFunction(() => [...document.querySelectorAll(".msg.user")].some((one) => one.textContent.includes("Sembrada 1")), null, { timeout: 30_000 });
+  check("…and it opens from the list", true);
   // Both themes, and the screenshots at every width: no horizontal scroll, 44 px targets.
   for (const [theme, nth] of [
     ["light", 1],
