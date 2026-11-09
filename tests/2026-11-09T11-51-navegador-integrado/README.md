@@ -15,7 +15,34 @@ Prueba de la función #86: el panel lateral de la app de escritorio como navegad
 
 ## Veredicto
 
-**Superada con hallazgos, y con un criterio sin cubrir.** Todo lo probado funciona en la ventana real: la vista sigue al panel, no tapa menús ni diálogos, los rechazos actúan, y un acceso sigue iniciado tras reiniciar. Falta el criterio literal: iniciar sesión **en el Moodle del sandbox**, porque el sandbox estaba parado. El sustituto reproduce lo que importa de Moodle (cookie de sesión y prohibición de marcos), pero debe repetirse contra Moodle antes de dar el criterio por cumplido.
+**Superada con hallazgos.** Todo lo probado funciona en la ventana real: la vista sigue al panel, no tapa menús ni diálogos, los rechazos actúan, y un acceso sigue iniciado tras reiniciar. El criterio que quedó abierto el primer día, iniciar sesión **en el Moodle del sandbox** y seguir dentro tras reiniciar, se cumplió después contra el Moodle real (ver «Repetición contra el Moodle del sandbox»). La primera ejecución se hizo sobre un sustituto local porque el sandbox estaba parado.
+
+## Repetición contra el Moodle del sandbox
+
+Se repitió lo que faltaba el mismo 9 de noviembre, con el sandbox levantado: Moodle 5.2.4 en `http://localhost:8080`, cuenta `profesor` (docente), código en `57bea92`, agent-kit 0.33.0, Electron sin empaquetar, carpeta de datos propia. La contraseña llegó solo por el entorno del proceso y no está en los pasos ni en las capturas.
+
+Dos arranques de la app sobre la misma carpeta de datos. No se escribió nada en Moodle ni se tocó ningún curso salvo abrir, en lectura, el curso de pruebas (id 2).
+
+| Esperado | Obtenido |
+| --- | --- |
+| Iniciar sesión en una pestaña con el formulario real de Moodle | De `/login/index.php` (sin sesión) a `/my/`, «Dashboard», con `sesskey` y menú de usuario: «Hi, Profesor!» |
+| Seguir dentro tras cerrar y volver a abrir la app | Pestaña nueva a `/my/` y a `/course/view.php?id=2`: con sesión, sin pasar por el acceso |
+| La cookie de sesión no es visible para las páginas | `document.cookie` no contiene `MoodleSession` (es `HttpOnly`), tras reiniciar y con la sesión viva |
+| Dos pestañas en sitios distintos, independientes | Moodle en una y `https://example.org/` en otra, cada una con lo suyo: navegar a `/my/`, recargar y volver atrás en una no cambió la dirección ni la sesión de la otra |
+
+![Sesión iniciada en Moodle](assets/10-moodle-sesion-iniciada.png)
+
+*El panel de Moodle del docente en la vista nativa.*
+
+![Segundo sitio](assets/11-moodle-segundo-sitio.png)
+
+*La segunda pestaña en otro sitio, sin sesión, mientras la de Moodle sigue en la suya.*
+
+![Tras reiniciar](assets/12-moodle-tras-reiniciar.png)
+
+*Tras cerrar y volver a abrir la app, el curso de pruebas con la sesión del docente.*
+
+**Límites de esta repetición.** La app corrió sin sesión de Claude (la carpeta de datos propia aísla `~/.claude`), así que no había conversación abierta y el panel lateral de la página no se dibujó: por eso, detrás, se ve la pantalla de conectar con Claude. Las pestañas se abrieron, eligieron y colocaron con las mismas acciones del host que usa el panel (`browser-open`, `browser-select`, `browser-bounds`, `browser-navigate`, `browser-reload`, `browser-back`); lo probado es la vista nativa y su sesión `persist:browser`, no los botones del panel, que sí cubrió la primera ejecución. El segundo sitio es público y sin acceso: no se probaron dos sesiones iniciadas en dos sitios a la vez.
 
 ## Qué se ejecutó
 
@@ -126,7 +153,7 @@ Nada: es una función de la app, no un cambio de comportamiento del agente. Sí 
 
 ## Qué no cubrió
 
-- **El inicio de sesión contra Moodle real** (ver veredicto): pendiente de repetir con el sandbox levantado.
-- El contenido de Moodle real en la pestaña (editores, selector de archivos, cuestionarios).
+- El trabajo dentro de Moodle real en la pestaña (editores, selector de archivos, cuestionarios): el inicio de sesión y la navegación sí se probaron, ver «Repetición contra el Moodle del sandbox».
+- Dos sesiones iniciadas a la vez en dos sitios distintos.
 - El aviso de salida al abandonar un formulario con cambios (`beforeunload`) y el diálogo de guardar una descarga: están programados, pero no se han ejercitado (son diálogos nativos que la ejecución guiada no puede cerrar).
 - La app empaquetada: la prueba corrió desde `desktop/`, sin instalador.
