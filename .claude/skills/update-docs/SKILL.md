@@ -54,7 +54,7 @@ The roadmap (`content/hoja-de-ruta.md`) is the only page about what doesn't exis
 ## 4. Screenshots
 
 The use-case tutorial (`docs/content/casos-de-uso/`) shows real screenshots of the chat and
-of Moodle (`docs/static/img/casos/`). If the change alters what one of them shows (a
+of Moodle (`docs/static/img/v2/`). If the change alters what one of them shows (a
 message, a panel, a step the agent takes, a page it builds), list the affected images and
 say so: either retake them (the test report that built the tutorial, in `tests/`, explains how
 they were made against moodle-sandbox and keeps its scripts: the pseudo-terminal driver for

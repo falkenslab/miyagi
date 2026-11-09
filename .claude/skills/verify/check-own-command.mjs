@@ -112,7 +112,10 @@ try {
 
   // 2. The next conversation knows it: a topic's ⋯, its form with the topic filled in.
   await page.click(".side .new-conv");
-  await page.waitForSelector(".msg.agent", { timeout: 240_000 });
+  // The last conversation's messages stay until the new one starts, and a new one doesn't greet:
+  // it has started when they've gone and it's no longer busy.
+  await page.waitForFunction(() => !document.querySelector(".msg.user"), null, { timeout: 60_000 });
+  await page.waitForSelector(".welcome .waiting", { timeout: 20_000 }).catch(() => {});
   await work();
   await page.click('.rail-item[data-rail="course"]');
   await page.click(".view-tabs button:has-text('Temas')");

@@ -772,6 +772,12 @@ try {
   await page.check('.new-subject input[type="checkbox"]');
   await page.click('.new-subject button[type="submit"]');
   await page.waitForSelector(".rail .brand");
+  // That sentence is only on screen in the chat, and the checks of the wizard and the tour can
+  // outlast the start: look at the chat while it's starting, and go back to Today.
+  await page.waitForSelector(".recents a.open-conv, .recents a.on-conv", { state: "attached", timeout: 60_000 });
+  await page.evaluate(() => document.querySelector(".recents a.open-conv")?.click());
+  await page.waitForFunction(() => window.__waits.some((text) => /Arrancando miyagi|Starting miyagi/.test(text)) || document.querySelector(".msg.agent"), null, { timeout: 60_000 });
+  await page.evaluate(() => document.querySelector('.rail-item[data-rail="today"]')?.click());
   await checkTourWaitsForWizard();
   await skipTour();
   await checkFirstTip();
