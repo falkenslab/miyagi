@@ -2,8 +2,10 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { act, upload } from "../api";
 import type { CourseTexts } from "../i18n/course";
 import { Markdown } from "../markdown";
+import { canPreview, namedFile } from "../sideTabs";
 import { Actionable, GroupActions, useActions, useItemMenu } from "./Actions";
 import type { ChatState, Info } from "../types";
+import { Icon } from "./Icons";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
 import { whileBusy } from "./StatusBar";
@@ -27,6 +29,8 @@ interface Common {
   item: string | null;
   onLink: () => void;
   linkTitle: string;
+  /** A file in the side panel (#85), beside the conversation. */
+  beside: (file: string) => void;
 }
 
 /** One host action's result, loaded again after every turn (the agent may have changed it). */
@@ -346,7 +350,7 @@ function MarkdownPreview({ file }: { file: string }) {
   return <div className="preview md">{text === null ? null : <Markdown text={text} />}</div>;
 }
 
-function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
+export function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
   if (!file) return <p className="muted">{C.choose}</p>;
   const ext = file.slice(file.lastIndexOf(".")).toLowerCase();
   if ([".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"].includes(ext)) return <img className="preview-img" src={fileUrl(file)} alt={file} />;
@@ -373,7 +377,7 @@ function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
 /** A quiz among the materials (by its name or format), whose menu also offers the paper exam. */
 const isQuiz = (file: string) => /quiz|cuestionario|questionnaire|\.gift$/i.test(file);
 
-function MaterialRow({ file, on, choose, publish, busy, C }: { file: { path: string; size: number; changed: string }; on: boolean; choose: () => void; publish?: () => void; busy: boolean; C: CourseTexts }) {
+function MaterialRow({ file, on, choose, publish, beside, busy, C }: { file: { path: string; size: number; changed: string }; on: boolean; choose: () => void; publish?: () => void; beside: () => void; busy: boolean; C: CourseTexts }) {
   const menu = useItemMenu(isQuiz(file.path) ? ["material", "quiz"] : ["material"], file.path);
   return (
     <tr className={on ? "on" : ""} {...menu.bind}>
@@ -385,6 +389,11 @@ function MaterialRow({ file, on, choose, publish, busy, C }: { file: { path: str
       </td>
       <td className="muted">{day(file.changed)}</td>
       <td className="acts">
+        {canPreview(file.path) && (
+          <button type="button" className="ibtn plain beside" title={C.openBeside} aria-label={C.openBeside} onClick={beside}>
+            <Icon name="side" />
+          </button>
+        )}
         {publish && (
           <button type="button" className="btn small" {...whileBusy(busy)} onClick={publish}>
             {C.publish}
@@ -396,7 +405,7 @@ function MaterialRow({ file, on, choose, publish, busy, C }: { file: { path: str
   );
 }
 
-export function MaterialsView({ chat, info, C, ask, item }: Common) {
+export function MaterialsView({ chat, info, C, ask, item, beside }: Common) {
   const { result, load } = useHost<{ files: { path: string; size: number; changed: string }[] }>("drafts");
   useReload(load, chat);
   const [chosen, setChosen] = useState<string | null>(item);
@@ -428,7 +437,7 @@ export function MaterialsView({ chat, info, C, ask, item }: Common) {
             </thead>
             <tbody>
               {result.files.map((file) => (
-                <MaterialRow key={file.path} file={file} on={file.path === chosen} choose={() => setChosen(file.path)} publish={info.classroom?.connected ? () => ask(C.prompts.publish(file.path)) : undefined} busy={chat.busy} C={C} />
+                <MaterialRow key={file.path} file={file} on={file.path === chosen} choose={() => setChosen(file.path)} publish={info.classroom?.connected ? () => ask(C.prompts.publish(file.path)) : undefined} beside={() => beside(file.path)} busy={chat.busy} C={C} />
               ))}
             </tbody>
           </table>
@@ -443,10 +452,21 @@ export function MaterialsView({ chat, info, C, ask, item }: Common) {
 
 // ---------- En el horno ----------
 
-export function OvenView({ chat, info, C, ask }: Common) {
+export function OvenView({ chat, info, C, ask, beside }: Common) {
   const compose = useActions()?.compose;
   const { result, load } = useHost<{ items: Today["oven"] }>("oven");
   useReload(load, chat);
+  // The files the register names that exist, asked to the host (only what it can show opens).
+  const [existing, setExisting] = useState<Record<string, unknown>>({});
+  useEffect(() => {
+    const targets = (result?.items ?? []).map((item) => namedFile(item.text)).filter((file) => file !== undefined);
+    if (!targets.length) return setExisting({});
+    let live = true;
+    void act<{ items?: Record<string, unknown> }>("resolve", { targets }).then((answer) => live && setExisting(answer.items ?? {}));
+    return () => {
+      live = false;
+    };
+  }, [result]);
   if (!result) return <div className="wrap"><Waiting text={C.loading} still={C.stillWorking} /></div>;
   const label = (text: string) => text.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/[*_`]/g, "");
   return (
@@ -458,11 +478,18 @@ export function OvenView({ chat, info, C, ask }: Common) {
             <h4>{C.phases[phase]}</h4>
             {result.items
               .filter((item) => item.phase === phase)
-              .map((item, index) => (
+              .map((item, index) => {
+                const file = namedFile(item.text);
+                return (
                 <Actionable key={index} kinds={["oven"]} value={label(item.text)} className="it">
                   <span className="md">
                     <Markdown text={item.text.replace(/\[([^\]]+)\]\([^)\s]+\.md\)/g, "$1")} />
                   </span>
+                  {file && existing[file] !== undefined && (
+                    <button type="button" className="btn small beside" onClick={() => beside(file)}>
+                      {C.openBeside}
+                    </button>
+                  )}
                   {phase === "hidden" && info.classroom?.connected ? (
                     <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={() => ask(C.prompts.show(label(item.text)))}>
                       {C.showToStudents}
@@ -473,7 +500,8 @@ export function OvenView({ chat, info, C, ask }: Common) {
                     </button>
                   ) : null}
                 </Actionable>
-              ))}
+                );
+              })}
           </div>
         ))}
       </div>

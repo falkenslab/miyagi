@@ -32,7 +32,7 @@ const SIDE_STEP = 16;
 const clampSide = (width: number) => Math.round(Math.min(SIDE_MAX, Math.max(SIDE_MIN, width)));
 
 /** Kept for the next visit, if the page may remember it. */
-function remember(key: string, value: string) {
+export function remember(key: string, value: string) {
   try {
     localStorage.setItem(key, value);
   } catch {
@@ -40,7 +40,7 @@ function remember(key: string, value: string) {
   }
 }
 
-function recalled(key: string): string | null {
+export function recalled(key: string): string | null {
   try {
     return localStorage.getItem(key);
   } catch {
@@ -461,33 +461,37 @@ function Rail({ info, chat, view, go, theme, setTheme, T, X, C }: { info: Info |
   );
 }
 
-/** The sidebar's edge: dragged, or with the arrow keys, between its limits; a double click puts it back. */
-function SideHandle({ width, resize, label }: { width: number; resize: (width: number) => void; label: string }) {
+/**
+ * The sidebar's edge, or the side panel's with `left`: dragged, or with the arrow keys, between its
+ * limits; a double click puts it back.
+ */
+export function SideHandle({ width, resize, label, left = false, min = SIDE_MIN, max = SIDE_MAX, initial = SIDE_WIDTH }: { width: number; resize: (width: number) => void; label: string; left?: boolean; min?: number; max?: number; initial?: number }) {
   const grab = useRef(0);
+  const towards = left ? -1 : 1;
   return (
     <div
-      className="side-handle"
+      className={`side-handle${left ? " left" : ""}`}
       role="separator"
       aria-orientation="vertical"
       aria-label={label}
-      aria-valuemin={SIDE_MIN}
-      aria-valuemax={SIDE_MAX}
+      aria-valuemin={min}
+      aria-valuemax={max}
       aria-valuenow={width}
       tabIndex={0}
       onPointerDown={(event) => {
         if (event.button !== 0) return;
         event.currentTarget.setPointerCapture(event.pointerId);
         // Where it was grabbed: the edge moves with the pointer, without jumping to it.
-        grab.current = (event.currentTarget.parentElement?.offsetWidth ?? width) - event.clientX;
+        grab.current = (event.currentTarget.parentElement?.offsetWidth ?? width) - towards * event.clientX;
       }}
       onPointerMove={(event) => {
-        if (event.currentTarget.hasPointerCapture(event.pointerId)) resize(event.clientX + grab.current);
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) resize(towards * event.clientX + grab.current);
       }}
-      onDoubleClick={() => resize(SIDE_WIDTH)}
+      onDoubleClick={() => resize(initial)}
       onKeyDown={(event) => {
         // From what's on screen: a narrow window can be showing less than the width asked for.
         const shown = event.currentTarget.parentElement?.offsetWidth ?? width;
-        const next = ({ ArrowLeft: shown - SIDE_STEP, ArrowRight: shown + SIDE_STEP, Home: SIDE_MIN, End: SIDE_MAX } as Record<string, number>)[event.key];
+        const next = ({ ArrowLeft: shown - towards * SIDE_STEP, ArrowRight: shown + towards * SIDE_STEP, Home: min, End: max } as Record<string, number>)[event.key];
         if (next === undefined) return;
         event.preventDefault();
         resize(next);
@@ -585,7 +589,7 @@ export function ViewTabs({ view, setView, C }: { view: View; setView: (view: Vie
 }
 
 /** Each view's header: the menu (on a phone), the sidebar's button when it's collapsed, the title, and the conversation's ⋯. */
-export function Header({ title, subtitle, chat, chatShown, collapsed, T, X, onMenu, onExpand, onOpenChat }: { title: string; subtitle?: string; chat: ChatState | null; chatShown: boolean; collapsed: boolean; T: Texts; X: ExtTexts; onMenu: () => void; onExpand: () => void; onOpenChat: () => void }) {
+export function Header({ title, subtitle, chat, chatShown, collapsed, T, X, onMenu, onExpand, onOpenChat, panelTabs, panelShown, onPanel }: { title: string; subtitle?: string; chat: ChatState | null; chatShown: boolean; collapsed: boolean; T: Texts; X: ExtTexts; onMenu: () => void; onExpand: () => void; onOpenChat: () => void; panelTabs: number; panelShown: boolean; onPanel: () => void }) {
   return (
     <header className="top">
       <button type="button" className="ibtn plain burger" title={X.menu} aria-label={X.menu} onClick={onMenu}>
@@ -600,6 +604,11 @@ export function Header({ title, subtitle, chat, chatShown, collapsed, T, X, onMe
         {title}
         {subtitle && <small>{subtitle}</small>}
       </h1>
+      {panelTabs > 0 && (
+        <button type="button" className="ibtn plain panel-btn" title={panelShown ? T.closePanel : T.showPanel} aria-label={panelShown ? T.closePanel : T.showPanel} aria-pressed={panelShown} onClick={onPanel}>
+          <Icon name="side" />
+        </button>
+      )}
       {chat && chatShown && (
         <Menu title={T.moreOptions} ariaLabel={T.moreOptions} className="ibtn plain more-btn" label={<span aria-hidden="true">⋯</span>}>
           {(close) => (

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { act, useMiyagi } from "./api";
 import { ActionsContext, actionLine, SelectionMenu, type ActionsApi } from "./components/Actions";
 import { Composer, Todos } from "./components/Composer";
@@ -6,6 +6,7 @@ import { KnowledgeView, MaterialsView, OvenView, PlanView, SourcesView, TodayVie
 import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./components/Extensions";
 import { Panel } from "./components/Panel";
 import { Frame, Header, useSideCollapsed, ViewTabs, type Theme, type View } from "./components/Shell";
+import { SidePanel, useSidePanel } from "./components/SidePanel";
 import { SignIn } from "./components/SignIn";
 import { setCanPick } from "./components/PathField";
 import { setBusyReason, StatusBar } from "./components/StatusBar";
@@ -41,9 +42,12 @@ export function App() {
   const [extTab, setExtTab] = useState<ExtTab>("installed");
   const [sideOpen, setSideOpen] = useState(false);
   const [sideCollapsed, setSideCollapsed] = useSideCollapsed();
+  const side = useSidePanel();
   const [linking, setLinking] = useState(false);
   const closeLink = useCallback(() => setLinking(false), []);
   const chat = state?.chat ?? null;
+  const resetSide = side.reset;
+  useEffect(() => resetSide(), [info?.workspace, resetSide]);
   const T = texts(chat?.language ?? info?.language);
   const X = extTexts(chat?.language ?? info?.language);
   const C = courseTexts(chat?.language ?? info?.language);
@@ -60,6 +64,11 @@ export function App() {
       if (page) setKbPage(page);
     } else setItem(page ?? null);
     setView(next);
+  };
+  /** A file beside the conversation (#85), with the conversation shown next to it. */
+  const beside = (file: string) => {
+    side.openFile(file);
+    setView("chat");
   };
   /** A text left in the chat's box to finish (an item's "Ask miyagi about this", a quote), and the conversation shown. */
   const [draft, setDraft] = useState<{ text: string; at: number } | null>(null);
@@ -134,12 +143,15 @@ export function App() {
     extensions: [X.navExtensions, X.extSubtitle],
   };
   const [title, subtitle] = titles[shown];
+  // An approval or a question brings the conversation back at once, whatever the panel covers.
+  const asking = Boolean(chat?.panel || chat?.choice);
+  const withPanel = Boolean(chat && side.shown);
   return (
     <ActionsContext.Provider value={actions}>
-    <div className="app">
+    <div className={`app${withPanel ? " with-panel" : ""}${withPanel && side.expanded ? " panel-full" : ""}${asking ? " asking" : ""}`} style={{ "--panel-width": `${side.width}px` } as CSSProperties}>
       <Frame info={info} chat={chat} view={shown} setView={setView} open={sideOpen} setOpen={setSideOpen} collapsed={sideCollapsed} setCollapsed={setSideCollapsed} theme={theme} setTheme={setTheme} T={T} X={X} C={C} onNewSubject={() => setNewSubject(true)} onOpenExisting={() => setOpenExisting(true)} />
       <section className="main">
-        <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} />
+        <Header title={title} subtitle={subtitle} chat={chat} chatShown={shown === "chat"} collapsed={sideCollapsed && Boolean(info?.workspace)} T={T} X={X} onMenu={() => setSideOpen(true)} onExpand={() => setSideCollapsed(false)} onOpenChat={() => setView("chat")} panelTabs={chat ? side.tabs.list.length : 0} panelShown={withPanel} onPanel={side.toggle} />
         <ViewTabs view={shown} setView={setView} C={C} />
         {status && (
           <div className="banner" role="status">
@@ -153,7 +165,7 @@ export function App() {
           {state?.signedIn && state.opening && !chat && <Waiting block text={T.opening} still={T.stillWorking} />}
           {chat && shown === "chat" && (
             <div className="chat">
-              <Transcript chat={chat} T={T} go={go} />
+              <Transcript chat={chat} T={T} go={go} beside={beside} />
               {/* A checkpoint takes the composer's place; the composer stays mounted, so a draft isn't lost. */}
               <div className="dock">
                 <Panel chat={chat} T={T} />
@@ -175,7 +187,7 @@ export function App() {
             </div>
           )}
           {chat && info && (() => {
-            const common = { chat, info, C, ask, go, item, onLink: () => setLinking(true), linkTitle: X.linkTitle };
+            const common = { chat, info, C, ask, go, item, onLink: () => setLinking(true), linkTitle: X.linkTitle, beside };
             switch (shown) {
               case "today":
                 return <TodayView {...common} />;
@@ -200,6 +212,7 @@ export function App() {
         </main>
         <StatusBar chat={chat} T={T} inChat={shown === "chat"} onOpenChat={() => setView("chat")} />
       </section>
+      {withPanel && <SidePanel panel={side} T={T} C={C} />}
       {linking && info && (
         <LinkWizard
           info={info}

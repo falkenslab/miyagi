@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { act } from "../api";
 import type { Texts } from "../i18n";
 import { Markdown } from "../markdown";
+import { canPreview } from "../sideTabs";
 import type { ChatState, TranscriptCall, TranscriptEntry } from "../types";
 import type { CourseView } from "./Course";
 import { actionLabel, launched, useActions } from "./Actions";
@@ -35,7 +36,7 @@ function namedTargets(transcript: TranscriptEntry[]): string[] {
  * the new ones), and how to open each. Those that don't exist are asked again after the turn: the
  * agent may name a file before writing it.
  */
-function useItemLinks(chat: ChatState, go: (view: CourseView, item?: string) => void): Opener {
+function useItemLinks(chat: ChatState, go: (view: CourseView, item?: string) => void, beside: (file: string) => void): Opener {
   const [places, setPlaces] = useState<Record<string, ItemPlace>>({});
   const asked = useRef(new Set<string>());
   useEffect(() => {
@@ -52,7 +53,10 @@ function useItemLinks(chat: ChatState, go: (view: CourseView, item?: string) => 
   return Object.assign(
     (target: string) => {
       const place = places[target];
-      if (place) go(place.view, place.item);
+      if (!place) return;
+      // A file the panel can show opens beside the conversation (#85), without leaving it.
+      if (place.view === "materials" && place.item && canPreview(place.item)) beside(place.item);
+      else go(place.view, place.item);
     },
     { has: (target: string) => target in places },
   );
@@ -239,8 +243,8 @@ function greeting(T: Texts) {
 }
 
 /** The conversation, scrolled to the end while the person is at the end; ↓ takes them back there. */
-export function Transcript({ chat, T, go }: { chat: ChatState; T: Texts; go: (view: CourseView, item?: string) => void }) {
-  const open = useItemLinks(chat, go);
+export function Transcript({ chat, T, go, beside }: { chat: ChatState; T: Texts; go: (view: CourseView, item?: string) => void; beside: (file: string) => void }) {
+  const open = useItemLinks(chat, go, beside);
   const box = useRef<HTMLDivElement>(null);
   const atEnd = useRef(true);
   const [away, setAway] = useState(false);

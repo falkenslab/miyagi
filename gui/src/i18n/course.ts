@@ -84,6 +84,7 @@ export interface CourseTexts {
   sentToChat: string;
   openFolder: string;
   play: string;
+  openBeside: string;
   playNote: string;
 }
 
@@ -166,6 +167,7 @@ const es: CourseTexts = {
   sentToChat: "Enviado a la conversación.",
   openFolder: "Abrir la carpeta",
   play: "▶ Jugar en el navegador",
+  openBeside: "Abrir junto al chat",
   playNote: "Aquí se ve quieta; en el navegador se puede jugar, fuera de miyagi.",
 };
 
@@ -248,6 +250,7 @@ const en: CourseTexts = {
   sentToChat: "Sent to the conversation.",
   openFolder: "Open the folder",
   play: "▶ Play in the browser",
+  openBeside: "Open beside the chat",
   playNote: "Here it stays still; in the browser you can play it, outside miyagi.",
 };
 
@@ -330,6 +333,7 @@ const fr: CourseTexts = {
   sentToChat: "Envoyé à la conversation.",
   openFolder: "Ouvrir le dossier",
   play: "▶ Jouer dans le navigateur",
+  openBeside: "Ouvrir à côté du chat",
   playNote: "Ici elle reste figée ; dans le navigateur on peut y jouer, hors de miyagi.",
 };
 
@@ -412,6 +416,7 @@ const de: CourseTexts = {
   sentToChat: "An das Gespräch gesendet.",
   openFolder: "Ordner öffnen",
   play: "▶ Im Browser spielen",
+  openBeside: "Neben dem Chat öffnen",
   playNote: "Hier bleibt sie unbewegt; im Browser lässt sie sich spielen, außerhalb von miyagi.",
 };
 

@@ -1,4 +1,4 @@
-// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84) in Chrome against the
+// Checks miyagi's page (gui/, gui-chat #47, a three-zone frame #83, the sidebar's tools #84, the side panel #85) in Chrome against the
 // real host and a real Claude session: a subject created from the page, the rail's places and their
 // tabs, the sidebar collapsed and resized, a conversation with its suggestion rows, an approval answered in the dock (the conversation still readable) and one
 // refused (interactive mode asks before every tool), Copy, the ↓ button, the ＋ and mode sheets, the
@@ -10,7 +10,7 @@
 // is a temporary folder, so nothing of yours is touched; Claude Code's session is read where it
 // keeps it (CLAUDE_CONFIG_DIR at your ~/.claude), never copied (ADR-026).
 // Usage (from the repo root, after `npm run build`): node .claude/skills/verify/check-page.mjs <screenshots dir>
-/* global document, window, getComputedStyle, MutationObserver -- the callbacks of page.evaluate and waitForFunction run in the page. */
+/* global document, window, location, getComputedStyle, MutationObserver -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
@@ -71,7 +71,7 @@ const CHECKPOINT = ".dock .checkpoint";
 /** The header's and the composer's buttons smaller than a finger (44 px), by their label. */
 const small = () =>
   page.evaluate(() =>
-    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress"))
+    Array.from(document.querySelectorAll(".top button, .composer .tools-row button, .rail button, .view-tabs button, .side-collapse, .side-tools button, .side-search, .conv-more, .conv-row a, .side-progress, .spanel-bar button, .spanel-tab button, .beside"))
       .filter((el) => el.offsetParent)
       .map((el) => [el.getAttribute("aria-label") || el.textContent.trim(), el.getBoundingClientRect()])
       .filter(([, box]) => box.width < 44 || box.height < 44)
@@ -169,6 +169,167 @@ const checkFrame = async () => {
   await page.evaluate(() => localStorage.removeItem("miyagi.sideWidth"));
   await page.reload();
   await page.waitForSelector(".recents a.open-conv");
+};
+
+/** The side panel (#85): opened from Materials, the oven and a link in the chat, the conversation going on beside it. */
+const PANEL_OPEN = (name) => `.tbl tr:has-text('${name}') .beside`;
+const tabs = () => page.locator(".spanel-tab").count();
+const panelRects = () => page.evaluate(() => {
+  const rect = (el) => (el && el.offsetParent !== null ? el.getBoundingClientRect() : null);
+  const [main, panel, msgs] = [".main", ".spanel", ".msgs"].map((sel) => rect(document.querySelector(sel)));
+  return { main: main && Math.round(main.right), mainWidth: main && Math.round(main.width), panel: panel && Math.round(panel.left), panelWidth: panel && Math.round(panel.width), msgs: Boolean(msgs), innerWidth: window.innerWidth };
+});
+const servedFrame = () => page.evaluate(async () => {
+  const frame = document.querySelector(".spanel-page:not([hidden]) iframe");
+  const answer = await fetch(frame.getAttribute("src"));
+  return { sandbox: frame.getAttribute("sandbox"), status: answer.status, type: answer.headers.get("content-type"), csp: answer.headers.get("content-security-policy") ?? "" };
+});
+/** Drags the panel's divider by `by` pixels (to the left widens it). */
+const dragPanel = async (by) => {
+  const box = await page.locator(".spanel .side-handle").boundingBox();
+  const x = box.x + box.width / 2;
+  const y = box.y + box.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + by / 2, y);
+  await page.mouse.move(x + by, y);
+  await page.mouse.up();
+};
+const checkSidePanel = async (subject) => {
+  const drafts = path.join(subject, "drafts");
+  mkdirSync(path.join(drafts, "tarea"), { recursive: true });
+  writeFileSync(path.join(drafts, "guion.pdf"), "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 300 200]>>endobj\ntrailer<</Root 1 0 R>>\n");
+  writeFileSync(path.join(drafts, "pagina.html"), "<h1>Actividad</h1><script>parent.postMessage('ran', '*')</script>");
+  writeFileSync(path.join(drafts, "tarea", "plan.md"), "# Plan\n\nSemana uno de la tarea.\n");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.evaluate(() => {
+    window.__ran = 0;
+    window.addEventListener("message", () => window.__ran++);
+  });
+  await page.click(RAIL("course"));
+  await page.click(".view-tabs button >> nth=2");
+  await page.waitForSelector(PANEL_OPEN("guion.pdf"));
+  await page.click(PANEL_OPEN("guion.pdf"));
+  await page.waitForSelector(".spanel iframe");
+  const beside = await panelRects();
+  check("a PDF opens beside the chat, with the conversation next to it", beside.panel !== null && beside.msgs && beside.main <= beside.panel + 1 && beside.mainWidth >= 360, JSON.stringify(beside));
+  const pdf = await servedFrame();
+  check("…the host serves it as a PDF", pdf.status === 200 && pdf.type.startsWith("application/pdf"), JSON.stringify(pdf));
+  await shot("panel-pdf-1440");
+  // The conversation goes on with the panel open; a file named in the chat opens another tab.
+  await send("Sin usar herramientas, responde solo esta línea, tal cual: «Está `drafts/pagina.html`».");
+  await idle();
+  const line = page.locator(".msg.agent").last();
+  await line.locator("a.page-link").first().waitFor({ timeout: 10_000 }).catch(() => {});
+  check("the conversation goes on with the panel open", (await page.locator(".spanel iframe").count()) === 1 && (await line.innerText()).includes("drafts/pagina.html"));
+  await line.locator("a.page-link").first().click();
+  await page.waitForFunction(() => document.querySelectorAll(".spanel-tab").length === 2, null, { timeout: 10_000 }).catch(() => {});
+  check("a file named in the chat opens a tab, without leaving the chat", (await tabs()) === 2 && Boolean(await page.$(".msgs")));
+  check("…the one on screen", (await page.innerText(".spanel-tab.on [role=tab]")) === "pagina.html");
+  const html = await servedFrame();
+  check("an HTML draft stays sandboxed", html.sandbox === "" && html.status === 200 && /sandbox/.test(html.csp), JSON.stringify(html));
+  await page.waitForTimeout(800);
+  check("…its scripts don't run", (await page.evaluate(() => window.__ran)) === 0);
+  await shot("panel-html-1440");
+  // Back to the first tab, kept mounted; closing one leaves the other.
+  await page.click(".spanel-tab:has-text('guion.pdf') [role=tab]");
+  check("changing tab shows the other file", (await page.getAttribute(".spanel-tab:has-text('guion.pdf') [role=tab]", "aria-selected")) === "true" && (await page.locator(".spanel-page:not([hidden]) iframe").count()) === 1);
+  // The oven's register names a plan: it opens beside the chat too.
+  await page.click(RAIL("course"));
+  await page.click(".view-tabs button >> nth=3");
+  await page.waitForSelector(".oven .it .beside", { timeout: 10_000 });
+  await page.click(".oven .it:has-text('plan.md') .beside");
+  await page.waitForFunction(() => /Semana uno/.test(document.querySelector(".spanel-page:not([hidden]) .preview.md")?.textContent ?? ""), null, { timeout: 10_000 });
+  check("the oven's plan opens beside the chat, and shows the chat", (await tabs()) === 3 && Boolean(await page.$(".msgs")));
+  // Resized with the mouse, within its limits, the width kept over a reload.
+  await dragPanel(-100);
+  const wide = (await panelRects()).panelWidth;
+  check("dragging the divider widens the panel", wide === 580, String(wide));
+  await page.reload();
+  await page.waitForSelector(".recents a.open-conv");
+  await page.click(RAIL("course"));
+  await page.click(".view-tabs button >> nth=2");
+  await page.waitForSelector(PANEL_OPEN("guion.pdf"));
+  check("tabs last until the page is closed", (await page.locator(".spanel").count()) === 0);
+  await page.click(PANEL_OPEN("guion.pdf"));
+  await page.waitForSelector(".spanel iframe");
+  check("the width survives a reload", (await panelRects()).panelWidth === 580, String((await panelRects()).panelWidth));
+  await page.dblclick(".spanel .side-handle");
+  check("a double click returns it to its default", (await panelRects()).panelWidth === 480, String((await panelRects()).panelWidth));
+  await page.evaluate(() => localStorage.removeItem("miyagi.panelWidth"));
+  // Closed and brought back from the header, its tabs still there.
+  await page.click(".spanel-close");
+  await page.waitForSelector(".spanel", { state: "detached" });
+  await page.click(".top .panel-btn");
+  check("the header brings the panel back", (await page.locator(".spanel").count()) === 1 && (await tabs()) === 1);
+  // Expanded it takes the conversation's column; an approval brings the conversation back at once.
+  await mode("interactive");
+  await page.click(".spanel-expand");
+  const expanded = await panelRects();
+  check("expanded, the panel takes the conversation's column", expanded.main === null && expanded.panel !== null, JSON.stringify(expanded));
+  await shot("panel-expanded-1440");
+  await page.evaluate(() => fetch(`api/send?token=${new URLSearchParams(location.search).get("token")}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ line: "Lee la página overview de tu base de conocimiento y dime en una línea qué dice." }) }));
+  await page.waitForSelector(CHECKPOINT, { timeout: 180_000 });
+  const seen = await panelRects();
+  check("an approval with the panel expanded is seen at once", seen.msgs && seen.main !== null, JSON.stringify(seen));
+  await shot("panel-approval-1440");
+  for (const [width, height] of [
+    [1024, 768],
+    [390, 844],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await shot(`panel-approval-${width}`);
+    const narrow = await panelRects();
+    check(`at ${width} the approval takes the panel's place`, narrow.msgs && narrow.panel === null, JSON.stringify(narrow));
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.click(`${CHECKPOINT} .acts .btn.danger`);
+  await page.waitForSelector(CHECKPOINT, { state: "detached", timeout: 20_000 }).catch(() => {});
+  await idle();
+  check("…and once answered the panel is back", (await panelRects()).main === null);
+  await page.click(".spanel-expand");
+  await mode("guided");
+  // Every width and theme: beside the chat when there's room, in its place under 1100 px, the whole screen at 760 or less.
+  for (const [theme, nth] of [
+    ["light", 1],
+    ["dark", 2],
+  ]) {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.click(".rail-foot .theme-btn");
+    await page.click(`.pop button >> nth=${nth}`);
+    for (const [width, height] of [
+      [1920, 1080],
+      [1440, 900],
+      [1024, 768],
+      [768, 1000],
+      [390, 844],
+      [360, 760],
+    ]) {
+      await page.setViewportSize({ width, height });
+      await shot(`panel-${theme}-${width}`);
+      const box = await panelRects();
+      const place = width > 1100 ? box.msgs && box.main <= box.panel + 1 : width > 760 ? box.main === null && box.panel !== null : box.main === null && box.panel === 0 && box.panelWidth === width;
+      check(`the panel's place at ${width} (${theme})`, place, JSON.stringify(box));
+      check(`no horizontal scroll at ${width} with the panel (${theme})`, await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+      const tiny = await small();
+      check(`44 px targets at ${width} with the panel`, !tiny.length, tiny.join(", "));
+    }
+    await page.setViewportSize({ width: 1440, height: 900 });
+  }
+  await page.click(".rail-foot .theme-btn");
+  await page.click(".pop button >> nth=0");
+  // On a phone the way back returns to the conversation; the header offers the panel again.
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.click(".spanel-back");
+  await page.waitForSelector(".msgs");
+  check("the way back returns to the conversation", (await panelRects()).panel === null);
+  await page.click(".top .panel-btn");
+  await page.waitForSelector(".spanel");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  // Closing the last tab closes the panel.
+  await page.click(".spanel-tab .spanel-x");
+  await page.waitForSelector(".spanel", { state: "detached" });
+  check("closing the last tab closes the panel, and the header's button goes", (await page.locator(".panel-btn").count()) === 0);
 };
 
 try {
@@ -334,6 +495,8 @@ try {
   await page.click('.pop [data-notice="oven"]');
   check("…the oven's notice opens the oven", (await page.getAttribute(".view-tabs button >> nth=3", "aria-selected")) === "true");
   await page.click(".recents .open-conv");
+  await page.waitForSelector(".msgs");
+  await checkSidePanel(subject);
   await page.waitForSelector(".msgs");
   // Selected text in a reply: research it, questions about it, quote it (#67).
   await page.evaluate(() => {

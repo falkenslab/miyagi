@@ -45,6 +45,14 @@ export interface Texts {
   collapseSidebar: string;
   expandSidebar: string;
   resizeSidebar: string;
+  sidePanel: string;
+  resizePanel: string;
+  expandPanel: string;
+  shrinkPanel: string;
+  closePanel: string;
+  showPanel: string;
+  backToChat: string;
+  closeTab: (title: string) => string;
   moreOptions: string;
   versions: string;
   current: string;
@@ -180,6 +188,14 @@ const es: Texts = {
   collapseSidebar: "Ocultar la barra lateral",
   expandSidebar: "Mostrar la barra lateral",
   resizeSidebar: "Cambiar el ancho de la barra lateral",
+  sidePanel: "Panel lateral",
+  resizePanel: "Cambiar el ancho del panel",
+  expandPanel: "Ampliar el panel",
+  shrinkPanel: "Reducir el panel",
+  closePanel: "Cerrar el panel",
+  showPanel: "Mostrar el panel",
+  backToChat: "Volver a la conversación",
+  closeTab: (title) => `Cerrar ${title}`,
   moreOptions: "Más opciones",
   versions: "Versiones",
   current: "actual",
@@ -329,6 +345,14 @@ const en: Texts = {
   collapseSidebar: "Hide the sidebar",
   expandSidebar: "Show the sidebar",
   resizeSidebar: "Resize the sidebar",
+  sidePanel: "Side panel",
+  resizePanel: "Resize the panel",
+  expandPanel: "Expand the panel",
+  shrinkPanel: "Shrink the panel",
+  closePanel: "Close the panel",
+  showPanel: "Show the panel",
+  backToChat: "Back to the conversation",
+  closeTab: (title) => `Close ${title}`,
   moreOptions: "More options",
   versions: "Versions",
   current: "current",
@@ -478,6 +502,14 @@ const fr: Texts = {
   collapseSidebar: "Masquer la barre latérale",
   expandSidebar: "Afficher la barre latérale",
   resizeSidebar: "Redimensionner la barre latérale",
+  sidePanel: "Panneau latéral",
+  resizePanel: "Redimensionner le panneau",
+  expandPanel: "Agrandir le panneau",
+  shrinkPanel: "Réduire le panneau",
+  closePanel: "Fermer le panneau",
+  showPanel: "Afficher le panneau",
+  backToChat: "Revenir à la conversation",
+  closeTab: (title) => `Fermer ${title}`,
   moreOptions: "Plus d'options",
   versions: "Versions",
   current: "actuelle",
@@ -627,6 +659,14 @@ const de: Texts = {
   collapseSidebar: "Seitenleiste ausblenden",
   expandSidebar: "Seitenleiste einblenden",
   resizeSidebar: "Breite der Seitenleiste ändern",
+  sidePanel: "Seitenbereich",
+  resizePanel: "Breite des Bereichs ändern",
+  expandPanel: "Bereich vergrößern",
+  shrinkPanel: "Bereich verkleinern",
+  closePanel: "Bereich schließen",
+  showPanel: "Bereich anzeigen",
+  backToChat: "Zurück zum Gespräch",
+  closeTab: (title) => `Schließen ${title}`,
   moreOptions: "Weitere Optionen",
   versions: "Versionen",
   current: "aktuell",
