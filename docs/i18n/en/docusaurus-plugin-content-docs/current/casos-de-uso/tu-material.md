@@ -1,34 +1,34 @@
 ---
-title: 2. Giving it your material
+title: 2. Give it your material
 sidebar_position: 3
-description: Leaving the syllabus and the rubric in sources/ and turning them into the course's memory with miyagi ingest.
+description: Leave the syllabus and the rubric in Sources and turn them into the course's memory.
 ---
 
-# 2. Giving it your material {#2-darle-tu-material}
+# 2. Give it your material {#2-darle-tu-material}
 
-The more miyagi knows about your course, the better it works. What you've already written (the syllabus, rubrics, solutions, your criteria) goes in the course's `sources/` folder. It only reads it: it never changes your originals.
+The more miyagi knows about your course, the better it works. What you already have written (the syllabus, the rubrics, the solutions, your criteria) goes in **Memory**, **Sources** tab. It only reads it: it never changes your originals.
 
-For the SQL classroom we leave two documents:
+For the SQL classroom we drag in two documents:
 
-- **`temario-introduccion-sql.md`**: 6 weeks, 4 units (MariaDB in Docker, DDL, DML and queries), the objectives, the working database (`tienda`, a shop) and the assessment: quizzes 20%, exercises 30%, final project 50%, and 20% off for late submissions.
-- **`rubrica-practica-consultas.md`**: the final project's rubric, out of 10: correct results (5), appropriate use of SQL (3) and readability (2), with what to do if there's no submission.
+- **`temario-introduccion-sql.md`**: 6 weeks, 4 units (MariaDB in Docker, DDL, DML and queries), the objectives, the working database (`tienda`) and the assessment: quizzes 20%, exercises 30%, final project 50%, and 20% off for late submission.
+- **`rubrica-practica-consultas.md`**: the final project's rubric, out of 10: correct results (5), appropriate use of SQL (3) and readability (2).
 
-They can be PDF, Word, PowerPoint, Excel, Markdown or even photos of handwritten notes. Then:
+They can be PDF, Word, PowerPoint, Excel, Markdown or even photos of handwritten notes. Then we click **Ask miyagi to take them in**.
 
-<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi ingest`}</Terminal>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-02-fuentes.webp" alt="The Sources view: the area for dragging documents and the list of files, with the syllabus and the rubric taken in and three new submissions not taken in yet.">Sources, with the syllabus and the rubric taken in. The three submissions shown at the top will arrive in step 7: this screenshot was taken later.</Shot>
 
-`ingest` doesn't open Moodle: it reads each document and turns it into pages of its course memory, linked to each other.
+It doesn't open Moodle: it reads each document and turns it into pages of its memory, linked to each other. In the conversation it sums up what it has done: eleven pages plus the overview (summaries, the four units, the final project, the database and three concepts), and what it needs you to clarify: how a 2 or a 4 is given in "Correct results", until when a late submission is accepted and whether the quizzes and the exercises weigh the same.
 
-<Shot src="/img/casos/03-ingest.webp" title="PowerShell — miyagi ingest" alt="The miyagi ingest summary: two sources read, nine pages created (summaries, the teaching plan, a page per unit, the final project's page and the overview) and a warning: the 20% late penalty can't be set up in this Moodle's assignment and will have to be applied by hand.">The ingest summary. It compares your syllabus with what it saw when exploring and warns of a contradiction: the late penalty doesn't exist in this Moodle's assignment.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-02-ingesta-conversacion.webp" alt="The conversation after taking in the documents: the pages created with their links, three questions for the teacher and two things worth looking at.">The summary of what it took in, with the pages created, its questions and two warnings.</Shot>
 
-That warning is a good example of what the memory is for: it doesn't just copy your documents, it relates them to what it knows about the course.
+It warns you of things that can't be seen at a glance: that Unit 1 is only assessed through its quiz, so starting and administering the server counts for very little in the grade; and that the syllabus has objectives but no assessment criteria.
 
 ## The course's memory {#la-memoria-del-curso}
 
-Everything stays in the `knowledge/` folder, in text files you can open with any editor:
+It all ends up in **Memory**, **Knowledge base** tab: pages you can open and correct.
 
-<Shot src="/img/casos/04-knowledge.webp" title="PowerShell — knowledge/" alt="The listing of the knowledge folder: index.md, log.md, moodle-capabilities.md, overview.md, teaching-plan.md, an activity page for the final project, two source summaries and a page for each of the four units.">The memory after the ingest: an index, a change log, the teaching plan, a page per unit and the final project's page.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-02-base-conocimiento.webp" alt="The Knowledge base view with the list of pages by section and the search box.">The course's memory.</Shot>
 
-If you want to know what each file holds and how the ingest works inside, it's in [The knowledge base](/avanzado/base-de-conocimiento/).
+If you want to know what each file holds and how ingestion works inside, it's in [The knowledge base](/avanzado/base-de-conocimiento/).
 
 Next step: [the teaching plan](programacion.md).

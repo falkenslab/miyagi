@@ -1,57 +1,57 @@
 ---
-title: 6. Unit 4 and final project
+title: 6. Unit 4 and the final project
 sidebar_position: 7
-description: The unit on queries with SELECT, a quiz, the final project with the teacher's rubric, the Q&A forum and the gradebook's weights.
+description: The unit on queries with SELECT, a quiz, the final project with 10 queries and the teacher's rubric, the forum for questions, the gradebook's weights and showing it all.
 ---
 
-# 6. Unit 4 and final project {#6-tema-4-y-práctica-final}
+# 6. Unit 4 and the final project {#6-tema-4-y-práctica-final}
 
-The last unit is the one that weighs most: queries with `SELECT` and the final project, worth 50% of the grade. We ask for it all at once, hidden until reviewed:
+The last unit is the one that counts most: queries with `SELECT` and the final project, worth 50% of the grade. We ask for it all at once, hidden until it's been reviewed:
 
-<Prompt>{`/miyagi:build-unit Unit 4: Querying with SELECT, following the teaching plan (filters, ordering, aggregates with GROUP BY and HAVING, INNER and LEFT JOIN), with week 5's formative exercise, the quiz and the final project "Queries on the shop": an assignment with a single file consultas.sql and the rubric I left you in sources, with a script of the shop's data so that everyone queries the same thing. Test it all in Docker. And create a "Foro de dudas" (Q&A forum) in the General section for the whole course. All hidden until you've reviewed it and asked my permission to show it.`}</Prompt>
+<Prompt>{`/miyagi:build-unit Unit 4: Querying with SELECT, following the teaching plan (filters, ordering, aggregates with GROUP BY and HAVING, INNER and LEFT JOIN), with the quiz and the Práctica final "Consultas sobre la tienda": an assignment with a single file consultas.sql and the rubric I left you in sources, with a script of the shop's data so everyone queries the same thing. Test everything in Docker. And create in the General section a "Foro de dudas" for the whole course. Adjust the gradebook's weights: 20% the four quizzes, 15% each exercise (Unit 2 and Unit 3) and 50% the final project; the Unit 1 deliverable doesn't count. All hidden until you've reviewed it and asked my permission to show it.`}</Prompt>
 
-## Hidden, tested and with permission {#oculto-probado-y-con-permiso}
+It tests the queries in a lab against the shop's data before writing the instructions. It asks you two questions, about the rubric and about how to approach authorship in a project worth half the grade.
 
-This time each piece is created hidden, with its approval, starting with the section itself:
+## When it gets cut off {#cuando-se-corta}
 
-<Shot src="/img/casos/29-t4-seccion-oculta.webp" alt="Approval panel: creating the Unit 4 section hidden, to test it, with its name and its summary of weeks 5 and 6.">First the section, hidden.</Shot>
+This request didn't go through in one go. The connection dropped, and the Moodle browser closed again. All it took was telling it where to carry on:
 
-Before writing anything, miyagi checks the practical in a docker-lab lab: it loads some common shop data into MariaDB (8 customers, 10 products, 12 orders and 21 order lines) and runs every query of the notes, the formative exercise and the final project. That data script is published too, so the whole class queries the same thing and can compare results.
+<Prompt>{`The connection dropped while the reviewer was finishing. Carry on building Unit 4 where you left off, with the same request: notes, quiz, Práctica final, Foro de dudas and gradebook weights, all hidden.`}</Prompt>
 
-The final project uses your rubric from `sources/`. miyagi translates it into a Moodle rubric (one line per query, worth 0.625 points, and the criteria for use of SQL and readability) and tells you what it wrote itself:
+It picked up the unit's plan from its memory and published Unit 4 hidden. It also completed, with your permission, the quizzes for Units 1 and 2 that had been left half-way. The weights, with their own approval, ended up as: 5% each quiz, 15% each exercise, 50% the final project and 0% the Unit 1 deliverable.
 
-<Shot src="/img/casos/30-t4-rubrica.webp" alt="Approval panel: saving the final project's rubric, based on the teacher's: eight result criteria of 0, 0.3125 or 0.625 points, appropriate use of SQL from 0 to 3 and readability from 0 to 2, with the note that it wrote the intermediate levels of the last two itself.">The teacher's rubric, turned into a Moodle rubric.</Shot>
+## The final project {#la-práctica-final}
 
-The pedagogical reviewer came through here too: it changed query 8 of the project, which was almost the same as an example in the notes, and query 5, which could be solved without `HAVING`.
+The assignment has a single file, `consultas.sql`, with **10 queries** on `tienda_practica`. We put the rubric in Sources, and miyagi turned it into a Moodle rubric: correct results (5 points), appropriate use of SQL (3) and readability (2).
 
-When everything is built and checked, it asks permission just once to show it, listing each piece and its dates:
+<Shot width="1400" height="1476" kind="moodle" src="/img/v2/moodle-profesor-rubrica.webp" alt="The Práctica final's rubric in Moodle, seen by the teacher: the three criteria with their levels and points.">The rubric in the assignment's grading form.</Shot>
 
-<Shot src="/img/casos/31-t4-mostrar-todo.webp" alt="Approval panel: showing the students the Unit 4 section with its six items (common data, notes, guided practical, formative exercise, quiz and final project with its rubric) and the Q&amp;A forum of the General section, reminding that the opening dates still apply.">One approval listing everything the class is going to see.</Shot>
+## Showing it to the students {#mostrarlo-a-los-alumnos}
 
-## What you decide {#lo-que-decides-tú}
+We review the course ourselves and tell it:
 
-When it finishes, it separates what changed from the pedagogical review, the decisions it made on its own and what's left for you:
+<Prompt>{`I've reviewed it and it's fine. Show the students Units 2, 3 and 4 with all their activities, and also the Foro de dudas. Leave the file type filter as it is.`}</Prompt>
 
-<Shot src="/img/casos/32-t4-resumen.webp" alt="The Unit 4 summary: changes from the pedagogical review, its own decisions to review (how it built the rubric, a commitment in the teacher's name in the formative exercise's wording, the quiz's opening time) and two pending items: the gradebook's weights and whether to give the expected number of rows.">Its own decisions worth reviewing, and two questions.</Shot>
+It asks permission just once, listing the 3 sections and the 16 activities. It says it only changes visibility and doesn't notify anyone. The graded items appear in the course, but open on their date.
 
-Notice the second point: the formative exercise's wording says you'll go over the most common mistakes in class. That's a commitment in your name, and it warns you. We answer the two pending items:
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-mostrar-a-alumnos.webp" alt="The reply after showing the units: what they can see from today, a table with the date each graded item opens in 2027, and the pending decision: the Unit 1 quiz is still hidden.">Units shown, each graded item with its opening date, and a decision for you.</Shot>
 
-<Prompt>{`Yes, adjust the gradebook's weights: 20% the four quizzes, 15% each block of exercises (Unit 2 and Unit 3) and 50% the final project; the formative exercise and the Unit 1 deliverable don't count. Don't give the expected number of rows: let them check it themselves.`}</Prompt>
+The only thing still hidden is the Unit 1 quiz, because we didn't mention it, and miyagi reminds you of it. It stays in **In the oven**, with a button to show it:
 
-<Shot src="/img/casos/33-pesos.webp" alt="The gradebook's final table of weights: quizzes, DDL exercises 15%, DML exercises 15%, final project 50% and the pass/fail deliverable 0%; the formative exercise isn't listed because it has no grade.">The gradebook's weights, as the teaching plan says.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-horno.webp" alt="The In the oven view: the Unit 1 quiz in the Tested hidden column, with the Show to students button.">In the oven, the quiz that's missing.</Shot>
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-aprobacion-mostrar.webp" alt="Approval panel for showing the Unit 1 quiz: only the visibility changes, with no notice; 10 random questions, 20 minutes, 2 attempts, it counts for 5%.">Before showing it: what they'll see and what it hasn't been able to check. This screenshot was taken for the tutorial and we then rejected it.</Shot>
 
 ## The course, finished {#el-curso-terminado}
 
-This is how a student sees the whole course: the Q&A forum in the General section and the four units with their notes, practicals, deliverables and quizzes.
+This is how the complete course ends up:
 
-<Shot kind="moodle" src="/img/casos/35-curso-completo-alumno.webp" alt="The whole course seen by a student: the Q&amp;A forum with its description in General and Units 1 to 4, each with its summary, the order to follow and its activities with dates; Unit 4 with the common data, notes, guided practical, formative exercise, quiz and final project.">Introducción a SQL, from start to finish.</Shot>
+<Shot width="1400" height="1458" kind="moodle" src="/img/v2/moodle-profesor-curso.webp" alt="The complete course in Moodle seen by the teacher, with General, the Foro de dudas and the four units.">From the teacher's account.</Shot>
 
-And the final project, with its wording, how it's graded and the rubric in view:
+<Shot width="1400" height="2333" kind="moodle" src="/img/v2/moodle-alumno-curso.webp" alt="The course seen by a student, with the sections and the activities with their dates.">And from a student's account.</Shot>
 
-<Shot kind="moodle" src="/img/casos/34-practica-final-alumno.webp" alt="The final project seen by a student who has already submitted: the wording with the 8 queries, how it's graded, the deadline, the submission status with their consultas.sql file and the rubric with its ten criteria.">The final project, from the account of a student who has already submitted.</Shot>
-
-:::note For the tutorial we moved the calendar forward
-The final project opened on 5 November. To be able to go on with the grading, we moved its dates in the test Moodle: three test students submitted on time and we then let the deadline pass.
+:::note We brought the calendar forward for the tutorial
+The final project opens in March 2027. So that we could carry on with the grading, in the test Moodle we moved its dates: three test students submitted and we treated the deadline as passed. In [step 9](seguimiento.md) we put it back on its real dates.
 :::
 
 Next step: [grading with the rubric](corregir.md).

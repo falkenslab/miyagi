@@ -1,70 +1,62 @@
 ---
 title: 10. Your own skill
 sidebar_position: 11
-description: Teaching miyagi your class's SQL conventions with a skill of your own, and seeing it applied without asking.
+description: Teach miyagi your class's SQL conventions with a skill of your own, and see it applied without asking for it.
 ---
 
 # 10. Your own skill {#10-tu-propia-habilidad}
 
-miyagi comes with its skills built in, but each subject has its quirks. In this course we want all the SQL the students see to follow the same conventions: reserved words in upper case, one clause per line, aliases with `AS`, always an explicit `JOIN`, `INSERT` always with the column list… Students learn by imitating.
+miyagi comes with its skills built in, but every subject has its quirks. In this course we want all the SQL the students see to follow the same conventions: keywords in upper case, one clause per line, aliases with `AS`, `JOIN` always explicit, `INSERT` always with the column list… Students learn by imitating.
 
-For that there's no need to program: a text file with a **skill of your own** is enough.
+You don't have to program for that: a text file with a **skill of your own** is enough.
 
 ## Writing it {#escribirla}
 
-In the course's folder, `.claude/skills/estilo-sql/SKILL.md`:
+In the subject's folder, `.claude/skills/estilo-sql/SKILL.md`:
 
 ```markdown
 ---
 name: estilo-sql
-description: This course's SQL style conventions (MariaDB) - use it whenever you write or review SQL the students will see (notes, assignment wordings, solutions, quiz questions, forum replies) and when grading submissions with SQL.
+description: Convenciones de estilo SQL de este curso (MariaDB) - úsala siempre que escribas o revises SQL que vayan a ver los alumnos (apuntes, enunciados, soluciones, preguntas de cuestionario, respuestas del foro) y al corregir entregas con SQL.
 ---
 
-# The course's SQL style
+# Estilo SQL del curso
 
-All the SQL you publish in this course follows these conventions, without exception.
+Todo el SQL que publiques en este curso sigue estas convenciones, sin excepciones.
 
-## Conventions
+## Convenciones
 
-1. Reserved words in UPPER CASE.
-2. Table and column names in snake_case and lower case: clientes, fecha_alta, id_cliente.
-3. One clause per line, and the columns of a long SELECT one per line with four spaces.
-4. INSERT always with the explicit column list.
+1. Palabras reservadas en MAYÚSCULAS.
+2. Nombres de tablas y columnas en snake_case y minúsculas: clientes, fecha_alta, id_cliente.
+3. Una cláusula por línea, y las columnas de un SELECT largo, una por línea con cuatro espacios.
+4. INSERT siempre con la lista de columnas explícita.
 ...
 ```
 
-The `description` line is the one that decides **when** it's used: it says what it does and in which situations. The complete file, with the reference example and what to do when grading, is in [Your own skills](/avanzado/habilidades-propias/).
+The `description` line is what decides **when** it's used: it says what it does and in which situations. The full file, with the reference example and what to do when grading, is in [Your own skills](/avanzado/habilidades-propias/).
 
-## Checking that it sees it {#comprobar-que-la-ve}
-
-<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi skills`}</Terminal>
-
-It appears at the end of the list, marked as your own (`[propia]` in this Spanish session):
-
-<Shot src="/img/casos/49-skills-propia.webp" title="PowerShell — miyagi skills" alt="The output of miyagi skills: the built-in skills with their descriptions and, at the end, estilo-sql marked as the teacher's own, with its description.">miyagi's skills, and ours at the end.</Shot>
+In the terminal, `miyagi skills` shows it at the end of the list, marked as `[own]`. You can see it in [Use cases in the terminal](en-terminal.md).
 
 ## Seeing it in action {#verla-en-acción}
 
-There's no need to name it. We ask for something where it's going to write SQL for the students:
+There's no need to name it. We ask it for something where it's going to write SQL for the students:
 
-<Prompt>{`For Tuesday's class, write in drafts three examples of JOIN on the shop, from easier to harder, with their explanation, to project in class. Don't publish anything.`}</Prompt>
+<Prompt>{`For Tuesday's class, write in drafts three JOIN examples on the shop, from simplest to hardest, with their explanation, to project in class. Don't publish anything.`}</Prompt>
 
-Before writing a line, it loads it on its own:
+It reads its notes, writes the examples following the conventions, runs them in the lab against the shop's data and prepares a page to project with the real results. In the grading in [step 7](corregir.md) you'd already seen it apply on its own: "Applying the estilo-sql skill".
 
-<Shot src="/img/casos/50-skill-carga.webp" alt="The chat: after reading the Unit 4 page, it applies the estilo-sql skill; it then reads the shop's data, the JOIN chapters of the notes and the final project's solution so as not to repeat them, writes ejemplos-join.sql and announces it will check it in Docker.">Applying the estilo-sql skill, without us asking.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-10-habilidad-en-uso.webp" alt="The conversation with the JOIN examples: the request, the steps, and the table with the three examples.">Three examples, from simplest to hardest.</Shot>
 
-It reads the notes and the final project's solution so as not to repeat their examples, writes the queries following the conventions, runs them in Docker on the shop's data and prepares a page to project, with the real results:
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-10-ejemplos-join.webp" alt="The same conversation with the table of examples and, in the side panel, the ejemplos-join.html page ready to project.">The page to project, in the side panel next to the conversation.</Shot>
 
-<Shot src="/img/casos/52-ejemplos-join.webp" title="ejemplos-join.html" alt="The page to project: three examples of JOIN on the shop; the first, what order 6 contains, with the source tables, the query written in upper case with one clause per line and aliases with AS, the real result and what to look at.">What it prepared in `drafts/` for the class: queries in our style and real results.</Shot>
-
-<Shot src="/img/casos/51-skill-resumen.webp" alt="The summary: the three examples from easier to harder (INNER JOIN of two tables, a LEFT JOIN's filter in the ON or in the WHERE, three tables with COUNT DISTINCT), all run in Docker without errors, following the course's SQL style, and the question of whether the class is the one on Tuesday 10 November, which is when JOIN comes up in the calendar.">And a sensible question: according to the calendar, JOIN comes up on Tuesday 10 November, not this Tuesday.</Shot>
+And it asks a sensible question: according to the calendar, `JOIN` is explained on Thursday, not Tuesday. The examples work for both sessions, but it tells you.
 
 :::tip What a skill can and can't do
-A skill teaches it **how** to do something with what it already has. It doesn't give it new tools or get past approvals. What applies to the whole course, in every task ("grade out of 10"), goes better in `instructions.md`: it's explained in [Shortcuts and instructions](/avanzado/atajos-e-instrucciones/).
+A skill teaches it **how** to do something with what it already has. It doesn't give it new tools or let it skip approvals. What applies to the whole course, in every task ("grade out of 10"), is better in `instructions.md`: it's explained in [Shortcuts and instructions](/avanzado/atajos-e-instrucciones/).
 :::
 
-## That's all {#y-hasta-aquí}
+## And that's all {#y-hasta-aquí}
 
-From an empty course to a complete Introduction to SQL classroom: teaching plan, four units with notes, practicals tested in Docker, deliverables with rubrics, quizzes, a graded final project, a forum looked after, a follow-up, an audit and a course guide. Everything the students saw first went through an approval panel.
+From an empty course to a complete Introduction to SQL classroom: teaching plan, four units with notes, practicals tested in Docker, exercises with rubrics, quizzes, a graded final project, a forum looked after, a follow-up, an audit and a course guide. Everything the students saw first went through an approval panel. And you also saw what failed: the browser dropping, the quizzes left half-way, and that to grade files, today, you have to be the bridge yourself.
 
-To do it in your course, start with [Install](/guia/instalar/) and [Getting started](/guia/primeros-pasos/).
+To do it in your course, start with [Install](/guia/instalar/) and [The desktop app](/guia/escritorio/).

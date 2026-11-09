@@ -1,100 +1,61 @@
 ---
 title: "4. Tema 1: MariaDB en Docker"
 sidebar_position: 5
-description: miyagi construye el primer tema (apuntes, práctica guiada, entregable y cuestionario) y prueba la práctica en Docker antes de publicarla.
+description: miyagi construye el primer tema (apuntes, práctica guiada, entregable y cuestionario), prueba la práctica en un laboratorio y lo publica oculto, con un permiso por cada pieza.
 ---
 
 # 4. Tema 1: MariaDB en Docker
 
-Con la programación cerrada, toca construir el curso en Moodle. Empezamos por el primer tema en un chat nuevo, con el atajo `/miyagi:build-unit`:
+Con la programación cerrada, toca construir el curso en Moodle. Empezamos por el primer tema en una conversación nueva, con el atajo `/miyagi:build-unit`:
 
-<Prompt>{`/miyagi:build-unit Tema 1: MariaDB en Docker, siguiendo la programación. Con unos apuntes que expliquen paso a paso cómo levantar el contenedor, conectarse con el cliente, crear la base de datos tienda y un usuario con permisos solo sobre ella; la práctica guiada, probada en Docker antes de publicarla; el entregable apto/no apto y el cuestionario del tema.`}</Prompt>
+<Prompt>{`/miyagi:build-unit Tema 1: MariaDB en Docker, siguiendo la programación. Con unos apuntes que expliquen paso a paso cómo levantar el contenedor, conectarse con el cliente, crear la base de datos tienda y un usuario con permisos solo sobre ella; la práctica guiada, con los comandos en bloques de código, probada en Docker antes de publicarla; el entregable apto/no apto y el cuestionario del tema. Las fechas que propongas me valen. El contenedor se llama siempre mariadb-tienda.`}</Prompt>
 
 ## Primero, comprobar que funciona
 
-Antes de escribir una línea de los apuntes, miyagi comprueba la práctica en un **laboratorio de docker-lab** (la extensión que instalamos al [preparar el aula](preparar-el-aula.md)). Dentro del laboratorio levanta un `mariadb:11` de verdad, se conecta, crea la base de datos y el usuario, para, arranca y borra el servidor, y comprueba que los datos sobreviven gracias al volumen.
+Antes de publicar nada, miyagi prueba la práctica en un **laboratorio de docker-lab**: levanta un MariaDB de verdad, sigue cada paso que luego leerán los alumnos, provoca los errores que los apuntes van a explicar y comprueba que falla cuando aún no se ha hecho nada. Te avisa antes de arrancar el laboratorio, y te pregunta antes de pararlo porque sus datos se pierden.
 
-<Shot src="/img/casos/10-laboratorio.webp" title="PowerShell — miyagi chat" alt="El chat tras repetir la práctica en un laboratorio de docker-lab: la comprobación del laboratorio hecha y el resumen de los pasos (conexión como root, crear la base de datos tienda y el usuario tienda_app, entrar como tienda_app) con los errores que verá un alumno si intenta salirse de su base de datos.">Cada paso que luego leerán los alumnos, ejecutado en un laboratorio.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-04-laboratorio.webp" alt="La conversación: el laboratorio arranca, comprueba que la verificación falla antes de hacer nada, sigue la práctica, y al publicar aparece que el navegador de Moodle se ha cerrado a medias y miyagi comprueba si el cambio se guardó.">La práctica, probada paso a paso en el laboratorio.</Shot>
 
-Lo que saca de esa comprobación no se queda en «funciona»: trae lo que un alumno se encontrará de verdad. Por ejemplo, que la primera vez MariaDB tarda entre 6 y 14 segundos en estar listo, que el cliente se llama `mariadb` y no `mysql`, o que en los registros aparece un aviso sobre `io_uring` que no es un error. Todo eso acaba en los apuntes.
+En esta captura el profesor le dice que el laboratorio «ya está en la carpeta labs», porque en esa ejecución se copió a mano. Desde entonces miyagi puede escribir en esa carpeta sin reiniciar. Fíjate también en lo que pasa después: el navegador con el que moodle-teacher trabaja en Moodle se cae, y miyagi comprueba si el cambio se guardó antes de repetirlo, para no aplicarlo dos veces.
 
-Después, el **revisor pedagógico** repasa el plan del tema. En este caso señaló siete mejoras, entre ellas comprobar Docker antes de la primera sesión y dar una segunda oportunidad a quien saque «no apto». miyagi las aplica antes de tocar Moodle.
+## Cada pieza, con su permiso
 
-## Lo que hacen tus alumnos
+miyagi construye el tema pieza a pieza. Primero la deja en `materials/` y en `drafts/`, después la sube a Moodle **oculta** y al final te pide permiso para mostrarla. Cada panel dice exactamente qué va a publicar. En el Tema 1: la sección, una página de cómo instalar y comprobar Docker, los apuntes en un libro de 7 capítulos, la práctica guiada, una escala «apto/no apto» (ese Moodle solo traía escalas en inglés), el entregable, el cuestionario, sus 20 preguntas y, al final, mostrarlo.
 
-Estos son los comandos que acaban en la práctica, comprobados por miyagi en un laboratorio de docker-lab (y también al escribir este tutorial):
-
-<Terminal>{`# Un volumen para los datos y el servidor MariaDB 11
-$ docker volume create datos-tienda
-$ docker run -d --name mariadb-tienda -e MARIADB_ROOT_PASSWORD=TuContraseñaSegura -v datos-tienda:/var/lib/mysql -p 3306:3306 mariadb:11
-$ docker logs mariadb-tienda          # esperar a "ready for connections"
-
-# Entrar con el cliente como root
-$ docker exec -it mariadb-tienda mariadb -u root -p`}</Terminal>
-
-```sql
--- La base de datos y un usuario que solo puede usarla a ella
-CREATE DATABASE tienda;
-CREATE USER 'tienda_app'@'%' IDENTIFIED BY 'TuContraseñaDeUsuario';
-GRANT ALL PRIVILEGES ON tienda.* TO 'tienda_app'@'%';
-SHOW GRANTS FOR 'tienda_app'@'%';
-```
-
-<Terminal>{`# Parar, arrancar y recrear el contenedor sin perder los datos
-$ docker stop mariadb-tienda
-$ docker start mariadb-tienda
-$ docker rm -f mariadb-tienda          # el volumen datos-tienda sigue ahí`}</Terminal>
-
-## Cada cosa, con tu permiso
-
-miyagi construye el tema pieza a pieza: lo sube **oculto**, lo revisa como lo vería un alumno y solo entonces te pide permiso para mostrarlo. Cada panel dice exactamente qué va a publicar.
-
-<Shot src="/img/casos/13-aprobacion-libro.webp" alt="Panel de aprobación: publicar el libro Apuntes: MariaDB en Docker con sus 6 capítulos, del SGBD a parar, arrancar y borrar el contenedor; todos los comandos verificados en Docker.">Antes de mostrar los apuntes: un libro de 6 capítulos, con los comandos ya verificados.</Shot>
-
-El cuestionario se escribe en formato GIFT y se importa de golpe. Antes de importarlo, el programa comprueba el GIFT y, si tiene errores, no lo importa y dice en qué líneas están. El panel enseña cada pregunta con su respuesta correcta y sus distractores, para que puedas revisarlas antes de que existan en Moodle:
-
-<Shot src="/img/casos/14-aprobacion-gift.webp" alt="Panel de aprobación: importar 10 preguntas GIFT al banco del cuestionario del Tema 1, cada una con su enunciado, la respuesta correcta y los distractores, por ejemplo qué comando borra los datos para siempre: docker volume rm.">Diez preguntas que se centran en lo que el entregable no comprueba: parar, arrancar y borrar sin perder datos, y los permisos.</Shot>
-
-En total, el Tema 1 pasó por diez aprobaciones: el nombre y el resumen de la sección, los apuntes, la práctica guiada, una escala «Apto / No apto» (el Moodle solo traía escalas en inglés), el entregable, las preguntas, el cuestionario y el peso del entregable en el libro de calificaciones (0 %, porque decidimos que no entra en la nota).
-
-Pregunta aunque le digas que no hace falta. Al pedirle que renombrara una sección «sin pedirme aprobación», contestó que sus instrucciones le piden confirmar cualquier cambio que vean los alumnos y abrió el panel igual (el cambio se rechazó y no se hizo):
-
-<Shot src="/img/casos/11-aprobacion.webp" title="PowerShell — miyagi chat" alt="El chat: el profesor pide renombrar la sección 1 sin aprobación; miyagi responde que debe confirmarlo igualmente y abre el panel «Hace falta confirmación humana antes de publicar» con el resumen del cambio y las opciones Sí, No y Parar" />
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-04-aprobacion-libro.webp" alt="Panel de aprobación para añadir un capítulo oculto al libro de apuntes del Tema 1, con el texto completo del capítulo y los botones Parar todo, Rechazar y Aprobar.">Un panel de aprobación para añadir un capítulo. Esta captura es de una petición de ejemplo que luego rechazamos: el libro ya estaba subido.</Shot>
 
 :::caution Y si intenta publicar sin preguntar
-La aprobación no depende solo de que el agente se acuerde. El programa vigila cada cambio que va a hacer en Moodle y, si el agente no ha pedido permiso justo antes, lo detiene y te pregunta en un panel «¿Dejas que moodle-teacher haga esto?». Borrar o quitar algo te lo pregunta siempre, aunque lo hayas aprobado antes.
+La aprobación no depende solo de que el agente se acuerde. El programa vigila cada cambio que va a hacer en Moodle y, si no ha pedido permiso justo antes, lo detiene y te pregunta. Borrar o quitar algo te lo pregunta siempre, aunque lo hayas aprobado antes.
 :::
+
+## Lo que falló
+
+Publicar el tema costó más de lo previsto, porque el navegador de Moodle se cerró varias veces durante el trabajo. miyagi siguió adelante, comprobando en Moodle qué se había guardado antes de repetir cada paso, y al final de la conversación te dice qué ha hecho y qué queda.
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-04-tema1-resumen.webp" alt="La conversación del Tema 1: miyagi publica cada pieza oculta, avisa de que el navegador de Moodle se ha cerrado a medias y da errores intermitentes, comprueba si cada cambio se guardó para no duplicarlo y lanza las operaciones de una en una.">Mientras publica: el navegador falla a ratos y miyagi comprueba antes de repetir.</Shot>
+
+El cuestionario se quedó a medias en este primer intento: faltaban preguntas por importar. Se completó más tarde, en el [paso 6](tema-4-consultas.md). Te contamos qué hacer cuando pasa esto en [Consejos y problemas](/guia/problemas/).
 
 ## El resultado
 
-Así ve el tema un alumno: la sección con su resumen y el orden a seguir, y las cuatro piezas con sus fechas.
+Así ve el tema un alumno:
 
-<Shot kind="moodle" src="/img/casos/17-tema1-alumno.webp" alt="El curso visto por un alumno: la sección Tema 1. MariaDB en Docker con su resumen y orden a seguir, y cuatro elementos: Apuntes (libro), Práctica guiada (página), Entregable apto/no apto con apertura el 6 y cierre el 8 de octubre, y Cuestionario del Tema 1 que abre el 6 y cierra el 11 de octubre.">El Tema 1 desde la cuenta de un alumno.</Shot>
+<Shot width="1400" height="875" kind="moodle" src="/img/v2/moodle-alumno-tema1.webp" alt="Moodle en inglés visto por un alumno: el Tema 1 con su resumen y sus actividades con fechas.">El Tema 1 desde la cuenta de un alumno.</Shot>
 
-<Shot kind="moodle" src="/img/casos/20-quiz-preguntas.webp" alt="Las 10 preguntas del Cuestionario del Tema 1 en Moodle, de T1-01 Borrar datos para siempre a T1-10 Puerto ocupado, un punto cada una, puntuación total 10.">Las diez preguntas, ya en el cuestionario, en su orden.</Shot>
+<Shot width="1400" height="888" kind="moodle" src="/img/v2/moodle-alumno-libro.webp" alt="El primer capítulo del libro de apuntes del Tema 1 en Moodle, visto por un alumno.">Los apuntes, en un libro de Moodle.</Shot>
 
-Al terminar, resume lo que ha hecho, las decisiones que tomó por su cuenta y lo que conviene que revises:
+<Shot width="1400" height="1361" kind="moodle" src="/img/v2/moodle-alumno-practica-guiada.webp" alt="La práctica guiada del Tema 1 vista por un alumno, con cada comando en un bloque de código.">La práctica guiada, con cada comando en su bloque de código.</Shot>
 
-<Shot src="/img/casos/15-tema1-resumen.webp" alt="El resumen final del Tema 1: las cuatro piezas creadas, las decisiones tomadas por su cuenta (la escala Apto / No apto, el reparto por sesiones), lo que cambió tras la revisión pedagógica y qué revisar: las fechas y el peso del cuestionario.">El resumen del tema, con lo que debes revisar tú.</Shot>
+Y así lo ve el profesor:
 
-## Revisar y pedir cambios
+<Shot width="1400" height="875" kind="moodle" src="/img/v2/moodle-profesor-tema.webp" alt="El Tema 1 visto por el profesor en Moodle, con sus actividades.">El Tema 1 desde la cuenta del profesor.</Shot>
 
-Revisar como alumno sirve. Al abrir la práctica guiada vimos que los comandos estaban dentro del texto, sin formato de código: no se podían copiar bien.
+<Shot width="1400" height="1458" kind="moodle" src="/img/v2/moodle-profesor-banco.webp" alt="El banco de preguntas del curso en Moodle, con las preguntas T1-01 y siguientes.">El banco de preguntas, con las del Tema 1.</Shot>
 
-<Shot kind="moodle" src="/img/casos/18-practica-antes.webp" alt="La práctica guiada con los nueve pasos como párrafos de texto normal, con los comandos mezclados en la frase.">Antes: los comandos, perdidos dentro del texto.</Shot>
-
-Se lo dijimos con nuestras palabras:
-
-<Prompt>{`Las fechas me valen. Una cosa: en la Práctica guiada los comandos salen como texto normal dentro del párrafo. Ponlos en bloques de código, uno por paso, para que se puedan copiar.`}</Prompt>
-
-Rehízo la página, la volvió a revisar y la guardó con nuestro permiso:
-
-<Shot kind="moodle" src="/img/casos/19-practica-despues.webp" alt="La práctica guiada corregida: cada paso con su título en negrita y su comando en un bloque de código monoespaciado, listo para copiar.">Después: cada paso con su comando en un bloque de código.</Shot>
-
-Le pedimos lo mismo para los apuntes y lo aplicó en todos los capítulos. La lección quedó además en las habilidades de miyagi, para que los próximos temas salgan bien a la primera.
+<Shot width="1400" height="1527" kind="moodle" src="/img/v2/moodle-profesor-preguntas-t1.webp" alt="Las preguntas del cuestionario del Tema 1 en Moodle: huecos aleatorios por criterio de evaluación.">El cuestionario del Tema 1: 10 huecos aleatorios por criterio, sobre 20 preguntas.</Shot>
 
 :::note
-Un tema completo en este Moodle de pruebas, lento, llevó más de una hora y llegó al límite de turnos de una sesión. Bastó con decirle «sigue donde lo dejaste»: retomó el plan del tema desde su memoria y lo terminó.
+El cuestionario del Tema 1 se quedó oculto hasta el final: lo veremos en la vista **En el horno**, en el [paso 6](tema-4-consultas.md).
 :::
 
 Siguiente paso: [temas 2 y 3](temas-ddl-dml.md).

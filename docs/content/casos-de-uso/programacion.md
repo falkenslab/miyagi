@@ -1,58 +1,37 @@
 ---
 title: 3. La programación didáctica
 sidebar_position: 4
-description: Completar la programación didáctica en el chat, con una revisión pedagógica y las decisiones que solo toma el profesor.
+description: Completar la programación didáctica en la conversación y decidir lo que solo decide el profesor.
 ---
 
 # 3. La programación didáctica
 
-La ingesta convirtió el temario en la programación del curso (`knowledge/teaching-plan.md`), pero al temario le faltaban cosas: criterios de evaluación, un calendario y atención a la diversidad. Abrimos el chat:
+La ingesta convirtió el temario en la programación del curso, pero le faltaban cosas: criterios de evaluación, un calendario y atención a la diversidad. Usamos el atajo de la programación y le decimos lo que queremos, contestando de paso a sus dudas:
 
-<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi chat`}</Terminal>
-
-Al arrancar, lee su memoria y nos resume lo que sabe del curso, incluida la contradicción de la penalización que encontró en el paso anterior.
-
-<Shot src="/img/casos/05-chat-apertura.webp" alt="El chat de miyagi a pantalla completa: la cabecera con el logo, el curso Introducción a SQL y un saludo que resume lo que sabe: programación con 5 objetivos y 4 temas, práctica final del 50 %, curso aún vacío en Moodle y la contradicción de la penalización por retraso.">El chat al arrancar. Abajo, el modo (guiado) y cuánto contexto lleva usado.</Shot>
-
-## Pedírselo
-
-Usamos el atajo de la programación, `/miyagi:teaching-plan`, y le decimos lo que queremos con nuestras palabras:
-
-<Prompt>{`/miyagi:teaching-plan Revisa la programación que sacaste de mi temario y complétala con lo que falte: criterios de evaluación, calendario de las 6 semanas (empezamos el lunes 5 de octubre) y atención a la diversidad. La penalización por retraso la aplico yo a mano al calificar.`}</Prompt>
-
-Escribe lo que falta y, antes de darlo por bueno, lo manda a un ayudante: el **revisor pedagógico**, un experto en diseño didáctico que lee la programación entera y le devuelve un informe. No puede cambiar nada él mismo.
-
-<Shot src="/img/casos/06-revisor.webp" alt="El chat mientras delega en pedagogy-reviewer: el ayudante lee la programación, las páginas de los cuatro temas y la de la práctica final; después miyagi edita la programación con lo que le ha señalado.">El revisor pedagógico leyendo la programación y los temas. Después, miyagi aplica sus sugerencias.</Shot>
+<Prompt>{`/miyagi:teaching-plan Revisa la programación que sacaste de mi temario y complétala con lo que falte: criterios de evaluación, calendario de las 6 semanas (empezamos el lunes 5 de octubre) y atención a la diversidad. La penalización por retraso la aplico yo a mano al calificar. Las sesiones son los martes y jueves, de 1,5 horas cada una. En «Resultados correctos» un 2 o un 4 son estados intermedios, a tu criterio. Las entregas tardías se admiten hasta una semana después. Los cuestionarios pesan igual entre sí, y los ejercicios también. Para O1, añade al Tema 1 un entregable ligero, apto o no apto, sin entrar en el 100 %: una captura de su contenedor funcionando con la base de datos tienda creada.`}</Prompt>
 
 ## Lo que solo decides tú
 
-Cuando termina, resume lo que ha hecho y pregunta lo que no le corresponde decidir: qué días hay clase (el 12 de octubre es festivo), si el reparto de semanas vale, y cómo evaluar un objetivo que se había quedado sin instrumento de evaluación.
+Escribe lo que falta y deja anotado lo que no le corresponde decidir. Como la fecha del 5 de octubre ya había pasado, le pedimos un calendario para otra edición:
 
-<Shot src="/img/casos/07-programacion.webp" alt="La respuesta de miyagi: criterios CE1.1 a CE5.3, calendario de 6 semanas desde el 5 de octubre, atención a la diversidad, y tres preguntas para el profesor: los días de clase, el reparto de semanas y cómo evaluar los criterios del objetivo 1.">Lo que ha añadido, marcado como propuesta, y tres preguntas para el profesor.</Shot>
+<Prompt>{`Es para otra edición: empezamos el lunes 1 de febrero de 2027, recalcula el calendario con esa fecha y da por buenos los festivos nacionales. Un ejercicio por tema, 15 % cada uno, en los temas 2 y 3. El retraso no vale para cuestionarios. Los criterios me valen como están. Un no apto se corrige y se vuelve a comprobar, sin efecto en la nota. Sin nota mínima por ahora. Lo demás, como propones.`}</Prompt>
 
-Le contestamos en el mismo chat:
+Lo recalcula y te dice lo que queda en el aire: que el martes 9 de febrero es Martes de Carnaval y coincide con una sesión y con el límite del entregable, que el fin de la admisión tardía de la práctica final cae en Semana Santa y que la recuperación y el cierre de actas siguen sin fijar.
 
-<Prompt>{`Las sesiones son los martes y jueves, de 1,5 horas cada una. El reparto de las semanas me vale. Para O1, añade al Tema 1 un entregable ligero: una captura de su contenedor funcionando con la base de datos tienda creada.`}</Prompt>
-
-Lo incorpora y vuelve a preguntar lo único que no puede saber: cuánto pesa ese entregable nuevo.
-
-<Shot src="/img/casos/08-programacion-pregunta.webp" alt="miyagi confirma las sesiones de martes y jueves y el entregable del Tema 1, y pregunta si debe ser apto/no apto o restar peso a otros entregables; también avisa de dos criterios que siguen sin entregable propio.">Una pregunta concreta, con las dos opciones razonables.</Shot>
-
-<Prompt>{`Que sea apto/no apto, sin entrar en el 100 %. Lo de CE1.3 y los permisos lo cubrimos en el cuestionario del Tema 1.`}</Prompt>
-
-Con eso la programación queda cerrada. Así quedan, por ejemplo, los criterios de evaluación en `knowledge/teaching-plan.md`:
-
-```markdown
-- **CE1.1** (O1). Levanta un contenedor MariaDB 11 con `docker run` usando un volumen persistente y el puerto publicado correctamente.
-- **CE1.2** (O1). Se conecta al servidor desde el cliente de línea de órdenes dentro del contenedor.
-- **CE1.3** (O1). Para, arranca y borra el contenedor sin perder los datos, apoyándose en el volumen.
-- **CE2.1** (O2). Crea una base de datos y un usuario con contraseña, y le concede permisos solo sobre esa base de datos (no sobre todas).
-...
-- **CE5.3** (O5). Combina dos o más tablas con `INNER JOIN` y `LEFT JOIN`, usando `JOIN` explícito y no comas en el `FROM`.
-```
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-03-programacion-respuesta.webp" alt="La respuesta de miyagi: una tabla con fechas límite y hasta cuándo se admite la entrega tardía de cada evaluable, y las dudas que quedan: Martes de Carnaval, Semana Santa, recuperación y cierre de actas, cuestionarios sin intento.">El calendario de evaluables y las dudas, sin prisa, para que las decidas tú.</Shot>
 
 :::info La programación no se publica
 La programación vive en la memoria del curso, en tu ordenador. No se sube a Moodle salvo que se lo pidas. Lo que sí hace es usarla para construir cada tema y, más adelante, para comprobar que el aula sigue cuadrando con ella (`/miyagi:align`).
 :::
+
+## Verla
+
+En la vista **Asignatura**, pestaña **Programación**, está tal como quedó, con **Revisar con miyagi** y **Comprobar el aula**:
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-03-programacion.webp" alt="La vista Programación con el texto de la programación didáctica de Introducción a SQL.">La programación didáctica.</Shot>
+
+Y en **Temas y actividades**, las cuatro unidades que acaba de planificar:
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-03-temas.webp" alt="La vista Temas y actividades con cuatro tarjetas de unidad.">Los cuatro temas, antes de construirlos en Moodle.</Shot>
 
 Siguiente paso: [el Tema 1](tema-1-mariadb-docker.md).

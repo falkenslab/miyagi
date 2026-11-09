@@ -8,49 +8,43 @@ description: How the class is doing, separating data from interpretation, and an
 
 ## How the class is doing {#cómo-va-la-clase}
 
-With the first grades in, we ask about the class with the follow-up shortcut:
+With the first grades in, we ask it about the class with the follow-up shortcut:
 
 <Prompt>{`/miyagi:progress`}</Prompt>
 
-It looks at the gradebook and the activity summary, and separates what's data from what's its interpretation:
+It looks at the gradebook and the activity summary, and separates what's data from what's its interpretation. It also detects that the final project's dates don't match, a side effect of having brought them forward for the tutorial:
 
-<Shot src="/img/casos/44-progreso.webp" alt="The progress review: gradebook data (one student without any submission, two fails in the final project, one student with 9.38, the other activities not yet due, the course total not yet weighted) and its interpretation (what fails most is HAVING, LEFT JOIN and ordering; the likely cause; the test student); it publishes no announcement and saves the review in progress.md with no names.">Data on one side, interpretation on the other, and no unnecessary announcement.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-09-progreso.webp" alt="The progress review: the average of those who submitted, a table of deadlines that don't match each other, the patterns detected and its reading of them, with no general notice.">Data on one side, interpretation on the other, and no unnecessary notices.</Shot>
 
 Two details matter here:
 
-- **It doesn't publish announcements on its own.** With only one student not submitting and nothing else overdue, it sees no reason to write to the class.
-- **It doesn't keep records on students.** The review stays in `knowledge/progress.md` as a class trend, with no names, to compare with the next one.
+- **It doesn't post notices on its own.** Since it's a single case, it sees no reason to write to the class.
+- **It doesn't keep student records.** The review stays in its memory with no aliases or names, to compare with the next one.
+
+It points out that the two students with a 4 are the ones in the thread about `WHERE` and `HAVING`, and says that "with 4 students the sample is very small".
 
 ## Auditing the whole course {#auditar-el-curso-entero}
 
-Before classes start, a full review:
-
 <Prompt>{`/miyagi:audit`}</Prompt>
 
-It goes through the course without changing anything (organisation, dates, assessment, accessibility, pedagogy, with a second opinion from the pedagogical reviewer) and returns recommendations by priority. The high-priority ones, in this case, weren't obvious:
+It goes through the course without changing anything (organization, dates, assessment, accessibility, pedagogy) and returns the recommendations by priority. And it says what it hasn't been able to check: how a student really sees it, that it has only reviewed 3 of the 14 question banks and that it hasn't run the practicals again.
 
-<Shot src="/img/casos/45-auditoria-alta.webp" alt="The audit, high priority: the final project's test dates; that the quizzes don't measure well because the second attempt repeats the questions and the right answer shows after the first one; and that the interpretation of the rubric approved that day allows passing with a single correct query, with an alternative.">The three high-priority recommendations.</Shot>
-
-The third is the most interesting: the interpretation of the rubric we approved when grading ("the criteria for use of SQL and readability are assessed on what works") has an effect nobody saw then. Whoever gets a single query right would get a 5.6 without a single `JOIN` or `HAVING`. It points that out, proposes an alternative and leaves the decision to the teacher.
-
-Then come the medium- and low-priority ones: that there's no course guide, that `JOIN` reaches the final grade without any graded practice before it, that Unit 4 is overloaded, that completion tracking is off, that the course's end date isn't set…
-
-<Shot src="/img/casos/46-auditoria-media-baja.webp" alt="The audit, medium and low priority: no course guide, Unit 4 reaches JOIN without graded practice and is overloaded, practical skills are assessed only with multiple-choice questions, completion tracking is off, and details such as different headings in the guided practicals or the course's end date.">Medium and low priority, and the question of where to start.</Shot>
-
-The audit is saved with its date in `knowledge/course-audit.md`, so the next one will tell you what has improved.
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-09-auditoria.webp" alt="The audit: low-priority recommendations, what's fine and what couldn't be checked.">The end of the audit, with what's fine and what it hasn't been able to check.</Shot>
 
 ## Applying a recommendation {#aplicar-una-recomendación}
 
-We choose the one most visible to the students:
+We pick the one most visible to the students:
 
-<Prompt>{`Do point 4: a "Course guide" page in General with the weights, the calendar, the late submission policy for all assignments and what to do if Docker doesn't work. We'll see to the rest another day.`}</Prompt>
+<Prompt>{`Make a "Guía del curso" page in General with the weights, the calendar, the late submission policy for all assignments and what to do if Docker doesn't work, and show it. Put the final project back on the dates in the teaching plan, without touching the grades. We'll see to the rest another day.`}</Prompt>
 
-It creates it hidden, reviews it as a teacher and at mobile width, and before showing it warns of two things it can't decide:
+It creates it hidden, asks your permission, shows it with another permission and changes the dates with another. And it warns you of what you have to decide: the guide announces the Unit 1 quiz, which is still hidden; it promises a school computer for anyone who can't use Docker at home, with no procedure yet; and it gives the weights as percentages, although Moodle still calculates the total out of 70.
 
-<Shot src="/img/casos/47-guia-resumen.webp" alt="The course guide's summary: what it contains (weights, calendar, late submissions, what to do if Docker doesn't work, where to ask), reviewed on mobile, and two warnings before showing it: the final project's dates and what alternative to offer whoever can't use Docker.">The guide, ready and hidden, with two questions before showing it.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-09-guia-resumen.webp" alt="The summary of the course guide: the sections, the final project's dates before and now, and a list of what to bear in mind.">The guide, published, and what's worth fixing.</Shot>
 
-We asked it to put the final project back on its real dates (5 to 15 November, without touching the grades) and to show the guide as it was. This is how the students see it:
+This is how the students see it:
 
-<Shot kind="moodle" src="/img/casos/48-guia-curso.webp" alt="The course guide page seen by a student: how the grade is worked out with a table of weights, the calendar of the six weeks with units and submissions, what happens with late submissions for each type of activity, how to check Docker before the first class, what to do if Docker doesn't work and where to ask.">The course guide: weights, calendar, late submissions and what to do if Docker fails.</Shot>
+<Shot width="1400" height="1847" kind="moodle" src="/img/v2/moodle-alumno-guia.webp" alt="The Guía del curso page in Moodle seen by a student: weights, calendar, late submissions and what to do if Docker fails.">The Guía del curso.</Shot>
+
+The audit and the progress review stay in its memory with their date, so next time it will tell you what has changed.
 
 Next step: [your own skill](habilidad-propia.md).

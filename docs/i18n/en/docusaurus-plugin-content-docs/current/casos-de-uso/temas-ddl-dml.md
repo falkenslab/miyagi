@@ -1,57 +1,46 @@
 ---
 title: "5. Units 2 and 3: DDL and DML"
 sidebar_position: 6
-description: The units on defining and manipulating data, with rubric-graded deliverables, quizzes, and what to do when miyagi skips a step.
+description: The units on defining and manipulating data, with rubric-graded exercises, quizzes, and what was left pending.
 ---
 
 # 5. Units 2 and 3: DDL and DML {#5-temas-2-y-3-ddl-y-dml}
 
-With the first unit built and reviewed, we ask for the next two in a single request:
+With the first unit in place, we ask it for the next two in a single request:
 
-<Prompt>{`/miyagi:build-unit Units 2 and 3, one after the other, following the teaching plan: Unit 2 (DDL: CREATE TABLE with keys and constraints, ALTER, DROP on the tienda database) and Unit 3 (DML: INSERT, UPDATE, DELETE and the typical errors). Each with its notes, graded exercises, quiz and practicals tested in Docker.`}</Prompt>
+<Prompt>{`/miyagi:build-unit Units 2 and 3, one after the other, following the teaching plan: Unit 2 (DDL: CREATE TABLE with keys and constraints, ALTER, DROP on the tienda database) and Unit 3 (DML: INSERT, UPDATE, DELETE and the typical errors). Each with its notes, an exercise to submit with a rubric, a quiz and the practicals tested in Docker. The container is always called mariadb-tienda. The dates in the teaching plan work for me. Publish it hidden and ask my permission to show it.`}</Prompt>
 
-It follows the same method as in Unit 1: miyagi checks the practical in a docker-lab lab, running in MariaDB every `CREATE TABLE`, every foreign key and every `ALTER TABLE` with data already in it, and every error the notes are going to explain (for example, `ERROR 1452` when inserting an order for a customer who doesn't exist). It then writes the notes, the guided practical, the exercises with their rubric and the quiz.
+It follows the same method as in Unit 1: it tests in a lab every `CREATE TABLE`, every foreign key and every error the notes are going to explain (for example, `ERROR 1452` when inserting an order for a customer who doesn't exist). Then it writes the notes, the guided practical, the exercise with its rubric and the quiz, and uploads each piece hidden, with its permission.
 
-## What it learned from Unit 1 {#lo-que-aprendió-del-tema-1}
+<Shot width="1400" height="1141" kind="moodle" src="/img/v2/moodle-alumno-libro-t2.webp" alt="The Unit 2 notes seen by a student, with the DDL statements in code blocks.">The Unit 2 notes.</Shot>
 
-The notes for Unit 2 came out with the code already in blocks and the table and column names in code format, the first time. That was the lesson we left in its skills when fixing Unit 1's guided practical.
+<Shot width="1400" height="1045" kind="moodle" src="/img/v2/moodle-alumno-libro-t3.webp" alt="The Unit 3 notes seen by a student, on INSERT, UPDATE and DELETE.">And those of Unit 3, on the same `tienda` database.</Shot>
 
-<Shot kind="moodle" src="/img/casos/22-t2-libro.webp" alt="The first chapter of the Unit 2 notes seen by a student: what DDL is, the three statements CREATE TABLE, ALTER TABLE and DROP TABLE in code format, and the command to enter the container in a code block; on the right, the table of contents with the six chapters.">The Unit 2 notes: six chapters, from what DDL is to `DROP TABLE` and `SHOW CREATE TABLE`.</Shot>
+## Exercises with a rubric {#ejercicios-con-rúbrica}
 
-<Shot kind="moodle" src="/img/casos/24-t3-libro.webp" alt="The first chapter of the Unit 3 notes: what DML is and how it differs from DDL, with INSERT, UPDATE and DELETE and the shop's tables in code format.">And those for Unit 3, on the same `tienda` database.</Shot>
+Each unit has an exercise. miyagi designs the rubric from the teaching plan's assessment criteria, and shows it to you before saving it, criterion by criterion and level by level:
 
-## Deliverables with a rubric {#entregables-con-rúbrica}
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-05-aprobacion-rubrica.webp" alt="Approval panel with the rubric for the Unit 3 exercise: four criteria, each with its levels and its score.">The rubric for the Unit 3 exercise, before it exists in Moodle. This screenshot is of an example request that we then rejected.</Shot>
 
-Each unit has a deliverable: a `.sql` file that must run whole on a clean MariaDB. miyagi designs the rubric from the teaching plan's assessment criteria, and shows it to you before saving it:
+The student sees it next to the instructions, so they know from the start how they're going to be graded:
 
-<Shot src="/img/casos/26-aprobacion-rubrica-dml.webp" alt="Approval panel: publishing the rubric of the DML exercises out of 10 points, with four criteria: correct INSERT, UPDATE and DELETE with WHERE, explanation of the foreign key error on delete, and runnable and readable, each with its levels.">The rubric of the DML exercises, criterion by criterion and level by level, before it exists in Moodle.</Shot>
+<Shot width="1400" height="1361" kind="moodle" src="/img/v2/moodle-alumno-ejercicio-ddl.webp" alt="The Unit 2 exercise seen by a student: instructions, submission status and the rubric.">The DDL exercise with its rubric, from a student's account.</Shot>
 
-The student sees it next to the assignment's wording, so they know from the start how it'll be graded:
+<Shot width="1400" height="1527" kind="moodle" src="/img/v2/moodle-profesor-preguntas-t3.webp" alt="The Unit 3 quiz's questions in Moodle, seen by the teacher.">The Unit 3 quiz's questions.</Shot>
 
-<Shot kind="moodle" src="/img/casos/23-t2-ejercicios-rubrica.webp" alt="The DDL exercises assignment seen by a student: the wording with its four steps (the four tables, a categories table, two ALTER TABLE), the dates, the submission status and the rubric with three criteria: tables and constraints (5 points), extending with ALTER TABLE (3), and runnable and readable (2).">The DDL exercises' wording and their rubric, from a student's account.</Shot>
+## What was left pending {#lo-que-quedó-pendiente}
 
-And a quiz of ten questions per unit, imported in GIFT and in order:
+When it finishes, it separates the tests it did, the decisions it took on its own and what's waiting on you:
 
-<Shot kind="moodle" src="/img/casos/25-t3-quiz.webp" alt="The ten questions of the Unit 3 quiz in Moodle, from T3-01 to T3-10, one point each, about INSERT, UPDATE, DELETE and foreign key, NOT NULL and CHECK errors.">The Unit 3 quiz.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-05-temas-2-3.webp" alt="The summary of Units 2 and 3: the tests in Docker, miyagi's decisions, and what's left pending: questions for the Unit 2 quiz, labs still running and Shrove Tuesday.">Summary of Units 2 and 3, with what's left pending.</Shot>
 
-## When it skips a step {#cuando-se-salta-un-paso}
+We'd highlight two things:
 
-In these two units, miyagi didn't quite follow its own method. In Unit 1 it uploaded each piece hidden, reviewed it and asked your permission to show it. Here it saved the notes, the practicals and the assignments directly visible. The publishing watchdog stopped each of those saves to ask, but without the detailed summary of a normal approval. In addition, the Unit 3 quiz was left visible before it was complete.
+- **The Unit 2 quiz was left incomplete.** miyagi said that "Moodle rejects new imports into that bank", but the real cause was that the Moodle browser was closing. It was completed in the next step.
+- **It can't see it as a student.** miyagi doesn't have a student view: it asks you to check it yourself. And Moodle doesn't allow restricting the submission to `.sql`, so the instructions ask for the file name.
 
-We spotted it when reviewing the course and told it just that:
-
-<Prompt>{`Let's carry on. First of all: in Units 2 and 3 everything was left visible to the students without you asking my permission to show it, and the Unit 3 quiz is visible half done. Hide that quiz, finish adding its questions in order, review it and ask my permission to show it. And one more thing: Unit 1 calls the container mariadb-tienda and Unit 2 mi-mariadb; make them all mariadb-tienda.`}</Prompt>
-
-It hid the quiz, finished it, checked the questions and asked permission, this time in full detail:
-
-<Shot src="/img/casos/28-aprobacion-mostrar-quiz.webp" alt="Approval panel: showing the students the Unit 3 quiz, now complete, with 10 multiple-choice questions on INSERT, UPDATE and DELETE and the typical errors, 2 attempts, immediate feedback, opening on 29 October and closing on 1 November.">Showing the quiz, now with its summary.</Shot>
-
-And it replied with what it had done, acknowledging the process failure and offering to hide the rest to review it piece by piece:
-
-<Shot src="/img/casos/27-correccion-proceso.webp" alt="miyagi's reply: the Unit 3 quiz hidden, completed, reviewed and shown with permission; the container renamed mariadb-tienda in the Unit 2 notes; and the acknowledgement that the book, the page and the assignment of Units 2 and 3 were published without being hidden, reviewed and approved, with the offer to hide them for review.">miyagi explains what it has fixed and what it did wrong.</Shot>
-
-:::tip Review as a student
-No automatic review replaces yours. Open the course with the student view every now and then, and tell it in your own words if something doesn't convince you: it fixes it, and what you teach it stays in its course memory.
+:::tip Review it as a student
+No automatic review replaces yours. Open the course with **Switch role to Student** from time to time and tell it in your own words if something doesn't convince you: it fixes it, and what you teach it stays in its memory of the course.
 :::
 
 Next step: [Unit 4 and the final project](tema-4-consultas.md).

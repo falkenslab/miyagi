@@ -1,58 +1,37 @@
 ---
 title: 3. The teaching plan
 sidebar_position: 4
-description: Completing the teaching plan in the chat, with a pedagogical review and the decisions only the teacher makes.
+description: Complete the teaching plan in the conversation and decide what only the teacher decides.
 ---
 
 # 3. The teaching plan {#3-la-programación-didáctica}
 
-The ingest turned the syllabus into the course's teaching plan (`knowledge/teaching-plan.md`), but the syllabus was missing things: assessment criteria, a calendar and support for diverse learners. We open the chat:
+Ingestion turned the syllabus into the course's teaching plan, but some things were missing: assessment criteria, a calendar and attention to diversity. We use the teaching plan shortcut and tell it what we want, answering its questions along the way:
 
-<Terminal title="PowerShell" prompt="PS>">{`PS> miyagi chat`}</Terminal>
-
-When it starts, it reads its memory and sums up what it knows about the course, including the contradiction about the late penalty it found in the previous step.
-
-<Shot src="/img/casos/05-chat-apertura.webp" alt="miyagi's chat in full screen: the header with the logo, the Introducción a SQL course and a greeting summing up what it knows: a teaching plan with 5 objectives and 4 units, a final project worth 50%, a course still empty in Moodle and the contradiction about the late penalty.">The chat when it starts. At the bottom, the mode (guided) and how much context it has used.</Shot>
-
-## Asking for it {#pedírselo}
-
-We use the teaching plan shortcut, `/miyagi:teaching-plan`, and tell it what we want in our own words:
-
-<Prompt>{`/miyagi:teaching-plan Review the teaching plan you drew from my syllabus and complete what's missing: assessment criteria, a calendar for the 6 weeks (we start on Monday 5 October) and support for diverse learners. I apply the late penalty by hand when grading.`}</Prompt>
-
-It writes what's missing and, before calling it done, sends it to a helper: the **pedagogical reviewer**, an expert in instructional design who reads the whole plan and returns a report. It can't change anything itself.
-
-<Shot src="/img/casos/06-revisor.webp" alt="The chat while it delegates to pedagogy-reviewer: the helper reads the teaching plan, the four unit pages and the final project's page; miyagi then edits the plan with what it pointed out.">The pedagogical reviewer reading the plan and the units. miyagi then applies its suggestions.</Shot>
+<Prompt>{`/miyagi:teaching-plan Review the teaching plan you got from my syllabus and complete it with whatever is missing: assessment criteria, a calendar for the 6 weeks (we start on Monday 5 October) and attention to diversity. I apply the late penalty by hand when grading. The sessions are on Tuesdays and Thursdays, 1.5 hours each. In "Correct results" a 2 or a 4 are intermediate states, at your discretion. Late submissions are accepted up to one week after the deadline. The quizzes all weigh the same, and so do the exercises. For O1, add a light pass/fail deliverable to Unit 1, outside the 100%: a screenshot of their container running with the tienda database created.`}</Prompt>
 
 ## What only you decide {#lo-que-solo-decides-tú}
 
-When it finishes, it sums up what it did and asks what isn't its call: which days there are classes (12 October is a public holiday), whether the split of weeks works, and how to assess an objective that had been left without an assessment tool.
+It writes what's missing and makes a note of what isn't its place to decide. Since the date of 5 October had already passed, we ask it for a calendar for another edition:
 
-<Shot src="/img/casos/07-programacion.webp" alt="miyagi's reply: criteria CE1.1 to CE5.3, a 6-week calendar from 5 October, support for diverse learners, and three questions for the teacher: class days, the split of weeks and how to assess objective 1's criteria.">What it has added, marked as a proposal, and three questions for the teacher.</Shot>
+<Prompt>{`It's for another edition: we start on Monday 1 February 2027, recalculate the calendar with that date and take the national holidays as correct. One exercise per unit, 15% each, in Units 2 and 3. Late submission doesn't apply to quizzes. The criteria are fine as they are. A fail is corrected and checked again, with no effect on the grade. No minimum grade for now. The rest, as you propose.`}</Prompt>
 
-We answer in the same chat:
+It recalculates and tells you what's still up in the air: that Tuesday 9 February is Shrove Tuesday and coincides with a session and with the deliverable's deadline, that the end of late submission for the final project falls in Holy Week, and that the resit and the closing of the grade records are still not set.
 
-<Prompt>{`Sessions are on Tuesdays and Thursdays, 1.5 hours each. The split of weeks works for me. For O1, add a light deliverable to Unit 1: a screenshot of their container running with the tienda database created.`}</Prompt>
-
-It takes that in and asks again the only thing it can't know: how much that new deliverable weighs.
-
-<Shot src="/img/casos/08-programacion-pregunta.webp" alt="miyagi confirms the Tuesday and Thursday sessions and the Unit 1 deliverable, and asks whether it should be pass/fail or take weight from other deliverables; it also warns of two criteria still without a deliverable of their own.">A concrete question, with the two reasonable options.</Shot>
-
-<Prompt>{`Make it pass/fail, outside the 100%. We'll cover CE1.3 and permissions in the Unit 1 quiz.`}</Prompt>
-
-With that the plan is closed. This is how the assessment criteria end up, for example, in `knowledge/teaching-plan.md`:
-
-```markdown
-- **CE1.1** (O1). Starts a MariaDB 11 container with `docker run`, using a persistent volume and publishing the port correctly.
-- **CE1.2** (O1). Connects to the server from the command-line client inside the container.
-- **CE1.3** (O1). Stops, starts and removes the container without losing the data, relying on the volume.
-- **CE2.1** (O2). Creates a database and a user with a password, and grants permissions only on that database (not on all of them).
-...
-- **CE5.3** (O5). Combines two or more tables with `INNER JOIN` and `LEFT JOIN`, using explicit `JOIN` and not commas in the `FROM`.
-```
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-03-programacion-respuesta.webp" alt="miyagi's reply: a table with deadlines and until when late submission is accepted for each graded item, and the remaining doubts: Shrove Tuesday, Holy Week, resit and closing of grade records, quizzes with no attempt.">The calendar of graded items and the doubts, with no rush, for you to decide.</Shot>
 
 :::info The teaching plan isn't published
-The teaching plan lives in the course's memory, on your computer. It isn't uploaded to Moodle unless you ask. What it does do is use it to build each unit and, later on, to check that the classroom still matches it (`/miyagi:align`).
+The teaching plan lives in the course's memory, on your computer. It isn't uploaded to Moodle unless you ask for it. What it does do is use it to build each unit and, later on, to check that the classroom still matches it (`/miyagi:align`).
 :::
+
+## Seeing it {#verla}
+
+In the **Subject** view, **Teaching plan** tab, it's there just as it was left, with **Review with miyagi** and **Check the classroom**:
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-03-programacion.webp" alt="The Teaching plan view with the text of the Introducción a SQL teaching plan.">The teaching plan.</Shot>
+
+And in **Topics and activities**, the four units it has just planned:
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-03-temas.webp" alt="The Topics and activities view with four unit cards.">The four units, before building them in Moodle.</Shot>
 
 Next step: [Unit 1](tema-1-mariadb-docker.md).

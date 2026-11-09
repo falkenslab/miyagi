@@ -1,57 +1,57 @@
 ---
 title: 6. Tema 4 y práctica final
 sidebar_position: 7
-description: El tema de consultas con SELECT, un cuestionario, la práctica final con la rúbrica del profesor, el foro de dudas y los pesos del calificador.
+description: El tema de consultas con SELECT, un cuestionario, la práctica final de 10 consultas con la rúbrica del profesor, el foro de dudas, los pesos del calificador y mostrarlo todo.
 ---
 
 # 6. Tema 4 y práctica final
 
 El último tema es el que más pesa: consultas con `SELECT` y la práctica final, que vale el 50 % de la nota. Se lo pedimos todo de una vez, oculto hasta revisarlo:
 
-<Prompt>{`/miyagi:build-unit Tema 4: Consultar con SELECT, siguiendo la programación (filtros, orden, agregados con GROUP BY y HAVING, INNER y LEFT JOIN), con el ejercicio formativo de la semana 5, el cuestionario y la Práctica final «Consultas sobre la tienda»: una tarea con un único archivo consultas.sql y la rúbrica que te dejé en sources, con un script de datos de la tienda para que todos consulten lo mismo. Pruébalo todo en Docker. Y crea en la sección General un «Foro de dudas» para todo el curso. Todo oculto hasta que lo revises y me pidas permiso para mostrarlo.`}</Prompt>
+<Prompt>{`/miyagi:build-unit Tema 4: Consultar con SELECT, siguiendo la programación (filtros, orden, agregados con GROUP BY y HAVING, INNER y LEFT JOIN), con el cuestionario y la Práctica final «Consultas sobre la tienda»: una tarea con un único archivo consultas.sql y la rúbrica que te dejé en sources, con un script de datos de la tienda para que todos consulten lo mismo. Pruébalo todo en Docker. Y crea en la sección General un «Foro de dudas» para todo el curso. Ajusta los pesos del libro de calificaciones: 20 % los cuatro cuestionarios, 15 % cada ejercicio (Tema 2 y Tema 3) y 50 % la práctica final; el entregable del Tema 1 no cuenta. Todo oculto hasta que lo revises y me pidas permiso para mostrarlo.`}</Prompt>
 
-## Oculto, probado y con permiso
+Prueba las consultas en un laboratorio contra los datos de la tienda antes de escribir el enunciado. Te hace dos preguntas sobre la rúbrica y sobre cómo plantear la autoría de una práctica que vale la mitad de la nota.
 
-Esta vez cada pieza se crea oculta, con su aprobación, empezando por la propia sección:
+## Cuando se corta
 
-<Shot src="/img/casos/29-t4-seccion-oculta.webp" alt="Panel de aprobación: crear la sección del Tema 4 oculta, para probarla, con su nombre y su resumen de las semanas 5 y 6.">Primero la sección, oculta.</Shot>
+Este encargo no salió de una sola vez. La conexión se cortó, y el navegador de Moodle volvió a cerrarse. Bastó con decirle dónde seguir:
 
-Antes de escribir nada, miyagi comprueba la práctica en un laboratorio de docker-lab: carga en MariaDB unos datos comunes de la tienda (8 clientes, 10 productos, 12 pedidos y 21 líneas) y ejecuta cada consulta de los apuntes, del ejercicio formativo y de la práctica final. Ese script de datos se publica también, para que toda la clase consulte lo mismo y pueda comparar resultados.
+<Prompt>{`Se ha cortado la conexión mientras el revisor terminaba. Sigue con la construcción del Tema 4 donde lo dejaste, con el mismo encargo: apuntes, cuestionario, Práctica final, Foro de dudas y pesos del libro de calificaciones, todo oculto.`}</Prompt>
 
-La práctica final usa tu rúbrica de `sources/`. miyagi la traduce a una rúbrica de Moodle (una línea por consulta, de 0,625 puntos, y los criterios de uso de SQL y legibilidad) y te dice qué ha redactado él:
+Retomó el plan del tema desde su memoria, y publicó el Tema 4 oculto. También completó, con su permiso, los cuestionarios de los temas 1 y 2 que se habían quedado a medias. Los pesos, con su propia aprobación, quedaron: 5 % cada cuestionario, 15 % cada ejercicio, 50 % la práctica final y 0 % el entregable del Tema 1.
 
-<Shot src="/img/casos/30-t4-rubrica.webp" alt="Panel de aprobación: guardar la rúbrica de la práctica final, basada en la rúbrica del profesor: ocho criterios de resultado de 0, 0,3125 o 0,625 puntos, uso adecuado de SQL de 0 a 3 y legibilidad de 0 a 2, con la nota de que los niveles intermedios de los dos últimos los ha redactado él.">La rúbrica del profesor, convertida en una rúbrica de Moodle.</Shot>
+## La práctica final
 
-El revisor pedagógico también pasó por aquí: cambió la consulta 8 de la práctica, que era casi igual que un ejemplo de los apuntes, y la 5, que se podía resolver sin `HAVING`.
+La tarea tiene un único archivo, `consultas.sql`, con **10 consultas** sobre `tienda_practica`. La rúbrica la pusimos en Fuentes, y miyagi la convirtió en una rúbrica de Moodle: resultados correctos (5 puntos), uso adecuado de SQL (3) y legibilidad (2).
 
-Cuando todo está construido y comprobado, pide permiso una sola vez para mostrarlo, enumerando cada pieza y sus fechas:
+<Shot width="1400" height="1476" kind="moodle" src="/img/v2/moodle-profesor-rubrica.webp" alt="La rúbrica de la Práctica final en Moodle, vista por el profesor: los tres criterios con sus niveles y puntos.">La rúbrica en el formulario de calificación de la tarea.</Shot>
 
-<Shot src="/img/casos/31-t4-mostrar-todo.webp" alt="Panel de aprobación: mostrar a los alumnos la sección del Tema 4 con sus seis elementos (datos comunes, apuntes, práctica guiada, ejercicio formativo, cuestionario y práctica final con su rúbrica) y el Foro de dudas de la sección General, recordando que las fechas de apertura siguen en vigor.">Una aprobación que enumera todo lo que va a ver la clase.</Shot>
+## Mostrarlo a los alumnos
 
-## Lo que decides tú
+Revisamos el curso nosotros y se lo decimos:
 
-Al terminar, separa lo que cambió por la revisión pedagógica, las decisiones que tomó por su cuenta y lo que queda pendiente de ti:
+<Prompt>{`Lo he revisado y me vale. Muestra a los alumnos los temas 2, 3 y 4 con todas sus actividades, y también el Foro de dudas. Deja el filtro de tipos de archivo como está.`}</Prompt>
 
-<Shot src="/img/casos/32-t4-resumen.webp" alt="El resumen del Tema 4: cambios por la revisión pedagógica, decisiones suyas para revisar (cómo montó la rúbrica, un compromiso a nombre del profesor en el enunciado del formativo, la hora de apertura del cuestionario) y dos pendientes: los pesos del calificador y si dar el número de filas esperado.">Decisiones suyas que conviene revisar, y dos preguntas.</Shot>
+Pide permiso una sola vez, enumerando las 3 secciones y las 16 actividades. Dice que solo cambia la visibilidad y que no avisa a nadie. Las evaluables aparecen en el curso, pero se abren en su fecha.
 
-Fíjate en el segundo punto: el enunciado del ejercicio formativo dice que repasarás en clase los fallos más comunes. Es un compromiso a tu nombre, y te lo avisa. Contestamos a los dos pendientes:
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-mostrar-a-alumnos.webp" alt="La respuesta tras mostrar los temas: lo que pueden ver desde hoy, una tabla con la fecha en la que abre cada evaluable en 2027, y la decisión pendiente: el Cuestionario del Tema 1 sigue oculto.">Temas mostrados, cada evaluable con su fecha de apertura, y una decisión para ti.</Shot>
 
-<Prompt>{`Sí, ajusta los pesos del libro de calificaciones: 20 % los cuatro cuestionarios, 15 % cada bloque de ejercicios (Tema 2 y Tema 3) y 50 % la práctica final; el formativo y el entregable del Tema 1 no cuentan. El número de filas esperado no lo des: que lo comprueben ellos.`}</Prompt>
+Lo único que sigue oculto es el Cuestionario del Tema 1, porque no lo mencionamos, y miyagi lo recuerda. Queda en **En el horno**, con un botón para mostrarlo:
 
-<Shot src="/img/casos/33-pesos.webp" alt="La tabla final de pesos del libro de calificaciones: cuestionarios, ejercicios DDL 15 %, ejercicios DML 15 %, práctica final 50 % y entregable apto/no apto 0 %; el formativo no aparece porque no tiene nota.">Los pesos del calificador, tal como dice la programación.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-horno.webp" alt="La vista En el horno: el Cuestionario del Tema 1 en la columna Probándose oculto, con el botón Mostrar a los alumnos.">En el horno, el cuestionario que falta.</Shot>
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-aprobacion-mostrar.webp" alt="Panel de aprobación para mostrar el Cuestionario del Tema 1: solo cambia la visibilidad, sin aviso; 10 preguntas al azar, 20 minutos, 2 intentos, pesa un 5 %.">Antes de mostrarlo: qué verán y qué no ha podido comprobar. Esta captura se hizo para el tutorial y luego la rechazamos.</Shot>
 
 ## El curso, terminado
 
-Así ve el curso completo un alumno: el foro de dudas en la sección General y los cuatro temas con sus apuntes, prácticas, entregables y cuestionarios.
+Así queda el curso completo:
 
-<Shot kind="moodle" src="/img/casos/35-curso-completo-alumno.webp" alt="El curso completo visto por un alumno: el Foro de dudas con su descripción en General y los temas 1 a 4, cada uno con su resumen, el orden a seguir y sus actividades con fechas; el Tema 4 con los datos comunes, apuntes, práctica guiada, ejercicio formativo, cuestionario y práctica final.">Introducción a SQL, de principio a fin.</Shot>
+<Shot width="1400" height="1458" kind="moodle" src="/img/v2/moodle-profesor-curso.webp" alt="El curso completo en Moodle visto por el profesor, con General, el Foro de dudas y los cuatro temas.">Desde la cuenta del profesor.</Shot>
 
-Y la práctica final, con su enunciado, cómo se califica y la rúbrica a la vista:
-
-<Shot kind="moodle" src="/img/casos/34-practica-final-alumno.webp" alt="La práctica final vista por una alumna que ya ha entregado: el enunciado con las 8 consultas, cómo se califica, el plazo, el estado de la entrega con su archivo consultas.sql y la rúbrica con los diez criterios.">La práctica final, desde la cuenta de una alumna que ya ha entregado.</Shot>
+<Shot width="1400" height="2333" kind="moodle" src="/img/v2/moodle-alumno-curso.webp" alt="El curso visto por una alumna, con las secciones y las actividades con sus fechas.">Y desde la cuenta de una alumna.</Shot>
 
 :::note Para el tutorial adelantamos el calendario
-La práctica final abría el 5 de noviembre. Para poder seguir con la corrección, en el Moodle de pruebas movimos sus fechas: tres alumnas y alumnos de prueba entregaron a tiempo y después dimos el plazo por vencido.
+La práctica final se abre en marzo de 2027. Para poder seguir con la corrección, en el Moodle de pruebas movimos sus fechas: tres alumnos de prueba entregaron y dimos el plazo por vencido. En el [paso 9](seguimiento.md) la devolvemos a sus fechas reales.
 :::
 
 Siguiente paso: [corregir con la rúbrica](corregir.md).
