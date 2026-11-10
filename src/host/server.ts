@@ -139,6 +139,20 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   let current: OpenSubject | null = null;
   const pickFolder = options.pickFolder ?? systemFolderPicker();
   let picking = false;
+  /**
+   * A conversation being opened, new or resumed: the kit ends the old one's input first, so a line
+   * sent meanwhile would be lost there and leave the new one busy and empty (#88). It waits instead.
+   */
+  let switching: Promise<void> | null = null;
+  const switchConversation = async (open: () => Promise<void>) => {
+    const opening = open();
+    switching = opening;
+    try {
+      await opening;
+    } finally {
+      if (switching === opening) switching = null;
+    }
+  };
   /** The address the browser must never reach (#86): set once the server listens, before any page can ask. */
   let ownOrigin = "";
   /**
@@ -524,6 +538,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const busy = () => chat.getState().busy;
     switch (action) {
       case "send":
+        if (switching) await switching.catch(() => undefined);
         // One turn at a time: the page waits for the one running.
         if (busy()) return { error: "busy" };
         void chat.send(String(data.line ?? "")).catch((error: unknown) => chat.notice(String((error as Error)?.message ?? error), "error"));
@@ -565,12 +580,12 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return { ...latestRuns(runs, Math.max(1, Number(data.limit) || 12), currentDir), current: currentDir };
       }
       case "resume":
-        if (busy()) return { error: "busy" };
-        await chat.resume(data.dir ? String(data.dir) : undefined);
+        if (busy() || switching) return { error: "busy" };
+        await switchConversation(() => chat.resume(data.dir ? String(data.dir) : undefined));
         return {};
       case "new":
-        if (busy()) return { error: "busy" };
-        await chat.newConversation();
+        if (busy() || switching) return { error: "busy" };
+        await switchConversation(() => chat.newConversation());
         return {};
       case "extension":
         if (busy()) return { error: "busy" };
