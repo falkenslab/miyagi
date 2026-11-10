@@ -43,6 +43,11 @@ Both compose the other skills' criteria rather than redefining them:
   (`course-design`), whether each activity is actually well-designed for its type
   (its building skill), question quality in quizzes (`quiz-design`), grading-criteria
   quality (`rubric-design`).
+- **Answer keys**: read every graded quiz's questions *with their answers* (the bank exported,
+  not only the quiz's structure, which lists questions without them) and check each key. A
+  wrong key grades the whole class wrongly, and attempts already made keep the wrong mark until
+  they're regraded: it's critical. In a simulated course, a key giving the gram as the SI unit
+  of mass went unnoticed by a review that read only the quiz's settings.
 - **Instructions**: does each activity clearly say what's expected, in what format, and
   what's graded (the standard of `assignment-building`)?
 - **Resources**: broken external links (checkable via `WebFetch` where the link is

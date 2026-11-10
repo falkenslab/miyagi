@@ -72,13 +72,18 @@ deleting needs its own approval, naming what goes, and the teacher may prefer th
 
 ## Changing an existing quiz
 
-Look at its attempts first.
+Look at its attempts first, then read its questions *with their answers* (the bank exported,
+not only the quiz's structure, which lists questions without them) and check every key: a
+teacher asking to fix a quiz's settings rarely knows a key is wrong, and a wrong key grades
+everyone wrongly. A wrong key is fixed even with attempts, with the teacher's yes, and those
+attempts regraded; say how many marks change.
 
 - **None**: editing or replacing questions affects nobody. Placeholder content ("The answer is
   true.", a description like "Test quiz 1", an English stub in a course taught in another
   language) is worth fixing.
 - **With attempts**: don't change what a question asks or which answer is right: students were
-  graded against the old one. Add new questions or propose the change to the teacher.
+  graded against the old one. Add new questions or propose the change to the teacher. The
+  exception is a key that's wrong, as above.
 
 `publication_status` says whether its bank was edited after it was published.
 
@@ -86,7 +91,8 @@ Look at its attempts first.
 
 The same checklist doubles as a review: read through the quiz's questions and flag any that are
 trivial (answerable without having studied the topic), near-duplicates of another question in
-the same quiz, ambiguous, or have a distractor that's obviously not a real option. Summarize
+the same quiz, ambiguous, or have a distractor that's obviously not a real option — and any
+whose key is wrong, which comes first. Summarize
 findings rather than silently leaving them: a teacher may want to keep a "trivial" question
 deliberately (e.g. as an easy warm-up), so flag it as a suggestion, not an automatic fix.
 
