@@ -10,6 +10,8 @@ Una **extensión** le da a miyagi algo que no trae de serie: herramientas nuevas
 
 Las extensiones las gestiona agent-kit, la base sobre la que está hecho miyagi. miyagi solo decide de dónde vienen y cuáles te enseña.
 
+Cuando le pides algo que ninguna de las que tienes hace bien (comprobar una práctica en Docker, dar estilo a tus apuntes), miyagi mira el catálogo y te dice cuál te serviría, qué necesita y cómo instalarla, por ejemplo `/extensions install docker-lab@falkenslab`. Nunca la instala él: lo haces tú.
+
 ## De dónde salen
 
 - **El repositorio oficial**, [`falkenslab/agent-extensions`](https://github.com/falkenslab/agent-extensions), lo publica Falken's Lab. miyagi ya lo conoce, y lo que instalas de ahí no te pide confirmación. El catálogo te enseña solo las extensiones pensadas para miyagi.
