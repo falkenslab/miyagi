@@ -23,7 +23,7 @@ La página funciona solo en tu ordenador, y esa dirección lleva una llave aleat
 ## Qué cambia respecto a la aplicación
 
 - No hay **barra de título** con menús Archivo, Editar, Ver y Ayuda: la ventana es tu navegador.
-- No hay **navegador integrado**: el panel lateral muestra borradores y actividad, y los enlaces se abren en tu navegador.
+- No hay **navegador integrado**: el panel lateral muestra borradores y actividad, y los enlaces (también **Ver en el aula**, bajo cada cosa que hace en Moodle) se abren en una pestaña nueva de tu navegador, donde ya tienes tu sesión de Moodle.
 - Hay que tenerla abierta desde una **terminal**, y al cerrar la terminal se cierra.
 - **Solo una pestaña a la vez**: si la abres en otra, la anterior deja de funcionar.
 

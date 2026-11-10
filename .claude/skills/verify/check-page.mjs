@@ -879,6 +879,12 @@ try {
   // Refused, it may try another way: stop it there.
   if (await page.waitForSelector(CHECKPOINT, { timeout: 8000 }).then(() => true, () => false)) await page.click(`${CHECKPOINT} .acts .btn.danger`);
   await idle();
+  // A later try takes the composer's place too, which idle() can't tell from the end: stopped as well.
+  for (let i = 0; i < 3 && (await page.$(CHECKPOINT)); i++) {
+    await page.click(`${CHECKPOINT} .acts .btn.danger`);
+    await page.waitForTimeout(1500);
+    await idle();
+  }
   check("a refused tool doesn't break the conversation", !(await page.$(CHECKPOINT)) && (await page.locator(".tool-calls li.err, .tool .badge.sun").count()) >= before);
   // The last thing said is the answer to that refusal, not a greeting (#98): Today keeps the greeting.
   const greeted = (await page.locator(".msg.agent >> nth=0").innerText()).trim();
@@ -904,7 +910,23 @@ try {
   const acting = await page.waitForFunction(() => /\d+ (acci|action)/.test(document.querySelector(".tool .sub-activity")?.textContent ?? ""), null, { timeout: 120_000 }).then(() => true, () => false);
   const seenSub = acting ? await page.innerText(".tool .sub-activity") : "";
   await shot("subagent-1440");
+  // Written while it works (#62): send and stop both there, a command kept in the box, a message
+  // shown queued until miyagi answers it, and the turn ending once.
+  const summaries = await page.locator(".turn-summary").count();
+  const users = await page.locator(".msg.user").count();
+  await page.fill(".composer textarea", "exit");
+  await page.keyboard.press("Enter");
+  await page.waitForTimeout(800);
+  const commandKept = (await page.inputValue(".composer textarea")) === "exit" && (await page.locator(".msg.user").count()) === users;
+  await page.fill(".composer textarea", "Y en la misma respuesta, escribe también la palabra CANGURO.");
+  const bothButtons = Boolean(await page.$(".composer .send.stop")) && Boolean(await page.$(".composer .send:not(.stop):not([disabled])"));
+  await page.keyboard.press("Enter");
+  const queuedSeen = await page.waitForSelector(".msg.user.queued .queued-mark", { timeout: 15_000 }).then(() => true, () => false);
+  await shot("queued-1440");
   await idle();
+  check("while it works, send and stop are both there and a command waits in the box", bothButtons && commandKept);
+  const lastReply = await page.locator(".msg.agent").last().innerText();
+  check("a message sent while it works shows queued, then the turn answers it and ends once", queuedSeen && (await page.locator(".msg.user.queued").count()) === 0 && (await page.locator(".turn-summary").count()) === summaries + 1 && /CANGURO/i.test(lastReply), `${queuedSeen} ${summaries} ${lastReply.slice(0, 80)}`);
   check("a working subagent shows its current action, time and count under its line", /\d+ (s|min)/.test(firstSub) && acting && seenSub !== firstSub, `${firstSub} → ${seenSub}`);
   check("the subagent's line goes once it's done", (await page.locator(".tool .sub-activity").count()) === 0);
   await checkActivity(actionsGrew);

@@ -90,7 +90,7 @@ Yes. In the app and in the web version they're in the conversations column, and 
 
 ### Can I write to it while it's working? {#puedo-escribirle-mientras-está-trabajando}
 
-No: you have to wait for it to finish, or stop it (`Esc` or the ■ button) and tell it something else.
+Yes, in the app and on the web: your message is queued and it reads it as soon as the action in progress ends, without stopping the work. Not in the terminal: wait for it to finish or stop it (`Esc`). It's in [The conversation](chat.md).
 
 ## If you came from another version {#si-venías-de-otra-versión}
 

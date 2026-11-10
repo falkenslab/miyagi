@@ -137,7 +137,7 @@ También te pregunta cuando le hace falta una decisión tuya:
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-pregunta.webp" alt="miyagi preguntando con varias opciones en el lugar del cuadro de escritura.">miyagi te pregunta con opciones.</Shot>
 
-Mientras trabaja no se le pueden enviar mensajes nuevos: espera a que termine, o páralo con `Esc` o con el botón ■ y dile otra cosa.
+Mientras trabaja puedes seguir escribiéndole: tu mensaje sale **en cola** y lo lee en cuanto termina la acción en curso. Para pararlo del todo, `Esc` o el botón ■.
 
 ### El panel lateral {#panel-lateral}
 
@@ -153,7 +153,7 @@ Se abre a la derecha, en pestañas, sin dejar la conversación. Tienes el botón
 
 ### El navegador integrado {#navegador-integrado}
 
-Con el botón de la barra del panel abres una pestaña web. Los enlaces de la conversación se abren ahí. Sirve para tener tu curso de Moodle al lado: inicias sesión una vez en una pestaña y sigues dentro aunque cierres la aplicación.
+Con el botón de la barra del panel abres una pestaña web. Los enlaces de la conversación se abren ahí, y también **Ver en el aula**, que sale bajo cada cosa que miyagi hace en Moodle y abre esa misma página. Sirve para tener tu curso de Moodle al lado: inicias sesión una vez en una pestaña y sigues dentro aunque cierres la aplicación.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-navegador-moodle.webp" alt="El navegador integrado en el panel lateral, con el curso de Moodle abierto con la sesión del profesor, junto a la conversación.">Moodle al lado de la conversación.</Shot>
 

@@ -137,7 +137,7 @@ It also asks you when it needs a decision from you:
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-pregunta.webp" alt="miyagi asking a question with several options in place of the writing box.">miyagi asks you, with options.</Shot>
 
-While it's working you can't send it new messages: wait for it to finish, or stop it with `Esc` or the ■ button and tell it something else.
+While it works you can keep writing to it: your message shows as **queued** and it reads it as soon as the action in progress ends. To stop it altogether, `Esc` or the ■ button.
 
 ### The side panel {#panel-lateral}
 
@@ -153,7 +153,7 @@ It opens on the right, in tabs, without leaving the conversation. The button to 
 
 ### The built-in browser {#navegador-integrado}
 
-With the button on the panel's bar you open a web tab. Links in the conversation open there. It's useful for having your Moodle course next to you: you log in once in a tab and you stay logged in even if you close the app.
+With the button on the panel's bar you open a web tab. Links in the conversation open there, and so does **View in the classroom**, under each thing miyagi does in Moodle, which opens that same page. It's useful for having your Moodle course next to you: you log in once in a tab and you stay logged in even if you close the app.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-navegador-moodle.webp" alt="The built-in browser in the side panel, with the Moodle course open with the teacher's session, next to the conversation.">Moodle next to the conversation.</Shot>
 

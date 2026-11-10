@@ -9,11 +9,13 @@ export interface TranscriptCall {
   toolName: string;
   label: string;
   result: { isError: boolean; text: string } | null;
+  /** The classroom page a moodle-teacher call touched (#77): the host keeps only one on the classroom's origin. */
+  page?: string;
   children: string[];
 }
 
 export type TranscriptEntry =
-  | { id: number; kind: "user"; text: string }
+  | { id: number; kind: "user"; text: string; steered?: boolean }
   | { id: number; kind: "agent"; text: string }
   | { id: number; kind: "tools"; calls: TranscriptCall[] }
   | { id: number; kind: "notice"; tone: "plain" | "dim" | "warn" | "error"; text: string }

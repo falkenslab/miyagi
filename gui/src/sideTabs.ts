@@ -67,7 +67,8 @@ export function turnsOf(transcript: TranscriptEntry[]): Turn[] {
   const turns: Turn[] = [];
   let now: Turn | undefined;
   for (const entry of transcript) {
-    if (!now || (entry.kind === "user" && now.entries.length)) {
+    // A message sent while it worked (#62) stays in the turn it joined.
+    if (!now || (entry.kind === "user" && !entry.steered && now.entries.length)) {
       now = { id: entry.id, entries: [], calls: [], seconds: null };
       turns.push(now);
     }

@@ -91,7 +91,8 @@ function ModeMenu({ chat, T }: { chat: ChatState; T: Texts }) {
  * capabilities, the catalog of miyagi's actions, #67), the mode and send (stop while a turn runs).
  * A `draft` (an item's "Ask miyagi about this", a quote) is left in the box to finish.
  * Enter sends, Shift+Enter is a new line, Esc stops a running turn, ↑/↓ walk the history when the
- * box is empty, / opens the shortcuts. While a turn runs nothing is sent: the host refuses it.
+ * box is empty, / opens the shortcuts. While a turn runs a message joins it (#62), shown queued until
+ * miyagi answers; a command waits for the turn to end.
  */
 export function Composer({ chat, T, X, onNotice, onCapabilities, draft }: { chat: ChatState; T: Texts; X: ExtTexts; onNotice: (text: string) => void; onCapabilities: () => void; draft: { text: string; at: number } | null }) {
   const [text, setText] = useState("");
@@ -131,10 +132,16 @@ export function Composer({ chat, T, X, onNotice, onCapabilities, draft }: { chat
 
   const send = (line = text) => {
     const value = line.trim();
-    if (!value || chat.busy) return;
+    if (!value) return;
+    if (chat.busy && (value.startsWith("/") || value.toLowerCase() === "exit")) return onNotice(T.commandWhileBusy);
     setText("");
     setHistoryAt(-1);
-    void act("send", { line: value });
+    void act<{ error?: string }>("send", { line: value }).then((answer) => {
+      if (!answer.error) return;
+      // The turn ended at that moment, or it was a command: back in the box, and why.
+      setText(value);
+      onNotice(T.commandWhileBusy);
+    });
   };
 
   const onKey = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -281,11 +288,12 @@ export function Composer({ chat, T, X, onNotice, onCapabilities, draft }: { chat
           </Menu>
           <ModeMenu chat={chat} T={T} />
           <span className="sp" />
-          {chat.busy ? (
+          {chat.busy && (
             <button type="button" className="round send stop" aria-label={T.stop} title={T.stop} onClick={() => void act("interrupt")}>
               <span className="stop-sq" aria-hidden="true" />
             </button>
-          ) : (
+          )}
+          {(!chat.busy || text.trim()) && (
             <button type="button" className="round send" aria-label={T.send} title={T.send} disabled={!text.trim()} onClick={() => send()}>
               <Icon name="send" />
             </button>

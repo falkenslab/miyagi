@@ -16,7 +16,9 @@ Escribe en el cuadro y pulsa `Intro`. `Mayús+Intro` salta de línea. Con **+** 
 
 Mientras trabaja, ves qué está haciendo en cada momento y sus tareas encima del cuadro. La pestaña **Actividad** del [panel lateral](escritorio.md#panel-lateral) lo cuenta paso a paso.
 
-Mientras está trabajando no puedes enviarle otro mensaje. Si quieres que cambie de rumbo, páralo con `Esc` o con el botón ■ y dile qué hacer en su lugar.
+En la aplicación y en la web puedes **escribirle mientras trabaja**: una pregunta, una corrección o «eso no, haz esto otro». Tu mensaje sale **en cola** hasta que lo lee, en cuanto termina la acción en curso, y lo tiene en cuenta sin parar lo que estaba haciendo. Si está esperando a un subagente, lo lee cuando este acaba. Los comandos (`/…`) esperan a que termine. Para que cambie de rumbo ya, páralo con `Esc` o con el botón ■. En la terminal hay que esperar a que acabe o pararlo.
+
+Bajo cada cosa que hace en Moodle tienes **Ver en el aula**, que abre esa misma página del curso: en la aplicación, en una pestaña del [navegador integrado](escritorio.md#navegador-integrado); en la web, en una pestaña nueva de tu navegador. La abres con tu propia sesión de Moodle, y miyagi no recibe nada de ese enlace.
 
 ## Cómo te pide permiso {#permiso}
 

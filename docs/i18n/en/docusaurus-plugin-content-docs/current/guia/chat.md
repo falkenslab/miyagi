@@ -16,7 +16,9 @@ Type in the box and press `Enter`. `Shift+Enter` starts a new line. With **+** y
 
 While it works, you see what it's doing at each moment and its tasks above the box. The **Activity** tab of the [side panel](escritorio.md#panel-lateral) tells it step by step.
 
-While it's working you can't send it another message. If you want it to change course, stop it with `Esc` or the ■ button and tell it what to do instead.
+In the app and on the web you can **write to it while it works**: a question, a correction or "not that, do this instead". Your message shows as **queued** until it reads it, as soon as the action in progress ends, and it takes it into account without stopping what it was doing. If it's waiting for a subagent, it reads it when the subagent is done. Commands (`/…`) wait for it to finish. To make it change course right away, stop it with `Esc` or the ■ button. In the terminal you have to wait for it to finish or stop it.
+
+Under each thing it does in Moodle there's **View in the classroom**, which opens that same page of the course: in the app, in a tab of the [built-in browser](escritorio.md#navegador-integrado); on the web, in a new tab of your browser. You open it with your own Moodle session, and miyagi gets nothing from that link.
 
 ## How it asks for permission {#permiso}
 

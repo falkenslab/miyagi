@@ -12,7 +12,7 @@ let openLink: ((url: string) => void) | null = null;
 export const setOpenLink = (open: typeof openLink) => {
   openLink = open;
 };
-const followLink = (event: MouseEvent, url: string) => {
+export const followLink = (event: MouseEvent, url: string) => {
   if (!openLink || event.ctrlKey || event.metaKey || event.shiftKey || event.button) return;
   event.preventDefault();
   openLink(url);

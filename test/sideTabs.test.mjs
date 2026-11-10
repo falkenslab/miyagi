@@ -97,6 +97,8 @@ test("a transcript splits into turns, each with its calls and, once ended, its t
   assert.equal(turns[1].seconds, null, "still running");
   const noSummaries = turnsOf([{ id: 1, kind: "user", text: "a" }, { id: 2, kind: "tools", calls: [] }, { id: 3, kind: "user", text: "b" }]);
   assert.equal(noSummaries.length, 2, "a reopened conversation splits at the teacher's lines");
+  const steered = turnsOf([{ id: 1, kind: "user", text: "a" }, { id: 2, kind: "tools", calls: [call("uno", false)] }, { id: 3, kind: "user", text: "b", steered: true }, { id: 4, kind: "tools", calls: [call("dos", false)] }, { id: 5, kind: "turn-summary", seconds: 9 }]);
+  assert.deepEqual(steered.map((turn) => [turn.id, turn.calls.length, turn.seconds]), [[1, 2, 9]], "a message sent during the turn stays in it (#62)");
 });
 
 test("the turn shown: the one chosen, otherwise the running one or the last that did something", () => {

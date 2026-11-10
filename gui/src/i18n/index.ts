@@ -22,6 +22,12 @@ export interface Texts {
   keyInvalid: string;
   placeholder: string;
   placeholderBusy: string;
+  /** A slash command or "exit" sent while a turn runs (#62). */
+  commandWhileBusy: string;
+  /** A message sent during a turn, until miyagi answers it (#62). */
+  queued: string;
+  /** The link to the classroom page a Moodle action touched (#77). */
+  viewInClassroom: string;
   send: string;
   stop: string;
   attach: string;
@@ -204,7 +210,10 @@ const es: Texts = {
   keySave: "Guardar y empezar",
   keyInvalid: "Eso no parece una clave de API de Claude (empieza por sk-ant-api).",
   placeholder: "Escribe a miyagi… (/ para los atajos)",
-  placeholderBusy: "miyagi está trabajando… (Esc para pararlo)",
+  placeholderBusy: "miyagi está trabajando: escríbele y lo leerá en cuanto pueda (Esc para pararlo)",
+  commandWhileBusy: "Los comandos esperan a que miyagi termine: envíalo cuando acabe o páralo con Esc.",
+  queued: "en cola",
+  viewInClassroom: "Ver en el aula",
   send: "Enviar",
   stop: "Parar",
   attach: "Añadir un archivo a las fuentes",
@@ -406,7 +415,10 @@ const en: Texts = {
   keySave: "Save and start",
   keyInvalid: "That doesn't look like a Claude API key (it starts with sk-ant-api).",
   placeholder: "Write to miyagi… (/ for shortcuts)",
-  placeholderBusy: "miyagi is working… (Esc to stop it)",
+  placeholderBusy: "miyagi is working: write and it will read it as soon as it can (Esc to stop it)",
+  commandWhileBusy: "Commands wait for miyagi to finish: send it when it's done, or stop it with Esc.",
+  queued: "queued",
+  viewInClassroom: "View in the classroom",
   send: "Send",
   stop: "Stop",
   attach: "Add a file to the sources",
@@ -608,7 +620,10 @@ const fr: Texts = {
   keySave: "Enregistrer et commencer",
   keyInvalid: "Cela ne ressemble pas à une clé d'API Claude (elle commence par sk-ant-api).",
   placeholder: "Écrivez à miyagi… (/ pour les raccourcis)",
-  placeholderBusy: "miyagi travaille… (Échap pour l'arrêter)",
+  placeholderBusy: "miyagi travaille : écrivez-lui, il le lira dès qu'il pourra (Échap pour l'arrêter)",
+  commandWhileBusy: "Les commandes attendent que miyagi ait fini : envoyez-la ensuite, ou arrêtez-le avec Échap.",
+  queued: "en attente",
+  viewInClassroom: "Voir dans la classe",
   send: "Envoyer",
   stop: "Arrêter",
   attach: "Ajouter un fichier aux sources",
@@ -810,7 +825,10 @@ const de: Texts = {
   keySave: "Speichern und beginnen",
   keyInvalid: "Das sieht nicht wie ein Claude-API-Schlüssel aus (er beginnt mit sk-ant-api).",
   placeholder: "Schreiben Sie miyagi… (/ für Kurzbefehle)",
-  placeholderBusy: "miyagi arbeitet… (Esc zum Anhalten)",
+  placeholderBusy: "miyagi arbeitet: schreib ihm, es liest es, sobald es kann (Esc zum Anhalten)",
+  commandWhileBusy: "Befehle warten, bis miyagi fertig ist: sende ihn danach oder halte es mit Esc an.",
+  queued: "in der Warteschlange",
+  viewInClassroom: "Im Kursraum ansehen",
   send: "Senden",
   stop: "Anhalten",
   attach: "Eine Datei zu den Quellen hinzufügen",

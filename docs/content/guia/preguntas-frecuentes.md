@@ -90,7 +90,7 @@ Sí. En la aplicación y en la versión web están en la columna de conversacion
 
 ### ¿Puedo escribirle mientras está trabajando?
 
-No: tienes que esperar a que termine, o pararlo (`Esc` o el botón ■) y decirle otra cosa.
+Sí, en la aplicación y en la web: tu mensaje sale en cola y lo lee en cuanto termina la acción en curso, sin parar el trabajo. En la terminal no: espera a que termine o páralo (`Esc`). Lo tienes en [La conversación](chat.md).
 
 ## Si venías de otra versión
 

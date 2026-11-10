@@ -213,6 +213,14 @@ th { background: var(--panel-2); }
 .tool { margin: 4px 0; font-size: 14px; }
 .tool-head { display: inline-flex; gap: 6px; align-items: center; max-width: 100%; background: none; border: 0; padding: 4px 0; min-height: 44px; cursor: pointer; text-align: left; color: var(--dim); }
 .tool-head:hover { color: var(--text-2); }
+/* "View in the classroom" under a Moodle action (#77): a 44 px target, quiet until hovered. */
+.classroom-link { display: inline-flex; gap: 6px; align-items: center; min-height: 44px; padding: 0 2px; font-size: 13px; color: var(--accent); text-decoration: none; }
+.classroom-link:hover { text-decoration: underline; }
+.tool .classroom-link { margin-left: 8px; }
+.tool-calls .classroom-link { display: flex; width: fit-content; }
+/* A message sent while miyagi works, until it answers (#62). */
+.msg.user.queued .body { opacity: 0.6; }
+.queued-mark { align-self: flex-end; margin-right: 8px; font-size: 12px; color: var(--dim); }
 .tool-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tool-head .icon { flex: 0 0 auto; }
 /* What a working subagent is doing, under its call's line (#63) */

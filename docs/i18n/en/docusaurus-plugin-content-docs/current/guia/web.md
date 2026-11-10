@@ -23,7 +23,7 @@ The page works only on your computer, and that address carries a random key that
 ## What changes compared with the app {#qué-cambia-respecto-a-la-aplicación}
 
 - There's no **title bar** with the File, Edit, View and Help menus: the window is your browser.
-- There's no **built-in browser**: the side panel shows drafts and activity, and links open in your browser.
+- There's no **built-in browser**: the side panel shows drafts and activity, and links (also **View in the classroom**, under each thing it does in Moodle) open in a new tab of your browser, where you're already signed in to Moodle.
 - You have to keep it open from a **terminal**, and when you close the terminal it closes.
 - **Only one tab at a time**: if you open it in another one, the previous one stops working.
 

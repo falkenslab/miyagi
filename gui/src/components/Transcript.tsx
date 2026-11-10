@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { act } from "../api";
 import type { Texts } from "../i18n";
-import { Markdown } from "../markdown";
+import { followLink, Markdown } from "../markdown";
 import { canPreview, turnOfEntry } from "../sideTabs";
 import type { ChatState, TranscriptCall, TranscriptEntry } from "../types";
 import type { CourseView } from "./Course";
@@ -62,6 +62,18 @@ function useItemLinks(chat: ChatState, go: (view: CourseView, item?: string) => 
   );
 }
 
+/**
+ * "View in the classroom" (#77): the page a call touched in Moodle, in a new tab where the teacher
+ * is signed in, or in a tab of the desktop app's browser.
+ */
+export function ClassroomLink({ url, T }: { url: string; T: Texts }) {
+  return (
+    <a className="classroom-link" href={url} target="_blank" rel="noopener noreferrer" onClick={(event) => followLink(event, url)}>
+      <Icon name="globe" size={14} /> {T.viewInClassroom}
+    </a>
+  );
+}
+
 /** The SDK's tool that hands a task to a subagent (`Agent`, `Task` before). */
 const SUBAGENT_TOOLS = new Set(["Agent", "Task"]);
 
@@ -94,6 +106,7 @@ function Tools({ calls, running, T, onOpen }: { calls: TranscriptCall[]; running
   const last = calls[calls.length - 1];
   const sub = running && last && !last.result && (SUBAGENT_TOOLS.has(last.toolName) || last.children.length > 0) ? last : undefined;
   const since = useSince(sub ? (sub.id ?? sub.label) : undefined);
+  const page = [...calls].reverse().find((call) => call.page)?.page;
   return (
     <div className="tool">
       <button type="button" className="tool-head" onClick={onOpen}>
@@ -110,6 +123,7 @@ function Tools({ calls, running, T, onOpen }: { calls: TranscriptCall[]; running
           {sub.children.length > 0 && <span>· {T.calls(sub.children.length)}</span>}
         </button>
       )}
+      {page && <ClassroomLink url={page} T={T} />}
     </div>
   );
 }
@@ -140,10 +154,10 @@ function TurnEnd({ text, seconds, T }: { text: string; seconds: number; T: Texts
   );
 }
 
-function Entry({ entry, running, reply, T, open, onActivity }: { entry: TranscriptEntry; running: boolean; reply: string; T: Texts; open: Opener; onActivity: (entry: number) => void }) {
+function Entry({ entry, running, queued, reply, T, open, onActivity }: { entry: TranscriptEntry; running: boolean; queued: boolean; reply: string; T: Texts; open: Opener; onActivity: (entry: number) => void }) {
   switch (entry.kind) {
     case "user":
-      return <UserLine text={entry.text} />;
+      return <UserLine text={entry.text} queued={queued} T={T} />;
     case "agent":
       return (
         <div className="msg agent">
@@ -163,13 +177,14 @@ function Entry({ entry, running, reply, T, open, onActivity }: { entry: Transcri
 
 /**
  * What the teacher wrote; an action launched from the page (#67) as its name and its value, so the
- * conversation reads as what they asked for.
+ * conversation reads as what they asked for. One sent while miyagi works (#62) is "queued" until it answers.
  */
-function UserLine({ text }: { text: string }) {
+function UserLine({ text, queued, T }: { text: string; queued: boolean; T: Texts }) {
   const api = useActions();
   const found = api && launched(api.actions, text);
   return (
-    <div className="msg user">
+    <div className={queued ? "msg user queued" : "msg user"}>
+      {queued && <small className="queued-mark">{T.queued}</small>}
       {found ? (
         <div className="body">
           <span className="cmd-chip">
@@ -217,6 +232,21 @@ function Suggestions({ chat }: { chat: ChatState }) {
   );
 }
 
+/**
+ * The messages sent during the running turn (#62) that miyagi hasn't answered yet: those after its
+ * last reply. The kit doesn't say when it reads one, so its reply is the sign.
+ */
+function queuedMessages(chat: ChatState): Set<number> {
+  const found = new Set<number>();
+  if (!chat.busy) return found;
+  for (let i = chat.transcript.length - 1; i >= 0; i--) {
+    const entry = chat.transcript[i]!;
+    if (entry.kind === "agent" || entry.kind === "turn-summary") break;
+    if (entry.kind === "user" && entry.steered) found.add(entry.id);
+  }
+  return found;
+}
+
 /** The greeting by the hour, as the person's clock says. */
 function greeting(T: Texts) {
   const hour = new Date().getHours();
@@ -239,6 +269,7 @@ export function Transcript({ chat, T, go, beside, onActivity }: { chat: ChatStat
   }, [chat.run?.dir]);
   const last = chat.transcript[chat.transcript.length - 1];
   const fresh = !chat.transcript.some((entry) => entry.kind === "user");
+  const queued = queuedMessages(chat);
   // Each turn's summary copies the reply right before it.
   let reply = "";
   return (
@@ -268,7 +299,7 @@ export function Transcript({ chat, T, go, beside, onActivity }: { chat: ChatStat
 ${entry.text}` : entry.text;
             const text = reply;
             if (entry.kind === "user" || entry.kind === "turn-summary") reply = "";
-            return <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} reply={text} T={T} open={open} onActivity={(id) => onActivity(turnOfEntry(chat.transcript, id))} />;
+            return <Entry key={entry.id} entry={entry} running={chat.busy && entry === last} queued={queued.has(entry.id)} reply={text} T={T} open={open} onActivity={(id) => onActivity(turnOfEntry(chat.transcript, id))} />;
           })}
           {chat.busy && chat.activity && last?.kind !== "tools" && (
             <div className="activity">

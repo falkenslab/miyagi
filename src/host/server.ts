@@ -9,6 +9,7 @@ import { prepareSession, VERSION } from "../agent.js";
 import { watchStart } from "./startWatch.js";
 import { conversationTitle, isOnlyGreeting, isOpening, latestRuns, readPinned, searchConversations, setPinned } from "./conversations.js";
 import { t } from "../messages/index.js";
+import { withClassroomPages } from "./classroomLinks.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
@@ -139,6 +140,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   let current: OpenSubject | null = null;
   const pickFolder = options.pickFolder ?? systemFolderPicker();
   let picking = false;
+  /** The messages sent during a turn (#62), by conversation and entry: the kit keeps no mark of them. */
+  const steered = new Set<string>();
   /**
    * A conversation being opened, new or resumed: the kit ends the old one's input first, so a line
    * sent meanwhile would be lost there and leave the new one busy and empty (#88). It waits instead.
@@ -277,7 +280,10 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     // A resumed conversation brings back what the teacher never wrote: the greeting miyagi sends
     // itself to open it, and the SDK's mark for an interrupted turn.
     const opening = subject.prepared.chatOpening?.();
-    const transcript = state.transcript.filter((entry) => entry.kind !== "user" || (!isOpening(entry.text, opening) && !/^\[Request interrupted/.test(entry.text)));
+    const kept = state.transcript.filter((entry) => entry.kind !== "user" || (!isOpening(entry.text, opening) && !/^\[Request interrupted/.test(entry.text)));
+    // A message sent during a turn (#62) is marked: the page shows it queued and keeps the turn whole.
+    const run = state.run?.dir;
+    const transcript = withClassroomPages(kept, subject.prepared.workspace?.classroom?.url).map((entry) => (entry.kind === "user" && steered.has(`${run}#${entry.id}`) ? { ...entry, steered: true } : entry));
     return { ...state, transcript, commandDetails, commands: commandDetails.map((command) => command.name), actions, extensions: pageExtensions(state.extensions) };
   }
   const snapshot = () => ({
@@ -539,8 +545,18 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     switch (action) {
       case "send":
         if (switching) await switching.catch(() => undefined);
-        // One turn at a time: the page waits for the one running.
-        if (busy()) return { error: "busy" };
+        // While a turn runs, a message joins it (#62); a command or "exit" waits for it to end.
+        if (busy()) {
+          const line = String(data.line ?? "");
+          const before = chat.getState().transcript.length;
+          if (await chat.steer(line)) {
+            const now = chat.getState();
+            for (const entry of now.transcript.slice(before)) if (entry.kind === "user") steered.add(`${now.run?.dir}#${entry.id}`);
+            send("state", snapshot());
+            return {};
+          }
+          if (busy()) return { error: "busy" };
+        }
         void chat.send(String(data.line ?? "")).catch((error: unknown) => chat.notice(String((error as Error)?.message ?? error), "error"));
         return {};
       case "interrupt":
