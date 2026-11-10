@@ -32,8 +32,13 @@
       "browser.mjs",
       "package.json",
       "miyagi/**/*",
-      "node_modules/**/*"
+      "node_modules/**/*",
+      "!node_modules/**/*.{ts,mts,cts,tsx,map}",
+      "!node_modules/**/{CHANGELOG,HISTORY,README,readme}*",
+      "!node_modules/**/*.md",
+      "node_modules/@falkenslab/**/*"
     ],
+    "afterPack": "./scripts/afterPack.cjs",
     "asarUnpack": [
       "node_modules/@anthropic-ai/claude-agent-sdk-*/**",
       "node_modules/@falkenslab/agent-kit/assets/**",

@@ -85,12 +85,13 @@ Before uploading it, check the unpacked app in `desktop/dist/win-unpacked/`:
   exists (outside the asar: another process runs it);
 - `resources/app.asar.unpacked/miyagi/plugin/` and `.../miyagi/prompts/` exist;
 - `locales/` holds only `en-US`, `es`, `es-419`, `fr` and `de` (`electronLanguages`, about 45 MB less);
+- `scripts/afterPack.cjs` ran: no `dxcompiler.dll` nor `dxil.dll` (WebGPU, 26 MB) and `LICENSES.chromium.html.gz` instead of the 20 MB HTML; and `package.json`'s `files` left the types, source maps, TypeScript sources and docs of `node_modules` out of the asar (about 13 MB), agent-kit kept whole. The unpacked app is about 610 MB, 297 of them Claude Code's `claude.exe`, which can't be made smaller;
 - it starts and shows the page, with a throwaway data folder (also its home, so your `~/.miyagi` is out of reach) and a scripted shot:
   `MIYAGI_DESKTOP_DATA=<scratchpad>/d MIYAGI_DESKTOP_SCRIPT=<steps.json> desktop/dist/win-unpacked/miyagi.exe`
   (steps as in `main.mjs`: wait for `.rail .brand`, `shot`). Look at the image: the rail, and
   the version at its foot is this release's.
 
-A Windows-only artifact: it's ~230 MB and unsigned, so SmartScreen warns on the first run (the
+A Windows-only artifact: it's ~205 MB and unsigned, so SmartScreen warns on the first run (the
 install page explains it). Never put it in the npm package.
 
 ## 5. GitHub release
