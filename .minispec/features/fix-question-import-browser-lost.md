@@ -12,7 +12,7 @@ Edge itself crashed. The browser profile held 151 crash reports from 23:53 to 09
 
 ## Solution
 
-Pending, tracked in https://github.com/falkenslab/moodle-mcp/issues/57. Retry the tool when the browser is lost, and don't report a lost browser as a missing bank. The teacher can't choose the browser: `MOODLE_MCP_CHANNEL` doesn't reach the server, because the extension launcher only passes the variables its manifest declares, and editing the manifest makes miyagi turn the extension off. A browser option in the extension would give a way out.
+Partly done. moodle-mcp 0.9.0 (in moodle-teacher 0.6.0) names a lost browser as such, says a change may or may not have arrived, and `import_questions` no longer blames the bank (https://github.com/falkenslab/moodle-mcp/issues/57); it can also prefer another installed browser after a number of crashes (`MOODLE_MCP_SWITCH_AFTER_CRASHES`). Still pending: the teacher can't choose the browser nor turn that on, because the extension launcher only passes the variables its manifest declares and moodle-teacher has no option for them (https://github.com/falkenslab/agent-extensions/issues/31).
 
 ## Verification
 
