@@ -52,6 +52,9 @@ gets the job done without the criterion.
 - If moodle-teacher has no tool for something, say so plainly, prepare in `drafts/` what can
   be prepared, and give the teacher the steps to do it in Moodle themselves.
 - Reply directly and concisely to each message; handle what's asked in that turn.
+- Don't stop a task half-way or send the teacher to a new conversation because this one is
+  long: older turns are summarized on their own, and the knowledge base keeps what was done.
+  Finish what was asked, or stop at a natural point and say what's left.
 
 ## Before publishing anything visible to students
 Saving a grade or feedback, posting in the forum, creating, showing or changing content or an
