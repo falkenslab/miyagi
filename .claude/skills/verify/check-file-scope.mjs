@@ -48,6 +48,8 @@ const outside = [
   ["Read", { file_path: path.join(ws, "instructions.md") }],
   ["Glob", { path: path.join(home, "Documents"), pattern: "**/*" }],
   ["Glob", { path: path.dirname(ws), pattern: "*" }],
+  // Students' files are read, never written (#95).
+  ["Write", { file_path: path.join(ws, "submissions", "practica-final", "A-6KTXW8", "file-1.sql") }],
 ];
 const allowed = [
   ["Read", { file_path: path.join(ws, "sources", "temario.pdf") }],
@@ -56,6 +58,8 @@ const allowed = [
   ["Glob", { path: path.join(ws, "sources"), pattern: "*.pdf" }],
   ["Write", { file_path: path.join(ws, "drafts", "tarea-1", "enunciado.html") }],
   ["Grep", { path: path.join(ws, "sources"), pattern: "RA1" }],
+  // A student's file saved to grade it (#95).
+  ["Read", { file_path: path.join(ws, "submissions", "practica-final", "A-6KTXW8", "file-1.sql") }],
 ];
 
 let failures = 0;
@@ -80,4 +84,4 @@ if (failures > 0) {
   console.log(`\n${failures} file-scope check(s) failed`);
   process.exit(1);
 }
-console.log(`ok   ${denied.length} files with secrets can't be read, searched or written, ${outside.length} reads outside the course are refused; sources/, drafts/ and plugin/ still work`);
+console.log(`ok   ${denied.length} files with secrets can't be read, searched or written, ${outside.length} reads outside the course are refused; sources/, drafts/, submissions/ (read only) and plugin/ still work`);

@@ -159,6 +159,8 @@ export interface Messages {
       style: string;
       coverage: string;
       aggregate: string;
+      /** submissions_clear (#95). */
+      clearSubmissions: string;
     };
   };
 }
@@ -360,6 +362,7 @@ See README.md for details.`,
       style: "Looking at the materials' style",
       coverage: "Counting the bank's questions by criterion and level",
       aggregate: "Keeping only the survey's totals",
+      clearSubmissions: "Deleting the students' files saved to grade",
     },
   },
 };

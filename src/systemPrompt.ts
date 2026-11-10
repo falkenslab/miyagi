@@ -20,7 +20,7 @@ export function buildSystemPrompt(config: WorkspaceSessionConfig): string {
   const base = !config.hasMoodle
     ? buildStandaloneSystemPrompt(config)
     : config.kind === "ingest" ? buildIngestSystemPrompt(config) : buildClassroomSystemPrompt(config);
-  return `${base}${migrationSection(config)}${subagentsSection(config)}${practiceSection(config)}${languageSection(config)}${personaSection(config)}${customInstructionsSection(config)}${webResearchSection(config)}`;
+  return `${base}${migrationSection(config)}${subagentsSection(config)}${practiceSection(config)}${submissionsSection(config)}${languageSection(config)}${personaSection(config)}${customInstructionsSection(config)}${webResearchSection(config)}`;
 }
 
 /** A legacy knowledge/ was moved to knowledge-legacy/: rebuilding the knowledge base comes before anything else. */
@@ -45,6 +45,14 @@ ${loadPrompt("system/subagents.md")}`;
 function practiceSection(config: WorkspaceSessionConfig): string {
   if (!config.labs || (config.kind !== "run" && config.kind !== "chat")) return "";
   return `\n\n${loadPrompt("system/practice-labs.md", { labsDir: config.labs.dir.split(path.sep).join("/"), labPrefix: config.labs.prefix })}`;
+}
+
+/** Students' submitted files (#95): where the classroom extension saves them to grade, and that they're cleared after. */
+function submissionsSection(config: WorkspaceSessionConfig): string {
+  if (!config.hasMoodle || (config.kind !== "run" && config.kind !== "chat")) return "";
+  return `
+
+${loadPrompt("system/submissions.md", { submissionsDir: config.submissionsDir.split(path.sep).join("/") })}`;
 }
 
 function languageSection(config: WorkspaceSessionConfig): string {

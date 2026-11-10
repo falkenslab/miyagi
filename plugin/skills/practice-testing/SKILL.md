@@ -44,8 +44,9 @@ own question. A new run in a later turn asks again.
 
 ## While grading a submission that can be run
 
-1. Bring the student's files into a lab of this activity, under a folder named by an id or alias,
-   never by the student's name.
+1. Bring the student's files into a lab of this activity (from the submissions folder, when they
+   were submitted as files), in its `submissions/` folder under the alias, never by the student's
+   name: they're cleared from there with the rest when the grading ends.
 2. Run what the activity asked ("the container must answer on port 8080 with...", "the script must
    print..."), with the activity's check if it has one.
 3. Grade with `grading-rubric`, using what ran as evidence: quote the relevant command and output

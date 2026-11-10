@@ -56,6 +56,7 @@ import { installUploadGate } from "./uploadGate.js";
 import { installPdfText } from "./pdfText.js";
 import { COMMANDS_SERVER, createCommandsServer, installCommandsGate } from "./commandsServer.js";
 import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
+import { clearSubmissions, createSubmissionsServer, SUBMISSIONS_SERVER } from "./submissions.js";
 import { ownPluginDir } from "./ownCommands.js";
 import { installMaterialsGate } from "./materials/gate.js";
 import { createMaterialsServer, MATERIALS_SERVER, type PendingLosses } from "./materials/server.js";
@@ -142,6 +143,8 @@ function buildSpec(kind: SessionKind, skills: string[], pending: PendingLosses):
       // The drafts toolbox (download, copy, zip, PDF...) — file operations as code, not a
       // shell; with or without a classroom.
       ...(kind === "run" || kind === "chat" ? { [DRAFTS_SERVER]: createDraftsServer(config.draftsDir, config.draftsLimits) } : {}),
+      // Students' submitted files saved to grade them (#95), cleared when the grading ends.
+      ...((kind === "run" || kind === "chat") && config.hasMoodle ? { [SUBMISSIONS_SERVER]: createSubmissionsServer(config.projectDir, () => config.labs) } : {}),
       // The materials toolbox (ADR-015): validate, export to the classroom's formats, the publication record.
       // The teacher's own commands (#68): written by talking, saved only after their yes.
       ...(kind === "chat" ? { [COMMANDS_SERVER]: createCommandsServer(config.projectDir) } : {}),
@@ -298,6 +301,7 @@ export async function prepareSession(
 
   await mkdir(draftsDirFor(workspaceDir), { recursive: true }); // workspaces from before drafts/
   await mkdir(materialsDirFor(workspaceDir), { recursive: true }); // and from before materials/
+  await clearSubmissions(workspaceDir, config.labs); // students' files a grading left behind (#95)
   await tagCoursePages(knowledgeDirFor(workspaceDir)); // root pages from before the knowledge_* tools
   const autoCompactEnabled = await isAutoCompactEnabled();
   const skills = await sessionSkills(workspaceDir);

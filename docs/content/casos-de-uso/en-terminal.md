@@ -37,7 +37,7 @@ Copia tus documentos en `sources` y:
 
 <Prompt>{`¿Qué entregas de la Práctica final tengo sin corregir?`}</Prompt>
 
-<Shot width="1400" height="1122" kind="terminal" src="/img/v2/terminal-chat.webp" alt="El chat de la terminal respondiendo con una tabla de alias, si entregaron y si quedan por calificar.">El estado de las entregas, solo leyendo. Los alumnos también aparecen como alias aquí, y si la entrega es un archivo tendrás que pasársela [igual que en la aplicación](/casos-de-uso/corregir/#archivos).</Shot>
+<Shot width="1400" height="1122" kind="terminal" src="/img/v2/terminal-chat.webp" alt="El chat de la terminal respondiendo con una tabla de alias, si entregaron y si quedan por calificar.">El estado de las entregas, solo leyendo. Los alumnos también aparecen como alias aquí, y si la entrega es un archivo te pide permiso para guardarla [igual que en la aplicación](/casos-de-uso/corregir/#archivos).</Shot>
 
 Antes de publicar te pide permiso igual que en las otras versiones:
 

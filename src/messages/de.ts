@@ -200,6 +200,7 @@ Mehr in README.md.`,
       style: "Sieht sich den Stil der Materialien an",
       coverage: "Zählt die Fragen der Fragensammlung nach Kriterium und Niveau",
       aggregate: "Behält nur die Summen der Umfrage",
+      clearSubmissions: "Löscht die zum Bewerten gespeicherten Dateien der Lernenden",
     },
   },
 };

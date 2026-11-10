@@ -49,6 +49,8 @@ function describeMaterials(shortName: string, input: Record<string, unknown>): s
       return m.resolve(text(input.path));
     case "survey_aggregate":
       return m.aggregate;
+    case "submissions_clear":
+      return m.clearSubmissions;
     case "materials_coverage":
       return m.coverage;
     case "materials_style":
@@ -61,7 +63,7 @@ function describeMaterials(shortName: string, input: Record<string, unknown>): s
 /** `extraLocalServers: ["drafts"]` so `mcp__drafts__drafts_zip` unwraps without a `"[drafts] "` prefix. */
 export const friendlyToolLabel = createFriendlyToolLabel({
   describe: describeDrafts,
-  extraLocalServers: ["drafts", "materials"],
+  extraLocalServers: ["drafts", "materials", "submissions"],
 });
 
 /** Which phrase each of miyagi's tools (and the approval tool) counts with in a folded group. */
@@ -89,6 +91,7 @@ const PHRASE_KEYS: Record<string, ToolPhraseKey> = {
   materials_style: "files",
   materials_coverage: "files",
   survey_aggregate: "files",
+  submissions_clear: "files",
 };
 
 /** `toolPhrase` for agent-kit's folded tool groups ("revisó 3 archivos"); other tools keep the kit's. */

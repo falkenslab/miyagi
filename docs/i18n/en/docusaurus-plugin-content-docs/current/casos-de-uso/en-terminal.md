@@ -37,7 +37,7 @@ Copy your documents into `sources` and:
 
 <Prompt>{`Which submissions of the Práctica final do I have left to grade?`}</Prompt>
 
-<Shot width="1400" height="1122" kind="terminal" src="/img/v2/terminal-chat.webp" alt="The terminal chat answering with a table of aliases, whether they submitted and whether they're still to be graded.">The state of the submissions, only reading. The students appear as aliases here too, and if the submission is a file you'll have to pass it to it [just as in the app](/casos-de-uso/corregir/#archivos).</Shot>
+<Shot width="1400" height="1122" kind="terminal" src="/img/v2/terminal-chat.webp" alt="The terminal chat answering with a table of aliases, whether they submitted and whether they're still to be graded.">The state of the submissions, only reading. The students appear as aliases here too, and if the submission is a file it asks your permission to save it [just as in the app](/casos-de-uso/corregir/#archivos).</Shot>
 
 Before publishing it asks your permission just as in the other versions:
 

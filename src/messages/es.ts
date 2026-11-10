@@ -201,6 +201,7 @@ la asignatura ("agent.language") o, para todas, en ${globalConfigPath}
       style: "Mirando el estilo de los materiales",
       coverage: "Contando las preguntas del banco por criterio y nivel",
       aggregate: "Quedándose solo con los totales de la encuesta",
+      clearSubmissions: "Borrando los archivos de los alumnos guardados para corregir",
     },
   },
 };

@@ -44,7 +44,7 @@ miyagi doesn't ask for it or store it. The first time it needs to get into Moodl
 
 ### What happens to my students' data? {#qué-pasa-con-los-datos-de-mis-alumnos}
 
-It reads what you would see in Moodle in order to do its work, but your students reach it under an alias (“A-7KQ2XM”), never with their name. That's why, by default, it can't open the files they submit either: if the submission is a file, it asks you to pass it on under an alias ([we cover it in the tutorial](/casos-de-uso/corregir/)). In its notes it doesn't keep records about individual students, only class trends. More detail in [Security and privacy](/avanzado/seguridad-y-privacidad/).
+It reads what you would see in Moodle in order to do its work, but your students reach it under an alias (“A-7KQ2XM”), never with their name. If the submission is a file, it asks your permission to save it on your computer under the alias, and deletes it when it's done grading ([we cover it in the tutorial](/casos-de-uso/corregir/#archivos)). In its notes it doesn't keep records about individual students, only class trends. More detail in [Security and privacy](/avanzado/seguridad-y-privacidad/).
 
 ### Does it run programs on my computer? {#ejecuta-programas-en-mi-ordenador}
 

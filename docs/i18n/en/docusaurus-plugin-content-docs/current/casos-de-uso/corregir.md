@@ -12,29 +12,27 @@ In a new conversation, with the grading shortcut:
 
 <Prompt>{`/miyagi:grade Grade the Práctica final "Consultas sobre la tienda" with the rubric I left you in sources. Run the submissions in Docker against the shop's data to check the results. I brought the deadline forward for this test and it has already passed.`}</Prompt>
 
-## miyagi can't read the submitted files {#archivos}
+## Submissions that are files {#archivos}
 
 This is the step most worth reading before using it with your class.
 
-:::caution Important: with the default data protection, submissions that are files don't reach miyagi
-To protect your students, the moodle-teacher extension works by default with `student_data: pseudonymize`: the students reach the model with an alias ("A-6KTXW8") and never with their name. That has a practical consequence: **miyagi can read a text submission, but not an attached file**, because the content of a file can't be pseudonymized. **Text** submissions do reach it.
+To protect your students, the moodle-teacher extension works by default with `student_data: pseudonymize`: the students reach the model with an alias ("A-6KTXW8") and never with their name. **Text** submissions reach it that way. Those that are **files** it doesn't read from Moodle: to read them, miyagi asks you to save them on your computer, a folder per student under their alias and with neutral file names.
 
-If the assignment is submitted as a file, miyagi tells you so and asks you to pass it each submission yourself, with its alias. And here's the problem: in Moodle you see the students by their name, and miyagi only gives you the alias. **The only way to know which alias belongs to which student is by comparing the time of each submission**. It's awkward, it's prone to errors and we're working on it ([issue #95](https://github.com/falkenslab/miyagi/issues/95)). Before really grading with files, keep this in mind.
+It asks you in a panel of the classroom extension, with the folder where it will save them: `submissions`, inside the subject. You can say no, and then it doesn't read them.
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-guardar-entregas.webp" alt="The moodle panel: save the files submitted to assignment 1939 in the subject's submissions folder, a folder per student, warning that a name written inside a PDF, a document or an image isn't hidden; with the Yes, do it box and the Cancel, No and Send buttons.">miyagi asks for permission to save the submissions on your computer.</Shot>
+
+:::caution What isn't hidden
+In text files, like a `.sql`, names are replaced by the alias. But **a name written inside a PDF, a document or an image isn't hidden**, and the model will see it. If your students sign their work inside the file, keep it in mind before saying yes.
 :::
 
-In the tutorial, miyagi says so right at the start:
+With your permission, it reads them in `submissions`, copies those it has to run into the lab and runs them against the shop's data, comparing each query with the solution. When the grading is done it **deletes every copy**, the subject's and the lab's, and says so in its summary. If the grading stops halfway, whatever is left is deleted the next time you open the subject.
 
-> I can't download the 3 submissions from Moodle (A-Z63WCA, A-6KTXW8 and A-5MTSQM). How shall we proceed?
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-entregas-borradas.webp" alt="The end of a grading summary: what failed in each submission, a pending decision about the student who didn't submit and the line saying the lab was stopped and the copies of the submissions deleted.">At the end of the summary, the lab stopped and the copies deleted.</Shot>
 
-The options it proposes are for you to pass them to it, to change the Moodle server's configuration, or to enter only the 0 for the student who didn't submit. We choose to pass them. It asks for them one at a time, in this panel, and reminds you to check that the file doesn't have the student's name in the comments.
-
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-entrega-con-alias.webp" alt="The panel The agent asks for a file: I need the consultas.sql file that A-Z63WCA submitted in the Práctica final; a box for dragging the file and the Answer button.">The panel that asks you for each alias's file.</Shot>
-
-The opposite happens too: if you talk to it about a student by name, it doesn't know which is their alias. It asks you, showing you what grades each alias has, and your eyes in Moodle are what bridge the gap.
+What doesn't change is that **you see your students by name and miyagi by alias**. If you talk to it about a student by name, it doesn't know which is their alias. It asks you, showing you what grades each alias has, and your eyes in Moodle are what bridge the gap.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-alias-que-alumno.webp" alt="miyagi asks which alias is Sara Gil's, with four aliases and their current grade as options.">miyagi asks which alias belongs to the student we named. You can see it in Moodle by comparing the submission times.</Shot>
-
-With the files in place, it saves them in Sources under the alias and runs them in a lab against the shop's data, comparing each query with the solution.
 
 ## Each grade, before saving it {#cada-nota-antes-de-guardarla}
 
