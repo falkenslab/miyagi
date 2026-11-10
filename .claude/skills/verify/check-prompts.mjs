@@ -36,6 +36,7 @@ const SECTIONS = {
   "subagents": { text: "## Helpers you can delegate to", when: (c) => c.kind === "run" || c.kind === "chat" },
   "practice labs": { text: "## Checking practical activities in a lab", when: (c) => Boolean(c.labs) && (c.kind === "run" || c.kind === "chat") },
   "no shell": { text: "practice-runner", when: () => false },
+  "suggest extensions": { text: "`extensions_catalog` before answering", when: (c) => c.kind === "run" || c.kind === "chat" },
   "submitted files": { text: "## Students' submitted files", when: (c) => moodle(c) && (c.kind === "run" || c.kind === "chat") },
 };
 

@@ -15,6 +15,7 @@ import {
   type AgentSpec,
   type McpServerConfig,
   type Mode,
+  awareness,
   knowledge,
   sources,
 } from "@falkenslab/agent-kit";
@@ -132,7 +133,10 @@ function positionalArgs(args: string[]): string[] {
 function buildSpec(kind: SessionKind, skills: string[], pending: PendingLosses): AgentSpec<WorkspaceSessionConfig> {
   return {
     skills,
+    // Who it is, for the kit's awareness: `about_me`, and `extensions_catalog` to suggest an extension it lacks.
+    identity: { name: "miyagi", version: VERSION, description: "the teacher's AI assistant: it plans a subject, builds its materials and runs its Moodle classroom, publishing only with the teacher's approval" },
     extensions: [
+      awareness(),
       sources<WorkspaceSessionConfig>({ dir: (config) => config.sourcesDir }),
       // The course's pages (course/, topic/, activity/) next to the kit's own, all through the
       // kit's knowledge_* tools, never the file tools (agent-kit's ADR-024).
