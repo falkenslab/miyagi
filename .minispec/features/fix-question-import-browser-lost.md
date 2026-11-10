@@ -16,4 +16,4 @@ Partly done. moodle-mcp 0.9.0 (in moodle-teacher 0.6.0) names a lost browser as 
 
 ## Verification
 
-Pending. Find what triggers the crash, and check that a unit built while the browser is killed on purpose ends complete, with the question count in Moodle matching the GIFT files.
+The part done is checked (10 November 2026, miyagi with moodle-teacher 0.6.0 on moodle-sandbox): Edge killed on purpose 1.5 s into `import_questions` of an 8-question GIFT. The tool answered that the browser closed or crashed, that Moodle may or may not have got the change and refused nothing; the agent checked the bank was still empty, imported again, and the quiz ended with 8 questions in Moodle, no duplicates, still hidden. Still pending: what triggers the crashes, and choosing the browser.
