@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 export default async ({ page, shot, log }) => {
   const t = Date.now();
   await page.locator('[role="dialog"] button.primary').last().click();

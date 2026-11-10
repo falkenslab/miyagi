@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { finish } from "../lib.mjs";
 const S = "<run>/sources/";
 export default async ({ page, shot, log }) => {

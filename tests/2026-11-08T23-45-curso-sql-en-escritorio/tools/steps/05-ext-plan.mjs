@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { turn } from "../lib.mjs";
 export default async ({ page, shot, log }) => {
   await page.click('.nav a:has-text("Extensiones")');

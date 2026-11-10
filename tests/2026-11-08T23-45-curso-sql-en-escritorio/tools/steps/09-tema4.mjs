@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { turn } from "../lib.mjs";
 // A session that stays on "Arrancando miyagi" must fail in minutes, not after the turn's limit.
 const ready = (page) => page.waitForFunction(() => !document.body.innerText.includes("Arrancando miyagi") && !document.querySelector(".composer .send.stop"), null, { timeout: 300000, polling: 2000 });

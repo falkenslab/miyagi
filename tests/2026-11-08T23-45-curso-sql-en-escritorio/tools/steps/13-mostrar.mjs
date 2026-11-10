@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { turn } from "../lib.mjs";
 export default async ({ page, shot, log }) => {
   await page.waitForFunction(() => document.querySelector(".composer textarea") || document.querySelector(".nav"), null, { timeout: 60000 });

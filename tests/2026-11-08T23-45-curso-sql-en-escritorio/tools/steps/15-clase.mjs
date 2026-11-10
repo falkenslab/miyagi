@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { turn, finish } from "../lib.mjs";
 // The submissions as the teacher would download them from Moodle; each alias matched by its submission time.
 const E = "<run>/entregas/";

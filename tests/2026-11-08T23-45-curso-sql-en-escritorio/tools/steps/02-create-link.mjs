@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 export default async ({ page, shot, log }) => {
   await page.waitForSelector(".new-subject input");
   await shot("a02-sin-asignaturas");

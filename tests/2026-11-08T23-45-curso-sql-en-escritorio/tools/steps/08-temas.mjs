@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 import { turn, finish } from "../lib.mjs";
 const fresh = async (page) => {
   await page.waitForSelector('button.new-conv:not([disabled])', { timeout: 600000 });

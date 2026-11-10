@@ -1,3 +1,4 @@
+/* global document -- the callbacks of page.evaluate and waitForFunction run in the page. */
 // Shared helpers: a turn of the chat that answers approvals and questions and logs each one.
 // Approving unattended is acceptable only against moodle-sandbox.
 import { appendFileSync, cpSync, existsSync, readdirSync } from "node:fs";
