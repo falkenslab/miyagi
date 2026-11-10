@@ -12,13 +12,17 @@ Le pides las cosas con tus palabras y él te va enseñando lo que hace. La conve
 
 Escribe en el cuadro y pulsa `Intro`. `Mayús+Intro` salta de línea. Con **+** añades un archivo a tus fuentes o eliges una acción del catálogo, y con **/** ves los atajos.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="Una conversación en la aplicación: la petición y miyagi trabajando, con sus acciones plegadas en líneas tenues.">Una conversación en la aplicación.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="Una conversación en la aplicación: la petición y miyagi trabajando, con sus acciones plegadas en líneas tenues y Ver en el aula bajo las que tocan Moodle.">Una conversación en la aplicación.</Shot>
 
 Mientras trabaja, ves qué está haciendo en cada momento y sus tareas encima del cuadro. La pestaña **Actividad** del [panel lateral](escritorio.md#panel-lateral) lo cuenta paso a paso.
 
 En la aplicación y en la web puedes **escribirle mientras trabaja**: una pregunta, una corrección o «eso no, haz esto otro». Tu mensaje sale **en cola** hasta que lo lee, en cuanto termina la acción en curso, y lo tiene en cuenta sin parar lo que estaba haciendo. Si está esperando a un subagente, lo lee cuando este acaba. Los comandos (`/…`) esperan a que termine. Para que cambie de rumbo ya, páralo con `Esc` o con el botón ■. En la terminal hay que esperar a que acabe o pararlo.
 
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-en-cola.webp" alt="Mientras miyagi corrige, un mensaje del profesor atenuado y marcado en cola: Cuando acabes, dime también cuántas consultas acertó cada uno.">Un mensaje enviado mientras trabaja, en cola hasta que lo lee.</Shot>
+
 Bajo cada cosa que hace en Moodle tienes **Ver en el aula**, que abre esa misma página del curso: en la aplicación, en una pestaña del [navegador integrado](escritorio.md#navegador-integrado); en la web, en una pestaña nueva de tu navegador. La abres con tu propia sesión de Moodle, y miyagi no recibe nada de ese enlace.
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-ver-en-el-aula.webp" alt="La conversación con Ver en el aula bajo cada acción en Moodle y, en el panel lateral, la página de la Práctica final abierta en Moodle con la sesión del profesor.">Ver en el aula abre la página de la tarea al lado de la conversación.</Shot>
 
 ## Cómo te pide permiso {#permiso}
 

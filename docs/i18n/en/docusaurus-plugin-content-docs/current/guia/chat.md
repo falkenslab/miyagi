@@ -12,13 +12,17 @@ You ask for things in your own words and it shows you what it's doing as it goes
 
 Type in the box and press `Enter`. `Shift+Enter` starts a new line. With **+** you add a file to your sources or choose an action from the catalog, and with **/** you see the shortcuts.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="A conversation in the app: the request and miyagi working, with its actions folded into faint lines.">A conversation in the app.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="A conversation in the app: the request and miyagi working, with its actions folded into faint lines and View in the classroom under those that touch Moodle.">A conversation in the app.</Shot>
 
 While it works, you see what it's doing at each moment and its tasks above the box. The **Activity** tab of the [side panel](escritorio.md#panel-lateral) tells it step by step.
 
 In the app and on the web you can **write to it while it works**: a question, a correction or "not that, do this instead". Your message shows as **queued** until it reads it, as soon as the action in progress ends, and it takes it into account without stopping what it was doing. If it's waiting for a subagent, it reads it when the subagent is done. Commands (`/…`) wait for it to finish. To make it change course right away, stop it with `Esc` or the ■ button. In the terminal you have to wait for it to finish or stop it.
 
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-en-cola.webp" alt="While miyagi grades, a message from the teacher dimmed and marked queued: When you're done, also tell me how many queries each one got right.">A message sent while it works, queued until it reads it.</Shot>
+
 Under each thing it does in Moodle there's **View in the classroom**, which opens that same page of the course: in the app, in a tab of the [built-in browser](escritorio.md#navegador-integrado); on the web, in a new tab of your browser. You open it with your own Moodle session, and miyagi gets nothing from that link.
+
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-ver-en-el-aula.webp" alt="The conversation with View in the classroom under each action in Moodle and, in the side panel, the Práctica final's page open in Moodle with the teacher's session.">View in the classroom opens the assignment's page next to the conversation.</Shot>
 
 ## How it asks for permission {#permiso}
 
