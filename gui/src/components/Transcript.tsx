@@ -66,10 +66,10 @@ function useItemLinks(chat: ChatState, go: (view: CourseView, item?: string) => 
  * "View in the classroom" (#77): the page a call touched in Moodle, in a new tab where the teacher
  * is signed in, or in a tab of the desktop app's browser.
  */
-export function ClassroomLink({ url, T }: { url: string; T: Texts }) {
+export function ClassroomLink({ url, label, className = "classroom-link" }: { url: string; label: string; className?: string }) {
   return (
-    <a className="classroom-link" href={url} target="_blank" rel="noopener noreferrer" onClick={(event) => followLink(event, url)}>
-      <Icon name="globe" size={14} /> {T.viewInClassroom}
+    <a className={className} href={url} target="_blank" rel="noopener noreferrer" onClick={(event) => followLink(event, url)}>
+      <Icon name="globe" size={14} /> {label}
     </a>
   );
 }
@@ -123,7 +123,7 @@ function Tools({ calls, running, T, onOpen }: { calls: TranscriptCall[]; running
           {sub.children.length > 0 && <span>· {T.calls(sub.children.length)}</span>}
         </button>
       )}
-      {page && <ClassroomLink url={page} T={T} />}
+      {page && <ClassroomLink url={page} label={T.viewInClassroom} />}
     </div>
   );
 }

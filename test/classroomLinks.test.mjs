@@ -30,3 +30,17 @@ test("without a classroom, nothing is offered", () => {
   assert.equal(withClassroomPages([{ id: 1, kind: "tools", calls: [call("mcp__moodle__x", { page: "https://moodle.example.org/a" })] }], undefined)[0].calls[0].page, undefined);
   assert.equal(classroomPage("https://moodle.example.org/a", "https://moodle.example.org"), "https://moodle.example.org/a");
 });
+
+test("the oven offers the classroom page of a hidden or served activity, and nothing else", async () => {
+  const { withOvenPages } = await import("../dist/host/classroomLinks.js");
+  const items = withOvenPages(
+    [
+      { phase: "hidden", text: "Cuestionario del tema 2 — https://moodle.example.org/mod/quiz/view.php?id=5. — next: try it" },
+      { phase: "served", text: "Taller — [enlace](https://evil.example.org/mod/page/view.php?id=6) y https://moodle.example.org/mod/page/view.php?id=6" },
+      { phase: "building", text: "Juego — https://moodle.example.org/mod/page/view.php?id=7" },
+      { phase: "hidden", text: "Sin enlace" },
+    ],
+    ROOM,
+  );
+  assert.deepEqual(items.map((item) => item.page), ["https://moodle.example.org/mod/quiz/view.php?id=5", "https://moodle.example.org/mod/page/view.php?id=6", undefined, undefined]);
+});

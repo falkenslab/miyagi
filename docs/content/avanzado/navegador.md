@@ -81,13 +81,13 @@ Cada tema, material, documento de tus fuentes, página de su memoria, actividad 
 - **Programación**: tu programación didáctica tal como está en su memoria, con **Revisar con miyagi** (y **Comprobar el aula** si la tienes vinculada). Sin programación todavía, un botón para escribirla con él.
 - **Temas y actividades**: las unidades de la programación, por orden y con sus fechas y horas, y los demás temas de su memoria, cada uno con sus actividades; un clic lleva a su página. Una unidad que aún no tiene página sale igual, con **Prepararlo con miyagi**.
 - **Materiales**: lo que miyagi prepara antes de publicarlo, en `materials/` (bancos de preguntas, cuestionarios, apuntes, tareas y rúbricas) y en `drafts/` (lo exportado, páginas, sitios), con una vista previa (los Markdown se ven ya formateados y los HTML sin ejecutar nada de su código; una actividad HTML, como una sopa de letras, se juega con **▶ Jugar en el navegador**, que la abre en el navegador del ordenador) y, con el aula vinculada, **Publicar…**.
-- **En el horno**: las actividades que van por fases (en plan, cocinándose, probándose oculta, servida), con su siguiente paso: **Mostrar a los alumnos** lo que está probado y oculto, y **Seguir con ello** te deja escrito en el cuadro cómo retomarla.
+- **En el horno**: las actividades que van por fases (en plan, cocinándose, probándose oculta, servida), con su siguiente paso: **Mostrar a los alumnos** lo que está probado y oculto, y **Seguir con ello** te deja escrito en el cuadro cómo retomarla. Las que ya están en Moodle (ocultas o servidas) tienen **Ver en el aula**, con la dirección que miyagi apuntó al subirlas, y solo si es de tu aula.
 - **Base de conocimiento**: sus páginas por secciones, con buscador y los enlaces entre ellas; **Revisar la base** le pide que la compruebe.
 - **Fuentes**: tus documentos, con si ya están incorporados, han cambiado o son nuevos. Arrastra aquí los nuevos y pulsa **Pedir a miyagi que los incorpore**.
 
 ## Tu aula {#tu-aula}
 
-**Tu aula** enseña el curso de Moodle de la asignatura y si miyagi llega a él. Sin aula, **Vincular un aula** lo hace en tres pasos:
+**Tu aula** enseña el curso de Moodle de la asignatura y si miyagi llega a él, con **Ver en el aula** para abrir el curso (en la aplicación, en su navegador integrado). Sin aula, **Vincular un aula** lo hace en tres pasos:
 
 1. Pegas la dirección de tu curso (la que ves en el navegador, con `course/view.php?id=…`).
 2. miyagi te dice lo que va a hacer: instalar la extensión del aula (moodle-teacher) la primera vez y darle tu campus y este curso, de modo que solo pueda entrar en tus cursos vinculados.

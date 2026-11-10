@@ -38,3 +38,19 @@ function originOf(url: string | undefined): string | undefined {
     return undefined;
   }
 }
+
+/**
+ * The oven's activities in the classroom (#77): the first address on the classroom's origin in a
+ * hidden or served activity's line of the register (`course/drafts`), as "View in the classroom".
+ */
+export function withOvenPages<T extends { phase: string; text: string }>(items: T[], classroomUrl: string | undefined): (T & { page?: string })[] {
+  const origin = originOf(classroomUrl);
+  return items.map((item) => {
+    if (!origin || (item.phase !== "hidden" && item.phase !== "served")) return item;
+    for (const match of item.text.matchAll(/https?:\/\/[^\s)<>\]"']+/g)) {
+      const page = classroomPage(match[0].replace(/[.,;:]+$/, ""), origin);
+      if (page) return { ...item, page };
+    }
+    return item;
+  });
+}

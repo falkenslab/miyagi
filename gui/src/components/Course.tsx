@@ -7,6 +7,7 @@ import { canPreview, namedFile } from "../sideTabs";
 import { Actionable, GroupActions, useActions, useItemMenu } from "./Actions";
 import type { ChatState, Info } from "../types";
 import { Icon } from "./Icons";
+import { ClassroomLink } from "./Transcript";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
 import { whileBusy } from "./StatusBar";
@@ -90,7 +91,8 @@ interface Today {
   teachingPlan: boolean;
   sources: { total: number; pending: number };
   drafts: number;
-  oven: { phase: "planning" | "building" | "hidden" | "served"; text: string }[];
+  /** `page`: a hidden or served activity's page in the classroom (#77), as the host found it in its line. */
+  oven: { phase: "planning" | "building" | "hidden" | "served"; text: string; page?: string }[];
   log: { date: string; operation: string; what: string }[];
 }
 
@@ -479,6 +481,7 @@ export function OvenView({ chat, info, C, ask, beside }: Common) {
                   <span className="md">
                     <Markdown text={item.text.replace(/\[([^\]]+)\]\([^)\s]+\.md\)/g, "$1")} />
                   </span>
+                  {item.page && <ClassroomLink url={item.page} label={C.viewInClassroom} className="btn small classroom-btn" />}
                   {file && existing[file] !== undefined && (
                     <button type="button" className="btn small beside" onClick={() => beside(file)}>
                       {C.openBeside}

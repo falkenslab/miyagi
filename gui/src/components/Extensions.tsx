@@ -7,6 +7,7 @@ import { Dialog } from "./Panel";
 import { Waiting } from "./Waiting";
 import { whileBusy } from "./StatusBar";
 import { PathField } from "./PathField";
+import { ClassroomLink } from "./Transcript";
 import { OwnCommandsTab } from "./OwnCommands";
 
 // The extensions view (gui-extensions #50), as the mockup draws it: tabs for what's installed (cards
@@ -767,9 +768,7 @@ export function ClassroomView({ chat, info, X, onLink }: { chat: ChatState; info
             <p>{X.moodleCourse(room.courseId)}</p>
             <p className="muted">{room.connected ? X.classroomConnected(hostOf(room.url), room.courseId) : X.classroomOff(hostOf(room.url), room.courseId)}</p>
             <div className="row">
-              <a className="btn small" href={`${room.url.replace(/\/+$/, "")}/course/view.php?id=${room.courseId}`} target="_blank" rel="noreferrer">
-                Moodle ↗
-              </a>
+              <ClassroomLink url={`${room.url.replace(/\/+$/, "")}/course/view.php?id=${room.courseId}`} label={X.viewInClassroom} className="btn small classroom-btn" />
               {!room.connected && (
                 <button type="button" className="btn small primary" {...whileBusy(chat.busy)} onClick={onLink}>
                   {X.classroomReconnect}

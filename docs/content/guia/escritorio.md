@@ -119,7 +119,7 @@ Tus conversaciones aparecen por fecha y, encima, las que hayas **fijado**. Con e
 
 Lo que escribes va a la derecha; lo que responde miyagi, a todo el ancho, con sus acciones plegadas en una línea que puedes abrir. Lo que nombra de tu asignatura (una fuente, un material, una página de su memoria) es un enlace que abre esa vista.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="Una conversación: la petición del profesor y miyagi trabajando sobre la guía del curso, con sus acciones plegadas.">Una conversación real.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="Una conversación: la petición del profesor de corregir la práctica final y miyagi trabajando, con sus acciones plegadas y Ver en el aula bajo las que tocan Moodle.">Una conversación real.</Shot>
 
 En el cuadro para escribir, `Intro` envía y `Mayús+Intro` salta de línea. El **+** añade un archivo a tus fuentes, o elige una acción del catálogo. El **/** muestra los atajos:
 
@@ -175,7 +175,7 @@ Estas vistas enseñan lo que miyagi sabe y tiene preparado. Sus botones mandan a
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-materiales.webp" alt="La vista Materiales: la lista de materiales y la vista previa del seleccionado.">Materiales, con su vista previa.</Shot>
 
-**En el horno** son las actividades que van por fases: en plan, cocinándose, probándose oculta y servida.
+**En el horno** son las actividades que van por fases: en plan, cocinándose, probándose oculta y servida. Las que ya están en Moodle tienen **Ver en el aula**, que abre su página.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="La vista En el horno, con cuatro columnas y el cuestionario del Tema 1 en Probándose oculto.">En el horno, con un cuestionario probándose oculto.</Shot>
 

@@ -85,6 +85,8 @@ export interface CourseTexts {
   openFolder: string;
   play: string;
   openBeside: string;
+  /** A hidden or served activity's page in the classroom (#77). */
+  viewInClassroom: string;
   playNote: string;
 }
 
@@ -168,6 +170,7 @@ const es: CourseTexts = {
   openFolder: "Abrir la carpeta",
   play: "▶ Jugar en el navegador",
   openBeside: "Abrir junto al chat",
+  viewInClassroom: "Ver en el aula",
   playNote: "Aquí se ve quieta; en el navegador se puede jugar, fuera de miyagi.",
 };
 
@@ -251,6 +254,7 @@ const en: CourseTexts = {
   openFolder: "Open the folder",
   play: "▶ Play in the browser",
   openBeside: "Open beside the chat",
+  viewInClassroom: "View in the classroom",
   playNote: "Here it stays still; in the browser you can play it, outside miyagi.",
 };
 
@@ -334,6 +338,7 @@ const fr: CourseTexts = {
   openFolder: "Ouvrir le dossier",
   play: "▶ Jouer dans le navigateur",
   openBeside: "Ouvrir à côté du chat",
+  viewInClassroom: "Voir dans la classe",
   playNote: "Ici elle reste figée ; dans le navigateur on peut y jouer, hors de miyagi.",
 };
 
@@ -417,6 +422,7 @@ const de: CourseTexts = {
   openFolder: "Ordner öffnen",
   play: "▶ Im Browser spielen",
   openBeside: "Neben dem Chat öffnen",
+  viewInClassroom: "Im Kursraum ansehen",
   playNote: "Hier bleibt sie unbewegt; im Browser lässt sie sich spielen, außerhalb von miyagi.",
 };
 

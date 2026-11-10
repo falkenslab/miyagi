@@ -81,13 +81,13 @@ Every topic, material, document in your sources, page of its memory, activity in
 - **Teaching plan**: your teaching plan as it stands in its memory, with **Review with miyagi** (and **Check the classroom** if you have one linked). With no teaching plan yet, a button to write it with miyagi.
 - **Topics and activities**: the teaching plan's units, in order with their dates and hours, and the other topics in its memory, each with its activities; one click takes you to its page. A unit with no page yet is shown too, with **Prepare it with miyagi**.
 - **Materials**: what miyagi prepares before publishing it, in `materials/` (question banks, quizzes, notes, assignments and rubrics) and in `drafts/` (exports, pages, sites), with a preview (Markdown shown formatted, HTML files without running any of their code; an HTML activity, such as a word search, is played with **▶ Play in the browser**, which opens it in the computer's browser) and, with the classroom linked, **Publish…**.
-- **In the oven**: the activities that go through phases (planned, cooking, tested hidden, served), with their next step: **Show to students** what is tested and hidden, and **Go on with it** leaves written in the box how to pick it up.
+- **In the oven**: the activities that go through phases (planned, cooking, tested hidden, served), with their next step: **Show to students** what is tested and hidden, and **Go on with it** leaves written in the box how to pick it up. Those already in Moodle (hidden or served) have **View in the classroom**, with the address miyagi noted when it uploaded them, and only if it's in your classroom.
 - **Knowledge base**: its pages by section, with a search box and the links between them; **Check the base** asks it to check it.
 - **Sources**: your documents, with whether they've already been taken in, have changed or are new. Drag new ones here and click **Ask miyagi to take them in**.
 
 ## Your classroom {#tu-aula}
 
-**Your classroom** shows the subject's Moodle course and whether miyagi can reach it. Without a classroom, **Link a classroom** does it in three steps:
+**Your classroom** shows the subject's Moodle course and whether miyagi can reach it, with **View in the classroom** to open the course (in the app, in its built-in browser). Without a classroom, **Link a classroom** does it in three steps:
 
 1. You paste your course's address (the one you see in the browser, with `course/view.php?id=…`).
 2. miyagi tells you what it's going to do: install the classroom extension (moodle-teacher) the first time and give it your campus and this course, so that it can only enter your linked courses.

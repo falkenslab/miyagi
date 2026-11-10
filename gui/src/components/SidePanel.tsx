@@ -175,7 +175,7 @@ function ActivityBody({ turn: chosen, chat, T }: { turn: number | null; chat: Ch
               <span className="mark" aria-hidden="true">{call.result ? (call.result.isError ? "✕" : "✓") : "…"}</span>
               <span>{call.label}</span>
               {call.result?.text && <small>{call.result.text}</small>}
-              {call.page && <ClassroomLink url={call.page} T={T} />}
+              {call.page && <ClassroomLink url={call.page} label={T.viewInClassroom} />}
               {call.children.length > 0 && (
                 <ul>
                   {call.children.map((child, c) => (

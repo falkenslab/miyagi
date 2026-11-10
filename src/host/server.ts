@@ -9,7 +9,7 @@ import { prepareSession, VERSION } from "../agent.js";
 import { watchStart } from "./startWatch.js";
 import { conversationTitle, isOnlyGreeting, isOpening, latestRuns, readPinned, searchConversations, setPinned } from "./conversations.js";
 import { t } from "../messages/index.js";
-import { withClassroomPages } from "./classroomLinks.js";
+import { withClassroomPages, withOvenPages } from "./classroomLinks.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
@@ -625,7 +625,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       case "drafts":
         return await draftsList(subjectDir);
       case "oven":
-        return oven(subjectDir);
+        return { items: withOvenPages(oven(subjectDir).items, current.prepared.workspace?.classroom?.url) };
       case "topics":
         return await topics(chat);
       case "resolve":

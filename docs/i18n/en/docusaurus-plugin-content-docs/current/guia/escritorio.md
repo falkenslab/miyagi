@@ -119,7 +119,7 @@ Your conversations appear by date and, above them, the ones you've **pinned**. Y
 
 What you write goes on the right; what miyagi replies, at full width, with its actions folded into a line you can open. Whatever it names from your subject (a source, a material, a page of its memory) is a link that opens that view.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="A conversation: the teacher's request and miyagi working on the course guide, with its actions folded.">A real conversation.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-chat.webp" alt="A conversation: the teacher's request to grade the final practice and miyagi working, with its actions folded and View in the classroom under those that touch Moodle.">A real conversation.</Shot>
 
 In the writing box, `Enter` sends and `Shift+Enter` starts a new line. The **+** adds a file to your sources, or chooses an action from the catalog. The **/** shows the shortcuts:
 
@@ -175,7 +175,7 @@ These views show what miyagi knows and has prepared. Their buttons send to the c
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-materiales.webp" alt="The Materials view: the list of materials and the preview of the selected one.">Materials, with their preview.</Shot>
 
-**In the oven** holds the activities that go through phases: planned, cooking, tested hidden and served.
+**In the oven** holds the activities that go through phases: planned, cooking, tested hidden and served. Those already in Moodle have **View in the classroom**, which opens their page.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="The In the oven view, with four columns and the Unit 1 quiz in Tested hidden.">In the oven, with a quiz being tested hidden.</Shot>
 
