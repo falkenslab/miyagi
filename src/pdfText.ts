@@ -36,6 +36,20 @@ export async function pdfToMarkdown(file: string, from?: string): Promise<string
   return `${[...head, ...pages].join("\n\n")}\n`;
 }
 
+/**
+ * What a PDF miyagi printed holds, to check it without opening it (Read can't always render a
+ * PDF): its pages and how each one begins. A page with no text says so (an image, or empty).
+ */
+export async function pdfPreview(file: string, perPage = 160, maxPages = 15): Promise<string> {
+  const pdf = await getDocumentProxy(new Uint8Array(await readFile(file)));
+  const { totalPages, text } = await extractText(pdf, { mergePages: false });
+  const lines = text.slice(0, maxPages).map((page, i) => {
+    const flat = page.replace(/\s+/g, " ").trim();
+    return `p. ${i + 1}: ${flat ? `${flat.slice(0, perPage)}${flat.length > perPage ? "…" : ""}` : "(no text)"}`;
+  });
+  return [`${totalPages} page${totalPages === 1 ? "" : "s"}.`, ...lines, ...(totalPages > maxPages ? [`…and ${totalPages - maxPages} more.`] : [])].join("\n");
+}
+
 const exists = (file: string) => access(file).then(() => true, () => false);
 
 export function installPdfText(options: Options, sourcesDir: string): void {

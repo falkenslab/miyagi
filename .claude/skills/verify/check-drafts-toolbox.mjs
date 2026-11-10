@@ -109,7 +109,14 @@ try {
     failures++;
     console.log(`FAIL the PDF is ${kind}`);
   }
-  pdf = "ok";
+  // What drafts_pdf answers, so the agent checks the PDF without opening it (#103).
+  const { pdfPreview } = await import(pathToFileURL(path.join(root, "dist/pdfText.js")).href);
+  const preview = await pdfPreview(path.join(drafts, "notes.pdf"));
+  if (!/^1 page\.\np\. 1: Apuntes Un bucle repite/.test(preview)) {
+    failures++;
+    console.log(`FAIL the PDF's preview: ${preview}`);
+  }
+  pdf = "ok, with its preview";
 } catch (error) {
   if (!/executable|chrome|browser/i.test(error.message)) {
     failures++;

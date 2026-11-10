@@ -6,6 +6,7 @@ import { z } from "zod";
 import { fetchSite, toPdf } from "./browser.js";
 import { checkUrl, copyEntry, deleteEntry, download, fileInfo, listEntries, moveEntry, unzip, zip, type DraftsLimits } from "./files.js";
 import { resolveInDrafts, shown } from "./paths.js";
+import { pdfPreview } from "../pdfText.js";
 
 /**
  * The drafts toolbox: file operations the agent needs to build what it uploads to Moodle
@@ -127,14 +128,15 @@ export function createDraftsServer(draftsDir: string, limits: DraftsLimits) {
         return `Wrote ${rel(to)}: ${r.files} files, ${r.bytes} bytes.${manifest}`;
       })),
 
-      tool("drafts_pdf", "Print an HTML or Markdown file in drafts/ to a PDF in drafts/ (A4), with a headless browser; relative images and styles load from its folder.", {
+      tool("drafts_pdf", "Print an HTML or Markdown file in drafts/ to a PDF in drafts/ (A4), with a headless browser; relative images and styles load from its folder. Says how many pages it has and how each begins: check it there before uploading it.", {
         from: pathArg("The .html or .md file"),
         to: pathArg("The .pdf to write"),
       }, (a) => guarded(async () => {
         const from = inDrafts(a.from);
         const to = inDrafts(a.to);
         await toPdf(from, to);
-        return `Wrote ${rel(to)} (${(await stat(to)).size} bytes).`;
+        // How it came out, page by page: the check before uploading it (#103).
+        return `Wrote ${rel(to)} (${(await stat(to)).size} bytes). ${await pdfPreview(to)}`;
       })),
 
       tool("drafts_info", "A file's real type (from its content, not its name), size, image dimensions and SHA-256.", {
