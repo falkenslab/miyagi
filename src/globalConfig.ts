@@ -92,6 +92,19 @@ async function writeGlobalConfig(config: GlobalConfig): Promise<void> {
   await chmod(file, 0o600).catch(() => {});
 }
 
+/** The changes to the config, one at a time, so two saved at once can't undo each other (the tour's and the tips'). */
+let updates: Promise<unknown> = Promise.resolve();
+
+/** Reads the config, applies `change` and writes what it returns, in turn with every other change; nothing when it returns undefined. */
+function updateGlobalConfig(change: (config: GlobalConfig) => GlobalConfig | undefined): Promise<void> {
+  const next = updates.then(async () => {
+    const changed = change(await readGlobalConfig());
+    if (changed) await writeGlobalConfig(changed);
+  });
+  updates = next.catch(() => undefined);
+  return next;
+}
+
 /**
  * Loads `<workspace>/.env`, if any, overriding variables already set. A subscription token in
  * it is left out: miyagi never hands one to Claude (ADR-026), the teacher signs in instead.
@@ -114,11 +127,14 @@ export async function loadWorkspaceEnv(workspaceDir: string): Promise<void> {
  * the teacher, once, to sign in with their Claude account.
  */
 export async function forgetSavedClaudeToken(): Promise<boolean> {
-  const config = await readGlobalConfig();
-  if (!config.claudeCodeOAuthToken) return false;
-  delete config.claudeCodeOAuthToken;
-  await writeGlobalConfig(config);
-  return true;
+  let had = false;
+  await updateGlobalConfig((config) => {
+    if (!config.claudeCodeOAuthToken) return undefined;
+    had = true;
+    delete config.claudeCodeOAuthToken;
+    return config;
+  });
+  return had;
 }
 
 /** The API key the teacher pasted, if any, for this process: the SDK reads it from the environment. */
@@ -146,8 +162,7 @@ export async function saveClaudeKey(pasted: string): Promise<boolean> {
   const value = pasted.trim();
   if (!value.startsWith("sk-ant-api") || /\s/.test(value)) return false;
   process.env.ANTHROPIC_API_KEY = value;
-  const config = await readGlobalConfig();
-  await writeGlobalConfig({ ...config, anthropicApiKey: value });
+  await updateGlobalConfig((config) => ({ ...config, anthropicApiKey: value }));
   return true;
 }
 
@@ -189,13 +204,12 @@ export async function savePageSettings(changes: Record<string, unknown>): Promis
   const { tourSeen, showTips, tipsNext } = changes;
   const isCount = (value: unknown) => value === undefined || (Number.isInteger(value) && (value as number) >= 0);
   if (!isCount(tourSeen) || !isCount(tipsNext) || !(showTips === undefined || typeof showTips === "boolean")) return false;
-  const config = await readGlobalConfig();
-  await writeGlobalConfig({
+  await updateGlobalConfig((config) => ({
     ...config,
     ...(tourSeen === undefined ? {} : { tourSeen: tourSeen as number }),
     ...(showTips === undefined ? {} : { showTips: showTips as boolean }),
     ...(tipsNext === undefined ? {} : { tipsNext: tipsNext as number }),
-  });
+  }));
   return true;
 }
 
