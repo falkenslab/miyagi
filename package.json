@@ -25,7 +25,7 @@
     "lint": "eslint .",
     "prepack": "npm run build",
     "build:gui": "npm --prefix gui install --no-audit --no-fund --silent && npm --prefix gui run build",
-    "test": "node --test \"test/*.test.mjs\""
+    "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
     "@falkenslab/agent-kit": "0.34.0",
