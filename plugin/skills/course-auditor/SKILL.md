@@ -73,6 +73,11 @@ missing alt text on a decorative image). For each finding, say what's wrong and,
 what fixing it would look like — the audit's value is the prioritization, not just the
 detection.
 
+Say where each finding comes from: the published item (its link) or the knowledge base's copy
+(its page). A document can live in both and drift apart; before calling the published one
+inconsistent, read it, and when only the knowledge base's copy is wrong, say so: it's a
+lower-severity fix that students never saw.
+
 ## Remembering past audits
 
 If `course/course-audit` exists, read it first: it's the history of previous

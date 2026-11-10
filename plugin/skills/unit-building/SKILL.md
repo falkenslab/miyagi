@@ -79,6 +79,17 @@ order, nothing is empty or locked without explanation, every statement is comple
 order with a non-zero total, rubrics visible where intended. Then the gradebook: the unit's items
 with the planned weights.
 
+Then against the teaching plan and the units already built, before calling it done (in a
+simulated course, these were what the audit found afterwards):
+- every criterion the plan assigns to this unit has its instrument built, the written or
+  practical test the plan names included; one that's left for later goes in the report and in
+  the teaching plan's evaluation matrix, never silently;
+- the evaluation matrix and the published teaching plan still name only instruments that
+  exist (a retired or renamed one is updated in both);
+- the same conventions as the other units: a section summary with dates and the order to
+  follow, completion on every resource that has it elsewhere, the same naming of notes,
+  cheat sheets and reviews.
+
 Update the topic page with what was actually created (URLs), the activity pages and
 `course/course-map` (`knowledge_edit`, or `knowledge_create` for a new page), `knowledge_log` it,
 and — if there's a teaching plan — mark in it that the unit is built.
