@@ -10,6 +10,8 @@ import { watchStart } from "./startWatch.js";
 import { conversationTitle, isOnlyGreeting, isOpening, latestRuns, readPinned, searchConversations, setPinned } from "./conversations.js";
 import { t } from "../messages/index.js";
 import { withClassroomPages, withOvenPages } from "./classroomLinks.js";
+import { CATALOG_CHECK_EVERY_MS, extensionUpdates, refreshCatalogs } from "./catalogRefresh.js";
+import { extensionDirsFor } from "../extensions.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
@@ -611,7 +613,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return await capabilities(chat);
       // The course views: read only; what changes something goes through the chat.
       case "today":
-        return await today(chat, subjectDir);
+        return { ...(await today(chat, subjectDir)), extensionUpdates: await extensionUpdates(extensionDirsFor(subjectDir)) };
       case "kb-index":
         return await knowledgeIndex(chat);
       case "kb-page":
@@ -769,6 +771,17 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   const address = server.address();
   const port = typeof address === "object" && address ? address.port : options.port;
   ownOrigin = `http://127.0.0.1:${port}`;
+  // The catalogs' copies renewed in the background (#101), so an extension's new version shows.
+  const catalogsDir = extensionDirsFor(undefined).agent;
+  let refreshing = false;
+  const refreshTheCatalogs = () => {
+    if (refreshing || !catalogsDir) return;
+    refreshing = true;
+    void refreshCatalogs(catalogsDir).finally(() => (refreshing = false));
+  };
+  refreshTheCatalogs();
+  const catalogTimer = setInterval(refreshTheCatalogs, CATALOG_CHECK_EVERY_MS);
+  catalogTimer.unref?.();
   // The browser's tabs reach the page on their own event, apart from the chat's state (#86).
   const stopBrowser = options.browser?.subscribe(
     () => send("browser", options.browser?.list()),
@@ -784,6 +797,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     url: `http://127.0.0.1:${port}/?token=${token}`,
     async close() {
       clearInterval(heartbeat);
+      clearInterval(catalogTimer);
       stopBrowser?.();
       client?.end();
       current?.chat?.close();

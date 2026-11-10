@@ -131,6 +131,8 @@ export interface Texts {
   noticesCount: (n: number) => string;
   noticeSources: (n: number) => string;
   noticeOven: (n: number) => string;
+  /** Installed extensions with a newer version (#101). */
+  noticeUpdates: (n: number) => string;
   taskOf: (n: number, total: number) => string;
   thisConversation: string;
   more: string;
@@ -321,6 +323,7 @@ const es: Texts = {
   noticesCount: (n) => (n === 1 ? "1 aviso" : `${n} avisos`),
   noticeSources: (n) => (n === 1 ? "1 fuente por incorporar" : `${n} fuentes por incorporar`),
   noticeOven: (n) => (n === 1 ? "1 actividad en el horno" : `${n} actividades en el horno`),
+  noticeUpdates: (n) => (n === 1 ? "1 extensión tiene versión nueva" : `${n} extensiones tienen versión nueva`),
   taskOf: (n, total) => `${n} de ${total}`,
   thisConversation: "Esta conversación",
   more: "Más",
@@ -526,6 +529,7 @@ const en: Texts = {
   noticesCount: (n) => (n === 1 ? "1 notice" : `${n} notices`),
   noticeSources: (n) => (n === 1 ? "1 source to take in" : `${n} sources to take in`),
   noticeOven: (n) => (n === 1 ? "1 activity in the oven" : `${n} activities in the oven`),
+  noticeUpdates: (n) => (n === 1 ? "1 extension has a new version" : `${n} extensions have a new version`),
   taskOf: (n, total) => `${n} of ${total}`,
   thisConversation: "This conversation",
   more: "More",
@@ -731,6 +735,7 @@ const fr: Texts = {
   noticesCount: (n) => (n === 1 ? "1 avis" : `${n} avis`),
   noticeSources: (n) => (n === 1 ? "1 source à intégrer" : `${n} sources à intégrer`),
   noticeOven: (n) => (n === 1 ? "1 activité au four" : `${n} activités au four`),
+  noticeUpdates: (n) => (n === 1 ? "1 extension a une nouvelle version" : `${n} extensions ont une nouvelle version`),
   taskOf: (n, total) => `${n} sur ${total}`,
   thisConversation: "Cette conversation",
   more: "Plus",
@@ -936,6 +941,7 @@ const de: Texts = {
   noticesCount: (n) => (n === 1 ? "1 Hinweis" : `${n} Hinweise`),
   noticeSources: (n) => (n === 1 ? "1 Quelle aufzunehmen" : `${n} Quellen aufzunehmen`),
   noticeOven: (n) => (n === 1 ? "1 Aktivität im Ofen" : `${n} Aktivitäten im Ofen`),
+  noticeUpdates: (n) => (n === 1 ? "1 Erweiterung hat eine neue Version" : `${n} Erweiterungen haben eine neue Version`),
   taskOf: (n, total) => `${n} von ${total}`,
   thisConversation: "Dieses Gespräch",
   more: "Mehr",

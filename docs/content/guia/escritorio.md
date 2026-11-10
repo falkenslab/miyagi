@@ -107,7 +107,7 @@ Arriba, el selector de asignatura y, debajo, **Nueva conversación**. La búsque
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-buscar.webp" alt="La búsqueda en la columna de conversaciones con resultados para JOIN.">Buscar en todas las conversaciones.</Shot>
 
-La **campana** cuenta lo que te espera: una aprobación, una pregunta, fuentes sin incorporar o actividades en el horno.
+La **campana** cuenta lo que te espera: una aprobación, una pregunta, fuentes sin incorporar, actividades en el horno o extensiones con versión nueva.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-campana.webp" alt="La campana abierta: 3 fuentes por incorporar y 1 actividad en el horno.">La campana, con lo que tienes pendiente.</Shot>
 
@@ -195,7 +195,7 @@ Enseña el curso de Moodle de la asignatura y si miyagi llega a él, con accesos
 
 ### Extensiones {#extensiones}
 
-Las extensiones le dan a miyagi capacidades nuevas. Aquí ves las instaladas, añades otras del catálogo y creas tus propios comandos.
+Las extensiones le dan a miyagi capacidades nuevas. Aquí ves las instaladas, añades otras del catálogo y creas tus propios comandos. miyagi mira una vez al día si hay versiones nuevas: la que la tiene pone **Hay versión nueva**, con su botón **Actualizar**, y la campana te avisa. **Buscar actualizaciones** lo comprueba en el momento y las actualiza todas.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-extensiones-instaladas.webp" alt="La pestaña Instaladas con las tarjetas de moodle-teacher y docker-lab.">Las extensiones instaladas.</Shot>
 

@@ -107,7 +107,7 @@ At the top, the subject selector and, below it, **New conversation**. The search
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-buscar.webp" alt="The search in the conversations column with results for JOIN.">Searching all the conversations.</Shot>
 
-The **bell** counts what's waiting for you: an approval, a question, sources not taken in yet or activities in the oven.
+The **bell** counts what's waiting for you: an approval, a question, sources not taken in yet, activities in the oven or extensions with a new version.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-campana.webp" alt="The bell open: 3 sources to take in and 1 activity in the oven.">The bell, with what you have pending.</Shot>
 
@@ -195,7 +195,7 @@ It shows the subject's Moodle course and whether miyagi can reach it, with short
 
 ### Extensions {#extensiones}
 
-Extensions give miyagi new capabilities. Here you see the installed ones, add others from the catalog and create your own commands.
+Extensions give miyagi new capabilities. Here you see the installed ones, add others from the catalog and create your own commands. miyagi checks once a day for new versions: one that has it says **New version**, with its **Update** button, and the bell tells you. **Check for updates** checks right away and updates them all.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-extensiones-instaladas.webp" alt="The Installed tab with the moodle-teacher and docker-lab cards.">The installed extensions.</Shot>
 
