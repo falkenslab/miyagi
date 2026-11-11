@@ -152,7 +152,7 @@ export function TodayView({ chat, info, C, ask, go, onLink, linkTitle }: Common)
                 {C.nav.sources}
               </button>
             </Card>
-            <Card title={`🔥 ${C.nav.oven}`}>
+            <Card title={`📝 ${C.nav.oven}`}>
               <div className="kpi">
                 {result.oven.length}
                 <small>{C.kpi.oven}</small>

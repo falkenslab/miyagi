@@ -30,6 +30,10 @@ first, in backticks, exactly one of these words, so code can count them:
 - `served` Taller de normalización — <its link> — shown on 2026-10-22
 ```
 
+The words in backticks are for code. To the teacher, the register is "Drafts" and its phases are
+planned, being built, tested hidden and just published, in their language; never the words of the
+old oven metaphor (cooking, served).
+
 Then its name, and links to what exists: its `plan.md`, its source in `drafts/<slug>/`, its
 link in the classroom once it's there, and what it needs for the next phase. Update the item when
 the phase changes; never two items for one activity. A `served` item stays until a later session
