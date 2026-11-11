@@ -101,7 +101,7 @@ Its guarantees: every path resolves inside `drafts/` (no `..`, absolute paths or
 Its instructions, in every mode, forbid it to:
 
 - **delete** anything in Moodle it didn't create: what it leaves hidden stays hidden until you show it or remove it;
-- **change the enrolments** of any student, or the groups;
+- **change the enrolments** or roles of any student (groups yes, with your approval);
 - **touch the settings of the Moodle platform**;
 - **leave your course** or go into other Moodle courses.
 

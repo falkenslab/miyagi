@@ -101,7 +101,7 @@ Sus garantías: toda ruta se resuelve dentro de `drafts/` (sin `..`, rutas absol
 Sus instrucciones, en todos los modos, le prohíben:
 
 - **borrar** en Moodle nada que no haya creado él: lo que deja oculto se queda oculto hasta que tú lo muestres o lo quites;
-- **cambiar matrículas** de ningún estudiante, ni los grupos;
+- **cambiar matrículas** ni roles de ningún estudiante (los grupos sí, con tu aprobación);
 - **tocar la configuración de la plataforma** Moodle;
 - **salir de tu curso** o entrar en otros cursos de Moodle.
 

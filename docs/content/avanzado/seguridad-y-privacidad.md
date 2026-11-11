@@ -46,9 +46,9 @@ Una actividad que prepara miyagi (una sopa de letras, un crucigrama) lleva códi
 
 Trabaja con tu cuenta, a través de las herramientas fijas de moodle-teacher, así que puede hacer lo que esas herramientas permiten hacer con tu cuenta en el curso. Lo que lo frena:
 
-- Sus instrucciones le prohíben borrar lo que no haya creado él, cambiar matrículas o grupos, tocar la configuración de la plataforma y salir de tu curso.
+- Sus instrucciones le prohíben borrar lo que no haya creado él, cambiar matrículas o roles, tocar la configuración de la plataforma y salir de tu curso. Los grupos y agrupamientos sí los hace, con tu aprobación, que te enseña cada grupo con sus miembros (por alias); nunca borra uno ni apunta quién está en cada grupo en su memoria.
 - moodle-teacher solo llega a los cursos de tus asignaturas de miyagi: miyagi pone el de cada una en su opción `courses` al conectarla (o al abrirla por primera vez), y el propio servidor rechaza cualquier otro curso que vea tu cuenta. Como la extensión es la misma para todas tus asignaturas, que trabaje solo en el curso de la que tienes abierta lo siguen diciendo sus instrucciones.
-- Algunas herramientas de moodle-teacher están bloqueadas en todas las sesiones, en cualquier modo, porque nunca son trabajo del asistente: matricular o dar de baja, cambiar roles, crear grupos o cambiar quién está en ellos, mandar mensajes privados, reiniciar el curso y copiarlo a otro curso o sitio.
+- Algunas herramientas de moodle-teacher están bloqueadas en todas las sesiones, en cualquier modo, porque nunca son trabajo del asistente: matricular o dar de baja, cambiar roles, borrar grupos o agrupamientos, mandar mensajes privados, reiniciar el curso y copiarlo a otro curso o sitio.
 - En `guided`, ninguna herramienta de moodle-teacher que cambie algo se ejecuta sin tu aprobación: un [gancho del programa](aprobaciones-y-borradores.md) lo hace cumplir. Borrar, quitar o reiniciar te lo pregunta siempre moodle-teacher, en cada llamada, aunque ya lo hayas aprobado.
 - Lo que moodle-teacher no sabe hacer, no lo intenta por otro camino: te lo dice, lo prepara en `drafts/` y te da los pasos.
 - Todo lo nuevo se sube oculto y se prueba antes de mostrarlo.

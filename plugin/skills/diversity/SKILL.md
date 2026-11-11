@@ -36,8 +36,9 @@ they change, never by who they're for: "variante con más tiempo", "versión en 
 The teacher decides who gets each one.
 
 Giving a variant to some students only (restrictions by user or group, extra time for some) is
-the teacher's: miyagi doesn't change group membership. Build the variant hidden, and tell the
-teacher how to assign it in the classroom.
+the teacher's: miyagi makes groups for practicals or projects with the teacher's approval, but
+never one that says who has a need. Build the variant hidden, and tell the teacher how to assign
+it in the classroom.
 
 ## 3. Reinforcement and extension, not individual adaptations
 

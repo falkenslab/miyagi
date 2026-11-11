@@ -87,11 +87,14 @@ const KNOWLEDGE_READ_TOOLS = ["mcp__knowledge__knowledge_index", "mcp__knowledge
 /** miyagi's own tools that plan mode lets run: they only read. */
 const PLAN_READ_TOOLS = new Set([...KNOWLEDGE_READ_TOOLS, `mcp__${DRAFTS_SERVER}__drafts_list`, `mcp__${DRAFTS_SERVER}__drafts_info`, ...["commands_list", "commands_read", "commands_check"].map((name) => `mcp__${COMMANDS_SERVER}__${name}`)]);
 
-/** moodle-mcp's tools miyagi never uses (they're the teacher's or the site's, not a teaching assistant's). */
+/**
+ * moodle-mcp's tools miyagi never uses (they're the teacher's or the site's, not a teaching
+ * assistant's). Groups and groupings are miyagi's with the teacher's approval (ADR-028); deleting
+ * one isn't.
+ */
 const NEVER_MOODLE_TOOLS = [
   "enrol_users", "unenrol_user", "set_user_roles", "set_enrolment_method",
-  "create_group", "update_group", "delete_group", "set_group_members", "auto_create_groups", "import_groups",
-  "create_grouping", "delete_grouping", "set_grouping_groups",
+  "delete_group", "delete_grouping",
   "send_message", "message_participants",
   "reset_course", "copy_course", "copy_between_sites",
 ];

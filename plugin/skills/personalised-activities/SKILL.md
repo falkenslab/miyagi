@@ -58,6 +58,6 @@ anywhere. When a new school year starts, the old page is replaced by the new sur
   gradebook counts them. Students pick; nobody is assigned a context.
 - **One variant per group**, only when the teacher decides it: each variant restricted to an
   existing group of the classroom. Never per named student, and never creating or changing groups
-  for it (that's enrolment).
+  for it: interests are only read in aggregate, and a group made from them would say who answered what.
 - Publish them like any activity (`publish-check`): hidden, tested, shown with their approval;
   `record_publication` for each file. Name the interests page in the activity's page.

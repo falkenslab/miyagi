@@ -46,9 +46,9 @@ An activity miyagi prepares (a word search, a crossword) carries code the model 
 
 It works with your account, through moodle-teacher's fixed tools, so it can do whatever those tools allow with your account in the course. What holds it back:
 
-- Its instructions forbid it to delete what it didn't create, change enrolments or groups, touch the platform's settings and leave your course.
+- Its instructions forbid it to delete what it didn't create, change enrolments or roles, touch the platform's settings and leave your course. Groups and groupings it does make, with your approval, which shows each group with its members (by alias); it never deletes one nor notes who is in each group in its memory.
 - moodle-teacher only reaches the courses of your miyagi subjects: miyagi puts each one's course in its `courses` option when connecting it (or when opening it for the first time), and the server itself rejects any other course your account can see. Since the extension is the same for all your subjects, its instructions are still what keeps it working only in the course of the one you have open.
-- Some moodle-teacher tools are blocked in every session, in any mode, because they're never the assistant's job: enrolling or unenrolling, changing roles, creating groups or changing who's in them, sending private messages, resetting the course and copying it to another course or site.
+- Some moodle-teacher tools are blocked in every session, in any mode, because they're never the assistant's job: enrolling or unenrolling, changing roles, deleting groups or groupings, sending private messages, resetting the course and copying it to another course or site.
 - In `guided`, no moodle-teacher tool that changes something runs without your approval: a [hook in the program](aprobaciones-y-borradores.md) enforces it. Deleting, removing or resetting is always asked by moodle-teacher, on every call, even if you've already approved it.
 - What moodle-teacher can't do, it doesn't try by another route: it tells you, prepares it in `drafts/` and gives you the steps.
 - Everything new is uploaded hidden and tested before it's shown.
