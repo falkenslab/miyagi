@@ -34,6 +34,12 @@ is the hub, and each unit's topic page holds that unit's part. That's what lets
 - What's missing, ask (in `chat`) — the teacher's decisions shouldn't be invented: the group
   and its context, the total hours and calendar, the weights. In `run`, propose and mark each
   proposal clearly as such ("(propuesta, pendiente de confirmar)").
+- When an instrument of the teacher's (their rubric, their weights, their penalties) disagrees
+  with an official framework (an external exam's correction criteria), keep theirs in the plan
+  and propose the change next to it, with what differs: replacing it is the teacher's call, and a
+  published plan is what counts in a complaint. Ask before publishing a plan that drops it. In a
+  simulated course, a teacher's own commentary rubric was swapped for the exam board's in the
+  published plan, said only in the closing summary.
 
 ## 2. Structure
 
