@@ -1,7 +1,7 @@
 ---
 title: La memoria del curso
 sidebar_position: 11
-description: "Qué recuerda miyagi de tu curso, dónde lo guarda, cómo corregirlo y qué no guarda nunca."
+description: "Qué recuerda miyagi de tu curso y de ti, dónde lo guarda, cómo corregirlo y qué no guarda nunca."
 ---
 
 # La memoria del curso
@@ -68,5 +68,14 @@ Para consultarlos sin abrir Moodle, usa `/knowledge:query` con tu pregunta. Para
 ## Cada curso, su memoria
 
 Cada curso tiene sus propios apuntes, en su carpeta. Lo que aprende de un curso no pasa a otro.
+
+## Lo que recuerda de ti, en todos tus cursos
+
+Aparte de los apuntes de cada curso, miyagi recuerda **cómo quieres trabajar tú**, en todas tus asignaturas: cómo quieres que te llame, el tono, cómo escribir la retroalimentación al alumnado, tus formatos y tus herramientas. Basta con decírselo una vez («llámame Paco», «la retroalimentación, breve y empezando por lo que está bien») y en otra asignatura lo sigue desde el primer mensaje.
+
+- Solo guarda lo que **tú le escribes**, con tus palabras; nunca lo que sale de un documento o de una página.
+- Lo que es de un curso (su programación, un criterio de corrección, lo que vale en un examen) va a los apuntes de ese curso, no aquí.
+- **Nunca guarda a un alumno**, aunque le hables de él: ni su nombre ni sus necesidades ni sus notas.
+- Escribe `/memory:list` en el chat para ver lo que recuerda y `/memory:forget` con el nombre de una entrada para que la olvide. Está en tu ordenador, en `~/.miyagi/memory/`, un fichero por entrada.
 
 ¿Quieres saber cómo se construye por dentro, qué hace la ingesta (`miyagi ingest` en la terminal) paso a paso o qué formatos admite? Está en [La base de conocimiento](../avanzado/base-de-conocimiento.md).

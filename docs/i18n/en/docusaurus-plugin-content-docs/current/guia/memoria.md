@@ -69,4 +69,13 @@ To look them up without opening Moodle, use `/knowledge:query` with your questio
 
 Each course has its own notes, in its folder. What it learns from one course doesn't carry over to another.
 
+## What it remembers about you, in all your courses {#lo-que-recuerda-de-ti-en-todos-tus-cursos}
+
+Besides each course's notes, miyagi remembers **how you like to work**, in all your subjects: what to call you, your tone, how to write feedback for students, your formats and your tools. Tell it once ("call me Paco", "feedback short, starting with what's right") and in another subject it follows it from the first message.
+
+- It only keeps what **you write to it**, in your words; never what comes from a document or a page.
+- What belongs to one course (its teaching plan, a grading criterion, what an exam accepts) goes to that course's notes, not here.
+- **It never keeps a student**, even if you tell it about one: not their name, their needs or their grades.
+- Type `/memory:list` in the chat to see what it remembers and `/memory:forget` with an entry's name to make it forget it. It's on your computer, in `~/.miyagi/memory/`, one file per entry.
+
 Want to know how it's built inside, what ingesting (`miyagi ingest` in the terminal) does step by step or which formats it accepts? It's in [The knowledge base](../avanzado/base-de-conocimiento.md).

@@ -31,6 +31,11 @@ export interface GlobalConfig {
 /** What the page keeps here, the same in the app and the browser: only these keys reach it, never the key above. */
 export type PageSettings = Pick<GlobalConfig, "tourSeen" | "showTips" | "tipsNext">;
 
+/** The teacher's memory across all their subjects (teacher-memory #104): agent-kit's, one file per entry. */
+export function memoryDir(): string {
+  return path.join(os.homedir(), ".miyagi", "memory");
+}
+
 export function globalConfigPath(): string {
   return path.join(os.homedir(), ".miyagi", "config.json");
 }

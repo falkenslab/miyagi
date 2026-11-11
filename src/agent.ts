@@ -17,6 +17,7 @@ import {
   type Mode,
   awareness,
   knowledge,
+  memory,
   sources,
 } from "@falkenslab/agent-kit";
 import {
@@ -45,6 +46,7 @@ import {
   forgetSavedClaudeToken,
   isAutoCompactEnabled,
   loadWorkspaceEnv,
+  memoryDir,
   resolveLanguage,
 } from "./globalConfig.js";
 import { promptInitWorkspace, promptMigrateClassroom, promptMode, promptPickWorkspace } from "./menu.js";
@@ -137,6 +139,8 @@ function buildSpec(kind: SessionKind, skills: string[], pending: PendingLosses):
     identity: { name: "miyagi", version: VERSION, description: "the teacher's AI assistant: it plans a subject, builds its materials and runs its Moodle classroom, publishing only with the teacher's approval" },
     extensions: [
       awareness(),
+      // The teacher across all their subjects (#104): how they like things done, never a student.
+      ...(kind === "run" || kind === "chat" ? [memory({ dir: memoryDir() })] : []),
       sources<WorkspaceSessionConfig>({ dir: (config) => config.sourcesDir }),
       // The course's pages (course/, topic/, activity/) next to the kit's own, all through the
       // kit's knowledge_* tools, never the file tools (agent-kit's ADR-024).
