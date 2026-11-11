@@ -81,6 +81,10 @@ A methodology that doesn't fit the time available is worse than a well-run lectu
   completion); quizzes with several attempts as "missions"; a lesson with branching as an
   escape room (`activity-building`); the gradebook as experience points if the teacher wants.
   Plugins like leaderboards or XP blocks are not core: check `course/moodle-capabilities` first.
+  When it doesn't say and your tools can't tell (blocks often aren't visible to them), say you
+  can't see whether it's installed and how the teacher checks (adding a block lists the ones
+  there) — never that the classroom lacks it. In a simulated course, the teacher was told to
+  ask the administrator for an XP block that was already installed.
 
 ### Cooperative learning
 - **What**: structured group work where everyone is needed (positive interdependence) and
