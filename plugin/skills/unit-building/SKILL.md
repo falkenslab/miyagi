@@ -67,7 +67,10 @@ rather than promising restrictions you can't set:
    groups). Hands-on work is checked with `practice-testing` when the
    workspace allows it.
 4. Every activity graded by hand gets its rubric on its grading form (`rubric-design`).
-5. Grade items in the right category and weight; dates in the calendar's order.
+5. Grade items in the right category and weight; dates in the calendar's order. When the
+   teaching plan grades in a way the gradebook doesn't follow yet (by criteria, by outcomes),
+   propose setting the gradebook up first, before the term's grades close: a graded activity
+   parked at weight 0 "until later" is an evidence that counts for nothing on the report card.
 
 Every item goes through `publish-check` (writing and accessibility) and gets its approval, one
 item per approval when it's new content.

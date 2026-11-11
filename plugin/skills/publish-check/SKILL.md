@@ -33,7 +33,9 @@ whatever its type:
 3. **Test it as the teacher**: read back what the classroom stored, and check it works the way a
    student would use it (the quiz, the H5P, every link and interactive part, the page at a narrow
    width). What the tools can't try, ask the teacher to try, with its link. If something fails,
-   fix it in `drafts/` and replace it (another approval).
+   fix it in `drafts/` and replace it (another approval). Read its texts once more for words left
+   in another language and typos, the short ones (a description, an intro) above all: in a
+   simulated course, a game's intro told the class to have «resolved» five puzzles.
 4. **Note it in `course/drafts`** (`knowledge_edit`): one list item per hidden draft, starting
    with `` `hidden` `` (the register's format is in `activity-lifecycle`), with its link and
    what's pending.
