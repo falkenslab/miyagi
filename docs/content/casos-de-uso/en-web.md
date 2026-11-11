@@ -13,7 +13,7 @@ La [versión web](/guia/web/) es la misma página que la aplicación de escritor
 
 ## Ver cómo está la asignatura
 
-La vista **Hoy** resume lo que miyagi sabe, las fuentes por incorporar, lo que hay en el horno y lo que puedes hacer.
+La vista **Hoy** resume lo que miyagi sabe, las fuentes por incorporar, lo que hay en Borradores y lo que puedes hacer.
 
 <Shot width="1400" height="875" kind="web" src="/img/v2/web-hoy.webp" alt="La versión web en la vista Hoy de la asignatura Introducción a SQL: saludo, cuatro tarjetas y sugerencias como revisar el foro o corregir lo pendiente.">La asignatura de SQL en la versión web.</Shot>
 

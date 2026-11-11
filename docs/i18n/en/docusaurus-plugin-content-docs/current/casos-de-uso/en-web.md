@@ -13,7 +13,7 @@ The [web version](/guia/web/) is the same page as the desktop app, opened in a t
 
 ## See how the subject is doing {#ver-cómo-está-la-asignatura}
 
-The **Today** view sums up what miyagi knows, the sources waiting to be taken in, what's in the oven and what you can do.
+The **Today** view sums up what miyagi knows, the sources waiting to be taken in, what's in Drafts and what you can do.
 
 <Shot width="1400" height="875" kind="web" src="/img/v2/web-hoy.webp" alt="The web version in the Today view of the Introducción a SQL subject: a greeting, four cards and suggestions such as checking the forum or grading what's pending.">The SQL subject in the web version.</Shot>
 

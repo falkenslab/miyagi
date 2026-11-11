@@ -101,7 +101,7 @@ It designs and sets up the rest of the activities so they work as they should: p
 
 For something new and complex (a unit project, a gamified activity, an escape room, a SCORM package, a workshop), it suggests going in phases instead of building it all at once: first **a plan** you agree on together (objectives and criteria, what students do and submit, how it's assessed, the classroom pieces, materials, timing and risks), reviewed by its teaching assistant; then it **builds it** and tells you where it departs from the plan and why; next it **tests it hidden** in the classroom; and finally it **serves it** to students. Each step from one phase to the next needs your approval. If you don't want this, it builds it as usual; for a typo or a single question it doesn't suggest it.
 
-Each activity in progress is noted with its phase in the `course/drafts` page. When you close the session you see how many there are in each (“In the oven: 1 planning, 2 being built, 1 being tested hidden”), and the next chat reminds you when it greets you.
+Each activity in progress is noted with its phase in the `course/drafts` page. When you close the session you see how many there are in each (“Drafts: 1 planning, 2 being built, 1 being tested hidden”), and the next chat reminds you when it greets you.
 
 - **Ask it like this:** *“Prepare an SQL escape room for unit 3, with the full process.”* If you type `/plan` first, it writes the plan in plan mode, unable to touch anything else.
 

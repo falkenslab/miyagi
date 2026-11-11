@@ -91,7 +91,7 @@ export interface CourseTexts {
 }
 
 const es: CourseTexts = {
-  nav: { today: "Hoy", plan: "Programación", topics: "Temas y actividades", materials: "Materiales", oven: "En el horno", knowledge: "Base de conocimiento", sources: "Fuentes" },
+  nav: { today: "Hoy", plan: "Programación", topics: "Temas y actividades", materials: "Materiales", oven: "Borradores", knowledge: "Base de conocimiento", sources: "Fuentes" },
   sec: { subject: "Asignatura", memory: "Memoria" },
   sub: { plan: "course/teaching-plan", materials: "materials/ y drafts/ · lo que miyagi prepara antes de publicar", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} páginas`, sources: "sources/ · tus documentos" },
   loading: "Cargando…",
@@ -99,7 +99,7 @@ const es: CourseTexts = {
   uploading: "Subiendo a tus fuentes…",
   talk: "Hablar con miyagi",
   hello: "Esto es lo que sé de tu asignatura ahora mismo.",
-  kpi: { pages: "páginas en su memoria", topics: "temas", activities: "actividades", pending: "fuentes por incorporar", oven: "en el horno", drafts: "materiales preparados" },
+  kpi: { pages: "páginas en su memoria", topics: "temas", activities: "actividades", pending: "fuentes por incorporar", oven: "borradores", drafts: "materiales preparados" },
   suggestions: "Sugerencias para hoy",
   recent: "Actividad reciente",
   noRecent: "Todavía no ha anotado nada en su memoria.",
@@ -142,9 +142,9 @@ const es: CourseTexts = {
   size: "Tamaño",
   changed: "Cambiado",
   choose: "Elige un material para verlo.",
-  phases: { planning: "📝 En plan", building: "🔥 Cocinándose", hidden: "🧪 Probándose oculto", served: "🍽️ Servido" },
+  phases: { planning: "📝 En plan", building: "🔨 En construcción", hidden: "🧪 Probándose oculto", served: "✅ Recién publicado" },
   ovenNote: "Lo nuevo se sube oculto, se prueba como alumno y solo se muestra con tu aprobación.",
-  emptyOven: "Nada en el horno. Pide algo nuevo «con el proceso completo» y aparecerá aquí, fase a fase.",
+  emptyOven: "Ningún borrador. Pide algo nuevo «con el proceso completo» y aparecerá aquí, fase a fase.",
   showToStudents: "Mostrar a los alumnos",
   resume: "Seguir con ello",
   searchKb: "Buscar en las páginas…",
@@ -175,7 +175,7 @@ const es: CourseTexts = {
 };
 
 const en: CourseTexts = {
-  nav: { today: "Today", plan: "Teaching plan", topics: "Topics and activities", materials: "Materials", oven: "In the oven", knowledge: "Knowledge base", sources: "Sources" },
+  nav: { today: "Today", plan: "Teaching plan", topics: "Topics and activities", materials: "Materials", oven: "Drafts", knowledge: "Knowledge base", sources: "Sources" },
   sec: { subject: "Subject", memory: "Memory" },
   sub: { plan: "course/teaching-plan", materials: "materials/ and drafts/ · what miyagi prepares before publishing", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} pages`, sources: "sources/ · your documents" },
   loading: "Loading…",
@@ -183,7 +183,7 @@ const en: CourseTexts = {
   uploading: "Uploading to your sources…",
   talk: "Talk to miyagi",
   hello: "This is what I know of your subject right now.",
-  kpi: { pages: "pages in its memory", topics: "topics", activities: "activities", pending: "sources to take in", oven: "in the oven", drafts: "materials prepared" },
+  kpi: { pages: "pages in its memory", topics: "topics", activities: "activities", pending: "sources to take in", oven: "drafts", drafts: "materials prepared" },
   suggestions: "Suggestions for today",
   recent: "Recent activity",
   noRecent: "Nothing noted in its memory yet.",
@@ -226,9 +226,9 @@ const en: CourseTexts = {
   size: "Size",
   changed: "Changed",
   choose: "Choose a material to see it.",
-  phases: { planning: "📝 Planned", building: "🔥 Cooking", hidden: "🧪 Tested hidden", served: "🍽️ Served" },
+  phases: { planning: "📝 Planned", building: "🔨 Being built", hidden: "🧪 Tested hidden", served: "✅ Just published" },
   ovenNote: "New things go up hidden, are tested as a student and are shown only with your approval.",
-  emptyOven: "Nothing in the oven. Ask for something new \"with the full process\" and it shows up here, phase by phase.",
+  emptyOven: "No drafts. Ask for something new \"with the full process\" and it shows up here, phase by phase.",
   showToStudents: "Show to students",
   resume: "Go on with it",
   searchKb: "Search the pages…",
@@ -259,7 +259,7 @@ const en: CourseTexts = {
 };
 
 const fr: CourseTexts = {
-  nav: { today: "Aujourd'hui", plan: "Progression", topics: "Thèmes et activités", materials: "Matériel", oven: "Au four", knowledge: "Base de connaissances", sources: "Sources" },
+  nav: { today: "Aujourd'hui", plan: "Progression", topics: "Thèmes et activités", materials: "Matériel", oven: "Brouillons", knowledge: "Base de connaissances", sources: "Sources" },
   sec: { subject: "Matière", memory: "Mémoire" },
   sub: { plan: "course/teaching-plan", materials: "materials/ et drafts/ · ce que miyagi prépare avant de publier", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} pages`, sources: "sources/ · tes documents" },
   loading: "Chargement…",
@@ -267,7 +267,7 @@ const fr: CourseTexts = {
   uploading: "Envoi vers vos sources…",
   talk: "Parler à miyagi",
   hello: "Voici ce que je sais de ta matière en ce moment.",
-  kpi: { pages: "pages dans sa mémoire", topics: "thèmes", activities: "activités", pending: "sources à intégrer", oven: "au four", drafts: "éléments préparés" },
+  kpi: { pages: "pages dans sa mémoire", topics: "thèmes", activities: "activités", pending: "sources à intégrer", oven: "brouillons", drafts: "éléments préparés" },
   suggestions: "Suggestions pour aujourd'hui",
   recent: "Activité récente",
   noRecent: "Rien de noté dans sa mémoire pour l'instant.",
@@ -310,9 +310,9 @@ const fr: CourseTexts = {
   size: "Taille",
   changed: "Modifié",
   choose: "Choisis un élément pour le voir.",
-  phases: { planning: "📝 En plan", building: "🔥 En cuisson", hidden: "🧪 Testé caché", served: "🍽️ Servi" },
+  phases: { planning: "📝 En plan", building: "🔨 En construction", hidden: "🧪 Testé caché", served: "✅ Tout juste publié" },
   ovenNote: "Le nouveau est publié caché, testé comme élève et montré seulement avec ton accord.",
-  emptyOven: "Rien au four. Demande quelque chose de nouveau « avec le processus complet » et il apparaîtra ici, phase par phase.",
+  emptyOven: "Aucun brouillon. Demande quelque chose de nouveau « avec le processus complet » et il apparaîtra ici, phase par phase.",
   showToStudents: "Montrer aux élèves",
   resume: "Continuer",
   searchKb: "Chercher dans les pages…",
@@ -343,7 +343,7 @@ const fr: CourseTexts = {
 };
 
 const de: CourseTexts = {
-  nav: { today: "Heute", plan: "Planung", topics: "Themen und Aktivitäten", materials: "Material", oven: "Im Ofen", knowledge: "Wissensbasis", sources: "Quellen" },
+  nav: { today: "Heute", plan: "Planung", topics: "Themen und Aktivitäten", materials: "Material", oven: "Entwürfe", knowledge: "Wissensbasis", sources: "Quellen" },
   sec: { subject: "Fach", memory: "Gedächtnis" },
   sub: { plan: "course/teaching-plan", materials: "materials/ und drafts/ · was miyagi vor dem Veröffentlichen vorbereitet", oven: "course/drafts", knowledge: (n) => `knowledge/ · ${n} Seiten`, sources: "sources/ · deine Dokumente" },
   loading: "Wird geladen…",
@@ -351,7 +351,7 @@ const de: CourseTexts = {
   uploading: "Wird zu Ihren Quellen hochgeladen…",
   talk: "Mit miyagi sprechen",
   hello: "Das weiß ich gerade über dein Fach.",
-  kpi: { pages: "Seiten im Gedächtnis", topics: "Themen", activities: "Aktivitäten", pending: "Quellen aufzunehmen", oven: "im Ofen", drafts: "vorbereitete Materialien" },
+  kpi: { pages: "Seiten im Gedächtnis", topics: "Themen", activities: "Aktivitäten", pending: "Quellen aufzunehmen", oven: "Entwürfe", drafts: "vorbereitete Materialien" },
   suggestions: "Vorschläge für heute",
   recent: "Letzte Aktivität",
   noRecent: "Noch nichts im Gedächtnis notiert.",
@@ -394,9 +394,9 @@ const de: CourseTexts = {
   size: "Größe",
   changed: "Geändert",
   choose: "Wähle ein Material, um es anzusehen.",
-  phases: { planning: "📝 Geplant", building: "🔥 Im Bau", hidden: "🧪 Verborgen getestet", served: "🍽️ Serviert" },
+  phases: { planning: "📝 Geplant", building: "🔨 Im Bau", hidden: "🧪 Verborgen getestet", served: "✅ Gerade veröffentlicht" },
   ovenNote: "Neues wird verborgen hochgeladen, als Lernende getestet und nur mit deiner Zustimmung gezeigt.",
-  emptyOven: "Nichts im Ofen. Bitte um etwas Neues „mit dem ganzen Ablauf“, und es erscheint hier, Phase für Phase.",
+  emptyOven: "Keine Entwürfe. Bitte um etwas Neues „mit dem ganzen Ablauf“, und es erscheint hier, Phase für Phase.",
   showToStudents: "Den Lernenden zeigen",
   resume: "Weitermachen",
   searchKb: "In den Seiten suchen…",

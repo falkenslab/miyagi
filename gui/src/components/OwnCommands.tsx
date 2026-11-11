@@ -14,7 +14,7 @@ import { Waiting } from "./Waiting";
 type Notice = (text: string) => void;
 
 const GROUPS = ["day", "create", "plan", "memory", "classroom"];
-const KINDS = ["topic", "material", "quiz", "source", "page", "plan", "oven", "text"];
+const KINDS = ["topic", "material", "quiz", "source", "page", "plan", "draft", "text"];
 const TYPES: ActionParameter["type"][] = ["text", "number", "choice", "words", "topic", "source", "page"];
 const MAX_PARAMETERS = 8;
 

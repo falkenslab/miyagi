@@ -36,9 +36,9 @@ It asks permission just once, listing the 3 sections and the 16 activities. It s
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-mostrar-a-alumnos.webp" alt="The reply after showing the units: what they can see from today, a table with the date each graded item opens in 2027, and the pending decision: the Unit 1 quiz is still hidden.">Units shown, each graded item with its opening date, and a decision for you.</Shot>
 
-The only thing still hidden is the Unit 1 quiz, because we didn't mention it, and miyagi reminds you of it. It stays in **In the oven**, with a button to show it:
+The only thing still hidden is the Unit 1 quiz, because we didn't mention it, and miyagi reminds you of it. It stays in **Drafts**, with a button to show it:
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-horno.webp" alt="The In the oven view: the Unit 1 quiz in the Tested hidden column, with the Show to students button.">In the oven, the quiz that's missing.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-horno.webp" alt="The Drafts view: the Unit 1 quiz in the Tested hidden column, with the Show to students button.">In the oven, the quiz that's missing.</Shot>
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-aprobacion-mostrar.webp" alt="Approval panel for showing the Unit 1 quiz: only the visibility changes, with no notice; 10 random questions, 20 minutes, 2 attempts, it counts for 5%.">Before showing it: what they'll see and what it hasn't been able to check. This screenshot was taken for the tutorial and we then rejected it.</Shot>
 

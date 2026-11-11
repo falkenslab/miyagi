@@ -13,7 +13,7 @@ import { Waiting } from "./Waiting";
 import { whileBusy } from "./StatusBar";
 
 // The course views (gui-course-views #51), as the mockup draws them: Hoy, the teaching plan, topics
-// and activities, materials, the oven, the knowledge base and the sources. They only read; every
+// and activities, materials, the drafts, the knowledge base and the sources. They only read; every
 // button that changes something sends a line to the chat, where the agent works and asks for
 // approval as always.
 
@@ -446,7 +446,7 @@ export function MaterialsView({ chat, info, C, ask, item, beside }: Common) {
   );
 }
 
-// ---------- En el horno ----------
+// ---------- Borradores ----------
 
 export function OvenView({ chat, info, C, ask, beside }: Common) {
   const compose = useActions()?.compose;
@@ -477,7 +477,7 @@ export function OvenView({ chat, info, C, ask, beside }: Common) {
               .map((item, index) => {
                 const file = namedFile(item.text);
                 return (
-                <Actionable key={index} kinds={["oven"]} value={label(item.text)} className="it">
+                <Actionable key={index} kinds={["draft"]} value={label(item.text)} className="it">
                   <span className="md">
                     <Markdown text={item.text.replace(/\[([^\]]+)\]\([^)\s]+\.md\)/g, "$1")} />
                   </span>

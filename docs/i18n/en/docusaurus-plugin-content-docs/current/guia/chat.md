@@ -57,7 +57,7 @@ The mode selector is next to the writing box, and you can also change it with `S
 ## Interrupting and picking up again {#interrumpir-y-retomar}
 
 - **`Esc`** or the **■** button cuts short what it's doing without closing the conversation. Then tell it what to do instead.
-- To leave, **there's nothing to save**: everything is written as it goes. If it has left something hidden in Moodle without showing it to students, it stays in **In the oven**, and the bell reminds you.
+- To leave, **there's nothing to save**: everything is written as it goes. If it has left something hidden in Moodle without showing it to students, it stays in **Drafts**, and the bell reminds you.
 - In the app and on the web, any earlier conversation is in the conversations column, and **Search conversations** finds them by a word.
 
 Even if you start a new conversation, the assistant doesn't start from scratch: it reads its [course notes](memoria.md) when it starts.

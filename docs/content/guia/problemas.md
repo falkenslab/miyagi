@@ -35,7 +35,7 @@ description: "Consejos para sacarle partido a miyagi y qué hacer cuando algo no
 | Recuerda algo mal | Díselo en la conversación o edita la página de `knowledge`. |
 | No lee un documento de `sources` | Comprueba el formato. Los de OpenDocument (`.odt`) no los lee bien: expórtalos a PDF o DOCX. Los vídeos tampoco los puede transcribir. |
 | Dice que no puede probar una práctica | Falta la extensión docker-lab (o está desactivada) o falta Docker. Ver [Prácticas en Docker](/avanzado/practicas-docker/). |
-| Al cerrar dice «En el horno: …» | Son las actividades que tiene a medias: en plan, construyéndose o subidas ocultas para probarlas, que tus alumnos aún no ven. Las ves en la vista **En el horno** y en `knowledge/drafts.md`: pídele que siga con ellas, que las muestre o que las descarte. |
+| Al cerrar dice «Borradores: …» | Son las actividades que tiene a medias: en plan, construyéndose o subidas ocultas para probarlas, que tus alumnos aún no ven. Las ves en la vista **Borradores** y en `knowledge/drafts.md`: pídele que siga con ellas, que las muestre o que las descarte. |
 | Venía de moodle-agent | Abre esa asignatura con `miyagi chat` en su carpeta: reorganiza sus apuntes solo. |
 
 Si el problema sigue, puedes contarlo en [GitHub](https://github.com/falkenslab/miyagi/issues).

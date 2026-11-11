@@ -161,7 +161,7 @@ matière ("agent.language") ou, pour toutes, dans ${globalConfigPath}
   endTranscript: (path) => `  - Les actions de l'agent et leurs résultats : ${path}`,
   endConversation: (path) => `  - La conversation, en texte brut : ${path}`,
   endKnowledge: (path) => `  - Ce que l'agent a appris : ${path}`,
-  endInProgress: (counts, path) => `Au four : ${inOven(counts, { planning: "en plan", building: "en préparation", hidden: "en test masqué", served: "tout juste servi" })} (${path})`,
+  endInProgress: (counts, path) => `Brouillons : ${inOven(counts, { planning: "en plan", building: "en construction", hidden: "en test masqué", served: "tout juste publié" })} (${path})`,
   endInterruptedNote:
     "Ce qu'il faisait au moment de l'interruption peut être à moitié fait (une note non enregistrée, une réponse non publiée) ; à la prochaine session, vous pouvez lui demander de reprendre.",
 

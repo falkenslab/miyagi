@@ -497,7 +497,7 @@ function printSessionEnd(kind: SessionKind, workspaceDir: string, runDir: string
   console.log(lines.join("\n"));
 }
 
-/** "En el horno: 1 en plan, 2 cocinándose" when `course/drafts` lists activities in progress. */
+/** "Borradores: 1 en plan, 2 en construcción" when `course/drafts` lists activities in progress. */
 function inProgressEnd(workspaceDir: string): string[] {
   const counts = readPhaseCounts(workspaceDir);
   return counts ? [ui.warn(t().endInProgress(counts, registerPath(workspaceDir)))] : [];

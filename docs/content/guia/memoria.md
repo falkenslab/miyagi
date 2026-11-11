@@ -24,7 +24,7 @@ En la [aplicación de escritorio](escritorio.md#vistas) y en la versión web los
 | Cada actividad evaluable: criterios que aplicó, rúbrica, preguntas importadas | `activities/` (una página por actividad) |
 | La evolución de la clase, revisión a revisión | `progress.md` |
 | Las auditorías del curso, con su fecha | `course-audit.md` |
-| Las actividades en marcha: en plan, construyéndose, ocultas para probarlas o recién servidas | `drafts.md` |
+| Las actividades en marcha: en plan, construyéndose, ocultas para probarlas o recién publicadas | `drafts.md` |
 | Un resumen de cada documento que le diste | `summaries/` |
 | Una visión general del curso | `overview.md` |
 | Todo enlazado, con un índice y un diario de cambios | `index.md` y `log.md` |

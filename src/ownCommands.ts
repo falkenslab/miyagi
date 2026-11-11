@@ -35,7 +35,10 @@ export const templatesDir = path.join(__dirname, "..", "plugin", "command-templa
 
 export const PARAMETER_TYPES = ["text", "number", "choice", "words", "topic", "source", "page"] as const;
 export const GROUPS = ["day", "create", "plan", "memory", "classroom"];
-export const ITEM_KINDS = ["topic", "material", "quiz", "source", "page", "plan", "oven", "text"];
+export const ITEM_KINDS = ["topic", "material", "quiz", "source", "page", "plan", "draft", "text"];
+
+/** An item kind as a command names it: `oven` is the drafts' old name (#105), still read. */
+export const itemKind = (kind: string) => (kind === "oven" ? "draft" : kind);
 export const PRODUCES = ["html-activity", "quiz", "document", "page"];
 
 /** Claude Code's and the kit's own commands, and miyagi's namespaces: a subject's command can't take these names. */
@@ -113,7 +116,7 @@ export function validateCommand(name: string, markdown: string): string[] {
   if (typeof data.description !== "string" || !data.description.trim()) errors.push("`description` is missing");
   if (!perLanguage(data.label)) errors.push("`label` is missing: the name the teacher sees");
   if (data.group !== undefined && !GROUPS.includes(String(data.group))) errors.push(`\`group\` must be one of ${GROUPS.join(", ")}`);
-  for (const kind of typeof data["applies-to"] === "string" ? data["applies-to"].split(",").map((one) => one.trim()) : []) if (!ITEM_KINDS.includes(kind)) errors.push(`\`applies-to\`: "${kind}" isn't one of ${ITEM_KINDS.join(", ")}`);
+  for (const kind of typeof data["applies-to"] === "string" ? data["applies-to"].split(",").map((one) => one.trim()) : []) if (!ITEM_KINDS.includes(itemKind(kind))) errors.push(`\`applies-to\`: "${kind}" isn't one of ${ITEM_KINDS.join(", ")}`);
   if (data.produces !== undefined && !PRODUCES.includes(String(data.produces))) errors.push(`\`produces\` must be one of ${PRODUCES.join(", ")}`);
   const { parameters, errors: parameterErrors } = readParameters(data.parameters);
   errors.push(...parameterErrors);
@@ -202,7 +205,7 @@ function draftOf(markdown: string): CommandDraft {
     label: perLanguage(data.label) ?? {},
     icon: text("icon"),
     group: text("group"),
-    appliesTo: stringList(data["applies-to"]),
+    appliesTo: stringList(data["applies-to"]).map(itemKind),
     parameters: readParameters(data.parameters).parameters,
     instructions: body.trim(),
   };

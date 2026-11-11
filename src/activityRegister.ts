@@ -60,7 +60,7 @@ export function readPhaseCounts(workspaceDir: string, draftsDir = path.join(work
   return PHASES.some((phase) => counts[phase] > 0) ? counts : undefined;
 }
 
-/** One activity of the register, as the page's "En el horno" shows it: its phase and its line, without the phase's backticks. */
+/** One activity of the register, as the page's "Borradores" shows it: its phase and its line, without the phase's backticks. */
 export interface RegisterItem {
   phase: Phase;
   text: string;
@@ -86,7 +86,7 @@ export function readRegister(workspaceDir: string, draftsDir = path.join(workspa
   return items;
 }
 
-/** "1 en plan, 2 cocinándose": the phases with something in them, in order, with each language's names. */
+/** "1 en plan, 2 en construcción": the phases with something in them, in order, with each language's names. */
 export function inOven(counts: PhaseCounts, names: Record<Phase, string>): string {
   return PHASES.filter((phase) => counts[phase] > 0).map((phase) => `${counts[phase]} ${names[phase]}`).join(", ");
 }

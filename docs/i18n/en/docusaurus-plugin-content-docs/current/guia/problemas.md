@@ -35,7 +35,7 @@ description: "Tips to get the most out of miyagi and what to do when something d
 | It remembers something wrong | Tell it in the conversation or edit the page in `knowledge`. |
 | It doesn't read a document in `sources` | Check the format. It doesn't read OpenDocument files (`.odt`) well: export them to PDF or DOCX. It can't transcribe videos either. |
 | It says it can't test a practical | The docker-lab extension is missing (or turned off), or Docker is missing. See [Docker practicals](/avanzado/practicas-docker/). |
-| When closing it says “In the oven: …” | Those are the activities it has half done: planned, being built or uploaded hidden to test them, which your students can't see yet. You can see them in the **In the oven** view and in `knowledge/drafts.md`: ask it to carry on with them, show them or discard them. |
+| When closing it says “Drafts: …” | Those are the activities it has half done: planned, being built or uploaded hidden to test them, which your students can't see yet. You can see them in the **Drafts** view and in `knowledge/drafts.md`: ask it to carry on with them, show them or discard them. |
 | You were using moodle-agent | Open that subject with `miyagi chat` in its folder: it reorganizes its notes by itself. |
 
 If the problem persists, you can report it on [GitHub](https://github.com/falkenslab/miyagi/issues).

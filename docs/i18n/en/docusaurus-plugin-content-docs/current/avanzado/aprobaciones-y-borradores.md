@@ -55,7 +55,7 @@ If you'd rather not show it yet, it stays hidden and in `drafts.md`.
 - `hidden`: uploaded hidden to the classroom, being tested.
 - `served`: the students already see it; the next session tells you so and removes it.
 
-The first three phases are gone through by the `activity-lifecycle` skill for something new and complex, with an approval to move from each phase to the next; a hidden draft without that process is a `hidden` line. An older page, without phases, counts everything as `hidden`. When the session closes, miyagi tells you how many there are in each phase (“In the oven: 1 planning, 2 being built, 1 being tested hidden”), and the next chat tells you when it greets you.
+The first three phases are gone through by the `activity-lifecycle` skill for something new and complex, with an approval to move from each phase to the next; a hidden draft without that process is a `hidden` line. An older page, without phases, counts everything as `hidden`. When the session closes, miyagi tells you how many there are in each phase (“Drafts: 1 planning, 2 being built, 1 being tested hidden”), and the next chat tells you when it greets you.
 
 Changes to something the students already see (a typo, a date, a broken link) don't go through a draft: they're saved in place, with their approval.
 

@@ -55,7 +55,7 @@ And this is how the teacher sees it:
 <Shot width="1400" height="1527" kind="moodle" src="/img/v2/moodle-profesor-preguntas-t1.webp" alt="The Unit 1 quiz's questions in Moodle: random slots by assessment criterion.">The Unit 1 quiz: 10 random slots by criterion, drawn from 20 questions.</Shot>
 
 :::note
-The Unit 1 quiz stayed hidden until the end: we'll see it in the **In the oven** view, in [step 6](tema-4-consultas.md).
+The Unit 1 quiz stayed hidden until the end: we'll see it in the **Drafts** view, in [step 6](tema-4-consultas.md).
 :::
 
 Next step: [Units 2 and 3](temas-ddl-dml.md).

@@ -56,7 +56,7 @@ knowledge/
   progress.md             course/progress: historial de revisiones del progreso de la clase
   course-audit.md         course/course-audit: historial de auditorías del curso
   teaching-plan.md        course/teaching-plan: la programación didáctica (objetivos O1…, criterios CE…, temas, metodología, calificación)
-  drafts.md               course/drafts: las actividades en marcha, cada una con su fase (en plan, construyéndose, oculta, servida)
+  drafts.md               course/drafts: las actividades en marcha, cada una con su fase (en plan, construyéndose, oculta, publicada)
   topics/<unit>.md        topic/<unit>: una página por tema o sección (objetivos, plan, contenido creado, dudas del foro)
   activities/<act>.md     activity/<act>: una página por actividad evaluable (criterios aplicados, rúbrica, preguntas)
   curriculum/provisions.md curriculum/provisions: las normas del currículo oficial, con su fecha, enlace, vigencia y día de consulta

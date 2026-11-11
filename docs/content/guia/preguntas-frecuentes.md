@@ -58,7 +58,7 @@ En la carpeta `knowledge` del curso: archivos de texto que puedes abrir con cual
 
 ### ¿Cómo prueba lo que crea antes de que lo vean los alumnos?
 
-Lo prepara en la carpeta `drafts` del curso, lo sube a Moodle **oculto** (con tu permiso), lo prueba ahí como profesor y te pide permiso otra vez para mostrarlo. Lo que dejes oculto queda en la vista **En el horno** y en `knowledge/drafts.md`, y te lo recuerda la campana.
+Lo prepara en la carpeta `drafts` del curso, lo sube a Moodle **oculto** (con tu permiso), lo prueba ahí como profesor y te pide permiso otra vez para mostrarlo. Lo que dejes oculto queda en la vista **Borradores** y en `knowledge/drafts.md`, y te lo recuerda la campana.
 
 ### ¿Puedo darle instrucciones propias?
 

@@ -323,7 +323,7 @@ See README.md for details.`,
   endTranscript: (path) => `  - The agent's actions and their results: ${path}`,
   endConversation: (path) => `  - The conversation, as plain text: ${path}`,
   endKnowledge: (path) => `  - What the agent has learned: ${path}`,
-  endInProgress: (counts, path) => `In the oven: ${inOven(counts, { planning: "planning", building: "being built", hidden: "being tested hidden", served: "just served" })} (${path})`,
+  endInProgress: (counts, path) => `Drafts: ${inOven(counts, { planning: "planning", building: "being built", hidden: "being tested hidden", served: "just published" })} (${path})`,
   endInterruptedNote:
     "What it was doing when interrupted may be half done (a grade not saved, a reply not posted); in the next session you can ask it to pick it up.",
 

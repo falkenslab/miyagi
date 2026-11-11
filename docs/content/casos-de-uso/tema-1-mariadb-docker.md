@@ -55,7 +55,7 @@ Y así lo ve el profesor:
 <Shot width="1400" height="1527" kind="moodle" src="/img/v2/moodle-profesor-preguntas-t1.webp" alt="Las preguntas del cuestionario del Tema 1 en Moodle: huecos aleatorios por criterio de evaluación.">El cuestionario del Tema 1: 10 huecos aleatorios por criterio, sobre 20 preguntas.</Shot>
 
 :::note
-El cuestionario del Tema 1 se quedó oculto hasta el final: lo veremos en la vista **En el horno**, en el [paso 6](tema-4-consultas.md).
+El cuestionario del Tema 1 se quedó oculto hasta el final: lo veremos en la vista **Borradores**, en el [paso 6](tema-4-consultas.md).
 :::
 
 Siguiente paso: [temas 2 y 3](temas-ddl-dml.md).

@@ -101,7 +101,7 @@ Diseña y monta el resto de actividades para que funcionen como deben: talleres 
 
 Para algo nuevo y complejo (el proyecto de un tema, una actividad gamificada, un escape room, un paquete SCORM, un taller), te propone ir por fases en vez de construirlo de golpe: primero **un plan** que acordáis (objetivos y criterios, qué hacen y entregan los alumnos, cómo se evalúa, las piezas del aula, materiales, tiempos y riesgos), revisado por su ayudante de pedagogía; luego **lo construye** y te dice en qué se aparta del plan y por qué; después **lo prueba oculto** en el aula; y por último **lo sirve** a los alumnos. Cada paso de una fase a la siguiente lleva tu aprobación. Si no lo quieres, lo construye como siempre; para una errata o una pregunta suelta no lo propone.
 
-Cada actividad en marcha queda apuntada con su fase en la página `course/drafts`. Al cerrar la sesión ves cuántas hay en cada una («En el horno: 1 en plan, 2 cocinándose, 1 probándose oculto»), y el siguiente chat te lo recuerda al saludar.
+Cada actividad en marcha queda apuntada con su fase en la página `course/drafts`. Al cerrar la sesión ves cuántas hay en cada una («Borradores: 1 en plan, 2 en construcción, 1 probándose oculto»), y el siguiente chat te lo recuerda al saludar.
 
 - **Pídeselo así:** *«Prepara un escape room de SQL para el tema 3, con el proceso completo.»* Si escribes `/plan` antes, el plan lo escribe en modo plan, sin poder tocar nada más.
 

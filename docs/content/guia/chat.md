@@ -57,7 +57,7 @@ El selector de modo está junto al cuadro para escribir, y también se cambia co
 ## Interrumpir y retomar
 
 - **`Esc`** o el botón **■** cortan lo que está haciendo sin cerrar la conversación. Después dile qué hacer en su lugar.
-- Para salir **no hay nada que guardar**: todo se escribe sobre la marcha. Si ha dejado algo oculto en Moodle sin mostrar a los alumnos, sigue en **En el horno**, y te lo recuerda la campana.
+- Para salir **no hay nada que guardar**: todo se escribe sobre la marcha. Si ha dejado algo oculto en Moodle sin mostrar a los alumnos, sigue en **Borradores**, y te lo recuerda la campana.
 - En la aplicación y en la web, cualquier conversación anterior está en la columna de conversaciones, y **Buscar conversaciones** las encuentra por una palabra.
 
 Aunque empieces una conversación nueva, el asistente no parte de cero: lee sus [apuntes del curso](memoria.md) al empezar.

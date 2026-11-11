@@ -94,7 +94,7 @@ It's part of the window. It has the arrows to go back to the views you've visite
 On the far left, five icons:
 
 - **Today.** The first thing you see: what miyagi told you when it greeted you, the summary cards and the suggestions.
-- **Subject.** With tabs: **Teaching plan**, **Topics and activities**, **Materials** and **In the oven**.
+- **Subject.** With tabs: **Teaching plan**, **Topics and activities**, **Materials** and **Drafts**.
 - **Memory.** With tabs: **Knowledge base** and **Sources**.
 - **Your classroom.** This subject's Moodle course. A green dot means it's linked.
 - **Extensions.** With tabs: **Installed**, **My commands**, **Catalog**, **Repositories** and **Capabilities**.
@@ -107,9 +107,9 @@ At the top, the subject selector and, below it, **New conversation**. The search
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-buscar.webp" alt="The search in the conversations column with results for JOIN.">Searching all the conversations.</Shot>
 
-The **bell** counts what's waiting for you: an approval, a question, sources not taken in yet, activities in the oven or extensions with a new version.
+The **bell** counts what's waiting for you: an approval, a question, sources not taken in yet, activities in Drafts or extensions with a new version.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-campana.webp" alt="The bell open: 3 sources to take in and 1 activity in the oven.">The bell, with what you have pending.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-campana.webp" alt="The bell open: 3 sources to take in and 1 draft.">The bell, with what you have pending.</Shot>
 
 Your conversations appear by date and, above them, the ones you've **pinned**. You pin one with its **⋯**. You can widen the column by dragging its edge or fold it with its button. At the foot, if there's work under way, you see the task in progress and which of how many it is.
 
@@ -175,9 +175,9 @@ These views show what miyagi knows and has prepared. Their buttons send to the c
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-materiales.webp" alt="The Materials view: the list of materials and the preview of the selected one.">Materials, with their preview.</Shot>
 
-**In the oven** holds the activities that go through phases: planned, cooking, tested hidden and served. Those already in Moodle have **View in the classroom**, which opens their page.
+**Drafts** holds the activities that go through phases: planned, being built, tested hidden and just published. Those already in Moodle have **View in the classroom**, which opens their page.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="The In the oven view, with four columns and the Unit 1 quiz in Tested hidden.">In the oven, with a quiz being tested hidden.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="The Drafts view, with four columns and the Unit 1 quiz in Tested hidden.">Drafts, with a quiz being tested hidden.</Shot>
 
 **Knowledge base** is the pages miyagi writes and consults about your course:
 

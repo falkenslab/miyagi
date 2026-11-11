@@ -58,7 +58,7 @@ In the course's `knowledge` folder: text files you can open with any editor (or 
 
 ### How does it test what it creates before students see it? {#cómo-prueba-lo-que-crea-antes-de-que-lo-vean-los-alumnos}
 
-It prepares it in the course's `drafts` folder, uploads it to Moodle **hidden** (with your permission), tests it there as a teacher and asks your permission again to show it. Whatever you leave hidden stays in the **In the oven** view and in `knowledge/drafts.md`, and the bell reminds you.
+It prepares it in the course's `drafts` folder, uploads it to Moodle **hidden** (with your permission), tests it there as a teacher and asks your permission again to show it. Whatever you leave hidden stays in the **Drafts** view and in `knowledge/drafts.md`, and the bell reminds you.
 
 ### Can I give it my own instructions? {#puedo-darle-instrucciones-propias}
 

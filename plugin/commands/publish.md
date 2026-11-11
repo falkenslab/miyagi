@@ -4,7 +4,7 @@ label: es=Publicar en el aula | en=Publish to the classroom | fr=Publier dans la
 icon: 🚀
 group: classroom
 needs-classroom: true
-applies-to: material, quiz, oven
+applies-to: material, quiz, draft
 ask: es=¿Qué material? | en=Which material? | fr=Quel support ? | de=Welches Material?
 ---
 

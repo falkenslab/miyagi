@@ -35,7 +35,7 @@ description: One line, in English, of what it makes
 label: es=Sopa de letras | en=Word search
 icon: 🔤
 group: create            # day, create, plan, memory or classroom
-applies-to: topic        # topic, material, quiz, source, page, plan, oven, text
+applies-to: topic        # topic, material, quiz, source, page, plan, draft, text
 produces: html-activity  # html-activity, quiz, document or page
 parameters:
   - name: topic          # lowercase, digits, _

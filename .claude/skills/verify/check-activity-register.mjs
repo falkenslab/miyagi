@@ -65,7 +65,7 @@ if (readPhaseCounts(ws)?.planning !== 2) {
 fs.rmSync(ws, { recursive: true, force: true });
 
 const line = es.endInProgress({ planning: 1, building: 1, hidden: 1, served: 0 }, "drafts.md");
-if (!line.startsWith("En el horno: 1 en plan, 1 cocinándose, 1 probándose oculto")) {
+if (!line.startsWith("Borradores: 1 en plan, 1 en construcción, 1 probándose oculto")) {
   failures++;
   console.log(`FAIL end of session: ${line}`);
 }

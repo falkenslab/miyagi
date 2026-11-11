@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import { knowledgePluginRoot, type InstalledExtension } from "@falkenslab/agent-kit";
 import { enabledExtensions } from "./extensions.js";
 import { splitFrontmatter } from "./materials/frontmatter.js";
-import { commandsDirFor, OWN_PLUGIN, perLanguage, readParameters, type Parameter } from "./ownCommands.js";
+import { commandsDirFor, itemKind, OWN_PLUGIN, perLanguage, readParameters, type Parameter } from "./ownCommands.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pluginDir = path.join(__dirname, "..", "plugin");
@@ -62,7 +62,7 @@ function actionMeta(markdown: string): ActionMeta | undefined {
     icon: text("icon"),
     group: text("group"),
     needsClassroom: yes("needs-classroom"),
-    appliesTo: (text("applies-to") ?? "").split(",").map((one) => one.trim()).filter(Boolean),
+    appliesTo: (text("applies-to") ?? "").split(",").map((one) => itemKind(one.trim())).filter(Boolean),
     ask: perLanguage(data.ask),
     suggest: yes("suggest"),
     opens: text("opens"),

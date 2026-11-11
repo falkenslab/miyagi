@@ -94,7 +94,7 @@ Forma parte de la ventana. Tiene las flechas para volver a las vistas que has vi
 A la izquierda del todo, cinco iconos:
 
 - **Hoy.** Lo primero que ves: lo que miyagi te dijo al saludar, las tarjetas de resumen y las sugerencias.
-- **Asignatura.** Con pestañas: **Programación**, **Temas y actividades**, **Materiales** y **En el horno**.
+- **Asignatura.** Con pestañas: **Programación**, **Temas y actividades**, **Materiales** y **Borradores**.
 - **Memoria.** Con pestañas: **Base de conocimiento** y **Fuentes**.
 - **Tu aula.** El curso de Moodle de esta asignatura. Un punto verde indica que está vinculada.
 - **Extensiones.** Con pestañas: **Instaladas**, **Mis comandos**, **Catálogo**, **Repositorios** y **Capacidades**.
@@ -107,9 +107,9 @@ Arriba, el selector de asignatura y, debajo, **Nueva conversación**. La búsque
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-buscar.webp" alt="La búsqueda en la columna de conversaciones con resultados para JOIN.">Buscar en todas las conversaciones.</Shot>
 
-La **campana** cuenta lo que te espera: una aprobación, una pregunta, fuentes sin incorporar, actividades en el horno o extensiones con versión nueva.
+La **campana** cuenta lo que te espera: una aprobación, una pregunta, fuentes sin incorporar, actividades en Borradores o extensiones con versión nueva.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-campana.webp" alt="La campana abierta: 3 fuentes por incorporar y 1 actividad en el horno.">La campana, con lo que tienes pendiente.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-campana.webp" alt="La campana abierta: 3 fuentes por incorporar y 1 actividad en Borradores.">La campana, con lo que tienes pendiente.</Shot>
 
 Tus conversaciones aparecen por fecha y, encima, las que hayas **fijado**. Con el **⋯** de cada una la fijas. Puedes ensanchar la columna arrastrando su borde o plegarla con su botón. Al pie, si hay un trabajo en marcha, ves la tarea en curso y cuál de cuántas es.
 
@@ -175,9 +175,9 @@ Estas vistas enseñan lo que miyagi sabe y tiene preparado. Sus botones mandan a
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-materiales.webp" alt="La vista Materiales: la lista de materiales y la vista previa del seleccionado.">Materiales, con su vista previa.</Shot>
 
-**En el horno** son las actividades que van por fases: en plan, cocinándose, probándose oculta y servida. Las que ya están en Moodle tienen **Ver en el aula**, que abre su página.
+**Borradores** son las actividades que van por fases: en plan, en construcción, probándose oculta y recién publicada. Las que ya están en Moodle tienen **Ver en el aula**, que abre su página.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="La vista En el horno, con cuatro columnas y el cuestionario del Tema 1 en Probándose oculto.">En el horno, con un cuestionario probándose oculto.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="La vista Borradores, con cuatro columnas y el cuestionario del Tema 1 en Probándose oculto.">Borradores, con un cuestionario probándose oculto.</Shot>
 
 **Base de conocimiento** son las páginas que miyagi escribe y consulta sobre tu curso:
 

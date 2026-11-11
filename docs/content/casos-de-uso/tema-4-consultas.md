@@ -36,9 +36,9 @@ Pide permiso una sola vez, enumerando las 3 secciones y las 16 actividades. Dice
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-mostrar-a-alumnos.webp" alt="La respuesta tras mostrar los temas: lo que pueden ver desde hoy, una tabla con la fecha en la que abre cada evaluable en 2027, y la decisión pendiente: el Cuestionario del Tema 1 sigue oculto.">Temas mostrados, cada evaluable con su fecha de apertura, y una decisión para ti.</Shot>
 
-Lo único que sigue oculto es el Cuestionario del Tema 1, porque no lo mencionamos, y miyagi lo recuerda. Queda en **En el horno**, con un botón para mostrarlo:
+Lo único que sigue oculto es el Cuestionario del Tema 1, porque no lo mencionamos, y miyagi lo recuerda. Queda en **Borradores**, con un botón para mostrarlo:
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-horno.webp" alt="La vista En el horno: el Cuestionario del Tema 1 en la columna Probándose oculto, con el botón Mostrar a los alumnos.">En el horno, el cuestionario que falta.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-horno.webp" alt="La vista Borradores: el Cuestionario del Tema 1 en la columna Probándose oculto, con el botón Mostrar a los alumnos.">En el horno, el cuestionario que falta.</Shot>
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-06-aprobacion-mostrar.webp" alt="Panel de aprobación para mostrar el Cuestionario del Tema 1: solo cambia la visibilidad, sin aviso; 10 preguntas al azar, 20 minutos, 2 intentos, pesa un 5 %.">Antes de mostrarlo: qué verán y qué no ha podido comprobar. Esta captura se hizo para el tutorial y luego la rechazamos.</Shot>
 
