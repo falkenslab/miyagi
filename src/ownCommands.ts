@@ -1,3 +1,4 @@
+import { checkVariables, ITEM_KINDS as SCHEMA_KINDS } from "./uiSchema.js";
 import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -35,7 +36,7 @@ export const templatesDir = path.join(__dirname, "..", "plugin", "command-templa
 
 export const PARAMETER_TYPES = ["text", "number", "choice", "words", "topic", "source", "page"] as const;
 export const GROUPS = ["day", "create", "plan", "memory", "classroom"];
-export const ITEM_KINDS = ["topic", "material", "quiz", "source", "page", "plan", "draft", "text"];
+export const ITEM_KINDS: string[] = SCHEMA_KINDS;
 
 /** An item kind as a command names it: `oven` is the drafts' old name (#105), still read. */
 export const itemKind = (kind: string) => (kind === "oven" ? "draft" : kind);
@@ -121,7 +122,10 @@ export function validateCommand(name: string, markdown: string): string[] {
   const { parameters, errors: parameterErrors } = readParameters(data.parameters);
   errors.push(...parameterErrors);
   if (!body.trim()) errors.push("the instructions (after the frontmatter) are empty");
-  if (parameters.length && !body.includes("$ARGUMENTS")) errors.push("with parameters, the instructions must say where their values go: $ARGUMENTS");
+  if (parameters.length && !body.includes("$ARGUMENTS") && !/\{\{\s*form\./.test(body)) errors.push("with parameters, the instructions must say where their values go: $ARGUMENTS, or each one as {{form.<name>}}");
+  // The item's fields and the form's values it names, against the page's schema (#106).
+  const kinds = typeof data["applies-to"] === "string" ? data["applies-to"].split(",").map((one) => itemKind(one.trim())).filter(Boolean) : [];
+  errors.push(...checkVariables(body, kinds, parameters.map((parameter) => parameter.name)));
   if (/!`/.test(body)) errors.push("a line like !`…` would run a shell command: not allowed");
   if (/(^|\s)@[~.\w-]*[\\/]/m.test(body)) errors.push("@path would pull a file into the command: name the file instead, and let the session read it");
   return errors;

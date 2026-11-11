@@ -224,7 +224,7 @@ interface Page {
 
 export function PlanView({ chat, info, C, ask, go }: Common) {
   const { result, load } = useHost<Page>("kb-page", { id: "course/teaching-plan" });
-  const menu = useItemMenu(["plan"], "", C.nav.plan);
+  const menu = useItemMenu(["plan"], "", C.nav.plan, { kind: "plan", data: { id: "course/teaching-plan" } });
   const [loaded, setLoaded] = useState(false);
   useReload(
     useCallback(async () => {
@@ -291,7 +291,7 @@ export function TopicsView({ chat, C, ask, go }: Common) {
       {result.topics.length === 0 && <div className="card">{C.noTopics}</div>}
       <div className="grid g2">
         {result.topics.map((topic) => (
-          <Actionable key={topic.id ?? `unit-${topic.unit}`} kinds={["topic"]} value={topic.unit ? `${topic.unit} ${topic.title}` : topic.title} className="card-actions">
+          <Actionable key={topic.id ?? `unit-${topic.unit}`} kinds={["topic"]} value={topic.unit ? `${topic.unit} ${topic.title}` : topic.title} item={{ kind: "topic", data: { id: topic.id ?? "", title: topic.title, unit: topic.unit ?? undefined, description: topic.description || undefined, status: topic.status ?? undefined, details: topic.details ?? undefined, activities: topic.activities } }} className="card-actions">
           <Card title={`🧱 ${topic.unit ? `${topic.unit} · ` : ""}${topic.title}`} badge={topic.id ? <span className="badge">{C.activities(topic.activities.length)}</span> : undefined}>
             {topic.details && <p className="muted small">{topic.details}</p>}
             {topic.description && <Markdown text={topic.description} />}
@@ -374,7 +374,7 @@ export function Preview({ file, C }: { file: string | null; C: CourseTexts }) {
 const isQuiz = (file: string) => /quiz|cuestionario|questionnaire|\.gift$/i.test(file);
 
 function MaterialRow({ file, on, choose, publish, beside, busy, C }: { file: { path: string; size: number; changed: string }; on: boolean; choose: () => void; publish?: () => void; beside: () => void; busy: boolean; C: CourseTexts }) {
-  const menu = useItemMenu(isQuiz(file.path) ? ["material", "quiz"] : ["material"], file.path);
+  const menu = useItemMenu(isQuiz(file.path) ? ["material", "quiz"] : ["material"], file.path, file.path, { kind: isQuiz(file.path) ? "quiz" : "material", data: { path: file.path, size: file.size, changed: file.changed } });
   return (
     <tr className={on ? "on" : ""} {...menu.bind}>
       <td>
@@ -477,7 +477,7 @@ export function OvenView({ chat, info, C, ask, beside }: Common) {
               .map((item, index) => {
                 const file = namedFile(item.text);
                 return (
-                <Actionable key={index} kinds={["draft"]} value={label(item.text)} className="it">
+                <Actionable key={index} kinds={["draft"]} value={label(item.text)} item={{ kind: "draft", data: { phase: item.phase, text: item.text } }} className="it">
                   <span className="md">
                     <Markdown text={item.text.replace(/\[([^\]]+)\]\([^)\s]+\.md\)/g, "$1")} />
                   </span>
@@ -617,7 +617,7 @@ export function KnowledgeView({ chat, C, ask, page, setPage }: Common & { page: 
 
 /** A knowledge page's title, with its ⋯ menu: the actions on a page, with the page as their value. */
 function PageTitle({ page }: { page: Page }) {
-  const menu = useItemMenu(["page"], `${page.title} (${page.id})`, page.title);
+  const menu = useItemMenu(["page"], `${page.title} (${page.id})`, page.title, { kind: "page", data: { id: page.id, title: page.title } });
   return (
     <div className="page-head" {...menu.bind}>
       <h2>{page.title}</h2>
@@ -637,7 +637,7 @@ interface Source {
 }
 
 function SourceRow({ source, on, go, C }: { source: Source; on: boolean; go: Common["go"]; C: CourseTexts }) {
-  const menu = useItemMenu(["source"], `sources/${source.path}`, source.path);
+  const menu = useItemMenu(["source"], `sources/${source.path}`, source.path, { kind: "source", data: { path: `sources/${source.path}`, state: source.state, page: source.page ?? undefined, size: source.size, changed: source.changed } });
   const badge = { new: "sun", changed: "warn", ingested: "ok" } as const;
   return (
     <tr className={on ? "on" : ""} ref={on ? (row) => row?.scrollIntoView({ block: "center" }) : undefined} {...menu.bind}>

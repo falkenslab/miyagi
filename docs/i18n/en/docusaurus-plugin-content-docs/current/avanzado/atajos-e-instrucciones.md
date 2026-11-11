@@ -121,6 +121,30 @@ Where it's saved:
 
 A command with a form is a shortcut with a longer header: its name in each language (`label`), its icon, which group of the catalog it goes in (`group`), on which items it shows up (`applies-to`: a topic, a source, a page, a material…) and its `parameters`, each with its name, its label, its type (text, number, an option from a list, a list of words, a topic, a source or a page), whether it's required, its default value and its limits. What you fill in arrives where the instructions say `$ARGUMENTS`, as `topic: Unit 3 E-R model; count: 10`.
 
+### Variables: the item and the form {#variables-el-elemento-y-el-formulario}
+
+The instructions can name the item you launch the command on and what you fill in its form, and miyagi puts them in when it's launched:
+
+- `{{item.title}}`, `{{item.unit}}`, `{{item.path}}`…: the item's data (a topic has its title, unit, description and activities; a material, its path and date; a source, whether it's in the knowledge base yet).
+- `{{form.<name>}}`: a parameter's value.
+- `{{subject.name}}` and `{{today}}`: the subject and today's date.
+
+```markdown title="~/.miyagi/own/commands/word-search.md"
+---
+description: A word search with a topic's vocabulary
+label: es=Sopa de letras | en=Word search
+applies-to: topic
+parameters:
+  - name: count
+    label: es=Número de palabras | en=Number of words
+    type: number
+    default: 10
+---
+Make a word search of {{form.count}} words with the vocabulary of "{{item.title}}" ({{item.unit}}).
+```
+
+When the command is saved each variable is checked: an `{{item.date}}` that none of the `applies-to` items has is refused, saying which ones there are. Every item's fields are in the page's schema, [`schema/ui.schema.json`](https://github.com/falkenslab/miyagi/blob/main/schema/ui.schema.json), and miyagi knows them: ask it in the chat for "a command on every topic that…" and it writes the instructions with them.
+
 :::info What a command can't do
 A command is instructions, nothing more: it runs with the same approvals, the same permissions and the same checks as anything you ask in the chat. That's why miyagi won't save one that tries to give itself tools (`allowed-tools`), run something in the console (a line with !`…`) or pull a file in with @path.
 :::

@@ -121,6 +121,30 @@ Dónde se guarda:
 
 Un comando con formulario es un atajo con un encabezado más largo: su nombre en cada idioma (`label`), su icono, en qué grupo del catálogo va (`group`), en qué elementos sale (`applies-to`: un tema, una fuente, una página, un material…) y sus `parameters`, cada uno con su nombre, su etiqueta, su tipo (texto, número, una opción de una lista, una lista de palabras, un tema, una fuente o una página), si es obligatorio, su valor por defecto y sus límites. Lo que rellenas llega donde las instrucciones dicen `$ARGUMENTS`, como `topic: UT3 Modelo E-R; count: 10`.
 
+### Variables: el elemento y el formulario
+
+Las instrucciones pueden nombrar el elemento en el que lanzas el comando y lo que rellenas en su formulario, y miyagi los sustituye al lanzarlo:
+
+- `{{item.title}}`, `{{item.unit}}`, `{{item.path}}`…: los datos del elemento (un tema tiene su título, su unidad, su descripción y sus actividades; un material, su ruta y su fecha; una fuente, si ya está en la base de conocimiento).
+- `{{form.<nombre>}}`: el valor de un parámetro del formulario.
+- `{{subject.name}}` y `{{today}}`: la asignatura y la fecha de hoy.
+
+```markdown title="~/.miyagi/own/commands/sopa-de-letras.md"
+---
+description: Una sopa de letras con el vocabulario de un tema
+label: es=Sopa de letras | en=Word search
+applies-to: topic
+parameters:
+  - name: count
+    label: es=Número de palabras | en=Number of words
+    type: number
+    default: 10
+---
+Haz una sopa de letras de {{form.count}} palabras con el vocabulario de «{{item.title}}» ({{item.unit}}).
+```
+
+Al guardar el comando se comprueba que cada variable existe: un `{{item.fecha}}` que no tenga ninguno de los elementos de `applies-to` se rechaza diciendo cuáles hay. Todos los campos de cada elemento están en el esquema de la interfaz, [`schema/ui.schema.json`](https://github.com/falkenslab/miyagi/blob/main/schema/ui.schema.json), y miyagi los conoce: si le pides en el chat «un comando para cada tema que…», escribe las instrucciones con ellas.
+
 :::info Lo que un comando no puede hacer
 Un comando son instrucciones, nada más: corre con las mismas aprobaciones, los mismos permisos y las mismas comprobaciones que cualquier cosa que le pidas en el chat. Por eso miyagi no guarda uno que intente darse herramientas propias (`allowed-tools`), ejecutar una orden en la consola (una línea con !`…`) o meter un archivo con @ruta.
 :::

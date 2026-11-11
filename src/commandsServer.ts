@@ -2,6 +2,7 @@ import type { Options } from "@falkenslab/agent-kit";
 import { createSdkMcpServer, tool } from "@falkenslab/agent-kit";
 import { z } from "zod";
 import { listOwn, readOwn, saveOwn, validateCommand } from "./ownCommands.js";
+import { fieldsOf, ITEM_KINDS } from "./uiSchema.js";
 
 /**
  * The teacher's own commands as tools (teacher-commands #68): list them and the templates, read
@@ -39,6 +40,19 @@ export function createCommandsServer(workspaceDir: string) {
           const lines = (title: string, list: { name: string; description: string }[]) => [`${title}:`, ...(list.length ? list.map((one) => `- ${one.name}: ${one.description}`) : ["- (none)"])];
           return [...lines("This subject", own.subject), ...lines("All subjects", own.all), ...lines("Templates", own.templates)].join("\n");
         }),
+      ),
+      tool(
+        "commands_fields",
+        "What an own command's instructions can name, from the page's schema (#106): each item kind's fields as {{item.<field>}}, the form's values as {{form.<name>}} (a parameter's name), and {{subject.name}} and {{today}}. The action gets them filled in when launched on an item.",
+        {},
+        () =>
+          guarded(async () =>
+            [
+              ...ITEM_KINDS.map((kind) => `${kind}: ${fieldsOf(kind).map((field) => `{{item.${field}}}`).join(", ")}`),
+              "Any action: {{form.<parameter name>}}, {{subject.name}}, {{today}} (YYYY-MM-DD).",
+              "An item field only resolves when `applies-to` names a kind that has it; commands_check refuses one that doesn't.",
+            ].join("\n"),
+          ),
       ),
       tool(
         "commands_read",

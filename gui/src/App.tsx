@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { act, useMiyagi } from "./api";
+import type { ActionLaunch } from "./types";
 import { ActionsContext, actionLine, SelectionMenu, type ActionsApi } from "./components/Actions";
 import { Composer, Todos } from "./components/Composer";
 import { KnowledgeView, MaterialsView, OvenView, PlanView, SourcesView, TodayView, TopicsView, type CourseView } from "./components/Course";
@@ -77,9 +78,9 @@ export function App() {
   const canBrowse = Boolean(info?.browser);
   setOpenLink(canBrowse ? (url) => void side.openWeb(url).then((error) => error && setToast(T.webRefused)) : null);
   /** A line to the chat from a view's button: sent as the teacher would type it, and the conversation shown. */
-  const ask = (line: string) => {
+  const ask = (line: string, launch?: ActionLaunch) => {
     if (!chat || chat.busy) return;
-    void act("send", { line });
+    void act("send", { line, ...(launch ? { launch } : {}) });
     setView("chat");
   };
   const go = (next: CourseView | "chat", page?: string) => {
@@ -103,7 +104,7 @@ export function App() {
         A: actionTexts(language),
         connected: Boolean(info?.classroom?.connected),
         busy: chat.busy,
-        run: (action, value) => (action.opens ? go("knowledge", action.opens) : ask(actionLine(action, value))),
+        run: (action, value, launch) => (action.opens ? go("knowledge", action.opens) : ask(actionLine(action, value), launch && { ...launch, command: action.command })),
         compose: (text) => {
           setDraft({ text, at: Date.now() });
           setView("chat");

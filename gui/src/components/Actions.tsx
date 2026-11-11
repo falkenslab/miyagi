@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { act } from "../api";
 import type { ActionTexts } from "../i18n/actions";
-import type { ActionParameter, PageAction } from "../types";
+import type { ActionLaunch, ActionParameter, ItemData, PageAction } from "../types";
 import { whileBusy } from "./StatusBar";
 
 // miyagi's commands as actions of the page (contextual-actions #67): the catalog in ＋, the ⋯ menu
@@ -16,8 +16,8 @@ export interface ActionsApi {
   A: ActionTexts;
   connected: boolean;
   busy: boolean;
-  /** Sends the action's command with its value, or opens its page (`opens`). */
-  run: (action: PageAction, value?: string) => void;
+  /** Sends the action's command with its value, or opens its page (`opens`); its item and form go with it (#106). */
+  run: (action: PageAction, value?: string, launch?: Omit<ActionLaunch, "command">) => void;
   /** Leaves a text in the chat's box, to finish and send. */
   compose: (text: string) => void;
   onLink: () => void;
@@ -59,6 +59,10 @@ export const argumentsLine = (values: Record<string, string>) =>
     .map(([name, value]) => `${name}: ${oneLine(value)}`)
     .join("; ");
 
+/** What goes with an action's line: the item it was launched on and the form's values (#106). */
+const launchOf = (item?: ItemData, form?: Record<string, string>): Omit<ActionLaunch, "command"> | undefined =>
+  item || form ? { ...(item ? { kind: item.kind, item: item.data } : {}), ...(form ? { form: Object.fromEntries(Object.entries(form).filter(([, value]) => value.trim())) } : {}) } : undefined;
+
 /** The item a menu was opened on fills the first parameter of its kind (a topic's title for a `topic`). */
 function initialValues(parameters: ActionParameter[], value: string | undefined, kinds: string[]): Record<string, string> {
   const filled = parameters.find((one) => value && kinds.includes(one.type));
@@ -70,7 +74,7 @@ function initialValues(parameters: ActionParameter[], value: string | undefined,
  * checked before it's sent (required, numbers within their range). `unsaved`: the editor's try of
  * a command with changes not saved yet, which can be seen but not sent (#78).
  */
-export function ParameterForm({ action, value, kinds, close, back, unsaved = false }: { action: PageAction; value?: string; kinds: string[]; close: () => void; back: () => void; unsaved?: boolean }) {
+export function ParameterForm({ action, value, item, kinds, close, back, unsaved = false }: { action: PageAction; value?: string; item?: ItemData; kinds: string[]; close: () => void; back: () => void; unsaved?: boolean }) {
   const api = useActions()!;
   const { A, lang } = api;
   const parameters = action.parameters ?? [];
@@ -108,7 +112,7 @@ export function ParameterForm({ action, value, kinds, close, back, unsaved = fal
         event.preventDefault();
         if (invalid || unsaved) return;
         close();
-        api.run(action, argumentsLine(values));
+        api.run(action, argumentsLine(values), launchOf(item, values));
       }}
     >
       <b>
@@ -172,13 +176,13 @@ export function ParameterForm({ action, value, kinds, close, back, unsaved = fal
  * Actions as the rows of a popover. One that needs a value and has none asks for it right there;
  * one that needs the classroom without one is disabled and says why. Grouped, in the catalog.
  */
-export function ActionList({ list, value, kinds = [], close, grouped = false }: { list: PageAction[]; value?: string; kinds?: string[]; close: () => void; grouped?: boolean }) {
+export function ActionList({ list, value, item, kinds = [], close, grouped = false }: { list: PageAction[]; value?: string; item?: ItemData; kinds?: string[]; close: () => void; grouped?: boolean }) {
   const api = useActions();
   const [asking, setAsking] = useState<PageAction | null>(null);
   const [text, setText] = useState("");
   if (!api) return null;
   const { A, lang } = api;
-  if (asking?.parameters?.length) return <ParameterForm action={asking} value={value} kinds={kinds} close={close} back={() => setAsking(null)} />;
+  if (asking?.parameters?.length) return <ParameterForm action={asking} value={value} item={item} kinds={kinds} close={close} back={() => setAsking(null)} />;
   if (asking)
     return (
       <form
@@ -187,7 +191,7 @@ export function ActionList({ list, value, kinds = [], close, grouped = false }: 
           event.preventDefault();
           if (!text.trim()) return;
           close();
-          api.run(asking, oneLine(text));
+          api.run(asking, oneLine(text), launchOf(item));
         }}
       >
         <label>
@@ -221,7 +225,7 @@ export function ActionList({ list, value, kinds = [], close, grouped = false }: 
         onClick={() => {
           if (action.parameters?.length || (action.ask && !value && !action.opens)) return setAsking(action);
           close();
-          api.run(action, value);
+          api.run(action, value, launchOf(item));
         }}
       >
         <span className="act-icon" aria-hidden="true">
@@ -281,7 +285,7 @@ type At = "button" | { x: number; y: number } | null;
  * its kinds, with the item as their value, and "Ask miyagi about this". `bind` goes on the item
  * (right click, Shift+F10 or the menu key, a long press), `button` is its ⋯ with the menu.
  */
-export function useItemMenu(kinds: string[], value: string, name = value) {
+export function useItemMenu(kinds: string[], value: string, name = value, item?: ItemData) {
   const api = useActions();
   const [at, setAt] = useState<At>(null);
   const pop = useRef<HTMLDivElement>(null);
@@ -345,7 +349,7 @@ export function useItemMenu(kinds: string[], value: string, name = value) {
         <div ref={pop} className={`pop item-pop${point ? " at-point" : ""}`} style={point} role="menu" aria-label={name}>
           <span className="grab" aria-hidden="true" />
           <h4 className="pop-title small-caps ellipsis">{name}</h4>
-          <ActionList list={list} value={value} kinds={kinds} close={close} />
+          <ActionList list={list} value={value} item={item} kinds={kinds} close={close} />
           <button
             type="button"
             role="menuitem"
@@ -367,8 +371,8 @@ export function useItemMenu(kinds: string[], value: string, name = value) {
 }
 
 /** An item with its ⋯ menu, as a block (a card, a row of a list). */
-export function Actionable({ kinds, value, name, className = "", children }: { kinds: string[]; value: string; name?: string; className?: string; children: ReactNode }) {
-  const { bind, button } = useItemMenu(kinds, value, name);
+export function Actionable({ kinds, value, name, item, className = "", children }: { kinds: string[]; value: string; name?: string; item?: ItemData; className?: string; children: ReactNode }) {
+  const { bind, button } = useItemMenu(kinds, value, name, item);
   return (
     <div className={`actionable ${className}`} {...bind}>
       {children}

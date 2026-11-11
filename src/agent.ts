@@ -57,6 +57,7 @@ import { buildSystemPrompt } from "./systemPrompt.js";
 import { friendlyToolLabel, toolPhrase } from "./toolLabels.js";
 import { installUploadGate } from "./uploadGate.js";
 import { installPdfText } from "./pdfText.js";
+import { installActionContext } from "./actionContext.js";
 import { COMMANDS_SERVER, createCommandsServer, installCommandsGate } from "./commandsServer.js";
 import { createDraftsServer, DRAFTS_SERVER } from "./drafts/server.js";
 import { clearSubmissions, createSubmissionsServer, SUBMISSIONS_SERVER } from "./submissions.js";
@@ -329,6 +330,8 @@ export async function prepareSession(
     if (classroom && kind !== "ingest") installUploadGate(options);
     if (kind === "run" || kind === "chat") installMaterialsGate(options, pending);
     if (kind === "chat") installCommandsGate(options, loadPrompt("tools/human-approval-approved.md"));
+    // An action launched on an item: its data and its instructions filled in, with its line (#106).
+    if (kind === "run" || kind === "chat") installActionContext(options, workspaceDir, label);
     // A PDF copied into sources/ gets its text as markdown next to it (#64).
     installPdfText(options, config.sourcesDir);
     return opened;

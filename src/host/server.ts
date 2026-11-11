@@ -1,3 +1,4 @@
+import { launchAction, type ActionLaunch } from "../actionContext.js";
 import { spawn } from "node:child_process";
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { mkdir, readFile, rm, stat, writeFile } from "node:fs/promises";
@@ -547,6 +548,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     switch (action) {
       case "send":
         if (switching) await switching.catch(() => undefined);
+        // An action launched on an item: its data and its form go with its line (#106).
+        if (data.launch && typeof data.launch === "object") launchAction(data.launch as ActionLaunch);
         // While a turn runs, a message joins it (#62); a command or "exit" waits for it to end.
         if (busy()) {
           const line = String(data.line ?? "");

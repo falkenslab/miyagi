@@ -54,6 +54,11 @@ Make a word search now. The values: $ARGUMENTS
 ...
 ```
 
+- The instructions can name the item it's launched on and the form's values as variables, filled
+  in when it runs: `{{item.title}}`, `{{item.unit}}`, `{{item.path}}`… (each kind's fields:
+  `commands_fields`), `{{form.<parameter name>}}`, `{{subject.name}}` and `{{today}}`. Prefer them
+  to `$ARGUMENTS` when the action is about an item: "Make a word search on «{{item.title}}» with
+  {{form.count}} words". An item field must exist in a kind `applies-to` names, or it's refused.
 - A `topic`, `source` or `page` parameter is filled from the item the teacher launched it on;
   `words` is a list separated by commas; `choice` needs its `options`. Up to 8 parameters, few is
   better: what miyagi can decide well, don't ask.

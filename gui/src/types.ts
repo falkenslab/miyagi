@@ -76,6 +76,20 @@ export interface PageAction {
   produces?: string;
 }
 
+/** What goes with an action's line (ui-schema #106): its item, as the page's schema describes it, and its form. */
+export interface ActionLaunch {
+  command: string;
+  kind?: string;
+  item?: Record<string, unknown>;
+  form?: Record<string, string>;
+}
+
+/** An item an action can be launched on: its kind and its data. */
+export interface ItemData {
+  kind: string;
+  data: Record<string, unknown>;
+}
+
 /** One value an own command asks for (#68). */
 export interface ActionParameter {
   name: string;

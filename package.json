@@ -13,7 +13,8 @@
     "dist",
     "plugin",
     "prompts",
-    "README.md"
+    "README.md",
+    "schema"
   ],
   "engines": {
     "node": ">=20"

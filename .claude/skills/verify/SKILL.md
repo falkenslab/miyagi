@@ -22,6 +22,7 @@ node .claude/skills/verify/check-neutral-skills.mjs
 node .claude/skills/verify/check-activity-register.mjs
 node .claude/skills/verify/check-validators.mjs
 node .claude/skills/verify/check-drafts-toolbox.mjs
+node .claude/skills/verify/check-ui-schema.mjs
 node .claude/skills/verify/check-file-scope.mjs
 node .claude/skills/verify/check-tips.mjs
 node .claude/skills/verify/check-pdf-text.mjs
@@ -85,6 +86,11 @@ and HTML files broken on purpose, and the upload gate's hook itself on moodle-te
 `import_questions` (GIFT as a file and as text; Moodle XML left alone). Each fixture has its
 expected errors by line. When a real upload gets through broken, or a good one is refused,
 add the file there with the rule that fixes it.
+
+`check-ui-schema.mjs` checks the page's schema (ui-schema #106): `schema/ui.schema.json` is what
+`src/uiSchema.ts` generates (`--write` regenerates it after changing an item's fields), every
+command and template in `plugin/` names only `{{…}}` the schema has, a bad variable is refused in
+an own command, and an action's instructions are filled from its item and form.
 
 `check-drafts-toolbox.mjs` exercises the drafts toolbox in a throwaway folder: every refusal
 (paths out of drafts/ by "..", absolute path or link, file:// and data: URLs, a zip-slip

@@ -24,6 +24,8 @@ export interface CatalogEntry {
   extension?: string;
   /** How the page offers a command as an action (#67), from its frontmatter. */
   action?: ActionMeta;
+  /** Its file, for a command (to read its instructions, #106). */
+  file?: string;
 }
 
 /** Where a command's action goes in the page and what it asks for (contextual-actions #67). */
@@ -33,7 +35,7 @@ export interface ActionMeta {
   icon?: string;
   group?: string;
   needsClassroom?: boolean;
-  /** The items whose menu offers it: topic, material, quiz, source, page, plan, oven, text. */
+  /** The items whose menu offers it: topic, material, quiz, source, page, plan, draft, text. */
   appliesTo: string[];
   /** The question it asks, per language, when launched without a value. */
   ask?: Record<string, string>;
@@ -149,6 +151,7 @@ async function readCommands(commandsDir: string, origin: CatalogEntry["origin"],
       description: frontmatterField(markdown, "description"),
       origin,
       action: actionMeta(markdown) ?? actions[base],
+      file: path.join(commandsDir, fileName),
     });
   }
   return entries;

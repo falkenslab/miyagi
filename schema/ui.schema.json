@@ -1,0 +1,433 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/falkenslab/miyagi/schema/ui.schema.json",
+  "title": "miyagi's page",
+  "description": "What the page shows (its items and their fields), and what an action launched on them is.",
+  "version": 1,
+  "$defs": {
+    "item-topic": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Its knowledge-base page (topic/<slug>), empty for a unit of the teaching plan that has none yet"
+        },
+        "title": {
+          "type": "string",
+          "description": "Its title"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Its number in the teaching plan (UT3, SA5…)"
+        },
+        "description": {
+          "type": "string",
+          "description": "What it's about, as its page says"
+        },
+        "status": {
+          "type": "string",
+          "description": "Where it stands (planned, built, in class…)"
+        },
+        "details": {
+          "type": "string",
+          "description": "The rest of its row in the teaching plan: dates, hours…"
+        },
+        "activities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The activity's page"
+              },
+              "title": {
+                "type": "string",
+                "description": "Its title"
+              }
+            },
+            "required": [
+              "id",
+              "title"
+            ],
+            "additionalProperties": false
+          },
+          "description": "Its activities' pages"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "additionalProperties": false,
+      "description": "A topic or unit of the course (Topics and activities)"
+    },
+    "item-material": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Its path, under materials/ or drafts/"
+        },
+        "size": {
+          "type": "number",
+          "description": "Its size in bytes"
+        },
+        "changed": {
+          "type": "string",
+          "description": "When it last changed (ISO 8601)"
+        }
+      },
+      "required": [
+        "path",
+        "size",
+        "changed"
+      ],
+      "additionalProperties": false,
+      "description": "A file miyagi prepared (Materials)"
+    },
+    "item-quiz": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Its bank or quiz file, under materials/"
+        },
+        "size": {
+          "type": "number",
+          "description": "Its size in bytes"
+        },
+        "changed": {
+          "type": "string",
+          "description": "When it last changed (ISO 8601)"
+        }
+      },
+      "required": [
+        "path",
+        "size",
+        "changed"
+      ],
+      "additionalProperties": false,
+      "description": "A question bank or quiz in Materials"
+    },
+    "item-source": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Its path, under sources/"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "new",
+            "changed",
+            "ingested"
+          ],
+          "description": "Whether the knowledge base has it"
+        },
+        "page": {
+          "type": "string",
+          "description": "Its summary page, once taken in"
+        },
+        "size": {
+          "type": "number",
+          "description": "Its size in bytes"
+        },
+        "changed": {
+          "type": "string",
+          "description": "When it last changed (ISO 8601)"
+        }
+      },
+      "required": [
+        "path",
+        "state",
+        "size",
+        "changed"
+      ],
+      "additionalProperties": false,
+      "description": "A document of the teacher's sources (Sources)"
+    },
+    "item-page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Its id (course/teaching-plan, topic/<slug>, concept/<slug>…)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Its title"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "additionalProperties": false,
+      "description": "A page of the knowledge base"
+    },
+    "item-plan": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Always course/teaching-plan"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "description": "The teaching plan"
+    },
+    "item-draft": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "enum": [
+            "planning",
+            "building",
+            "hidden",
+            "served"
+          ],
+          "description": "Its phase"
+        },
+        "text": {
+          "type": "string",
+          "description": "Its line in the register: what it is and where"
+        }
+      },
+      "required": [
+        "phase",
+        "text"
+      ],
+      "additionalProperties": false,
+      "description": "An activity in progress (Drafts)"
+    },
+    "item-text": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "The selected text"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "additionalProperties": false,
+      "description": "Text selected in the chat or in a page"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The subject's name"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "additionalProperties": false
+        },
+        "today": {
+          "type": "string",
+          "description": "Today's date, YYYY-MM-DD, in the computer's time zone"
+        }
+      },
+      "required": [
+        "subject",
+        "today"
+      ],
+      "additionalProperties": false,
+      "description": "The subject and the day"
+    },
+    "formField": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{0,30}$",
+          "description": "How the instructions name it: {{form.<name>}}"
+        },
+        "label": {
+          "type": "string",
+          "description": "Per language: \"es=… | en=…\", or one text for all"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "text",
+            "number",
+            "choice",
+            "words",
+            "topic",
+            "source",
+            "page"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "default": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "options": {
+          "description": "For a choice",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "help": {
+          "type": "string",
+          "description": "Per language: \"es=… | en=…\", or one text for all"
+        }
+      },
+      "required": [
+        "name",
+        "label",
+        "type"
+      ],
+      "additionalProperties": false,
+      "description": "A value the action asks for before it runs"
+    },
+    "action": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "What it does, one line"
+        },
+        "label": {
+          "type": "string",
+          "description": "Per language: \"es=… | en=…\", or one text for all"
+        },
+        "icon": {
+          "description": "One emoji",
+          "type": "string"
+        },
+        "group": {
+          "type": "string",
+          "enum": [
+            "day",
+            "create",
+            "plan",
+            "memory",
+            "classroom"
+          ]
+        },
+        "applies-to": {
+          "description": "The item kinds it shows on, comma separated: topic, material, quiz, source, page, plan, draft, text",
+          "type": "string"
+        },
+        "needs-classroom": {
+          "type": "boolean"
+        },
+        "ask": {
+          "description": "One question asked before running, when it has no form",
+          "type": "string"
+        },
+        "argument-hint": {
+          "type": "string"
+        },
+        "suggest": {
+          "type": "boolean"
+        },
+        "produces": {
+          "type": "string",
+          "enum": [
+            "html-activity",
+            "quiz",
+            "document",
+            "page"
+          ]
+        },
+        "parameters": {
+          "description": "Its form",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,30}$",
+                "description": "How the instructions name it: {{form.<name>}}"
+              },
+              "label": {
+                "type": "string",
+                "description": "Per language: \"es=… | en=…\", or one text for all"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "number",
+                  "choice",
+                  "words",
+                  "topic",
+                  "source",
+                  "page"
+                ]
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "default": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "options": {
+                "description": "For a choice",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "help": {
+                "type": "string",
+                "description": "Per language: \"es=… | en=…\", or one text for all"
+              }
+            },
+            "required": [
+              "name",
+              "label",
+              "type"
+            ],
+            "additionalProperties": false,
+            "description": "A value the action asks for before it runs"
+          }
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "additionalProperties": false,
+      "description": "An action of the page: a command's frontmatter; the body holds its instructions, with {{item.*}}, {{form.*}}, {{subject.name}} and {{today}}"
+    }
+  }
+}
