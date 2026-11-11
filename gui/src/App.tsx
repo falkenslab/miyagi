@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { act, useMiyagi } from "./api";
 import type { ActionLaunch } from "./types";
-import { ActionsContext, actionLine, SelectionMenu, type ActionsApi } from "./components/Actions";
+import { ActionsContext, actionLine, SelectionMenu, ViewActions, type ActionsApi } from "./components/Actions";
 import { Composer, Todos } from "./components/Composer";
 import { KnowledgeView, MaterialsView, OvenView, PlanView, SourcesView, TodayView, TopicsView, type CourseView } from "./components/Course";
 import { ClassroomView, ExtensionsView, LinkWizard, type ExtTab } from "./components/Extensions";
@@ -273,6 +273,8 @@ export function App() {
           )}
           {chat && info && (() => {
             const common = { chat, info, C, ask, go, item, onLink: () => setLinking(true), linkTitle: X.linkTitle, beside };
+            const bar = <ViewActions view={shown === "oven" ? "drafts" : shown} />;
+            const body = (() => {
             switch (shown) {
               case "today":
                 return <TodayView {...common} />;
@@ -291,9 +293,21 @@ export function App() {
               default:
                 return null;
             }
+            })();
+            return body && (
+              <>
+                {bar}
+                {body}
+              </>
+            );
           })()}
           {chat && info && shown === "extensions" && <ExtensionsView chat={chat} info={info} X={X} tab={extTab} setTab={setExtTab} onNotice={setToast} onLink={() => setLinking(true)} />}
-          {chat && info && shown === "classroom" && <ClassroomView chat={chat} info={info} X={X} onLink={() => setLinking(true)} />}
+          {chat && info && shown === "classroom" && (
+            <>
+              <ViewActions view="classroom" />
+              <ClassroomView chat={chat} info={info} X={X} onLink={() => setLinking(true)} />
+            </>
+          )}
         </main>
         <StatusBar chat={chat} T={T} inChat={shown === "chat"} onOpenChat={() => setView("chat")} showing={tour.step?.current.id === "statusBar" ? G.statusLine : undefined} />
       </section>

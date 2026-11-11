@@ -73,6 +73,9 @@ export interface ExtTexts {
   /** The course in the classroom, opened as the chat's links are (#77). */
   viewInClassroom: string;
   classroomNone: string;
+  /** The classroom's activities miyagi knows, with their actions (#107). */
+  classroomItems: string;
+  classroomItemsNote: string;
   classroomUrl: string;
   classroomUrlHelp: string;
   classroomCourse: string;
@@ -214,7 +217,7 @@ const es: ExtTexts = {
     paramName: "Identificador",
     paramLabel: "Pregunta del formulario",
     type: "Tipo",
-    types: { text: "Texto", number: "Número", choice: "Opciones", words: "Lista de palabras", topic: "Tema", source: "Fuente", page: "Página" },
+    types: { text: "Texto", number: "Número", choice: "Opciones", multichoice: "Varias opciones", words: "Lista de palabras", date: "Fecha", topic: "Tema", source: "Fuente", page: "Página", activity: "Actividad del aula", file: "Fichero" },
     defaultValue: "Valor inicial",
     min: "Mínimo",
     max: "Máximo",
@@ -258,6 +261,8 @@ const es: ExtTexts = {
   classroomReconnect: "Volver a conectar",
   viewInClassroom: "Ver en el aula",
   classroomNone: "Sin aula, miyagi prepara el material aquí. Conecta tu curso de Moodle para que también corrija entregas, responda en el foro y publique, siempre con tu aprobación.",
+  classroomItems: "Lo que hay en el aula",
+  classroomItemsNote: "Lo que miyagi ha publicado o tiene en el mapa del curso. Cada uno tiene su ⋯ con las acciones que le sirven.",
   classroomUrl: "Dirección del curso",
   classroomUrlHelp: "Copia la dirección de tu curso desde el navegador, como https://campus.miinstituto.es/course/view.php?id=12.",
   classroomCourse: "Número del curso (el id de su dirección)",
@@ -391,7 +396,7 @@ const en: ExtTexts = {
     paramName: "Identifier",
     paramLabel: "Question on the form",
     type: "Type",
-    types: { text: "Text", number: "Number", choice: "Options", words: "Word list", topic: "Topic", source: "Source", page: "Page" },
+    types: { text: "Text", number: "Number", choice: "Options", multichoice: "Several options", words: "Word list", date: "Date", topic: "Topic", source: "Source", page: "Page", activity: "Classroom activity", file: "File" },
     defaultValue: "Starting value",
     min: "Minimum",
     max: "Maximum",
@@ -435,6 +440,8 @@ const en: ExtTexts = {
   classroomReconnect: "Connect again",
   viewInClassroom: "View in the classroom",
   classroomNone: "Without a classroom, miyagi prepares material here. Connect your Moodle course so it can also grade submissions, answer in the forum and publish, always with your approval.",
+  classroomItems: "What's in the classroom",
+  classroomItemsNote: "What miyagi published or has in the course map. Each has its ⋯ with the actions that fit it.",
   classroomUrl: "Course address",
   classroomUrlHelp: "Copy your course's address from the browser, like https://campus.myschool.org/course/view.php?id=12.",
   classroomCourse: "Course number (the id in its address)",
@@ -568,7 +575,7 @@ const fr: ExtTexts = {
     paramName: "Identifiant",
     paramLabel: "Question du formulaire",
     type: "Type",
-    types: { text: "Texte", number: "Nombre", choice: "Options", words: "Liste de mots", topic: "Thème", source: "Source", page: "Page" },
+    types: { text: "Texte", number: "Nombre", choice: "Options", multichoice: "Plusieurs options", words: "Liste de mots", date: "Date", topic: "Thème", source: "Source", page: "Page", activity: "Activité de la classe", file: "Fichier" },
     defaultValue: "Valeur initiale",
     min: "Minimum",
     max: "Maximum",
@@ -612,6 +619,8 @@ const fr: ExtTexts = {
   classroomReconnect: "Reconnecter",
   viewInClassroom: "Voir dans la classe",
   classroomNone: "Sans classe, miyagi prépare le matériel ici. Connecte ton cours Moodle pour qu'il corrige aussi les devoirs, réponde dans le forum et publie, toujours avec ton accord.",
+  classroomItems: "Ce qu'il y a dans la classe",
+  classroomItemsNote: "Ce que miyagi a publié ou a dans la carte du cours. Chacun a son ⋯ avec les actions qui lui conviennent.",
   classroomUrl: "Adresse du cours",
   classroomUrlHelp: "Copie l'adresse de ton cours depuis le navigateur, comme https://campus.monecole.fr/course/view.php?id=12.",
   classroomCourse: "Numéro du cours (l'id de son adresse)",
@@ -745,7 +754,7 @@ const de: ExtTexts = {
     paramName: "Kennung",
     paramLabel: "Frage im Formular",
     type: "Typ",
-    types: { text: "Text", number: "Zahl", choice: "Optionen", words: "Wortliste", topic: "Thema", source: "Quelle", page: "Seite" },
+    types: { text: "Text", number: "Zahl", choice: "Optionen", multichoice: "Mehrere Optionen", words: "Wortliste", date: "Datum", topic: "Thema", source: "Quelle", page: "Seite", activity: "Kursraum-Aktivität", file: "Datei" },
     defaultValue: "Startwert",
     min: "Minimum",
     max: "Maximum",
@@ -789,6 +798,8 @@ const de: ExtTexts = {
   classroomReconnect: "Erneut verbinden",
   viewInClassroom: "Im Kursraum ansehen",
   classroomNone: "Ohne Kursraum bereitet miyagi das Material hier vor. Verbinde deinen Moodle-Kurs, damit es auch Abgaben bewertet, im Forum antwortet und veröffentlicht, immer mit deiner Zustimmung.",
+  classroomItems: "Was im Kursraum ist",
+  classroomItemsNote: "Was miyagi veröffentlicht hat oder in der Kurskarte steht. Jedes hat sein ⋯ mit den passenden Aktionen.",
   classroomUrl: "Adresse des Kurses",
   classroomUrlHelp: "Kopiere die Adresse deines Kurses aus dem Browser, etwa https://campus.meineschule.de/course/view.php?id=12.",
   classroomCourse: "Kursnummer (die id in seiner Adresse)",

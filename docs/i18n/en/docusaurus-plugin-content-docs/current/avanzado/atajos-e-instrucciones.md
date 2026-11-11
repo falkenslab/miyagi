@@ -143,6 +143,12 @@ parameters:
 Make a word search of {{form.count}} words with the vocabulary of "{{item.title}}" ({{item.unit}}).
 ```
 
+### Where it shows and what it asks {#dónde-sale-y-qué-pregunta}
+
+- **On which items** (`applies-to`): besides topics, materials, sources, pages, the teaching plan and drafts, the **classroom's activities** (in **Your classroom** and the Moodle page open beside the chat), a **submission** or a **forum thread** open beside it, a **conversation** in the list and a **reply** from miyagi. miyagi never gets whose submission it is: it finds the student's alias itself.
+- **In which views** (`views`): a button in the bar of Today, Teaching plan, Topics, Materials, Drafts, Knowledge base, Sources or Your classroom.
+- **Form fields**: besides text, number, options, word list, topic, source and page, there's **date**, **several options**, **a classroom activity** (picked from a list) and **a file** (added to your sources). A field can depend on another: `show-if: tone=firm` only shows it when `tone` is `firm`.
+
 When the command is saved each variable is checked: an `{{item.date}}` that none of the `applies-to` items has is refused, saying which ones there are. Every item's fields are in the page's schema, [`schema/ui.schema.json`](https://github.com/falkenslab/miyagi/blob/main/schema/ui.schema.json), and miyagi knows them: ask it in the chat for "a command on every topic that…" and it writes the instructions with them.
 
 :::info What a command can't do

@@ -15,7 +15,7 @@ type Notice = (text: string) => void;
 
 const GROUPS = ["day", "create", "plan", "memory", "classroom"];
 const KINDS = ["topic", "material", "quiz", "source", "page", "plan", "draft", "text"];
-const TYPES: ActionParameter["type"][] = ["text", "number", "choice", "words", "topic", "source", "page"];
+const TYPES: ActionParameter["type"][] = ["text", "number", "choice", "multichoice", "words", "date", "topic", "source", "page", "activity", "file"];
 const MAX_PARAMETERS = 8;
 
 /** A text in the language shown, keeping the others; one for every language stays one. */

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { act, logoUrl } from "../api";
 import type { ExtTexts } from "../i18n/extensions";
 import type { Capabilities, CatalogEntry, ChatState, ExtensionOptionState, Info, InstalledExtension, Repository } from "../types";
-import { GroupActions } from "./Actions";
+import { Actionable, GroupActions } from "./Actions";
 import { Dialog } from "./Panel";
 import { Waiting } from "./Waiting";
 import { whileBusy } from "./StatusBar";
@@ -777,6 +777,7 @@ export function ClassroomView({ chat, info, X, onLink }: { chat: ChatState; info
             </div>
             {room.connected && <GroupActions group="classroom" />}
           </div>
+          <ClassroomItems X={X} chat={chat} />
         </div>
       ) : (
         <div className="card">
@@ -788,6 +789,35 @@ export function ClassroomView({ chat, info, X, onLink }: { chat: ChatState; info
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+/** The classroom's activities miyagi knows (published, or in the course map), each with its actions (#107). */
+function ClassroomItems({ X, chat }: { X: ExtTexts; chat: ChatState }) {
+  const [items, setItems] = useState<{ id: number; type: string; title?: string; url: string }[]>([]);
+  useEffect(() => {
+    if (chat.busy) return;
+    let gone = false;
+    void act<{ items?: { id: number; type: string; title?: string; url: string }[] }>("classroom-items").then((result) => !gone && setItems(result.items ?? []));
+    return () => {
+      gone = true;
+    };
+  }, [chat.busy]);
+  if (!items.length) return null;
+  return (
+    <div className="card">
+      <h2 className="card-title">{X.classroomItems}</h2>
+      <p className="muted">{X.classroomItemsNote}</p>
+      <ul className="plain-list">
+        {items.map((one) => (
+          <li key={one.id}>
+            <Actionable kinds={["activity"]} value={one.title ? `${one.title} (${one.url})` : one.url} name={one.title ?? `${one.type} ${one.id}`} item={{ kind: "activity", data: one }} className="it">
+              <span className="badge">{one.type}</span> <ClassroomLink url={one.url} label={one.title ?? `${one.type} ${one.id}`} />
+            </Actionable>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

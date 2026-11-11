@@ -6,6 +6,7 @@ import type { ExtTexts } from "../i18n/extensions";
 import type { TipsTexts } from "../i18n/tips";
 import type { TourTexts } from "../i18n/tour";
 import type { ChatState, Info } from "../types";
+import { ActionList, useActions } from "./Actions";
 import { Icon, type IconName } from "./Icons";
 import { Logo } from "./Logo";
 import { SubjectList, useSubjects } from "./Subjects";
@@ -253,8 +254,16 @@ function Notices({ chat, view, T, go }: { chat: ChatState; view: View; T: Texts;
 }
 
 /** One conversation of the list, with its ⋯ to pin it once it's kept. */
+/** A conversation as an action gets it (#107): its folder, its title and when it started. */
+function conversationData(run: Run) {
+  const id = run.dir.split(/[\\/]/).filter(Boolean).at(-1) ?? run.dir;
+  const stamp = /^(\d{4}-\d{2}-\d{2})T(\d{2})-(\d{2})-(\d{2})-(\d{3})Z/.exec(id);
+  return { id, title: run.label, started: stamp ? `${stamp[1]}T${stamp[2]}:${stamp[3]}:${stamp[4]}.${stamp[5]}Z` : "" };
+}
+
 function ConversationRow({ run, kept, chat, T, inChat, onOpen, onChanged }: { run: Run; kept: boolean; chat: ChatState; T: Texts; inChat: boolean; onOpen: () => void; onChanged: () => void }) {
   const current = chat.run?.dir;
+  const actions = useActions()?.actions.filter((action) => action.appliesTo?.includes("conversation"));
   return (
     <div className="conv-row">
       <a
@@ -275,6 +284,8 @@ function ConversationRow({ run, kept, chat, T, inChat, onOpen, onChanged }: { ru
       {kept && (
         <Menu title={T.moreOptions} ariaLabel={T.moreOptions} className="ibtn plain more-btn conv-more" popClass="conv-pop" atButton label={<span aria-hidden="true">⋯</span>}>
           {(close) => (
+            <>
+            {actions && actions.length > 0 && <ActionList list={actions} value={run.label} item={{ kind: "conversation", data: conversationData(run) }} kinds={["conversation"]} close={close} />}
             <button
               type="button"
               onClick={() => {
@@ -285,6 +296,7 @@ function ConversationRow({ run, kept, chat, T, inChat, onOpen, onChanged }: { ru
               <Icon name="pin" />
               <span>{run.pinned ? T.unpin : T.pin}</span>
             </button>
+            </>
           )}
         </Menu>
       )}

@@ -1,3 +1,4 @@
+import { classroomItems } from "./classroomItems.js";
 import { launchAction, type ActionLaunch } from "../actionContext.js";
 import { spawn } from "node:child_process";
 import { randomBytes, timingSafeEqual } from "node:crypto";
@@ -16,7 +17,7 @@ import { extensionDirsFor } from "../extensions.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
 import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
-import { draftsDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
+import { draftsDirFor, knowledgeDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
 import { deleteOwn, ownCommands, saveDraft, type CommandDraft } from "../ownCommands.js";
 import { topicWords, draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
@@ -631,6 +632,9 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return await draftsList(subjectDir);
       case "oven":
         return { items: withOvenPages(oven(subjectDir).items, current.prepared.workspace?.classroom?.url) };
+      case "classroom-items":
+        // What the page can offer actions on in Tu aula (#107): published or in the course map.
+        return { items: await classroomItems(materialsDirFor(subjectDir), knowledgeDirFor(subjectDir), current.prepared.workspace?.classroom?.url) };
       case "topics":
         return await topics(chat);
       case "resolve":

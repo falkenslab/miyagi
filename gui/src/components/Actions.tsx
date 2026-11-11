@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
-import { act } from "../api";
+import { act, upload } from "../api";
 import type { ActionTexts } from "../i18n/actions";
 import type { ActionLaunch, ActionParameter, ItemData, PageAction } from "../types";
 import { whileBusy } from "./StatusBar";
@@ -79,7 +79,17 @@ export function ParameterForm({ action, value, item, kinds, close, back, unsaved
   const { A, lang } = api;
   const parameters = action.parameters ?? [];
   const [values, setValues] = useState(() => initialValues(parameters, value, kinds));
+  // The classroom's activities, for an `activity` field (#107).
+  const [activities, setActivities] = useState<{ id: number; type: string; title?: string; url: string }[]>([]);
+  useEffect(() => {
+    if (!parameters.some((one) => one.type === "activity")) return;
+    void act<{ items?: { id: number; type: string; title?: string; url: string }[] }>("classroom-items").then((result) => setActivities(result.items ?? []));
+    // Once, when the form opens.
+  }, []);
+  // A field with `showIf` shows only while the other one has that value (#107); hidden, it's not sent.
+  const shown = (one: ActionParameter) => !one.showIf || (values[one.showIf.name] ?? "").split(", ").includes(one.showIf.value);
   const problem = (one: ActionParameter) => {
+    if (!shown(one)) return "";
     const text = values[one.name]?.trim() ?? "";
     if (one.required && !text) return A.required;
     if (one.type === "number" && text) {
@@ -112,13 +122,14 @@ export function ParameterForm({ action, value, item, kinds, close, back, unsaved
         event.preventDefault();
         if (invalid || unsaved) return;
         close();
-        api.run(action, argumentsLine(values), launchOf(item, values));
+        const sent = Object.fromEntries(Object.entries(values).filter(([name]) => parameters.some((one) => one.name === name && shown(one))));
+        api.run(action, argumentsLine(sent), launchOf(item, sent));
       }}
     >
       <b>
         <span aria-hidden="true">{action.icon}</span> {actionLabel(action, lang)}
       </b>
-      {parameters.map((one, index) => {
+      {parameters.filter(shown).map((one, index) => {
         const id = `param-${action.command}-${one.name}`;
         const help = inLanguage(one.help, lang);
         // Required fields say so with their *; a value out of range, as it's typed.
@@ -138,6 +149,39 @@ export function ParameterForm({ action, value, item, kinds, close, back, unsaved
                   </option>
                 ))}
               </select>
+            ) : one.type === "multichoice" ? (
+              <span id={id} className="checks" role="group">
+                {one.options?.map((option) => {
+                  const chosen = (values[one.name] ?? "").split(", ").filter(Boolean);
+                  return (
+                    <label key={option} className="check">
+                      <input type="checkbox" checked={chosen.includes(option)} onChange={(event) => set(one.name, (event.target.checked ? [...chosen, option] : chosen.filter((other) => other !== option)).join(", "))} /> {option}
+                    </label>
+                  );
+                })}
+              </span>
+            ) : one.type === "activity" ? (
+              <select id={id} className="field" value={values[one.name]} onChange={(event) => set(one.name, event.target.value)}>
+                <option value="" />
+                {activities.map((activity) => (
+                  <option key={activity.id} value={activity.url}>
+                    {activity.title ?? `${activity.type} ${activity.id}`}
+                  </option>
+                ))}
+              </select>
+            ) : one.type === "file" ? (
+              <span className="row">
+                <input
+                  id={id}
+                  type="file"
+                  className="field"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) void upload(file).then((result) => set(one.name, result.path ?? result.duplicateOf ?? ""));
+                  }}
+                />
+                {values[one.name] && <small className="muted">{values[one.name]}</small>}
+              </span>
             ) : one.type === "words" ? (
               <textarea id={id} className="field" rows={2} value={values[one.name]} onChange={(event) => set(one.name, event.target.value)} />
             ) : (
@@ -145,7 +189,7 @@ export function ParameterForm({ action, value, item, kinds, close, back, unsaved
                 id={id}
                 className="field"
                 autoFocus={index === 0}
-                type={one.type === "number" ? "number" : "text"}
+                type={one.type === "number" ? "number" : one.type === "date" ? "date" : "text"}
                 min={one.min}
                 max={one.max}
                 required={one.required}
@@ -440,6 +484,48 @@ export function SelectionMenu() {
 }
 
 /** One group of the catalog as a row of buttons (Today's day to day, the classroom's), those that need no value. */
+/**
+ * The classroom page open beside the chat as an item (#107): an activity, the grading of an
+ * assignment or a forum discussion, from its address. Never who a submission is from.
+ */
+export function classroomPageItem(url: string, title: string): ItemData | null {
+  let address: URL;
+  try {
+    address = new URL(url);
+  } catch {
+    return null;
+  }
+  const name = title.split(/\s+[|·-]\s+/)[0]?.trim() || undefined;
+  const id = Number(address.searchParams.get("id"));
+  const discussion = Number(address.searchParams.get("d"));
+  const module = /\/mod\/([a-z0-9_]+)\/(view|discuss)\.php$/i.exec(address.pathname);
+  if (!module) return null;
+  const clean = `${address.origin}${address.pathname}${address.search}`;
+  if (module[2] === "discuss" && discussion) return { kind: "thread", data: { id: discussion, title: name, url: clean } };
+  if (module[1] === "assign" && id && /grad|submission/.test(address.searchParams.get("action") ?? "")) return { kind: "submission", data: { assignment: id, url: clean } };
+  return id ? { kind: "activity", data: { id, type: module[1]!.toLowerCase(), title: name, url: clean } } : null;
+}
+
+/** A view's own actions (#107): those whose `views` name it, as buttons above the view. */
+export function ViewActions({ view }: { view: string }) {
+  const api = useActions();
+  if (!api) return null;
+  const list = api.actions.filter((action) => action.views?.includes(view));
+  if (!list.length) return null;
+  return (
+    <div className="wrap view-actions row wrap-row" role="group" aria-label={api.A.viewActions}>
+      {list.map((action) => {
+        const off = Boolean(action.needsClassroom && !api.connected);
+        return (
+          <button key={action.command} type="button" className="btn small" data-command={action.command} {...whileBusy(api.busy && !action.opens, off)} {...(off ? { title: api.A.needsClassroom } : {})} onClick={() => api.run(action, undefined, { kind: "view", item: { view } })}>
+            <span aria-hidden="true">{action.icon}</span> {actionLabel(action, api.lang)}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export function GroupActions({ group }: { group: string }) {
   const api = useActions();
   if (!api) return null;

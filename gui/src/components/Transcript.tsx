@@ -5,7 +5,7 @@ import { followLink, Markdown } from "../markdown";
 import { canPreview, turnOfEntry } from "../sideTabs";
 import type { ChatState, TranscriptCall, TranscriptEntry } from "../types";
 import type { CourseView } from "./Course";
-import { actionLabel, launched, useActions } from "./Actions";
+import { actionLabel, launched, oneLine, useActions, useItemMenu } from "./Actions";
 import { Icon } from "./Icons";
 import { Logo } from "./Logo";
 import { Waiting } from "./Waiting";
@@ -150,8 +150,17 @@ function TurnEnd({ text, seconds, T }: { text: string; seconds: number; T: Texts
         </button>
       )}
       <span>✻ {T.seconds(seconds)}</span>
+      {text && <MessageActions text={text} />}
     </div>
   );
+}
+
+/** A finished reply's own actions (#107): those that apply to a message, in its ⋯. */
+function MessageActions({ text }: { text: string }) {
+  const api = useActions();
+  const menu = useItemMenu(["message"], oneLine(text).slice(0, 120), oneLine(text).slice(0, 60), { kind: "message", data: { role: "miyagi", text } });
+  if (!api?.actions.some((action) => action.appliesTo?.includes("message"))) return null;
+  return menu.button;
 }
 
 function Entry({ entry, running, queued, reply, T, open, onActivity }: { entry: TranscriptEntry; running: boolean; queued: boolean; reply: string; T: Texts; open: Opener; onActivity: (entry: number) => void }) {

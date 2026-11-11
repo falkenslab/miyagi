@@ -220,6 +220,123 @@
       "additionalProperties": false,
       "description": "Text selected in the chat or in a page"
     },
+    "item-activity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "Its id in the classroom (the course module)"
+        },
+        "type": {
+          "type": "string",
+          "description": "Its type: assign, quiz, forum, book, page, resource, url, h5pactivity, scorm, workshop, choice, feedback, lesson…"
+        },
+        "title": {
+          "type": "string",
+          "description": "Its name, as miyagi published it or the course map says"
+        },
+        "url": {
+          "type": "string",
+          "description": "Its address in the classroom"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "url"
+      ],
+      "additionalProperties": false,
+      "description": "An activity or resource of the classroom (Tu aula, or the classroom page open beside the chat)"
+    },
+    "item-submission": {
+      "type": "object",
+      "properties": {
+        "assignment": {
+          "type": "number",
+          "description": "The assignment's id in the classroom (the course module)"
+        },
+        "url": {
+          "type": "string",
+          "description": "The page of the submission or the grading being looked at"
+        }
+      },
+      "required": [
+        "assignment",
+        "url"
+      ],
+      "additionalProperties": false,
+      "description": "A submission or the grading of an assignment, as open beside the chat; never who it's from: the agent finds the student's alias itself"
+    },
+    "item-thread": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "description": "The discussion's id"
+        },
+        "title": {
+          "type": "string",
+          "description": "Its title, as the page shows it"
+        },
+        "url": {
+          "type": "string",
+          "description": "Its address in the classroom"
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ],
+      "additionalProperties": false,
+      "description": "A forum discussion, as open beside the chat"
+    },
+    "item-conversation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Its folder's name (its start time)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Its title in the list"
+        },
+        "started": {
+          "type": "string",
+          "description": "When it started (ISO 8601)"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "started"
+      ],
+      "additionalProperties": false,
+      "description": "A conversation of the subject (the conversations' column)"
+    },
+    "item-message": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "teacher",
+            "miyagi"
+          ],
+          "description": "Who wrote it"
+        },
+        "text": {
+          "type": "string",
+          "description": "What it says"
+        }
+      },
+      "required": [
+        "role",
+        "text"
+      ],
+      "additionalProperties": false,
+      "description": "A message of the conversation"
+    },
     "context": {
       "type": "object",
       "properties": {
@@ -269,8 +386,13 @@
             "words",
             "topic",
             "source",
-            "page"
-          ]
+            "page",
+            "date",
+            "multichoice",
+            "activity",
+            "file"
+          ],
+          "description": "A date is YYYY-MM-DD; multichoice, several of its options; activity, one of the classroom's; file, one the teacher adds to sources/"
         },
         "required": {
           "type": "boolean"
@@ -297,6 +419,10 @@
         "help": {
           "type": "string",
           "description": "Per language: \"es=… | en=…\", or one text for all"
+        },
+        "show-if": {
+          "description": "other=value: shown only when an earlier field has that value",
+          "type": "string"
         }
       },
       "required": [
@@ -334,7 +460,11 @@
           ]
         },
         "applies-to": {
-          "description": "The item kinds it shows on, comma separated: topic, material, quiz, source, page, plan, draft, text",
+          "description": "The item kinds it shows on, comma separated: topic, material, quiz, source, page, plan, draft, text, activity, submission, thread, conversation, message",
+          "type": "string"
+        },
+        "views": {
+          "description": "The views whose bar shows it as a button, comma separated: today, plan, topics, materials, drafts, knowledge, sources, classroom",
           "type": "string"
         },
         "needs-classroom": {
@@ -383,8 +513,13 @@
                   "words",
                   "topic",
                   "source",
-                  "page"
-                ]
+                  "page",
+                  "date",
+                  "multichoice",
+                  "activity",
+                  "file"
+                ],
+                "description": "A date is YYYY-MM-DD; multichoice, several of its options; activity, one of the classroom's; file, one the teacher adds to sources/"
               },
               "required": {
                 "type": "boolean"
@@ -411,6 +546,10 @@
               "help": {
                 "type": "string",
                 "description": "Per language: \"es=… | en=…\", or one text for all"
+              },
+              "show-if": {
+                "description": "other=value: shown only when an earlier field has that value",
+                "type": "string"
               }
             },
             "required": [

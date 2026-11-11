@@ -143,6 +143,12 @@ parameters:
 Haz una sopa de letras de {{form.count}} palabras con el vocabulario de «{{item.title}}» ({{item.unit}}).
 ```
 
+### Dónde sale y qué pregunta
+
+- **En qué elementos** (`applies-to`): además de los temas, materiales, fuentes, páginas, la programación y los borradores, las **actividades del aula** (en **Tu aula** y en la página de Moodle que tengas abierta al lado del chat), una **entrega** o un **hilo del foro** abiertos al lado, una **conversación** de la lista y una **respuesta** de miyagi. De una entrega nunca le llega a miyagi de quién es: busca él mismo el alias del alumno.
+- **En qué vistas** (`views`): un botón en la barra de Hoy, Programación, Temas, Materiales, Borradores, Base de conocimiento, Fuentes o Tu aula.
+- **Campos del formulario**: además de texto, número, opciones, lista de palabras, tema, fuente y página, hay **fecha**, **varias opciones**, **una actividad del aula** (se elige de una lista) y **un fichero** (se añade a tus fuentes). Un campo puede depender de otro: `show-if: tono=firme` solo lo enseña cuando `tono` es `firme`.
+
 Al guardar el comando se comprueba que cada variable existe: un `{{item.fecha}}` que no tenga ninguno de los elementos de `applies-to` se rechaza diciendo cuáles hay. Todos los campos de cada elemento están en el esquema de la interfaz, [`schema/ui.schema.json`](https://github.com/falkenslab/miyagi/blob/main/schema/ui.schema.json), y miyagi los conoce: si le pides en el chat «un comando para cada tema que…», escribe las instrucciones con ellas.
 
 :::info Lo que un comando no puede hacer

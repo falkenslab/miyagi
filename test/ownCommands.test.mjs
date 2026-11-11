@@ -43,7 +43,13 @@ test("parameters: names, types, choices and ranges", () => {
   assert.match(readParameters([{ name: "a" }, { name: "a" }]).errors.join(), /repeated/);
   assert.match(readParameters([{ name: "kind", type: "choice" }]).errors.join(), /options/);
   assert.match(readParameters([{ name: "n", type: "number", min: 5, max: 1 }]).errors.join(), /min/);
-  assert.match(readParameters([{ name: "n", type: "date" }]).errors.join(), /type/);
+  assert.match(readParameters([{ name: "n", type: "color" }]).errors.join(), /type/);
+  // The form's newer fields (#107): a date, several options, an activity, a file, and show-if.
+  assert.deepEqual(readParameters([{ name: "d", type: "date", default: "2027-01-15" }, { name: "m", type: "multichoice", options: ["a", "b"] }, { name: "x", type: "activity" }, { name: "f", type: "file" }]).errors, []);
+  assert.match(readParameters([{ name: "d", type: "date", default: "15/01" }]).errors.join(), /YYYY-MM-DD/);
+  assert.match(readParameters([{ name: "m", type: "multichoice" }]).errors.join(), /options/);
+  assert.deepEqual(readParameters([{ name: "tone", type: "choice", options: ["kind", "firm"] }, { name: "why", "show-if": "tone=firm" }]).parameters[1].showIf, { name: "tone", value: "firm" });
+  assert.match(readParameters([{ name: "why", "show-if": "later=yes" }, { name: "later" }]).errors.join(), /earlier/);
   assert.equal(argumentsLine({ topic: "UT3  Modelo ER", count: "10", words: "" }), "topic: UT3 Modelo ER; count: 10");
 });
 

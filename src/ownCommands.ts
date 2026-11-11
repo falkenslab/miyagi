@@ -1,4 +1,4 @@
-import { checkVariables, ITEM_KINDS as SCHEMA_KINDS } from "./uiSchema.js";
+import { checkVariables, ITEM_KINDS as SCHEMA_KINDS, VIEWS } from "./uiSchema.js";
 import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -34,7 +34,7 @@ export function commandsDirFor(scope: CommandScope, workspaceDir: string): strin
 /** The starting templates (word search, crossword…), copied and adapted, never commands themselves. */
 export const templatesDir = path.join(__dirname, "..", "plugin", "command-templates");
 
-export const PARAMETER_TYPES = ["text", "number", "choice", "words", "topic", "source", "page"] as const;
+export const PARAMETER_TYPES = ["text", "number", "choice", "words", "topic", "source", "page", "date", "multichoice", "activity", "file"] as const;
 export const GROUPS = ["day", "create", "plan", "memory", "classroom"];
 export const ITEM_KINDS: string[] = SCHEMA_KINDS;
 
@@ -56,6 +56,8 @@ export interface Parameter {
   max?: number;
   options?: string[];
   help?: Record<string, string>;
+  /** Shown only when another parameter has this value (#107). */
+  showIf?: { name: string; value: string };
 }
 
 /** `es=… | en=…` as `{ es, en }`; a plain text as `{ "*": text }`. */
@@ -84,25 +86,30 @@ export function readParameters(value: unknown): { parameters: Parameter[]; error
     const name = typeof p.name === "string" ? p.name : "";
     if (!/^[a-z][a-z0-9_]{0,30}$/.test(name)) errors.push(`${where}: \`name\` must be lowercase letters, digits or _ (got "${String(p.name ?? "")}")`);
     else if (seen.has(name)) errors.push(`${where}: \`${name}\` is repeated`);
-    seen.add(name);
     const type = (p.type ?? "text") as Parameter["type"];
     if (!PARAMETER_TYPES.includes(type)) errors.push(`${name || where}: type must be one of ${PARAMETER_TYPES.join(", ")}`);
     const label = perLanguage(p.label) ?? { "*": name };
     const options = Array.isArray(p.options) ? p.options.map(String) : undefined;
-    if (type === "choice" && !options?.length) errors.push(`${name}: a choice needs \`options\``);
+    if ((type === "choice" || type === "multichoice") && !options?.length) errors.push(`${name}: a ${type} needs \`options\``);
     const min = typeof p.min === "number" ? p.min : undefined;
     const max = typeof p.max === "number" ? p.max : undefined;
     if (min !== undefined && max !== undefined && min > max) errors.push(`${name}: min is above max`);
     const fallback = typeof p.default === "number" || typeof p.default === "string" ? p.default : undefined;
     if (type === "number" && fallback !== undefined && typeof fallback !== "number") errors.push(`${name}: its default must be a number`);
     if (type === "choice" && fallback !== undefined && !options?.includes(String(fallback))) errors.push(`${name}: its default isn't one of its options`);
-    parameters.push({ name, label, type, required: p.required === true, default: fallback, min, max, options, help: perLanguage(p.help) });
+    if (type === "date" && fallback !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(String(fallback))) errors.push(`${name}: a date's default is YYYY-MM-DD`);
+    // `show-if: other=value`: shown only when an earlier parameter has that value.
+    const rule = typeof p["show-if"] === "string" ? /^([a-z][a-z0-9_]*)\s*=\s*(.+)$/.exec(p["show-if"].trim()) : null;
+    if (p["show-if"] !== undefined && !rule) errors.push(`${name}: \`show-if\` is "other=value"`);
+    else if (rule && !seen.has(rule[1]!)) errors.push(`${name}: \`show-if\` names "${rule[1]}", which isn't an earlier parameter`);
+    seen.add(name);
+    parameters.push({ name, label, type, required: p.required === true, default: fallback, min, max, options, help: perLanguage(p.help), ...(rule ? { showIf: { name: rule[1]!, value: rule[2]!.trim() } } : {}) });
   }
   return { parameters, errors };
 }
 
 /** The frontmatter keys an own command may carry; anything else is refused (`allowed-tools` above all). */
-const KEYS = new Set(["description", "argument-hint", "label", "icon", "group", "needs-classroom", "applies-to", "ask", "suggest", "produces", "parameters"]);
+const KEYS = new Set(["description", "argument-hint", "label", "icon", "group", "needs-classroom", "applies-to", "views", "ask", "suggest", "produces", "parameters"]);
 
 /** What's wrong with an own command, before it's saved: nothing means it can be. */
 export function validateCommand(name: string, markdown: string): string[] {
@@ -118,6 +125,7 @@ export function validateCommand(name: string, markdown: string): string[] {
   if (!perLanguage(data.label)) errors.push("`label` is missing: the name the teacher sees");
   if (data.group !== undefined && !GROUPS.includes(String(data.group))) errors.push(`\`group\` must be one of ${GROUPS.join(", ")}`);
   for (const kind of typeof data["applies-to"] === "string" ? data["applies-to"].split(",").map((one) => one.trim()) : []) if (!ITEM_KINDS.includes(itemKind(kind))) errors.push(`\`applies-to\`: "${kind}" isn't one of ${ITEM_KINDS.join(", ")}`);
+  for (const view of stringList(data.views)) if (!(VIEWS as readonly string[]).includes(view)) errors.push(`\`views\`: "${view}" isn't one of ${VIEWS.join(", ")}`);
   if (data.produces !== undefined && !PRODUCES.includes(String(data.produces))) errors.push(`\`produces\` must be one of ${PRODUCES.join(", ")}`);
   const { parameters, errors: parameterErrors } = readParameters(data.parameters);
   errors.push(...parameterErrors);
@@ -186,6 +194,8 @@ export interface CommandDraft {
   icon?: string;
   group?: string;
   appliesTo: string[];
+  /** The views whose bar shows it (#107). */
+  views?: string[];
   parameters: Parameter[];
   instructions: string;
 }
@@ -210,6 +220,7 @@ function draftOf(markdown: string): CommandDraft {
     icon: text("icon"),
     group: text("group"),
     appliesTo: stringList(data["applies-to"]).map(itemKind),
+    views: stringList(data.views),
     parameters: readParameters(data.parameters).parameters,
     instructions: body.trim(),
   };
@@ -228,6 +239,7 @@ function markdownOf(draft: CommandDraft, previous: string): string {
     ...(one.max !== undefined ? { max: one.max } : {}),
     ...(one.options ? { options: one.options } : {}),
     ...(languagePairs(one.help) ? { help: languagePairs(one.help) } : {}),
+    ...(one.showIf ? { "show-if": `${one.showIf.name}=${one.showIf.value}` } : {}),
   }));
   const frontmatter = {
     description: String(draft.description ?? "").trim(),
@@ -235,6 +247,7 @@ function markdownOf(draft: CommandDraft, previous: string): string {
     ...(draft.icon?.trim() ? { icon: draft.icon.trim() } : {}),
     ...(draft.group ? { group: draft.group } : {}),
     ...(draft.appliesTo?.length ? { "applies-to": draft.appliesTo.join(", ") } : {}),
+    ...(draft.views?.length ? { views: draft.views.join(", ") } : {}),
     ...Object.fromEntries(KEPT_KEYS.filter((key) => data[key] !== undefined).map((key) => [key, data[key]])),
     ...(parameters.length ? { parameters } : {}),
   };

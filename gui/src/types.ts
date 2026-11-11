@@ -68,6 +68,8 @@ export interface PageAction {
   group?: string;
   needsClassroom?: boolean;
   appliesTo?: string[];
+  /** The views whose bar shows it as a button (#107). */
+  views?: string[];
   ask?: Record<string, string>;
   suggest?: boolean;
   opens?: string;
@@ -95,13 +97,15 @@ export interface ActionParameter {
   name: string;
   /** Per language, or `*` for every language. */
   label: Record<string, string>;
-  type: "text" | "number" | "choice" | "words" | "topic" | "source" | "page";
+  type: "text" | "number" | "choice" | "words" | "topic" | "source" | "page" | "date" | "multichoice" | "activity" | "file";
   required: boolean;
   default?: string | number;
   min?: number;
   max?: number;
   options?: string[];
   help?: Record<string, string>;
+  /** Shown only when another parameter has this value (#107). */
+  showIf?: { name: string; value: string };
 }
 
 /** An own command as its editor shows it (#78). */

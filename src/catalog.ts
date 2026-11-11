@@ -37,6 +37,8 @@ export interface ActionMeta {
   needsClassroom?: boolean;
   /** The items whose menu offers it: topic, material, quiz, source, page, plan, draft, text. */
   appliesTo: string[];
+  /** The views whose bar shows it as a button (#107). */
+  views?: string[];
   /** The question it asks, per language, when launched without a value. */
   ask?: Record<string, string>;
   /** Offered in an empty conversation. */
@@ -53,7 +55,7 @@ export interface ActionMeta {
 function actionMeta(markdown: string): ActionMeta | undefined {
   // YAML first (parameters are a list); a frontmatter that isn't valid YAML, by its lines.
   const split = splitFrontmatter(markdown);
-  const data: Record<string, unknown> = split.error ? Object.fromEntries(["label", "icon", "group", "needs-classroom", "applies-to", "ask", "suggest", "opens", "produces"].map((key) => [key, frontmatterField(markdown, key)])) : split.data;
+  const data: Record<string, unknown> = split.error ? Object.fromEntries(["label", "icon", "group", "needs-classroom", "applies-to", "views", "ask", "suggest", "opens", "produces"].map((key) => [key, frontmatterField(markdown, key)])) : split.data;
   const label = perLanguage(data.label);
   if (!label) return undefined;
   const text = (key: string) => (typeof data[key] === "string" ? (data[key] as string).trim() || undefined : undefined);
@@ -65,6 +67,7 @@ function actionMeta(markdown: string): ActionMeta | undefined {
     group: text("group"),
     needsClassroom: yes("needs-classroom"),
     appliesTo: (text("applies-to") ?? "").split(",").map((one) => itemKind(one.trim())).filter(Boolean),
+    ...(text("views") ? { views: text("views")!.split(",").map((one) => one.trim()).filter(Boolean) } : {}),
     ask: perLanguage(data.ask),
     suggest: yes("suggest"),
     opens: text("opens"),

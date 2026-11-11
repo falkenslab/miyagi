@@ -12,6 +12,8 @@ export interface ActionTexts {
   quizThis: string;
   quote: string;
   needsClassroom: string;
+  /** The bar of a view's own actions (#107). */
+  viewActions: string;
   linkClassroom: string;
   send: string;
   cancel: string;
@@ -33,6 +35,7 @@ const es: ActionTexts = {
   quizThis: "Preguntas sobre esto",
   quote: "Citar en el chat",
   needsClassroom: "Necesita tu aula",
+  viewActions: "Acciones de esta vista",
   linkClassroom: "Vincular un aula",
   send: "Enviar",
   cancel: "Cancelar",
@@ -51,6 +54,7 @@ const en: ActionTexts = {
   quizThis: "Questions about this",
   quote: "Quote in the chat",
   needsClassroom: "Needs your classroom",
+  viewActions: "This view's actions",
   linkClassroom: "Link a classroom",
   send: "Send",
   cancel: "Cancel",
@@ -69,6 +73,7 @@ const fr: ActionTexts = {
   quizThis: "Questions sur ceci",
   quote: "Citer dans le chat",
   needsClassroom: "Nécessite ta classe",
+  viewActions: "Actions de cette vue",
   linkClassroom: "Lier une classe",
   send: "Envoyer",
   cancel: "Annuler",
@@ -87,6 +92,7 @@ const de: ActionTexts = {
   quizThis: "Fragen dazu",
   quote: "Im Chat zitieren",
   needsClassroom: "Braucht deinen Kursraum",
+  viewActions: "Aktionen dieser Ansicht",
   linkClassroom: "Kursraum verknüpfen",
   send: "Senden",
   cancel: "Abbrechen",

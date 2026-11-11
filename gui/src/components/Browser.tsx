@@ -1,3 +1,4 @@
+import { ActionList, classroomPageItem, useActions } from "./Actions";
 import { useEffect, useRef, useState } from "react";
 import { act } from "../api";
 import type { Texts } from "../i18n";
@@ -37,6 +38,9 @@ function covered(box: HTMLElement, rect: DOMRect): boolean {
 /** The rows above the page: back, forward, reload, the address in a pill, and the rest under ⋯ when the panel is narrow. */
 export function WebBar({ tab, tabs, T }: { tab: BrowserTab; tabs: BrowserTab[]; T: Texts }) {
   const [draft, setDraft] = useState(tab.url);
+  // The classroom page open here, as an item its actions apply to (#107).
+  const pageItem = classroomPageItem(tab.url, tab.title);
+  const pageActions = useActions()?.actions.filter((action) => pageItem && action.appliesTo?.includes(pageItem.kind)) ?? [];
   const typing = useRef(false);
   const [refusal, setRefusal] = useState("");
   const [copied, setCopied] = useState(false);
@@ -97,6 +101,7 @@ export function WebBar({ tab, tabs, T }: { tab: BrowserTab; tabs: BrowserTab[]; 
         <Menu title={T.webMore} ariaLabel={T.webMore} className="ibtn plain web-more" label={<span aria-hidden="true">⋯</span>}>
           {(close) => (
             <>
+              {pageItem && pageActions.length > 0 && <ActionList list={pageActions} value={tab.url} item={pageItem} kinds={[pageItem.kind]} close={close} />}
               <button type="button" disabled={!tab.url} onClick={() => (external(), close())}>
                 <Icon name="external" />
                 <span>{T.webOpenSystem}</span>

@@ -672,3 +672,10 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 .tip-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; }
 .tip-acts .btn { min-height: 44px; }
 @media (max-width: 760px) { .tip-body { flex-direction: column; } .tip-body img { flex: none; width: 100%; max-height: 34dvh; object-fit: contain; object-position: top; } }
+
+/* The classroom's activities in Tu aula and a view's own actions (#107). */
+.plain-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 6px; }
+.plain-list .it { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.view-actions { padding-bottom: 0; }
+.param-form .checks { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.param-form .check { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; flex-direction: row; }

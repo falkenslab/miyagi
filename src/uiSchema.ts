@@ -66,7 +66,44 @@ export const ENTITIES = {
     })
     .describe("An activity in progress (Drafts)"),
   text: z.object({ text: text("The selected text") }).describe("Text selected in the chat or in a page"),
+  activity: z
+    .object({
+      id: z.number().describe("Its id in the classroom (the course module)"),
+      type: text("Its type: assign, quiz, forum, book, page, resource, url, h5pactivity, scorm, workshop, choice, feedback, lesson…"),
+      title: text("Its name, as miyagi published it or the course map says").optional(),
+      url: text("Its address in the classroom"),
+    })
+    .describe("An activity or resource of the classroom (Tu aula, or the classroom page open beside the chat)"),
+  submission: z
+    .object({
+      assignment: z.number().describe("The assignment's id in the classroom (the course module)"),
+      url: text("The page of the submission or the grading being looked at"),
+    })
+    .describe("A submission or the grading of an assignment, as open beside the chat; never who it's from: the agent finds the student's alias itself"),
+  thread: z
+    .object({
+      id: z.number().describe("The discussion's id"),
+      title: text("Its title, as the page shows it").optional(),
+      url: text("Its address in the classroom"),
+    })
+    .describe("A forum discussion, as open beside the chat"),
+  conversation: z
+    .object({
+      id: text("Its folder's name (its start time)"),
+      title: text("Its title in the list"),
+      started: when("When it started"),
+    })
+    .describe("A conversation of the subject (the conversations' column)"),
+  message: z
+    .object({
+      role: z.enum(["teacher", "miyagi"]).describe("Who wrote it"),
+      text: text("What it says"),
+    })
+    .describe("A message of the conversation"),
 } as const;
+
+/** The page's views, each with a bar where an action can be a button (`views`). */
+export const VIEWS = ["today", "plan", "topics", "materials", "drafts", "knowledge", "sources", "classroom"] as const;
 
 export type ItemKind = keyof typeof ENTITIES;
 export const ITEM_KINDS = Object.keys(ENTITIES) as ItemKind[];
@@ -86,13 +123,14 @@ export const FORM_FIELD = z
   .object({
     name: z.string().regex(/^[a-z][a-z0-9_]{0,30}$/).describe("How the instructions name it: {{form.<name>}}"),
     label: perLanguage,
-    type: z.enum(["text", "number", "choice", "words", "topic", "source", "page"]),
+    type: z.enum(["text", "number", "choice", "words", "topic", "source", "page", "date", "multichoice", "activity", "file"]).describe("A date is YYYY-MM-DD; multichoice, several of its options; activity, one of the classroom's; file, one the teacher adds to sources/"),
     required: z.boolean().optional(),
     default: z.union([z.string(), z.number()]).optional(),
     min: z.number().optional(),
     max: z.number().optional(),
     options: z.array(z.string()).optional().describe("For a choice"),
     help: perLanguage.optional(),
+    "show-if": z.string().optional().describe("other=value: shown only when an earlier field has that value"),
   })
   .describe("A value the action asks for before it runs");
 
@@ -104,6 +142,7 @@ export const ACTION = z
     icon: z.string().optional().describe("One emoji"),
     group: z.enum(["day", "create", "plan", "memory", "classroom"]).optional(),
     "applies-to": z.string().optional().describe(`The item kinds it shows on, comma separated: ${ITEM_KINDS.join(", ")}`),
+    views: z.string().optional().describe(`The views whose bar shows it as a button, comma separated: ${VIEWS.join(", ")}`),
     "needs-classroom": z.boolean().optional(),
     ask: perLanguage.optional().describe("One question asked before running, when it has no form"),
     "argument-hint": z.string().optional(),

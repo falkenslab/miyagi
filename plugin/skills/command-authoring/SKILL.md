@@ -35,12 +35,16 @@ description: One line, in English, of what it makes
 label: es=Sopa de letras | en=Word search
 icon: 🔤
 group: create            # day, create, plan, memory or classroom
-applies-to: topic        # topic, material, quiz, source, page, plan, draft, text
+applies-to: topic        # topic, material, quiz, source, page, plan, draft, text,
+                         # activity, submission, thread, conversation, message
+views: today             # optional: a button in these views' bar (today, plan, topics,
+                         # materials, drafts, knowledge, sources, classroom)
 produces: html-activity  # html-activity, quiz, document or page
 parameters:
   - name: topic          # lowercase, digits, _
     label: es=Temática | en=Topic
-    type: topic          # text, number, choice, words, topic, source or page
+    type: topic          # text, number, choice, multichoice, words, date, topic, source,
+                         # page, activity (one of the classroom's) or file (added to sources/)
     required: true
   - name: count
     label: es=Número de palabras | en=Number of words
@@ -59,6 +63,11 @@ Make a word search now. The values: $ARGUMENTS
   `commands_fields`), `{{form.<parameter name>}}`, `{{subject.name}}` and `{{today}}`. Prefer them
   to `$ARGUMENTS` when the action is about an item: "Make a word search on «{{item.title}}» with
   {{form.count}} words". An item field must exist in a kind `applies-to` names, or it's refused.
+- `activity` is one of the classroom's activities (Tu aula, or the classroom page open beside the
+  chat); `submission` and `thread` come from the page open beside the chat, and never say whose
+  submission it is: find the student's alias yourself. `conversation` and `message` are the
+  conversations' list and a finished reply.
+- A parameter can depend on another: `show-if: tone=firm` shows it only when `tone` is `firm`.
 - A `topic`, `source` or `page` parameter is filled from the item the teacher launched it on;
   `words` is a list separated by commas; `choice` needs its `options`. Up to 8 parameters, few is
   better: what miyagi can decide well, don't ask.
