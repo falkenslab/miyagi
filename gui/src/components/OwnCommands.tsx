@@ -1,3 +1,4 @@
+import { act } from "../api";
 import { useCallback, useEffect, useState } from "react";
 import type { ExtTexts } from "../i18n/extensions";
 import type { ActionParameter, ChatState, CommandDraft, OwnCommand, PageAction } from "../types";
@@ -73,6 +74,7 @@ export function OwnCommandsTab({ chat, X, onNotice }: { chat: ChatState; X: ExtT
           </div>
         ))}
       </div>
+      <AutomaticActions chat={chat} X={X} />
       {editing && (
         <CommandEditor
           key={editing.command}
@@ -88,6 +90,35 @@ export function OwnCommandsTab({ chat, X, onNotice }: { chat: ChatState; X: ExtT
         />
       )}
     </>
+  );
+}
+
+/** The subject's actions that run on their own (#108): when, the last run, and pause or resume each. */
+function AutomaticActions({ chat, X }: { chat: ChatState; X: ExtTexts }) {
+  const [list, setList] = useState<{ command: string; trigger: string; lastRun?: string; paused: boolean }[]>([]);
+  useEffect(() => {
+    void act<{ triggers?: typeof list }>("triggers").then((result) => setList(result.triggers ?? []));
+  }, [chat.busy]);
+  if (!list.length) return null;
+  const O = X.own;
+  return (
+    <section className="own-auto">
+      <h3>{O.automatic}</h3>
+      <p className="muted">{O.automaticNote}</p>
+      <div className="own-list">
+        {list.map((one) => (
+          <div key={one.command} className="own-row">
+            <span className="grow">
+              <b>/{one.command}</b> <span className="badge">{one.trigger}</span>
+              <small className="muted">{one.lastRun ? O.lastRun(new Date(one.lastRun).toLocaleString()) : O.neverRun}</small>
+            </span>
+            <button type="button" className="btn small" onClick={() => void act<{ triggers?: typeof list }>("trigger-pause", { command: one.command, paused: !one.paused }).then((result) => setList(result.triggers ?? list))}>
+              {one.paused ? O.resume : O.pause}
+            </button>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 

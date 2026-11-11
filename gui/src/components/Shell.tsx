@@ -197,22 +197,24 @@ interface Found {
 
 /** The bell (#84): what exists and waits for the teacher, only reading, each one taking them where it's dealt with. */
 function Notices({ chat, view, T, go }: { chat: ChatState; view: View; T: Texts; go: (view: View) => void }) {
-  const [waiting, setWaiting] = useState<{ sources: number; oven: number; updates: string[] } | null>(null);
+  const [waiting, setWaiting] = useState<{ sources: number; oven: number; updates: string[]; automatic: { command: string; dir?: string; ok: boolean }[] } | null>(null);
   const load = useCallback(async () => {
-    const today = await act<{ sources?: { pending: number }; oven?: unknown[]; extensionUpdates?: string[] }>("today");
-    if (!today.error) setWaiting({ sources: today.sources?.pending ?? 0, oven: today.oven?.length ?? 0, updates: today.extensionUpdates ?? [] });
+    const today = await act<{ sources?: { pending: number }; oven?: unknown[]; extensionUpdates?: string[]; automatic?: { command: string; dir?: string; ok: boolean }[] }>("today");
+    if (!today.error) setWaiting({ sources: today.sources?.pending ?? 0, oven: today.oven?.length ?? 0, updates: today.extensionUpdates ?? [], automatic: today.automatic ?? [] });
   }, []);
   // After every turn, and on leaving a view where something may have changed (a source added).
   useEffect(() => {
     void load();
   }, [load, chat.turns, view]);
   const S = T.status;
-  const notices: { id: string; icon: IconName; text: string; detail?: string; to: View }[] = [];
+  const notices: { id: string; icon: IconName; text: string; detail?: string; to: View; resume?: string }[] = [];
   if (chat.panel) notices.push({ id: "approval", icon: "check", text: chat.panel.kind === "decision" || chat.panel.kind === "manual" ? S.approval : S.question, detail: chat.panel.prompt.title, to: "chat" });
   if (chat.choice) notices.push({ id: "question", icon: "check", text: S.question, detail: chat.choice.title, to: "chat" });
   if (waiting?.sources) notices.push({ id: "sources", icon: "folder", text: T.noticeSources(waiting.sources), to: "sources" });
   if (waiting?.oven) notices.push({ id: "oven", icon: "layers", text: T.noticeOven(waiting.oven), to: "oven" });
   // An installed extension with a newer version in its catalog (#101).
+  // An automatic action that ran on its own (#108): it opens its conversation.
+  for (const run of waiting?.automatic ?? []) if (run.dir) notices.push({ id: `automatic-${run.dir}`, icon: "check", text: run.ok ? T.noticeAutomatic(run.command) : T.noticeAutomaticFailed(run.command), to: "chat", resume: run.dir });
   if (waiting?.updates.length) notices.push({ id: "updates", icon: "grid", text: T.noticeUpdates(waiting.updates.length), detail: waiting.updates.join(", "), to: "extensions" });
   return (
     <Menu
@@ -236,6 +238,7 @@ function Notices({ chat, view, T, go }: { chat: ChatState; view: View; T: Texts;
               type="button"
               data-notice={notice.id}
               onClick={() => {
+                if (notice.resume) void act("automatic-seen", { dir: notice.resume }).then(() => act("resume", { dir: notice.resume })).then(load);
                 go(notice.to);
                 close();
               }}

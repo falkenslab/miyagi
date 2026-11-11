@@ -68,6 +68,11 @@ Make a word search now. The values: $ARGUMENTS
   submission it is: find the student's alias yourself. `conversation` and `message` are the
   conversations' list and a finished reply.
 - A parameter can depend on another: `show-if: tone=firm` shows it only when `tone` is `firm`.
+- `trigger:` makes it run on its own while the app is open: `daily 07:30`, `weekly fri 14:00`,
+  `on draft.published`, `on submission.new` or `on post.new` (these two are looked for at most once
+  an hour). It runs with no one to approve, so it only prepares (drafts, the register, a report)
+  and the bell tells the teacher: write its instructions for that, and never to publish. It has
+  no item nor form: what it needs comes from the knowledge base and the classroom.
 - A `topic`, `source` or `page` parameter is filled from the item the teacher launched it on;
   `words` is a list separated by commas; `choice` needs its `options`. Up to 8 parameters, few is
   better: what miyagi can decide well, don't ask.

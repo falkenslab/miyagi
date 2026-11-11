@@ -149,6 +149,8 @@ Make a word search of {{form.count}} words with the vocabulary of "{{item.title}
 - **In which views** (`views`): a button in the bar of Today, Teaching plan, Topics, Materials, Drafts, Knowledge base, Sources or Your classroom.
 - **Form fields**: besides text, number, options, word list, topic, source and page, there's **date**, **several options**, **a classroom activity** (picked from a list) and **a file** (added to your sources). A field can depend on another: `show-if: tone=firm` only shows it when `tone` is `firm`.
 
+- **Running on its own** (`trigger`): `daily 07:30`, `weekly fri 14:00` (every Friday at 14:00), `on draft.published` (when a draft is published), `on submission.new` or `on post.new` (a new submission or forum post; looked for at most once an hour). It runs while the app is open and **publishes nothing**: it prepares it, leaves it in **Drafts** and the bell tells you; publishing it is still yours. In **Extensions › My commands** you see when it last ran and can pause it.
+
 When the command is saved each variable is checked: an `{{item.date}}` that none of the `applies-to` items has is refused, saying which ones there are. Every item's fields are in the page's schema, [`schema/ui.schema.json`](https://github.com/falkenslab/miyagi/blob/main/schema/ui.schema.json), and miyagi knows them: ask it in the chat for "a command on every topic that…" and it writes the instructions with them.
 
 :::info What a command can't do

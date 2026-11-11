@@ -149,6 +149,7 @@ export const ACTION = z
     suggest: z.boolean().optional(),
     produces: z.enum(["html-activity", "quiz", "document", "page"]).optional(),
     parameters: z.array(FORM_FIELD).optional().describe("Its form"),
+    trigger: z.string().optional().describe('Runs on its own while the app is open, preparing and publishing nothing: "daily HH:MM", "weekly mon HH:MM", "on draft.published", "on submission.new" or "on post.new"'),
   })
   .describe("An action of the page: a command's frontmatter; the body holds its instructions, with {{item.*}}, {{form.*}}, {{subject.name}} and {{today}}");
 

@@ -560,6 +560,10 @@
             "additionalProperties": false,
             "description": "A value the action asks for before it runs"
           }
+        },
+        "trigger": {
+          "description": "Runs on its own while the app is open, preparing and publishing nothing: \"daily HH:MM\", \"weekly mon HH:MM\", \"on draft.published\", \"on submission.new\" or \"on post.new\"",
+          "type": "string"
         }
       },
       "required": [

@@ -149,6 +149,8 @@ Haz una sopa de letras de {{form.count}} palabras con el vocabulario de «{{item
 - **En qué vistas** (`views`): un botón en la barra de Hoy, Programación, Temas, Materiales, Borradores, Base de conocimiento, Fuentes o Tu aula.
 - **Campos del formulario**: además de texto, número, opciones, lista de palabras, tema, fuente y página, hay **fecha**, **varias opciones**, **una actividad del aula** (se elige de una lista) y **un fichero** (se añade a tus fuentes). Un campo puede depender de otro: `show-if: tono=firme` solo lo enseña cuando `tono` es `firme`.
 
+- **Que se lance solo** (`trigger`): `daily 07:30`, `weekly fri 14:00` (cada viernes a las 14:00), `on draft.published` (cuando se publica un borrador), `on submission.new` o `on post.new` (una entrega o un mensaje nuevo en el foro; se mira como mucho una vez por hora). Corre mientras la app está abierta y **no publica nada**: lo prepara, lo deja en **Borradores** y la campana te avisa; publicarlo sigue siendo cosa tuya. En **Extensiones › Mis comandos** ves cuándo se lanzó por última vez y puedes pausarlo.
+
 Al guardar el comando se comprueba que cada variable existe: un `{{item.fecha}}` que no tenga ninguno de los elementos de `applies-to` se rechaza diciendo cuáles hay. Todos los campos de cada elemento están en el esquema de la interfaz, [`schema/ui.schema.json`](https://github.com/falkenslab/miyagi/blob/main/schema/ui.schema.json), y miyagi los conoce: si le pides en el chat «un comando para cada tema que…», escribe las instrucciones con ellas.
 
 :::info Lo que un comando no puede hacer

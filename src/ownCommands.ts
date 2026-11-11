@@ -1,3 +1,4 @@
+import { parseTrigger } from "./triggerSpec.js";
 import { checkVariables, ITEM_KINDS as SCHEMA_KINDS, VIEWS } from "./uiSchema.js";
 import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -109,7 +110,7 @@ export function readParameters(value: unknown): { parameters: Parameter[]; error
 }
 
 /** The frontmatter keys an own command may carry; anything else is refused (`allowed-tools` above all). */
-const KEYS = new Set(["description", "argument-hint", "label", "icon", "group", "needs-classroom", "applies-to", "views", "ask", "suggest", "produces", "parameters"]);
+const KEYS = new Set(["description", "argument-hint", "label", "icon", "group", "needs-classroom", "applies-to", "views", "ask", "suggest", "produces", "parameters", "trigger"]);
 
 /** What's wrong with an own command, before it's saved: nothing means it can be. */
 export function validateCommand(name: string, markdown: string): string[] {
@@ -126,6 +127,10 @@ export function validateCommand(name: string, markdown: string): string[] {
   if (data.group !== undefined && !GROUPS.includes(String(data.group))) errors.push(`\`group\` must be one of ${GROUPS.join(", ")}`);
   for (const kind of typeof data["applies-to"] === "string" ? data["applies-to"].split(",").map((one) => one.trim()) : []) if (!ITEM_KINDS.includes(itemKind(kind))) errors.push(`\`applies-to\`: "${kind}" isn't one of ${ITEM_KINDS.join(", ")}`);
   for (const view of stringList(data.views)) if (!(VIEWS as readonly string[]).includes(view)) errors.push(`\`views\`: "${view}" isn't one of ${VIEWS.join(", ")}`);
+  if (data.trigger !== undefined) {
+    const trigger = parseTrigger(String(data.trigger));
+    if (typeof trigger === "string") errors.push(`\`trigger\`: ${trigger}`);
+  }
   if (data.produces !== undefined && !PRODUCES.includes(String(data.produces))) errors.push(`\`produces\` must be one of ${PRODUCES.join(", ")}`);
   const { parameters, errors: parameterErrors } = readParameters(data.parameters);
   errors.push(...parameterErrors);
@@ -201,7 +206,7 @@ export interface CommandDraft {
 }
 
 /** What the editor doesn't show and a save keeps; anything else, `allowed-tools` above all, doesn't survive one. */
-const KEPT_KEYS = ["argument-hint", "needs-classroom", "ask", "suggest", "produces"];
+const KEPT_KEYS = ["argument-hint", "needs-classroom", "ask", "suggest", "produces", "trigger"];
 
 /** `{ es, en }` as `es=… | en=…`, `{ "*": text }` as the text; the empty ones left out. */
 function languagePairs(text: Record<string, string> | undefined): string {

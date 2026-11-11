@@ -131,6 +131,9 @@ export interface Texts {
   noticesCount: (n: number) => string;
   noticeSources: (n: number) => string;
   noticeOven: (n: number) => string;
+  /** An automatic action that ran (#108). */
+  noticeAutomatic: (command: string) => string;
+  noticeAutomaticFailed: (command: string) => string;
   /** Installed extensions with a newer version (#101). */
   noticeUpdates: (n: number) => string;
   taskOf: (n: number, total: number) => string;
@@ -323,6 +326,8 @@ const es: Texts = {
   noticesCount: (n) => (n === 1 ? "1 aviso" : `${n} avisos`),
   noticeSources: (n) => (n === 1 ? "1 fuente por incorporar" : `${n} fuentes por incorporar`),
   noticeOven: (n) => (n === 1 ? "1 actividad en borradores" : `${n} actividades en borradores`),
+  noticeAutomatic: (command) => `Acción automática hecha: /${command}`,
+  noticeAutomaticFailed: (command) => `La acción automática /${command} no terminó`,
   noticeUpdates: (n) => (n === 1 ? "1 extensión tiene versión nueva" : `${n} extensiones tienen versión nueva`),
   taskOf: (n, total) => `${n} de ${total}`,
   thisConversation: "Esta conversación",
@@ -529,6 +534,8 @@ const en: Texts = {
   noticesCount: (n) => (n === 1 ? "1 notice" : `${n} notices`),
   noticeSources: (n) => (n === 1 ? "1 source to take in" : `${n} sources to take in`),
   noticeOven: (n) => (n === 1 ? "1 activity in drafts" : `${n} activities in drafts`),
+  noticeAutomatic: (command) => `Automatic action done: /${command}`,
+  noticeAutomaticFailed: (command) => `The automatic action /${command} didn't finish`,
   noticeUpdates: (n) => (n === 1 ? "1 extension has a new version" : `${n} extensions have a new version`),
   taskOf: (n, total) => `${n} of ${total}`,
   thisConversation: "This conversation",
@@ -735,6 +742,8 @@ const fr: Texts = {
   noticesCount: (n) => (n === 1 ? "1 avis" : `${n} avis`),
   noticeSources: (n) => (n === 1 ? "1 source à intégrer" : `${n} sources à intégrer`),
   noticeOven: (n) => (n === 1 ? "1 activité en brouillon" : `${n} activités en brouillon`),
+  noticeAutomatic: (command) => `Action automatique terminée : /${command}`,
+  noticeAutomaticFailed: (command) => `L'action automatique /${command} n'a pas abouti`,
   noticeUpdates: (n) => (n === 1 ? "1 extension a une nouvelle version" : `${n} extensions ont une nouvelle version`),
   taskOf: (n, total) => `${n} sur ${total}`,
   thisConversation: "Cette conversation",
@@ -941,6 +950,8 @@ const de: Texts = {
   noticesCount: (n) => (n === 1 ? "1 Hinweis" : `${n} Hinweise`),
   noticeSources: (n) => (n === 1 ? "1 Quelle aufzunehmen" : `${n} Quellen aufzunehmen`),
   noticeOven: (n) => (n === 1 ? "1 Aktivität in Entwürfen" : `${n} Aktivitäten in Entwürfen`),
+  noticeAutomatic: (command) => `Automatische Aktion erledigt: /${command}`,
+  noticeAutomaticFailed: (command) => `Die automatische Aktion /${command} wurde nicht beendet`,
   noticeUpdates: (n) => (n === 1 ? "1 Erweiterung hat eine neue Version" : `${n} Erweiterungen haben eine neue Version`),
   taskOf: (n, total) => `${n} von ${total}`,
   thisConversation: "Dieses Gespräch",

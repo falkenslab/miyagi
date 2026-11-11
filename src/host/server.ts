@@ -1,3 +1,4 @@
+import { listTriggers, markRunSeen, pauseTrigger, tickTriggers, unseenRuns } from "./triggers.js";
 import { classroomItems } from "./classroomItems.js";
 import { launchAction, type ActionLaunch } from "../actionContext.js";
 import { spawn } from "node:child_process";
@@ -617,7 +618,15 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
         return await capabilities(chat);
       // The course views: read only; what changes something goes through the chat.
       case "today":
-        return { ...(await today(chat, subjectDir)), extensionUpdates: await extensionUpdates(extensionDirsFor(subjectDir)) };
+        return { ...(await today(chat, subjectDir)), extensionUpdates: await extensionUpdates(extensionDirsFor(subjectDir)), automatic: await unseenRuns(subjectDir) };
+      case "triggers":
+        return { triggers: await listTriggers(subjectDir) };
+      case "trigger-pause":
+        await pauseTrigger(subjectDir, String(data.command ?? ""), Boolean(data.paused));
+        return { triggers: await listTriggers(subjectDir) };
+      case "automatic-seen":
+        await markRunSeen(subjectDir, String(data.dir ?? ""));
+        return {};
       case "kb-index":
         return await knowledgeIndex(chat);
       case "kb-page":
@@ -789,6 +798,12 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   refreshTheCatalogs();
   const catalogTimer = setInterval(refreshTheCatalogs, CATALOG_CHECK_EVERY_MS);
   catalogTimer.unref?.();
+  // The actions that run on their own (#108), once a minute while the app is open; a finished one
+  // tells the page, whose bell offers it. Off in the host's own checks (MIYAGI_NO_TRIGGERS).
+  const triggerTimer = process.env.MIYAGI_NO_TRIGGERS
+    ? undefined
+    : setInterval(() => void tickTriggers(new Date(), () => send("automatic", {})).catch(() => undefined), 60_000);
+  triggerTimer?.unref?.();
   // The browser's tabs reach the page on their own event, apart from the chat's state (#86).
   const stopBrowser = options.browser?.subscribe(
     () => send("browser", options.browser?.list()),
@@ -805,6 +820,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     async close() {
       clearInterval(heartbeat);
       clearInterval(catalogTimer);
+      if (triggerTimer) clearInterval(triggerTimer);
       stopBrowser?.();
       client?.end();
       current?.chat?.close();

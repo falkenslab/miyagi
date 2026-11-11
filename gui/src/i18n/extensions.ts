@@ -4,6 +4,13 @@
 /** The editor of the teacher's own commands (#78). */
 export interface OwnTexts {
   intro: string;
+  /** The actions that run on their own (#108). */
+  automatic: string;
+  automaticNote: string;
+  lastRun: (when: string) => string;
+  neverRun: string;
+  pause: string;
+  resume: string;
   none: string;
   scopeSubject: string;
   scopeAll: string;
@@ -200,6 +207,12 @@ const es: ExtTexts = {
   open: "Extensiones",
   tabs: { capabilities: "Capacidades", installed: "Instaladas", commands: "Mis comandos", catalog: "Catálogo", repositories: "Repositorios" },
   own: {
+    automatic: "Acciones automáticas",
+    automaticNote: "Se lanzan solas mientras la app está abierta: preparan y lo dejan en Borradores, y la campana te avisa. No publican nada sin ti.",
+    lastRun: (when: string) => `Última vez: ${when}`,
+    neverRun: "Aún no se ha lanzado",
+    pause: "Pausar",
+    resume: "Reanudar",
     intro: "Los comandos que has creado hablando con miyagi. Para crear uno nuevo, pídeselo en el chat.",
     none: "Aún no tienes comandos propios.",
     scopeSubject: "Esta asignatura",
@@ -379,6 +392,12 @@ const en: ExtTexts = {
   open: "Extensions",
   tabs: { capabilities: "Capabilities", installed: "Installed", commands: "My commands", catalog: "Catalog", repositories: "Repositories" },
   own: {
+    automatic: "Automatic actions",
+    automaticNote: "They run on their own while the app is open: they prepare and leave it in Drafts, and the bell tells you. They publish nothing without you.",
+    lastRun: (when: string) => `Last run: ${when}`,
+    neverRun: "Not run yet",
+    pause: "Pause",
+    resume: "Resume",
     intro: "The commands you made by talking to miyagi. To make a new one, ask for it in the chat.",
     none: "You have no commands of your own yet.",
     scopeSubject: "This subject",
@@ -558,6 +577,12 @@ const fr: ExtTexts = {
   open: "Extensions",
   tabs: { capabilities: "Capacités", installed: "Installées", commands: "Mes commandes", catalog: "Catalogue", repositories: "Dépôts" },
   own: {
+    automatic: "Actions automatiques",
+    automaticNote: "Elles se lancent seules tant que l'app est ouverte : elles préparent et le laissent dans Brouillons, et la cloche te prévient. Elles ne publient rien sans toi.",
+    lastRun: (when: string) => `Dernière fois : ${when}`,
+    neverRun: "Pas encore lancée",
+    pause: "Mettre en pause",
+    resume: "Reprendre",
     intro: "Les commandes créées en parlant avec miyagi. Pour en créer une nouvelle, demande-la dans le chat.",
     none: "Tu n'as pas encore de commandes personnelles.",
     scopeSubject: "Cette matière",
@@ -737,6 +762,12 @@ const de: ExtTexts = {
   open: "Erweiterungen",
   tabs: { capabilities: "Fähigkeiten", installed: "Installiert", commands: "Meine Befehle", catalog: "Katalog", repositories: "Repositorys" },
   own: {
+    automatic: "Automatische Aktionen",
+    automaticNote: "Sie laufen von selbst, solange die App offen ist: Sie bereiten vor, legen es in Entwürfe, und die Glocke sagt Bescheid. Ohne dich veröffentlichen sie nichts.",
+    lastRun: (when: string) => `Zuletzt: ${when}`,
+    neverRun: "Noch nicht gelaufen",
+    pause: "Pausieren",
+    resume: "Fortsetzen",
     intro: "Die Befehle, die du im Gespräch mit miyagi erstellt hast. Für einen neuen frag im Chat danach.",
     none: "Du hast noch keine eigenen Befehle.",
     scopeSubject: "Dieses Fach",
