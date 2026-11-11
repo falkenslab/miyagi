@@ -82,7 +82,7 @@ Its settings follow its purpose (`quiz-design`). Its body is what students read 
 ```markdown
 ---
 title: Variables y tipos
-as: page          # page (default) or book: then each ## is a chapter
+as: page          # page (default) or book: then each ## is a chapter, titled without a number
 ---
 Una **variable** es un nombre para un valor…
 

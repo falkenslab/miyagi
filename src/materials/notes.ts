@@ -92,7 +92,11 @@ export function parseNotes(source: string, file?: string): Parsed<Notes> {
     let current: Chapter | null = null;
     for (const token of tokens) {
       if (token.type === "heading" && (token as Tokens.Heading).depth === 2) {
-        current = { title: (token as Tokens.Heading).text.trim(), markdown: "" };
+        // The book numbers its chapters itself: «## 1. Grupos» would show as «1. 1. Grupos».
+        const text = (token as Tokens.Heading).text.trim();
+        const title = text.replace(/^(\d+(\.\d+)*[.)]|\d+(\.\d+)+)\s+/, "");
+        if (title !== text) warnings.push(finding(bodyLine, `chapter "${text}": the book numbers its chapters, so it goes up as "${title}"`));
+        current = { title, markdown: "" };
         chapters.push(current);
       } else if (current) current.markdown += token.raw;
       else intro += token.raw;

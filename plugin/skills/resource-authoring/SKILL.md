@@ -58,7 +58,8 @@ it. Activities are `assignment-building`, `quiz-design` and `activity-building`.
 ## In materials/, as Markdown
 
 Write a page's or a book's notes in `materials/<unit>/<slug>.notes.md` (`as: page` or
-`as: book`, one chapter per `##`), in plain Markdown: headings from `##`, code in fenced blocks,
+`as: book`, one chapter per `##`, its title without a number: the book numbers its chapters
+itself, and «## 1. Grupos» shows as «1. 1. Grupos»), in plain Markdown: headings from `##`, code in fenced blocks,
 images next to the file with what they show as their alternative text, links whose text says
 where they go. `materials_validate` and `materials_export`: the export writes accessible HTML
 (headings under the classroom's title, code with its indentation, tables with headers) and
