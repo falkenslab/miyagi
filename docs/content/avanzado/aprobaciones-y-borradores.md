@@ -55,7 +55,7 @@ Si prefieres no mostrarlo todavía, se queda oculto y en `drafts.md`.
 - `hidden`: subida oculta al aula, probándose.
 - `served`: ya la ven los alumnos; la siguiente sesión te lo dice y la quita.
 
-Las tres primeras fases las recorre la habilidad `activity-lifecycle` con algo nuevo y complejo, con una aprobación para pasar de cada fase a la siguiente; un borrador oculto sin ese proceso es una línea `hidden`. Una página de antes, sin fases, cuenta todo como `hidden`. Al cerrar la sesión, miyagi te dice cuántas hay en cada fase («Borradores: 1 en plan, 2 cocinándose, 1 probándose oculto»), y el siguiente chat te lo cuenta al saludar.
+Las tres primeras fases las recorre la habilidad `activity-lifecycle` con algo nuevo y complejo, con una aprobación para pasar de cada fase a la siguiente; un borrador oculto sin ese proceso es una línea `hidden`. Una página de antes, sin fases, cuenta todo como `hidden`. Al cerrar la sesión, miyagi te dice cuántas hay en cada fase («Borradores: 1 en plan, 2 en construcción, 1 probándose oculto»), y el siguiente chat te lo cuenta al saludar.
 
 Los cambios en algo que los alumnos ya ven (una errata, una fecha, un enlace roto) no pasan por borrador: se guardan en su sitio, con su aprobación.
 

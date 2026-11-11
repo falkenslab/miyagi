@@ -132,11 +132,11 @@ In Materials, "Open beside the chat" shows a file in the side panel, in a tab, w
 
 [Learn more](avanzado/materiales)
 
-## The oven shows what's under way {#21-oven}
+## Drafts shows what's under way {#21-oven}
 
-Each activity appears in its phase: planned, being built, hidden for testing or just served to students.
+Each activity appears in its phase: planned, being built, hidden for testing or just published for students.
 
-![The Oven view](img/21-oven.webp)
+![The Drafts view](img/21-drafts.webp)
 
 [Learn more](avanzado/aprobaciones-y-borradores)
 
@@ -288,7 +288,7 @@ The side column's search finds a word in all of the subject's conversations, wha
 
 ## The bell counts what's waiting for you {#45-bell}
 
-An approval, a question, sources not taken in, activities in the oven. Each notice takes you where it's dealt with.
+An approval, a question, sources not taken in, activities in Drafts. Each notice takes you where it's dealt with.
 
 ![The bell's menu](img/45-bell.webp)
 

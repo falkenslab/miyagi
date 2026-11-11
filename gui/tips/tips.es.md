@@ -132,11 +132,11 @@ En Materiales, «Abrir junto al chat» muestra un archivo en el panel lateral, e
 
 [Más información](avanzado/materiales)
 
-## El horno enseña lo que está en marcha {#21-oven}
+## Borradores enseña lo que está en marcha {#21-oven}
 
-Cada actividad aparece en su fase: en plan, construyéndose, oculta para probarla o recién servida a los alumnos.
+Cada actividad aparece en su fase: en plan, en construcción, oculta para probarla o recién publicada para los alumnos.
 
-![La vista del Horno](img/21-oven.webp)
+![La vista Borradores](img/21-drafts.webp)
 
 [Más información](avanzado/aprobaciones-y-borradores)
 
@@ -288,7 +288,7 @@ La búsqueda de la columna lateral encuentra una palabra en todas las conversaci
 
 ## La campana cuenta lo que te espera {#45-bell}
 
-Una aprobación, una pregunta, fuentes sin incorporar, actividades en el horno. Cada aviso te lleva a donde se atiende.
+Una aprobación, una pregunta, fuentes sin incorporar, actividades en Borradores. Cada aviso te lleva a donde se atiende.
 
 ![El menú de la campana](img/45-bell.webp)
 

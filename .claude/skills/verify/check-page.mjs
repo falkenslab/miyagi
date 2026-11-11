@@ -958,7 +958,7 @@ try {
   await page.click(".recents .open-conv");
   await page.waitForSelector(".msgs");
   // The bell's other notices (#84): a source not taken in and an activity in the oven, each to its view.
-  writeFileSync(path.join(subject, "knowledge", "drafts.md"), "# En el horno\n\n- `building` Tarea de normalización\n");
+  writeFileSync(path.join(subject, "knowledge", "drafts.md"), "# Borradores\n\n- `building` Tarea de normalización\n");
   await page.click(".side-tools .bell");
   await page.waitForSelector('.pop [data-notice="oven"]', { timeout: 10_000 });
   await shot("bell-1440");
