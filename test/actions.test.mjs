@@ -11,7 +11,7 @@ import { pageActions } from "../dist/host/server.js";
 
 const LANGUAGES = ["es", "en", "fr", "de"];
 const GROUPS = ["day", "create", "plan", "memory", "classroom"];
-const KINDS = ["topic", "material", "quiz", "source", "page", "plan", "oven", "text"];
+const KINDS = ["topic", "material", "quiz", "source", "page", "plan", "draft", "text"];
 
 const dir = mkdtempSync(path.join(os.tmpdir(), "miyagi-actions-"));
 mkdirSync(path.join(dir, ".claude", "commands"), { recursive: true });
