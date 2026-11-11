@@ -177,7 +177,7 @@ These views show what miyagi knows and has prepared. Their buttons send to the c
 
 **Drafts** holds the activities that go through phases: planned, being built, tested hidden and just published. Those already in Moodle have **View in the classroom**, which opens their page.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="The Drafts view, with four columns and the Unit 1 quiz in Tested hidden.">Drafts, with a quiz being tested hidden.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-borradores.webp" alt="The Drafts view, with four columns and the Unit 1 quiz in Tested hidden.">Drafts, with a quiz being tested hidden.</Shot>
 
 **Knowledge base** is the pages miyagi writes and consults about your course:
 

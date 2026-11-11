@@ -177,7 +177,7 @@ Estas vistas enseñan lo que miyagi sabe y tiene preparado. Sus botones mandan a
 
 **Borradores** son las actividades que van por fases: en plan, en construcción, probándose oculta y recién publicada. Las que ya están en Moodle tienen **Ver en el aula**, que abre su página.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-horno.webp" alt="La vista Borradores, con cuatro columnas y el cuestionario del Tema 1 en Probándose oculto.">Borradores, con un cuestionario probándose oculto.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-borradores.webp" alt="La vista Borradores, con cuatro columnas y el cuestionario del Tema 1 en Probándose oculto.">Borradores, con un cuestionario probándose oculto.</Shot>
 
 **Base de conocimiento** son las páginas que miyagi escribe y consulta sobre tu curso:
 
