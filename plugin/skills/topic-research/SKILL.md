@@ -33,7 +33,12 @@ Always look first at what you have: `sources/`, the knowledge base, the course i
    more researchers after it. Don't send a second round for the same questions on your own.
 3. **Contrast**: prefer primary sources (official documentation, the project's release notes,
    standards, the publisher of a dataset) over blogs; note the date of each source; when two
-   disagree, keep both and say which is more authoritative and why.
+   disagree, keep both and say which is more authoritative and why. For history, law, science or
+   any fact a student may be examined on, that means the primary document or the official record
+   (a law in its official gazette, a parliament's or archive's record, a reference work or a
+   university source), not the press or an encyclopedia anyone edits: those are a lead to find
+   the source, not the source to cite. In a simulated course, the date women first voted was
+   checked against two newspapers and an English-language wiki.
 4. **Keep it**: write what's worth keeping into the knowledge base — a summary page per important
    source (`summary/<slug>` with `origin: web`, its URL and the date consulted, from
    `current_time`) and the facts into the concept or topic pages that use them (`knowledge_edit`),
