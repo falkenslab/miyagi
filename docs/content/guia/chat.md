@@ -28,7 +28,7 @@ Bajo cada cosa que hace en Moodle tienes **Ver en el aula**, que abre esa misma 
 
 Antes de guardar una nota, responder en el foro, publicar contenido o cambiar la configuración de una actividad, la aprobación ocupa el sitio del cuadro para escribir, con un resumen de lo que va a publicar y tres botones: **Aprobar**, **Rechazar** y **Parar todo**.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-aprobacion-nota.webp" alt="El panel de aprobación para guardar una nota: la rúbrica y el comentario para el alias A-Z63WCA, con los botones Parar todo, Rechazar y Aprobar.">La aprobación de una nota: el resumen dice exactamente qué se va a guardar.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-aprobacion-nota.webp" alt="El panel de aprobación para cambiar el comentario de Sara Gil (A-WS3G1P) en la Práctica final: la nota que no cambia y el comentario nuevo, literal, con los botones Parar todo, Rechazar y Aprobar.">La aprobación de un comentario: el resumen dice exactamente qué se va a guardar, y a quién, con su nombre y su alias.</Shot>
 
 - **Aprobar**: lo publica.
 - **Rechazar**: no lo publica. Explícale por qué en tu siguiente mensaje; lo tiene en cuenta, por ejemplo, para el resto de notas de la misma tarea.

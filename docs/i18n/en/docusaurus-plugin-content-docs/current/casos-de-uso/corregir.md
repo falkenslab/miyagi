@@ -6,7 +6,7 @@ description: miyagi grades the final project applying the teacher's rubric, with
 
 # 7. Grading with the rubric {#7-corregir-con-la-rúbrica}
 
-Three test students have submitted the final project, each at a different level: Lucía all 10 queries correct; Marcos, only some; Sara, all 10 with conceptual mistakes. Alumno Demo hasn't submitted, and the deadline has passed.
+Three test students have submitted the final project, each at a different level: Lucía all 10 queries correct; Marcos, only some; Sara, all 10 with conceptual mistakes. Alumno Demo hasn't submitted.
 
 In a new conversation, with the grading shortcut:
 
@@ -30,32 +30,30 @@ With your permission, it reads them in `submissions`, copies those it has to run
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-entregas-borradas.webp" alt="The end of a grading summary: what failed in each submission, a pending decision about the student who didn't submit and the line saying the lab was stopped and the copies of the submissions deleted.">At the end of the summary, the lab stopped and the copies deleted.</Shot>
 
-What doesn't change is that **you see your students by name and miyagi by alias**. If you talk to it about a student by name, it doesn't know which is their alias. It asks you, showing you what grades each alias has, and your eyes in Moodle are what bridge the gap.
-
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-alias-que-alumno.webp" alt="miyagi asks which alias is Sara Gil's, with four aliases and their current grade as options.">miyagi asks which alias belongs to the student we named. You can see it in Moodle by comparing the submission times.</Shot>
+What you see isn't what the model sees. **In the app and the web version you see each student by name**: miyagi puts it on screen where the model has their alias, without the name leaving your computer. And if you talk about a student by their full name (say, “what is Sara Gil missing?”), the model gets their alias. To project in class, the eye button at the top right goes back to the aliases. The terminal always shows the aliases.
 
 ## Each grade, before saving it {#cada-nota-antes-de-guardarla}
 
-With the results, it applies the rubric and shows you the four grades in a single approval, with each student's breakdown by criterion and their comment.
+With the results, it applies the rubric and shows you the grades in a single approval, with each student's breakdown by criterion and their comment.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-aprobacion-nota.webp" alt="Approval panel for saving the grading of A-Z63WCA: correct results 1 out of 5, use of SQL 1 out of 3, readability 2 out of 2, and the comment to the student with each query that fails.">The detail of a grade before saving it. This screenshot is of an example request that we then rejected.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-aprobacion-nota.webp" alt="Approval panel for the grading: Sara Gil (A-WS3G1P) 4/10 and Marcos López (A-N1XSAP) 4/10, with the rubric levels, the observations and each one's comment.">The detail of each grade before saving it, with each student's name next to their alias.</Shot>
 
-The grade is clear for each alias, and it's what you'll later see in Moodle with their name:
+Each student's grade, the same you'll later see in Moodle:
 
 - **Lucía, 10.** All 10 queries correct.
 - **Marcos, 4.** He's missing queries (it counts them as not submitted) and the ones he has fail on order and style.
 - **Sara, 4.** Very well presented, but with conceptual mistakes: an aggregate in the `WHERE` (error 1111), an `INNER JOIN` where a `LEFT JOIN` was needed and a count without `GROUP BY`.
-- **Alumno Demo, 0**, with the comment "No submission has been received", because the deadline has passed.
+- **Alumno Demo, no grade.** They haven't submitted, but the deadline is still open, so it doesn't give them a 0 yet.
 
-When it finishes, miyagi sums up what it has done. It warns that it hasn't sent notifications and that the late penalty is yours to apply. And it's honest about what it hasn't been able to confirm: that Moodle doesn't give it back the remarks per criterion when saving.
+When it finishes, miyagi sums up what it has done. It says it has read each grade back from Moodle, that the students already see it because the assignment doesn't use the marking workflow, and that it has stopped the lab and deleted the submissions. It also points out what looks odd, such as submission dates before the assignment opened, instead of deciding it for you.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-correccion-resumen.webp" alt="The grading summary: a table with alias, correct queries, points per criterion and grade: A-5MTSQM 10, A-Z63WCA 4, A-6KTXW8 4, A-8BY92W 0.">The table of grades, by alias.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-correccion-resumen.webp" alt="The summary of the saved grading: Lucía Martín 10, Sara Gil 4 and Marcos López 4; Alumno Demo ungraded because the deadline is still open, the lab stopped and the submissions deleted.">The table of grades, with each student's name.</Shot>
 
 ## What each one sees {#lo-que-ve-cada-uno}
 
 The teacher sees the grades in Moodle with their names:
 
-<Shot width="1400" height="1386" kind="moodle" src="/img/v2/moodle-profesor-entregas.webp" alt="The table of submissions for the Práctica final in Moodle: Lucía 10, Marcos 4, Sara 4 and Alumno Demo 0, with their files and their comments.">The submissions and their grades. The submission times are the only thing that lets you match each alias to each student.</Shot>
+<Shot width="1400" height="1386" kind="moodle" src="/img/v2/moodle-profesor-entregas.webp" alt="The table of submissions for the Práctica final in Moodle: Lucía 10, Marcos 4, Sara 4 and Alumno Demo 0, with their files and their comments.">The submissions and their grades. Alumno Demo's 0 is from an earlier grading, with the deadline already passed.</Shot>
 
 <Shot width="1400" height="875" kind="moodle" src="/img/v2/moodle-profesor-corrector.webp" alt="Moodle's grader with Sara Gil's submission, her rubric and the review panel collapsed.">The grader, with the rubric applied.</Shot>
 

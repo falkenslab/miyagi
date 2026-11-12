@@ -28,7 +28,7 @@ Under each thing it does in Moodle there's **View in the classroom**, which open
 
 Before saving a grade, replying in the forum, publishing content or changing an activity's settings, the approval takes the place of the writing box, with a summary of what it's going to publish and three buttons: **Approve**, **Reject** and **Stop all**.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-aprobacion-nota.webp" alt="The approval panel for saving a grade: the rubric and the comment for the alias A-Z63WCA, with the Stop all, Reject and Approve buttons.">Approving a grade: the summary says exactly what's going to be saved.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-aprobacion-nota.webp" alt="The approval panel to change Sara Gil's (A-WS3G1P) comment on the Práctica final: the grade that doesn't change and the new comment, word for word, with the buttons Stop all, Reject and Approve.">The approval of a comment: the summary says exactly what will be saved, and for whom, with their name and their alias.</Shot>
 
 - **Approve**: it publishes it.
 - **Reject**: it doesn't publish it. Explain why in your next message; it takes it into account, for example, for the rest of the grades for the same assignment.

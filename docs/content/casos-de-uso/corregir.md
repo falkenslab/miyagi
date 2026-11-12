@@ -6,7 +6,7 @@ description: miyagi corrige la práctica final aplicando la rúbrica del profeso
 
 # 7. Corregir con la rúbrica
 
-Tres alumnos de prueba han entregado la práctica final, cada uno con un nivel distinto: Lucía las 10 consultas correctas; Marcos, solo algunas; Sara, las 10 con errores de concepto. Alumno Demo no ha entregado, y el plazo ha vencido.
+Tres alumnos de prueba han entregado la práctica final, cada uno con un nivel distinto: Lucía las 10 consultas correctas; Marcos, solo algunas; Sara, las 10 con errores de concepto. Alumno Demo no ha entregado.
 
 En una conversación nueva, con el atajo de corregir:
 
@@ -30,32 +30,30 @@ Con tu permiso, las lee en `submissions`, copia al laboratorio las que tiene que
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-entregas-borradas.webp" alt="El final del resumen de una corrección: qué falló en cada entrega, una decisión pendiente sobre el alumno que no entregó y la línea He parado el laboratorio y he borrado las copias de las entregas.">Al final del resumen, el laboratorio parado y las copias borradas.</Shot>
 
-Lo que no cambia es que **tú ves a tus alumnos por su nombre y miyagi por su alias**. Si le hablas de un alumno por su nombre, no sabe cuál es su alias. Te lo pregunta enseñándote qué notas tiene cada alias, y son tus ojos en Moodle los que hacen de puente.
-
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-alias-que-alumno.webp" alt="miyagi pregunta qué alias es el de Sara Gil, con cuatro alias y su nota actual como opciones.">miyagi pregunta qué alias es el de la alumna que le nombramos. Se ve en Moodle comparando las horas de entrega.</Shot>
+Lo que tú ves no es lo que ve el modelo. **En la app y en la versión web ves a cada alumno por su nombre**: miyagi lo pone en la pantalla donde el modelo tiene su alias, sin que el nombre salga de tu ordenador. Y si le hablas de un alumno por su nombre completo (por ejemplo «¿qué le falta a Sara Gil?»), al modelo le llega su alias. Para proyectar en clase, el botón del ojo de arriba a la derecha vuelve a los alias. En la terminal se ven siempre los alias.
 
 ## Cada nota, antes de guardarla
 
-Con los resultados, aplica la rúbrica y te enseña las cuatro notas en una sola aprobación, con el desglose por criterio de cada alumno y su comentario.
+Con los resultados, aplica la rúbrica y te enseña las notas en una sola aprobación, con el desglose por criterio de cada alumno y su comentario.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-aprobacion-nota.webp" alt="Panel de aprobación para guardar la corrección de A-Z63WCA: resultados correctos 1 de 5, uso de SQL 1 de 3, legibilidad 2 de 2, y el comentario al alumno con cada consulta que falla.">El detalle de una nota antes de guardarla. Esta captura es de una petición de ejemplo que luego rechazamos.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-aprobacion-nota.webp" alt="Panel de aprobación de la corrección: Sara Gil (A-WS3G1P) 4/10 y Marcos López (A-N1XSAP) 4/10, con los niveles de la rúbrica, las observaciones y el comentario de cada uno.">El detalle de cada nota antes de guardarla, con el nombre de cada alumno junto a su alias.</Shot>
 
-La nota queda clara para cada alias, y es lo que luego verás en Moodle con su nombre:
+La nota de cada alumno, la misma que verás luego en Moodle:
 
 - **Lucía, 10.** Las 10 consultas correctas.
 - **Marcos, 4.** Le faltan consultas (las cuenta como no entregadas) y las que tiene fallan en orden y en estilo.
 - **Sara, 4.** Muy bien presentado, pero con errores de concepto: un agregado en el `WHERE` (error 1111), un `INNER JOIN` donde hacía falta `LEFT JOIN` y un recuento sin `GROUP BY`.
-- **Alumno Demo, 0**, con el comentario «No se ha recibido ninguna entrega», porque el plazo ha vencido.
+- **Alumno Demo, sin nota.** No ha entregado, pero el plazo sigue abierto, así que no le pone un 0 todavía.
 
-Al terminar, miyagi resume lo que ha hecho. Avisa de que no ha enviado notificaciones y de que el descuento por retraso lo aplicas tú. Y es honesto con lo que no ha podido confirmar: que Moodle no le devuelve las observaciones por criterio al guardar.
+Al terminar, miyagi resume lo que ha hecho. Dice que ha leído de vuelta cada nota en Moodle, que los alumnos ya la ven porque la tarea no usa el flujo de calificación, y que ha parado el laboratorio y borrado las entregas. También avisa de lo que le parece raro, como unas fechas de entrega anteriores a la apertura de la tarea, en vez de decidirlo por ti.
 
-<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-correccion-resumen.webp" alt="El resumen de la corrección: una tabla con alias, consultas correctas, puntos por criterio y nota: A-5MTSQM 10, A-Z63WCA 4, A-6KTXW8 4, A-8BY92W 0.">La tabla de notas, por alias.</Shot>
+<Shot width="1400" height="875" kind="desktop" src="/img/v2/tutorial-07-correccion-resumen.webp" alt="El resumen de la corrección guardada: Lucía Martín 10, Sara Gil 4 y Marcos López 4; Alumno Demo sin calificar porque el plazo sigue abierto, el laboratorio parado y las entregas borradas.">La tabla de notas, con el nombre de cada alumno.</Shot>
 
 ## Lo que ve cada uno
 
 El profesor ve en Moodle las notas con sus nombres:
 
-<Shot width="1400" height="1386" kind="moodle" src="/img/v2/moodle-profesor-entregas.webp" alt="La tabla de entregas de la Práctica final en Moodle: Lucía 10, Marcos 4, Sara 4 y Alumno Demo 0, con sus archivos y sus comentarios.">Las entregas y sus notas. Las horas de entrega son lo único que permite casar cada alias con cada alumno.</Shot>
+<Shot width="1400" height="1386" kind="moodle" src="/img/v2/moodle-profesor-entregas.webp" alt="La tabla de entregas de la Práctica final en Moodle: Lucía 10, Marcos 4, Sara 4 y Alumno Demo 0, con sus archivos y sus comentarios.">Las entregas y sus notas. El 0 de Alumno Demo es de una corrección anterior, con el plazo ya vencido.</Shot>
 
 <Shot width="1400" height="875" kind="moodle" src="/img/v2/moodle-profesor-corrector.webp" alt="El corrector de Moodle con la entrega de Sara Gil, su rúbrica y el panel de revisión plegado.">El corrector, con la rúbrica aplicada.</Shot>
 
