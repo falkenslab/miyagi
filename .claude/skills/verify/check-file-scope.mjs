@@ -39,6 +39,9 @@ const denied = [
   path.join(home, ".aws", "credentials"),
   path.join(home, ".git-credentials"),
   path.join(process.env.LOCALAPPDATA ?? path.join(home, "AppData", "Local"), "Google", "Chrome", "User Data", "Default", "Cookies"),
+  // pseudonym's key and alias directory: with them every alias turns back into a name.
+  path.join(process.env.APPDATA ?? path.join(home, "AppData", "Roaming"), "pseudonym", "key"),
+  path.join(home, ".config", "pseudonym", "directory.json"),
 ];
 // Outside the agent's folders (falkenslab/miyagi#42): a sibling of the workspace, the home's
 // keys and documents, the workspace's own root.

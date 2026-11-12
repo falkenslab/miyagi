@@ -67,6 +67,8 @@ export function sensitivePaths(): string[] {
     // Keys and tokens.
     ...[".ssh", ".aws", ".azure", ".gnupg", ".kube", ".npmrc", ".git-credentials", ".netrc", ".pypirc"].map((p) => path.join(home, p)),
     path.join(home, ".config", "gh"),
+    // pseudonym's key and directory (moodle-mcp's aliases): with them an alias turns back into a name.
+    ...pseudonymHomes(),
     path.join(home, ".docker", "config.json"),
     path.join(home, "Library", "Keychains"),
     // Browser profiles (cookies, saved passwords).
@@ -79,6 +81,18 @@ export function sensitivePaths(): string[] {
     ...["google-chrome", "chromium", "microsoft-edge"].map((p) => path.join(home, ".config", p)),
     path.join(home, ".mozilla"),
   ];
+}
+
+/**
+ * Where @falkenslab/pseudonym keeps the key and the alias directory moodle-mcp writes: `PSEUDONYM_HOME`
+ * when set, else its per-user default on every OS (Windows' and the others', whatever this one is).
+ */
+export function pseudonymHomes(): string[] {
+  const home = os.homedir();
+  const appData = process.env.APPDATA ?? path.join(home, "AppData", "Roaming");
+  const homes = [path.join(appData, "pseudonym"), path.join(home, ".config", "pseudonym")];
+  if (process.env.PSEUDONYM_HOME) homes.unshift(path.resolve(process.env.PSEUDONYM_HOME));
+  return homes;
 }
 
 export async function readGlobalConfig(): Promise<GlobalConfig> {

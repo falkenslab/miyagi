@@ -26,7 +26,7 @@ Un filtro de agent-kit revisa cada uso de las herramientas de archivos, tanto de
 - **`knowledge/`**: ninguna herramienta de archivos llega ahí, ni para leer. Solo las herramientas `knowledge_*`, que no borran ni renombran páginas; retirar una (`knowledge_retire`) te pide aprobación.
 - **Buscar en el contenido** (`Grep`): solo en `sources/`, `drafts/`, `materials/` y, con docker-lab activada, su carpeta de laboratorios.
 - **`config.json` y `.env` del curso, `~/.miyagi/config.json` y `~/.claude/.credentials.json`**: prohibidos, ni leer ni escribir. `verify` lo comprueba en cada cambio (`check-file-scope.mjs`).
-- **Otras credenciales en sitios conocidos**, prohibidas además, por si acaso: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS y los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas).
+- **Otras credenciales en sitios conocidos**, prohibidas además, por si acaso: `~/.ssh`, `~/.aws`, `~/.azure`, `~/.gnupg`, `~/.kube`, `~/.npmrc`, `~/.git-credentials`, `~/.netrc`, `~/.pypirc`, `~/.config/gh`, `~/.docker/config.json`, el llavero de macOS, los perfiles de Chrome, Edge y Firefox (cookies y contraseñas guardadas) y la carpeta de pseudonym (`%APPDATA%\pseudonym` o `~/.config/pseudonym`), donde están la clave y el directorio que convierten cada alias de un alumno en su nombre.
 
 Tus habilidades, atajos e `instructions.md` quedan fuera de las carpetas en las que puede escribir: el asistente los usa, pero no puede cambiarlos.
 
