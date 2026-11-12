@@ -65,6 +65,7 @@ export interface Texts {
   menuEdit: string;
   menuView: string;
   menuHelp: string;
+  menuAll: string;
   menuClose: string;
   menuUndo: string;
   menuRedo: string;
@@ -263,6 +264,7 @@ const es: Texts = {
   menuEdit: "Editar",
   menuView: "Ver",
   menuHelp: "Ayuda",
+  menuAll: "Menú",
   menuClose: "Cerrar la ventana",
   menuUndo: "Deshacer",
   menuRedo: "Rehacer",
@@ -473,6 +475,7 @@ const en: Texts = {
   menuEdit: "Edit",
   menuView: "View",
   menuHelp: "Help",
+  menuAll: "Menu",
   menuClose: "Close the window",
   menuUndo: "Undo",
   menuRedo: "Redo",
@@ -683,6 +686,7 @@ const fr: Texts = {
   menuEdit: "Édition",
   menuView: "Affichage",
   menuHelp: "Aide",
+  menuAll: "Menu",
   menuClose: "Fermer la fenêtre",
   menuUndo: "Annuler",
   menuRedo: "Rétablir",
@@ -893,6 +897,7 @@ const de: Texts = {
   menuEdit: "Bearbeiten",
   menuView: "Ansicht",
   menuHelp: "Hilfe",
+  menuAll: "Menü",
   menuClose: "Fenster schließen",
   menuUndo: "Rückgängig",
   menuRedo: "Wiederholen",

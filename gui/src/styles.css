@@ -646,6 +646,12 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 .pop.tb-pop button { align-items: center; min-height: 36px; padding: 6px 10px; }
 .pop.tb-pop .grow { flex: 1; }
 .tb-rule { border: 0; border-top: 1px solid var(--line); margin: 4px 6px; }
+.tb-full { display: flex; align-items: center; gap: 2px; }
+.tb-compact { display: none; }
+.tb-group + .tb-group { border-top: 1px solid var(--line); margin-top: 4px; padding-top: 4px; }
+.tb-group-title { padding: 4px 10px 2px; color: var(--dim); font-size: 12px; font-weight: 600; }
+/* Under ~600 px the four menus and the window's buttons don't fit side by side: one menu instead. */
+@media (max-width: 600px) { .tb-full { display: none; } .tb-compact { display: flex; } }
 @media (max-width: 760px) { .pop.tb-pop { top: auto; left: 0; right: 0; } }
 
 /* The guided tour (#81): the window dimmed with a hole around what's being explained, and a bubble beside it */

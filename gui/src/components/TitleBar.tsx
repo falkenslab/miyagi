@@ -36,7 +36,7 @@ export function TitleBar({ info, T, canGoBack, canGoForward, onBack, onForward, 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (!event.altKey || event.ctrlKey || event.shiftKey) return;
-      const menu = [...document.querySelectorAll<HTMLElement>(".titlebar .tb-menu")].find((button) => button.textContent?.[0]?.toLowerCase() === event.key.toLowerCase());
+      const menu = [...document.querySelectorAll<HTMLElement>(".titlebar .tb-full .tb-menu")].find((button) => button.textContent?.[0]?.toLowerCase() === event.key.toLowerCase());
       if (!menu) return;
       event.preventDefault();
       menu.click();
@@ -48,6 +48,28 @@ export function TitleBar({ info, T, canGoBack, canGoForward, onBack, onForward, 
     void act("window-role", { role });
     close();
   };
+  const menus = roles(T, Boolean(info.frameDevTools));
+  const entries = (items: ([string, string, string?] | "-")[], close: () => void) =>
+    items.map((item, index) =>
+      item === "-" ? (
+        <hr key={index} className="tb-rule" />
+      ) : (
+        <button type="button" key={item[1]} onMouseDown={(event) => event.preventDefault()} onClick={() => run(item[1], close)}>
+          <span className="grow">{item[0]}</span>
+          {item[2] && <small>{item[2]}</small>}
+        </button>
+      ),
+    );
+  const help = (close: () => void) => (
+    <>
+      <button type="button" onClick={() => { window.open(DOCS, "_blank"); close(); }}>
+        <span className="grow">{T.menuDocs}</span>
+      </button>
+      <button type="button" onClick={() => { onNotice(`miyagi ${info.version} · agent-kit ${info.kit}`); close(); }}>
+        <span className="grow">{T.menuAbout}</span>
+      </button>
+    </>
+  );
   return (
     <div className="titlebar">
       <button type="button" className="tb-btn tb-back" title={T.tbBack} aria-label={T.tbBack} disabled={!canGoBack} onClick={onBack}>
@@ -60,36 +82,35 @@ export function TitleBar({ info, T, canGoBack, canGoForward, onBack, onForward, 
         <Icon name="panel" size={18} />
       </button>
       <span className="tb-sep" aria-hidden="true" />
-      {roles(T, Boolean(info.frameDevTools)).map((menu) => (
-        <Menu key={menu.label} title={menu.label} ariaLabel={menu.label} className="tb-menu" popClass="tb-pop" label={menu.label}>
+      {/* The menus side by side while they fit; in a narrow window, one menu with all of them, so none goes under the window's buttons. */}
+      <span className="tb-full">
+        {menus.map((menu) => (
+          <Menu key={menu.label} title={menu.label} ariaLabel={menu.label} className="tb-menu" popClass="tb-pop" label={menu.label}>
+            {(close) => <>{entries(menu.items, close)}</>}
+          </Menu>
+        ))}
+        <Menu title={T.menuHelp} ariaLabel={T.menuHelp} className="tb-menu" popClass="tb-pop" label={T.menuHelp}>
+          {help}
+        </Menu>
+      </span>
+      <span className="tb-compact">
+        <Menu title={T.menuAll} ariaLabel={T.menuAll} className="tb-menu" popClass="tb-pop" label={T.menuAll}>
           {(close) => (
             <>
-              {menu.items.map((item, index) =>
-                item === "-" ? (
-                  <hr key={index} className="tb-rule" />
-                ) : (
-                  <button type="button" key={item[1]} onMouseDown={(event) => event.preventDefault()} onClick={() => run(item[1], close)}>
-                    <span className="grow">{item[0]}</span>
-                    {item[2] && <small>{item[2]}</small>}
-                  </button>
-                ),
-              )}
+              {menus.map((menu) => (
+                <div key={menu.label} className="tb-group">
+                  <div className="tb-group-title">{menu.label}</div>
+                  {entries(menu.items, close)}
+                </div>
+              ))}
+              <div className="tb-group">
+                <div className="tb-group-title">{T.menuHelp}</div>
+                {help(close)}
+              </div>
             </>
           )}
         </Menu>
-      ))}
-      <Menu title={T.menuHelp} ariaLabel={T.menuHelp} className="tb-menu" popClass="tb-pop" label={T.menuHelp}>
-        {(close) => (
-          <>
-            <button type="button" onClick={() => { window.open(DOCS, "_blank"); close(); }}>
-              <span className="grow">{T.menuDocs}</span>
-            </button>
-            <button type="button" onClick={() => { onNotice(`miyagi ${info.version} · agent-kit ${info.kit}`); close(); }}>
-              <span className="grow">{T.menuAbout}</span>
-            </button>
-          </>
-        )}
-      </Menu>
+      </span>
       <span className="tb-drag" />
     </div>
   );

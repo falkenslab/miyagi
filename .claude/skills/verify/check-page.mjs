@@ -508,6 +508,16 @@ const checkBrowser = async (subject) => {
   check("the sidebar's button collapses it", (await page.locator(".side-open").count()) === 1);
   await page.click(".tb-side");
   check("the bar is drawn in the theme, draggable, its buttons not", await page.evaluate(() => getComputedStyle(document.querySelector(".titlebar")).getPropertyValue("-webkit-app-region") === "drag" && getComputedStyle(document.querySelector(".tb-back")).getPropertyValue("-webkit-app-region") === "no-drag"));
+  // A narrow window: the four menus become one, so none goes under the window's own buttons.
+  const wide = page.viewportSize();
+  await page.setViewportSize({ width: 420, height: wide.height });
+  await page.waitForTimeout(200);
+  const narrowBar = await page.evaluate(() => ({ full: getComputedStyle(document.querySelector(".tb-full")).display, compact: getComputedStyle(document.querySelector(".tb-compact")).display, right: Math.max(...[...document.querySelectorAll(".titlebar > *")].map((e) => e.getBoundingClientRect().right)) }));
+  await page.click(".tb-compact .tb-menu");
+  const grouped = await page.locator(".titlebar .pop .tb-group-title").count();
+  await page.keyboard.press("Escape");
+  check("in a narrow window the menus are one, with all four inside", narrowBar.full === "none" && narrowBar.compact === "flex" && narrowBar.right <= 420 && grouped === 4, JSON.stringify({ ...narrowBar, grouped }));
+  await page.setViewportSize(wide);
   await page.click(".recents a.open-conv");
   await page.waitForSelector(".composer textarea");
   await shot("titlebar-1440");
