@@ -243,6 +243,8 @@ export interface Info {
   frame?: boolean;
   /** Whether its View menu may open the developer tools (unpacked only). */
   frameDevTools?: boolean;
+  /** Students' real names in place of their aliases (#109): null when the classroom has none to show. */
+  names?: { shown: boolean } | null;
 }
 
 /** A tab of the desktop app's browser (#86): the native side's, kept nowhere. */

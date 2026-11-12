@@ -44,7 +44,7 @@ miyagi no te la pide ni la guarda. La primera vez que necesita entrar en Moodle,
 
 ### ¿Qué pasa con los datos de mis alumnos?
 
-Lee lo que tú verías en Moodle para hacer su trabajo, pero tus alumnos le llegan con un alias («A-7KQ2XM»), nunca con su nombre. Si la entrega es un archivo, te pide permiso para guardarla en tu ordenador bajo el alias, y la borra al acabar de corregir ([lo vemos en el tutorial](/casos-de-uso/corregir/#archivos)). En sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Más detalle en [Seguridad y privacidad](/avanzado/seguridad-y-privacidad/).
+Lee lo que tú verías en Moodle para hacer su trabajo, pero tus alumnos le llegan con un alias («A-7KQ2XM»), nunca con su nombre. Tú sí ves sus nombres en la app y en la versión web: miyagi los pone en la pantalla sin que lleguen al asistente, y el botón del ojo los oculta para proyectar. Si la entrega es un archivo, te pide permiso para guardarla en tu ordenador bajo el alias, y la borra al acabar de corregir ([lo vemos en el tutorial](/casos-de-uso/corregir/#archivos)). En sus apuntes no guarda fichas de alumnos concretos, solo tendencias de la clase. Más detalle en [Seguridad y privacidad](/avanzado/seguridad-y-privacidad/).
 
 ### ¿Ejecuta programas en mi ordenador?
 

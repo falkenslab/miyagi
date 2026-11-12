@@ -23,6 +23,8 @@ import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } fro
 import { deleteOwn, ownCommands, saveDraft, type CommandDraft } from "../ownCommands.js";
 import { topicWords, draftsList, knowledgeIndex, preparedFile, knowledgePage, knowledgeSearch, oven, PREVIEW_TYPES, resolveItems, sourcesList, today, topics } from "./course.js";
 import { webAddress, type BrowserRect, type EmbeddedBrowser } from "./browser.js";
+import { classroomNames, NO_NAMES, type Names } from "./names.js";
+import { studentDataLevel } from "../classroom.js";
 import { systemFolderPicker, type FolderPicker } from "./folderPicker.js";
 import { addRepository, capabilities, catalog, connectClassroom, inspect, marketplaces, pageExtensions, removeRepository } from "./extensions.js";
 
@@ -131,7 +133,14 @@ interface OpenSubject {
   notices: string[];
   /** The commands the page offers: miyagi's catalog (as `miyagi commands` lists it) and the kit's, for the extensions running now. */
   commands: { active: string; names: Set<string>; actions: PageAction[] } | null;
+  /** Its students' names for the page, never for the agent (#109). */
+  names: Names;
 }
+
+/** Answers the page may send back to be saved where the agent reads them: never with names. */
+const KEEP_ALIASES = new Set(["own-commands", "options", "page-settings"]);
+/** What the page sends that reaches the agent: a name in it goes as its alias (#109). */
+const TO_THE_AGENT = new Set(["send", "answer", "search", "kb-search"]);
 
 /**
  * Starts the host: on `workspaceDir` if given, else on the subject opened last, else on none
@@ -143,6 +152,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
   const tokenForgotten = await forgetSavedClaudeToken();
   let signedIn = await claudeAuthAvailable();
   let current: OpenSubject | null = null;
+  /** The teacher's "Ocultar nombres" (#109): for this run of the host only, names again at every start. */
+  let namesShown = true;
   const pickFolder = options.pickFolder ?? systemFolderPicker();
   let picking = false;
   /** The messages sent during a turn (#62), by conversation and entry: the kit keeps no mark of them. */
@@ -196,7 +207,16 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const notices: string[] = [];
     const prepared = await prepareSession("chat", dir, { canPrompt: false, say: (line) => notices.push(line) });
     if (!prepared.openSession || !prepared.label) throw new Error(`${dir} is not a miyagi subject`);
-    const subject: OpenSubject = { dir, label: prepared.label, prepared, chat: null, opening: null, notices, commands: null };
+    const room = prepared.workspace?.classroom?.url;
+    const names =
+      room && (await studentDataLevel(dir).catch(() => undefined)) === "pseudonymize"
+        ? classroomNames(room, () => {
+            send("info", info());
+            schedule();
+          })
+        : NO_NAMES;
+    names.shown = namesShown;
+    const subject: OpenSubject = { dir, label: prepared.label, prepared, chat: null, opening: null, notices, commands: null, names };
     current = subject;
     send("info", info());
     if (signedIn) await openChat(subject);
@@ -303,9 +323,17 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const room = current?.prepared.workspace?.classroom;
     return room ? { url: room.url, courseId: room.courseId, connected: Boolean(current?.prepared.classroom) } : null;
   };
-  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder), browser: Boolean(options.browser), frame: Boolean(options.frame), frameDevTools: Boolean(options.frame?.devTools) });
+  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder), browser: Boolean(options.browser), frame: Boolean(options.frame), frameDevTools: Boolean(options.frame?.devTools), names: current?.names.available ? { shown: current.names.shown } : null });
   function send(event: string, data: unknown): void {
+    if (event === "state") data = revealState(data as ReturnType<typeof snapshot>);
     client?.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  }
+  /** The state as the page shows it: names for aliases, and the approval waiting as "Name (A-…)". */
+  function revealState(state: ReturnType<typeof snapshot>): ReturnType<typeof snapshot> {
+    const names = current?.names ?? NO_NAMES;
+    const shown = names.reveal(state);
+    const panel = state.chat?.panel;
+    return panel && shown.chat ? { ...shown, chat: { ...shown.chat, panel: names.reveal(panel, true) } } : shown;
   }
   // A heartbeat every 20 s, so no proxy closes the connection for being idle.
   const heartbeat = setInterval(() => client?.write(": ping\n\n"), 20_000);
@@ -390,6 +418,15 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
       const [color, symbolColor] = [String(data.color), String(data.symbolColor)];
       if (![color, symbolColor].every((value) => /^#[0-9a-f]{6}$/i.test(value))) return { error: "invalid colour" };
       options.frame.colors(color, symbolColor);
+      return {};
+    }
+    // A name the teacher wrote, or copied from the page, goes to the agent as its alias (#109).
+    if (current && TO_THE_AGENT.has(action)) data = current.names.aliasify(data);
+    if (action === "names") {
+      namesShown = Boolean(data.shown);
+      if (current) current.names.shown = namesShown;
+      send("info", info());
+      send("state", snapshot());
       return {};
     }
     switch (action) {
@@ -767,12 +804,16 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
             "content-disposition": "inline",
             ...(type.startsWith("application/pdf") ? {} : { "content-security-policy": "sandbox; default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; media-src 'self'" }),
           });
-          return void response.end(await readFile(file));
+          // A text material with its students' names, as the rest of the page (#109); the file keeps the aliases.
+          const content = await readFile(file);
+          return void response.end(type.startsWith("text/") && current ? current.names.reveal(content.toString("utf8")) : content);
         }
         if (request.method === "POST" && url.pathname === "/api/upload") return json(response, 200, await addSource(request, url));
         if (request.method === "POST" && url.pathname.startsWith("/api/")) {
           const raw = (await body(request, 1_000_000)).toString("utf8");
-          return json(response, 200, await act(url.pathname.slice("/api/".length), raw ? (JSON.parse(raw) as Record<string, unknown>) : {}));
+          const action = url.pathname.slice("/api/".length);
+          const answer = await act(action, raw ? (JSON.parse(raw) as Record<string, unknown>) : {});
+          return json(response, 200, KEEP_ALIASES.has(action) || !current ? answer : current.names.reveal(answer));
         }
         if (request.method === "GET") return await page(response, url.pathname);
         response.writeHead(404).end();

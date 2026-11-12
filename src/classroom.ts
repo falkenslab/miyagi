@@ -37,6 +37,14 @@ export async function moodleTeacherActive(workspaceDir: string): Promise<boolean
   return (await enabledExtensions(workspaceDir)).some((ext) => ext.name === MOODLE_TEACHER);
 }
 
+/** How moodle-teacher gives the agent other people (its `student_data`: pseudonymize, block or clear), if it's installed. */
+export async function studentDataLevel(workspaceDir: string): Promise<string | undefined> {
+  const installed = await installedMoodleTeacher(workspaceDir);
+  if (!installed) return undefined;
+  const value = (await extensionOptionStates(installed)).find((state) => state.key === "student_data")?.value;
+  return typeof value === "string" && value ? value : "pseudonymize";
+}
+
 /**
  * The kit's `extension` command, as `miyagi extension …` runs it; throws when it fails, with what
  * the kit said. It never asks: an option not given keeps its default (the kit's own prompt would

@@ -676,7 +676,7 @@ export function ViewTabs({ view, setView, C }: { view: View; setView: (view: Vie
 }
 
 /** Each view's header: the menu (on a phone), the sidebar's button when it's collapsed, the title, and the conversation's ⋯. */
-export function Header({ title, subtitle, chat, chatShown, collapsed, T, X, onMenu, onExpand, onOpenChat, panelTabs, canBrowse, panelShown, onPanel }: { title: string; subtitle?: string; chat: ChatState | null; chatShown: boolean; collapsed: boolean; T: Texts; X: ExtTexts; onMenu: () => void; onExpand: () => void; onOpenChat: () => void; panelTabs: number; canBrowse: boolean; panelShown: boolean; onPanel: () => void }) {
+export function Header({ title, subtitle, chat, chatShown, collapsed, T, X, onMenu, onExpand, onOpenChat, panelTabs, canBrowse, panelShown, onPanel, names }: { title: string; subtitle?: string; chat: ChatState | null; chatShown: boolean; collapsed: boolean; T: Texts; X: ExtTexts; onMenu: () => void; onExpand: () => void; onOpenChat: () => void; panelTabs: number; canBrowse: boolean; panelShown: boolean; onPanel: () => void; names?: { shown: boolean } | null }) {
   return (
     <header className="top">
       <button type="button" className="ibtn plain burger" title={X.menu} aria-label={X.menu} onClick={onMenu}>
@@ -691,6 +691,11 @@ export function Header({ title, subtitle, chat, chatShown, collapsed, T, X, onMe
         {title}
         {subtitle && <small>{subtitle}</small>}
       </h1>
+      {names && (
+        <button type="button" className="ibtn plain names-btn" title={names.shown ? T.hideNames : T.showNames} aria-label={names.shown ? T.hideNames : T.showNames} aria-pressed={!names.shown} onClick={() => void act("names", { shown: !names.shown })}>
+          <Icon name={names.shown ? "eye" : "eyeOff"} />
+        </button>
+      )}
       {(panelTabs > 0 || canBrowse) && (
         <button type="button" className="ibtn plain panel-btn" title={panelShown ? T.closePanel : T.showPanel} aria-label={panelShown ? T.closePanel : T.showPanel} aria-pressed={panelShown} onClick={onPanel}>
           <Icon name="side" />

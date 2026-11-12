@@ -56,6 +56,8 @@ export interface Texts {
   expandPanel: string;
   shrinkPanel: string;
   closePanel: string;
+  hideNames: string;
+  showNames: string;
   showPanel: string;
   backToChat: string;
   closeTab: (title: string) => string;
@@ -252,6 +254,8 @@ const es: Texts = {
   expandPanel: "Ampliar el panel",
   shrinkPanel: "Reducir el panel",
   closePanel: "Cerrar el panel",
+  hideNames: "Ocultar los nombres de los alumnos (ver sus alias), para proyectar o hacer capturas",
+  showNames: "Mostrar los nombres de los alumnos",
   showPanel: "Mostrar el panel",
   backToChat: "Volver a la conversación",
   closeTab: (title) => `Cerrar ${title}`,
@@ -460,6 +464,8 @@ const en: Texts = {
   expandPanel: "Expand the panel",
   shrinkPanel: "Shrink the panel",
   closePanel: "Close the panel",
+  hideNames: "Hide the students' names (show their aliases), to project or take screenshots",
+  showNames: "Show the students' names",
   showPanel: "Show the panel",
   backToChat: "Back to the conversation",
   closeTab: (title) => `Close ${title}`,
@@ -668,6 +674,8 @@ const fr: Texts = {
   expandPanel: "Agrandir le panneau",
   shrinkPanel: "Réduire le panneau",
   closePanel: "Fermer le panneau",
+  hideNames: "Masquer les noms des élèves (voir leurs alias), pour projeter ou faire des captures",
+  showNames: "Afficher les noms des élèves",
   showPanel: "Afficher le panneau",
   backToChat: "Revenir à la conversation",
   closeTab: (title) => `Fermer ${title}`,
@@ -876,6 +884,8 @@ const de: Texts = {
   expandPanel: "Bereich vergrößern",
   shrinkPanel: "Bereich verkleinern",
   closePanel: "Bereich schließen",
+  hideNames: "Namen der Lernenden ausblenden (ihre Aliasse zeigen), zum Projizieren oder für Screenshots",
+  showNames: "Namen der Lernenden zeigen",
   showPanel: "Bereich anzeigen",
   backToChat: "Zurück zum Gespräch",
   closeTab: (title) => `Schließen ${title}`,
