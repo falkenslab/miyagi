@@ -139,6 +139,7 @@ async function readSkills(skillsDir: string, origin: CatalogEntry["origin"]): Pr
       name: frontmatterField(markdown, "name") ?? dirName,
       description: frontmatterField(markdown, "description"),
       origin,
+      action: actionMeta(markdown),
     });
   }
   return entries;
@@ -193,6 +194,15 @@ export async function listCommands(workspaceDir: string): Promise<CatalogEntry[]
     ...(await readCommands(commandsDirFor("all", workspaceDir), "custom", `${OWN_PLUGIN}:`)),
     ...(await extensionEntries(workspaceDir, (ext) => readCommands(path.join(ext.dir, "commands"), "extension", `${ext.manifest!.name}:`), (_ext, c) => c.name)),
   ];
+}
+
+/**
+ * The extensions' skills that are actions of the page (#110), as the session offers them: the SDK
+ * lists an extension's skill as the command `/<extension>:<skill>`, so the page sends that line.
+ */
+export async function extensionSkillActions(workspaceDir: string): Promise<CatalogEntry[]> {
+  const skills = await extensionEntries(workspaceDir, (ext) => readSkills(path.join(ext.dir, "skills"), "extension"), (ext, s) => `/${ext.manifest!.name}:${s.name}`);
+  return skills.filter((skill) => skill.action);
 }
 
 /** One extension's skills or commands, tagged with it; the kit offers them in the session by itself. */

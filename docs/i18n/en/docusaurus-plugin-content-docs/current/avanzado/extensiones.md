@@ -52,6 +52,8 @@ In the [desktop app and in the web version](navegador.md#extensiones) all of thi
 
 In the terminal, an installed or changed extension takes effect in the next session, not in the one already open. `miyagi skills` lists its skills with the extension's name in square brackets.
 
+An extension's skill can also be a button on the page: if its header has a `label`, it shows as an action, with the same keys as an [own shortcut](atajos-e-instrucciones.md#dónde-sale-y-qué-pregunta) (`icon`, `group`, `needs-classroom`, `applies-to`…). That's how moodle-teacher puts "This week" and "See what is to grade" in **Today** when you have a classroom linked. Those without one are still used by miyagi when needed, with no button.
+
 ## What an extension can't get around {#lo-que-una-extensión-no-puede-saltarse}
 
 Wherever it comes from, an extension doesn't change miyagi's rules ([Security and privacy](seguridad-y-privacidad.md)):

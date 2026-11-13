@@ -52,6 +52,8 @@ En la [aplicación de escritorio y en la versión web](navegador.md#extensiones)
 
 En la terminal, una extensión instalada o cambiada se nota en la siguiente sesión, no en la que ya está abierta. `miyagi skills` lista sus habilidades con el nombre de la extensión entre corchetes.
 
+Una habilidad de una extensión puede ser también un botón de la página: si su encabezado trae `label`, sale como acción con las mismas claves que un [atajo propio](atajos-e-instrucciones.md#dónde-sale-y-qué-pregunta) (`icon`, `group`, `needs-classroom`, `applies-to`…). Así, moodle-teacher pone en **Hoy** «Esta semana» y «Ver qué hay por corregir» cuando tienes un aula vinculada. Las que no lo traen las sigue usando miyagi cuando hacen falta, sin botón.
+
 ## Lo que una extensión no puede saltarse
 
 Venga de donde venga, una extensión no cambia las reglas de miyagi ([Seguridad y privacidad](seguridad-y-privacidad.md)):

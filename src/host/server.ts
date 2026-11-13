@@ -17,7 +17,7 @@ import { CATALOG_CHECK_EVERY_MS, extensionUpdates, refreshCatalogs } from "./cat
 import { extensionDirsFor } from "../extensions.js";
 import { chooseLanguageFor, claudeAuthAvailable, forgetSavedClaudeToken, loadWorkspaceEnv, readPageSettings, saveClaudeKey, savePageSettings } from "../globalConfig.js";
 import { friendlyToolLabel, toolPhrase } from "../toolLabels.js";
-import { listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
+import { extensionSkillActions, listCommands, type ActionMeta, type CatalogEntry } from "../catalog.js";
 import { draftsDirFor, knowledgeDirFor, materialsDirFor, readWorkspaceConfig, type AgentPersona, sessionsDirFor, sourcesDirFor, workspaceExists, workspaceLabel } from "../workspace.js";
 import { createSubject, forgetWorkspace, listWorkspaces, registerWorkspace } from "../workspaces.js";
 import { deleteOwn, ownCommands, saveDraft, type CommandDraft } from "../ownCommands.js";
@@ -291,7 +291,8 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const active = `${(state.extensions?.active ?? []).join(",")}|${state.commandDetails.length}`;
     if (subject.commands?.active !== active) {
       subject.commands = { active, names: subject.commands?.names ?? new Set(KIT_COMMANDS), actions: subject.commands?.actions ?? [] };
-      void listCommands(subject.dir).then((entries) => {
+      void Promise.all([listCommands(subject.dir), extensionSkillActions(subject.dir)]).then(([commands, skills]) => {
+        const entries = [...commands, ...skills];
         if (subject.commands?.active !== active) return;
         subject.commands = { active, names: new Set([...KIT_COMMANDS, ...entries.map((entry) => entry.name.replace(/^\//, ""))]), actions: pageActions(entries) };
         schedule();

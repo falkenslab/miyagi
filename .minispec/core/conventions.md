@@ -6,7 +6,7 @@
 - Import only from the package root `@falkenslab/agent-kit`, never deep paths.
 - Resolve `plugin/` and `prompts/` relative to the source file (`path.join(__dirname, "..", ...)`), so it also works from `dist/`.
 - Run the CLI with `--dir` pointing at a workspace outside this repo.
-- A new command in `plugin/commands/` carries, besides `description`, what the page needs to offer it as an action: `label` and, if it takes a value, `ask` (`es=… | en=… | fr=… | de=…`), `icon`, `group` (day, create, plan, memory, classroom), `needs-classroom`, `applies-to` (topic, material, quiz, source, page, plan, oven, text), `suggest` and `opens`; `test/actions.test.mjs` fails without them.
+- A new command in `plugin/commands/` carries, besides `description`, what the page needs to offer it as an action: `label` and, if it takes a value, `ask` (`es=… | en=… | fr=… | de=…`), `icon`, `group` (day, create, plan, memory, classroom), `needs-classroom`, `applies-to` (topic, material, quiz, source, page, plan, oven, text), `suggest` and `opens`; `test/actions.test.mjs` fails without them. An extension's skill with a `label` in its `SKILL.md` frontmatter is an action too, sent as `/<extension>:<skill>`, the command the SDK lists it as (#110).
 - The knowledge base layout is named in `course-knowledge.md`, `explore.md` and every skill that writes there: change it in all of them at once.
 - After renaming or merging skills, update the docs site (`update-docs`: `docs/content/guia/habilidades.md` and the reference) and `.minispec/core/architecture.md`.
 - Every end-to-end test leaves its report in `tests/` and its lessons in `plugin/skills/` or `prompts/` (see ADR-006).
