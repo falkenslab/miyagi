@@ -29,7 +29,7 @@
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "0.34.0",
+    "@falkenslab/agent-kit": "0.35.0",
     "@falkenslab/pseudonym": "0.3.0",
     "@mozilla/readability": "^0.6.0",
     "fflate": "^0.8.3",

@@ -4,7 +4,7 @@
 
 - Node.js ≥ 20, ESM.
 - TypeScript (`tsc` to `dist/`), `tsx` in development.
-- `@falkenslab/agent-kit` 0.34.0, from npm at that exact version (see ADR-010). Its optional libraries are dependencies here: `mammoth`, `fflate`, `turndown` for `extract_text` (DOCX, PPTX, XLSX), `@mozilla/readability`, `linkedom` for web pages kept as markdown.
+- `@falkenslab/agent-kit` 0.35.0, from npm at that exact version (see ADR-010). Its optional libraries are dependencies here: `mammoth`, `fflate`, `turndown` for `extract_text` (DOCX, PPTX, XLSX), `@mozilla/readability`, `linkedom` for web pages kept as markdown.
 - Claude Agent SDK (through agent-kit).
 - `@falkenslab/pseudonym` 0.3.0, moodle-mcp's version, exact: only its CLI (`pseudonym aliases`), run by the host to show students' names in the page (#109).
 - `@playwright/mcp` — browser control of Moodle.
