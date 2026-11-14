@@ -6,7 +6,7 @@ description: "Cómo añadir capacidades a miyagi con extensiones del repositorio
 
 # Extensiones
 
-Una **extensión** le da a miyagi algo que no trae de serie: herramientas nuevas (por ejemplo, probar código en un laboratorio de Docker) o saber hacer algo de una manera concreta (por ejemplo, un estilo visual para lo que publica). Cada extensión aporta sus propias habilidades, que el asistente usa como las suyas.
+Una **extensión** le da a miyagi algo que no trae de serie: herramientas nuevas (por ejemplo, probar código en un laboratorio de Docker) o saber hacer algo de una manera concreta (por ejemplo, un estilo visual para lo que publica). Cada extensión aporta sus propias habilidades, que el asistente usa como las suyas. Algunas traen también subagentes: ayudantes a los que el asistente encarga un trabajo largo (revisar un curso entero, probar una práctica) y que le devuelven solo un resumen corto, para que la conversación no se llene de lecturas. Los subagentes de una extensión instalada no pueden usar la terminal.
 
 Las extensiones las gestiona agent-kit, la base sobre la que está hecho miyagi. miyagi solo decide de dónde vienen y cuáles te enseña.
 
@@ -21,9 +21,15 @@ Cuando le pides algo que ninguna de las que tienes hace bien (comprobar una prá
 
 Del repositorio oficial, pensadas para miyagi:
 
-- **moodle-teacher**: tu aula de Moodle, con tu sesión y los alumnos con seudónimo. miyagi la instala al conectar el aula (ver [Configuración](configuracion.md)).
-- **docker-lab**: probar las prácticas en laboratorios de Docker (ver [Prácticas en Docker](practicas-docker.md)).
+- **moodle-teacher**: tu aula de Moodle, con tu sesión y los alumnos con seudónimo. miyagi la instala al conectar el aula (ver [Configuración](configuracion.md)). Trae los subagentes `course-auditor` (revisa un curso entero sin cambiar nada) y `class-reporter` (cómo va la clase).
+- **docker-lab**: probar las prácticas en laboratorios de Docker (ver [Prácticas en Docker](practicas-docker.md)), con el subagente `lab-runner`.
 - **moodle-ui-kit**: un estilo visual para lo que publica en Moodle.
+- **asker**: preguntas de cuestionario a partir de tus definiciones con [Asker](https://github.com/teuton-software/asker), que revisas antes de importarlas en Moodle. Necesita Ruby y Asker en tu ordenador. Trae los subagentes `input-reviewer` y `question-reviewer`.
+- **h5p**: actividades interactivas H5P (opción múltiple, rellenar huecos, tarjetas, conjuntos de preguntas, presentaciones) como paquetes `.h5p`, comprobados antes de escribirlos.
+- **anki**: mazos de tarjetas para Anki (`.apkg`).
+- **calendar**: fechas y planes como archivo `.ics` para Google Calendar, Outlook o Apple Calendar.
+- **documents**: documentos de Word con la plantilla de tu centro, con su encabezado, su pie y su logo.
+- **canva**: tus diseños de Canva, con tu cuenta. Nada con datos de tus alumnos va a Canva sin tu permiso.
 
 ## Para todas tus asignaturas o solo para una
 
@@ -52,7 +58,7 @@ En la [aplicación de escritorio y en la versión web](navegador.md#extensiones)
 
 En la terminal, una extensión instalada o cambiada se nota en la siguiente sesión, no en la que ya está abierta. `miyagi skills` lista sus habilidades con el nombre de la extensión entre corchetes.
 
-Una habilidad de una extensión puede ser también un botón de la página: si su encabezado trae `label`, sale como acción con las mismas claves que un [atajo propio](atajos-e-instrucciones.md#dónde-sale-y-qué-pregunta) (`icon`, `group`, `needs-classroom`, `applies-to`…). Así, moodle-teacher pone en **Hoy** «Esta semana» y «Ver qué hay por corregir» cuando tienes un aula vinculada. Las que no lo traen las sigue usando miyagi cuando hacen falta, sin botón.
+Una habilidad de una extensión puede ser también un botón de la página: si su encabezado trae `label`, sale como acción con las mismas claves que un [atajo propio](atajos-e-instrucciones.md#dónde-sale-y-qué-pregunta) (`icon`, `group`, `needs-classroom`, `applies-to`…). Así, moodle-teacher pone en **Hoy** «Esta semana» y «Ver qué hay por corregir», y en **Tu aula** «Revisar el aula» y «Cómo va la clase», todas cuando tienes un aula vinculada; asker pone «Preguntas con Asker» en **Crear**. Las que no lo traen las sigue usando miyagi cuando hacen falta, sin botón.
 
 ## Lo que una extensión no puede saltarse
 

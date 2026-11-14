@@ -6,7 +6,7 @@ description: "How to add capabilities to miyagi with extensions from Falken's La
 
 # Extensions {#extensiones}
 
-An **extension** gives miyagi something it doesn't come with: new tools (for example, testing code in a Docker lab) or knowing how to do something in a particular way (for example, a visual style for what it publishes). Each extension brings its own skills, which the assistant uses like its own.
+An **extension** gives miyagi something it doesn't come with: new tools (for example, testing code in a Docker lab) or knowing how to do something in a particular way (for example, a visual style for what it publishes). Each extension brings its own skills, which the assistant uses like its own. Some also bring subagents: helpers the assistant hands a long job to (checking a whole course, testing a practical) and that give it back only a short summary, so the conversation doesn't fill up with readings. An installed extension's subagents can't use the terminal.
 
 Extensions are managed by agent-kit, the base miyagi is built on. miyagi only decides where they come from and which ones it shows you.
 
@@ -21,9 +21,15 @@ When you ask it for something none of yours does well (checking a practice in Do
 
 From the official repository, meant for miyagi:
 
-- **moodle-teacher**: your Moodle classroom, with your session and the students under pseudonyms. miyagi installs it when connecting the classroom (see [Configuration](configuracion.md)).
-- **docker-lab**: testing practicals in Docker labs (see [Practicals in Docker](practicas-docker.md)).
+- **moodle-teacher**: your Moodle classroom, with your session and the students under pseudonyms. miyagi installs it when connecting the classroom (see [Configuration](configuracion.md)). It brings the subagents `course-auditor` (checks a whole course without changing anything) and `class-reporter` (how the class is doing).
+- **docker-lab**: testing practicals in Docker labs (see [Practicals in Docker](practicas-docker.md)), with the subagent `lab-runner`.
 - **moodle-ui-kit**: a visual style for what it publishes in Moodle.
+- **asker**: quiz questions from your own definitions with [Asker](https://github.com/teuton-software/asker), which you review before they're imported into Moodle. It needs Ruby and Asker on your computer. It brings the subagents `input-reviewer` and `question-reviewer`.
+- **h5p**: interactive H5P activities (multiple choice, fill in the blanks, cards, question sets, presentations) as `.h5p` packages, checked before they're written.
+- **anki**: Anki flashcard decks (`.apkg`).
+- **calendar**: dates and plans as an `.ics` file for Google Calendar, Outlook or Apple Calendar.
+- **documents**: Word documents in your school's template, with its header, footer and logo.
+- **canva**: your Canva designs, with your account. Nothing with your students' data goes to Canva without your permission.
 
 ## For all your subjects or just for one {#para-todas-tus-asignaturas-o-solo-para-una}
 
@@ -52,7 +58,7 @@ In the [desktop app and in the web version](navegador.md#extensiones) all of thi
 
 In the terminal, an installed or changed extension takes effect in the next session, not in the one already open. `miyagi skills` lists its skills with the extension's name in square brackets.
 
-An extension's skill can also be a button on the page: if its header has a `label`, it shows as an action, with the same keys as an [own shortcut](atajos-e-instrucciones.md#dónde-sale-y-qué-pregunta) (`icon`, `group`, `needs-classroom`, `applies-to`…). That's how moodle-teacher puts "This week" and "See what is to grade" in **Today** when you have a classroom linked. Those without one are still used by miyagi when needed, with no button.
+An extension's skill can also be a button on the page: if its header has a `label`, it shows as an action, with the same keys as an [own shortcut](atajos-e-instrucciones.md#dónde-sale-y-qué-pregunta) (`icon`, `group`, `needs-classroom`, `applies-to`…). That's how moodle-teacher puts "This week" and "See what is to grade" in **Today**, and "Check the course" and "How the class is doing" in **Your classroom**, all when you have a classroom linked; asker puts "Questions with Asker" in **Create**. Those without one are still used by miyagi when needed, with no button.
 
 ## What an extension can't get around {#lo-que-una-extensión-no-puede-saltarse}
 
