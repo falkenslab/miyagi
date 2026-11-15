@@ -1,7 +1,7 @@
 {
   "name": "miyagi-desktop",
   "productName": "miyagi",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "private": true,
   "description": "miyagi as a desktop application: the AI teaching assistant in a window of its own.",
   "author": "Falken's Lab",
@@ -81,7 +81,7 @@
     }
   },
   "dependencies": {
-    "@falkenslab/agent-kit": "0.34.0",
+    "@falkenslab/agent-kit": "0.36.0",
     "@falkenslab/pseudonym": "0.3.0",
     "@mozilla/readability": "^0.6.0",
     "fflate": "^0.8.3",
