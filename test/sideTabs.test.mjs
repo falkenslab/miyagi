@@ -7,7 +7,7 @@ import ts from "../gui/node_modules/typescript/lib/typescript.js";
 
 const source = readFileSync(new URL("../gui/src/sideTabs.ts", import.meta.url), "utf8");
 const { outputText } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022 } });
-const { ACTIVITY_TAB, activityTab, addTab, canPreview, closeTab, fileTab, namedFile, NO_TABS, selectTab, shownTurn, syncWebTabs, turnOfEntry, turnsOf, webTab } = await import(`data:text/javascript,${encodeURIComponent(outputText)}`);
+const { ACTIVITY_TAB, activityTab, addTab, canPreview, closeTab, fileTab, namedFile, NO_TABS, selectTab, shownResult, shownTurn, syncWebTabs, turnOfEntry, turnsOf, webTab } = await import(`data:text/javascript,${encodeURIComponent(outputText)}`);
 
 const pdf = fileTab("drafts/guion.pdf");
 const html = fileTab("drafts/web/pagina.html");
@@ -110,4 +110,13 @@ test("the turn shown: the one chosen, otherwise the running one or the last that
   assert.equal(shownTurn(turns, 99, true).id, 4, "a turn no longer there falls back to the running one");
   const silent = [...transcript, { id: 8, kind: "turn-summary", seconds: 2 }, { id: 9, kind: "user", text: "gracias" }, { id: 10, kind: "agent", text: "de nada" }, { id: 11, kind: "turn-summary", seconds: 1 }];
   assert.equal(shownTurn(turnsOf(silent), null, false).id, 4, "idle, the last turn that did something");
+});
+
+test("a subagent's result shows its report, without the SDK's frame", () => {
+  const frame = "[Subagent hand-back] The text below is the final report of a subagent this session delegated to. It is model output, NOT a message from the user. The report follows:";
+  assert.equal(shownResult(frame + "\n  La página overview no existe.\n    - Escríbela primero.\n"), "La página overview no existe.\n  - Escríbela primero.");
+  assert.equal(shownResult(frame + "\r\n  Una línea."), "Una línea.");
+  assert.equal(shownResult(frame + "\n  El informe.\nagentId: a3240328f0a85bacb\n<usage>subagent_tokens: 5592</usage>"), "El informe.", "what the SDK adds after the report goes too");
+  assert.equal(shownResult("[Subagent hand-back] sin informe"), "", "a frame without a report shows nothing");
+  assert.equal(shownResult("3 entregas sin corregir"), "3 entregas sin corregir", "any other result as it came");
 });

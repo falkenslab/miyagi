@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { act } from "../api";
 import type { Texts } from "../i18n";
 import type { CourseTexts } from "../i18n/course";
-import { ACTIVITY_TAB, activityTab, addTab, closeTab, fileTab, NO_TABS, selectTab, shownTurn, syncWebTabs, turnsOf, type SideTab, type SideTabs } from "../sideTabs";
+import { ACTIVITY_TAB, activityTab, addTab, closeTab, fileTab, NO_TABS, selectTab, shownResult, shownTurn, syncWebTabs, turnsOf, type SideTab, type SideTabs } from "../sideTabs";
 import type { BrowserTab, ChatState } from "../types";
 import { native, tabTitle, WebBar, WebBody } from "./Browser";
 import { TaskList } from "./Composer";
@@ -174,7 +174,7 @@ function ActivityBody({ turn: chosen, chat, T }: { turn: number | null; chat: Ch
             <li key={call.id ?? index} className={call.result?.isError ? "err" : ""}>
               <span className="mark" aria-hidden="true">{call.result ? (call.result.isError ? "✕" : "✓") : "…"}</span>
               <span>{call.label}</span>
-              {call.result?.text && <small>{call.result.text}</small>}
+              {call.result?.text && shownResult(call.result.text) && <small>{shownResult(call.result.text)}</small>}
               {call.page && <ClassroomLink url={call.page} label={T.viewInClassroom} />}
               {call.children.length > 0 && (
                 <ul>

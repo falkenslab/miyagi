@@ -93,3 +93,22 @@ export function turnOfEntry(transcript: TranscriptEntry[], entry: number): numbe
 export function shownTurn(turns: Turn[], chosen: number | null, busy: boolean): Turn | undefined {
   return turns.find((one) => one.id === chosen) ?? (busy ? turns.at(-1) : (turns.filter((one) => one.calls.length).at(-1) ?? turns.at(-1)));
 }
+
+/** The frame the Claude Agent SDK puts around a subagent's report, in English and for the model: the teacher sees only the report. */
+const HAND_BACK = "[Subagent hand-back]";
+const REPORT_FOLLOWS = "The report follows:";
+
+/** A call's result as the activity shows it: a subagent's report without the SDK's frame, its indentation nor what the SDK adds after it (agentId, usage); anything else as it came. */
+export function shownResult(text: string): string {
+  const frame = text.indexOf(HAND_BACK);
+  if (frame < 0) return text;
+  const follows = text.indexOf(REPORT_FOLLOWS, frame);
+  if (follows < 0) return "";
+  const [first = "", ...rest] = text.slice(follows + REPORT_FOLLOWS.length).split(/\r?\n/);
+  // The SDK indents every line of the report: the first one at column zero is no longer the report.
+  const end = rest.findIndex((line) => line.trim() && !/^\s/.test(line));
+  const lines = [first, ...(end < 0 ? rest : rest.slice(0, end))];
+  const indents = lines.slice(1).filter((line) => line.trim()).map((line) => line.length - line.trimStart().length);
+  const indent = indents.length ? Math.min(...indents) : 0;
+  return [first.trim(), ...lines.slice(1).map((line) => line.slice(Math.min(indent, line.length - line.trimStart().length)))].join("\n").trim();
+}
