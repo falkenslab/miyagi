@@ -25,7 +25,7 @@ Esta página es la referencia de la **terminal** y de los atajos, que valen en l
 | `miyagi workspaces` | Lista tus asignaturas, con el nombre para `-w` y su carpeta. Marca las que ya no encuentra. |
 | `miyagi workspaces forget <nombre>` | Quita una asignatura de la lista. Su carpeta no se toca. |
 | `miyagi extension …` | Instala, configura, activa o quita [extensiones](/avanzado/extensiones/): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
-| `miyagi --help` | Muestra la ayuda con todas las órdenes y opciones. |
+| `miyagi --help` | Muestra la ayuda con todas las órdenes y opciones. Detrás de cualquier orden (`miyagi web --help`) también la muestra, sin ejecutar la orden. |
 | `miyagi --version` | Muestra la versión instalada. |
 
 Sin ninguna orden (`miyagi` a secas), te pregunta si quieres `run` o `chat` y, si no estás dentro de la carpeta de una asignatura, con cuál de tu lista. Si eliges una nueva, te hace las preguntas de `init`, la guarda y termina: vuelve a lanzarlo para empezar.

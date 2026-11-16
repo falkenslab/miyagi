@@ -150,6 +150,10 @@ async function main(): Promise<void> {
   await chooseLanguage(process.argv.slice(2));
   applyTeacherTheme();
 
+  // Asking for help never runs anything, wherever the flag goes ("miyagi web --help" used to start
+  // the server). `extension` is agent-kit's, which has its own help.
+  if (first !== "extension" && process.argv.slice(2).some((arg) => arg === "-h" || arg === "--help")) return printHelp();
+
   switch (first) {
     case "-h":
     case "--help":

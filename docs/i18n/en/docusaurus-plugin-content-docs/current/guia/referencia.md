@@ -25,7 +25,7 @@ This page is the reference for the **terminal** and for the shortcuts, which wor
 | `miyagi workspaces` | Lists your subjects, with the name for `-w` and their folder. It marks the ones it can no longer find. |
 | `miyagi workspaces forget <name>` | Removes a subject from the list. Its folder isn't touched. |
 | `miyagi extension …` | Installs, configures, enables or removes [extensions](/avanzado/extensiones/): `search`, `add`, `list`, `config`, `enable`, `disable`, `update`, `remove`. |
-| `miyagi --help` | Shows the help with all commands and options. |
+| `miyagi --help` | Shows the help with all commands and options. After any command (`miyagi web --help`) it shows it too, without running the command. |
 | `miyagi --version` | Shows the installed version. |
 
 With no command at all (just `miyagi`), it asks whether you want `run` or `chat` and, if you're not inside a subject's folder, which one from your list. If you choose a new one, it asks you the `init` questions, saves it and finishes: launch it again to start.
