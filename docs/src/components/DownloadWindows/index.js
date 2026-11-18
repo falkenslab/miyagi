@@ -18,7 +18,7 @@ export default function DownloadWindows() {
         {translate({ id: "download.windows", message: "Descargar para Windows", description: "The button that downloads the Windows installer" })}
       </a>
       <span className={styles.note}>
-        {translate({ id: "download.windows.note", message: "miyagi-setup.exe · 64 bits · unos 215 MB", description: "What the Windows installer is, next to its download button" })}
+        {translate({ id: "download.windows.note", message: "miyagi-setup.exe · 64 bits · unos 250 MB", description: "What the Windows installer is, next to its download button" })}
         {" · "}
         <a href={RELEASES}>{translate({ id: "download.releases", message: "novedades y versiones anteriores", description: "The link to every release and its notes, next to the Windows download button" })}</a>
       </span>

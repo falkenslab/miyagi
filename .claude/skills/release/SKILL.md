@@ -77,15 +77,15 @@ What `check-desktop.mjs` checks, the same locally:
 - `locales/` holds only `en-US`, `es`, `es-419`, `fr` and `de` (`electronLanguages`, about 45 MB less);
 - `scripts/afterPack.cjs` ran: no `dxcompiler.dll` nor `dxil.dll` (WebGPU, 26 MB) and
   `LICENSES.chromium.html.gz` instead of the 20 MB HTML (`package.json`'s `files` also leaves the types,
-  source maps and docs of `node_modules` out of the asar; the unpacked app is about 610 MB, 297 of them
-  Claude Code's `claude.exe`, which can't be made smaller);
+  source maps and docs of `node_modules` out of the asar; the unpacked app is about 700 MB, 380 of them
+  Claude Code's `claude.exe` in SDK 0.3.327, which can't be made smaller);
 - it starts with a throwaway data folder (also its home, so no `~/.miyagi` is touched) and without
   `ELECTRON_RUN_AS_NODE` (VS Code's terminal sets it, and the packaged app then exits silently), until
   its rail shows the version.
 
 Download the screenshot (`gh run download <run> -n desktop-screenshot`) and look at it.
 
-The installer is Windows-only, ~215 MB and unsigned, so SmartScreen warns on the first run (the
+The installer is Windows-only, ~250 MB and unsigned, so SmartScreen warns on the first run (the
 install page explains it). Never put it in the npm package.
 
 **When Actions fails** and can't be fixed now, build locally as the fallback: `npm pack` and
