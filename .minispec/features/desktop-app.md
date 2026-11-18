@@ -24,7 +24,7 @@ An Electron app (`desktop/`) with an installer, so a teacher installs miyagi wit
 - Icon from the logo (512 px); the window title is the subject's label.
 - electron-builder: `appId dev.falkenslab.miyagi`, NSIS per user, Spanish, English, French and German installers, desktop and Start menu shortcuts, `artifactName: miyagi-setup.exe`; data in `~/.miyagi/`, kept on uninstall.
 - A screenshot hook as the captain's (`MIYAGI_DESKTOP_SCRIPT`: steps run in the real window, `capturePage`), used by a check.
-- `release` skill: build the installer, check `app.asar.unpacked/.../claude.exe` exists and the versions inside, `gh release upload vX.Y.Z miyagi-setup.exe`; the docs' install page links `releases/latest/download/miyagi-setup.exe`.
+- Released by `.github/workflows/release.yml` (#115): built on Windows, `check-desktop.mjs` (`claude.exe` unpacked, the version in the rail), uploaded to the draft release; the docs' install page links `releases/latest/download/miyagi-setup.exe`.
 - Docs: "Instalar miyagi" in the guide leads with the installer, with SmartScreen's warning explained.
 
 - - -

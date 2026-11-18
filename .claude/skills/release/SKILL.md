@@ -1,6 +1,6 @@
 ---
 name: release
-description: Cut a new miyagi release - decide the semver bump from the commits since the last tag, bump the version, commit, tag, push, build the installable package and create the GitHub release with it and Spanish notes. Only when the user explicitly asks to release or publish a version.
+description: Cut a new miyagi release - decide the semver bump from the commits since the last tag, bump the version, commit, tag and push; the release workflow builds and checks miyagi.tgz and miyagi-setup.exe into a draft release, whose Spanish notes are rewritten before publishing it. Only when the user explicitly asks to release or publish a version.
 disable-model-invocation: true
 ---
 
@@ -39,9 +39,13 @@ release may not be worth it and confirm. State the bump and why.
 
 ## 3. Bump, commit, tag, push
 
+The desktop app's `package.json` carries the same version and dependencies (`desktop/scripts/build.mjs`
+writes them, and the release workflow refuses a tag they disagree with):
+
 ```
 npm version <patch|minor> --no-git-tag-version
-git add package.json package-lock.json
+node -e "const fs=require('fs');const m=require('./package.json');const f='desktop/package.json';const d=JSON.parse(fs.readFileSync(f));d.version=m.version;d.dependencies=m.dependencies;fs.writeFileSync(f,JSON.stringify(d,null,2)+'\n')"
+git add package.json package-lock.json desktop/package.json
 git commit -m "chore(release): vX.Y.Z"   # plus the attribution trailer the session requires
 git tag vX.Y.Z
 git push origin main && git push origin vX.Y.Z
@@ -49,68 +53,62 @@ git push origin main && git push origin vX.Y.Z
 
 Tags are lightweight. Never move or delete a published tag, never force-push.
 
-## 4. Build the package and test it
+## 4. The workflow builds the files
 
-```
-npm pack --pack-destination <scratchpad>          # prepack builds dist/ first
-mv <scratchpad>/miyagi-X.Y.Z.tgz <scratchpad>/miyagi.tgz
-```
+Pushing the tag starts `.github/workflows/release.yml` (#115). Follow it with
+`gh run watch $(gh run list --workflow release.yml --limit 1 --json databaseId -q '.[0].databaseId')`. It:
 
-It must be tens of kB, with no `node_modules/` inside (`tar -tzf` it). A package in the
-hundreds of MB means dependencies got bundled — among them the Claude SDK's Windows-only
-`claude.exe` — and it won't install on Mac or Linux: don't publish it.
+- checks that the tag, `package.json` and `desktop/package.json` say the same version;
+- on Ubuntu: the gate of `verify.yml`, `npm pack` as `miyagi.tgz` and `check-package.mjs` (under 5 MB,
+  no `node_modules/`, installed into a throwaway prefix it prints the version and `web --help` shows the help);
+- on Windows: `desktop: npm ci, npm run build, npm run dist` and `check-desktop.mjs` on
+  `desktop/dist/win-unpacked/` (below), keeping the screenshot as the run's `desktop-screenshot` artifact;
+- then a **draft** release with both files and notes drafted from the commits. A re-run replaces a
+  draft's files, never a published release's.
 
-Install it into a throwaway prefix, never the user's global npm, and run `--version` from
-there (`<scratchpad>/g/miyagi.cmd` on Windows):
+Each installer is built on its own system because the Claude SDK installs only the `claude` binary of
+the platform `npm install` runs on (`@anthropic-ai/claude-agent-sdk-win32-x64`, `-darwin-arm64`…): a
+Windows build carries `claude.exe`, and can't make a Mac or Linux app. `miyagi.tgz` carries none:
+each user's `npm install -g` fetches theirs.
 
-```
-npm install -g --prefix <scratchpad>/g <scratchpad>/miyagi.tgz
-```
-
-## 4b. The desktop installer (Windows)
-
-The same miyagi in a window (`desktop/`, ADR-022): every release carries `miyagi-setup.exe`, built
-from this tag, so the app never lags behind the package. On Windows, from a terminal where
-`ELECTRON_RUN_AS_NODE` isn't set (VS Code's sets it: `env -u ELECTRON_RUN_AS_NODE` in Git Bash):
-
-```
-cd desktop
-npm install            # Electron and electron-builder; its postinstall downloads Electron's binary
-npm run build          # builds miyagi and its page, copies dist/ plugin/ prompts/ into desktop/miyagi/, installs its dependencies
-npm run dist           # electron-builder: desktop/dist/miyagi-setup.exe
-```
-
-Before uploading it, check the unpacked app in `desktop/dist/win-unpacked/`:
+What `check-desktop.mjs` checks, the same locally:
 - `resources/app.asar.unpacked/node_modules/@anthropic-ai/claude-agent-sdk-win32-x64/claude.exe`
-  exists (outside the asar: another process runs it);
-- `resources/app.asar.unpacked/miyagi/plugin/` and `.../miyagi/prompts/` exist;
+  exists (outside the asar: another process runs it), and so do `.../miyagi/plugin/` and `.../miyagi/prompts/`;
 - `locales/` holds only `en-US`, `es`, `es-419`, `fr` and `de` (`electronLanguages`, about 45 MB less);
-- `scripts/afterPack.cjs` ran: no `dxcompiler.dll` nor `dxil.dll` (WebGPU, 26 MB) and `LICENSES.chromium.html.gz` instead of the 20 MB HTML; and `package.json`'s `files` left the types, source maps, TypeScript sources and docs of `node_modules` out of the asar (about 13 MB), agent-kit kept whole. The unpacked app is about 610 MB, 297 of them Claude Code's `claude.exe`, which can't be made smaller;
-- it starts and shows the page, with a throwaway data folder (also its home, so your `~/.miyagi` is out of reach) and a scripted shot:
-  `MIYAGI_DESKTOP_DATA=<scratchpad>/d MIYAGI_DESKTOP_SCRIPT=<steps.json> desktop/dist/win-unpacked/miyagi.exe`
-  (steps as in `main.mjs`: wait for `.rail .brand`, `shot`). Look at the image: the rail, and
-  the version at its foot is this release's.
+- `scripts/afterPack.cjs` ran: no `dxcompiler.dll` nor `dxil.dll` (WebGPU, 26 MB) and
+  `LICENSES.chromium.html.gz` instead of the 20 MB HTML (`package.json`'s `files` also leaves the types,
+  source maps and docs of `node_modules` out of the asar; the unpacked app is about 610 MB, 297 of them
+  Claude Code's `claude.exe`, which can't be made smaller);
+- it starts with a throwaway data folder (also its home, so no `~/.miyagi` is touched) and without
+  `ELECTRON_RUN_AS_NODE` (VS Code's terminal sets it, and the packaged app then exits silently), until
+  its rail shows the version.
 
-A Windows-only artifact: it's ~205 MB and unsigned, so SmartScreen warns on the first run (the
+Download the screenshot (`gh run download <run> -n desktop-screenshot`) and look at it.
+
+The installer is Windows-only, ~215 MB and unsigned, so SmartScreen warns on the first run (the
 install page explains it). Never put it in the npm package.
 
-## 5. GitHub release
+**When Actions fails** and can't be fixed now, build locally as the fallback: `npm pack` and
+`check-package.mjs`; from a terminal without `ELECTRON_RUN_AS_NODE` (`env -u ELECTRON_RUN_AS_NODE` in
+Git Bash), `cd desktop && npm install && npm run build && npm run dist`, then `check-desktop.mjs`; and
+`gh release upload vX.Y.Z miyagi.tgz desktop/dist/miyagi-setup.exe --clobber` to the draft (or
+`gh release create … --draft` if the workflow never got that far).
 
-Notes in Spanish, for a teacher who uses miyagi (not its code), from the commits since
-the last tag: the install command, novedades, correcciones, cambios que afectan a los
-workspaces existentes (with what the user must do, if anything), and the agent-kit version it
-uses.
+## 5. Publish the release
+
+The workflow's notes are a list of commits. Rewrite them (`gh release edit vX.Y.Z --notes-file <notes>`)
+in Spanish, for a teacher who uses miyagi (not its code): the install section it leaves, novedades,
+correcciones, cambios que afectan a los workspaces existentes (with what the user must do, if
+anything), and the agent-kit version it uses. Then publish it, which makes it "latest":
 
 ```
-gh release create vX.Y.Z <scratchpad>/miyagi.tgz desktop/dist/miyagi-setup.exe --verify-tag --title "miyagi vX.Y.Z" --notes-file <notes>
+gh release edit vX.Y.Z --draft=false --latest
 ```
 
 Then check the real user path: install from
-`https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz` into
-another throwaway prefix and run `--version`. And the installer: `https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe`
-answers with the file. The first release that carries it also makes the docs' install page
-(`docs/content/guia/instalar.md`) lead with that link, SmartScreen's warning explained, and the
-npm command for Mac, Linux and whoever prefers the terminal.
+`https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz` into another throwaway
+prefix and run `--version`; and `https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe`
+answers with the file.
 
 Report the version, the release URL and the notes. If a step fails half-way, report exactly
 what is pushed and published and what isn't instead of retrying blindly.
