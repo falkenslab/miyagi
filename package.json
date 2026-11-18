@@ -1,6 +1,6 @@
 {
   "name": "miyagi",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "private": true,
   "description": "Agent that manages a Moodle course as a teacher, built on @falkenslab/agent-kit",
   "author": "Francisco Vargas Ruiz",
