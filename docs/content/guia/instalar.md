@@ -62,6 +62,16 @@ Solo se hace una vez por ordenador. La sesión la guarda Claude Code, el program
 
 Si prefieres pagar por uso en lugar de usar tu suscripción, crea una clave de API en [console.anthropic.com](https://console.anthropic.com/settings/keys) y ponla en la variable de entorno `ANTHROPIC_API_KEY` (o pégala en la aplicación o en la [versión web](web.md), que te lo ofrecen en esa misma pantalla).
 
+## Todas las descargas {#descargas}
+
+Cada versión de miyagi publica sus archivos en GitHub. Estos enlaces llevan siempre a los de la última:
+
+- **[miyagi-setup.exe](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe)**: el instalador de la aplicación de escritorio, para Windows de 64 bits.
+- **[miyagi.tgz](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz)**: el paquete de la versión web y la terminal, para cualquier sistema con Node.js. Es el que instala la línea de arriba; si lo descargas, se instala igual con `npm install -g` y la ruta del archivo.
+- **[Todas las versiones](https://github.com/falkenslab/miyagi/releases)**: qué trae cada una y sus archivos, por si necesitas volver a una anterior.
+
+Para Mac y Linux todavía no hay aplicación de escritorio: usa la [versión web](web.md).
+
 ## Actualizarlo
 
 Si usas la aplicación de escritorio, descarga el instalador de nuevo y ejecútalo.

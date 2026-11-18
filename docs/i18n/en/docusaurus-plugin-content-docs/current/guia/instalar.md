@@ -62,6 +62,16 @@ You only do this once per computer. Claude Code, Anthropic's program that comes 
 
 If you'd rather pay per use than use your subscription, create an API key at [console.anthropic.com](https://console.anthropic.com/settings/keys) and put it in the `ANTHROPIC_API_KEY` environment variable (or paste it in the app or the [web version](web.md), which offer you that on that same screen).
 
+## All downloads {#descargas}
+
+Every miyagi release publishes its files on GitHub. These links always take you to the latest one's:
+
+- **[miyagi-setup.exe](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe)**: the desktop app's installer, for 64-bit Windows.
+- **[miyagi.tgz](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz)**: the package of the web version and the terminal, for any system with Node.js. It's what the line above installs; if you download it, it installs the same way with `npm install -g` and the file's path.
+- **[All releases](https://github.com/falkenslab/miyagi/releases)**: what each one brings and its files, in case you need to go back to an earlier one.
+
+There's no desktop app for Mac and Linux yet: use the [web version](web.md).
+
 ## Updating it {#actualizarlo}
 
 If you use the desktop app, download the installer again and run it.

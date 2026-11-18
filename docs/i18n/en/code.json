@@ -339,7 +339,11 @@
     "description": "The button that downloads the Windows installer"
   },
   "download.windows.note": {
-    "message": "miyagi-setup.exe · 64-bit · about 225 MB",
+    "message": "miyagi-setup.exe · 64-bit · about 215 MB",
     "description": "What the Windows installer is, next to its download button"
+  },
+  "download.releases": {
+    "message": "what's new and earlier versions",
+    "description": "The link to every release and its notes, next to the Windows download button"
   }
 }
