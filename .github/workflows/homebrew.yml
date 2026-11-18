@@ -1,0 +1,72 @@
+# When a release is published (the release workflow leaves it as a draft, #115), the Homebrew cask in
+# falkenslab/homebrew-tap gets its version and both .dmg checksums (#116), so
+# `brew upgrade --cask miyagi` finds it. Writing to another repository needs a token of its own: the
+# HOMEBREW_TAP_TOKEN secret, a fine-grained token with Contents: write on falkenslab/homebrew-tap only.
+# Without it, the job says so and does nothing. Run by hand with a tag to redo one.
+name: homebrew
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The release's tag (vX.Y.Z)"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  cask:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+    steps:
+      - name: The token for the tap
+        id: token
+        run: |
+          if [ -z "$TAP_TOKEN" ]; then
+            echo "::warning::No HOMEBREW_TAP_TOKEN secret: the cask stays as it is. Update Casks/miyagi.rb in falkenslab/homebrew-tap by hand."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: The release's version and the .dmg checksums
+        if: steps.token.outputs.ok == 'true'
+        id: release
+        run: |
+          version="${TAG#v}"
+          digest() { gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" -q ".assets[] | select(.name == \"$1\") | .digest" | sed 's/^sha256://'; }
+          arm=$(digest miyagi-arm64.dmg)
+          intel=$(digest miyagi-x64.dmg)
+          echo "version $version, arm $arm, intel $intel"
+          if [ -z "$arm" ] || [ -z "$intel" ]; then echo "::error::$TAG has no miyagi-arm64.dmg or miyagi-x64.dmg"; exit 1; fi
+          { echo "version=$version"; echo "arm=$arm"; echo "intel=$intel"; } >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        if: steps.token.outputs.ok == 'true'
+        with:
+          repository: falkenslab/homebrew-tap
+          token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+      - name: The cask, at this release
+        if: steps.token.outputs.ok == 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          ARM: ${{ steps.release.outputs.arm }}
+          INTEL: ${{ steps.release.outputs.intel }}
+        run: |
+          sed -i -E \
+            -e "s/^(  version \")[^\"]+\"/\1$VERSION\"/" \
+            -e "s/(sha256 arm: +\")[0-9a-f]+\"/\1$ARM\"/" \
+            -e "s/(intel: +\")[0-9a-f]+\"/\1$INTEL\"/" \
+            Casks/miyagi.rb
+          git diff
+          grep -q "version \"$VERSION\"" Casks/miyagi.rb && grep -q "$ARM" Casks/miyagi.rb && grep -q "$INTEL" Casks/miyagi.rb
+          if git diff --quiet; then echo "The cask is already at $VERSION"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "feat(miyagi): $VERSION"
+          git push
+          echo "Cask: miyagi $VERSION" >> "$GITHUB_STEP_SUMMARY"

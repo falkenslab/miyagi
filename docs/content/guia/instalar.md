@@ -30,6 +30,11 @@ Para Windows de 64 bits, Mac (con Apple Silicon o con Intel) y Linux de 64 bits.
      <Terminal>{`$ xattr -dr com.apple.quarantine /Applications/miyagi.app`}</Terminal>
 
      Si tu Mac tiene procesador Intel (los anteriores a finales de 2020), descarga la versión **Mac (Intel)**.
+
+     Si usas [Homebrew](https://brew.sh), también puedes instalarla así; elige sola la versión de tu Mac, y `brew upgrade --cask miyagi` la actualiza. `brew trust` solo existe en las versiones recientes de Homebrew: si no la conoce, sáltala.
+
+     <Terminal>{`$ brew tap falkenslab/tap\n$ brew trust falkenslab/tap\n$ brew install --cask falkenslab/tap/miyagi`}</Terminal>
+
    - **Linux**: en Ubuntu o Debian, instala el `.deb` y tendrás miyagi entre tus aplicaciones. En otras distribuciones, usa el `.AppImage`: dale permiso de ejecución (en sus propiedades, o con `chmod +x miyagi.AppImage`) y ábrelo.
 
      <Terminal>{`$ sudo apt install ./miyagi.deb`}</Terminal>
@@ -76,14 +81,14 @@ Si prefieres pagar por uso en lugar de usar tu suscripción, crea una clave de A
 Cada versión de miyagi publica sus archivos en GitHub. Estos enlaces llevan siempre a los de la última:
 
 - **[miyagi-setup.exe](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe)**: la aplicación de escritorio para Windows de 64 bits.
-- **[miyagi-arm64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-arm64.dmg)** y **[miyagi-x64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-x64.dmg)**: la aplicación para Mac, con Apple Silicon (M1 y posteriores) y con Intel.
+- **[miyagi-arm64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-arm64.dmg)** y **[miyagi-x64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-x64.dmg)**: la aplicación para Mac, con Apple Silicon (M1 y posteriores) y con Intel. También con Homebrew: `brew install --cask falkenslab/tap/miyagi`.
 - **[miyagi.deb](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.deb)** y **[miyagi.AppImage](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.AppImage)**: la aplicación para Linux de 64 bits; el primero para Ubuntu y Debian, el segundo para cualquier otra distribución.
 - **[miyagi.tgz](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz)**: el paquete de la versión web y la terminal, para cualquier sistema con Node.js. Es el que instala la línea de arriba; si lo descargas, se instala igual con `npm install -g` y la ruta del archivo.
 - **[Todas las versiones](https://github.com/falkenslab/miyagi/releases)**: qué trae cada una y sus archivos, por si necesitas volver a una anterior.
 
 ## Actualizarlo
 
-Si usas la aplicación de escritorio, descárgala de nuevo e instálala encima; en Mac, reemplaza la que tienes en Aplicaciones.
+Si usas la aplicación de escritorio, descárgala de nuevo e instálala encima; en Mac, reemplaza la que tienes en Aplicaciones, o, si la instalaste con Homebrew, `brew upgrade --cask miyagi`.
 
 Si lo instalaste con la terminal, repite la línea de instalación: siempre descarga la última versión.
 

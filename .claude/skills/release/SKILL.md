@@ -120,5 +120,11 @@ prefix and run `--version`; and each installer under
 `https://github.com/falkenslab/miyagi/releases/latest/download/` (`miyagi-setup.exe`, `miyagi-arm64.dmg`,
 `miyagi-x64.dmg`, `miyagi.AppImage`, `miyagi.deb`) answers with the file.
 
+Publishing starts `.github/workflows/homebrew.yml`: it writes the release's version and both `.dmg`
+checksums into `Casks/miyagi.rb` of falkenslab/homebrew-tap, whose own test then installs it on both
+Macs. It needs the `HOMEBREW_TAP_TOKEN` secret (a fine-grained token, Contents: write on that repo
+only); without it the run warns and the cask must be updated by hand. Check that the tap's latest
+commit is `feat(miyagi): X.Y.Z` and its test passed (`gh run list -R falkenslab/homebrew-tap --limit 1`).
+
 Report the version, the release URL and the notes. If a step fails half-way, report exactly
 what is pushed and published and what isn't instead of retrying blindly.
