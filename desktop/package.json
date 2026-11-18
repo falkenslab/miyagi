@@ -5,6 +5,7 @@
   "private": true,
   "description": "miyagi as a desktop application: the AI teaching assistant in a window of its own.",
   "author": "Falken's Lab",
+  "homepage": "https://falkenslab.github.io/miyagi/",
   "license": "MIT",
   "type": "module",
   "main": "main.mjs",
@@ -13,7 +14,7 @@
     "build": "node scripts/build.mjs",
     "icon": "electron scripts/icon.mjs",
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder --publish never"
   },
   "devDependencies": {
     "electron": "^44.7.0",
