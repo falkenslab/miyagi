@@ -1,12 +1,12 @@
 ---
 title: La aplicación de escritorio
 sidebar_position: 4
-description: "miyagi en una ventana de Windows, desde cero: instalar, primer arranque, la visita guiada, crear una asignatura, vincular el aula y qué hay en cada parte de la ventana."
+description: "miyagi en una ventana de tu ordenador (Windows, Mac o Linux), desde cero: instalar, primer arranque, la visita guiada, crear una asignatura, vincular el aula y qué hay en cada parte de la ventana."
 ---
 
 # La aplicación de escritorio
 
-Esta es la versión principal de miyagi. En esta página la verás entera, desde el primer arranque hasta la última parte de la ventana. Solo se instala en Windows de 64 bits; si tienes otro sistema, mira la [versión web](web.md).
+Esta es la versión principal de miyagi. En esta página la verás entera, desde el primer arranque hasta la última parte de la ventana. Se instala en Windows, Mac y Linux.
 
 :::tip[El recorrido completo, con un curso de verdad]
 Si prefieres verlo en acción, sigue el tutorial [Un curso de Introducción a SQL](/casos-de-uso/): está hecho en esta misma aplicación, de principio a fin.
@@ -14,14 +14,14 @@ Si prefieres verlo en acción, sigue el tutorial [Un curso de Introducción a SQ
 
 ## Instalarla {#instalar}
 
-1. Descarga el instalador:
+1. Descarga miyagi para tu sistema:
 
-   <DownloadWindows />
+   <DownloadApp />
 
-2. Ábrelo. Windows te avisará de que no reconoce la aplicación, porque el instalador todavía no está firmado: pulsa **Más información** y luego **Ejecutar de todas formas**.
-3. Sigue los pasos. Al terminar se abre miyagi, y tendrás un acceso directo en el escritorio y en el menú Inicio.
+2. Instálala. Todavía no está firmada, así que la primera vez Windows o macOS te avisarán: en [Instalar](instalar.md#aplicacion-windows) tienes qué hacer en cada sistema.
+3. Ábrela.
 
-La aplicación no necesita Node.js ni terminal. Para actualizarla, descarga el instalador de nuevo y ejecútalo; para desinstalarla, ve a **Configuración > Aplicaciones**. Tus asignaturas no se borran al desinstalar.
+La aplicación no necesita Node.js ni terminal. Para actualizarla, descárgala de nuevo e instálala encima; cómo desinstalarla en cada sistema está en [Instalar](instalar.md#desinstalarlo). Tus asignaturas no se borran al desinstalar.
 
 ## La primera vez {#primera-vez}
 
@@ -85,7 +85,7 @@ Tu contraseña no pasa por miyagi: la primera vez que entre en el curso, se abre
 
 ### La barra de título {#barra-titulo}
 
-Forma parte de la ventana. Tiene las flechas para volver a las vistas que has visitado, el botón que muestra u oculta la columna de conversaciones y los menús **Archivo**, **Editar**, **Ver** y **Ayuda**. En **Ver** están la recarga, el zoom y la pantalla completa; en **Ayuda**, esta documentación.
+Forma parte de la ventana. Tiene las flechas para volver a las vistas que has visitado, el botón que muestra u oculta la columna de conversaciones y los menús **Archivo**, **Editar**, **Ver** y **Ayuda**. En **Ver** están la recarga, el zoom y la pantalla completa; en **Ayuda**, esta documentación. En Mac, los menús están en la barra de arriba de la pantalla, como en cualquier aplicación, y los botones de la ventana a la izquierda de la barra de título.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-barra-titulo-menu.webp" alt="La barra de título con el menú Ver abierto: Recargar, Tamaño real, Ampliar, Reducir y Pantalla completa.">El menú Ver de la barra de título.</Shot>
 

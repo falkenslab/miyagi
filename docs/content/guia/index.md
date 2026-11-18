@@ -16,11 +16,11 @@ Hablas con él con tus palabras, como hablarías con un compañero. Y **nada que
 
 miyagi se usa de tres maneras. Todas abren las mismas asignaturas y te piden permiso igual:
 
-- **La aplicación de escritorio** es la versión principal y la que te recomendamos. Se instala en Windows con un doble clic, sin terminal y sin Node.js, y es la más completa: tiene su propia barra de ventana y un navegador integrado para tener Moodle al lado de la conversación.
+- **La aplicación de escritorio** es la versión principal y la que te recomendamos. Se instala con un doble clic en Windows, Mac y Linux, sin terminal y sin Node.js, y es la más completa: tiene su propia barra de ventana y un navegador integrado para tener Moodle al lado de la conversación.
 - **La versión web** es la misma página, abierta en una pestaña de tu navegador con `miyagi web`. Sirve en Windows, Mac y Linux.
 - **La terminal** es la de siempre: `miyagi chat` y los encargos de una sola orden, para quien prefiere el teclado.
 
-¿No sabes cuál? Te ayudamos a [elegir versión](elegir-version.md). Si tienes Windows, empieza por la [aplicación de escritorio](escritorio.md).
+¿No sabes cuál? Te ayudamos a [elegir versión](elegir-version.md). O empieza directamente por la [aplicación de escritorio](escritorio.md).
 
 ## Qué hace por ti
 
@@ -33,20 +33,20 @@ miyagi se usa de tres maneras. Todas abren las mismas asignaturas y te piden per
 
 ## Para quién es
 
-Para profesores que llevan un curso en Moodle y quieren quitarse de encima el trabajo repetitivo sin perder el control de lo que ven sus alumnos. No hace falta saber programar: en Windows se instala con un doble clic y después se usa conversando.
+Para profesores que llevan un curso en Moodle y quieren quitarse de encima el trabajo repetitivo sin perder el control de lo que ven sus alumnos. No hace falta saber programar: se instala con un doble clic y después se usa conversando.
 
 El aula es opcional. Sin conectar Moodle, miyagi te ayuda igualmente con la programación, los temas y los materiales.
 
 ## Qué necesitas
 
 - **Una suscripción de Claude Pro o Max**, o una clave de API. miyagi es gratuito y de código abierto (licencia MIT); lo que hace funcionar al asistente es Claude.
-- **La aplicación de Windows** (Windows de 64 bits) o, para la versión web y la terminal, **Node.js** 20 o posterior.
+- **La aplicación de escritorio** (Windows, Mac o Linux) o, para la versión web y la terminal, **Node.js** 20 o posterior.
 - **Un navegador** como Chrome o Edge, para iniciar sesión en Moodle.
 - **Un curso de Moodle en el que tengas rol de profesor**, si quieres que trabaje en tu aula. No hay que instalar nada en el servidor de tu centro: trabaja con tu sesión, como tú.
 
 ## Cómo funciona, en tres pasos
 
-1. **Lo instalas.** En Windows, un instalador. En Mac y Linux, una línea en la terminal. Lo tienes en [Instalar](instalar.md).
+1. **Lo instalas.** Un instalador para Windows, Mac o Linux, o una línea en la terminal. Lo tienes en [Instalar](instalar.md).
 2. **Creas tu asignatura.** Le das un nombre, el tono y el idioma y, si quieres, la dirección de tu curso de Moodle (nunca tu contraseña: inicias sesión tú en una ventana del navegador). Si le dejas tu programación, tus rúbricas o tus criterios, los tiene en cuenta. Lo tienes en [Primeros pasos](primeros-pasos.md).
 3. **Se lo pides y apruebas.** Conversas con él o le encargas una tarea. Cuando algo vaya a llegar a tus alumnos, te lo enseña y espera tu sí.
 

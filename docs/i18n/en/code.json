@@ -338,12 +338,24 @@
     "message": "Download for Windows",
     "description": "The button that downloads the Windows installer"
   },
-  "download.windows.note": {
-    "message": "miyagi-setup.exe · 64-bit · about 250 MB",
-    "description": "What the Windows installer is, next to its download button"
-  },
   "download.releases": {
     "message": "what's new and earlier versions",
-    "description": "The link to every release and its notes, next to the Windows download button"
+    "description": "The link to every release and its notes, next to the download button"
+  },
+  "download.mac": {
+    "message": "Download for Mac",
+    "description": "The button that downloads the Mac app (Apple Silicon)"
+  },
+  "download.linux": {
+    "message": "Download for Linux",
+    "description": "The button that downloads the Linux app (AppImage)"
+  },
+  "download.macArm": {
+    "message": "Mac (Apple Silicon)",
+    "description": "Link to the Mac app for Apple Silicon"
+  },
+  "download.macIntel": {
+    "message": "Mac (Intel)",
+    "description": "Link to the Mac app for Intel Macs"
   }
 }

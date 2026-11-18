@@ -1,4 +1,4 @@
-/* The installer's download button, with what it downloads beside it (below it on a phone). */
+/* The desktop app's download button for the visitor's system, with every system's link below it. */
 .box {
   display: flex;
   flex-wrap: wrap;

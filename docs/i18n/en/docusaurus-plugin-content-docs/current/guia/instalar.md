@@ -6,7 +6,7 @@ description: "What you need, how to install miyagi, how to check it, update it a
 
 # Install miyagi {#instalar-miyagi}
 
-You install it once per computer. On Windows, the [desktop app](escritorio.md) installs with a double click and it's the version we recommend. On Mac and Linux, or if you prefer the web version or the terminal, a single line is enough. You don't need to know how to program. If you're not sure, see [Choose your version](elegir-version.md).
+You install it once per computer. The [desktop app](escritorio.md) installs with a double click on Windows, Mac and Linux, and it's the version we recommend. If you prefer the web version or the terminal, a single line is enough. You don't need to know how to program. If you're not sure, see [Choose your version](elegir-version.md).
 
 ## What you need first {#lo-que-necesitas-antes}
 
@@ -15,23 +15,32 @@ You install it once per computer. On Windows, the [desktop app](escritorio.md) i
 3. **A Claude Pro or Max subscription** ([claude.ai](https://claude.ai)). It's what powers the assistant.
 4. **A Moodle course where you are a teacher**, if you want it to work in your classroom. To try it without worry, a test course or a copy of a real one is better.
 
-## The desktop app, for Windows {#aplicacion-windows}
+## The desktop app {#aplicacion-windows}
 
-64-bit Windows only. It doesn't need Node.js or a terminal.
+For 64-bit Windows, Mac (with Apple Silicon or Intel) and 64-bit Linux. It doesn't need Node.js or a terminal.
 
-1. Download the miyagi installer:
+1. Download miyagi. The button offers your system's, and the others are below it:
 
-   <DownloadWindows />
+   <DownloadApp />
 
-2. Open it. Windows will warn you that it doesn't recognise the app, because the installer isn't signed yet: click **More info** and then **Run anyway**.
-3. Follow the steps. When it finishes miyagi opens, and you'll have a shortcut on the desktop and in the Start menu.
-4. The first time, it asks you to connect your Claude account: you sign in on Anthropic's page or use a key.
+2. Install it. It isn't signed yet, so your system will warn you the first time:
+   - **Windows**: open `miyagi-setup.exe`. Windows will say it doesn't recognise the app: click **More info** and then **Run anyway**. Follow the steps; you'll have a shortcut on the desktop and in the Start menu.
+   - **Mac**: open the `.dmg` and drag miyagi to **Applications**. The first time, in Applications, right-click miyagi and choose **Open**, and **Open** again. If macOS says the app "is damaged", open Terminal and type this line, which removes the downloaded-from-the-internet mark and changes nothing else:
+
+     <Terminal>{`$ xattr -dr com.apple.quarantine /Applications/miyagi.app`}</Terminal>
+
+     If your Mac has an Intel processor (those before late 2020), download the **Mac (Intel)** version.
+   - **Linux**: on Ubuntu or Debian, install the `.deb` and you'll have miyagi among your applications. On other distributions, use the `.AppImage`: allow it to run (in its properties, or with `chmod +x miyagi.AppImage`) and open it.
+
+     <Terminal>{`$ sudo apt install ./miyagi.deb`}</Terminal>
+
+3. Open miyagi. The first time, it asks you to connect your Claude account: you sign in on Anthropic's page or use a key.
 
 Everything that comes next, part by part, is in [The desktop app](escritorio.md).
 
 ## Installing it from the terminal, for the web version and the terminal {#instalarlo}
 
-For Mac, Linux and anyone who prefers the [web version](web.md) or the [terminal](terminal.md) on Windows.
+For anyone who prefers the [web version](web.md) or the [terminal](terminal.md), on any system.
 
 1. Open a terminal:
    - **Windows**: press the Windows key, type `PowerShell` and open it.
@@ -66,15 +75,15 @@ If you'd rather pay per use than use your subscription, create an API key at [co
 
 Every miyagi release publishes its files on GitHub. These links always take you to the latest one's:
 
-- **[miyagi-setup.exe](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe)**: the desktop app's installer, for 64-bit Windows.
+- **[miyagi-setup.exe](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe)**: the desktop app for 64-bit Windows.
+- **[miyagi-arm64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-arm64.dmg)** and **[miyagi-x64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-x64.dmg)**: the app for Mac, with Apple Silicon (M1 and later) and with Intel.
+- **[miyagi.deb](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.deb)** and **[miyagi.AppImage](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.AppImage)**: the app for 64-bit Linux; the first for Ubuntu and Debian, the second for any other distribution.
 - **[miyagi.tgz](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz)**: the package of the web version and the terminal, for any system with Node.js. It's what the line above installs; if you download it, it installs the same way with `npm install -g` and the file's path.
 - **[All releases](https://github.com/falkenslab/miyagi/releases)**: what each one brings and its files, in case you need to go back to an earlier one.
 
-There's no desktop app for Mac and Linux yet: use the [web version](web.md).
-
 ## Updating it {#actualizarlo}
 
-If you use the desktop app, download the installer again and run it.
+If you use the desktop app, download it again and install it over the old one; on Mac, replace the one in Applications.
 
 If you installed it from the terminal, run the installation line again: it always downloads the latest version.
 
@@ -84,7 +93,7 @@ Your courses and your settings stay as they were.
 
 ## Uninstalling it {#desinstalarlo}
 
-The desktop app is uninstalled from **Settings > Apps**. If you installed it from the terminal:
+The desktop app is uninstalled on Windows from **Settings > Apps**; on Mac, by dragging miyagi from Applications to the Trash; on Linux, with `sudo apt remove miyagi` if you installed the `.deb`, or by deleting the `.AppImage`. If you installed it from the terminal:
 
 <Terminal>{`$ npm uninstall -g miyagi`}</Terminal>
 

@@ -1,5 +1,5 @@
 // The landing page, for teachers with no technical background: the desktop app first (download
-// for Windows, its capture), what miyagi does, the three versions with a capture of each, how it
+// for the visitor's system, its capture), what miyagi does, the three versions with a capture of each, how it
 // keeps the teacher in control and how to install it. The English copy is in
 // i18n/en/docusaurus-plugin-content-pages/index.js.
 import React, { useEffect, useRef, useState } from "react";
@@ -7,9 +7,9 @@ import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import s from "./index.module.css";
+import { AllDownloads, useDownload } from "@site/src/components/DownloadApp";
 
 const INSTALL = "npm install -g https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz";
-const INSTALLER = "https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe";
 
 const TABS = [
   {
@@ -56,7 +56,7 @@ const FAQ = [
   ["¿Cuánto cuesta?", "miyagi es gratuito y de código abierto. Lo que hace funcionar al asistente es tu suscripción de Claude (Pro o Max)."],
   ["¿En qué se diferencia de preguntarle a un chat de IA?", "Un chat te da un texto y el resto lo haces tú en Moodle. miyagi entra en tu curso y hace el trabajo allí: pone la nota con su retroalimentación, responde en el foro, crea la tarea con su rúbrica. Además recuerda tu curso de una sesión a otra y te pide permiso antes de que tus alumnos vean nada."],
   ["¿Funciona con el Moodle de mi centro?", "Trabaja con el Moodle que ya usas, con la extensión moodle-teacher y tu sesión de profesor: entras tú en Moodle una vez, en su ventana, y no hay que instalar nada en el servidor. Está hecho para Moodle 4 y 5, y se prueba en Moodle 5.2."],
-  ["¿En qué sistemas funciona?", "La aplicación de escritorio, la versión principal, solo en Windows de 64 bits. La versión web y la terminal funcionan también en Mac y Linux, con Node.js."],
+  ["¿En qué sistemas funciona?", "Todas en Windows, Mac y Linux. La aplicación de escritorio, la versión principal, se instala con un doble clic (en Mac, con Apple Silicon o con Intel); la versión web y la terminal necesitan Node.js."],
   ["¿Tengo que saber programar?", "No. En Windows se instala con un doble clic, y después se usa conversando. La guía te lleva de la mano, y el aula de ejemplo lo enseña paso a paso con capturas reales."],
   ["¿Puede publicar algo sin que me dé cuenta?", "En el chat, antes de guardar una nota, responder en el foro o publicar contenido, te pide permiso con un resumen de lo que va a publicar. Si intenta publicar sin haberlo pedido, lo detiene y te pregunta."],
   ["¿Y si se equivoca?", "Ves cada nota, cada respuesta y cada recurso antes de que llegue a tus alumnos, y puedes decir que no o pedirle que lo cambie. Lo nuevo lo prueba oculto antes de mostrarlo. Si algo no te gusta de cómo trabaja, corrige sus apuntes o escríbeselo en instructions.md."],
@@ -135,6 +135,7 @@ function LatestRelease() {
 }
 
 export default function Home() {
+  const download = useDownload();
   const heroLight = useBaseUrl("/img/v2/desktop-navegador-moodle.webp");
   const heroDark = useBaseUrl("/img/v2/desktop-hoy-oscuro.webp");
   const heroLight480 = useBaseUrl("/img/v2/desktop-navegador-moodle-480.webp");
@@ -155,10 +156,10 @@ export default function Home() {
               <h1 id="titulo">Tú enseñas, y <span className={s.brandWord}>miyagi</span> se ocupa del resto.</h1>
               <p className={s.lead}>Una aplicación de escritorio que prepara tu asignatura contigo y, si conectas tu curso de Moodle, corrige con tu rúbrica, atiende el foro, monta temas y cuestionarios y te dice cómo va la clase. Nada llega a tus alumnos sin tu permiso.</p>
               <div className={s.actions}>
-                <a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a>
+                <a className={`${s.button} ${s.primary}`} href={download.href}>{download.label}</a>
                 <Link className={s.button} to="/casos-de-uso/">Verlo en un aula real</Link>
               </div>
-              <p className={s.fine}>Windows de 64 bits. <Link to="/guia/instalar/#aplicacion-windows">El instalador aún no está firmado</Link> y Windows te avisará. ¿Mac o Linux? Mira las <a href="#versiones">otras versiones</a>. Gratis y de código abierto (MIT); funciona con tu suscripción de Claude.</p>
+              <p className={s.fine}>Para Windows, Mac y Linux: <AllDownloads />. <Link to="/guia/instalar/#aplicacion-windows">Aún no está firmada</Link> y tu sistema te avisará la primera vez. Gratis y de código abierto (MIT); funciona con tu suscripción de Claude.</p>
             </div>
             <figure className={s.heroShot}>
               <img className={s.imgLight} src={heroLight} srcSet={`${heroLight480} 480w, ${heroLight820} 820w, ${heroLight} 1400w`} sizes="(max-width: 1020px) calc(100vw - 40px), 980px" width="1400" height="875" fetchPriority="high" decoding="async" alt="La aplicación de escritorio de miyagi: la columna de iconos, las conversaciones de la asignatura Introducción a SQL, el chat, y al lado el curso de Moodle abierto en el navegador integrado." />
@@ -200,7 +201,7 @@ export default function Home() {
               <p>Sin instalar nada en el servidor de tu centro: trabaja en tu Moodle con la extensión moodle-teacher y tu sesión de profesor.</p>
             </div>
             <ol className={s.how}>
-              <li><h3>Instálalo</h3><p>En Windows, un doble clic en el instalador. Abre la aplicación y conecta tu cuenta de Claude.</p></li>
+              <li><h3>Instálalo</h3><p>Un doble clic en el instalador de tu sistema. Abre la aplicación y conecta tu cuenta de Claude.</p></li>
               <li><h3>Preséntale tu curso</h3><p>Crea una asignatura: nombre, tono e idioma, y si quieres la dirección de tu curso de Moodle. Entras tú en Moodle una vez, en su ventana, y miyagi nunca ve tu contraseña. Déjale tu programación, tus rúbricas o tus criterios en Fuentes y los tendrá en cuenta.</p></li>
               <li><h3>Pídeselo y aprueba</h3><p>Conversa con él con tus palabras. Cuando algo vaya a llegar a tus alumnos, te lo enseña y espera tu sí.</p></li>
             </ol>
@@ -219,9 +220,9 @@ export default function Home() {
                 <div>
                   <p className={s.badge}>Recomendada</p>
                   <h3>Aplicación de escritorio</h3>
-                  <p>Para la mayoría de docentes, en Windows. Se instala con un doble clic, sin terminal ni Node.js. Tiene su propia barra de ventana y un navegador integrado para tener Moodle al lado de la conversación.</p>
+                  <p>Para la mayoría de docentes, en Windows, Mac o Linux. Se instala con un doble clic, sin terminal ni Node.js. Tiene su propia barra de ventana y un navegador integrado para tener Moodle al lado de la conversación.</p>
                   <div className={s.actions}>
-                    <a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a>
+                    <a className={`${s.button} ${s.primary}`} href={download.href}>{download.label}</a>
                     <Link className={s.button} to="/guia/escritorio/">Ver la guía</Link>
                   </div>
                 </div>
@@ -343,14 +344,15 @@ export default function Home() {
             <ol className={s.steps}>
               <li>
                 <div>
-                  <h3>En Windows: la aplicación de escritorio</h3>
-                  <p>Windows de 64 bits, sin terminal ni Node.js. Descarga el instalador y ábrelo. Como todavía no está firmado, Windows te avisará: pulsa <strong>Más información</strong> y <strong>Ejecutar de todas formas</strong>.</p>
-                  <div className={s.actions}><a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a></div>
+                  <h3>La aplicación de escritorio</h3>
+                  <p>Para Windows, Mac y Linux, sin terminal ni Node.js. Descárgala e instálala. Como todavía no está firmada, la primera vez tu sistema te avisará: en la <Link to="/guia/instalar/#aplicacion-windows">guía de instalación</Link> tienes qué hacer en cada uno.</p>
+                  <p className={s.fine}><AllDownloads /></p>
+                  <div className={s.actions}><a className={`${s.button} ${s.primary}`} href={download.href}>{download.label}</a></div>
                 </div>
               </li>
               <li>
                 <div>
-                  <h3>En Mac, Linux o desde la terminal: Node.js y una línea</h3>
+                  <h3>Desde la terminal: Node.js y una línea</h3>
                   <p>Instala <a href="https://nodejs.org/">Node.js</a> (la versión LTS, 20 o posterior). Abre una terminal, pega esta línea y pulsa Intro:</p>
                   <CopyCommand />
                   <p>Después, <code>miyagi web</code> abre la versión web y <code>miyagi init</code> prepara tu asignatura en la terminal.</p>
@@ -376,7 +378,7 @@ export default function Home() {
             <h2 id="final-t"><span className={s.motto}>Lo repetitivo</span>, para miyagi.</h2>
             <p>Tú te quedas con lo que importa, que es enseñar.</p>
             <div className={s.actions}>
-              <a className={`${s.button} ${s.primary}`} href={INSTALLER}>Descargar para Windows</a>
+              <a className={`${s.button} ${s.primary}`} href={download.href}>{download.label}</a>
               <Link className={s.button} to="/guia/instalar/">Otras formas de instalarlo</Link>
               <a className={s.button} href="https://github.com/falkenslab/miyagi">Ver el código en GitHub</a>
             </div>

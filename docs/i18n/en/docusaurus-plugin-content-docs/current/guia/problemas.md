@@ -20,6 +20,8 @@ description: "Tips to get the most out of miyagi and what to do when something d
 | Problem | Solution |
 | --- | --- |
 | Windows warns that it doesn't recognise the app when installing | The installer isn't signed yet. Click **More info** and **Run anyway**. |
+| macOS won't open miyagi, or says it "is damaged" | The app isn't signed yet. Right-click miyagi in Applications and choose **Open**; if nothing changes, type `xattr -dr com.apple.quarantine /Applications/miyagi.app` in Terminal ([Install](instalar.md#aplicacion-windows)). |
+| On Linux, the `.AppImage` won't open | Allow it to run (`chmod +x miyagi.AppImage`). On Ubuntu and Debian, install the `.deb` instead. |
 | The terminal doesn't recognize `miyagi` | Close and reopen the terminal. Check `node --version` (it has to be 20 or higher) and repeat the installation. |
 | It says there's no subject here (terminal) | You're outside a subject's folder. Add `-w <name>` to the command (`miyagi workspaces` gives you the names), or use plain `miyagi` to choose it. |
 | It's waiting for you to log in to Moodle | Log in yourself in the browser window the moodle-teacher extension has opened. It only happens the first time or when the session expires. That window is different from the built-in browser in the side panel. |

@@ -22,7 +22,7 @@ Trabaja con el Moodle que ya usas y con tu propia sesión de profesor, a través
 
 ### ¿Tengo que saber programar?
 
-No. En Windows se instala con un doble clic ([La aplicación de escritorio](escritorio.md)) y después se usa conversando. En Mac y Linux se instala pegando una línea en la terminal. [Instalar](instalar.md) y [Primeros pasos](primeros-pasos.md) te llevan de la mano.
+No. Se instala con un doble clic, en Windows, Mac o Linux ([La aplicación de escritorio](escritorio.md)), y después se usa conversando. [Instalar](instalar.md) y [Primeros pasos](primeros-pasos.md) te llevan de la mano.
 
 ## Control y seguridad
 
@@ -78,11 +78,11 @@ No. miyagi trabaja en Moodle sin ventana. Solo se abre una para que inicies sesi
 
 ### ¿La aplicación funciona en Mac o en Linux?
 
-No: la aplicación de escritorio solo se instala en Windows de 64 bits. En Mac y Linux usa la [versión web](web.md) o la [terminal](terminal.md), con Node.js.
+Sí: hay aplicación para Mac (con Apple Silicon o con Intel) y para Linux (`.deb` y `.AppImage`). La tienes en [Instalar](instalar.md#aplicacion-windows).
 
-### ¿Por qué Windows me avisa al instalarla?
+### ¿Por qué Windows o macOS me avisan al instalarla?
 
-Porque el instalador todavía no está firmado. Pulsa **Más información** y **Ejecutar de todas formas**.
+Porque todavía no está firmada. En Windows, pulsa **Más información** y **Ejecutar de todas formas**. En Mac, haz clic derecho en miyagi, en Aplicaciones, y elige **Abrir**; si dice que «está dañada», mira [Instalar](instalar.md#aplicacion-windows).
 
 ### ¿Puedo retomar una conversación de otro día?
 

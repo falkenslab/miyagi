@@ -22,7 +22,7 @@ It works with the Moodle you already use and with your own teacher session, thro
 
 ### Do I need to know how to program? {#tengo-que-saber-programar}
 
-No. On Windows you install it with a double click ([The desktop app](escritorio.md)) and then you use it by talking to it. On Mac and Linux you install it by pasting one line into the terminal. [Install](instalar.md) and [Getting started](primeros-pasos.md) walk you through it.
+No. You install it with a double click, on Windows, Mac or Linux ([The desktop app](escritorio.md)), and then you use it by talking to it. [Install](instalar.md) and [Getting started](primeros-pasos.md) walk you through it.
 
 ## Control and safety {#control-y-seguridad}
 
@@ -78,11 +78,11 @@ No. miyagi works in Moodle without a window. One only opens for you to log in, t
 
 ### Does the app work on Mac or Linux? {#la-aplicación-funciona-en-mac-o-en-linux}
 
-No: the desktop app only installs on 64-bit Windows. On Mac and Linux use the [web version](web.md) or the [terminal](terminal.md), with Node.js.
+Yes: there's an app for Mac (with Apple Silicon or Intel) and for Linux (`.deb` and `.AppImage`). It's in [Install](instalar.md#aplicacion-windows).
 
-### Why does Windows warn me when I install it? {#por-qué-windows-me-avisa-al-instalarla}
+### Why do Windows or macOS warn me when I install it? {#por-qué-windows-o-macos-me-avisan-al-instalarla}
 
-Because the installer isn't signed yet. Click **More info** and **Run anyway**.
+Because it isn't signed yet. On Windows, click **More info** and **Run anyway**. On Mac, right-click miyagi in Applications and choose **Open**; if it says it "is damaged", see [Install](instalar.md#aplicacion-windows).
 
 ### Can I pick up a conversation from another day? {#puedo-retomar-una-conversación-de-otro-día}
 

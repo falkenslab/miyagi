@@ -1,12 +1,12 @@
 ---
 title: The desktop app
 sidebar_position: 4
-description: "miyagi in a Windows window, from scratch: installing it, first launch, the guided tour, creating a subject, linking the classroom and what's in each part of the window."
+description: "miyagi in a window of your computer (Windows, Mac or Linux), from scratch: installing it, first launch, the guided tour, creating a subject, linking the classroom and what's in each part of the window."
 ---
 
 # The desktop app {#la-aplicación-de-escritorio}
 
-This is the main version of miyagi. On this page you'll see all of it, from the first launch to the last part of the window. It only installs on 64-bit Windows; if you have another system, see the [web version](web.md).
+This is the main version of miyagi. On this page you'll see all of it, from the first launch to the last part of the window. It installs on Windows, Mac and Linux.
 
 :::tip[The complete walkthrough, with a real course]
 If you'd rather see it in action, follow the tutorial [An Introduction to SQL course](/casos-de-uso/): it's done in this same app, from start to finish.
@@ -14,14 +14,14 @@ If you'd rather see it in action, follow the tutorial [An Introduction to SQL co
 
 ## Installing it {#instalar}
 
-1. Download the installer:
+1. Download miyagi for your system:
 
-   <DownloadWindows />
+   <DownloadApp />
 
-2. Open it. Windows will warn you that it doesn't recognise the app, because the installer isn't signed yet: click **More info** and then **Run anyway**.
-3. Follow the steps. When it finishes miyagi opens, and you'll have a shortcut on the desktop and in the Start menu.
+2. Install it. It isn't signed yet, so the first time Windows or macOS will warn you: [Install](instalar.md#aplicacion-windows) says what to do on each system.
+3. Open it.
 
-The app doesn't need Node.js or a terminal. To update it, download the installer again and run it; to uninstall it, go to **Settings > Apps**. Your subjects aren't deleted when you uninstall.
+The app doesn't need Node.js or a terminal. To update it, download it again and install it over the old one; how to uninstall it on each system is in [Install](instalar.md#desinstalarlo). Your subjects aren't deleted when you uninstall.
 
 ## The first time {#primera-vez}
 
@@ -85,7 +85,7 @@ Your password doesn't go through miyagi: the first time it goes into the course,
 
 ### The title bar {#barra-titulo}
 
-It's part of the window. It has the arrows to go back to the views you've visited, the button that shows or hides the conversations column and the **File**, **Edit**, **View** and **Help** menus. **View** has reload, zoom and full screen; **Help**, this documentation.
+It's part of the window. It has the arrows to go back to the views you've visited, the button that shows or hides the conversations column and the **File**, **Edit**, **View** and **Help** menus. **View** has reload, zoom and full screen; **Help**, this documentation. On Mac, the menus are in the bar at the top of the screen, as in any app, and the window's buttons at the left of the title bar.
 
 <Shot width="1400" height="875" kind="desktop" src="/img/v2/desktop-barra-titulo-menu.webp" alt="The title bar with the View menu open: Reload, Actual size, Zoom in, Zoom out and Full screen.">The title bar's View menu.</Shot>
 

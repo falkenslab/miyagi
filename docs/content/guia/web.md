@@ -51,4 +51,4 @@ La página escucha solo en tu ordenador, así que para usarla desde otro disposi
 
 Lo mismo que en la aplicación: [crear una asignatura](escritorio.md#crear-asignatura), [vincular el aula](escritorio.md#vincular), dejarle tus documentos en Fuentes y conversar. Y lo tienes en tareas concretas en [Casos de uso en la versión web](/casos-de-uso/en-web/).
 
-Para Windows, la [aplicación de escritorio](escritorio.md) es más cómoda: tiene su propia ventana y su navegador integrado.
+La [aplicación de escritorio](escritorio.md), para Windows, Mac y Linux, es más cómoda: tiene su propia ventana y su navegador integrado.

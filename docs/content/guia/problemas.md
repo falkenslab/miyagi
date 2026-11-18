@@ -20,6 +20,8 @@ description: "Consejos para sacarle partido a miyagi y qué hacer cuando algo no
 | Problema | Solución |
 | --- | --- |
 | Windows avisa de que no reconoce la aplicación al instalar | El instalador todavía no está firmado. Pulsa **Más información** y **Ejecutar de todas formas**. |
+| macOS no deja abrir miyagi, o dice que «está dañada» | La aplicación todavía no está firmada. Haz clic derecho en miyagi, en Aplicaciones, y elige **Abrir**; si sigue igual, escribe en la Terminal `xattr -dr com.apple.quarantine /Applications/miyagi.app` ([Instalar](instalar.md#aplicacion-windows)). |
+| En Linux, el `.AppImage` no se abre | Dale permiso de ejecución (`chmod +x miyagi.AppImage`). En Ubuntu y Debian, mejor instala el `.deb`. |
 | La terminal no reconoce `miyagi` | Cierra y abre la terminal. Comprueba `node --version` (tiene que ser 20 o más) y repite la instalación. |
 | Dice que aquí no hay ninguna asignatura (terminal) | Estás fuera de la carpeta de una asignatura. Añade `-w <nombre>` a la orden (`miyagi workspaces` te da los nombres), o usa `miyagi` a secas para elegirla. |
 | Espera a que inicies sesión en Moodle | Entra tú en la ventana del navegador que ha abierto la extensión moodle-teacher. Solo pasa la primera vez o cuando la sesión caduca. Esa ventana es distinta del navegador integrado del panel lateral. |

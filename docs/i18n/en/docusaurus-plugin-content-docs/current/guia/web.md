@@ -51,4 +51,4 @@ The page listens only on your computer, so using it from another device would ne
 
 The same as in the app: [create a subject](escritorio.md#crear-asignatura), [link the classroom](escritorio.md#vincular), leave your documents in Sources and talk to it. And you can see it in specific tasks in [Use cases in the web version](/casos-de-uso/en-web/).
 
-On Windows, the [desktop app](escritorio.md) is more comfortable: it has its own window and its built-in browser.
+The [desktop app](escritorio.md), for Windows, Mac and Linux, is more comfortable: it has its own window and its built-in browser.

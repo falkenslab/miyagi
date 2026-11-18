@@ -6,7 +6,7 @@ description: "Qué necesitas, cómo instalar miyagi, cómo comprobarlo, actualiz
 
 # Instalar miyagi
 
-Se instala una vez por ordenador. En Windows, la [aplicación de escritorio](escritorio.md) se instala con un doble clic y es la versión que te recomendamos. En Mac y Linux, o si prefieres la versión web o la terminal, basta con una sola línea. No hace falta saber programar. Si dudas, mira [Elige tu versión](elegir-version.md).
+Se instala una vez por ordenador. La [aplicación de escritorio](escritorio.md) se instala con un doble clic en Windows, Mac y Linux, y es la versión que te recomendamos. Si prefieres la versión web o la terminal, basta con una sola línea. No hace falta saber programar. Si dudas, mira [Elige tu versión](elegir-version.md).
 
 ## Lo que necesitas antes
 
@@ -15,23 +15,32 @@ Se instala una vez por ordenador. En Windows, la [aplicación de escritorio](esc
 3. **Una suscripción de Claude Pro o Max** ([claude.ai](https://claude.ai)). Es lo que hace funcionar al asistente.
 4. **Un curso de Moodle en el que seas profesor**, si quieres que trabaje en tu aula. Para probar sin miedo, mejor un curso de pruebas o una copia de uno real.
 
-## La aplicación de escritorio, para Windows {#aplicacion-windows}
+## La aplicación de escritorio {#aplicacion-windows}
 
-Solo en Windows de 64 bits. No necesita Node.js ni terminal.
+Para Windows de 64 bits, Mac (con Apple Silicon o con Intel) y Linux de 64 bits. No necesita Node.js ni terminal.
 
-1. Descarga el instalador de miyagi:
+1. Descarga miyagi. El botón te ofrece la de tu sistema, y debajo tienes las demás:
 
-   <DownloadWindows />
+   <DownloadApp />
 
-2. Ábrelo. Windows te avisará de que no reconoce la aplicación, porque el instalador todavía no está firmado: pulsa **Más información** y luego **Ejecutar de todas formas**.
-3. Sigue los pasos. Al terminar se abre miyagi, y tendrás un acceso directo en el escritorio y en el menú Inicio.
-4. La primera vez te pide conectar tu cuenta de Claude: inicias sesión en la página de Anthropic o usas una clave.
+2. Instálala. Todavía no está firmada, así que tu sistema te avisará la primera vez:
+   - **Windows**: abre `miyagi-setup.exe`. Windows te dirá que no reconoce la aplicación: pulsa **Más información** y luego **Ejecutar de todas formas**. Sigue los pasos; tendrás un acceso directo en el escritorio y en el menú Inicio.
+   - **Mac**: abre el `.dmg` y arrastra miyagi a **Aplicaciones**. La primera vez, en Aplicaciones, haz clic derecho en miyagi y elige **Abrir**, y otra vez **Abrir**. Si macOS dice que la aplicación «está dañada», abre la Terminal y escribe esta línea, que quita la marca de descarga de internet y no cambia nada más:
+
+     <Terminal>{`$ xattr -dr com.apple.quarantine /Applications/miyagi.app`}</Terminal>
+
+     Si tu Mac tiene procesador Intel (los anteriores a finales de 2020), descarga la versión **Mac (Intel)**.
+   - **Linux**: en Ubuntu o Debian, instala el `.deb` y tendrás miyagi entre tus aplicaciones. En otras distribuciones, usa el `.AppImage`: dale permiso de ejecución (en sus propiedades, o con `chmod +x miyagi.AppImage`) y ábrelo.
+
+     <Terminal>{`$ sudo apt install ./miyagi.deb`}</Terminal>
+
+3. Abre miyagi. La primera vez te pide conectar tu cuenta de Claude: inicias sesión en la página de Anthropic o usas una clave.
 
 En [La aplicación de escritorio](escritorio.md) tienes todo lo que viene después, parte por parte.
 
 ## Instalarlo con la terminal, para la versión web y la terminal {#instalarlo}
 
-Para Mac, Linux y quien prefiera la [versión web](web.md) o la [terminal](terminal.md) en Windows.
+Para quien prefiera la [versión web](web.md) o la [terminal](terminal.md), en cualquier sistema.
 
 1. Abre una terminal:
    - **Windows**: pulsa la tecla Windows, escribe `PowerShell` y ábrelo.
@@ -66,15 +75,15 @@ Si prefieres pagar por uso en lugar de usar tu suscripción, crea una clave de A
 
 Cada versión de miyagi publica sus archivos en GitHub. Estos enlaces llevan siempre a los de la última:
 
-- **[miyagi-setup.exe](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe)**: el instalador de la aplicación de escritorio, para Windows de 64 bits.
+- **[miyagi-setup.exe](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-setup.exe)**: la aplicación de escritorio para Windows de 64 bits.
+- **[miyagi-arm64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-arm64.dmg)** y **[miyagi-x64.dmg](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi-x64.dmg)**: la aplicación para Mac, con Apple Silicon (M1 y posteriores) y con Intel.
+- **[miyagi.deb](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.deb)** y **[miyagi.AppImage](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.AppImage)**: la aplicación para Linux de 64 bits; el primero para Ubuntu y Debian, el segundo para cualquier otra distribución.
 - **[miyagi.tgz](https://github.com/falkenslab/miyagi/releases/latest/download/miyagi.tgz)**: el paquete de la versión web y la terminal, para cualquier sistema con Node.js. Es el que instala la línea de arriba; si lo descargas, se instala igual con `npm install -g` y la ruta del archivo.
 - **[Todas las versiones](https://github.com/falkenslab/miyagi/releases)**: qué trae cada una y sus archivos, por si necesitas volver a una anterior.
 
-Para Mac y Linux todavía no hay aplicación de escritorio: usa la [versión web](web.md).
-
 ## Actualizarlo
 
-Si usas la aplicación de escritorio, descarga el instalador de nuevo y ejecútalo.
+Si usas la aplicación de escritorio, descárgala de nuevo e instálala encima; en Mac, reemplaza la que tienes en Aplicaciones.
 
 Si lo instalaste con la terminal, repite la línea de instalación: siempre descarga la última versión.
 
@@ -84,7 +93,7 @@ Tus cursos y tu configuración se quedan como estaban.
 
 ## Desinstalarlo
 
-La aplicación de escritorio se desinstala desde **Configuración > Aplicaciones**. Si lo instalaste con la terminal:
+La aplicación de escritorio se desinstala en Windows desde **Configuración > Aplicaciones**; en Mac, arrastrando miyagi de Aplicaciones a la papelera; en Linux, con `sudo apt remove miyagi` si instalaste el `.deb`, o borrando el `.AppImage`. Si lo instalaste con la terminal:
 
 <Terminal>{`$ npm uninstall -g miyagi`}</Terminal>
 
