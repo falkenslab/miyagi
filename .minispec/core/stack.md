@@ -18,6 +18,6 @@
 ## Infrastructure
 
 - GitHub Pages: the documentation site, `docs/`, built with Docusaurus 3 (React 19, its own `package.json`, not in the npm package) by `.github/workflows/pages.yml`; Atkinson Hyperlegible fonts served from the site.
-- GitHub releases: `miyagi.tgz` and `miyagi-setup.exe` (what users install), built and checked by `.github/workflows/release.yml` on a `v*` tag into a draft release. Releases up to v0.4.0 also carry the agent-kit tarball their versions depend on.
+- GitHub releases: `miyagi.tgz` and the desktop app for Windows (`miyagi-setup.exe`), macOS (`miyagi-arm64.dmg`, `miyagi-x64.dmg`) and Linux (`miyagi.AppImage`, `miyagi.deb`), what users install, built and checked by `.github/workflows/release.yml` on a `v*` tag into a draft release. Releases up to v0.4.0 also carry the agent-kit tarball their versions depend on.
 - `moodle-sandbox` (sibling repo) for end-to-end tests.
 - Docker, only through the docker-lab extension's labs.
