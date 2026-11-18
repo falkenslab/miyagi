@@ -13,7 +13,7 @@
     "build": "node scripts/build.mjs",
     "icon": "electron scripts/icon.mjs",
     "start": "electron .",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder"
   },
   "devDependencies": {
     "electron": "^44.7.0",
@@ -78,6 +78,34 @@
       ],
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": false
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.education",
+      "icon": "build/icon.png",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "signIgnore": [
+        "claude-agent-sdk-darwin-[^/]+/claude$"
+      ]
+    },
+    "dmg": {
+      "artifactName": "miyagi-${arch}.${ext}",
+      "title": "miyagi"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Education",
+      "icon": "build/icon.png",
+      "executableName": "miyagi",
+      "maintainer": "Falken's Lab",
+      "synopsis": "The AI teaching assistant, in a window of its own",
+      "artifactName": "miyagi.${ext}"
     }
   },
   "dependencies": {

@@ -635,7 +635,7 @@ h2.sec { font-size: 15px; margin: 22px 0 10px; }
 /* The desktop app's title bar (#87), only in it: the page's, with the system's window buttons over its right end. */
 :root { --titlebar: 40px; }
 .app.with-titlebar { height: calc(100% - var(--titlebar)); }
-.titlebar { position: relative; z-index: 25; display: flex; align-items: center; gap: 2px; height: var(--titlebar); padding: 0 8px; padding-right: calc(100vw - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100vw)); background: var(--bg-2); border-bottom: 1px solid var(--line); -webkit-app-region: drag; user-select: none; }
+.titlebar { position: relative; z-index: 25; display: flex; align-items: center; gap: 2px; height: var(--titlebar); padding: 0 8px; padding-left: calc(env(titlebar-area-x, 0px) + 8px); padding-right: calc(100vw - env(titlebar-area-x, 0px) - env(titlebar-area-width, 100vw)); background: var(--bg-2); border-bottom: 1px solid var(--line); -webkit-app-region: drag; user-select: none; }
 .titlebar button, .titlebar .pop { -webkit-app-region: no-drag; }
 .tb-btn, .tb-menu { display: inline-flex; align-items: center; justify-content: center; min-height: 32px; padding: 0 8px; border: 0; border-radius: 6px; background: none; color: var(--text-2); font-size: 13px; cursor: pointer; }
 .tb-btn:hover:not(:disabled), .tb-menu:hover { background: var(--panel-2); }

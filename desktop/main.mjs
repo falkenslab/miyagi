@@ -19,6 +19,9 @@ if (process.env.MIYAGI_DESKTOP_DATA) {
   app.setPath("userData", process.env.MIYAGI_DESKTOP_DATA);
 }
 const CONFIG = path.join(os.homedir(), ".miyagi", "config.json");
+// On macOS the menus are the system's menu bar and the window's buttons sit on the left (#116).
+const MAC = process.platform === "darwin";
+const DOCS = "https://falkenslab.github.io/miyagi/";
 
 // One window: a second launch brings the first to the front.
 if (!app.requestSingleInstanceLock()) {
@@ -93,7 +96,8 @@ async function start() {
     chooseLanguage: true,
     pickFolder,
     browser,
-    frame: { devTools: !app.isPackaged, role: runRole, colors: (color, symbolColor) => window?.setTitleBarOverlay({ color, symbolColor }) },
+    // macOS' traffic lights have no colours to set.
+    frame: { devTools: !app.isPackaged, menus: !MAC, role: runRole, colors: (color, symbolColor) => (MAC ? undefined : window?.setTitleBarOverlay({ color, symbolColor })) },
   });
   // For automated checks only: where the page is.
   if (process.env.MIYAGI_DESKTOP_URL_FILE) writeFileSync(process.env.MIYAGI_DESKTOP_URL_FILE, host.url);
@@ -107,8 +111,10 @@ async function start() {
     title: "miyagi",
     icon: path.join(here, "build", "icon.png"),
     backgroundColor: "#f7f7f4",
-    // The title bar is the page's (#87); the system's buttons stay over its right end.
+    // The title bar is the page's (#87); the system's buttons stay over its right end (on macOS, its
+    // left one, centred in the bar's 40 px).
     titleBarStyle: "hidden",
+    ...(MAC ? { trafficLightPosition: { x: 14, y: 13 } } : {}),
     titleBarOverlay: { color: nativeTheme.shouldUseDarkColors ? "#18181b" : "#efefea", symbolColor: nativeTheme.shouldUseDarkColors ? "#f3f3f0" : "#18181b", height: 40 },
     show: false,
     webPreferences: { contextIsolation: true, sandbox: true, nodeIntegration: false, spellcheck: true },
@@ -198,9 +204,12 @@ app.whenReady().then(async () => {
   // A small menu: what the person may need, nothing of a browser's.
   Menu.setApplicationMenu(
     Menu.buildFromTemplate([
+      // On macOS this is the menu bar the person sees: the app's menu first, and Help with the guide.
+      ...(MAC ? [{ role: "appMenu" }] : []),
       { role: "fileMenu" },
       { role: "editMenu" },
       { role: "viewMenu", submenu: [{ role: "reload" }, { role: "resetZoom" }, { role: "zoomIn" }, { role: "zoomOut" }, { type: "separator" }, { role: "togglefullscreen" }, ...(app.isPackaged ? [] : [{ role: "toggleDevTools" }])] },
+      ...(MAC ? [{ role: "windowMenu" }, { role: "help", submenu: [{ label: "miyagi", click: () => void openExternal(DOCS) }] }] : []),
     ]),
   );
   try {

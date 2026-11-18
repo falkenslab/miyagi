@@ -109,6 +109,8 @@ export interface HostOptions {
 export interface WindowFrame {
   /** Whether the app's developer tools can be opened (unpacked only). */
   devTools: boolean;
+  /** Whether the page draws the menus: not on macOS, where they're the system's menu bar (#116). */
+  menus?: boolean;
   role(name: string): void;
   colors(color: string, symbolColor: string): void;
 }
@@ -324,7 +326,7 @@ export async function startHost(workspaceDir?: string, options: HostOptions = {}
     const room = current?.prepared.workspace?.classroom;
     return room ? { url: room.url, courseId: room.courseId, connected: Boolean(current?.prepared.classroom) } : null;
   };
-  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder), browser: Boolean(options.browser), frame: Boolean(options.frame), frameDevTools: Boolean(options.frame?.devTools), names: current?.names.available ? { shown: current.names.shown } : null });
+  const info = () => ({ name: "miyagi", version: VERSION, kit: agentKitVersion(), language: getLanguage(), workspace: current?.label ?? null, classroom: classroom(), pickFolder: Boolean(pickFolder), browser: Boolean(options.browser), frame: Boolean(options.frame), frameDevTools: Boolean(options.frame?.devTools), frameMenus: options.frame ? options.frame.menus !== false : false, names: current?.names.available ? { shown: current.names.shown } : null });
   function send(event: string, data: unknown): void {
     if (event === "state") data = revealState(data as ReturnType<typeof snapshot>);
     client?.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);

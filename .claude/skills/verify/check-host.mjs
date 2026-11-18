@@ -260,6 +260,7 @@ const browserEvents = await new Promise((resolve) => {
   })();
 });
 check("info says the desktop app has a browser", /"browser":true/.test(browserEvents));
+check("…and that its title bar draws the menus (not said: not macOS)", /"frameMenus":true/.test(browserEvents));
 const opened = await browserPost("browser-open", { url: "https://moodle.org/es" });
 check("a page opens a tab", opened.id === "1" && browserCalls.at(-1)[1] === "https://moodle.org/es");
 check("a new tab, with no address", (await browserPost("browser-open", {})).id === "2" && browserCalls.at(-1)[1] === undefined);

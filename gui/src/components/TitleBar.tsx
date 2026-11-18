@@ -9,6 +9,8 @@ import { Menu, type Theme } from "./Shell";
 // visited, the sidebar's button and the menus; the window's own buttons are the system's, over its
 // right end. Each entry is carried out by the host, as the window's roles (no preload, ADR-022); the
 // keyboard shortcuts stay in the app's native menu. It only shows when the host says it's the app.
+// On macOS the menus are the system's menu bar, and the window's buttons sit at the bar's left end
+// (the page leaves them room, from the window controls overlay's titlebar-area-x).
 
 const DOCS = "https://falkenslab.github.io/miyagi/";
 
@@ -81,36 +83,40 @@ export function TitleBar({ info, T, canGoBack, canGoForward, onBack, onForward, 
       <button type="button" className="tb-btn tb-side" title={T.tbSidebar} aria-label={T.tbSidebar} onClick={onSide}>
         <Icon name="panel" size={18} />
       </button>
-      <span className="tb-sep" aria-hidden="true" />
-      {/* The menus side by side while they fit; in a narrow window, one menu with all of them, so none goes under the window's buttons. */}
-      <span className="tb-full">
-        {menus.map((menu) => (
-          <Menu key={menu.label} title={menu.label} ariaLabel={menu.label} className="tb-menu" popClass="tb-pop" label={menu.label}>
-            {(close) => <>{entries(menu.items, close)}</>}
-          </Menu>
-        ))}
-        <Menu title={T.menuHelp} ariaLabel={T.menuHelp} className="tb-menu" popClass="tb-pop" label={T.menuHelp}>
-          {help}
-        </Menu>
-      </span>
-      <span className="tb-compact">
-        <Menu title={T.menuAll} ariaLabel={T.menuAll} className="tb-menu" popClass="tb-pop" label={T.menuAll}>
-          {(close) => (
-            <>
-              {menus.map((menu) => (
-                <div key={menu.label} className="tb-group">
-                  <div className="tb-group-title">{menu.label}</div>
-                  {entries(menu.items, close)}
-                </div>
-              ))}
-              <div className="tb-group">
-                <div className="tb-group-title">{T.menuHelp}</div>
-                {help(close)}
-              </div>
-            </>
-          )}
-        </Menu>
-      </span>
+      {info.frameMenus !== false && (
+        <>
+          <span className="tb-sep" aria-hidden="true" />
+          {/* The menus side by side while they fit; in a narrow window, one menu with all of them, so none goes under the window's buttons. */}
+          <span className="tb-full">
+            {menus.map((menu) => (
+              <Menu key={menu.label} title={menu.label} ariaLabel={menu.label} className="tb-menu" popClass="tb-pop" label={menu.label}>
+                {(close) => <>{entries(menu.items, close)}</>}
+              </Menu>
+            ))}
+            <Menu title={T.menuHelp} ariaLabel={T.menuHelp} className="tb-menu" popClass="tb-pop" label={T.menuHelp}>
+              {help}
+            </Menu>
+          </span>
+          <span className="tb-compact">
+            <Menu title={T.menuAll} ariaLabel={T.menuAll} className="tb-menu" popClass="tb-pop" label={T.menuAll}>
+              {(close) => (
+                <>
+                  {menus.map((menu) => (
+                    <div key={menu.label} className="tb-group">
+                      <div className="tb-group-title">{menu.label}</div>
+                      {entries(menu.items, close)}
+                    </div>
+                  ))}
+                  <div className="tb-group">
+                    <div className="tb-group-title">{T.menuHelp}</div>
+                    {help(close)}
+                  </div>
+                </>
+              )}
+            </Menu>
+          </span>
+        </>
+      )}
       <span className="tb-drag" />
     </div>
   );

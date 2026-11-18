@@ -243,6 +243,8 @@ export interface Info {
   frame?: boolean;
   /** Whether its View menu may open the developer tools (unpacked only). */
   frameDevTools?: boolean;
+  /** Whether its title bar carries the menus: not on macOS, where they're the system's menu bar (#116). */
+  frameMenus?: boolean;
   /** Students' real names in place of their aliases (#109): null when the classroom has none to show. */
   names?: { shown: boolean } | null;
 }
