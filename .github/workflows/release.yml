@@ -85,13 +85,12 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            desktop/package-lock.json
       - run: npm ci
+      # desktop/ has no lockfile in git: build.mjs writes miyagi's dependencies into its
+      # package.json and installs them, as on the maintainer's computer.
       - name: Electron and electron-builder
         working-directory: desktop
-        run: npm ci
+        run: npm install --no-audit --no-fund
       - name: miyagi built and copied into the app, its dependencies installed
         working-directory: desktop
         run: npm run build
